@@ -1,0 +1,24 @@
+{
+  "name": "siiges-ui",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "description": "This monorepo will hold all the packages for the fronted team.",
+  "main": "index.js",
+  "private": true,
+  "devDependencies": {
+    "jest": "^28.1.1",
+    "nx": "^14.3.6"
+  },
+  "scripts": {
+    "bootstrap": "yarn install; lerna bootstrap;",
+    "start": "lerna run start --parallel",
+    "start:app": "node -r ./dotenv.config.js node_modules/.bin/lerna run --scope siiges-app --stream dev",
+    "build:app": "node -r ./dotenv.config.js node_modules/.bin/lerna run --scope siiges-app --stream build",
+    "run:build:app": "lerna run start --scope siiges-app",
+    "start:app_alt": "lerna run --scope siiges-app --stream dev",
+    "storybook:app": "lerna run --scope siiges-app --stream storybook"
+  },
+  "dependencies": {}
+}

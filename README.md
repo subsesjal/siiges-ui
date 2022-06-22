@@ -22,17 +22,17 @@ Este monorepo contendrá todos los paquetes para el equipo de frontend
 
 Define cada uno de los componentes de UI a ser agregado con el siguiente comando
 
-`lerna create @siiges-ui/[your-package-name]`.
+`npx lerna create @siiges-ui/[your-package-name]`.
 
 ### En seguida
 Necesitas compartir tu paquete al paquete de `shared`
 
-`lerna add @siiges-ui/[your-package-name] --scope=@siiges-ui/shared`.
+`npx lerna add @siiges-ui/[your-package-name] --scope=@siiges-ui/shared`.
 
 
 ### Ejemplo
 
-`lerna create @siiges-ui/autenticacion`
+`npx lerna create @siiges-ui/autenticacion`
 
 `Output:`
 
