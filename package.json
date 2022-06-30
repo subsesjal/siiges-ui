@@ -1,0 +1,21 @@
+{
+	"name": "siiges-ui",
+	"workspaces": [
+		"packages/*",
+		"apps/*"
+	],
+	"description": "This monorepo will hold all the packages for the fronted team",
+	"main": "index.js",
+	"private": true,
+	"devDependencies": {
+		"lerna": "5.1.6",
+		"nx": "14.3.6"
+	},
+	"scripts": {
+		"bootstrap": "npx lerna bootstrap",
+		"start:app": "npx lerna run dev --scope siiges-app"
+	},
+	"dependencies": {
+		"styled-components": "^5.3.5"
+	}
+}
