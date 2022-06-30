@@ -1,0 +1,23 @@
+{
+	"name": "@siiges-ui/shared",
+	"version": "1.0.0",
+	"description": "> TODO: description",
+	"author": "cetherdev <robert.hct@gmail.com>",
+	"homepage": "",
+	"license": "ISC",
+	"main": "src/index.js",
+	"directories": {
+		"src": "src",
+		"test": "__tests__"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"test": "echo \"Error: run tests from root\" && exit 1"
+	},
+	"devDependencies": {
+		"@siiges-ui/authentication": "1.0.0",
+		"microbundle": "^0.15.0"
+	}
+}

@@ -22,17 +22,17 @@ Este monorepo contendrá todos los paquetes para el equipo de frontend
 
 Define cada uno de los componentes de UI a ser agregado con el siguiente comando
 
-`lerna create @siiges-ui/[your-package-name]`.
+`npx lerna create @siiges-ui/[your-package-name]`.
 
 ### En seguida
 Necesitas compartir tu paquete al paquete de `shared`
 
-`lerna add @siiges-ui/[your-package-name] --scope=@siiges-ui/shared`.
+`npx lerna add @siiges-ui/[your-package-name] --scope=@siiges-ui/shared`.
 
 
 ### Ejemplo
 
-`lerna create @siiges-ui/autenticacion`
+`npx lerna create @siiges-ui/autenticacion`
 
 `Output:`
 
@@ -51,7 +51,7 @@ git repository: (https://github.com/) |
 ```
 
 ## Como renderizar tu paquete en Next.js siiges-app
-Tienes que agrgear el nombre de tu paquete dentro de `const withTM ` para renderizarlo
+<!-- Tienes que agrgear el nombre de tu paquete dentro de `const withTM ` para renderizarlo
 
 ```
 const withPlugins = require("next-compose-plugins");
@@ -68,7 +68,7 @@ module.exports = withPlugins([withTM()], {
   images: {},
 });
 
-```
+``` -->
 
 ## Directorios
 
@@ -138,8 +138,7 @@ module.exports = withPlugins([withTM()], {
 | Nombre                       | Descripcion                                                                                                                         |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `yarn bootstrap`           | Instala las dependiendas e inicia symlinks  |
-| `yarn start `              | run all packages in paralel                 |
+| `yarn start `              | run all packages in parallel                |
 | `yarn start:app `          | run server                                  |
 | `yarn build:app`           |                                             |
-| `yarn run:build:app`       | Built-in                                    |
 
