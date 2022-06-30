@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/node,yarn,nextjs,windows,macos,linux
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,yarn,nextjs,windows,macos,linux
+# Created by https://www.toptal.com/developers/gitignore/api/node,windows,linux,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=node,windows,linux,macos
 
 ### Linux ###
 *~
