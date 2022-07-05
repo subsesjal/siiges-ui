@@ -1,15 +1,15 @@
 import { TextField } from "@mui/material"
 
-export default function input(props) {
+export default function Input(input) {
   return (
     <TextField
       margin="normal"
       required
       fullWidth
-      id={props.id}
-      label={props.label}
-      name={props.name}
-      autoComplete={props.auto}
+      id={input.id}
+      label={input.label}
+      name={input.name}
+      autoComplete={input.auto}
       autoFocus
     />
   )

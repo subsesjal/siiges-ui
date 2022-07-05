@@ -71,15 +71,7 @@ export default function SignIn() {
                   id="password"
                   autoComplete="current-password"
                 />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                  sx={{ mt: 3, mb: 2, textTransform: 'none' }}
-                >
-                  <b>Entrar</b>
-                </Button>
+                
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">
