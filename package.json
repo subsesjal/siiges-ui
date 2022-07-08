@@ -21,9 +21,10 @@
     "bootstrap": "npx lerna bootstrap",
     "start:app": "npx lerna run dev --scope siiges-app",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix."
+    "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "react": "^18.2.0",
     "styled-components": "^5.3.5"
   }
 }

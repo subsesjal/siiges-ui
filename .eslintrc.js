@@ -1,24 +1,31 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es2021": true,
-    "node": true,
-    "jest": true
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+    jest: true,
   },
-  "extends": [
-      "plugin:react/recommended",
-      "airbnb"
+  extends: [
+    'plugin:react/recommended',
+    'airbnb',
   ],
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
-  "plugins": [
-      "react"
+  plugins: [
+    'react',
   ],
-  "rules": {
-  }
-}
+  rules: {
+    'import/no-extraneous-dependencies':
+      [
+        'error',
+        {
+          packageDir: __dirname,
+        },
+      ],
+  },
+};
