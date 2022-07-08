@@ -8,6 +8,7 @@
 	"main": "index.js",
 	"private": true,
 	"devDependencies": {
+		"eslint": "^7.32.0",
 		"lerna": "5.1.6",
 		"nx": "14.3.6"
 	},
@@ -16,6 +17,8 @@
 		"start:app": "npx lerna run dev --scope siiges-app"
 	},
 	"dependencies": {
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-plugin-react": "^7.28.0",
 		"styled-components": "^5.3.5"
 	}
 }
