@@ -14,10 +14,13 @@
 		"lib"
 	],
 	"scripts": {
-		"test": "echo \"Error: run tests from root\" && exit 1"
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix .",
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"precommit": "yarn lint && yarn test"
 	},
 	"devDependencies": {
-		"@siiges-ui/authentication": "1.0.0",
 		"microbundle": "^0.15.0"
 	}
 }
