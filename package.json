@@ -8,12 +8,17 @@
   "main": "index.js",
   "private": true,
   "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "commitlint": "^17.0.3",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.0",
     "eslint-plugin-react": "^7.28.0",
+    "husky": "^8.0.1",
     "install": "^0.13.0",
+    "jest": "^28.1.2",
     "lerna": "5.1.6",
     "nx": "14.3.6"
   },
@@ -21,7 +26,10 @@
     "bootstrap": "npx lerna bootstrap",
     "start:app": "npx lerna run dev --scope siiges-app",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "react": "^18.2.0",
