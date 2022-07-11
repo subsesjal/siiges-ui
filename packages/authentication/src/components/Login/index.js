@@ -1,19 +1,19 @@
 import { React } from "react"
-import Logo from './logo'
+import Logo from "./logo"
+import Header from './header'
+import { ButtonLogin } from "@siiges-ui/shared"
+import { Input } from "@siiges-ui/shared"
+import { LinkButton } from "@siiges-ui/shared"
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      user: data.get('user'),
-      password: data.get('password'),
-    });
-  };
-
   return (
     <>
-      <Logo></Logo>
+      <Logo />
+      <Header />
+      <Input label={'Usuario'} id={'user'} name={'user'} />
+      <Input label={'Contraseña'} id={'password'} name={'password'}/>
+      <LinkButton text={"¿Olvidaste tu contraseña?"} />
+      <ButtonLogin color={'secondary'} type={'submit'} text={'Entrar'} />
     </>
   )
 }

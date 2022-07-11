@@ -1,3 +1,3 @@
-import { LoginButton } from './components/LoginButton';
+import SignIn from './components/Login';
 
-export default LoginButton;
+export default SignIn;
