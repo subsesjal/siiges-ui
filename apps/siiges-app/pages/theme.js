@@ -3,15 +3,15 @@ import { createTheme } from '@mui/material';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#0072ce'
+      main: '#0072ce',
     },
     secondary: {
-      main: '#FF8D6D'
-    }
+      main: '#ff881a',
+    },
   },
   typography: {
-    fontFamily: 'Montserrat'
-  }
-})
+    fontFamily: 'Montserrat',
+  },
+});
 
-export default theme
+export default theme;
