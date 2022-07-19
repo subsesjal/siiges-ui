@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
 import Link from 'next/link';
 
-export default function SignIn() {
+export default function Register() {
   return (
     <Box
       sx={{
@@ -15,7 +15,7 @@ export default function SignIn() {
           mt: 3,
           py: 3,
           px: 3,
-          height: '330px',
+          height: '490px',
           width: '320px',
         },
       }}
@@ -28,23 +28,26 @@ export default function SignIn() {
           '&:hover': {
             boxShadow: '15',
           },
+          maxHeight: '490px',
           backgroundColor: 'rgb(255, 255, 255, 0.75)',
         }}
       >
-        <Typography component="h1" variant="h5" sx={{ textAlign: 'center', color: 'black' }}>Iniciar Sesión</Typography>
-        <Input label="Usuario" id="user" name="user" auto="user" size="small" />
-        <Input label="Contraseña" id="password" name="password" auto="current-password" type="password" size="small" />
+        <Typography component="h1" variant="h5" sx={{ textAlign: 'center', color: 'black' }}>Pre-registro</Typography>
+        <Input label="Usuario" id="user" name="user" auto="user" />
+        <Input label="Correo" id="email" name="email" auto="email" />
+        <Input label="Contraseña" id="password" name="password" auto="current-password" type="password" />
+        <Input label="Repetir contraseña" id="repassword" name="repassword" auto="repassword" type="password" />
         <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
           sx={{ zIndex: 1, position: 'relative', mt: 2 }}
         >
-          <Link href="/password" passHref>
-            <LinkButton text="¿Has olvidado tu contraseña?" />
+          <Link href="/login">
+            <LinkButton text="¿Tienes cuenta? Inicia sesión" />
           </Link>
         </Box>
-        <ButtonLogin color="secondary" type="submit" text="Entrar" href="./home" />
+        <ButtonLogin color="secondary" type="submit" text="Enviar" href="./home" />
       </Paper>
     </Box>
   );

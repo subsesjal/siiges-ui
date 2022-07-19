@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Link from '@mui/material/Link';
 
-const LinkButton = React.forwardRef(({ onClick, href, text }, ref) => (
-  <a href={href} onClick={onClick} ref={ref}>
-    {text}
-  </a>
+const LinkButton = React.forwardRef(({ text, onClick, href }, ref) => (
+  <Link href={href} onClick={onClick} ref={ref}>
+    <b>{text}</b>
+  </Link>
 ));
 
 LinkButton.propTypes = {

@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
 import Link from 'next/link';
 
-export default function SignIn() {
+export default function RecoverPass() {
   return (
     <Box
       sx={{
@@ -15,7 +15,7 @@ export default function SignIn() {
           mt: 3,
           py: 3,
           px: 3,
-          height: '330px',
+          height: '260px',
           width: '320px',
         },
       }}
@@ -28,23 +28,21 @@ export default function SignIn() {
           '&:hover': {
             boxShadow: '15',
           },
-          backgroundColor: 'rgb(255, 255, 255, 0.75)',
         }}
       >
-        <Typography component="h1" variant="h5" sx={{ textAlign: 'center', color: 'black' }}>Iniciar Sesión</Typography>
+        <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>Recuperar contraseña</Typography>
         <Input label="Usuario" id="user" name="user" auto="user" size="small" />
-        <Input label="Contraseña" id="password" name="password" auto="current-password" type="password" size="small" />
         <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
           sx={{ zIndex: 1, position: 'relative', mt: 2 }}
         >
-          <Link href="/password" passHref>
-            <LinkButton text="¿Has olvidado tu contraseña?" />
+          <Link href="/login" passHref>
+            <LinkButton text="¿Tienes cuenta? Inicia sesión" />
           </Link>
         </Box>
-        <ButtonLogin color="secondary" type="submit" text="Entrar" href="./home" />
+        <ButtonLogin color="secondary" type="submit" text="Enviar correo" href="./home" />
       </Paper>
     </Box>
   );

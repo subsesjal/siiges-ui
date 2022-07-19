@@ -1,11 +1,11 @@
 import Image from 'next/image';
-import { SignIn } from '@siiges-ui/authentication';
+import { Register } from '@siiges-ui/authentication';
 import { Logo, Header, Navbar } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../theme';
 
-function LogInPage() {
+function SignUpPage() {
   return (
     <ThemeProvider theme={theme}>
       <Image
@@ -27,11 +27,11 @@ function LogInPage() {
           <Navbar />
           <Logo />
           <Header />
-          <SignIn />
+          <Register />
         </Grid>
       </Grid>
     </ThemeProvider>
   );
 }
 
-export default LogInPage;
+export default SignUpPage;

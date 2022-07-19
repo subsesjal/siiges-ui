@@ -17,11 +17,11 @@
 		"eslint-plugin-jsx-a11y": "^6.6.0",
 		"eslint-plugin-react": "^7.28.0",
 		"husky": "^8.0.1",
-    "prop-types": "^15.8.1",
 		"install": "^0.13.0",
 		"jest": "^28.1.2",
 		"lerna": "5.1.6",
-		"nx": "14.3.6"
+		"nx": "14.3.6",
+		"prop-types": "^15.8.1"
 	},
 	"scripts": {
 		"bootstrap": "npx lerna bootstrap",
