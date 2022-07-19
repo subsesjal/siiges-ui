@@ -10,12 +10,8 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@siiges-ui/shared": "^1.0.0",
-=======
     "@siiges-ui/authentication": "^1.0.0",
     "@siiges-ui/shared": "1.0.0",
->>>>>>> abf1603 (feat(login): added the login in separate components)
     "next": "12.2.0",
     "next-compose-plugins": "^2.2.1",
     "next-transpile-modules": "^9.0.0",
