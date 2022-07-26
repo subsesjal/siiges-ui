@@ -8,10 +8,15 @@ const LinkButton = React.forwardRef(({ text, onClick, href }, ref) => (
   </Link>
 ));
 
+LinkButton.defaultProps = {
+  href: undefined,
+  onClick: undefined,
+};
+
 LinkButton.propTypes = {
-  href: PropTypes.string.isRequired,
+  href: PropTypes.string,
+  onClick: PropTypes.string,
   text: PropTypes.string.isRequired,
-  onClick: PropTypes.string.isRequired,
 };
 
 export default LinkButton;

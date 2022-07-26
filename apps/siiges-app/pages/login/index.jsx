@@ -1,3 +1,4 @@
+import { React } from 'react';
 import Image from 'next/image';
 import { SignIn } from '@siiges-ui/authentication';
 import { Logo, Header, Navbar } from '@siiges-ui/shared';

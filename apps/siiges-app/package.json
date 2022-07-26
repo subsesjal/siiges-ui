@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "test": "jest"
   },
   "dependencies": {
     "@siiges-ui/authentication": "^1.0.0",
@@ -19,6 +20,9 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-do-expressions": "^7.18.6",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/preset-react": "^7.18.6",
     "eslint": "8.18.0",
     "eslint-config-next": "12.2.0"
   }

@@ -1,5 +1,6 @@
 import ButtonLogin from './components/Button';
 import Input from './components/input';
+import InputPassword from './components/inputPassword';
 import LinkButton from './components/link';
 import Header from './components/header';
 import Logo from './components/logo';
@@ -10,6 +11,7 @@ import MainNavbar from './components/mainnavbar';
 export {
   ButtonLogin,
   Input,
+  InputPassword,
   LinkButton,
   Header,
   Logo,

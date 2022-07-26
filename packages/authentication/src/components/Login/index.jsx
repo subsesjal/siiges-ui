@@ -1,5 +1,10 @@
 import React from 'react';
-import { ButtonLogin, Input, LinkButton } from '@siiges-ui/shared';
+import {
+  ButtonLogin,
+  Input,
+  InputPassword,
+  LinkButton,
+} from '@siiges-ui/shared';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
@@ -33,7 +38,7 @@ export default function SignIn() {
       >
         <Typography component="h1" variant="h5" sx={{ textAlign: 'center', color: 'black' }}>Iniciar Sesión</Typography>
         <Input label="Usuario" id="user" name="user" auto="user" size="small" />
-        <Input label="Contraseña" id="password" name="password" auto="current-password" type="password" size="small" />
+        <InputPassword label="Contraseña" id="password" name="password" auto="current-password" type="password" size="small" />
         <Box
           display="flex"
           justifyContent="center"
