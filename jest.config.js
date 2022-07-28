@@ -31,13 +31,19 @@ module.exports = {
   // The paths to modules that run some code to configure or set up the
   // testing environment before each test
   setupFiles: [
-    '<rootDir>/packages/shared/__tests__/setupTest.js',
-    '<rootDir>/packages/authentication/__tests__/setupTest.js',
+    '<rootDir>/packages/shared/__tests__/setupTest.jsx',
+    '<rootDir>/packages/authentication/__tests__/setupTest.jsx',
+  ],
+  setupFilesAfterEnv: [
+    '<rootDir>/packages/shared/__tests__/jest-setupTest.js',
+    '<rootDir>/packages/authentication/__tests__/jest-setupTest.js',
   ],
   // The glob patterns Jest uses to detect test files
   testMatch: [
     '**/__tests__/**/*.test.[jt]s?(x)',
   ],
+  // Set default test environment to jsdom
+  testEnvironment: 'jsdom',
   // Indicates whether each individual test should be reported during the run
   verbose: true,
 };

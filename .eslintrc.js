@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   env: {
     browser: true,
@@ -24,7 +26,12 @@ module.exports = {
       [
         'error',
         {
-          packageDir: __dirname,
+          packageDir: [
+            __dirname,
+            path.join(__dirname, 'packages/authentication'),
+            path.join(__dirname, 'packages/shared'),
+            path.join(__dirname, 'apps/siiges-app'),
+          ],
         },
       ],
   },
