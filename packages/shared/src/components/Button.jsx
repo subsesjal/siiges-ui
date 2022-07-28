@@ -8,6 +8,7 @@ function ButtonLogin({
   color,
   text,
   href,
+  click,
 }) {
   return (
     <Link href={href}>
@@ -16,6 +17,7 @@ function ButtonLogin({
         fullWidth
         variant="contained"
         color={color}
+        onClick={click}
         sx={{
           mt: 3,
           mb: 2,
@@ -33,11 +35,16 @@ function ButtonLogin({
   );
 }
 
+ButtonLogin.defaultProps = {
+  click: () => {},
+};
+
 ButtonLogin.propTypes = {
   type: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
+  click: PropTypes.func,
 };
 
 export default ButtonLogin;
