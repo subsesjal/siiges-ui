@@ -38,6 +38,9 @@ module.exports = {
   ],
   // Set default test environment to jsdom
   testEnvironment: 'jsdom',
+  moduleNameMapper: {
+    '\\.(css|less)$': 'identity-obj-proxy',
+  },
   // Indicates whether each individual test should be reported during the run
   verbose: true,
 };

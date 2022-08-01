@@ -4,7 +4,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-import ButtonVisibility from './buttonVisibility';
+import ButtonVisibility from '../Buttons/buttonVisibility';
 
 const handleClickShowPassword = (setValues, values) => {
   setValues({

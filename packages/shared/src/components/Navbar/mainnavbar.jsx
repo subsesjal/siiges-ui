@@ -3,11 +3,10 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import Link from 'next/link';
-import LogoWhite from './logowhite';
+import LogoWhite from '../Images/logowhite';
+import MenuNavbar from './menuNavbar';
+import MenuButton from '../Buttons/MenuButton';
 
 export default function Navbar() {
   return (
@@ -33,25 +32,8 @@ export default function Navbar() {
           >
             <b>SIIGES</b>
           </Typography>
-          <Link href="/signup">
-            <Button
-              variant="outlined"
-              startIcon={<PersonAddIcon />}
-              sx={{
-                backgroundColor: 'rgba(233, 236, 239, 0.5)',
-                textTransform: 'none',
-                color: 'white',
-                borderRadius: '2rem',
-                '&:hover': {
-                  background: '#fff',
-                  color: '#0072ce',
-                  m: 'auto',
-                },
-              }}
-            >
-              Pre-registro
-            </Button>
-          </Link>
+          <MenuButton title="RVOE" />
+          <MenuNavbar />
         </Toolbar>
       </AppBar>
     </Box>

@@ -2,11 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import { Container, Typography } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { MainNavbar } from '@siiges-ui/shared';
+import { MainNavbar, PaperHome } from '@siiges-ui/shared';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import theme from '../theme';
 
 export default function SignIn() {
@@ -52,54 +51,34 @@ export default function SignIn() {
                   mt: 5,
                   mx: 1,
                   width: 350,
-                  height: 200,
+                  height: 250,
                 },
               }}
             >
-              <Paper variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h5" gutterBottom component="div">
-                  Noticia 1
-                </Typography>
-                <hr />
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua.
-                </Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h5" gutterBottom component="div">
-                  Noticia 2
-                </Typography>
-                <hr />
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua.
-                </Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h5" gutterBottom component="div">
-                  Noticia 3
-                </Typography>
-                <hr />
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua.
-                </Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h5" gutterBottom component="div">
-                  Noticia 4
-                </Typography>
-                <hr />
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua.
-                </Typography>
-              </Paper>
+              <PaperHome
+                title="Noticia 1"
+                text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua."
+              />
+              <PaperHome
+                title="Noticia 2"
+                text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua."
+              />
+              <PaperHome
+                title="Noticia 3"
+                text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua."
+              />
+              <PaperHome
+                title="Noticia 4"
+                text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua."
+              />
             </Box>
           </CardContent>
         </Card>

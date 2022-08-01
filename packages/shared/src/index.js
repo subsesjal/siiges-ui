@@ -1,15 +1,18 @@
-import ButtonLogin from './components/Button';
-import Input from './components/input';
-import InputPassword from './components/inputPassword';
-import LinkButton from './components/link';
-import Header from './components/header';
-import Logo from './components/logo';
-import LogoWhite from './components/logowhite';
-import Navbar from './components/navbar';
-import MainNavbar from './components/mainnavbar';
+import ButtonLogin from './components/Buttons/Button';
+import ButtonStyled from './components/Buttons/ButtonStyled';
+import Input from './components/Input/input';
+import InputPassword from './components/Input/inputPassword';
+import LinkButton from './components/Link/link';
+import Header from './components/Header/header';
+import Logo from './components/Images/logo';
+import LogoWhite from './components/Images/logowhite';
+import Navbar from './components/Navbar/navbar';
+import MainNavbar from './components/Navbar/mainnavbar';
+import PaperHome from './components/Paper/PaperHome';
 
 export {
   ButtonLogin,
+  ButtonStyled,
   Input,
   InputPassword,
   LinkButton,
@@ -18,4 +21,5 @@ export {
   LogoWhite,
   Navbar,
   MainNavbar,
+  PaperHome,
 };

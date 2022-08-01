@@ -15,7 +15,7 @@ LinkButton.defaultProps = {
 
 LinkButton.propTypes = {
   href: PropTypes.string,
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   text: PropTypes.string.isRequired,
 };
 

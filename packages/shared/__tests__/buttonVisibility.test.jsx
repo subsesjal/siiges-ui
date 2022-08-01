@@ -6,7 +6,7 @@ import {
   fireEvent,
   createEvent,
 } from '@testing-library/react';
-import ButtonVisibility from '../src/components/buttonVisibility';
+import ButtonVisibility from '../src/components/Buttons/buttonVisibility';
 
 afterEach(cleanup);
 

@@ -36,6 +36,9 @@ module.exports = {
   testMatch: [
     '<rootDir>/__tests__/**/*.test.[jt]s?(x)',
   ],
+  moduleNameMapper: {
+    '\\.(css|less)$': 'identity-obj-proxy',
+  },
   // Indicates whether each individual test should be reported during the run
   verbose: true,
 };

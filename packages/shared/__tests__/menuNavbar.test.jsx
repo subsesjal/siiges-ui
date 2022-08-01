@@ -4,7 +4,7 @@ import {
   render,
   waitFor,
 } from '@testing-library/react';
-import MenuNavbar from '../src/components/menuNavbar';
+import MenuNavbar from '../src/components/Navbar/menuNavbar';
 import setHandler from '../src/utils/handlers/set-anchor';
 
 let value = true;

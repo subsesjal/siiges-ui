@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Input from '../src/components/input';
+import Input from '../src/components/Input/input';
 
 describe('Tests for the general input', () => {
   test('Test Input component render', () => {
