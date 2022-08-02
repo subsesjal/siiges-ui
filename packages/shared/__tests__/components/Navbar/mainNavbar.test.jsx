@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import Navbar from '../src/components/Navbar/navbar';
+import MainNavbar from '../../../src/components/Navbar/MainNavbar';
 
 describe('Tests for the general input', () => {
-  test('Test Navbar component render', () => {
-    const component = render(<Navbar />);
+  test('Test MainNavbar component render', () => {
+    const component = render(<MainNavbar />);
     waitFor(() => expect(component.toBeInTheDocument()));
   });
 });

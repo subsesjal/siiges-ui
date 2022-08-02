@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import MockLogin from './setupTest';
+import MockLogin from '../../setupTest';
 
 jest.mock('next/link', () => ({ children }) => children);
 

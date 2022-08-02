@@ -1,6 +1,6 @@
 import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
-import Login from './login';
+import Login from './Login';
 import theme from './theme';
 
 export default function Home() {

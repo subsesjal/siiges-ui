@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ButtonStyled from '../Buttons/ButtonStyled';
 import '../../Styles/PaperHome.css';
 
-export default function paperHome({ title, text }) {
+export default function PaperHome({ title, text }) {
   return (
     <Paper className="paper" variant="outlined">
       <Typography variant="h5" gutterBottom component="div">
@@ -22,7 +22,7 @@ export default function paperHome({ title, text }) {
   );
 }
 
-paperHome.propTypes = {
+PaperHome.propTypes = {
   text: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };

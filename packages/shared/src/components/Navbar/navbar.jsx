@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Link from 'next/link';
-import LogoWhite from '../Images/logowhite';
+import LogoWhite from '../Images/Logowhite';
 
 export default function Navbar() {
   return (
@@ -33,7 +33,7 @@ export default function Navbar() {
           >
             <b>SIIGES</b>
           </Typography>
-          <Link href="/signup">
+          <Link href="/Signup">
             <Button
               variant="outlined"
               startIcon={<PersonAddIcon />}

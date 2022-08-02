@@ -83,7 +83,7 @@ export default function MenuNavbar() {
           </ListItemIcon>
           Ajustes
         </MenuItem>
-        <Link href="./login">
+        <Link href="./Login">
           <MenuItem>
             <ListItemIcon>
               <Logout fontSize="small" />

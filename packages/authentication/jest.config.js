@@ -30,7 +30,7 @@ module.exports = {
   // The paths to modules that run some code to configure or set up the
   // testing environment before each test
   setupFiles: [
-    '<rootDir>/__tests__/setupTest.js',
+    '<rootDir>/__tests__/setupTest.jsx',
   ],
   // The glob patterns Jest uses to detect test files
   testMatch: [

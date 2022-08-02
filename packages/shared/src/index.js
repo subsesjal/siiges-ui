@@ -1,13 +1,13 @@
-import ButtonLogin from './components/Buttons/Button';
+import ButtonLogin from './components/Buttons/ButtonLogin';
 import ButtonStyled from './components/Buttons/ButtonStyled';
-import Input from './components/Input/input';
-import InputPassword from './components/Input/inputPassword';
-import LinkButton from './components/Link/link';
-import Header from './components/Header/header';
-import Logo from './components/Images/logo';
-import LogoWhite from './components/Images/logowhite';
-import Navbar from './components/Navbar/navbar';
-import MainNavbar from './components/Navbar/mainnavbar';
+import Input from './components/Input/Input';
+import InputPassword from './components/Input/InputPassword';
+import LinkButton from './components/LinkButton/link';
+import Header from './components/Header/Header';
+import Logo from './components/Images/Logo';
+import LogoWhite from './components/Images/Logowhite';
+import Navbar from './components/Navbar/Navbar';
+import MainNavbar from './components/Navbar/MainNavbar';
 import PaperHome from './components/Paper/PaperHome';
 
 export {

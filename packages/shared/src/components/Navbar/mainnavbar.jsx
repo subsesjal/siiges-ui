@@ -4,11 +4,11 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import LogoWhite from '../Images/logowhite';
-import MenuNavbar from './menuNavbar';
+import LogoWhite from '../Images/Logowhite';
+import MenuNavbar from './MenuNavbar';
 import MenuButton from '../Buttons/MenuButton';
 
-export default function Navbar() {
+export default function MainNavbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

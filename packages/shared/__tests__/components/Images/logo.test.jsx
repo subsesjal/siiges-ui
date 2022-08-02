@@ -1,6 +1,6 @@
 import React from 'react';
 import { waitFor } from '@testing-library/react';
-import Logo from '../src/components/Images/logo';
+import Logo from '../../../src/components/Images/Logo';
 
 describe('Tests for the logo', () => {
   test('correct render of logo', () => {

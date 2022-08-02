@@ -5,7 +5,7 @@ import {
   cleanup,
   fireEvent,
 } from '@testing-library/react';
-import ButtonLogin from '../src/components/Buttons/Button';
+import ButtonLogin from '../../../src/components/Buttons/ButtonLogin';
 
 afterEach(cleanup);
 
