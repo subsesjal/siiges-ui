@@ -6,7 +6,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BusinessIcon from '@mui/icons-material/Business';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import PropTypes from 'prop-types';
-import StyledMenu from '../../Styles/MenuButtonStyle';
+import StyledMenu from '../../styles/MenuButtonStyle';
 import setHandler from '../../utils/handlers/set-anchor';
 
 export default function MenuButton({ title }) {

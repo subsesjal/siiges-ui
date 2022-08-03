@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Link from 'next/link';
 import setHandler from '../../utils/handlers/set-anchor';
-import StyledBadge from '../../Styles/MenuNavbarStyle';
+import StyledBadge from '../../styles/MenuNavbarStyle';
 
 export default function MenuNavbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -72,10 +72,12 @@ export default function MenuNavbar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <Avatar />
-          Perfil
-        </MenuItem>
+        <Link href="./userProfile">
+          <MenuItem>
+            <Avatar />
+            Perfil
+          </MenuItem>
+        </Link>
         <Divider />
         <MenuItem>
           <ListItemIcon>
@@ -83,7 +85,7 @@ export default function MenuNavbar() {
           </ListItemIcon>
           Ajustes
         </MenuItem>
-        <Link href="./Login">
+        <Link href="./login">
           <MenuItem>
             <ListItemIcon>
               <Logout fontSize="small" />

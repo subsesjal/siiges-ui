@@ -38,11 +38,11 @@ export default function RecoverPass() {
           alignItems="center"
           sx={{ zIndex: 1, position: 'relative', mt: 2 }}
         >
-          <Link href="/Login" passHref>
+          <Link href="/login" passHref>
             <LinkButton text="¿Tienes cuenta? Inicia sesión" />
           </Link>
         </Box>
-        <ButtonLogin color="secondary" type="submit" text="Enviar correo" href="./Home" />
+        <ButtonLogin color="secondary" type="submit" text="Enviar correo" href="./home" />
       </Paper>
     </Box>
   );

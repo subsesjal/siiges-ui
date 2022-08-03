@@ -37,19 +37,19 @@ export default function SignIn() {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ textAlign: 'center', color: 'black' }}>Iniciar Sesión</Typography>
-        <Input label="Usuario" id="user" name="user" auto="user" size="small" />
-        <InputPassword label="Contraseña" id="password" name="password" auto="current-password" type="password" size="small" />
+        <Input label="Usuario" id="user" name="user" auto="user" />
+        <InputPassword label="Contraseña" id="password" name="password" auto="current-password" type="password" />
         <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
           sx={{ zIndex: 1, position: 'relative', mt: 2 }}
         >
-          <Link href="/Password" passHref>
+          <Link href="/password" passHref>
             <LinkButton text="¿Has olvidado tu contraseña?" />
           </Link>
         </Box>
-        <ButtonLogin color="secondary" type="submit" text="Entrar" href="./Home" />
+        <ButtonLogin color="secondary" type="submit" text="Entrar" href="./home" />
       </Paper>
     </Box>
   );

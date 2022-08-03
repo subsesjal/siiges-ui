@@ -33,7 +33,7 @@ export default function Navbar() {
           >
             <b>SIIGES</b>
           </Typography>
-          <Link href="/Signup">
+          <Link href="/signup">
             <Button
               variant="outlined"
               startIcon={<PersonAddIcon />}

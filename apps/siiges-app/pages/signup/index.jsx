@@ -10,7 +10,7 @@ function SignUpPage() {
   return (
     <ThemeProvider theme={theme}>
       <Image
-        alt="travel"
+        alt="background"
         src="/Fondo.jpg"
         layout="fill"
         objectFit="cover"

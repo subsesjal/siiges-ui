@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function Input({
-  id, label, name, auto, type, value,
+  id, label, name, auto, type, size,
 }) {
   return (
     <TextField
@@ -13,16 +13,16 @@ function Input({
       label={label}
       type={type}
       name={name}
-      value={value}
       autoComplete={auto}
       autoFocus
+      size={size}
     />
   );
 }
 
 Input.defaultProps = {
   type: 'text',
-  value: '',
+  size: 'normal',
 };
 
 Input.propTypes = {
@@ -30,7 +30,7 @@ Input.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
-  value: PropTypes.string,
+  size: PropTypes.string,
   auto: PropTypes.string.isRequired,
 };
 

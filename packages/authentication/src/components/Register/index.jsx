@@ -43,11 +43,11 @@ export default function Register() {
           alignItems="center"
           sx={{ zIndex: 1, position: 'relative', mt: 2 }}
         >
-          <Link href="/Login">
+          <Link href="/login">
             <LinkButton text="¿Tienes cuenta? Inicia sesión" />
           </Link>
         </Box>
-        <ButtonLogin color="secondary" type="submit" text="Enviar" href="./Home" />
+        <ButtonLogin color="secondary" type="submit" text="Enviar" href="./home" />
       </Paper>
     </Box>
   );
