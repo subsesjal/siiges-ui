@@ -1,48 +1,20 @@
 import React from 'react';
-import Image from 'next/image';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
+import { PaperHome, Overlay, HomeHeader } from '@siiges-ui/shared';
 import { ThemeProvider } from '@mui/material/styles';
-import { MainNavbar, PaperHome } from '@siiges-ui/shared';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import theme from '../theme';
 
-export default function SignIn() {
+export default function Home() {
   return (
     <ThemeProvider theme={theme}>
-      <Image
-        alt="travel"
-        src="/Fondo.jpg"
-        layout="fill"
-        objectFit="cover"
-        quality={100}
-        style={{
-          zIndex: -1,
-          overflow: 'hidden',
-        }}
-      />
-      <MainNavbar />
+      <Overlay />
       <Container>
         <Card sx={{ minWidth: 275, mt: 5 }}>
           <CardContent>
-            <Typography variant="h5" gutterBottom component="div">
-              Bienvenido
-            </Typography>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-              sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat.
-              <br />
-              <br />
-              Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-              non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum.
-            </Typography>
+            <HomeHeader title="Bienvenido" body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
             <hr style={{ marginTop: 50 }} />
             <Box
               sx={{

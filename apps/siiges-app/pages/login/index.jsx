@@ -1,7 +1,11 @@
 import { React } from 'react';
-import Image from 'next/image';
 import { SignIn } from '@siiges-ui/authentication';
-import { Logo, Header, Navbar } from '@siiges-ui/shared';
+import {
+  Logo,
+  Header,
+  Navbar,
+  Background,
+} from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../theme';
@@ -9,17 +13,7 @@ import theme from '../theme';
 function LogInPage() {
   return (
     <ThemeProvider theme={theme}>
-      <Image
-        alt="travel"
-        src="/Fondo.jpg"
-        layout="fill"
-        objectFit="cover"
-        quality={100}
-        style={{
-          zIndex: -1,
-          overflow: 'hidden',
-        }}
-      />
+      <Background />
       <Grid
         alignItems="center"
         justifyContent="center"

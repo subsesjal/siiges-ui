@@ -92,9 +92,9 @@
   color: #18181a;
   display: inline-block;
   font-size: 15px;
+  font-size: 15px;
   line-height: 15px;
-  border-radius: 2px;
-  padding: 12px 29px 12px;
+  border-radius: 0px;
   text-decoration: none;
   cursor: pointer;
   background: #fff;

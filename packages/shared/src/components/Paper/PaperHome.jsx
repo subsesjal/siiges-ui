@@ -2,8 +2,8 @@ import React from 'react';
 import { Typography, Stack } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';
+import '../../styles/PaperHome.css';
 import ButtonStyled from '../Buttons/ButtonStyled';
-import '../../Styles/PaperHome.css';
 
 export default function PaperHome({ title, text }) {
   return (
@@ -15,8 +15,8 @@ export default function PaperHome({ title, text }) {
       <Typography>
         {text}
       </Typography>
-      <Stack direction="row" justifyContent="end" sx={{ mt: 2 }}>
-        <ButtonStyled text="Botón" alt="Alternativo" />
+      <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2, ml: -1 }}>
+        <ButtonStyled text="Botón" alt="alternativo" />
       </Stack>
     </Paper>
   );
