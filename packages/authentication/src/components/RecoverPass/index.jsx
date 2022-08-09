@@ -31,7 +31,7 @@ export default function RecoverPass() {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>Recuperar contraseña</Typography>
-        <Input label="Usuario" id="user" name="user" auto="user" size="small" />
+        <Input label="Usuario" id="user" name="user" auto="user" size="normal" />
         <Box
           display="flex"
           justifyContent="center"

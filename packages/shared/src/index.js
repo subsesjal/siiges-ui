@@ -15,6 +15,7 @@ import Navbar from './components/Navbar/Navbar';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
 import Select from './components/Select/Select';
+import UserConsult from './components/Users/UserConsult';
 import UserForm from './components/Users/UserForm';
 import UserInfo from './components/Users/UserInfo';
 
@@ -36,6 +37,7 @@ export {
   Overlay,
   PaperHome,
   Select,
+  UserConsult,
   UserForm,
   UserInfo,
 };

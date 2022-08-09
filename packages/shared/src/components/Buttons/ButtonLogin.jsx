@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
+import '../../styles/buttons/ButtonLogin.css';
 
 function ButtonLogin({
   type,
@@ -18,16 +19,7 @@ function ButtonLogin({
         variant="contained"
         color={color}
         onClick={click}
-        sx={{
-          mt: 3,
-          mb: 2,
-          textTransform: 'none',
-          color: 'white',
-          '&:hover': {
-            backgroundColor: '#ffa34d',
-          },
-          opacity: 1,
-        }}
+        className="buttonLogin"
       >
         <b>{text}</b>
       </Button>

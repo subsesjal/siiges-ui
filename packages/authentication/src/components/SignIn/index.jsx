@@ -37,7 +37,7 @@ export default function SignIn() {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ textAlign: 'center', color: 'black' }}>Iniciar Sesión</Typography>
-        <Input label="Usuario" id="user" name="user" auto="user" />
+        <Input label="Usuario" id="user" name="user" auto="user" size="normal" />
         <InputPassword label="Contraseña" id="password" name="password" auto="current-password" type="password" />
         <Box
           display="flex"

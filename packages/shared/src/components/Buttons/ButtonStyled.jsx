@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import PropTypes from 'prop-types';
-import '../../styles/ButtonStyle.css';
+import '../../styles/buttons/ButtonStyle.css';
 
 export default function ButtonStyled({ text, alt, type }) {
   return (

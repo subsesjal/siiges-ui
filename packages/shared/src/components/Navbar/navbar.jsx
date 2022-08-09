@@ -14,14 +14,16 @@ export default function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-          >
-            <LogoWhite />
-          </IconButton>
+          <Link href="/login">
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+            >
+              <LogoWhite />
+            </IconButton>
+          </Link>
           <Typography
             variant="h6"
             component="div"

@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Link from 'next/link';
 import setHandler from '../../utils/handlers/set-anchor';
-import StyledBadge from '../../styles/MenuNavbarStyle';
+import StyledBadge from '../../styles/Navbar/MenuNavbarStyle';
 
 export default function MenuNavbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);

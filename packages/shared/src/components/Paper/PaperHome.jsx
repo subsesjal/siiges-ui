@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Stack } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';
-import '../../styles/PaperHome.css';
+import '../../styles/Home/PaperHome.css';
 import ButtonStyled from '../Buttons/ButtonStyled';
 
 export default function PaperHome({ title, text }) {
