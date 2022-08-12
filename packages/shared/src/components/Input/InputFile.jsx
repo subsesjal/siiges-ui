@@ -11,12 +11,12 @@ import '../../styles/Inputs/InputFile.css';
 
 export default function InputFile() {
   return (
-    <FormControl className='formInputFile' variant="outlined">
-      <InputLabel htmlFor="file-upload" className='formInputLabel'>Subir Archivos...</InputLabel>
+    <FormControl className="formInputFile" variant="outlined">
+      <InputLabel htmlFor="file-upload" className="formInputLabel">Subir Archivos...</InputLabel>
       <OutlinedInput
         id="file-upload"
         type="text"
-        className='OutlinedInput'
+        className="OutlinedInput"
         endAdornment={(
           <InputAdornment position="end">
             <ButtonStyled text={<UploadFileIcon />} alt="Examinar" />

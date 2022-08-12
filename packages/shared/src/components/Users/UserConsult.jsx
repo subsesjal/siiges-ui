@@ -26,10 +26,16 @@ export default function UserConsult() {
                 <ListItemText primary="Apellidos" sx={{ textAlign: 'right' }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="Correo electronico" sx={{ textAlign: 'right' }} />
+                <ListItemText
+                  primary="Correo electronico"
+                  sx={{ textAlign: 'right' }}
+                />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="Nacionalidad" sx={{ textAlign: 'right' }} />
+                <ListItemText
+                  primary="Nacionalidad"
+                  sx={{ textAlign: 'right' }}
+                />
               </ListItem>
               <ListItem disablePadding>
                 <ListItemText primary="Sexo" sx={{ textAlign: 'right' }} />

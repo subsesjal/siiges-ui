@@ -14,10 +14,7 @@ function LogInPage() {
   return (
     <ThemeProvider theme={theme}>
       <Background />
-      <Grid
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Grid alignItems="center" justifyContent="center">
         <Grid item xs={3} sx={{ textAlign: 'center' }}>
           <Navbar />
           <Logo />

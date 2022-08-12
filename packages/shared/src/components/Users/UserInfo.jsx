@@ -26,14 +26,10 @@ export default function UserInfo() {
           textAlign: 'center',
         }}
       >
-        <Typography variant="p">
-          Luis Manuel de Alba Villaseñor
-        </Typography>
+        <Typography variant="p">Luis Manuel de Alba Villaseñor</Typography>
         <br />
         <Divider sx={{ marginY: 1 }} />
-        <Typography variant="p">
-          Administrador
-        </Typography>
+        <Typography variant="p">Administrador</Typography>
       </Paper>
     </>
   );

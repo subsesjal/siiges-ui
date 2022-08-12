@@ -5,8 +5,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Link from 'next/link';
-import LogoWhite from '../Images/Logowhite';
-import MenuNavbar from './MenuNavbar';
+import LogoWhite from '../Images/logowhite';
+import MenuNavbar from './menuNavbar';
 import MenuButton from '../Buttons/MenuButton';
 
 export default function MainNavbar() {

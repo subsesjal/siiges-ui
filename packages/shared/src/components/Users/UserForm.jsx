@@ -37,10 +37,20 @@ export default function UserForm() {
           <Input label="Nombre(s)" id="name" name="name" auto="name" />
         </Grid>
         <Grid item xs={4}>
-          <Input label="Primer Apellido" id="lastname1" name="lastname1" auto="lastname1" />
+          <Input
+            label="Primer Apellido"
+            id="lastname1"
+            name="lastname1"
+            auto="lastname1"
+          />
         </Grid>
         <Grid item xs={4}>
-          <Input label="Segundo Apellido" id="lastname2" name="lastname2" auto="lastname2" />
+          <Input
+            label="Segundo Apellido"
+            id="lastname2"
+            name="lastname2"
+            auto="lastname2"
+          />
         </Grid>
       </Grid>
       <Grid container spacing={5}>
@@ -53,10 +63,20 @@ export default function UserForm() {
       </Grid>
       <Grid container spacing={5}>
         <Grid item xs={4}>
-          <Input label="Correo Electronico" id="email" name="email" auto="email" />
+          <Input
+            label="Correo Electronico"
+            id="email"
+            name="email"
+            auto="email"
+          />
         </Grid>
         <Grid item xs={4}>
-          <Input label="Nacionalidad" id="nationality" name="nationality" auto="nationality" />
+          <Input
+            label="Nacionalidad"
+            id="nationality"
+            name="nationality"
+            auto="nationality"
+          />
         </Grid>
         <Grid item xs={4}>
           <Select title="Sexo" options={Sexo} />
@@ -78,7 +98,12 @@ export default function UserForm() {
           <Input label="Telefono" id="phone" name="phone" auto="phone" />
         </Grid>
         <Grid item xs={4}>
-          <Input label="Celular" id="cellphone" name="cellphone" auto="cellphone" />
+          <Input
+            label="Celular"
+            id="cellphone"
+            name="cellphone"
+            auto="cellphone"
+          />
         </Grid>
       </Grid>
       <ButtonsForm />
