@@ -46,30 +46,30 @@ export default function UserConsult() {
           <Grid item xs>
             <List>
               <ListItem disablePadding>
-                <ListItemText primary="Luis Manuel" />
+                <ListItemText secondary="Luis Manuel" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="de Alba Villaseñor" />
+                <ListItemText secondary="de Alba Villaseñor" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="example@gmail.com" />
+                <ListItemText secondary="example@gmail.com" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="Mexicana" />
+                <ListItemText secondary="Mexicana" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="Masculino" />
+                <ListItemText secondary="Masculino" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="33777666" />
+                <ListItemText secondary="33777666" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="33777666" />
+                <ListItemText secondary="33777666" sx={{ mt: 1 }} />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-        <Grid container xs={6}>
+        <Grid container xs={5}>
           <Grid item xs>
             <List>
               <ListItem disablePadding>
@@ -93,19 +93,19 @@ export default function UserConsult() {
           <Grid item xs>
             <List>
               <ListItem disablePadding>
-                <ListItemText primary="Admin" />
+                <ListItemText secondary="Admin" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="Jefe de jefes" />
+                <ListItemText secondary="Jefe de jefes" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="AAAAAAAAAAA" />
+                <ListItemText secondary="AAAAAAAAAAA" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="AAAAAAAAAAA" />
+                <ListItemText secondary="AAAAAAAAAAA" sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText primary="AAAAAAAAAAA" />
+                <ListItemText secondary="AAAAAAAAAAA" sx={{ mt: 1 }} />
               </ListItem>
             </List>
           </Grid>

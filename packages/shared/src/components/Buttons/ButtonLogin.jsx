@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import '../../styles/buttons/ButtonLogin.css';
+import '../../styles/Buttons/ButtonLogin.css';
 
 function ButtonLogin({
   type,

@@ -12,7 +12,7 @@ import MenuButton from '../Buttons/MenuButton';
 export default function MainNavbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <Link href="/home">
             <IconButton

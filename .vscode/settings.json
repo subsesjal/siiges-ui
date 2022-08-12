@@ -2,5 +2,6 @@
   "eslint.workingDirectories": [
     "apps/",
     "packages/"
-  ]
+  ],
+  "editor.tabSize": 2
 }

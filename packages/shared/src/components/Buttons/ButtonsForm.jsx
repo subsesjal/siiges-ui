@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import ButtonStyled from './ButtonStyled';
-import '../../styles/buttons/ButtonForm.css';
+import '../../styles/Buttons/ButtonForm.css';
 
 export default function UserForm() {
   return (

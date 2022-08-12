@@ -5,7 +5,7 @@ export default function Background() {
   return (
     <Image
       alt="travel"
-      src="/Fondo.jpg"
+      src="/Fondo.png"
       layout="fill"
       objectFit="cover"
       quality={100}

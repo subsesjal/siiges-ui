@@ -1,0 +1,9 @@
+.boxNavbar {
+    display: flex;
+}
+
+.textHeader {
+    display: flex;
+    text-align: left;
+    font-size: 1rem;
+}

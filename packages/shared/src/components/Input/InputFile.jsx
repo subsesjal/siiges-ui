@@ -7,24 +7,16 @@ import {
 } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ButtonStyled from '../Buttons/ButtonStyled';
+import '../../styles/Inputs/InputFile.css';
 
 export default function InputFile() {
   return (
-    <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-      <InputLabel htmlFor="file-upload" sx={{ position: 'relative', alignSelf: 'left' }}>Subir Archivos...</InputLabel>
+    <FormControl className='formInputFile' variant="outlined">
+      <InputLabel htmlFor="file-upload" className='formInputLabel'>Subir Archivos...</InputLabel>
       <OutlinedInput
         id="file-upload"
         type="text"
-        sx={{
-          position: 'fixed',
-          mt: 1,
-          p: 0,
-          width: '240px',
-          height: '40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        className='OutlinedInput'
         endAdornment={(
           <InputAdornment position="end">
             <ButtonStyled text={<UploadFileIcon />} alt="Examinar" />
