@@ -119,7 +119,7 @@ export default function DataTable() {
     <ThemeProvider theme={theme}>
       <Overlay />
       <Container>
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ minWidth: 275, marginTop: 5 }}>
           <CardContent>
             <Typography variant="h3">Usuarios</Typography>
             <Divider

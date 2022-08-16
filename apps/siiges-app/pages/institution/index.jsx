@@ -24,9 +24,9 @@ export default function DataTable() {
     <ThemeProvider theme={theme}>
       <Overlay />
       <Container>
-        <Card sx={{ minWidth: 275, marginTop: 10 }}>
+        <Card sx={{ minWidth: 275, marginTop: 5 }}>
           <CardContent>
-            <Typography variant="h3">Instituciones</Typography>
+            <Typography variant="h3">Institucion</Typography>
             <Divider
               sx={{ backgroundColor: 'orange', width: '30%', height: '3px' }}
             />
@@ -40,7 +40,7 @@ export default function DataTable() {
                 }}
               >
                 <Tabs value={value} onChange={handleChange}>
-                  <Tab label="Instituciones" />
+                  <Tab label="Datos de institucion" />
                   <Tab label="Planteles" />
                 </Tabs>
               </Box>

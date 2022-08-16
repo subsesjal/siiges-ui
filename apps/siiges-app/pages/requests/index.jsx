@@ -1,9 +1,19 @@
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { ButtonStyled } from '@siiges-ui/shared';
-import { Grid, IconButton, TextField } from '@mui/material';
+import { ThemeProvider } from 'styled-components';
+import { Overlay, Select } from '@siiges-ui/shared';
+import {
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  TextField,
+  Typography,
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import Link from 'next/link';
+import theme from '../theme';
 
 const columns = [
   { field: 'user', headerName: 'Usuario', width: 200 },
@@ -103,51 +113,67 @@ const rows = [
   },
 ];
 
-export default function Planteles() {
+export default function DataTable() {
+  const options = [
+    {
+      id: 'admin',
+      name: 'Administrador',
+    },
+    {
+      id: 'user',
+      name: 'Usuario',
+    },
+  ];
   return (
-    <>
-      <Grid container>
-        <Grid item xs={9} sx={{ mt: '20px' }}>
-          <Link href="/institution/newPlantel">
-            <div>
-              <ButtonStyled
-                text="Nuevo Plantel"
-                alt="Agregar Plantel"
-                type="success"
+    <ThemeProvider theme={theme}>
+      <Overlay />
+      <Container>
+        <Card sx={{ minWidth: 275, marginTop: 5 }}>
+          <CardContent>
+            <Typography variant="h3">Solicitudes</Typography>
+            <Divider
+              sx={{ backgroundColor: 'orange', width: '30%', height: '3px' }}
+            />
+            <Select title="Seleccione una opcion" options={options} />
+            <Grid container>
+              <Grid item xs={9} sx={{ mt: '20px' }}>
+                <Typography variant="p" sx={{ pt: 5, fontWeight: 'bold' }}>
+                  Tipo de solicitud
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="filter"
+                  label="Filtrar"
+                  type="text"
+                  name="filter"
+                  autoComplete="filter"
+                  autoFocus
+                  size="small"
+                  sx={{ mt: 2 }}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton position="end">
+                        <SearchIcon />
+                      </IconButton>
+                    ),
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <div style={{ height: 400, width: '100%', marginTop: 15 }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
               />
             </div>
-          </Link>
-        </Grid>
-        <Grid item xs={3}>
-          <TextField
-            margin="normal"
-            fullWidth
-            id="filter"
-            label="Filtrar"
-            type="text"
-            name="filter"
-            autoComplete="filter"
-            autoFocus
-            size="small"
-            sx={{ mt: 2 }}
-            InputProps={{
-              endAdornment: (
-                <IconButton position="end">
-                  <SearchIcon />
-                </IconButton>
-              ),
-            }}
-          />
-        </Grid>
-      </Grid>
-      <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-        />
-      </div>
-    </>
+          </CardContent>
+        </Card>
+      </Container>
+    </ThemeProvider>
   );
 }

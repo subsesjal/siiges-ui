@@ -18,6 +18,7 @@ import NewUserForm from './components/Users/NewUserForm';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
 import Planteles from './components/Institutions/planteles';
+import NewPlantelForm from './components/Institutions/newPlantelForm';
 import Select from './components/Select/Select';
 import UserConsult from './components/Users/UserConsult';
 import UserForm from './components/Users/UserForm';
@@ -41,6 +42,7 @@ export {
   MenuDrawer,
   Navbar,
   NewUserForm,
+  NewPlantelForm,
   Overlay,
   PaperHome,
   Planteles,

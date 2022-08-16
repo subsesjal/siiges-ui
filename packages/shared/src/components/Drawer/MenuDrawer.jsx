@@ -122,7 +122,7 @@ export default function MenuDrawer() {
             </Link>
           </ListItem>
           <ListItem key="solicitudes" disablePadding sx={{ display: 'block' }}>
-            <Link href="/home">
+            <Link href="/requests">
               <ListItemButton
                 sx={{
                   minHeight: 48,
