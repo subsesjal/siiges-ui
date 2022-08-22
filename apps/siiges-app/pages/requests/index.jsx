@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { ThemeProvider } from 'styled-components';
+import { NewRequest, ChangeAddress, Refrendo } from '@siiges-ui/authentication';
 import { Overlay, Select } from '@siiges-ui/shared';
 import {
   Card,
@@ -16,112 +17,120 @@ import SearchIcon from '@mui/icons-material/Search';
 import theme from '../theme';
 
 const columns = [
-  { field: 'user', headerName: 'Usuario', width: 200 },
-  { field: 'email', headerName: 'Correo', width: 250 },
-  { field: 'rol', headerName: 'Rol', width: 180 },
-  {
-    field: 'date',
-    headerName: 'Fecha',
-    type: 'date',
-    width: 180,
-  },
-  { field: 'status', headerName: 'Estatus', width: 150 },
+  { field: 'folio', headerName: 'Folio', width: 100 },
+  { field: 'studyPlan', headerName: 'Plan de estudios', width: 350 },
+  { field: 'status', headerName: 'Estatus', width: 120 },
+  { field: 'plantel', headerName: 'Plantel', width: 370 },
   { field: 'actions', headerName: 'Acciones', width: 150 },
 ];
 
 const rows = [
   {
     id: 1,
-    user: 'Jon Snow',
-    email: 'juannieves@gmail.com',
-    rol: 'jefe',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 100,
+    studyPlan: 'juannieves@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
   {
     id: 2,
-    user: 'Cersei Lannister',
-    email: 'cerseilannister@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 101,
+    studyPlan: 'cerseilannister@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
   {
     id: 3,
-    user: 'Jaime Lannister',
-    email: 'jaimelannister@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 102,
+    studyPlan: 'jaimelannister@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
   {
     id: 4,
-    user: 'Arya Stark',
-    email: 'aryastark@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 103,
+    studyPlan: 'aryastark@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
   {
     id: 5,
-    user: 'Daenerys Targaryen',
-    email: 'daenerystargaryen@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 104,
+    studyPlan: 'daenerystargaryen@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
   {
     id: 6,
-    user: 'Melisandre',
-    email: 'melisandre@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 105,
+    studyPlan: 'melisandre@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
   {
     id: 7,
-    user: 'Ferrara Clifford',
-    email: 'ferraraclifford@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 106,
+    studyPlan: 'ferraraclifford@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
   {
     id: 8,
-    user: 'Rossini Frances',
-    email: 'rossinifrances@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 107,
+    studyPlan: 'rossinifrances@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
   {
     id: 9,
-    user: 'Harvey Roxie',
-    email: 'harveyroxie@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
+    folio: 108,
+    studyPlan: 'harveyroxie@gmail.com',
+    status: 'Inactivo',
+    plantel: 'Escuela',
     actions: 'iconos',
   },
 ];
 
 export default function DataTable() {
+  const [option, setOption] = useState('selectOption');
+
+  const [NewRequestContentVisible, setNewRequestContentVisible] = useState(false);
+  const [ChangeAddressContentVisible, setChangeAddressContentVisible] = useState(false);
+  const [RefrendoContentVisible, setRefrendoContentVisible] = useState(false);
+
+  useEffect(() => {
+    if (option === 'new') setNewRequestContentVisible(true);
+    else setNewRequestContentVisible(false);
+    if (option === 'address') setChangeAddressContentVisible(true);
+    else setChangeAddressContentVisible(false);
+    if (option === 'refrendo') setRefrendoContentVisible(true);
+    else setRefrendoContentVisible(false);
+  }, [option]);
+
+  const handleOnChange = (e) => {
+    setOption(e.target.value);
+  };
+
   const options = [
     {
-      id: 'admin',
-      name: 'Administrador',
+      id: 'new',
+      name: 'Nueva Solicitud',
     },
     {
-      id: 'user',
-      name: 'Usuario',
+      id: 'refrendo',
+      name: 'Refrendo de plan de estudios',
+    },
+    {
+      id: 'address',
+      name: 'Cambio de domicilio',
     },
   ];
   return (
@@ -134,7 +143,30 @@ export default function DataTable() {
             <Divider
               sx={{ backgroundColor: 'orange', width: '30%', height: '3px' }}
             />
-            <Select title="Seleccione una opcion" options={options} />
+            <Select
+              title="Seleccione una opcion"
+              options={options}
+              value={option}
+              onChange={handleOnChange}
+            />
+            {NewRequestContentVisible && (
+              <>
+                <Divider sx={{ mt: 2 }} />
+                <NewRequest />
+              </>
+            )}
+            {ChangeAddressContentVisible && (
+              <>
+                <Divider sx={{ mt: 2 }} />
+                <ChangeAddress />
+              </>
+            )}
+            {RefrendoContentVisible && (
+              <>
+                <Divider sx={{ mt: 2 }} />
+                <Refrendo />
+              </>
+            )}
             <Grid container>
               <Grid item xs={9} sx={{ mt: '20px' }}>
                 <Typography variant="p" sx={{ pt: 5, fontWeight: 'bold' }}>
