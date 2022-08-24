@@ -139,7 +139,7 @@ export default function DataTable() {
       <Container>
         <Card sx={{ minWidth: 275, marginTop: 5 }}>
           <CardContent>
-            <Typography variant="h3">Solicitudes</Typography>
+            <Typography variant="h4">Solicitudes</Typography>
             <Divider
               sx={{ backgroundColor: 'orange', width: '30%', height: '3px' }}
             />

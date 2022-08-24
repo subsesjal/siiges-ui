@@ -11,6 +11,7 @@ import Institution from './components/Institutions/institution';
 import LinkButton from './components/LinkButton/link';
 import Logo from './components/Images/logo';
 import LogoWhite from './components/Images/logowhite';
+import LoadCircle from './components/Resources/LoadCircle';
 import MenuDrawer from './components/Drawer/MenuDrawer';
 import MainNavbar from './components/Navbar/mainnavbar';
 import Navbar from './components/Navbar/navbar';
@@ -36,6 +37,7 @@ export {
   InputFile,
   Institution,
   LinkButton,
+  LoadCircle,
   Logo,
   LogoWhite,
   MainNavbar,
