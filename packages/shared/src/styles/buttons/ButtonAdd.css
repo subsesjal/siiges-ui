@@ -1,0 +1,41 @@
+/* CSS */
+.buttonAdd {
+  appearance: none;
+  background-color: transparent;
+  border: 1px solid #F99A2C;
+  color: #18181a;
+  font-size: 15px;
+  line-height: 15px;
+  border-radius: 50px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  margin: 0;
+  min-width: 0;
+  outline: none;
+  padding: 6px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
+}
+
+.buttonAdd:disabled {
+  pointer-events: none;
+}
+
+.buttonAdd:hover {
+  color: #fff;
+  background-color: #F99A2C;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.buttonAdd:active {
+  box-shadow: none;
+  transform: translateY(0);
+}

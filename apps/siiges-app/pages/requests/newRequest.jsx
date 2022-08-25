@@ -19,8 +19,8 @@ import theme from '../theme';
 
 const steps = [
   'Datos generales',
-  'Programa de estudios',
   'Plantel',
+  'Plan de estudios',
   'Anexos',
   'Evaluacion curricular',
 ];
@@ -35,7 +35,7 @@ function newRequest() {
             <Grid container>
               <Grid item xs={12}>
                 <Box sx={{ width: '100%', mb: 3 }}>
-                  <Stepper activeStep={0} alternativeLabel>
+                  <Stepper activeStep={2} alternativeLabel>
                     {steps.map((label) => (
                       <Step key={label}>
                         <StepLabel>{label}</StepLabel>

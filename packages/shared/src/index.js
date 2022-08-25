@@ -1,3 +1,4 @@
+import ButtonAdd from './components/Buttons/ButtonAdd';
 import ButtonLogin from './components/Buttons/ButtonLogin';
 import ButtonStyled from './components/Buttons/ButtonStyled';
 import ButtonsForm from './components/Buttons/ButtonsForm';
@@ -26,6 +27,7 @@ import UserForm from './components/Users/UserForm';
 import UserInfo from './components/Users/UserInfo';
 
 export {
+  ButtonAdd,
   ButtonLogin,
   ButtonStyled,
   ButtonsForm,
