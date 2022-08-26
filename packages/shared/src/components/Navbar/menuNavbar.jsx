@@ -72,7 +72,7 @@ export default function MenuNavbar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Link href="./userProfile">
+        <Link href="/usuarios/perfilUsuario">
           <MenuItem>
             <Avatar />
             Perfil
@@ -85,7 +85,7 @@ export default function MenuNavbar() {
           </ListItemIcon>
           Ajustes
         </MenuItem>
-        <Link href="./login">
+        <Link href="/autenticacion/login">
           <MenuItem>
             <ListItemIcon>
               <Logout fontSize="small" />

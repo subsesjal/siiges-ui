@@ -8,7 +8,6 @@ import HomeHeader from './components/Header/HomeHeader';
 import Input from './components/Input/input';
 import InputPassword from './components/Input/inputPassword';
 import InputFile from './components/Input/InputFile';
-import Institution from './components/Institutions/institution';
 import LinkButton from './components/LinkButton/link';
 import Logo from './components/Images/logo';
 import LogoWhite from './components/Images/logowhite';
@@ -16,15 +15,9 @@ import LoadCircle from './components/Resources/LoadCircle';
 import MenuDrawer from './components/Drawer/MenuDrawer';
 import MainNavbar from './components/Navbar/mainnavbar';
 import Navbar from './components/Navbar/navbar';
-import NewUserForm from './components/Users/NewUserForm';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
-import Planteles from './components/Institutions/planteles';
-import NewPlantelForm from './components/Institutions/newPlantelForm';
 import Select from './components/Select/Select';
-import UserConsult from './components/Users/UserConsult';
-import UserForm from './components/Users/UserForm';
-import UserInfo from './components/Users/UserInfo';
 
 export {
   ButtonAdd,
@@ -37,7 +30,6 @@ export {
   Input,
   InputPassword,
   InputFile,
-  Institution,
   LinkButton,
   LoadCircle,
   Logo,
@@ -45,13 +37,7 @@ export {
   MainNavbar,
   MenuDrawer,
   Navbar,
-  NewUserForm,
-  NewPlantelForm,
   Overlay,
   PaperHome,
-  Planteles,
   Select,
-  UserConsult,
-  UserForm,
-  UserInfo,
 };

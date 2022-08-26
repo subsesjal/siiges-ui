@@ -45,11 +45,11 @@ export default function SignIn() {
           alignItems="center"
           sx={{ zIndex: 1, position: 'relative', mt: 2 }}
         >
-          <Link href="/password" passHref>
+          <Link href="/autenticacion/contrasena" passHref>
             <LinkButton text="¿Has olvidado tu contraseña?" />
           </Link>
         </Box>
-        <ButtonLogin color="secondary" type="submit" text="Entrar" href="./home" />
+        <ButtonLogin color="secondary" type="submit" text="Entrar" href="../home" />
       </Paper>
     </Box>
   );

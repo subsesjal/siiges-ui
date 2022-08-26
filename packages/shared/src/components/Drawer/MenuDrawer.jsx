@@ -72,7 +72,7 @@ export default function MenuDrawer() {
       <Drawer variant="permanent" open={open}>
         <List onMouseOver={handleDrawerOpen} onMouseLeave={handleDrawerClose}>
           <ListItem key="users" disablePadding sx={{ display: 'block' }}>
-            <Link href="/users">
+            <Link href="/usuarios">
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -97,7 +97,7 @@ export default function MenuDrawer() {
             </Link>
           </ListItem>
           <ListItem key="intitutions" disablePadding sx={{ display: 'block' }}>
-            <Link href="/institution">
+            <Link href="/institucion">
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -122,7 +122,7 @@ export default function MenuDrawer() {
             </Link>
           </ListItem>
           <ListItem key="solicitudes" disablePadding sx={{ display: 'block' }}>
-            <Link href="/requests">
+            <Link href="/solicitudes">
               <ListItemButton
                 sx={{
                   minHeight: 48,

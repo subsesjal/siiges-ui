@@ -14,7 +14,7 @@ export default function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Link href="/login">
+          <Link href="/autenticacion/login">
             <IconButton
               size="large"
               edge="start"
@@ -35,7 +35,7 @@ export default function Navbar() {
           >
             <b>SIIGES</b>
           </Typography>
-          <Link href="/signup">
+          <Link href="/autenticacion/preRegistro">
             <Button
               variant="outlined"
               startIcon={<PersonAddIcon />}
