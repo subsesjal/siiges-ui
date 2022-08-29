@@ -33,21 +33,21 @@ export default function Register() {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ textAlign: 'center', color: 'black' }}>Pre-registro</Typography>
-        <Input label="Usuario" id="user" name="user" auto="user" />
-        <Input label="Correo" id="email" name="email" auto="email" />
-        <Input label="Contraseña" id="password" name="password" auto="current-password" type="password" />
-        <Input label="Repetir contraseña" id="repassword" name="repassword" auto="repassword" type="password" />
+        <Input label="Usuario" id="user" name="user" auto="user" size="normal" />
+        <Input label="Correo" id="email" name="email" auto="email" size="normal" />
+        <Input label="Contraseña" id="password" name="password" auto="current-password" type="password" size="normal" />
+        <Input label="Repetir contraseña" id="repassword" name="repassword" auto="repassword" type="password" size="normal" />
         <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
           sx={{ zIndex: 1, position: 'relative', mt: 2 }}
         >
-          <Link href="/login">
+          <Link href="/autenticacion/login">
             <LinkButton text="¿Tienes cuenta? Inicia sesión" />
           </Link>
         </Box>
-        <ButtonLogin color="secondary" type="submit" text="Enviar" href="./home" />
+        <ButtonLogin color="secondary" type="submit" text="Enviar" href="../home" />
       </Paper>
     </Box>
   );

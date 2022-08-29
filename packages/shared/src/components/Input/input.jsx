@@ -22,7 +22,7 @@ function Input({
 
 Input.defaultProps = {
   type: 'text',
-  size: 'normal',
+  size: 'small',
 };
 
 Input.propTypes = {

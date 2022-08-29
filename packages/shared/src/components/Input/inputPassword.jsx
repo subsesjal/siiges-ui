@@ -4,7 +4,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-import ButtonVisibility from '../Buttons/ButtonVisibility';
+import ButtonVisibility from '../Buttons/buttonVisibility';
+import '../../styles/Inputs/InputPassword.css';
 
 const handleClickShowPassword = (setValues, values) => {
   setValues({
@@ -27,9 +28,12 @@ function InputPassword({
   const [values, setValues] = useState(initialValues);
 
   return (
-    <FormControl sx={{ mt: 1 }} variant="outlined">
+    <FormControl className="formInputPasswrd" variant="outlined">
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <OutlinedInput
+        className="outlinedInput"
+        margin="normal"
+        fullWidth
         id={id}
         type={values.showPassword ? 'text' : 'password'}
         endAdornment={(

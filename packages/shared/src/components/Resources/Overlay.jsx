@@ -1,5 +1,6 @@
 import React from 'react';
-import MainNavbar from '../Navbar/MainNavbar';
+import MenuDrawer from '../Drawer/MenuDrawer';
+import MainNavbar from '../Navbar/mainnavbar';
 import Background from './Background';
 
 export default function Overlay() {
@@ -7,6 +8,7 @@ export default function Overlay() {
     <>
       <Background />
       <MainNavbar />
+      <MenuDrawer />
     </>
   );
 }

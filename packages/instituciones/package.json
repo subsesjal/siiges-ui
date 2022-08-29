@@ -1,0 +1,40 @@
+{
+  "name": "@siiges-ui/instituciones",
+  "version": "1.0.0",
+  "description": "mis instituciones en ravalidacion",
+  "keywords": [
+    "instituciones",
+    "planteles"
+  ],
+  "author": "elmejorlui <elmejorlui@gmail.com>",
+  "homepage": "http://src/index.js",
+  "license": "MIT",
+  "main": "src/index.js",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elmejorlui/siiges-ui.git"
+  },
+  "scripts": {
+    "lint": "eslint .",
+		"lint:fix": "eslint --fix .",
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"precommit": "yarn lint && yarn test"
+  },
+  "bugs": {
+    "url": "https://github.com/elmejorlui/siiges-ui/issues"
+  },
+  "dependencies": {
+    "@siiges-ui/users": "^1.0.0"
+  }
+}

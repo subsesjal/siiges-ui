@@ -1,0 +1,20 @@
+.OutlinedInput {
+    position: 'fixed';
+    margin-top: 10px;
+    padding: 0;
+    width: '240px';
+    height: '40px';
+    display: 'flex';
+    align-items: 'center';
+    justify-content: 'center';
+}
+
+.formInputFile {
+    margin: 1;
+    width: 25ch;
+}
+
+.formInputLabel{
+    position: 'relative';
+    align-self: 'left';
+}

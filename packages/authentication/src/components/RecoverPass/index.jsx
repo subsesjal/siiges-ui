@@ -31,18 +31,18 @@ export default function RecoverPass() {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>Recuperar contraseña</Typography>
-        <Input label="Usuario" id="user" name="user" auto="user" size="small" />
+        <Input label="Usuario" id="user" name="user" auto="user" size="normal" />
         <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
           sx={{ zIndex: 1, position: 'relative', mt: 2 }}
         >
-          <Link href="/login" passHref>
+          <Link href="/autenticacion/login" passHref>
             <LinkButton text="¿Tienes cuenta? Inicia sesión" />
           </Link>
         </Box>
-        <ButtonLogin color="secondary" type="submit" text="Enviar correo" href="./home" />
+        <ButtonLogin color="secondary" type="submit" text="Enviar correo" href="../home" />
       </Paper>
     </Box>
   );

@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "@siiges-ui/authentication": "^1.0.0",
+    "@siiges-ui/instituciones": "^1.0.0",
+    "@siiges-ui/solicitudes": "^1.0.0",
     "@siiges-ui/shared": "1.0.0",
+    "@siiges-ui/users": "^1.0.0",
     "next": "12.2.0",
     "next-compose-plugins": "^2.2.1",
     "next-transpile-modules": "^9.0.0",
