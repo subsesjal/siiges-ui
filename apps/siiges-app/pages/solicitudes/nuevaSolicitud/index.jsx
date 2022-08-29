@@ -14,7 +14,7 @@ import { ButtonStyled, LoadCircle, Overlay } from '@siiges-ui/shared';
 import React from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { ThemeProvider } from 'styled-components';
-import { InstitucionData } from '@siiges-ui/requests';
+import { InstitucionData } from '@siiges-ui/solicitudes';
 import theme from '../../theme';
 
 const steps = [

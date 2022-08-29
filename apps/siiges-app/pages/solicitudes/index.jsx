@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { ThemeProvider } from 'styled-components';
-import { NewRequest, ChangeAddress, Refrendo } from '@siiges-ui/requests';
+import { NewRequest, ChangeAddress, Refrendo } from '@siiges-ui/solicitudes';
 import { Overlay, Select } from '@siiges-ui/shared';
 import {
   Card,

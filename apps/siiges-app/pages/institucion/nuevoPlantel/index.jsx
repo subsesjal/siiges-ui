@@ -1,7 +1,7 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { ButtonsForm, Overlay } from '@siiges-ui/shared';
-import { NewPlantelForm } from '@siiges-ui/institutions';
+import { NewPlantelForm } from '@siiges-ui/instituciones';
 import {
   Card,
   CardContent,
