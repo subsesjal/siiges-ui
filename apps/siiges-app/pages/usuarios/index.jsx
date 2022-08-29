@@ -1,20 +1,13 @@
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { ThemeProvider } from 'styled-components';
-import { ButtonStyled, Overlay } from '@siiges-ui/shared';
+import { ButtonStyled, Layout } from '@siiges-ui/shared';
 import {
-  Card,
-  CardContent,
-  Container,
-  Divider,
   Grid,
   IconButton,
   TextField,
-  Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Link from 'next/link';
-import theme from '../theme';
 
 const columns = [
   { field: 'user', headerName: 'Usuario', width: 200 },
@@ -116,63 +109,49 @@ const rows = [
 
 export default function DataTable() {
   return (
-    <ThemeProvider theme={theme}>
-      <Overlay />
-      <Container>
-        <Card sx={{ minWidth: 275, marginTop: 5 }}>
-          <CardContent>
-            <Typography variant="h3">Usuarios</Typography>
-            <Divider
-              sx={{ backgroundColor: 'orange', width: '30%', height: '3px' }}
-            />
-            <Typography variant="p">
-              Consulta todos los usuarios registrados
-            </Typography>
-            <Grid container>
-              <Grid item xs={9} sx={{ mt: '20px' }}>
-                <Link href="/usuarios/nuevoUsuario">
-                  <div>
-                    <ButtonStyled
-                      text="Nuevo Usuario"
-                      alt="Agregar usuario"
-                      type="success"
-                    />
-                  </div>
-                </Link>
-              </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  id="filter"
-                  label="Filtrar"
-                  type="text"
-                  name="filter"
-                  autoComplete="filter"
-                  autoFocus
-                  size="small"
-                  sx={{ mt: 2 }}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton position="end">
-                        <SearchIcon />
-                      </IconButton>
-                    ),
-                  }}
-                />
-              </Grid>
-            </Grid>
-            <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
+    <Layout title="Usuarios" subtitle="Consulta todos los usuarios registrados">
+      <Grid container>
+        <Grid item xs={9} sx={{ mt: '20px' }}>
+          <Link href="/usuarios/nuevoUsuario">
+            <div>
+              <ButtonStyled
+                text="Nuevo Usuario"
+                alt="Agregar usuario"
+                type="success"
               />
             </div>
-          </CardContent>
-        </Card>
-      </Container>
-    </ThemeProvider>
+          </Link>
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            margin="normal"
+            fullWidth
+            id="filter"
+            label="Filtrar"
+            type="text"
+            name="filter"
+            autoComplete="filter"
+            autoFocus
+            size="small"
+            sx={{ mt: 2 }}
+            InputProps={{
+              endAdornment: (
+                <IconButton position="end">
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }}
+          />
+        </Grid>
+      </Grid>
+      <div style={{ height: 400, width: '100%', marginTop: 15 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+        />
+      </div>
+    </Layout>
   );
 }

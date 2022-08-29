@@ -5,11 +5,11 @@ import ButtonsForm from './components/Buttons/ButtonsForm';
 import Background from './components/Resources/Background';
 import Header from './components/Header/header';
 import HomePage from './components/HomePage';
-import HomeHeader from './components/Header/HomeHeader';
 import Input from './components/Input/input';
 import InputPassword from './components/Input/inputPassword';
 import InputFile from './components/Input/InputFile';
-import Layout from './components/Resources/Layout';
+import Layout from './components/Layout/Layout';
+import LoginLayout from './components/Layout/LoginLayout';
 import LinkButton from './components/LinkButton/link';
 import Logo from './components/Images/logo';
 import LogoWhite from './components/Images/logowhite';
@@ -28,12 +28,12 @@ export {
   ButtonsForm,
   Background,
   Header,
-  HomeHeader,
   HomePage,
   Input,
   InputPassword,
   InputFile,
   Layout,
+  LoginLayout,
   LinkButton,
   LoadCircle,
   Logo,
