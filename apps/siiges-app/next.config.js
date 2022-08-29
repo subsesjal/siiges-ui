@@ -3,8 +3,8 @@ const withTM = require('next-transpile-modules')([
   '@siiges-ui/shared',
   '@siiges-ui/authentication',
   '@siiges-ui/users',
-  '@siiges-ui/institutions',
-  '@siiges-ui/requests',
+  '@siiges-ui/instituciones',
+  '@siiges-ui/solicitudes',
 ]);
 
 module.exports = withPlugins([withTM()], {

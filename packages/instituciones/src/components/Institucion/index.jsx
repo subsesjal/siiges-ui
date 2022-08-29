@@ -11,7 +11,7 @@ import React from 'react';
 import Image from 'next/image';
 import { ButtonStyled } from '@siiges-ui/shared';
 
-export default function Institution() {
+export default function Institucion() {
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>

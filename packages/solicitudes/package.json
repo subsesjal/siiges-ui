@@ -1,10 +1,9 @@
 {
-  "name": "@siiges-ui/institutions",
+  "name": "@siiges-ui/solicitudes",
   "version": "1.0.0",
-  "description": "mis instituciones en ravalidacion",
+  "description": "solicitudes",
   "keywords": [
-    "instituciones",
-    "planteles"
+    "solicitudes"
   ],
   "author": "elmejrlui <elmejrlui@gmail.com>",
   "homepage": "http://src/index.js",
@@ -15,7 +14,8 @@
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "src",
+    "__tests__"
   ],
   "publishConfig": {
     "access": "public"
@@ -33,8 +33,5 @@
   },
   "bugs": {
     "url": "https://github.com/elmejorlui/siiges-ui/issues"
-  },
-  "dependencies": {
-    "@siiges-ui/users": "^1.0.0"
   }
 }
