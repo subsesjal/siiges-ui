@@ -1,12 +1,6 @@
 import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { ButtonStyled, Layout } from '@siiges-ui/shared';
-import {
-  Grid,
-  IconButton,
-  TextField,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { ButtonStyled, Layout, DataTable } from '@siiges-ui/shared';
+import { Grid } from '@mui/material';
 import Link from 'next/link';
 
 const columns = [
@@ -107,7 +101,7 @@ const rows = [
   },
 ];
 
-export default function DataTable() {
+export default function Usuarios() {
   return (
     <Layout title="Usuarios" subtitle="Consulta todos los usuarios registrados">
       <Grid container>
@@ -122,36 +116,8 @@ export default function DataTable() {
             </div>
           </Link>
         </Grid>
-        <Grid item xs={3}>
-          <TextField
-            margin="normal"
-            fullWidth
-            id="filter"
-            label="Filtrar"
-            type="text"
-            name="filter"
-            autoComplete="filter"
-            autoFocus
-            size="small"
-            sx={{ mt: 2 }}
-            InputProps={{
-              endAdornment: (
-                <IconButton position="end">
-                  <SearchIcon />
-                </IconButton>
-              ),
-            }}
-          />
-        </Grid>
+        <DataTable rows={rows} columns={columns} title="Tabla de usuarios" />
       </Grid>
-      <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-        />
-      </div>
     </Layout>
   );
 }
