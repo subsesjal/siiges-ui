@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import MenuDrawer from '../Drawer/MenuDrawer';
 import MainNavbar from '../Navbar/mainnavbar';
 import Background from '../Resources/Background';
-import LayoutHeader from './LayoutHeader';
+import Title from '../Title';
 
 export default function Overlay({
   children,
@@ -21,13 +21,13 @@ export default function Overlay({
         {type ? (
           <Card sx={{ mt: 5 }}>
             <CardContent>
-              <LayoutHeader title={title} subtitle={subtitle} />
+              <Title title={title} subtitle={subtitle} />
               {children}
             </CardContent>
           </Card>
         ) : (
           <>
-            <LayoutHeader title={title} subtitle={subtitle} />
+            <Title title={title} subtitle={subtitle} />
             {children}
           </>
         )}

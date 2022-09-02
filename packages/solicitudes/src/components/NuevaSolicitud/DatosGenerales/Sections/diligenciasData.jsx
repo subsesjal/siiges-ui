@@ -4,12 +4,12 @@ import { ButtonAdd } from '@siiges-ui/shared';
 import React from 'react';
 
 const columns = [
-  { field: 'name', headerName: 'Nombre' },
-  { field: 'charge', headerName: 'Cargo' },
-  { field: 'phone', headerName: 'Telefono' },
-  { field: 'cellphone', headerName: 'Celular' },
-  { field: 'email', headerName: 'Correo' },
-  { field: 'schedule', headerName: 'Horario' },
+  { field: 'name', headerName: 'Nombre', width: 270 },
+  { field: 'charge', headerName: 'Cargo', width: 100 },
+  { field: 'phone', headerName: 'Telefono', width: 130 },
+  { field: 'cellphone', headerName: 'Celular', width: 130 },
+  { field: 'email', headerName: 'Correo', width: 230 },
+  { field: 'schedule', headerName: 'Horario', width: 150 },
   { field: 'actions', headerName: 'Acciones' },
 ];
 

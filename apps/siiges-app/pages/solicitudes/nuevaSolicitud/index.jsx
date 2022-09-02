@@ -18,7 +18,7 @@ function newRequest() {
         type="Nueva solicitud"
         date="22 de Agosto 2022"
       />
-      <DatosGenerales />
+      <DatosGenerales totalSections="3" />
     </Layout>
   );
 }

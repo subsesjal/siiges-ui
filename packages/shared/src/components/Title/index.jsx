@@ -2,7 +2,7 @@ import { Divider, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-export default function LayoutHeader({ title, subtitle }) {
+export default function Title({ title, subtitle }) {
   if (title !== '') {
     return (
       <>
@@ -20,12 +20,12 @@ export default function LayoutHeader({ title, subtitle }) {
   }
 }
 
-LayoutHeader.defaultProps = {
+Title.defaultProps = {
   title: '',
   subtitle: '',
 };
 
-LayoutHeader.propTypes = {
+Title.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
 };
