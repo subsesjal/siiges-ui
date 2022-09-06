@@ -8,13 +8,19 @@ import { ButtonStyled, StepperComponent } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-export default function ModuleHeader({ steps, type, date }) {
+export default function ModuleHeader({
+  steps,
+  type,
+  date,
+  nextModule,
+  module,
+}) {
   return (
     <Card sx={{ width: '100%', mt: 5 }}>
       <CardContent>
         <Grid container>
           <Grid item xs={12}>
-            <StepperComponent steps={steps} position="1" />
+            <StepperComponent steps={steps} position={module} />
           </Grid>
           <Grid item xs={6}>
             <Typography variant="p" sx={{ fontWeight: 'bold' }}>
@@ -34,6 +40,7 @@ export default function ModuleHeader({ steps, type, date }) {
               text="Terminar"
               alt="Terminar solicitud"
               type="success"
+              onclick={nextModule}
             />
             <span>&nbsp;&nbsp;</span>
             <ButtonStyled text="Salir" alt="Salir" type="success" />
@@ -48,4 +55,6 @@ ModuleHeader.propTypes = {
   type: PropTypes.string.isRequired,
   steps: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
+  nextModule: PropTypes.func.isRequired,
+  module: PropTypes.number.isRequired,
 };
