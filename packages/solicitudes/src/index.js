@@ -1,4 +1,4 @@
-import InstitucionData from './components/NuevaSolicitud/DatosGenerales/Sections/institucionData';
+import InstitucionData from './components/Sections/InstitucionData';
 import DatosGenerales from './components/NuevaSolicitud/DatosGenerales';
 import ChangeAddress from './components/ModuleSelector/CambioDomicilio';
 import NewRequest from './components/ModuleSelector/NuevaSolicitud';

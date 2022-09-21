@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
-import DatosPlanEstudios from './Sections/DatosPlanEstudios';
-import CoordinadorPrograma from './Sections/CoordinadorPrograma';
-import FundamentosPlanEstudios from './Sections/FundamentosPlanEstudios';
-import Ingreso from './Sections/Ingreso';
-import Egreso from './Sections/Egreso';
-import Curricula from './Sections/Curricula';
-import Asignaturas from './Sections/Asignaturas';
-import AsignaturasFormacionElectiva from './Sections/AsignaturasFormacionElectiva';
-import Docentes from './Sections/Docentes';
-import TrayectoriaEducativa from './Sections/TrayectoriaEducativa';
+import DatosPlanEstudios from '../../Sections/DatosPlanEstudios';
+import CoordinadorPrograma from '../../Sections/CoordinadorPrograma';
+import FundamentosPlanEstudios from '../../Sections/FundamentosPlanEstudios';
+import Ingreso from '../../Sections/Ingreso';
+import Egreso from '../../Sections/Egreso';
+import Curricula from '../../Sections/Curricula';
+import Asignaturas from '../../Sections/Asignaturas';
+import AsignaturasFormacionElectiva from '../../Sections/AsignaturasFormacionElectiva';
+import Docentes from '../../Sections/Docentes';
+import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 
 export default function PlanEstudios() {
   const {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
-import RatificacionNombre from './Sections/RatificacionNombre';
+import RatificacionNombre from '../../Sections/AnexosSeccion';
 
 export default function Anexos() {
   const {

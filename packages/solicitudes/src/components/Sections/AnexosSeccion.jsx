@@ -2,11 +2,11 @@ import { Grid, Typography } from '@mui/material';
 import { InputFile } from '@siiges-ui/shared';
 import React from 'react';
 
-export default function RatificacionNombre() {
+export default function AnexosSeccion() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Trayectoria educativa</Typography>
+        <Typography variant="h6">Anexos</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={12}>

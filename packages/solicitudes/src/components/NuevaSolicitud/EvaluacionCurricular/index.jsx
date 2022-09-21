@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
-import DatosGeneralesEvaluacion from './Sections/DatosGeneralesEvaluacion';
+import DatosGeneralesEvaluacion from '../../Sections/DatosGeneralesEvaluacion';
 
 export default function EvaluacionCurricular() {
   const {

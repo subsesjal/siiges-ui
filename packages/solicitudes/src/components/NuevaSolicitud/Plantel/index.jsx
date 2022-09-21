@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
-import DatosPlantel from './Sections/DatosPlantel';
-import UbicacionPlantel from './Sections/UbicacionPlantel';
-import DescripcionPlantel from './Sections/DescripcionPlantel';
-import HigienePlantel from './Sections/HigienePlantel';
-import InstitucionesAledanas from './Sections/InstitucionesAledanas';
-import Infraestructura from './Sections/Infraestructura';
-import RatificacionNombre from './Sections/RatificacionNombre';
+import DatosPlantel from '../../Sections/DatosPlantel';
+import UbicacionPlantel from '../../Sections/UbicacionPlantel';
+import DescripcionPlantel from '../../Sections/DescripcionPlantel';
+import HigienePlantel from '../../Sections/HigienePlantel';
+import InstitucionesAledanas from '../../Sections/InstitucionesAledanas';
+import Infraestructura from '../../Sections/Infraestructura';
+import RatificacionNombre from '../../Sections/RatificacionNombre';
 
 export default function Plantel() {
   const {
