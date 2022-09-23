@@ -1,8 +1,6 @@
 import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { ButtonStyled } from '@siiges-ui/shared';
-import { Grid, IconButton, TextField } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { ButtonStyled, DataTable } from '@siiges-ui/shared';
+import { Grid } from '@mui/material';
 import Link from 'next/link';
 
 const columns = [
@@ -105,49 +103,19 @@ const rows = [
 
 export default function Planteles() {
   return (
-    <>
-      <Grid container>
-        <Grid item xs={9} sx={{ mt: '20px' }}>
-          <Link href="/institucion/nuevoPlantel">
-            <div>
-              <ButtonStyled
-                text="Nuevo Plantel"
-                alt="Agregar Plantel"
-                type="success"
-              />
-            </div>
-          </Link>
-        </Grid>
-        <Grid item xs={3}>
-          <TextField
-            margin="normal"
-            fullWidth
-            id="filter"
-            label="Filtrar"
-            type="text"
-            name="filter"
-            autoComplete="filter"
-            autoFocus
-            size="small"
-            sx={{ mt: 2 }}
-            InputProps={{
-              endAdornment: (
-                <IconButton position="end">
-                  <SearchIcon />
-                </IconButton>
-              ),
-            }}
-          />
-        </Grid>
+    <Grid container>
+      <Grid item xs={9} sx={{ mt: '20px' }}>
+        <Link href="/institucion/nuevoPlantel">
+          <div>
+            <ButtonStyled
+              text="Nuevo Plantel"
+              alt="Agregar Plantel"
+              type="success"
+            />
+          </div>
+        </Link>
       </Grid>
-      <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-        />
-      </div>
-    </>
+      <DataTable rows={rows} columns={columns} title="Planteles" />
+    </Grid>
   );
 }

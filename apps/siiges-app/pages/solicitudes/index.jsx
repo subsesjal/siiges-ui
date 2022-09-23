@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { ThemeProvider } from 'styled-components';
-import { NewRequest, ChangeAddress, Refrendo } from '@siiges-ui/requests';
-import { Overlay, Select } from '@siiges-ui/shared';
-import {
-  Card,
-  CardContent,
-  Container,
-  Divider,
-  Grid,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import theme from '../theme';
+import { NewRequest, ChangeAddress, Refrendo } from '@siiges-ui/solicitudes';
+import { Layout, Select, DataTable } from '@siiges-ui/shared';
+import { Divider } from '@mui/material';
 
 const columns = [
   { field: 'folio', headerName: 'Folio', width: 100 },
@@ -99,7 +86,7 @@ const rows = [
   },
 ];
 
-export default function DataTable() {
+export default function Solicitudes() {
   const [option, setOption] = useState('selectOption');
 
   const [NewRequestContentVisible, setNewRequestContentVisible] = useState(false);
@@ -134,78 +121,32 @@ export default function DataTable() {
     },
   ];
   return (
-    <ThemeProvider theme={theme}>
-      <Overlay />
-      <Container>
-        <Card sx={{ minWidth: 275, marginTop: 5 }}>
-          <CardContent>
-            <Typography variant="h4">Solicitudes</Typography>
-            <Divider
-              sx={{ backgroundColor: 'orange', width: '30%', height: '3px' }}
-            />
-            <Select
-              title="Seleccione una opcion"
-              options={options}
-              value={option}
-              onChange={handleOnChange}
-            />
-            {NewRequestContentVisible && (
-              <>
-                <Divider sx={{ mt: 2 }} />
-                <NewRequest />
-              </>
-            )}
-            {ChangeAddressContentVisible && (
-              <>
-                <Divider sx={{ mt: 2 }} />
-                <ChangeAddress />
-              </>
-            )}
-            {RefrendoContentVisible && (
-              <>
-                <Divider sx={{ mt: 2 }} />
-                <Refrendo />
-              </>
-            )}
-            <Grid container>
-              <Grid item xs={9} sx={{ mt: '20px' }}>
-                <Typography variant="p" sx={{ pt: 5, fontWeight: 'bold' }}>
-                  Tipo de solicitud
-                </Typography>
-              </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  id="filter"
-                  label="Filtrar"
-                  type="text"
-                  name="filter"
-                  autoComplete="filter"
-                  autoFocus
-                  size="small"
-                  sx={{ mt: 2 }}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton position="end">
-                        <SearchIcon />
-                      </IconButton>
-                    ),
-                  }}
-                />
-              </Grid>
-            </Grid>
-            <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </Container>
-    </ThemeProvider>
+    <Layout title="Solicitudes">
+      <Select
+        title="Seleccione una opcion"
+        options={options}
+        value={option}
+        onChange={handleOnChange}
+      />
+      {NewRequestContentVisible && (
+        <>
+          <Divider sx={{ mt: 2 }} />
+          <NewRequest />
+        </>
+      )}
+      {ChangeAddressContentVisible && (
+        <>
+          <Divider sx={{ mt: 2 }} />
+          <ChangeAddress />
+        </>
+      )}
+      {RefrendoContentVisible && (
+        <>
+          <Divider sx={{ mt: 2 }} />
+          <Refrendo />
+        </>
+      )}
+      <DataTable title="Tipo de solicitud" rows={rows} columns={columns} />
+    </Layout>
   );
 }
