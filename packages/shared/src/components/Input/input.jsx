@@ -3,7 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function Input({
-  id, label, name, auto, type, size,
+  id,
+  label,
+  name,
+  auto,
+  type,
+  size,
+  errorMessage,
 }) {
   return (
     <TextField
@@ -16,6 +22,8 @@ function Input({
       autoComplete={auto}
       autoFocus
       size={size}
+      helperText={errorMessage}
+      error={!!errorMessage}
     />
   );
 }
@@ -29,6 +37,7 @@ Input.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   type: PropTypes.string,
   size: PropTypes.string,
   auto: PropTypes.string.isRequired,

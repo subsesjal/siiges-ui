@@ -1,7 +1,7 @@
 export default function pagination(useState, sections) {
   const step = 100 / sections;
-  const lastRightSection = Math.round(100 - step);
-  const lastLeftSection = Math.round(step * 2);
+  const lastSection = sections - 1;
+  const firstSection = 2;
   const [position, setPosition] = useState('first');
   const [porcentaje, setPorcentaje] = useState(step);
   const [section, setSection] = useState(1);
@@ -9,7 +9,7 @@ export default function pagination(useState, sections) {
   const next = () => {
     setSection(section + 1);
     setPorcentaje(Math.round(porcentaje + step));
-    if (porcentaje === lastRightSection) {
+    if (section === lastSection) {
       setPosition('last');
     } else {
       setPosition('middle');
@@ -19,7 +19,7 @@ export default function pagination(useState, sections) {
   const prev = () => {
     setSection(section - 1);
     setPorcentaje(Math.round(porcentaje - step));
-    if (porcentaje === lastLeftSection) {
+    if (section === firstSection) {
       setPosition('first');
     } else {
       setPosition('middle');

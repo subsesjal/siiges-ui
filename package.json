@@ -42,7 +42,8 @@
 		"lint:fix": "eslint --fix .",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"postinstall": "husky install"
+		"postinstall": "husky install",
+    "dev": "cd apps/siiges-app && yarn dev"
 	},
 	"dependencies": {
 		"@babel/cli": "^7.18.9",

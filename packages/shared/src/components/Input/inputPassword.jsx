@@ -4,6 +4,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import ButtonVisibility from '../Buttons/buttonVisibility';
 import '../../styles/Inputs/InputPassword.css';
 
@@ -19,7 +20,7 @@ const handleMouseDownPassword = (event) => {
 };
 
 function InputPassword({
-  id, label, name, auto,
+  id, label, name, auto, errorMessage,
 }) {
   const initialValues = {
     showPassword: false,
@@ -29,13 +30,14 @@ function InputPassword({
 
   return (
     <FormControl className="formInputPasswrd" variant="outlined">
-      <InputLabel htmlFor={id}>{label}</InputLabel>
+      <InputLabel htmlFor={id} error={!!errorMessage}>{label}</InputLabel>
       <OutlinedInput
         className="outlinedInput"
         margin="normal"
         fullWidth
         id={id}
         type={values.showPassword ? 'text' : 'password'}
+        error={!!errorMessage}
         endAdornment={(
           <InputAdornment position="end" data-testid="visibility">
             <ButtonVisibility
@@ -49,6 +51,7 @@ function InputPassword({
         name={name}
         autoComplete={auto}
       />
+      {errorMessage && <FormHelperText error>{errorMessage}</FormHelperText>}
     </FormControl>
   );
 }
@@ -56,6 +59,7 @@ function InputPassword({
 InputPassword.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   auto: PropTypes.string.isRequired,
 };
