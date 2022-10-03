@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import PropTypes from 'prop-types';
 
@@ -9,10 +9,17 @@ const cookieObject = {};
 
 function Provider({ children }) {
   const [cookies, removeCookie] = useCookies(['usuario']);
-  cookieObject.usuario = cookies.nombre;
-  cookieObject.rol = cookies.rol;
-  const [session, setSession] = useState(() => cookies);
+  const [session, setSession] = useState({
+    nombre: cookies.nombre,
+    rol: cookies.rol,
+  });
   const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    if (session === undefined) {
+      setSession({ nombre: cookies.nombre, rol: cookies.rol });
+    }
+  }, [session]);
 
   const value = {
     session,

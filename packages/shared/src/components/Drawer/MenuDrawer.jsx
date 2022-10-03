@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '@siiges-ui/shared';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -56,10 +56,9 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-function userRol(session) {
-  let users;
+function userRol(session, setUsers) {
   if (session.rol === 'representante') {
-    users = [
+    setUsers([
       {
         text: 'Mis usuarios',
         icon: <GroupIcon />,
@@ -78,11 +77,11 @@ function userRol(session) {
         route: '/solicitudes',
         key: 'solicitudes',
       },
-    ];
+    ]);
   }
 
   if (session.rol === 'admin') {
-    users = [
+    setUsers([
       {
         text: 'Mis usuarios',
         icon: <GroupIcon />,
@@ -101,15 +100,18 @@ function userRol(session) {
         route: '/solicitudes',
         key: 'solicitudes',
       },
-    ];
+    ]);
   }
-  return users;
 }
 
 export default function MenuDrawer() {
   const { session } = useContext(Context);
   const [open, setOpen] = useState(false);
-  const [users] = useState(userRol(session));
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    userRol(session, setUsers);
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
