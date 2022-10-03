@@ -3,6 +3,7 @@ import ButtonLogin from './components/Buttons/ButtonLogin';
 import ButtonStyled from './components/Buttons/ButtonStyled';
 import ButtonsForm from './components/Buttons/ButtonsForm';
 import Background from './components/Resources/Background';
+import { Context } from './utils/handlers/context';
 import DataTable from './components/DataTable';
 import Header from './components/Header/header';
 import HomePage from './components/HomePage';
@@ -20,6 +21,7 @@ import MainNavbar from './components/Navbar/mainnavbar';
 import Navbar from './components/Navbar/navbar';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
+import ParseCookies from './utils/handlers/cookieHandler';
 import Select from './components/Select/Select';
 import StepperComponent from './components/Stepper';
 import Title from './components/Title';
@@ -30,6 +32,7 @@ export {
   ButtonStyled,
   ButtonsForm,
   Background,
+  Context,
   DataTable,
   Header,
   HomePage,
@@ -47,6 +50,7 @@ export {
   Navbar,
   Overlay,
   PaperHome,
+  ParseCookies,
   Select,
   StepperComponent,
   Title,

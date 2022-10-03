@@ -33,7 +33,7 @@ function InputPassword({
       <InputLabel htmlFor={id} error={!!errorMessage}>{label}</InputLabel>
       <OutlinedInput
         className="outlinedInput"
-        margin="normal"
+        margin="none"
         fullWidth
         id={id}
         type={values.showPassword ? 'text' : 'password'}

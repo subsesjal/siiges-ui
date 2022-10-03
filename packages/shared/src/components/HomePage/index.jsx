@@ -22,33 +22,33 @@ function HomePage() {
             mt: 5,
             mx: 1,
             width: 350,
-            height: 230,
+            height: 250,
           },
         }}
       >
         <PaperHome
           title="Noticia 1"
           text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-      sed do eiusmod tempor incididunt ut labore et dolore
-      magna aliqua."
+                sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua."
         />
         <PaperHome
           title="Noticia 2"
           text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-      sed do eiusmod tempor incididunt ut labore et dolore
-      magna aliqua."
+                sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua."
         />
         <PaperHome
           title="Noticia 3"
           text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-      sed do eiusmod tempor incididunt ut labore et dolore
-      magna aliqua."
+                sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua."
         />
         <PaperHome
           title="Noticia 4"
           text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-      sed do eiusmod tempor incididunt ut labore et dolore
-      magna aliqua."
+                sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua."
         />
       </Box>
     </>

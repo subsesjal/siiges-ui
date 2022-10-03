@@ -3,7 +3,7 @@
     "id": 1,
     "usuario": "Sara",
     "contrasena": "123456",
-    "rolId": 1,
+    "rolId": "representante",
     "estatus": 1,
     "actualizado": true
   },
@@ -11,7 +11,7 @@
     "id": 2,
     "usuario": "Jim",
     "contrasena": "123456",
-    "rolId": 2,
+    "rolId": "admin",
     "estatus": 1,
     "actualizado": true
   },
@@ -19,7 +19,7 @@
     "id": 3,
     "usuario": "Pete",
     "contrasena": "123456",
-    "rolId": 3,
+    "rolId": "gestor",
     "estatus": 1,
     "actualizado": true
   },
@@ -27,7 +27,7 @@
     "id": 4,
     "usuario": "Luis",
     "contrasena": "123456",
-    "rolId": 4,
+    "rolId": "sicyt_editar",
     "estatus": 1,
     "actualizado": true
   },
@@ -35,7 +35,7 @@
     "id": 5,
     "usuario": "Daniel",
     "contrasena": "123456",
-    "rolId": 5,
+    "rolId": "nuevo",
     "estatus": 1,
     "actualizado": true
   },
@@ -43,7 +43,7 @@
     "id": 6,
     "usuario": "Sara",
     "contrasena": "123456",
-    "rolId": 1,
+    "rolId": "representante",
     "estatus": 1,
     "actualizado": true
   },
@@ -51,7 +51,7 @@
     "id": 7,
     "usuario": "Jim",
     "contrasena": "123456",
-    "rolId": 2,
+    "rolId": "admin",
     "estatus": 1,
     "actualizado": true
   },
@@ -59,7 +59,7 @@
     "id": 8,
     "usuario": "Pete",
     "contrasena": "123456",
-    "rolId": 3,
+    "rolId": "gestor",
     "estatus": 1,
     "actualizado": true
   },
@@ -67,7 +67,7 @@
     "id": 9,
     "usuario": "Luis",
     "contrasena": "123456",
-    "rolId": 4,
+    "rolId": "sicyt_editar",
     "estatus": 1,
     "actualizado": true
   },
@@ -75,7 +75,7 @@
     "id": 10,
     "usuario": "Daniel",
     "contrasena": "123456",
-    "rolId": 5,
+    "rolId": "nuevo",
     "estatus": 1,
     "actualizado": true
   }

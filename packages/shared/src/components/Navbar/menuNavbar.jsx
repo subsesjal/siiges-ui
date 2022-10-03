@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -9,10 +9,12 @@ import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Link from 'next/link';
+import { Context } from '@siiges-ui/shared';
 import setHandler from '../../utils/handlers/set-anchor';
 import StyledBadge from '../../styles/Navbar/MenuNavbarStyle';
 
 export default function MenuNavbar() {
+  const { removeAuth } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -85,8 +87,8 @@ export default function MenuNavbar() {
           </ListItemIcon>
           Ajustes
         </MenuItem>
-        <Link href="/autenticacion/login">
-          <MenuItem>
+        <Link href="/">
+          <MenuItem onClick={() => removeAuth()}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

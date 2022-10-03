@@ -10,7 +10,7 @@ function ChangeAddress() {
           <Input label="Programa" id="program" name="program" auto="program" />
         </Grid>
         <Grid item xs={5}>
-          <Input label="Plantel" id="plantel" name="plantel" auto="plantel" />
+          <Input label="Plantel de destino" id="plantel" name="plantel" auto="plantel" />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
           <ButtonStyled text="Crear" alt="Cambiar Direccion" />

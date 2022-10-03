@@ -36,7 +36,7 @@ export default function Institucion() {
           <Grid item xs={4}>
             <List>
               <ListItem disablePadding>
-                <ListItemText primary="Nombre de institucion" />
+                <ListItemText primary="Nombre de institución" />
               </ListItem>
               <ListItem disablePadding>
                 <ListItemText primary="Razon social" />
@@ -57,7 +57,7 @@ export default function Institucion() {
         </Grid>
         <Divider sx={{ mt: 5, mb: 2 }} />
         <Typography variant="p" sx={{ fontWeight: 'medium' }}>
-          Historia de la institucion
+          Historia de la institución
         </Typography>
         <br />
         <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 15 }}>
@@ -73,7 +73,7 @@ export default function Institucion() {
         </div>
         <Divider />
         <Typography variant="p" sx={{ fontWeight: 'medium' }}>
-          Vision
+          Visión
         </Typography>
         <br />
         <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 15 }}>
@@ -89,7 +89,7 @@ export default function Institucion() {
         </div>
         <Divider />
         <Typography variant="p" sx={{ fontWeight: 'medium' }}>
-          Mision
+          Misión
         </Typography>
         <br />
         <div style={{ marginLeft: 100, marginTop: 15 }}>

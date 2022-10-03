@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   ButtonLogin,
+  Context,
   Input,
   InputPassword,
   LinkButton,
 } from '@siiges-ui/shared';
 import Box from '@mui/material/Box';
+import { useCookies } from 'react-cookie';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
 import Link from 'next/link';
 import users from '../../users.json';
 
 export default function SignIn() {
+  const [cookies, setCookie] = useCookies(['usuario']);
+  const { activateAuth } = useContext(Context);
   const [errorMessages, setErrorMessages] = useState({});
   const router = useRouter();
 
@@ -30,6 +34,10 @@ export default function SignIn() {
       if (userData.contrasena !== pass.value) {
         setErrorMessages({ name: 'pass', message: errors.pass });
       } else {
+        setCookie('nombre', userData.usuario, { path: '/' });
+        setCookie('rol', userData.rolId, { path: '/' });
+        activateAuth(cookies);
+
         router.push('../home');
       }
     } else {

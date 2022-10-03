@@ -15,7 +15,7 @@ export default function InstitutionPage() {
     setValue(newValue);
   };
   return (
-    <Layout title="Institucion">
+    <Layout title="Institución">
       <Grid container>
         <Box
           sx={{
@@ -26,7 +26,7 @@ export default function InstitutionPage() {
           }}
         >
           <Tabs value={value} onChange={handleChange}>
-            <Tab label="Datos de institucion" />
+            <Tab label="Datos de institución" />
             <Tab label="Planteles" />
           </Tabs>
         </Box>
