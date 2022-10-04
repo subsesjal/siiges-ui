@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   ButtonLogin,
@@ -20,6 +20,12 @@ export default function SignIn() {
   const [errorMessages, setErrorMessages] = useState({});
   const router = useRouter();
 
+  useEffect(() => {
+    if (cookies.rol !== 'undefined') {
+      router.push('./home');
+    }
+  }, [cookies]);
+
   const errors = {
     uname: 'Usuario equivocado',
     pass: 'Contraseña equivocada',
@@ -34,11 +40,15 @@ export default function SignIn() {
       if (userData.contrasena !== pass.value) {
         setErrorMessages({ name: 'pass', message: errors.pass });
       } else {
-        setCookie('nombre', userData.usuario, { path: '/' });
-        setCookie('rol', userData.rolId, { path: '/' });
-        activateAuth(cookies);
-
-        router.push('../home');
+        setCookie(
+          'nombre',
+          userData.usuario,
+        );
+        setCookie(
+          'rol',
+          userData.rolId,
+        );
+        activateAuth(userData);
       }
     } else {
       setErrorMessages({ name: 'uname', message: errors.uname });

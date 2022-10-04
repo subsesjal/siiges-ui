@@ -111,7 +111,7 @@ export default function MenuDrawer() {
 
   useEffect(() => {
     userRol(session, setUsers);
-  }, []);
+  }, [session]);
 
   const handleDrawerOpen = () => {
     setOpen(true);

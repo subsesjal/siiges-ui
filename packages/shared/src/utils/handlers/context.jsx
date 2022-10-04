@@ -1,41 +1,35 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import PropTypes from 'prop-types';
 
 export const Context = createContext();
 
-const cookieObject = {};
-
 function Provider({ children }) {
   const [cookies, removeCookie] = useCookies(['usuario']);
-  const [session, setSession] = useState({
-    nombre: cookies.nombre,
-    rol: cookies.rol,
-  });
+  const [session, setSession] = useState({});
   const [auth, setAuth] = useState(false);
 
+  const router = useRouter();
+
   useEffect(() => {
-    if (session === undefined) {
+    if (cookies.rol !== null) {
       setSession({ nombre: cookies.nombre, rol: cookies.rol });
+      setAuth(true);
+    } else {
+      router.push('./');
     }
-  }, [session]);
+  }, [cookies]);
 
   const value = {
     session,
     auth,
     cookies,
-    revalidateSession: () => {
-      cookieObject.usuario = cookies.nombre;
-      cookieObject.rol = cookies.rol;
-      setSession(cookieObject);
-    },
-    activateAuth: () => {
-      const newObject = { ...session };
-      newObject.usuario = cookies.nombre;
-      newObject.rol = cookies.rol;
-      setSession(newObject);
+    activateAuth: (userData) => {
+      setSession({ nombre: userData.usuario, rol: userData.rolId });
       setAuth(true);
+      router.push('../home');
     },
     removeAuth: () => {
       const nullSession = {};
