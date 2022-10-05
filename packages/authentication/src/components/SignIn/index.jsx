@@ -21,7 +21,7 @@ export default function SignIn() {
   const router = useRouter();
 
   useEffect(() => {
-    if (cookies.rol !== 'undefined') {
+    if (cookies.rol !== 'undefined' && cookies.rol !== undefined) {
       router.push('./home');
     }
   }, [cookies]);
