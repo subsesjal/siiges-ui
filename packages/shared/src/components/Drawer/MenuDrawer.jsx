@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Context } from '@siiges-ui/shared';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -55,8 +56,62 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+function userRol(session, setUsers) {
+  if (session.rol === 'representante') {
+    setUsers([
+      {
+        text: 'Mis usuarios',
+        icon: <GroupIcon />,
+        route: '/usuarios',
+        key: 'users',
+      },
+      {
+        text: 'Mi institucion',
+        icon: <BusinessIcon />,
+        route: '/institucion',
+        key: 'intitutions',
+      },
+      {
+        text: 'Mis solicitudes',
+        icon: <DescriptionIcon />,
+        route: '/solicitudes',
+        key: 'solicitudes',
+      },
+    ]);
+  }
+
+  if (session.rol === 'admin') {
+    setUsers([
+      {
+        text: 'Mis usuarios',
+        icon: <GroupIcon />,
+        route: '/usuarios',
+        key: 'users',
+      },
+      {
+        text: 'Mi institucion',
+        icon: <BusinessIcon />,
+        route: '/institucion',
+        key: 'intitutions',
+      },
+      {
+        text: 'Mis solicitudes',
+        icon: <DescriptionIcon />,
+        route: '/solicitudes',
+        key: 'solicitudes',
+      },
+    ]);
+  }
+}
+
 export default function MenuDrawer() {
-  const [open, setOpen] = React.useState(false);
+  const { session } = useContext(Context);
+  const [open, setOpen] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    userRol(session, setUsers);
+  }, [session]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -71,81 +126,33 @@ export default function MenuDrawer() {
       <CssBaseline />
       <Drawer variant="permanent" open={open}>
         <List onMouseOver={handleDrawerOpen} onMouseLeave={handleDrawerClose}>
-          <ListItem key="users" disablePadding sx={{ display: 'block' }}>
-            <Link href="/usuarios">
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
+          {users.map((item) => (
+            <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
+              <Link href={item.route}>
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
                   }}
                 >
-                  <GroupIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Mis usuarios"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem key="intitutions" disablePadding sx={{ display: 'block' }}>
-            <Link href="/institucion">
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <BusinessIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Mi institucion"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem key="solicitudes" disablePadding sx={{ display: 'block' }}>
-            <Link href="/solicitudes">
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <DescriptionIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Mis solicitudes"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
-          </ListItem>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+          ))}
         </List>
       </Drawer>
     </Box>

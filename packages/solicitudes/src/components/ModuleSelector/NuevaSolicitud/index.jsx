@@ -9,18 +9,18 @@ function NewRequest() {
       <Grid container spacing={2}>
         <Grid item xs={5}>
           <Input
-            label="Primer Apellido"
-            id="lastname1"
-            name="lastname1"
-            auto="lastname1"
+            label="Modalidad"
+            id="modalidad"
+            name="modalidad"
+            auto="modalidad"
           />
         </Grid>
         <Grid item xs={5}>
           <Input
-            label="Segundo Apellido"
-            id="lastname2"
-            name="lastname2"
-            auto="lastname2"
+            label="Plantel"
+            id="plantel"
+            name="plantel"
+            auto="plantel"
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
