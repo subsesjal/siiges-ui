@@ -87,7 +87,7 @@ const rows = [
 ];
 
 export default function Solicitudes() {
-  const [option, setOption] = useState('selectOption');
+  const [option, setOption] = useState();
 
   const [NewRequestContentVisible, setNewRequestContentVisible] = useState(false);
   const [ChangeAddressContentVisible, setChangeAddressContentVisible] = useState(false);
