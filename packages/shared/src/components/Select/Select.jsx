@@ -20,7 +20,7 @@ export default function BasicSelect({
           labelId="select-form-label"
           id="select-form"
           value={value}
-          label="Age"
+          label={title}
           onChange={onChange}
         >
           {options.map((option) => (

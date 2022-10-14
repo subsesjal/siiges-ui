@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { ButtonAdd, Input } from '@siiges-ui/shared';
 import React from 'react';
@@ -7,6 +7,9 @@ import { columns, rows } from './Mocks/AsignaturasFormacionElectiva';
 export default function AsignaturasFormacionElectiva() {
   return (
     <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Typography variant="h6">Asignaturas formacion electiva</Typography>
+      </Grid>
       <Grid item xs={3}>
         <ButtonAdd text="agregar" />
       </Grid>

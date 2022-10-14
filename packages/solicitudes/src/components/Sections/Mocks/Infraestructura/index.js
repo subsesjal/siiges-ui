@@ -1,10 +1,10 @@
 const columns = [
-  { field: 'instalation', headerName: 'Instalacion' },
-  { field: 'capacity', headerName: 'Capacidad (alumnos)' },
+  { field: 'instalation', headerName: 'Instalacion', width: 200 },
+  { field: 'capacity', headerName: 'Capacidad (alumnos)', width: 200 },
   { field: 'meters', headerName: 'Mts2' },
-  { field: 'resources', headerName: 'Recursos materiales' },
-  { field: 'location', headerName: 'Ubicacion' },
-  { field: 'asignaturas', headerName: 'Asignaturas' },
+  { field: 'resources', headerName: 'Recursos materiales', width: 200 },
+  { field: 'location', headerName: 'Ubicacion', width: 150 },
+  { field: 'asignaturas', headerName: 'Asignaturas', width: 150 },
   { field: 'actions', headerName: 'Acciones' },
 ];
 
