@@ -1,10 +1,10 @@
 const columns = [
-  { field: 'name', headerName: 'Nombre' },
+  { field: 'name', headerName: 'Nombre', width: 170 },
   { field: 'type', headerName: 'Tipo' },
-  { field: 'formation', headerName: 'Formacion profecional' },
-  { field: 'asignatura', headerName: 'Asignatura' },
-  { field: 'experience', headerName: 'Experiencia' },
-  { field: 'hirability', headerName: 'Contratacion y antiguedad' },
+  { field: 'formation', headerName: 'Formacion profecional', width: 180 },
+  { field: 'asignatura', headerName: 'Asignatura', width: 170 },
+  { field: 'experience', headerName: 'Experiencia', width: 170 },
+  { field: 'hirability', headerName: 'Contratacion y antiguedad', width: 220 },
   { field: 'actions', headerName: 'Acciones' },
 ];
 

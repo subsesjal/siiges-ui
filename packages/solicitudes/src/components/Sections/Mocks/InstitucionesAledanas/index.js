@@ -1,6 +1,6 @@
 const columns = [
   { field: 'name', headerName: 'Nombre de la institucion', width: 270 },
-  { field: 'time', headerName: 'Tiempo de llegada', width: 100 },
+  { field: 'time', headerName: 'Tiempo de llegada', width: 700 },
   { field: 'actions', headerName: 'Acciones' },
 ];
 

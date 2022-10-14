@@ -1,10 +1,10 @@
 const columns = [
   { field: 'grade', headerName: 'Grado' },
-  { field: 'name', headerName: 'Nombre' },
+  { field: 'name', headerName: 'Nombre', width: 170 },
   { field: 'clave', headerName: 'Clave' },
   { field: 'seriacion', headerName: 'Seriacion' },
-  { field: 'horasDocente', headerName: 'Horas docente' },
-  { field: 'horasIndependiente', headerName: 'Horas independiente' },
+  { field: 'horasDocente', headerName: 'Horas docente', width: 150 },
+  { field: 'horasIndependiente', headerName: 'Horas independiente', width: 180 },
   { field: 'creditos', headerName: 'Creditos' },
   { field: 'area', headerName: 'Area' },
   { field: 'actions', headerName: 'Acciones' },
