@@ -41,23 +41,23 @@
   },
   {
     "id": 6,
-    "usuario": "Sara",
+    "usuario": "Jelipe",
     "contrasena": "123456",
-    "rolId": "representante",
+    "rolId": "inspector",
     "estatus": 1,
     "actualizado": true
   },
   {
     "id": 7,
-    "usuario": "Jim",
+    "usuario": "Mario",
     "contrasena": "123456",
-    "rolId": "admin",
+    "rolId": "jefe_inspector",
     "estatus": 1,
     "actualizado": true
   },
   {
     "id": 8,
-    "usuario": "Pete",
+    "usuario": "Pedro",
     "contrasena": "123456",
     "rolId": "gestor",
     "estatus": 1,
@@ -65,7 +65,7 @@
   },
   {
     "id": 9,
-    "usuario": "Luis",
+    "usuario": "Lucio",
     "contrasena": "123456",
     "rolId": "sicyt_editar",
     "estatus": 1,
@@ -73,7 +73,7 @@
   },
   {
     "id": 10,
-    "usuario": "Daniel",
+    "usuario": "Daniela",
     "contrasena": "123456",
     "rolId": "nuevo",
     "estatus": 1,
