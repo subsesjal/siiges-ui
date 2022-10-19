@@ -1,0 +1,38 @@
+{
+  "name": "@siiges-ui/inspecciones",
+  "version": "1.0.0",
+  "description": "all the components for inspecciones",
+  "keywords": [
+    "inspecciones",
+    "inspector"
+  ],
+  "author": "elmejrlui <elmejrlui@gmail.com>",
+  "homepage": "https://github.com/elmejorlui/siiges-ui#readme",
+  "license": "ISC",
+  "main": "src/index.js",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "src",
+    "__tests__"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elmejorlui/siiges-ui.git"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "precommit": "yarn lint && yarn test"
+  },
+  "bugs": {
+    "url": "https://github.com/elmejorlui/siiges-ui/issues"
+  }
+}

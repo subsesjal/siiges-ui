@@ -9,6 +9,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import SearchIcon from '@mui/icons-material/Search';
 import GroupIcon from '@mui/icons-material/Group';
 import BusinessIcon from '@mui/icons-material/Business';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -99,6 +100,16 @@ function userRol(session, setUsers) {
         icon: <DescriptionIcon />,
         route: '/solicitudes',
         key: 'solicitudes',
+      },
+    ]);
+  }
+  if (session.rol === 'jefe_inspector') {
+    setUsers([
+      {
+        text: 'Inspeccion',
+        icon: <SearchIcon />,
+        route: '/inspecciones',
+        key: 'inspecciones',
       },
     ]);
   }
