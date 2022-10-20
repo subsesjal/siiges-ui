@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
 const useCheckMobileScreen = () => {
-  const [width, setWidth] = useState(console.log('satelag :('));
+  const [width, setWidth] = useState();
 
   useEffect(() => {
-    console.log('effectlag :(');
     function handleResize() {
       setWidth(window.innerWidth);
     }
