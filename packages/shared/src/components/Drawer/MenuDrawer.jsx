@@ -9,11 +9,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import SearchIcon from '@mui/icons-material/Search';
-import GroupIcon from '@mui/icons-material/Group';
-import BusinessIcon from '@mui/icons-material/Business';
-import DescriptionIcon from '@mui/icons-material/Description';
 import Link from 'next/link';
+import userRol from './utils/userRol';
 
 const drawerWidth = 240;
 
@@ -56,64 +53,6 @@ const Drawer = styled(MuiDrawer, {
     '& .MuiDrawer-paper': closedMixin(theme),
   }),
 }));
-
-function userRol(session, setUsers) {
-  if (session.rol === 'representante') {
-    setUsers([
-      {
-        text: 'Mis usuarios',
-        icon: <GroupIcon />,
-        route: '/usuarios',
-        key: 'users',
-      },
-      {
-        text: 'Mi institucion',
-        icon: <BusinessIcon />,
-        route: '/institucion',
-        key: 'intitutions',
-      },
-      {
-        text: 'Mis solicitudes',
-        icon: <DescriptionIcon />,
-        route: '/solicitudes',
-        key: 'solicitudes',
-      },
-    ]);
-  }
-
-  if (session.rol === 'admin') {
-    setUsers([
-      {
-        text: 'Mis usuarios',
-        icon: <GroupIcon />,
-        route: '/usuarios',
-        key: 'users',
-      },
-      {
-        text: 'Mi institucion',
-        icon: <BusinessIcon />,
-        route: '/institucion',
-        key: 'intitutions',
-      },
-      {
-        text: 'Mis solicitudes',
-        icon: <DescriptionIcon />,
-        route: '/solicitudes',
-        key: 'solicitudes',
-      },
-    ]);
-  }
-  if (session.rol === 'jefe_inspector') {
-    setUsers([
-      {
-        text: 'Inspeccion',
-        icon: <SearchIcon />,
-        route: '/inspecciones',
-        key: 'inspecciones',
-      },
-    ]);
-  }
-}
 
 export default function MenuDrawer() {
   const { session } = useContext(Context);

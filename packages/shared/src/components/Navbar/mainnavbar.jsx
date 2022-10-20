@@ -5,15 +5,28 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Link from 'next/link';
+import MenuIcon from '@mui/icons-material/Menu';
 import LogoWhite from '../Images/logowhite';
-import MenuNavbar from './menuNavbar';
-import MenuButton from '../Buttons/MenuButton';
+import MenuNavbar from './MenuNavbar';
+import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 
 export default function MainNavbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
+          {useCheckMobileScreen() ? (
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <div />
+          )}
           <Link href="/home">
             <IconButton
               size="large"
@@ -35,7 +48,6 @@ export default function MainNavbar() {
           >
             <b>SIIGES</b>
           </Typography>
-          <MenuButton title="RVOE" />
           <MenuNavbar />
         </Toolbar>
       </AppBar>

@@ -18,7 +18,7 @@ import Logo from './components/Images/logo';
 import LogoWhite from './components/Images/logowhite';
 import LoadCircle from './components/Resources/LoadCircle';
 import MenuDrawer from './components/Drawer/MenuDrawer';
-import MainNavbar from './components/Navbar/mainnavbar';
+import MainNavbar from './components/Navbar/MainNavbar';
 import Navbar from './components/Navbar/Navbar';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
@@ -29,6 +29,7 @@ import Title from './components/Title';
 import DefaultModal from './components/Modal';
 import ListTitle from './components/ListItems/ListTitle';
 import ListSubtitle from './components/ListItems/ListSubtitle';
+import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 
 export {
   ActionButtons,
@@ -62,4 +63,5 @@ export {
   DefaultModal,
   ListTitle,
   ListSubtitle,
+  useCheckMobileScreen,
 };
