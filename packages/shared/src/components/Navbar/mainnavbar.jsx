@@ -4,13 +4,14 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import PropTypes from 'prop-types';
 import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoWhite from '../Images/logowhite';
 import MenuNavbar from './MenuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 
-export default function MainNavbar() {
+export default function MainNavbar({ menuSwitch }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
@@ -21,6 +22,7 @@ export default function MainNavbar() {
               edge="start"
               color="inherit"
               aria-label="menu"
+              onClick={menuSwitch}
             >
               <MenuIcon />
             </IconButton>
@@ -54,3 +56,7 @@ export default function MainNavbar() {
     </Box>
   );
 }
+
+MainNavbar.propTypes = {
+  menuSwitch: PropTypes.func.isRequired,
+};

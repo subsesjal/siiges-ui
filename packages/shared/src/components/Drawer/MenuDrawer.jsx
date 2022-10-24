@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '@siiges-ui/shared';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -31,7 +32,7 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: `calc(${theme.spacing(0)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
@@ -54,28 +55,19 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MenuDrawer() {
+export default function MenuDrawer({ open, openFunction, closeFunction }) {
   const { session } = useContext(Context);
-  const [open, setOpen] = useState(false);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     userRol(session, setUsers);
   }, [session]);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Drawer variant="permanent" open={open}>
-        <List onMouseOver={handleDrawerOpen} onMouseLeave={handleDrawerClose}>
+        <List onMouseOver={openFunction} onMouseLeave={closeFunction}>
           {users.map((item) => (
             <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
               <Link href={item.route}>
@@ -108,3 +100,9 @@ export default function MenuDrawer() {
     </Box>
   );
 }
+
+MenuDrawer.propTypes = {
+  open: PropTypes.string.isRequired,
+  openFunction: PropTypes.func.isRequired,
+  closeFunction: PropTypes.func.isRequired,
+};
