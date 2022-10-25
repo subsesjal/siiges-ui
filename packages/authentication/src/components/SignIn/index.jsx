@@ -46,7 +46,7 @@ export default function SignIn() {
         );
         setCookie(
           'rol',
-          userData.rolId,
+          userData.rol.nombre,
         );
         activateAuth(userData);
       }

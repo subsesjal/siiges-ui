@@ -27,7 +27,7 @@ function Provider({ children }) {
     auth,
     cookies,
     activateAuth: (userData) => {
-      setSession({ nombre: userData.usuario, rol: userData.rolId });
+      setSession({ nombre: userData.usuario, rol: userData.rol.nombre });
       setAuth(true);
       router.push('../home');
     },

@@ -18,7 +18,7 @@ import LogoWhite from './components/Images/logowhite';
 import LoadCircle from './components/Resources/LoadCircle';
 import MenuDrawer from './components/Drawer/MenuDrawer';
 import MainNavbar from './components/Navbar/mainnavbar';
-import Navbar from './components/Navbar/navbar';
+import Navbar from './components/Navbar/Navbar';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
 import ParseCookies from './utils/handlers/cookieHandler';
