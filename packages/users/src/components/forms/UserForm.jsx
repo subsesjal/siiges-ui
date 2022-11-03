@@ -1,19 +1,91 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
-import { Input, ButtonsForm, Select } from '@siiges-ui/shared';
+import {
+  Input, ButtonsForm, Select, Context,
+} from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
 
-export default function UserForm() {
-  const Rol = [
-    {
-      id: 'admin',
-      name: 'Administrador',
-    },
-    {
-      id: 'user',
-      name: 'Usuario',
-    },
-  ];
+export default function UserForm({ user }) {
+  const { persona } = user.data;
+  const { session } = useContext(Context);
+  const [rol, setRol] = useState([]);
+
+  useEffect(() => {
+    if (session.rol === 'representante') {
+      setRol([
+        {
+          id: 'gestor',
+          name: 'Gestor',
+        },
+        {
+          id: 'control_escolar',
+          name: 'Control escolar IES',
+        },
+      ]);
+    }
+
+    if (session.rol === 'admin') {
+      setRol([
+        {
+          id: 'new',
+          name: 'Usuario Nuevo',
+        },
+        {
+          id: 'admin',
+          name: 'Administrador',
+        },
+        {
+          id: 'representante',
+          name: 'Representante Legal',
+        },
+        {
+          id: 'gestor',
+          name: 'Gestor',
+        },
+        {
+          id: 'evaluador',
+          name: 'Evaluador',
+        },
+        {
+          id: 'inspector',
+          name: 'Inspector',
+        },
+        {
+          id: 'revision_documentos',
+          name: 'Revisión de documentos',
+        },
+        {
+          id: 'sicyt_consulta',
+          name: 'Sicyt de consulta',
+        },
+        {
+          id: 'sicyt_editar',
+          name: 'Sicyt de editar',
+        },
+        {
+          id: 'comite_evaluacion',
+          name: 'Comite de evaluación',
+        },
+        {
+          id: 'jefe_inspectores',
+          name: 'Jefe de inspectores',
+        },
+        {
+          id: 'control_escolar_ies',
+          name: 'Control escolar IES',
+        },
+        {
+          id: 'control_escolar_sicyt',
+          name: 'Control escolar SICYT',
+        },
+        {
+          id: 'equivalencias_sicyt',
+          name: 'Equivalencia SICYT',
+        },
+      ]);
+    }
+  }, [session]);
 
   const Sexo = [
     {
@@ -34,7 +106,13 @@ export default function UserForm() {
       <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
       <Grid container spacing={5}>
         <Grid item xs={4}>
-          <Input label="Nombre(s)" id="name" name="name" auto="name" />
+          <Input
+            label="Nombre(s)"
+            id="name"
+            name="name"
+            auto="name"
+            value={persona.nombre}
+          />
         </Grid>
         <Grid item xs={4}>
           <Input
@@ -42,6 +120,7 @@ export default function UserForm() {
             id="lastname1"
             name="lastname1"
             auto="lastname1"
+            value={persona.apellidoPaterno}
           />
         </Grid>
         <Grid item xs={4}>
@@ -50,15 +129,22 @@ export default function UserForm() {
             id="lastname2"
             name="lastname2"
             auto="lastname2"
+            value={persona.apellidoMaterno}
           />
         </Grid>
       </Grid>
       <Grid container spacing={5}>
         <Grid item xs={8}>
-          <Input label="Cargo" id="cargo" name="cargo" auto="cargo" />
+          <Input
+            label="Cargo"
+            id="cargo"
+            name="cargo"
+            auto="cargo"
+            value={persona.titulo_cargo}
+          />
         </Grid>
         <Grid item xs={4}>
-          <Select title="Rol" options={Rol} />
+          <Select title="Rol" options={rol} />
         </Grid>
       </Grid>
       <Grid container spacing={5}>
@@ -68,6 +154,7 @@ export default function UserForm() {
             id="email"
             name="email"
             auto="email"
+            value={user.data.correo}
           />
         </Grid>
         <Grid item xs={4}>
@@ -76,6 +163,7 @@ export default function UserForm() {
             id="nationality"
             name="nationality"
             auto="nationality"
+            value={persona.nacionalidad}
           />
         </Grid>
         <Grid item xs={4}>
@@ -84,18 +172,42 @@ export default function UserForm() {
       </Grid>
       <Grid container spacing={5}>
         <Grid item xs={4}>
-          <Input label="INE" id="ine" name="ine" auto="ine" />
+          <Input
+            label="INE"
+            id="ine"
+            name="ine"
+            auto="ine"
+            value={persona.ine}
+          />
         </Grid>
         <Grid item xs={4}>
-          <Input label="Curp" id="curp" name="curp" auto="curp" />
+          <Input
+            label="Curp"
+            id="curp"
+            name="curp"
+            auto="curp"
+            value={persona.curp}
+          />
         </Grid>
         <Grid item xs={4}>
-          <Input label="RFC" id="rfc" name="rfc" auto="rfc" />
+          <Input
+            label="RFC"
+            id="rfc"
+            name="rfc"
+            auto="rfc"
+            value={persona.rfc}
+          />
         </Grid>
       </Grid>
       <Grid container spacing={5}>
         <Grid item xs={4}>
-          <Input label="Telefono" id="phone" name="phone" auto="phone" />
+          <Input
+            label="Telefono"
+            id="phone"
+            name="phone"
+            auto="phone"
+            value={persona.telefono}
+          />
         </Grid>
         <Grid item xs={4}>
           <Input
@@ -103,6 +215,7 @@ export default function UserForm() {
             id="cellphone"
             name="cellphone"
             auto="cellphone"
+            value={persona.celular}
           />
         </Grid>
       </Grid>
@@ -110,3 +223,7 @@ export default function UserForm() {
     </Grid>
   );
 }
+
+UserForm.propTypes = {
+  user: PropTypes.objectOf.isRequired,
+};

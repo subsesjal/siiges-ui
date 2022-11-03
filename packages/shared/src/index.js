@@ -1,3 +1,4 @@
+import ActionButtons from './components/Buttons/ActionButtons';
 import ButtonAdd from './components/Buttons/ButtonAdd';
 import ButtonLogin from './components/Buttons/ButtonLogin';
 import ButtonStyled from './components/Buttons/ButtonStyled';
@@ -27,6 +28,7 @@ import StepperComponent from './components/Stepper';
 import Title from './components/Title';
 
 export {
+  ActionButtons,
   ButtonAdd,
   ButtonLogin,
   ButtonStyled,

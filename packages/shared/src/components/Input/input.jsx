@@ -8,6 +8,7 @@ function Input({
   name,
   auto,
   type,
+  value,
   size,
   errorMessage,
 }) {
@@ -20,8 +21,8 @@ function Input({
       type={type}
       name={name}
       autoComplete={auto}
-      autoFocus
       size={size}
+      value={value}
       helperText={errorMessage}
       error={!!errorMessage}
     />
@@ -37,6 +38,8 @@ Input.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/require-default-props
+  value: PropTypes.string,
   errorMessage: PropTypes.string.isRequired,
   type: PropTypes.string,
   size: PropTypes.string,
