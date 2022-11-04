@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import '../../styles/buttons/ButtonStyle.css';
 
 export default function ButtonStyled({
-  text,
-  alt,
-  type,
-  onclick,
+  text, alt, type, design, onclick,
 }) {
   return (
-    <ButtonUnstyled className={`buttonaction button${type}`} onClick={onclick}>
+    <ButtonUnstyled
+      className={`buttonaction button${design}`}
+      onClick={onclick}
+      type={type}
+    >
       <span className="text">{text}</span>
       <span>{alt}</span>
     </ButtonUnstyled>
@@ -19,12 +20,14 @@ export default function ButtonStyled({
 
 ButtonStyled.defaultProps = {
   onclick: () => {},
-  type: 'normal',
+  design: 'normal',
+  type: 'button',
 };
 
 ButtonStyled.propTypes = {
   text: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   type: PropTypes.string,
+  design: PropTypes.string,
   onclick: PropTypes.func,
 };

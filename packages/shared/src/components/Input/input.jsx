@@ -1,17 +1,14 @@
 import { TextField } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 function Input({
-  id,
-  label,
-  name,
-  auto,
-  type,
-  value,
-  size,
-  errorMessage,
+  id, label, name, auto, type, value, size, errorMessage,
 }) {
+  const [input, setInput] = useState(value);
+  const handleOnChange = (e) => {
+    setInput(e.target.value);
+  };
   return (
     <TextField
       margin="normal"
@@ -22,9 +19,11 @@ function Input({
       name={name}
       autoComplete={auto}
       size={size}
-      value={value}
+      value={input}
+      onChange={handleOnChange}
       helperText={errorMessage}
       error={!!errorMessage}
+      className="data-form"
     />
   );
 }
