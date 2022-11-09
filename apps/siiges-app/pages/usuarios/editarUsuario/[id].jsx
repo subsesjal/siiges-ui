@@ -4,7 +4,7 @@ import { UserForm, UserInfo } from '@siiges-ui/users';
 import Grid from '@mui/material/Grid';
 import getUser from '../utils/getUser';
 
-export default function UserEdit() {
+export default function EditUser() {
   const { user, loading } = getUser();
   return (
     <Layout>

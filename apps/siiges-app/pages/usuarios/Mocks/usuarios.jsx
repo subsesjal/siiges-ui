@@ -1,5 +1,23 @@
-import React from 'react';
-import { ActionButtons } from '@siiges-ui/shared';
+import React, { useState } from 'react';
+import { ActionButtons, ButtonStyled, DefaultModal } from '@siiges-ui/shared';
+import { Grid, Typography } from '@mui/material';
+
+function ModalState() {
+  const [modal, setModal] = useState(false);
+
+  const showModal = () => {
+    setModal(true);
+  };
+  const hideModal = () => {
+    setModal(false);
+  };
+
+  return {
+    modal,
+    showModal,
+    hideModal,
+  };
+}
 
 const columns = [
   { field: 'usuario', headerName: 'Usuario', width: 200 },
@@ -16,13 +34,43 @@ const columns = [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => (
-      <ActionButtons
-        id={params.id}
-        consultar="/usuarios/editarUsuario"
-        editar={`/usuarios/editarUsuario/${params.id}`}
-      />
-    ),
+    renderCell: (params) => {
+      const { modal, showModal, hideModal } = ModalState();
+      return (
+        <>
+          <ActionButtons
+            id={params.id}
+            consultar={`/usuarios/consultarUsuario/${params.id}`}
+            editar={`/usuarios/editarUsuario/${params.id}`}
+            eliminar={showModal}
+          />
+          <DefaultModal open={modal} setOpen={hideModal}>
+            <Typography>Desea eliminar este usuario?</Typography>
+            <Grid container spacing={2}>
+              <Grid item>
+                <ButtonStyled
+                  text="Cancelar"
+                  alt="Cancelar"
+                  onclick={hideModal}
+                >
+                  Cancelar
+                </ButtonStyled>
+              </Grid>
+              <Grid item>
+                <ButtonStyled
+                  text="Confirmar"
+                  alt="Confirmar"
+                  design="error"
+                  onclick={hideModal}
+                >
+                  Confirmar
+                </ButtonStyled>
+              </Grid>
+            </Grid>
+          </DefaultModal>
+        </>
+      );
+    },
     sortable: false,
     filterable: false,
   },

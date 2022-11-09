@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
-import { Input, ButtonsForm, Select, Context } from '@siiges-ui/shared';
+import router from 'next/router';
+import {
+  Input, ButtonsForm, Select, Context,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
 import {
@@ -23,7 +26,8 @@ export default function UserForm({ user }) {
 
     fetch(`http://localhost:3000/api/v1/usuarios/${session.id}`, {
       method: 'PATCH',
-      body: { ...data },
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
   }
 
@@ -31,11 +35,11 @@ export default function UserForm({ user }) {
     if (session.rol === 'representante') {
       setUserrol([
         {
-          id: 'gestor',
+          id: '4',
           name: 'Gestor',
         },
         {
-          id: 'ce_ies',
+          id: '12',
           name: 'Control escolar IES',
         },
       ]);
@@ -44,59 +48,59 @@ export default function UserForm({ user }) {
     if (session.rol === 'admin') {
       setUserrol([
         {
-          id: 'nuevo',
+          id: '1',
           name: 'Usuario Nuevo',
         },
         {
-          id: 'admin',
+          id: '2',
           name: 'Administrador',
         },
         {
-          id: 'representante',
+          id: '3',
           name: 'Representante Legal',
         },
         {
-          id: 'gestor',
+          id: '4',
           name: 'Gestor',
         },
         {
-          id: 'evaluador',
+          id: '5',
           name: 'Evaluador',
         },
         {
-          id: 'inspector',
+          id: '6',
           name: 'Inspector',
         },
         {
-          id: 'control_documental',
+          id: '7',
           name: 'Revisión de documentos',
         },
         {
-          id: 'sicyt_lectura',
+          id: '8',
           name: 'Sicyt de consulta',
         },
         {
-          id: 'sicyt_editar',
+          id: '9',
           name: 'Sicyt de editar',
         },
         {
-          id: 'comite_evaluacion',
+          id: '10',
           name: 'Comite de evaluación',
         },
         {
-          id: 'jefe_inspector',
+          id: '11',
           name: 'Jefe de inspectores',
         },
         {
-          id: 'ce_ies',
+          id: '12',
           name: 'Control escolar IES',
         },
         {
-          id: 'ce_sicyt',
+          id: '13',
           name: 'Control escolar SICYT',
         },
         {
-          id: 'equiv_sicyt',
+          id: '14',
           name: 'Equivalencia SICYT',
         },
       ]);
@@ -124,9 +128,9 @@ export default function UserForm({ user }) {
         <Grid item xs={4}>
           <Input
             label="Nombre(s)"
-            id="name"
-            name="name"
-            auto="name"
+            id="nombre"
+            name="nombre"
+            auto="nombre"
             value={persona.nombre}
             class="data"
           />
@@ -134,9 +138,9 @@ export default function UserForm({ user }) {
         <Grid item xs={4}>
           <Input
             label="Primer Apellido"
-            id="lastname1"
-            name="lastname1"
-            auto="lastname1"
+            id="apellido_paterno"
+            name="apellido_paterno"
+            auto="apellido_paterno"
             value={persona.apellidoPaterno}
             class="data"
           />
@@ -144,9 +148,9 @@ export default function UserForm({ user }) {
         <Grid item xs={4}>
           <Input
             label="Segundo Apellido"
-            id="lastname2"
-            name="lastname2"
-            auto="lastname2"
+            id="apellido_materno"
+            name="apellido_materno"
+            auto="apellido_materno"
             value={persona.apellidoMaterno}
             class="data"
           />
@@ -156,24 +160,24 @@ export default function UserForm({ user }) {
         <Grid item xs={8}>
           <Input
             label="Cargo"
-            id="cargo"
-            name="cargo"
-            auto="cargo"
+            id="titulo_cargo"
+            name="titulo_cargo"
+            auto="titulo_cargo"
             value={persona.titulo_cargo}
             class="data"
           />
         </Grid>
         <Grid item xs={4}>
-          <Select title="Rol" options={userRol} value={rol.nombre} name="rol" />
+          <Select title="Rol" options={userRol} value={rol.id} name="rol_id" />
         </Grid>
       </Grid>
       <Grid container spacing={5}>
         <Grid item xs={4}>
           <Input
             label="Correo Electronico"
-            id="email"
-            name="email"
-            auto="email"
+            id="correo"
+            name="correo"
+            auto="correo"
             value={user.data.correo}
             class="data"
           />
@@ -181,9 +185,9 @@ export default function UserForm({ user }) {
         <Grid item xs={4}>
           <Input
             label="Nacionalidad"
-            id="nationality"
-            name="nationality"
-            auto="nationality"
+            id="nacionalidad"
+            name="nacionalidad"
+            auto="nacionalidad"
             value={persona.nacionalidad}
             class="data"
           />
@@ -234,9 +238,9 @@ export default function UserForm({ user }) {
         <Grid item xs={4}>
           <Input
             label="Telefono"
-            id="phone"
-            name="phone"
-            auto="phone"
+            id="telefono"
+            name="telefono"
+            auto="telefono"
             value={persona.telefono}
             class="data"
           />
@@ -244,15 +248,15 @@ export default function UserForm({ user }) {
         <Grid item xs={4}>
           <Input
             label="Celular"
-            id="cellphone"
-            name="cellphone"
-            auto="cellphone"
+            id="celular"
+            name="celular"
+            auto="celular"
             value={persona.celular}
             class="data"
           />
         </Grid>
       </Grid>
-      <ButtonsForm onconfirm={() => submit()} />
+      <ButtonsForm cancel={() => router.back()} confirm={() => submit()} />
     </Grid>
   );
 }

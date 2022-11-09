@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ButtonStyled from './ButtonStyled';
 import '../../styles/buttons/ButtonForm.css';
 
-export default function UserForm({ onconfirm }) {
+export default function UserForm({ confirm, cancel }) {
   return (
     <Grid
       container
@@ -14,7 +14,12 @@ export default function UserForm({ onconfirm }) {
       className="userFormContainer"
     >
       <Grid item xs={2} className="userFormItem">
-        <ButtonStyled text="Cancelar" alt="Cancelar" design="error" />
+        <ButtonStyled
+          text="Cancelar"
+          alt="Cancelar"
+          design="error"
+          onclick={cancel}
+        />
       </Grid>
       <Grid item xs={2}>
         <ButtonStyled
@@ -22,7 +27,7 @@ export default function UserForm({ onconfirm }) {
           alt="Guardar"
           design="success"
           type="submit"
-          onclick={onconfirm}
+          onclick={confirm}
         />
       </Grid>
     </Grid>
@@ -30,5 +35,6 @@ export default function UserForm({ onconfirm }) {
 }
 
 UserForm.propTypes = {
-  onconfirm: PropTypes.func.isRequired,
+  confirm: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired,
 };

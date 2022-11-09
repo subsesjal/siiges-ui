@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 import Link from 'next/link';
 
-export default function ActionButtons({ id, consultar, editar }) {
+export default function ActionButtons({ consultar, editar, eliminar }) {
   return (
     <Stack direction="row" spacing={1}>
       <Link href={consultar}>
@@ -19,7 +19,7 @@ export default function ActionButtons({ id, consultar, editar }) {
           <EditIcon />
         </IconButton>
       </Link>
-      <IconButton aria-label="eliminar" onClick={id}>
+      <IconButton aria-label="eliminar" onClick={eliminar}>
         <DeleteIcon />
       </IconButton>
     </Stack>
@@ -27,7 +27,7 @@ export default function ActionButtons({ id, consultar, editar }) {
 }
 
 ActionButtons.propTypes = {
-  id: PropTypes.number.isRequired,
   editar: PropTypes.string.isRequired,
   consultar: PropTypes.string.isRequired,
+  eliminar: PropTypes.func.isRequired,
 };

@@ -13,6 +13,19 @@
     }
   },
   {
+    "id": 1,
+    "usuario": "jose",
+    "contrasena": "123456",
+    "rolId": 11,
+    "estatus": 1,
+    "actualizado": true,
+    "rol": {
+      "id": 11,
+      "nombre": "jefe_inspector",
+      "descripcion": "Jefe de inspectores"
+    }
+  },
+  {
     "id": 6,
     "usuario": "jorge",
     "contrasena": "123456",

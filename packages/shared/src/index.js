@@ -26,6 +26,9 @@ import ParseCookies from './utils/handlers/cookieHandler';
 import Select from './components/Select/Select';
 import StepperComponent from './components/Stepper';
 import Title from './components/Title';
+import DefaultModal from './components/Modal';
+import ListTitle from './components/ListItems/ListTitle';
+import ListSubtitle from './components/ListItems/ListSubtitle';
 
 export {
   ActionButtons,
@@ -56,4 +59,7 @@ export {
   Select,
   StepperComponent,
   Title,
+  DefaultModal,
+  ListTitle,
+  ListSubtitle,
 };
