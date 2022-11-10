@@ -18,9 +18,12 @@ export default function NewUserForm() {
       ...dataSelects,
     };
 
+    data.actualizado = 1;
+
     fetch('http://localhost:3000/api/v1/usuarios/', {
       method: 'POST',
-      body: { ...data },
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
   }
 
@@ -28,11 +31,11 @@ export default function NewUserForm() {
     if (session.rol === 'representante') {
       setUserrol([
         {
-          id: 'gestor',
+          id: '4',
           name: 'Gestor',
         },
         {
-          id: 'ce_ies',
+          id: '12',
           name: 'Control escolar IES',
         },
       ]);
@@ -41,59 +44,59 @@ export default function NewUserForm() {
     if (session.rol === 'admin') {
       setUserrol([
         {
-          id: 'nuevo',
+          id: '1',
           name: 'Usuario Nuevo',
         },
         {
-          id: 'admin',
+          id: '2',
           name: 'Administrador',
         },
         {
-          id: 'representante',
+          id: '3',
           name: 'Representante Legal',
         },
         {
-          id: 'gestor',
+          id: '4',
           name: 'Gestor',
         },
         {
-          id: 'evaluador',
+          id: '5',
           name: 'Evaluador',
         },
         {
-          id: 'inspector',
+          id: '6',
           name: 'Inspector',
         },
         {
-          id: 'control_documental',
+          id: '7',
           name: 'Revisión de documentos',
         },
         {
-          id: 'sicyt_lectura',
+          id: '8',
           name: 'Sicyt de consulta',
         },
         {
-          id: 'sicyt_editar',
+          id: '9',
           name: 'Sicyt de editar',
         },
         {
-          id: 'comite_evaluacion',
+          id: '10',
           name: 'Comite de evaluación',
         },
         {
-          id: 'jefe_inspector',
+          id: '11',
           name: 'Jefe de inspectores',
         },
         {
-          id: 'ce_ies',
+          id: '12',
           name: 'Control escolar IES',
         },
         {
-          id: 'ce_sicyt',
+          id: '13',
           name: 'Control escolar SICYT',
         },
         {
-          id: 'equiv_sicyt',
+          id: '14',
           name: 'Equivalencia SICYT',
         },
       ]);
@@ -123,7 +126,7 @@ export default function NewUserForm() {
           />
         </Grid>
         <Grid item xs={3}>
-          <Select title="Tipo de usuario" options={userRol} />
+          <Select title="Tipo de usuario" options={userRol} name="rolId" id="rolId" />
         </Grid>
       </Grid>
       <Grid container spacing={2}>
@@ -133,9 +136,9 @@ export default function NewUserForm() {
         <Grid item xs={6}>
           <Input
             label="Correo Electronico"
-            id="email"
-            name="email"
-            auto="email"
+            id="correo"
+            name="correo"
+            auto="correo"
           />
         </Grid>
       </Grid>

@@ -12,17 +12,17 @@ import {
 } from '@siiges-ui/solicitudes';
 
 const stepsEscolarizada = [
+  'Plan de estudios',
   'Datos generales',
   'Plantel',
-  'Plan de estudios',
   'Anexos',
   'Evaluacion curricular',
 ];
 
 const stepsNoEscolarizada = [
+  'Plan de estudios',
   'Datos generales',
   'Plantel',
-  'Plan de estudios',
   'Plataforma educativa',
   'Anexos',
   'Evaluacion curricular',
@@ -47,9 +47,9 @@ function newRequest() {
           nextModule={nextModule}
           module={module}
         />
-        {module === 0 && <DatosGenerales />}
-        {module === 1 && <Plantel />}
-        {module === 2 && <PlanEstudios />}
+        {module === 0 && <PlanEstudios />}
+        {module === 1 && <DatosGenerales />}
+        {module === 2 && <Plantel />}
         {module === 3 && <Anexos />}
         {module === 4 && <EvaluacionCurricular />}
       </Layout>
@@ -64,9 +64,9 @@ function newRequest() {
         nextModule={nextModule}
         module={module}
       />
-      {module === 0 && <DatosGenerales />}
-      {module === 1 && <Plantel />}
-      {module === 2 && <PlanEstudios />}
+      {module === 0 && <PlanEstudios />}
+      {module === 1 && <DatosGenerales />}
+      {module === 2 && <Plantel />}
       {module === 3 && <PlataformaEducativa />}
       {module === 4 && <Anexos />}
       {module === 5 && <EvaluacionCurricular />}
