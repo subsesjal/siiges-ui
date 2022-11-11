@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 export const Context = createContext();
 
 function Provider({ children }) {
-  const [cookies, setCookies, removeCookie] = useCookies(['usuario']);
+  const [cookies, , removeCookie] = useCookies(['usuario']);
   const [session, setSession] = useState({});
   const [auth, setAuth] = useState(false);
 
