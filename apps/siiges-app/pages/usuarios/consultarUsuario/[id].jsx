@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
-import { Context, Layout } from '@siiges-ui/shared';
+import React from 'react';
+import { Layout } from '@siiges-ui/shared';
 import { UserConsult, UserInfo } from '@siiges-ui/users';
 import Grid from '@mui/material/Grid';
-import getCurrentUser from '../utils/getCurrentUser';
+import getUser from '../utils/getUser';
 
-export default function UserProfile() {
-  const { session } = useContext(Context);
-  const { user, loading } = getCurrentUser(session.id);
+export default function ConsultUser() {
+  const { user, loading } = getUser();
   return (
     <Layout>
       {loading ? (

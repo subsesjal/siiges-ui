@@ -40,14 +40,9 @@ export default function SignIn() {
       if (userData.contrasena !== pass.value) {
         setErrorMessages({ name: 'pass', message: errors.pass });
       } else {
-        setCookie(
-          'nombre',
-          userData.usuario,
-        );
-        setCookie(
-          'rol',
-          userData.rolId,
-        );
+        setCookie('id', userData.id);
+        setCookie('nombre', userData.usuario);
+        setCookie('rol', userData.rol.nombre);
         activateAuth(userData);
       }
     } else {

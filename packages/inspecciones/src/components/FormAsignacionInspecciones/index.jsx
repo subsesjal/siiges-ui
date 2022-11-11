@@ -1,30 +1,17 @@
-import {
-  Grid, Typography, Modal, Box, Card,
-} from '@mui/material';
+import { Grid, Typography, Card } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import {
-  ButtonStyled, Input, Title, ButtonsForm,
+  ButtonStyled,
+  Input,
+  ButtonsForm,
+  DefaultModal,
 } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useState } from 'react';
 import { rows, columns } from '../Mocks/inspectores';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 800,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
 export default function FormAsignacionInspecciones() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
     <>
       <Grid container spacing={2}>
@@ -81,51 +68,39 @@ export default function FormAsignacionInspecciones() {
           <ButtonStyled text="Terminar" alt="Confirmar" onclick={handleOpen} />
         </Grid>
       </Grid>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            <Title title="Confirmacion" />
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <Card
-                  variant="outlined"
-                  sx={{
-                    textAlign: 'center',
-                    backgroundColor: 'rgb(71, 127, 158, 0.53)',
-                    margin: 3,
-                    padding: 3,
-                  }}
-                >
-                  Esta por asignar Maestria Psicologia Juridica Criminologia y
-                  Ciencias Forenses a Inspector p/migrar RVOES SICYT para que
-                  realice la visita de inspeccion. ¿Esta usted seguro?
-                </Card>
-              </Grid>
-              <Grid item xs={6}>
-                <Input
-                  id="fechaInspeccion"
-                  label="Fecha de inspeccion"
-                  name="fechaInspeccion"
-                  auto="fechaInspeccion"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Input id="folio" label="Folio" name="folio" auto="folio" />
-              </Grid>
-              <Grid item xs={12}>
-                <ButtonsForm />
-              </Grid>
-            </Grid>
-          </Typography>
-        </Box>
-      </Modal>
+      <DefaultModal open={open} setOpen={setOpen}>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Card
+              variant="outlined"
+              sx={{
+                textAlign: 'center',
+                backgroundColor: 'rgb(71, 127, 158, 0.53)',
+                margin: 3,
+                padding: 3,
+              }}
+            >
+              Esta por asignar Maestria Psicologia Juridica Criminologia y
+              Ciencias Forenses a Inspector p/migrar RVOES SICYT para que
+              realice la visita de inspeccion. ¿Esta usted seguro?
+            </Card>
+          </Grid>
+          <Grid item xs={6}>
+            <Input
+              id="fechaInspeccion"
+              label="Fecha de inspeccion"
+              name="fechaInspeccion"
+              auto="fechaInspeccion"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Input id="folio" label="Folio" name="folio" auto="folio" />
+          </Grid>
+          <Grid item xs={12}>
+            <ButtonsForm />
+          </Grid>
+        </Grid>
+      </DefaultModal>
     </>
   );
 }

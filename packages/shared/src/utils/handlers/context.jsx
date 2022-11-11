@@ -15,7 +15,7 @@ function Provider({ children }) {
 
   useEffect(() => {
     if (cookies.rol !== null) {
-      setSession({ nombre: cookies.nombre, rol: cookies.rol });
+      setSession({ id: cookies.id, nombre: cookies.nombre, rol: cookies.rol });
       setAuth(true);
     } else {
       router.push('./');
@@ -27,7 +27,11 @@ function Provider({ children }) {
     auth,
     cookies,
     activateAuth: (userData) => {
-      setSession({ nombre: userData.usuario, rol: userData.rolId });
+      setSession({
+        id: userData.id,
+        nombre: userData.usuario,
+        rol: userData.rol.nombre,
+      });
       setAuth(true);
       router.push('../home');
     },

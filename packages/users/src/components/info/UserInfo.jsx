@@ -1,10 +1,13 @@
 import React from 'react';
 import { Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import Image from 'next/image';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 
-export default function UserInfo() {
+export default function UserInfo({ user }) {
+  const { persona, rol } = user.data;
+  const fullName = `${persona.nombre} ${persona.apellidoPaterno} ${persona.apellidoMaterno}`;
   return (
     <>
       <Image
@@ -26,11 +29,15 @@ export default function UserInfo() {
           textAlign: 'center',
         }}
       >
-        <Typography variant="p">Luis Manuel de Alba Villaseñor</Typography>
+        <Typography variant="p">{fullName}</Typography>
         <br />
         <Divider sx={{ marginY: 1 }} />
-        <Typography variant="p">Administrador</Typography>
+        <Typography variant="p">{rol.descripcion}</Typography>
       </Paper>
     </>
   );
 }
+
+UserInfo.propTypes = {
+  user: PropTypes.objectOf.isRequired,
+};

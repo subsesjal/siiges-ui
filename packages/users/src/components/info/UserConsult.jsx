@@ -1,14 +1,11 @@
 import React from 'react';
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { Grid, List, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
+import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
 
-export default function UserConsult() {
+export default function UserConsult({ user }) {
+  const { persona, rol } = user.data;
   return (
     <Grid item xs={8}>
       <Typography variant="h5" gutterBottom component="div">
@@ -19,100 +16,48 @@ export default function UserConsult() {
         <Grid container xs={6}>
           <Grid item xs>
             <List>
-              <ListItem disablePadding>
-                <ListItemText primary="Nombre(s)" sx={{ textAlign: 'right' }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="Apellidos" sx={{ textAlign: 'right' }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText
-                  primary="Correo electronico"
-                  sx={{ textAlign: 'right' }}
-                />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText
-                  primary="Nacionalidad"
-                  sx={{ textAlign: 'right' }}
-                />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="Sexo" sx={{ textAlign: 'right' }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="Telefono" sx={{ textAlign: 'right' }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="Celular" sx={{ textAlign: 'right' }} />
-              </ListItem>
+              <ListTitle text="Nombre(s)" />
+              <ListTitle text="Apellidos" />
+              <ListTitle text="Correo electronico" />
+              <ListTitle text="Nacionalidad" />
+              <ListTitle text="Sexo" />
+              <ListTitle text="Telefono" />
+              <ListTitle text="Celular" />
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
           <Grid item xs>
             <List>
-              <ListItem disablePadding>
-                <ListItemText secondary="Luis Manuel" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="de Alba Villaseñor" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="example@gmail.com" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="Mexicana" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="Masculino" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="33777666" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="33777666" sx={{ mt: 1 }} />
-              </ListItem>
+              <ListSubtitle text={persona.nombre} />
+              <ListSubtitle
+                text={`${persona.apellidoPaterno} ${persona.apellidoMaterno}`}
+              />
+              <ListSubtitle text={user.data.correo} />
+              <ListSubtitle text={persona.nacionalidad} />
+              <ListSubtitle text={persona.sexo} />
+              <ListSubtitle text={persona.telefono} />
+              <ListSubtitle text={persona.celular} />
             </List>
           </Grid>
         </Grid>
         <Grid container xs={5}>
           <Grid item xs>
             <List>
-              <ListItem disablePadding>
-                <ListItemText primary="Rol" sx={{ textAlign: 'right' }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="Cargo" sx={{ textAlign: 'right' }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="INE" sx={{ textAlign: 'right' }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="RFC" sx={{ textAlign: 'right' }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="Curp" sx={{ textAlign: 'right' }} />
-              </ListItem>
+              <ListTitle text="Rol" />
+              <ListTitle text="Cargo" />
+              <ListTitle text="INE" />
+              <ListTitle text="RFC" />
+              <ListTitle text="Curp" />
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
           <Grid item xs>
             <List>
-              <ListItem disablePadding>
-                <ListItemText secondary="Admin" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="Jefe de jefes" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="AAAAAAAAAAA" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="AAAAAAAAAAA" sx={{ mt: 1 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText secondary="AAAAAAAAAAA" sx={{ mt: 1 }} />
-              </ListItem>
+              <ListSubtitle text={rol.descripcion} />
+              <ListSubtitle text="Jefe de jefes" />
+              <ListSubtitle text={persona.ine} />
+              <ListSubtitle text={persona.rfc} />
+              <ListSubtitle text={persona.curp} />
             </List>
           </Grid>
         </Grid>
@@ -120,3 +65,7 @@ export default function UserConsult() {
     </Grid>
   );
 }
+
+UserConsult.propTypes = {
+  user: PropTypes.objectOf.isRequired,
+};

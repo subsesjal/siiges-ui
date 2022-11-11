@@ -1,82 +1,41 @@
 [
   {
     "id": 1,
-    "usuario": "Sara",
+    "usuario": "esau",
     "contrasena": "123456",
-    "rolId": "representante",
+    "rolId": 2,
     "estatus": 1,
-    "actualizado": true
+    "actualizado": true,
+    "rol": {
+      "id": 2,
+      "nombre": "admin",
+      "descripcion": "Administracion"
+    }
   },
   {
-    "id": 2,
-    "usuario": "Jim",
+    "id": 1,
+    "usuario": "jose",
     "contrasena": "123456",
-    "rolId": "admin",
+    "rolId": 11,
     "estatus": 1,
-    "actualizado": true
-  },
-  {
-    "id": 3,
-    "usuario": "Pete",
-    "contrasena": "123456",
-    "rolId": "gestor",
-    "estatus": 1,
-    "actualizado": true
-  },
-  {
-    "id": 4,
-    "usuario": "Luis",
-    "contrasena": "123456",
-    "rolId": "sicyt_editar",
-    "estatus": 1,
-    "actualizado": true
-  },
-  {
-    "id": 5,
-    "usuario": "Daniel",
-    "contrasena": "123456",
-    "rolId": "nuevo",
-    "estatus": 1,
-    "actualizado": true
+    "actualizado": true,
+    "rol": {
+      "id": 11,
+      "nombre": "jefe_inspector",
+      "descripcion": "Jefe de inspectores"
+    }
   },
   {
     "id": 6,
-    "usuario": "Jelipe",
+    "usuario": "jorge",
     "contrasena": "123456",
-    "rolId": "inspector",
+    "rolId": 3,
     "estatus": 1,
-    "actualizado": true
-  },
-  {
-    "id": 7,
-    "usuario": "Mario",
-    "contrasena": "123456",
-    "rolId": "jefe_inspector",
-    "estatus": 1,
-    "actualizado": true
-  },
-  {
-    "id": 8,
-    "usuario": "Pedro",
-    "contrasena": "123456",
-    "rolId": "gestor",
-    "estatus": 1,
-    "actualizado": true
-  },
-  {
-    "id": 9,
-    "usuario": "Lucio",
-    "contrasena": "123456",
-    "rolId": "sicyt_editar",
-    "estatus": 1,
-    "actualizado": true
-  },
-  {
-    "id": 10,
-    "usuario": "Daniela",
-    "contrasena": "123456",
-    "rolId": "nuevo",
-    "estatus": 1,
-    "actualizado": true
+    "actualizado": true,
+    "rol": {
+      "id": 2,
+      "nombre": "representante",
+      "descripcion": "Representante Legal"
+    }
   }
 ]
