@@ -1,14 +1,63 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import router from 'next/router';
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm, Context, Input, Select,
+  ButtonsForm, Input, Select,
 } from '@siiges-ui/shared';
-import { getFormData, getFormSelectData } from '@siiges-ui/shared/src/utils/forms/getFormData';
+import {
+  getFormData,
+  getFormSelectData,
+} from '@siiges-ui/shared/src/utils/forms/getFormData';
+import userRolOptions from '../utils/userRolOptions';
 
 export default function NewUserForm() {
-  const { session } = useContext(Context);
   const [userRol, setUserrol] = useState([]);
+  const [form, setForm] = useState({});
+  const [error, setError] = useState({});
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleOnBlur = (e) => {
+    const { name } = e.target;
+    if (name === 'nombre') {
+      if (form.nombre === undefined || form.nombre === '') {
+        setError({ ...error, nombre: 'Nombre invalido' });
+      } else {
+        setError({ ...error, nombre: '' });
+      }
+    }
+    if (name === 'apellido_paterno') {
+      if (form.apellido_paterno === undefined || form.apellido_paterno === '') {
+        setError({ ...error, apellido_paterno: 'Apellido paterno invalido' });
+      } else {
+        setError({ ...error, apellido_paterno: '' });
+      }
+    }
+    if (name === 'apellido_materno') {
+      if (form.apellido_materno === undefined || form.apellido_materno === '') {
+        setError({ ...error, apellido_materno: 'Apellido materno invalido' });
+      } else {
+        setError({ ...error, apellido_materno: '' });
+      }
+    }
+    if (name === 'cargo') {
+      if (form.cargo === undefined || form.cargo === '') {
+        setError({ ...error, cargo: 'Cargo invalido' });
+      } else {
+        setError({ ...error, cargo: '' });
+      }
+    }
+    if (name === 'correo') {
+      if (form.correo === undefined || form.correo === '') {
+        setError({ ...error, correo: 'Correo invalido' });
+      } else {
+        setError({ ...error, correo: '' });
+      }
+    }
+  };
 
   function submit() {
     const dataInputs = getFormData('MuiOutlinedInput-input');
@@ -16,95 +65,31 @@ export default function NewUserForm() {
     const data = {
       ...dataInputs,
       ...dataSelects,
+      actualizado: 1,
     };
 
     fetch('http://localhost:3000/api/v1/usuarios/', {
       method: 'POST',
-      body: { ...data },
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
   }
 
-  useEffect(() => {
-    if (session.rol === 'representante') {
-      setUserrol([
-        {
-          id: 'gestor',
-          name: 'Gestor',
-        },
-        {
-          id: 'ce_ies',
-          name: 'Control escolar IES',
-        },
-      ]);
-    }
-
-    if (session.rol === 'admin') {
-      setUserrol([
-        {
-          id: 'nuevo',
-          name: 'Usuario Nuevo',
-        },
-        {
-          id: 'admin',
-          name: 'Administrador',
-        },
-        {
-          id: 'representante',
-          name: 'Representante Legal',
-        },
-        {
-          id: 'gestor',
-          name: 'Gestor',
-        },
-        {
-          id: 'evaluador',
-          name: 'Evaluador',
-        },
-        {
-          id: 'inspector',
-          name: 'Inspector',
-        },
-        {
-          id: 'control_documental',
-          name: 'Revisión de documentos',
-        },
-        {
-          id: 'sicyt_lectura',
-          name: 'Sicyt de consulta',
-        },
-        {
-          id: 'sicyt_editar',
-          name: 'Sicyt de editar',
-        },
-        {
-          id: 'comite_evaluacion',
-          name: 'Comite de evaluación',
-        },
-        {
-          id: 'jefe_inspector',
-          name: 'Jefe de inspectores',
-        },
-        {
-          id: 'ce_ies',
-          name: 'Control escolar IES',
-        },
-        {
-          id: 'ce_sicyt',
-          name: 'Control escolar SICYT',
-        },
-        {
-          id: 'equiv_sicyt',
-          name: 'Equivalencia SICYT',
-        },
-      ]);
-    }
-  }, [session]);
+  userRolOptions(setUserrol);
 
   return (
     <Grid item sx={{ ml: 15 }}>
       <Grid container spacing={2}>
         <Grid item xs={3}>
-          <Input label="Nombre(s)" id="nombre" name="nombre" auto="nombre" />
+          <Input
+            label="Nombre(s)"
+            id="nombre"
+            name="nombre"
+            auto="nombre"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.nombre}
+          />
         </Grid>
         <Grid item xs={3}>
           <Input
@@ -112,6 +97,9 @@ export default function NewUserForm() {
             id="apellido_paterno"
             name="apellido_paterno"
             auto="apellido_paterno"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.apellido_paterno}
           />
         </Grid>
         <Grid item xs={3}>
@@ -120,28 +108,53 @@ export default function NewUserForm() {
             id="apellido_materno"
             name="apellido_materno"
             auto="apellido_materno"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.apellido_materno}
           />
         </Grid>
         <Grid item xs={3}>
-          <Select title="Tipo de usuario" options={userRol} />
+          <Select
+            title="Rol"
+            options={userRol}
+            name="rolId"
+            onchange={handleOnChange}
+          />
         </Grid>
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Input label="Cargo" id="cargo" name="cargo" auto="cargo" />
+          <Input
+            label="Cargo"
+            id="titulo_cargo"
+            name="titulo_cargo"
+            auto="titulo_cargo"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.cargo}
+          />
         </Grid>
         <Grid item xs={6}>
           <Input
             label="Correo Electronico"
-            id="email"
-            name="email"
-            auto="email"
+            id="correo"
+            name="correo"
+            auto="correo"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.correo}
           />
         </Grid>
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={3}>
-          <Input label="Usuario" id="usuario" name="usuario" auto="usuario" />
+          <Input
+            label="Usuario"
+            id="usuario"
+            name="usuario"
+            auto="usuario"
+            onchange={handleOnChange}
+          />
         </Grid>
         <Grid item xs={3}>
           <Input
@@ -149,6 +162,7 @@ export default function NewUserForm() {
             id="contrasena"
             name="contrasena"
             auto="contrasena"
+            onchange={handleOnChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -157,6 +171,7 @@ export default function NewUserForm() {
             id="repeatContrasena"
             name="repeatContrasena"
             auto="repeatContrasena"
+            onchange={handleOnChange}
           />
         </Grid>
       </Grid>
