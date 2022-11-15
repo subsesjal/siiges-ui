@@ -14,7 +14,7 @@ function Provider({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (cookies.rol !== null) {
+    if (cookies.id !== undefined) {
       setSession({ id: cookies.id, nombre: cookies.nombre, rol: cookies.rol });
       setAuth(true);
     } else {
