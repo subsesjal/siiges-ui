@@ -43,11 +43,11 @@ export default function NewUserForm() {
         setError({ ...error, apellido_materno: '' });
       }
     }
-    if (name === 'cargo') {
-      if (form.cargo === undefined || form.cargo === '') {
-        setError({ ...error, cargo: 'Cargo invalido' });
+    if (name === 'titulo_cargo') {
+      if (form.titulo_cargo === undefined || form.titulo_cargo === '') {
+        setError({ ...error, titulo_cargo: 'Cargo invalido' });
       } else {
-        setError({ ...error, cargo: '' });
+        setError({ ...error, titulo_cargo: '' });
       }
     }
     if (name === 'correo') {
@@ -131,7 +131,7 @@ export default function NewUserForm() {
             auto="titulo_cargo"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.cargo}
+            errorMessage={error.titulo_cargo}
           />
         </Grid>
         <Grid item xs={6}>

@@ -24,41 +24,45 @@ export default function EditUserForm({ user }) {
   };
 
   const handleOnBlur = (e) => {
-    const { name } = e.target;
-    if (name === 'nombre') {
+    const { name, value } = e.target;
+    if (name === 'nombre' && value === '') {
       if (form.nombre === undefined || form.nombre === '') {
         setError({ ...error, nombre: 'Nombre invalido' });
-      } else {
-        setError({ ...error, nombre: '' });
       }
+    } else {
+      setError({ ...error, nombre: '' });
     }
-    if (name === 'apellido_paterno') {
+
+    if (name === 'apellido_paterno' && value === '') {
       if (form.apellido_paterno === undefined || form.apellido_paterno === '') {
         setError({ ...error, apellido_paterno: 'Apellido paterno invalido' });
-      } else {
-        setError({ ...error, apellido_paterno: '' });
       }
+    } else {
+      setError({ ...error, apellido_paterno: '' });
     }
-    if (name === 'apellido_materno') {
+
+    if (name === 'apellido_materno' && value === '') {
       if (form.apellido_materno === undefined || form.apellido_materno === '') {
         setError({ ...error, apellido_materno: 'Apellido materno invalido' });
-      } else {
-        setError({ ...error, apellido_materno: '' });
       }
+    } else {
+      setError({ ...error, apellido_materno: '' });
     }
-    if (name === 'cargo') {
+
+    if (name === 'cargo' && value === '') {
       if (form.cargo === undefined || form.cargo === '') {
         setError({ ...error, cargo: 'Cargo invalido' });
-      } else {
-        setError({ ...error, cargo: '' });
       }
+    } else {
+      setError({ ...error, cargo: '' });
     }
-    if (name === 'correo') {
+
+    if (name === 'correo' && value === '') {
       if (form.correo === undefined || form.correo === '') {
         setError({ ...error, correo: 'Correo invalido' });
-      } else {
-        setError({ ...error, correo: '' });
       }
+    } else {
+      setError({ ...error, correo: '' });
     }
   };
 
