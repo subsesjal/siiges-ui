@@ -8,7 +8,7 @@ import { Context } from './utils/handlers/context';
 import DataTable from './components/DataTable';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
-import Input from './components/Input';
+import Input from './components/Input/Index';
 import InputPassword from './components/Input/InputPassword';
 import InputFile from './components/Input/InputFile';
 import Layout from './components/Layout/Layout';
