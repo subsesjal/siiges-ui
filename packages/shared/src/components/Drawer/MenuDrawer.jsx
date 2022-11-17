@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '@siiges-ui/shared';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,11 +10,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import SearchIcon from '@mui/icons-material/Search';
-import GroupIcon from '@mui/icons-material/Group';
-import BusinessIcon from '@mui/icons-material/Business';
-import DescriptionIcon from '@mui/icons-material/Description';
 import Link from 'next/link';
+import userRol from './utils/userRol';
 
 const drawerWidth = 240;
 
@@ -34,7 +32,7 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: `calc(${theme.spacing(0)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
@@ -57,86 +55,19 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-function userRol(session, setUsers) {
-  if (session.rol === 'representante') {
-    setUsers([
-      {
-        text: 'Mis usuarios',
-        icon: <GroupIcon />,
-        route: '/usuarios',
-        key: 'users',
-      },
-      {
-        text: 'Mi institucion',
-        icon: <BusinessIcon />,
-        route: '/institucion',
-        key: 'intitutions',
-      },
-      {
-        text: 'Mis solicitudes',
-        icon: <DescriptionIcon />,
-        route: '/solicitudes',
-        key: 'solicitudes',
-      },
-    ]);
-  }
-
-  if (session.rol === 'admin') {
-    setUsers([
-      {
-        text: 'Mis usuarios',
-        icon: <GroupIcon />,
-        route: '/usuarios',
-        key: 'users',
-      },
-      {
-        text: 'Mi institucion',
-        icon: <BusinessIcon />,
-        route: '/institucion',
-        key: 'intitutions',
-      },
-      {
-        text: 'Mis solicitudes',
-        icon: <DescriptionIcon />,
-        route: '/solicitudes',
-        key: 'solicitudes',
-      },
-    ]);
-  }
-  if (session.rol === 'jefe_inspector') {
-    setUsers([
-      {
-        text: 'Inspeccion',
-        icon: <SearchIcon />,
-        route: '/inspecciones',
-        key: 'inspecciones',
-      },
-    ]);
-  }
-}
-
-export default function MenuDrawer() {
+export default function MenuDrawer({ open, openFunction, closeFunction }) {
   const { session } = useContext(Context);
-  const [open, setOpen] = useState(false);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     userRol(session, setUsers);
   }, [session]);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Drawer variant="permanent" open={open}>
-        <List onMouseOver={handleDrawerOpen} onMouseLeave={handleDrawerClose}>
+        <List onMouseOver={openFunction} onMouseLeave={closeFunction}>
           {users.map((item) => (
             <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
               <Link href={item.route}>
@@ -169,3 +100,9 @@ export default function MenuDrawer() {
     </Box>
   );
 }
+
+MenuDrawer.propTypes = {
+  open: PropTypes.string.isRequired,
+  openFunction: PropTypes.func.isRequired,
+  closeFunction: PropTypes.func.isRequired,
+};
