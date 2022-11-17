@@ -1,8 +1,5 @@
 import {
-  Grid,
-  IconButton,
-  TextField,
-  Typography,
+  Grid, IconButton, TextField, Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import PropTypes from 'prop-types';
@@ -54,8 +51,9 @@ function DataTable({ title, rows, columns }) {
 
 DataTable.propTypes = {
   title: PropTypes.string.isRequired,
-  rows: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])).isRequired,
+  rows: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.shape({ width: PropTypes.number }))
+    .isRequired,
 };
 
 export default DataTable;

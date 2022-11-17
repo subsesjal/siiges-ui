@@ -2,7 +2,7 @@ import { Card, CardContent, Container } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
 import MenuDrawer from '../Drawer/MenuDrawer';
-import MainNavbar from '../Navbar/mainnavbar';
+import MainNavbar from '../Navbar/MainNavbar';
 import Background from '../Resources/Background';
 import Title from '../Title';
 

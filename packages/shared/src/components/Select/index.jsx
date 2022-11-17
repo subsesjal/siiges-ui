@@ -7,14 +7,12 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function BasicSelect({
-  title,
-  options,
-  value,
-  name,
+  title, options, value, name, onchange,
 }) {
   const [option, setOption] = useState(value);
   const handleOnChange = (e) => {
     setOption(e.target.value);
+    onchange(e);
   };
   return (
     <Box sx={{ minWidth: 120, mt: 2 }}>
@@ -29,7 +27,7 @@ export default function BasicSelect({
           onChange={handleOnChange}
         >
           {options.map((opcion) => (
-            <MenuItem value={opcion.id}>{opcion.name}</MenuItem>
+            <MenuItem key={opcion.id} value={opcion.id}>{opcion.name}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -37,9 +35,18 @@ export default function BasicSelect({
   );
 }
 
+BasicSelect.defaultProps = {
+  value: '',
+  onchange: () => {},
+};
+
 BasicSelect.propTypes = {
   title: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  value: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   name: PropTypes.string.isRequired,
+  onchange: PropTypes.func,
 };

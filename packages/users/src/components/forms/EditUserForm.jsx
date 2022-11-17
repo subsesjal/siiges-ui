@@ -5,10 +5,6 @@ import {
   ButtonsForm, Context, Input, Select,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import {
-  getFormData,
-  getFormSelectData,
-} from '@siiges-ui/shared/src/utils/forms/getFormData';
 import userRolOptions from '../utils/userRolOptions';
 
 export default function EditUserForm({ user }) {
@@ -20,40 +16,56 @@ export default function EditUserForm({ user }) {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    if (
+      name === 'nombre'
+      || name === 'apellidoPaterno'
+      || name === 'apellidoMaterno'
+    ) {
+      setForm({ ...form, persona: { ...form.persona, [name]: value } });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
-    if (name === 'nombre') {
-      if (form.nombre === undefined || form.nombre === '') {
-        setError({ ...error, nombre: 'Nombre invalido' });
-      } else {
-        setError({ ...error, nombre: '' });
+    if (form.persona !== undefined) {
+      if (name === 'nombre') {
+        if (form.persona.nombre === undefined || form.persona.nombre === '') {
+          setError({ ...error, nombre: 'Nombre invalido' });
+        } else {
+          setError({ ...error, nombre: '' });
+        }
+      }
+
+      if (name === 'apellidoPaterno') {
+        if (
+          form.persona.apellidoPaterno === undefined
+          || form.persona.apellidoPaterno === ''
+        ) {
+          setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
+        } else {
+          setError({ ...error, apellidoPaterno: '' });
+        }
+      }
+
+      if (name === 'apellidoMaterno') {
+        if (
+          form.persona.apellidoMaterno === undefined
+          || form.persona.apellidoMaterno === ''
+        ) {
+          setError({ ...error, apellidoMaterno: 'Apellido materno invalido' });
+        } else {
+          setError({ ...error, apellidoMaterno: '' });
+        }
       }
     }
 
-    if (name === 'apellido_paterno') {
-      if (form.apellido_paterno === undefined || form.apellido_paterno === '') {
-        setError({ ...error, apellido_paterno: 'Apellido paterno invalido' });
+    if (name === 'titulo_cargo') {
+      if (form.titulo_cargo === undefined || form.titulo_cargo === '') {
+        setError({ ...error, titulo_cargo: 'Cargo invalido' });
       } else {
-        setError({ ...error, apellido_paterno: '' });
-      }
-    }
-
-    if (name === 'apellido_materno') {
-      if (form.apellido_materno === undefined || form.apellido_materno === '') {
-        setError({ ...error, apellido_materno: 'Apellido materno invalido' });
-      } else {
-        setError({ ...error, apellido_materno: '' });
-      }
-    }
-
-    if (name === 'cargo') {
-      if (form.cargo === undefined || form.cargo === '') {
-        setError({ ...error, cargo: 'Cargo invalido' });
-      } else {
-        setError({ ...error, cargo: '' });
+        setError({ ...error, titulo_cargo: '' });
       }
     }
 
@@ -67,18 +79,13 @@ export default function EditUserForm({ user }) {
   };
 
   function submit() {
-    const dataInputs = getFormData('MuiOutlinedInput-input');
-    const dataSelects = getFormSelectData('MuiSelect-nativeInput');
-    const data = {
-      ...dataInputs,
-      ...dataSelects,
-    };
-
-    fetch(`http://localhost:3000/api/v1/usuarios/${session.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    if (Object.values(error).every((x) => x === null || x === '')) {
+      fetch(`http://localhost:3000/api/v1/usuarios/${session.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+    }
   }
 
   userRolOptions(setUserrol);
@@ -102,26 +109,26 @@ export default function EditUserForm({ user }) {
         <Grid item xs={3}>
           <Input
             label="Primer Apellido"
-            id="apellido_paterno"
-            name="apellido_paterno"
-            auto="apellido_paterno"
+            id="apellidoPaterno"
+            name="apellidoPaterno"
+            auto="apellidoPaterno"
             value={persona.apellidoPaterno}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.apellido_paterno}
+            errorMessage={error.apellidoPaterno}
             class="data"
           />
         </Grid>
         <Grid item xs={3}>
           <Input
             label="Segundo Apellido"
-            id="apellido_materno"
-            name="apellido_materno"
-            auto="apellido_materno"
+            id="apellidoMaterno"
+            name="apellidoMaterno"
+            auto="apellidoMaterno"
             value={persona.apellidoMaterno}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.apellido_materno}
+            errorMessage={error.apellidoMaterno}
             class="data"
           />
         </Grid>
@@ -130,7 +137,7 @@ export default function EditUserForm({ user }) {
             title="Rol"
             options={userRol}
             value={rol.id}
-            name="rol_id"
+            name="rolId"
             onchange={handleOnChange}
           />
         </Grid>
@@ -139,13 +146,13 @@ export default function EditUserForm({ user }) {
         <Grid item xs={6}>
           <Input
             label="Cargo"
-            id="cargo"
-            name="cargo"
-            auto="cargo"
-            value="cargo"
+            id="titulo_cargo"
+            name="titulo_cargo"
+            auto="titulo_cargo"
+            value="Cargo"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.cargo}
+            errorMessage={error.titulo_cargo}
             class="data"
           />
         </Grid>
@@ -204,5 +211,20 @@ export default function EditUserForm({ user }) {
 }
 
 EditUserForm.propTypes = {
-  user: PropTypes.objectOf.isRequired,
+  user: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      nombre: PropTypes.string,
+      correo: PropTypes.string,
+      usuario: PropTypes.string,
+      contrasena: PropTypes.string,
+      persona: PropTypes.shape({
+        id: PropTypes.number,
+        nombre: PropTypes.string,
+        apellidoPaterno: PropTypes.string,
+        apellidoMaterno: PropTypes.string,
+      }),
+      rol: PropTypes.shape({ id: PropTypes.number }),
+    }),
+  ).isRequired,
 };

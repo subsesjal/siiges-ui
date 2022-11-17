@@ -42,6 +42,8 @@ function Input({
 Input.defaultProps = {
   type: 'text',
   size: 'small',
+  errorMessage: '',
+  value: '',
   onchange: () => {},
   onblur: () => {},
 };
@@ -54,7 +56,7 @@ Input.propTypes = {
   onblur: PropTypes.func,
   // eslint-disable-next-line react/require-default-props
   value: PropTypes.string,
-  errorMessage: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string,
   type: PropTypes.string,
   size: PropTypes.string,
   auto: PropTypes.string.isRequired,

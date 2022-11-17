@@ -8,8 +8,8 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
-import InputPassword from '../../../src/components/Input/inputPassword';
-import ButtonVisibility from '../../../src/components/Buttons/buttonVisibility';
+import InputPassword from '../../../src/components/Input/InputPassword';
+import ButtonVisibility from '../../../src/components/Buttons/ButtonVisibility';
 
 afterEach(cleanup);
 

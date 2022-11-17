@@ -1,53 +1,64 @@
 import React, { useState } from 'react';
 import router from 'next/router';
 import { Grid } from '@mui/material';
-import {
-  ButtonsForm, Input, Select,
-} from '@siiges-ui/shared';
-import {
-  getFormData,
-  getFormSelectData,
-} from '@siiges-ui/shared/src/utils/forms/getFormData';
+import { ButtonsForm, Input, Select } from '@siiges-ui/shared';
 import userRolOptions from '../utils/userRolOptions';
 
 export default function NewUserForm() {
   const [userRol, setUserrol] = useState([]);
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ actualizado: 1 });
   const [error, setError] = useState({});
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    if (
+      name === 'nombre'
+      || name === 'apellidoPaterno'
+      || name === 'apellidoMaterno'
+      || name === 'tituloCargo'
+    ) {
+      setForm({ ...form, persona: { ...form.persona, [name]: value } });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
-    if (name === 'nombre') {
-      if (form.nombre === undefined || form.nombre === '') {
-        setError({ ...error, nombre: 'Nombre invalido' });
-      } else {
-        setError({ ...error, nombre: '' });
+    if (form.persona !== undefined) {
+      if (name === 'nombre') {
+        if (form.persona.nombre === undefined || form.persona.nombre === '') {
+          setError({ ...error, nombre: 'Nombre invalido' });
+        } else {
+          setError({ ...error, nombre: '' });
+        }
       }
-    }
-    if (name === 'apellido_paterno') {
-      if (form.apellido_paterno === undefined || form.apellido_paterno === '') {
-        setError({ ...error, apellido_paterno: 'Apellido paterno invalido' });
-      } else {
-        setError({ ...error, apellido_paterno: '' });
+      if (name === 'apellidoPaterno') {
+        if (
+          form.persona.apellidoPaterno === undefined
+          || form.persona.apellidoPaterno === ''
+        ) {
+          setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
+        } else {
+          setError({ ...error, apellidoPaterno: '' });
+        }
       }
-    }
-    if (name === 'apellido_materno') {
-      if (form.apellido_materno === undefined || form.apellido_materno === '') {
-        setError({ ...error, apellido_materno: 'Apellido materno invalido' });
-      } else {
-        setError({ ...error, apellido_materno: '' });
+      if (name === 'apellidoMaterno') {
+        if (
+          form.persona.apellidoMaterno === undefined
+          || form.persona.apellidoMaterno === ''
+        ) {
+          setError({ ...error, apellidoMaterno: 'Apellido materno invalido' });
+        } else {
+          setError({ ...error, apellidoMaterno: '' });
+        }
       }
-    }
-    if (name === 'titulo_cargo') {
-      if (form.titulo_cargo === undefined || form.titulo_cargo === '') {
-        setError({ ...error, titulo_cargo: 'Cargo invalido' });
-      } else {
-        setError({ ...error, titulo_cargo: '' });
+      if (name === 'tituloCargo') {
+        if (form.tituloCargo === undefined || form.tituloCargo === '') {
+          setError({ ...error, tituloCargo: 'Cargo invalido' });
+        } else {
+          setError({ ...error, tituloCargo: '' });
+        }
       }
     }
     if (name === 'correo') {
@@ -60,18 +71,10 @@ export default function NewUserForm() {
   };
 
   function submit() {
-    const dataInputs = getFormData('MuiOutlinedInput-input');
-    const dataSelects = getFormSelectData('MuiSelect-nativeInput');
-    const data = {
-      ...dataInputs,
-      ...dataSelects,
-      actualizado: 1,
-    };
-
     fetch('http://localhost:3000/api/v1/usuarios/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(form),
     });
   }
 
@@ -94,29 +97,30 @@ export default function NewUserForm() {
         <Grid item xs={3}>
           <Input
             label="Primer Apellido"
-            id="apellido_paterno"
-            name="apellido_paterno"
-            auto="apellido_paterno"
+            id="apellidoPaterno"
+            name="apellidoPaterno"
+            auto="apellidoPaterno"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.apellido_paterno}
+            errorMessage={error.apellidoPaterno}
           />
         </Grid>
         <Grid item xs={3}>
           <Input
             label="Segundo Apellido"
-            id="apellido_materno"
-            name="apellido_materno"
-            auto="apellido_materno"
+            id="apellidoMaterno"
+            name="apellidoMaterno"
+            auto="apellidoMaterno"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.apellido_materno}
+            errorMessage={error.apellidoMaterno}
           />
         </Grid>
         <Grid item xs={3}>
           <Select
             title="Rol"
             options={userRol}
+            id="rolId"
             name="rolId"
             onchange={handleOnChange}
           />
@@ -126,12 +130,12 @@ export default function NewUserForm() {
         <Grid item xs={6}>
           <Input
             label="Cargo"
-            id="titulo_cargo"
-            name="titulo_cargo"
-            auto="titulo_cargo"
+            id="tituloCargo"
+            name="tituloCargo"
+            auto="tituloCargo"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.titulo_cargo}
+            errorMessage={error.tituloCargo}
           />
         </Grid>
         <Grid item xs={6}>
