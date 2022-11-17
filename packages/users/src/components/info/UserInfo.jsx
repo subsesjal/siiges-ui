@@ -6,8 +6,8 @@ import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 
 export default function UserInfo({ user }) {
-  const { persona, rol } = user.data;
-  const fullName = `${persona.nombre} ${persona.apellidoPaterno} ${persona.apellidoMaterno}`;
+  const { persona = undefined, rol = undefined } = user.data || {};
+  const fullName = `${persona?.nombre} ${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`;
   return (
     <>
       <Image
@@ -32,7 +32,7 @@ export default function UserInfo({ user }) {
         <Typography variant="p">{fullName}</Typography>
         <br />
         <Divider sx={{ marginY: 1 }} />
-        <Typography variant="p">{rol.descripcion}</Typography>
+        <Typography variant="p">{rol?.descripcion}</Typography>
       </Paper>
     </>
   );
