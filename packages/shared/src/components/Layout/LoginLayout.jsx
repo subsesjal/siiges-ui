@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Header from '../Header';
 import Logo from '../Images/Logo';
-import Navbar from '../Navbar/Navbar';
+import Navbar from '../Navbar';
 import Background from '../Resources/Background';
 
 function LoginLayout({ children }) {

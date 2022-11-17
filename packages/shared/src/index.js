@@ -8,7 +8,7 @@ import { Context } from './utils/handlers/context';
 import DataTable from './components/DataTable';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
-import Input from './components/Input/Index';
+import Input from './components/Input';
 import InputPassword from './components/Input/InputPassword';
 import InputFile from './components/Input/InputFile';
 import Layout from './components/Layout/Layout';
@@ -19,7 +19,7 @@ import LogoWhite from './components/Images/LogoWhite';
 import LoadCircle from './components/Resources/LoadCircle';
 import MenuDrawer from './components/Drawer/MenuDrawer';
 import MainNavbar from './components/Navbar/MainNavbar';
-import Navbar from './components/Navbar/Navbar';
+import Navbar from './components/Navbar';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
 import Select from './components/Select';
@@ -29,6 +29,7 @@ import Title from './components/Title';
 import DefaultModal from './components/Modal';
 import ListTitle from './components/ListItems/ListTitle';
 import ListSubtitle from './components/ListItems/ListSubtitle';
+import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 
 export {
   ActionButtons,
@@ -62,4 +63,5 @@ export {
   DefaultModal,
   ListTitle,
   ListSubtitle,
+  useCheckMobileScreen,
 };

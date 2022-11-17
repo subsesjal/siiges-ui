@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 export const Context = createContext();
 
 function Provider({ children }) {
-  const [cookies, removeCookie] = useCookies(['usuario']);
+  const [cookies, , removeCookie] = useCookies(['usuario']);
   const [session, setSession] = useState({});
   const [auth, setAuth] = useState(false);
 
@@ -18,7 +18,7 @@ function Provider({ children }) {
       setSession({ id: cookies.id, nombre: cookies.nombre, rol: cookies.rol });
       setAuth(true);
     } else {
-      router.push('./');
+      router.push('/');
     }
   }, [cookies]);
 
@@ -38,9 +38,11 @@ function Provider({ children }) {
     removeAuth: () => {
       const nullSession = {};
       setSession(nullSession);
-      removeCookie('nombre');
-      removeCookie('rol');
+      removeCookie('nombre', { domain: '', path: '/' });
+      removeCookie('rol', { domain: '', path: '/' });
+      removeCookie('id', { domain: '', path: '/' });
       setAuth(false);
+      router.push('/');
     },
   };
   return <Context.Provider value={value}>{children}</Context.Provider>;

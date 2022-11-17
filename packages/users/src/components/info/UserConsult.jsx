@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
 
 export default function UserConsult({ user }) {
-  const { persona, rol } = user.data;
+  const { persona = undefined, rol = undefined } = user.data || {};
   return (
     <Grid item xs={8}>
       <Typography variant="h5" gutterBottom component="div">
@@ -28,15 +28,15 @@ export default function UserConsult({ user }) {
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
           <Grid item xs>
             <List>
-              <ListSubtitle text={persona.nombre} />
+              <ListSubtitle text={persona?.nombre} />
               <ListSubtitle
-                text={`${persona.apellidoPaterno} ${persona.apellidoMaterno}`}
+                text={`${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`}
               />
-              <ListSubtitle text={user.data.correo} />
-              <ListSubtitle text={persona.nacionalidad} />
-              <ListSubtitle text={persona.sexo} />
-              <ListSubtitle text={persona.telefono} />
-              <ListSubtitle text={persona.celular} />
+              <ListSubtitle text={user.data?.correo} />
+              <ListSubtitle text={persona?.nacionalidad} />
+              <ListSubtitle text={persona?.sexo} />
+              <ListSubtitle text={persona?.telefono} />
+              <ListSubtitle text={persona?.celular} />
             </List>
           </Grid>
         </Grid>
@@ -53,11 +53,11 @@ export default function UserConsult({ user }) {
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
           <Grid item xs>
             <List>
-              <ListSubtitle text={rol.descripcion} />
+              <ListSubtitle text={rol?.descripcion} />
               <ListSubtitle text="Jefe de jefes" />
-              <ListSubtitle text={persona.ine} />
-              <ListSubtitle text={persona.rfc} />
-              <ListSubtitle text={persona.curp} />
+              <ListSubtitle text={persona?.ine} />
+              <ListSubtitle text={persona?.rfc} />
+              <ListSubtitle text={persona?.curp} />
             </List>
           </Grid>
         </Grid>

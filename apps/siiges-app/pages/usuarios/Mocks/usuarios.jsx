@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ActionButtons, ButtonStyled, DefaultModal } from '@siiges-ui/shared';
 import { Grid, Typography } from '@mui/material';
+import deleteUser from '../utils/deleteUser';
 
 function ModalState() {
   const [modal, setModal] = useState(false);
@@ -46,7 +47,7 @@ const columns = [
           />
           <DefaultModal open={modal} setOpen={hideModal}>
             <Typography>Desea eliminar este usuario?</Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
                 <ButtonStyled
                   text="Cancelar"
@@ -61,7 +62,9 @@ const columns = [
                   text="Confirmar"
                   alt="Confirmar"
                   design="error"
-                  onclick={hideModal}
+                  onclick={() => {
+                    deleteUser(params.id);
+                  }}
                 >
                   Confirmar
                 </ButtonStyled>
