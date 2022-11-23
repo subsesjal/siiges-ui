@@ -2,7 +2,11 @@ import React, { useContext, useState } from 'react';
 import router from 'next/router';
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm, Context, Input, Select,
+  ButtonsForm,
+  Context,
+  Input,
+  InputPassword,
+  Select,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import userRolOptions from '../utils/userRolOptions';
@@ -82,6 +86,21 @@ export default function EditUserForm({ user }) {
         setError({ ...error, usuario: 'Usuario invalido' });
       } else {
         setError({ ...error, usuario: '' });
+      }
+    }
+
+    if (name === 'contrasena') {
+      if (form.contrasena !== undefined && form.contrasena !== '') {
+        setError({ ...error, contrasena: 'Contraseña invalida' });
+      } else {
+        setError({ ...error, contrasena: '' });
+      }
+    }
+    if (name === 'repeatContrasena') {
+      if (form.repeatContrasena !== undefined && form.repeatContrasena !== form.contrasena) {
+        setError({ ...error, repeatContrasena: 'Las contraseñas deben de ser iguales' });
+      } else {
+        setError({ ...error, repeatContrasena: '' });
       }
     }
   };
@@ -193,25 +212,25 @@ export default function EditUserForm({ user }) {
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputPassword
             label="Contraseña"
             id="contrasena"
             name="contrasena"
             auto="contrasena"
-            value={user.data.contrasena}
             onchange={handleOnChange}
-            class="data"
+            onblur={handleOnBlur}
+            errorMessage={error.contrasena}
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputPassword
             label="Repetir contraseña"
             id="repeatContrasena"
             name="repeatContrasena"
             auto="repeatContrasena"
-            value={user.data.contrasena}
             onchange={handleOnChange}
-            class="data"
+            onblur={handleOnBlur}
+            errorMessage={error.repeatContrasena}
           />
         </Grid>
       </Grid>

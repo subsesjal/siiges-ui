@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import router from 'next/router';
 import { Grid } from '@mui/material';
-import { ButtonsForm, Input, Select } from '@siiges-ui/shared';
+import {
+  ButtonsForm, Input, InputPassword, Select,
+} from '@siiges-ui/shared';
 import userRolOptions from '../utils/userRolOptions';
 
 export default function NewUserForm() {
@@ -71,6 +73,20 @@ export default function NewUserForm() {
         setError({ ...error, usuario: 'Usuario invalido' });
       } else {
         setError({ ...error, usuario: '' });
+      }
+    }
+    if (name === 'contrasena') {
+      if (Object.keys(form.contrasena).length <= 4 && Object.keys(form.contrasena).length > 0) {
+        setError({ ...error, contrasena: 'Contraseña invalida' });
+      } else {
+        setError({ ...error, contrasena: '' });
+      }
+    }
+    if (name === 'repeatContrasena') {
+      if (form.repeatContrasena !== undefined && form.repeatContrasena !== form.contrasena) {
+        setError({ ...error, repeatContrasena: 'Las contraseñas deben de ser iguales' });
+      } else {
+        setError({ ...error, repeatContrasena: '' });
       }
     }
   };
@@ -170,21 +186,25 @@ export default function NewUserForm() {
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputPassword
             label="Contraseña"
             id="contrasena"
             name="contrasena"
             auto="contrasena"
             onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.contrasena}
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputPassword
             label="Repetir contraseña"
             id="repeatContrasena"
             name="repeatContrasena"
             auto="repeatContrasena"
             onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.repeatContrasena}
           />
         </Grid>
       </Grid>
