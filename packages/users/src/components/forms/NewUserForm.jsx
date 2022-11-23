@@ -6,7 +6,7 @@ import userRolOptions from '../utils/userRolOptions';
 
 export default function NewUserForm() {
   const [userRol, setUserrol] = useState([]);
-  const [form, setForm] = useState({ actualizado: 1 });
+  const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [error, setError] = useState({});
 
   const handleOnChange = (e) => {
@@ -25,40 +25,38 @@ export default function NewUserForm() {
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
-    if (form.persona !== undefined) {
-      if (name === 'nombre') {
-        if (form.persona.nombre === undefined || form.persona.nombre === '') {
-          setError({ ...error, nombre: 'Nombre invalido' });
-        } else {
-          setError({ ...error, nombre: '' });
-        }
+    if (name === 'nombre') {
+      if (form.persona.nombre === undefined || form.persona.nombre === '') {
+        setError({ ...error, nombre: 'Nombre invalido' });
+      } else {
+        setError({ ...error, nombre: '' });
       }
-      if (name === 'apellidoPaterno') {
-        if (
-          form.persona.apellidoPaterno === undefined
-          || form.persona.apellidoPaterno === ''
-        ) {
-          setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
-        } else {
-          setError({ ...error, apellidoPaterno: '' });
-        }
+    }
+    if (name === 'apellidoPaterno') {
+      if (
+        form.persona.apellidoPaterno === undefined
+        || form.persona.apellidoPaterno === ''
+      ) {
+        setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
+      } else {
+        setError({ ...error, apellidoPaterno: '' });
       }
-      if (name === 'apellidoMaterno') {
-        if (
-          form.persona.apellidoMaterno === undefined
-          || form.persona.apellidoMaterno === ''
-        ) {
-          setError({ ...error, apellidoMaterno: 'Apellido materno invalido' });
-        } else {
-          setError({ ...error, apellidoMaterno: '' });
-        }
+    }
+    if (name === 'apellidoMaterno') {
+      if (
+        form.persona.apellidoMaterno === undefined
+        || form.persona.apellidoMaterno === ''
+      ) {
+        setError({ ...error, apellidoMaterno: 'Apellido materno invalido' });
+      } else {
+        setError({ ...error, apellidoMaterno: '' });
       }
-      if (name === 'tituloCargo') {
-        if (form.tituloCargo === undefined || form.tituloCargo === '') {
-          setError({ ...error, tituloCargo: 'Cargo invalido' });
-        } else {
-          setError({ ...error, tituloCargo: '' });
-        }
+    }
+    if (name === 'tituloCargo') {
+      if (form.tituloCargo === undefined || form.tituloCargo === '') {
+        setError({ ...error, tituloCargo: 'Cargo invalido' });
+      } else {
+        setError({ ...error, tituloCargo: '' });
       }
     }
     if (name === 'correo') {
@@ -68,14 +66,23 @@ export default function NewUserForm() {
         setError({ ...error, correo: '' });
       }
     }
+    if (name === 'usuario') {
+      if (form.usuario === undefined || form.usuario === '') {
+        setError({ ...error, usuario: 'Usuario invalido' });
+      } else {
+        setError({ ...error, usuario: '' });
+      }
+    }
   };
 
   function submit() {
-    fetch('http://localhost:3000/api/v1/usuarios/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
+    if (Object.values(error).every((x) => x === null || x === '')) {
+      fetch('http://localhost:3000/api/v1/usuarios/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+    }
   }
 
   userRolOptions(setUserrol);
@@ -158,6 +165,8 @@ export default function NewUserForm() {
             name="usuario"
             auto="usuario"
             onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.usuario}
           />
         </Grid>
         <Grid item xs={3}>

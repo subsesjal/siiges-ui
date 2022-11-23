@@ -61,11 +61,11 @@ export default function EditUserForm({ user }) {
       }
     }
 
-    if (name === 'titulo_cargo') {
-      if (form.titulo_cargo === undefined || form.titulo_cargo === '') {
-        setError({ ...error, titulo_cargo: 'Cargo invalido' });
+    if (name === 'tituloCargo') {
+      if (form.tituloCargo === undefined || form.tituloCargo === '') {
+        setError({ ...error, tituloCargo: 'Cargo invalido' });
       } else {
-        setError({ ...error, titulo_cargo: '' });
+        setError({ ...error, tituloCargo: '' });
       }
     }
 
@@ -74,6 +74,14 @@ export default function EditUserForm({ user }) {
         setError({ ...error, correo: 'Correo invalido' });
       } else {
         setError({ ...error, correo: '' });
+      }
+    }
+
+    if (name === 'usuario') {
+      if (form.usuario === undefined || form.usuario === '') {
+        setError({ ...error, usuario: 'Usuario invalido' });
+      } else {
+        setError({ ...error, usuario: '' });
       }
     }
   };
@@ -146,13 +154,13 @@ export default function EditUserForm({ user }) {
         <Grid item xs={6}>
           <Input
             label="Cargo"
-            id="titulo_cargo"
-            name="titulo_cargo"
-            auto="titulo_cargo"
-            value="Cargo"
+            id="tituloCargo"
+            name="tituloCargo"
+            auto="tituloCargo"
+            value={persona.tituloCargo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.titulo_cargo}
+            errorMessage={error.tituloCargo}
             class="data"
           />
         </Grid>
@@ -179,6 +187,8 @@ export default function EditUserForm({ user }) {
             auto="usuario"
             value={user.data.usuario}
             onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.usuario}
             class="data"
           />
         </Grid>
@@ -223,6 +233,7 @@ EditUserForm.propTypes = {
         nombre: PropTypes.string,
         apellidoPaterno: PropTypes.string,
         apellidoMaterno: PropTypes.string,
+        tituloCargo: PropTypes.string,
       }),
       rol: PropTypes.shape({ id: PropTypes.number }),
     }),
