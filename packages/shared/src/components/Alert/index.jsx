@@ -8,7 +8,7 @@ export default function SnackAlert({
   return (
     <Snackbar
       open={open}
-      autoHideDuration={6000}
+      autoHideDuration={3000}
       onClose={close}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
     >

@@ -9,12 +9,13 @@ import {
   SnackAlert,
 } from '@siiges-ui/shared';
 import userRolOptions from '../utils/userRolOptions';
+import submitNewUser from '../utils/submitNewUser';
 
 export default function NewUserForm() {
   const [userRol, setUserrol] = useState([]);
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [error, setError] = useState({});
-  const [noti, setNoti] = useState(false);
+  const [noti, setNoti] = useState({ open: false, message: '', type: '' });
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +63,10 @@ export default function NewUserForm() {
       return true;
     },
     tituloCargo: () => {
-      if (form.tituloCargo === undefined || form.tituloCargo === '') {
+      if (
+        form.persona.tituloCargo === undefined
+        || form.persona.tituloCargo === ''
+      ) {
         setError({ ...error, tituloCargo: 'Cargo invalido' });
         return false;
       }
@@ -123,20 +127,6 @@ export default function NewUserForm() {
     const { name } = e.target;
     errors[name]();
   };
-
-  function submit() {
-    if (Object.values(errors).every((validation) => validation()) !== false) {
-      if (Object.values(error).every((x) => x === null || x === '')) {
-        fetch('http://localhost:3000/api/v1/usuarios/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(form),
-        });
-      }
-    } else {
-      setNoti(true);
-    }
-  }
 
   userRolOptions(setUserrol);
 
@@ -254,15 +244,18 @@ export default function NewUserForm() {
             />
           </Grid>
         </Grid>
-        <ButtonsForm cancel={() => router.back()} confirm={() => submit()} />
+        <ButtonsForm
+          cancel={() => router.back()}
+          confirm={() => submitNewUser(errors, error, form, setNoti)}
+        />
       </Grid>
       <SnackAlert
-        open={noti}
+        open={noti.open}
         close={() => {
           setNoti(false);
         }}
-        type="error"
-        mensaje="Algo salio mal, revisa que los campos esten correctos"
+        type={noti.type}
+        mensaje={noti.message}
       />
     </>
   );

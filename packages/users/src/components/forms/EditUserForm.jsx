@@ -90,16 +90,27 @@ export default function EditUserForm({ user }) {
     }
 
     if (name === 'contrasena') {
-      if (Object.keys(form.contrasena).length <= 4 && Object.keys(form.contrasena).length > 0) {
-        setError({ ...error, contrasena: 'Contraseña invalida' });
+      if (form.contrasena === undefined || form.contrasena === '') {
+        if (
+          Object.keys(form.contrasena).length <= 4
+          && Object.keys(form.contrasena).length > 0
+        ) {
+          setError({ ...error, contrasena: 'Contraseña invalida' });
+        }
       } else {
         setError({ ...error, contrasena: '' });
       }
     }
 
     if (name === 'repeatContrasena') {
-      if (form.repeatContrasena !== undefined && form.repeatContrasena !== form.contrasena) {
-        setError({ ...error, repeatContrasena: 'Las contraseñas deben de ser iguales' });
+      if (
+        form.repeatContrasena !== undefined
+        && form.repeatContrasena !== form.contrasena
+      ) {
+        setError({
+          ...error,
+          repeatContrasena: 'Las contraseñas deben de ser iguales',
+        });
       } else {
         setError({ ...error, repeatContrasena: '' });
       }
@@ -127,6 +138,7 @@ export default function EditUserForm({ user }) {
             id="nombre"
             name="nombre"
             auto="nombre"
+            required
             value={persona.nombre}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -140,6 +152,7 @@ export default function EditUserForm({ user }) {
             id="apellidoPaterno"
             name="apellidoPaterno"
             auto="apellidoPaterno"
+            required
             value={persona.apellidoPaterno}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -153,6 +166,7 @@ export default function EditUserForm({ user }) {
             id="apellidoMaterno"
             name="apellidoMaterno"
             auto="apellidoMaterno"
+            required
             value={persona.apellidoMaterno}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -177,6 +191,7 @@ export default function EditUserForm({ user }) {
             id="tituloCargo"
             name="tituloCargo"
             auto="tituloCargo"
+            required
             value={persona.tituloCargo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -190,6 +205,7 @@ export default function EditUserForm({ user }) {
             id="correo"
             name="correo"
             auto="correo"
+            required
             value={user.data.correo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -205,6 +221,7 @@ export default function EditUserForm({ user }) {
             id="usuario"
             name="usuario"
             auto="usuario"
+            required
             value={user.data.usuario}
             onchange={handleOnChange}
             onblur={handleOnBlur}
