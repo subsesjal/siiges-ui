@@ -30,6 +30,7 @@ import DefaultModal from './components/Modal';
 import ListTitle from './components/ListItems/ListTitle';
 import ListSubtitle from './components/ListItems/ListSubtitle';
 import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
+import SnackAlert from './components/Alert';
 
 export {
   ActionButtons,
@@ -64,4 +65,5 @@ export {
   ListTitle,
   ListSubtitle,
   useCheckMobileScreen,
+  SnackAlert,
 };

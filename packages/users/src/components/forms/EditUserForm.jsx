@@ -90,12 +90,13 @@ export default function EditUserForm({ user }) {
     }
 
     if (name === 'contrasena') {
-      if (form.contrasena !== undefined && form.contrasena !== '') {
+      if (Object.keys(form.contrasena).length <= 4 && Object.keys(form.contrasena).length > 0) {
         setError({ ...error, contrasena: 'Contraseña invalida' });
       } else {
         setError({ ...error, contrasena: '' });
       }
     }
+
     if (name === 'repeatContrasena') {
       if (form.repeatContrasena !== undefined && form.repeatContrasena !== form.contrasena) {
         setError({ ...error, repeatContrasena: 'Las contraseñas deben de ser iguales' });

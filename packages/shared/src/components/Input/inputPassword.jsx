@@ -23,6 +23,7 @@ function InputPassword({
   auto,
   value,
   size,
+  required,
   errorMessage,
   onchange,
   onblur,
@@ -49,6 +50,7 @@ function InputPassword({
       name={name}
       autoComplete={auto}
       size={size}
+      required={required}
       value={input}
       onChange={handleOnChange}
       onBlur={onblur}
@@ -76,6 +78,7 @@ InputPassword.defaultProps = {
   value: '',
   errorMessage: '',
   size: 'small',
+  required: false,
 };
 
 InputPassword.propTypes = {
@@ -84,6 +87,7 @@ InputPassword.propTypes = {
   onblur: PropTypes.func,
   name: PropTypes.string.isRequired,
   auto: PropTypes.string.isRequired,
+  required: PropTypes,
   onchange: PropTypes.func,
   value: PropTypes.string,
   errorMessage: PropTypes.string,

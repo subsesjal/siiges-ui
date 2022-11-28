@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 function Input({
   id,
   label,
+  required,
   name,
   auto,
   type,
@@ -25,6 +26,7 @@ function Input({
       fullWidth
       id={id}
       label={label}
+      required={required}
       type={type}
       name={name}
       autoComplete={auto}
@@ -44,6 +46,7 @@ Input.defaultProps = {
   size: 'small',
   errorMessage: '',
   value: '',
+  required: false,
   onchange: () => {},
   onblur: () => {},
 };
@@ -54,7 +57,7 @@ Input.propTypes = {
   name: PropTypes.string.isRequired,
   onchange: PropTypes.func,
   onblur: PropTypes.func,
-  // eslint-disable-next-line react/require-default-props
+  required: PropTypes.bool,
   value: PropTypes.string,
   errorMessage: PropTypes.string,
   type: PropTypes.string,
