@@ -109,8 +109,8 @@ export default function NewUserForm() {
     },
     repeatContrasena: () => {
       if (
-        form.repeatContrasena !== undefined
-        && form.repeatContrasena !== form.contrasena
+        form.repeatContrasena === undefined
+        || form.repeatContrasena !== form.contrasena
       ) {
         setError({
           ...error,

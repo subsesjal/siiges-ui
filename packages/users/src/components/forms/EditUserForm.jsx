@@ -1,22 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import router from 'next/router';
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm,
-  Context,
-  Input,
-  InputPassword,
-  Select,
+  ButtonsForm, Input, InputPassword, Select, SnackAlert,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import userRolOptions from '../utils/userRolOptions';
+import submitEditUser from '../utils/submitEditUser';
 
 export default function EditUserForm({ user }) {
   const { persona, rol } = user.data;
-  const { session } = useContext(Context);
   const [userRol, setUserrol] = useState([]);
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [error, setError] = useState({});
+  const [noti, setNoti] = useState({ open: false, message: '', type: '' });
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +21,7 @@ export default function EditUserForm({ user }) {
       name === 'nombre'
       || name === 'apellidoPaterno'
       || name === 'apellidoMaterno'
+      || name === 'tituloCargo'
     ) {
       setForm({ ...form, persona: { ...form.persona, [name]: value } });
     } else {
@@ -31,229 +29,229 @@ export default function EditUserForm({ user }) {
     }
   };
 
-  const handleOnBlur = (e) => {
-    const { name } = e.target;
-    if (form.persona !== undefined) {
-      if (name === 'nombre') {
-        if (form.persona.nombre === undefined || form.persona.nombre === '') {
-          setError({ ...error, nombre: 'Nombre invalido' });
-        } else {
-          setError({ ...error, nombre: '' });
-        }
+  const errors = {
+    nombre: () => {
+      if (form.persona.nombre === '') {
+        setError({ ...error, nombre: 'Nombre invalido' });
+        return false;
       }
-
-      if (name === 'apellidoPaterno') {
-        if (
-          form.persona.apellidoPaterno === undefined
-          || form.persona.apellidoPaterno === ''
-        ) {
-          setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
-        } else {
-          setError({ ...error, apellidoPaterno: '' });
-        }
+      setError({ ...error, nombre: '' });
+      return true;
+    },
+    apellidoPaterno: () => {
+      if (form.persona.apellidoPaterno === '') {
+        setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
+        return false;
       }
-
-      if (name === 'apellidoMaterno') {
-        if (
-          form.persona.apellidoMaterno === undefined
-          || form.persona.apellidoMaterno === ''
-        ) {
-          setError({ ...error, apellidoMaterno: 'Apellido materno invalido' });
-        } else {
-          setError({ ...error, apellidoMaterno: '' });
-        }
+      setError({ ...error, apellidoPaterno: '' });
+      return true;
+    },
+    apellidoMaterno: () => {
+      if (form.persona.apellidoMaterno === '') {
+        setError({ ...error, apellidoMaterno: 'Apellido materno invalido' });
+        return false;
       }
-    }
-
-    if (name === 'tituloCargo') {
-      if (form.tituloCargo === undefined || form.tituloCargo === '') {
+      setError({ ...error, apellidoMaterno: '' });
+      return true;
+    },
+    tituloCargo: () => {
+      if (form.persona.tituloCargo === '') {
         setError({ ...error, tituloCargo: 'Cargo invalido' });
-      } else {
-        setError({ ...error, tituloCargo: '' });
+        return false;
       }
-    }
-
-    if (name === 'correo') {
-      if (form.correo === undefined || form.correo === '') {
+      setError({ ...error, tituloCargo: '' });
+      return true;
+    },
+    correo: () => {
+      if (form.correo === '') {
         setError({ ...error, correo: 'Correo invalido' });
-      } else {
-        setError({ ...error, correo: '' });
+        return false;
       }
-    }
-
-    if (name === 'usuario') {
-      if (form.usuario === undefined || form.usuario === '') {
+      setError({ ...error, correo: '' });
+      return true;
+    },
+    usuario: () => {
+      if (form.usuario === '') {
         setError({ ...error, usuario: 'Usuario invalido' });
-      } else {
-        setError({ ...error, usuario: '' });
+        return false;
       }
-    }
-
-    if (name === 'contrasena') {
-      if (form.contrasena === undefined || form.contrasena === '') {
+      setError({ ...error, usuario: '' });
+      return true;
+    },
+    contrasena: () => {
+      if (form.contrasena !== undefined && form.contrasena !== '') {
         if (
-          Object.keys(form.contrasena).length <= 4
-          && Object.keys(form.contrasena).length > 0
+          Object.keys(form.contrasena).length > 0
+          && Object.keys(form.contrasena).length <= 3
         ) {
-          setError({ ...error, contrasena: 'Contraseña invalida' });
+          setError({
+            ...error,
+            contrasena: 'La contraseña debe contener almenos 4 caracteres',
+          });
+          return false;
         }
-      } else {
-        setError({ ...error, contrasena: '' });
       }
-    }
-
-    if (name === 'repeatContrasena') {
-      if (
-        form.repeatContrasena !== undefined
-        && form.repeatContrasena !== form.contrasena
-      ) {
+      setError({ ...error, contrasena: '' });
+      return true;
+    },
+    repeatContrasena: () => {
+      if (form.repeatContrasena !== form.contrasena) {
         setError({
           ...error,
           repeatContrasena: 'Las contraseñas deben de ser iguales',
         });
-      } else {
-        setError({ ...error, repeatContrasena: '' });
+        return false;
       }
-    }
+      setError({ ...error, repeatContrasena: '' });
+      return true;
+    },
   };
 
-  function submit() {
-    if (Object.values(error).every((x) => x === null || x === '')) {
-      fetch(`http://localhost:3000/api/v1/usuarios/${session.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-    }
-  }
+  const handleOnBlur = (e) => {
+    const { name } = e.target;
+    errors[name]();
+  };
 
   userRolOptions(setUserrol);
 
   return (
-    <Grid item sx={{ ml: 15 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <Input
-            label="Nombre(s)"
-            id="nombre"
-            name="nombre"
-            auto="nombre"
-            required
-            value={persona.nombre}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.nombre}
-            class="data"
-          />
+    <>
+      <Grid item sx={{ ml: 15 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Input
+              label="Nombre(s)"
+              id="nombre"
+              name="nombre"
+              auto="nombre"
+              required
+              value={persona.nombre}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.nombre}
+              class="data"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <Input
+              label="Primer Apellido"
+              id="apellidoPaterno"
+              name="apellidoPaterno"
+              auto="apellidoPaterno"
+              required
+              value={persona.apellidoPaterno}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.apellidoPaterno}
+              class="data"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <Input
+              label="Segundo Apellido"
+              id="apellidoMaterno"
+              name="apellidoMaterno"
+              auto="apellidoMaterno"
+              required
+              value={persona.apellidoMaterno}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.apellidoMaterno}
+              class="data"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <Select
+              title="Rol"
+              options={userRol}
+              value={rol.id}
+              name="rolId"
+              onchange={handleOnChange}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Input
-            label="Primer Apellido"
-            id="apellidoPaterno"
-            name="apellidoPaterno"
-            auto="apellidoPaterno"
-            required
-            value={persona.apellidoPaterno}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.apellidoPaterno}
-            class="data"
-          />
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Input
+              label="Cargo"
+              id="tituloCargo"
+              name="tituloCargo"
+              auto="tituloCargo"
+              required
+              value={persona.tituloCargo}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.tituloCargo}
+              class="data"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Input
+              label="Correo Electronico"
+              id="correo"
+              name="correo"
+              auto="correo"
+              required
+              value={user.data.correo}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.correo}
+              class="data"
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Input
-            label="Segundo Apellido"
-            id="apellidoMaterno"
-            name="apellidoMaterno"
-            auto="apellidoMaterno"
-            required
-            value={persona.apellidoMaterno}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.apellidoMaterno}
-            class="data"
-          />
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Input
+              label="Usuario"
+              id="usuario"
+              name="usuario"
+              auto="usuario"
+              required
+              value={user.data.usuario}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.usuario}
+              class="data"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <InputPassword
+              label="Contraseña"
+              id="contrasena"
+              name="contrasena"
+              auto="contrasena"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.contrasena}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <InputPassword
+              label="Repetir contraseña"
+              id="repeatContrasena"
+              name="repeatContrasena"
+              auto="repeatContrasena"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.repeatContrasena}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Select
-            title="Rol"
-            options={userRol}
-            value={rol.id}
-            name="rolId"
-            onchange={handleOnChange}
-          />
-        </Grid>
+        <ButtonsForm
+          cancel={() => router.back()}
+          confirm={() => submitEditUser(errors, error, form, setNoti, user.data.id)}
+        />
       </Grid>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Input
-            label="Cargo"
-            id="tituloCargo"
-            name="tituloCargo"
-            auto="tituloCargo"
-            required
-            value={persona.tituloCargo}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.tituloCargo}
-            class="data"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Input
-            label="Correo Electronico"
-            id="correo"
-            name="correo"
-            auto="correo"
-            required
-            value={user.data.correo}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.correo}
-            class="data"
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <Input
-            label="Usuario"
-            id="usuario"
-            name="usuario"
-            auto="usuario"
-            required
-            value={user.data.usuario}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.usuario}
-            class="data"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <InputPassword
-            label="Contraseña"
-            id="contrasena"
-            name="contrasena"
-            auto="contrasena"
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.contrasena}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <InputPassword
-            label="Repetir contraseña"
-            id="repeatContrasena"
-            name="repeatContrasena"
-            auto="repeatContrasena"
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.repeatContrasena}
-          />
-        </Grid>
-      </Grid>
-      <ButtonsForm cancel={() => router.back()} confirm={() => submit()} />
-    </Grid>
+      <SnackAlert
+        open={noti.open}
+        close={() => {
+          setNoti(false);
+        }}
+        type={noti.type}
+        mensaje={noti.message}
+      />
+    </>
   );
 }
 
