@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
-import LogoWhite from '../Images/logowhite';
+import LogoWhite from '../Images/LogoWhite';
 import MenuNavbar from './MenuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 

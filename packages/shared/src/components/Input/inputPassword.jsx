@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import ButtonVisibility from '../Buttons/buttonVisibility';
+import { TextField } from '@mui/material';
+import ButtonVisibility from '../Buttons/ButtonVisibility';
 import '../../styles/Inputs/InputPassword.css';
 
 const handleClickShowPassword = (setValues, values) => {
@@ -20,7 +17,16 @@ const handleMouseDownPassword = (event) => {
 };
 
 function InputPassword({
-  id, label, name, auto, errorMessage,
+  id,
+  label,
+  name,
+  auto,
+  value,
+  size,
+  required,
+  errorMessage,
+  onchange,
+  onblur,
 }) {
   const initialValues = {
     showPassword: false,
@@ -28,17 +34,31 @@ function InputPassword({
 
   const [values, setValues] = useState(initialValues);
 
+  const [input, setInput] = useState(value);
+  const handleOnChange = (e) => {
+    setInput(e.target.value);
+    onchange(e);
+  };
+
   return (
-    <FormControl className="formInputPasswrd" variant="outlined">
-      <InputLabel htmlFor={id} error={!!errorMessage}>{label}</InputLabel>
-      <OutlinedInput
-        className="outlinedInput"
-        margin="none"
-        fullWidth
-        id={id}
-        type={values.showPassword ? 'text' : 'password'}
-        error={!!errorMessage}
-        endAdornment={(
+    <TextField
+      margin="normal"
+      fullWidth
+      id={id}
+      label={label}
+      type={values.showPassword ? 'text' : 'password'}
+      name={name}
+      autoComplete={auto}
+      size={size}
+      required={required}
+      value={input}
+      onChange={handleOnChange}
+      onBlur={onblur}
+      helperText={errorMessage}
+      error={!!errorMessage}
+      className="data-form"
+      InputProps={{
+        endAdornment: (
           <InputAdornment position="end" data-testid="visibility">
             <ButtonVisibility
               showPassword={values.showPassword}
@@ -46,22 +66,32 @@ function InputPassword({
               onMouse={(event) => handleMouseDownPassword(event)}
             />
           </InputAdornment>
-        )}
-        label={label}
-        name={name}
-        autoComplete={auto}
-      />
-      {errorMessage && <FormHelperText error>{errorMessage}</FormHelperText>}
-    </FormControl>
+        ),
+      }}
+    />
   );
 }
+
+InputPassword.defaultProps = {
+  onchange: () => {},
+  onblur: () => {},
+  value: '',
+  errorMessage: '',
+  size: 'small',
+  required: false,
+};
 
 InputPassword.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  errorMessage: PropTypes.string.isRequired,
+  onblur: PropTypes.func,
   name: PropTypes.string.isRequired,
   auto: PropTypes.string.isRequired,
+  required: PropTypes,
+  onchange: PropTypes.func,
+  value: PropTypes.string,
+  errorMessage: PropTypes.string,
+  size: PropTypes.string,
 };
 
 export default InputPassword;

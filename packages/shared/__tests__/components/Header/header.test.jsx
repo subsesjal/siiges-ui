@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import Header from '../../../src/components/Header/Header';
+import Header from '../../../src/components/Header';
 
 describe('Tests for the header', () => {
   test('Test Header component render', () => {
