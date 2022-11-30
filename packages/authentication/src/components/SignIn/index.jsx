@@ -99,6 +99,7 @@ export default function SignIn() {
             name="pass"
             auto="current-password"
             type="password"
+            size="normal"
             errorMessage={errorMessage('pass')}
           />
           <Box

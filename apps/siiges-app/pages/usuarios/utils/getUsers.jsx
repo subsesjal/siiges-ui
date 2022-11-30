@@ -1,12 +1,21 @@
-import { useEffect, useState } from 'react';
+import { Context } from '@siiges-ui/shared';
+import { useContext, useEffect, useState } from 'react';
 
 export default function getUsers() {
   const [users, setUser] = useState();
   const [loading, setLoading] = useState(false);
+  const { session } = useContext(Context);
   const active = 1;
+  let url;
+
+  if (session.rol === 'admin') {
+    url = 'http://localhost:3000/api/v1/usuarios';
+  } else {
+    url = `http://localhost:3000/api/v1/usuarios/${session.id}/usuario`;
+  }
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/usuarios')
+    fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setLoading(true);
