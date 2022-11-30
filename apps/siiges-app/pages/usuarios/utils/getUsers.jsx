@@ -6,12 +6,13 @@ export default function getUsers() {
   const [loading, setLoading] = useState(false);
   const { session } = useContext(Context);
   const active = 1;
+  let userData = {};
   let url;
 
   if (session.rol === 'admin') {
     url = 'http://localhost:3000/api/v1/usuarios';
   } else {
-    url = `http://localhost:3000/api/v1/usuarios/${session.id}/usuario`;
+    url = `http://localhost:3000/api/v1/usuarios/${session.id}/usuarios`;
   }
 
   useEffect(() => {
@@ -19,22 +20,23 @@ export default function getUsers() {
       .then((response) => response.json())
       .then((data) => {
         setLoading(true);
-        const userData = data.data.map((entry) => {
-          const rol = entry.rol.descripcion;
-          if (entry.estatus === active) {
+        if (data.data !== undefined) {
+          userData = data.data.map((entry) => {
+            const rol = entry.rol.descripcion;
+            if (entry.estatus === active) {
+              return {
+                ...entry,
+                estatus: 'Activo',
+                rol,
+              };
+            }
             return {
               ...entry,
-              estatus: 'Activo',
+              estatus: 'Inactivo',
               rol,
             };
-          }
-          return {
-            ...entry,
-            estatus: 'Inactivo',
-            rol,
-          };
-        });
-
+          });
+        }
         setUser(userData);
       });
     setLoading(false);
