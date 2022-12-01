@@ -11,12 +11,17 @@ export default function Usuarios() {
   const { users, loading } = getUsers();
   const { session } = useContext(Context);
   const [auth, setAuth] = useState(false);
+  let rows = '';
 
   useEffect(() => {
     if (session.rol === 'admin' || session.rol === 'representante') {
       setAuth(true);
     }
   }, [session]);
+
+  if (users !== undefined) {
+    rows = users;
+  }
 
   return (
     <Layout title="Usuarios" subtitle="Consulta todos los usuarios registrados">
@@ -37,7 +42,7 @@ export default function Usuarios() {
           <div />
         )}
         {loading ? (
-          <DataTable rows={users} columns={columns} title="Tabla de usuarios" />
+          <DataTable rows={rows} columns={columns} title="Tabla de usuarios" />
         ) : (
           <div />
         )}

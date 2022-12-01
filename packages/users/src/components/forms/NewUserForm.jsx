@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import router from 'next/router';
 import { Grid } from '@mui/material';
 import {
   ButtonsForm,
+  Context,
   Input,
   InputPassword,
   Select,
@@ -13,6 +14,7 @@ import submitNewUser from '../utils/submitNewUser';
 
 export default function NewUserForm() {
   const [userRol, setUserrol] = useState([]);
+  const { session } = useContext(Context);
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
@@ -246,7 +248,7 @@ export default function NewUserForm() {
         </Grid>
         <ButtonsForm
           cancel={() => router.back()}
-          confirm={() => submitNewUser(errors, error, form, setNoti)}
+          confirm={() => submitNewUser(errors, error, form, setNoti, session)}
         />
       </Grid>
       <SnackAlert

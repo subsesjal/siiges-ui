@@ -13,29 +13,55 @@
     }
   },
   {
-    "id": 1,
-    "usuario": "jose",
+    "id": 2,
+    "usuario": "Ivan",
     "contrasena": "123456",
-    "rolId": 11,
+    "rolId": 2,
     "estatus": 1,
     "actualizado": true,
     "rol": {
-      "id": 11,
-      "nombre": "jefe_inspector",
-      "descripcion": "Jefe de inspectores"
+      "id": 2,
+      "nombre": "admin",
+      "descripcion": "Administracion"
     }
   },
   {
-    "id": 6,
-    "usuario": "jorge",
+    "id": 3,
+    "usuario": "richi",
     "contrasena": "123456",
     "rolId": 3,
     "estatus": 1,
     "actualizado": true,
     "rol": {
-      "id": 2,
+      "id": 3,
       "nombre": "representante",
       "descripcion": "Representante Legal"
+    }
+  },
+  {
+    "id": 4,
+    "usuario": "lupita",
+    "contrasena": "123456",
+    "rolId": 3,
+    "estatus": 1,
+    "actualizado": true,
+    "rol": {
+      "id": 3,
+      "nombre": "representante",
+      "descripcion": "Representante Legal"
+    }
+  },
+  {
+    "id": 5,
+    "usuario": "beto",
+    "contrasena": "123456",
+    "rolId": 4,
+    "estatus": 1,
+    "actualizado": true,
+    "rol": {
+      "id": 4,
+      "nombre": "gestor",
+      "descripcion": "Gestor"
     }
   }
 ]
