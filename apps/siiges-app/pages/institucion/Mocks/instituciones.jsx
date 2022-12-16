@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ActionButtons, ButtonStyled, DefaultModal } from '@siiges-ui/shared';
 import { Grid, Typography } from '@mui/material';
-import deleteUser from '../utils/deleteUser';
+import deleteInstitucion from '../utils/deleteInstitucion';
 
 function ModalState() {
   const [modal, setModal] = useState(false);
@@ -21,16 +21,15 @@ function ModalState() {
 }
 
 const columns = [
-  { field: 'usuario', headerName: 'Usuario', width: 200 },
-  { field: 'correo', headerName: 'Correo', width: 250 },
-  { field: 'rol', headerName: 'Rol', width: 180 },
+  { field: 'nombre', headerName: 'Nombre', width: 300 },
+  { field: 'razonSocial', headerName: 'Razón Social', width: 320 },
   {
     field: 'createdAt',
     headerName: 'Fecha',
     type: 'date',
     width: 180,
   },
-  { field: 'estatus', headerName: 'Estatus', width: 150 },
+  { field: 'claveIes', headerName: 'Clave Ies', width: 150 },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -41,12 +40,12 @@ const columns = [
         <>
           <ActionButtons
             id={params.id}
-            consultar={`/usuarios/consultarUsuario/${params.id}`}
-            editar={`/usuarios/editarUsuario/${params.id}`}
+            consultar={`/institucion/consultarInstitucion/${params.id}`}
+            editar={`/institucion/editarInstitucion/${params.id}`}
             eliminar={showModal}
           />
           <DefaultModal open={modal} setOpen={hideModal}>
-            <Typography>Desea eliminar este usuario?</Typography>
+            <Typography>Desea eliminar esta institución?</Typography>
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
                 <ButtonStyled
@@ -63,7 +62,7 @@ const columns = [
                   alt="Confirmar"
                   design="error"
                   onclick={() => {
-                    deleteUser(params.id);
+                    deleteInstitucion(params.id);
                   }}
                 >
                   Confirmar

@@ -8,10 +8,11 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
+import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { ButtonStyled } from '@siiges-ui/shared';
 
-export default function Institucion() {
+export default function Institucion({ data }) {
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
@@ -47,10 +48,10 @@ export default function Institucion() {
           <Grid item xs={2}>
             <List>
               <ListItem disablePadding>
-                <ListItemText secondary="Escuela XYZ" sx={{ mt: 1 }} />
+                <ListItemText secondary={data.nombre} sx={{ mt: 1 }} />
               </ListItem>
               <ListItem disablePadding>
-                <ListItemText secondary="EXYZ" sx={{ mt: 1 }} />
+                <ListItemText secondary={data.razonSocial} sx={{ mt: 1 }} />
               </ListItem>
             </List>
           </Grid>
@@ -61,15 +62,7 @@ export default function Institucion() {
         </Typography>
         <br />
         <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 15 }}>
-          <Typography variant="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </Typography>
+          <Typography variant="p">{data.historia}</Typography>
         </div>
         <Divider />
         <Typography variant="p" sx={{ fontWeight: 'medium' }}>
@@ -77,15 +70,7 @@ export default function Institucion() {
         </Typography>
         <br />
         <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 15 }}>
-          <Typography variant="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </Typography>
+          <Typography variant="p">{data.vision}</Typography>
         </div>
         <Divider />
         <Typography variant="p" sx={{ fontWeight: 'medium' }}>
@@ -93,17 +78,20 @@ export default function Institucion() {
         </Typography>
         <br />
         <div style={{ marginLeft: 100, marginTop: 15 }}>
-          <Typography variant="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </Typography>
+          <Typography variant="p">{data.mision}</Typography>
         </div>
       </Grid>
     </Grid>
   );
 }
+
+Institucion.propTypes = {
+  data: PropTypes.shape({
+    id: PropTypes.number,
+    nombre: PropTypes.string,
+    razonSocial: PropTypes.string,
+    historia: PropTypes.string,
+    vision: PropTypes.string,
+    mision: PropTypes.string,
+  }).isRequired,
+};
