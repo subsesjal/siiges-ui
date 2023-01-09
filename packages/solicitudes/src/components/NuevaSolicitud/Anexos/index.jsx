@@ -16,6 +16,7 @@ export default function Anexos() {
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <SectionLayout
+          sectionTitle="Anexos"
           sections={section}
           position={position}
           total="1"

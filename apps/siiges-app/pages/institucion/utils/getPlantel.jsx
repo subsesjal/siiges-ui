@@ -8,8 +8,8 @@ export default function getPlantel() {
 
   useEffect(() => {
     if (router.isReady) {
-      const { id } = router.query;
-      fetch(`http://localhost:3000/api/v1/instituciones/${id}/planteles`)
+      const { institucionId, plantelId } = router.query;
+      fetch(`http://localhost:3000/api/v1/instituciones/${institucionId}/planteles/${plantelId}`)
         .then((response) => response.json())
         .then((data) => {
           setLoading(true);

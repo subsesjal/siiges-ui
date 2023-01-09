@@ -14,6 +14,7 @@ export default function DatosGenerales() {
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <SectionLayout
+          sectionTitle="Datos Generales"
           sections={section}
           position={position}
           total="3"

@@ -8,9 +8,8 @@ export default function getInstitucion() {
 
   useEffect(() => {
     if (router.isReady) {
-      console.log(router.query);
-      const { institucionId, plantelId } = router.query;
-      fetch(`http://localhost:3000/api/v1/instituciones/${institucionId}/planteles/${plantelId}`)
+      const { id } = router.query;
+      fetch(`http://localhost:3000/api/v1/instituciones/${id}/planteles`)
         .then((response) => response.json())
         .then((data) => {
           setLoading(true);

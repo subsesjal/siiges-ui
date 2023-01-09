@@ -13,6 +13,7 @@ export default function ConsultarInstitucion() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  console.log(institucion);
 
   return (
     <Layout title="Institución">
