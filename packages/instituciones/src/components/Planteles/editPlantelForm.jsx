@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 
-export default function EditPlantelForm() {
+export default function EditPlantelForm({ plantel }) {
   return (
     <>
       <Typography variant="h6" sx={{ mt: 5 }}>
@@ -11,31 +12,51 @@ export default function EditPlantelForm() {
       <Grid item sx={{ ml: 15 }}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Input label="Calle" id="street" street="street" auto="street" />
+            <Input
+              label="Calle"
+              id="calle"
+              name="calle"
+              auto="calle"
+              value={plantel.domicilio.calle}
+            />
           </Grid>
           <Grid item xs={3}>
             <Input
               label="Numero exterior"
-              id="extNum"
-              name="extNum"
-              auto="extNum"
+              id="numeroExterior"
+              name="numeroExterior"
+              auto="numeroExterior"
+              value={plantel.domicilio.numeroExterior}
             />
           </Grid>
           <Grid item xs={3}>
             <Input
               label="Numero interior"
-              id="intNum"
-              name="intNum"
-              auto="intNum"
+              id="numeroInterior"
+              name="numeroInterior"
+              auto="numeroInterior"
+              value={plantel.domicilio.numeroInterior}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            <Input label="Colonia" id="colony" name="colony" auto="colony" />
+            <Input
+              label="Colonia"
+              id="colonia"
+              name="colonia"
+              auto="colonia"
+              value={plantel.domicilio.colonia}
+            />
           </Grid>
           <Grid item xs={3}>
-            <Input label="Codigo Postal" id="CP" name="CP" auto="CP" />
+            <Input
+              label="Codigo Postal"
+              id="codigoPostal"
+              name="codigoPostal"
+              auto="codigoPostal"
+              value={plantel.domicilio.codigoPostal}
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -45,37 +66,58 @@ export default function EditPlantelForm() {
           <Grid item xs={3}>
             <Input
               label="Correo institucional"
-              id="instEmail"
-              name="instEmail"
-              auto="instEmail"
+              id="correo1"
+              name="correo1"
+              auto="correo1"
+              value={plantel.correo1}
             />
           </Grid>
           <Grid item xs={3}>
             <Input
               label="Correo de contacto"
-              id="contactEmail"
-              name="contactEmail"
-              auto="contactEmail"
+              id="correo2"
+              name="correo2"
+              auto="correo2"
+              value={plantel.correo2}
             />
           </Grid>
           <Grid item xs={3}>
             <Input
               label="Correo secundario"
-              id="altEmail"
-              name="altEmail"
-              auto="altEmail"
+              id="correo3"
+              name="correo3"
+              auto="correo3"
+              value={plantel.correo3}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            <Input label="Telefono 1" id="phone1" name="phone1" auto="phone1" />
+            <Input
+              label="Telefono 1"
+              id="telefono1"
+              name="telefono1"
+              auto="telefono1"
+              value={plantel.telefono1}
+            />
           </Grid>
           <Grid item xs={3}>
-            <Input label="Telefono 2" id="phone2" name="phone2" auto="phone2" />
+            <Input
+              label="Telefono 2"
+              id="telefono2"
+              name="telefono2"
+              auto="telefono2"
+              value={plantel.telefono2}
+            />
           </Grid>
           <Grid item xs={3}>
-            <Input label="Telefono 3" id="phone3" name="phone3" auto="phone3" />
+            <Input
+              label="Telefono 3"
+              id="telefono3"
+              name="telefono3"
+              auto="telefono3"
+              value={plantel.telefono3}
+            />
           </Grid>
         </Grid>
         <Grid container spacing={2}>
@@ -85,6 +127,7 @@ export default function EditPlantelForm() {
               id="claveCentroTrabajo"
               name="claveCentroTrabajo"
               auto="claveCentroTrabajo"
+              value={plantel.claveCentroTrabajo}
             />
           </Grid>
           <Grid item xs={3}>
@@ -166,3 +209,16 @@ export default function EditPlantelForm() {
     </>
   );
 }
+
+EditPlantelForm.propTypes = {
+  plantel: PropTypes.shape({
+    domicilio: PropTypes.objectOf(PropTypes.string),
+    correo1: PropTypes.string,
+    correo2: PropTypes.string,
+    correo3: PropTypes.string,
+    telefono1: PropTypes.string,
+    telefono2: PropTypes.string,
+    telefono3: PropTypes.string,
+    claveCentroTrabajo: PropTypes.string,
+  }).isRequired,
+};

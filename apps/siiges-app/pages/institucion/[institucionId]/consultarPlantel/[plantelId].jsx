@@ -51,7 +51,7 @@ export default function consultarPlantel() {
               <Grid item xs>
                 <List>
                   <ListSubtitle text={plantel.data.domicilio.codigoPostal} />
-                  <ListSubtitle text={plantel.data.domicilio.municipio.id} />
+                  <ListSubtitle text={plantel.data.domicilio.municipio.nombre} />
                   <ListSubtitle text={plantel.data.domicilio.calle} />
                 </List>
               </Grid>

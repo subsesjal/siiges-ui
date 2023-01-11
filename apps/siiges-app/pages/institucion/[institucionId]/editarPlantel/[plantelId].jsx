@@ -1,16 +1,15 @@
 import React from 'react';
 import { ButtonsForm, Layout } from '@siiges-ui/shared';
 import { EditPlantelForm } from '@siiges-ui/instituciones';
-import getInstitucion from '../../utils/getInstitucion';
+import getPlantel from '../../utils/getPlantel';
 
 export default function EditarPlantel() {
-  const { institucion, loading } = getInstitucion();
-  console.log(institucion);
+  const { plantel, loading } = getPlantel();
   return (
     <Layout title="Editar Plantel">
       {loading ? (
         <>
-          <EditPlantelForm />
+          <EditPlantelForm plantel={plantel.data} />
           <ButtonsForm />
         </>
       ) : (
