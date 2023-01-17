@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import router from 'next/router';
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm, Input, InputPassword, Select, SnackAlert,
+  ButtonsForm,
+  Input,
+  InputPassword,
+  Select,
+  SnackAlert,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import userRolOptions from '../utils/userRolOptions';
@@ -124,8 +128,8 @@ export default function EditUserForm({ user }) {
               id="nombre"
               name="nombre"
               auto="nombre"
-              required
               value={persona.nombre}
+              required
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}

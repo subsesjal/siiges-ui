@@ -7,11 +7,10 @@ export default function Background() {
       alt="travel"
       src="/Fondo.png"
       layout="fill"
-      objectFit="cover"
       quality={100}
+      objectFit="cover"
       style={{
         zIndex: -1,
-        overflow: 'hidden',
       }}
     />
   );
