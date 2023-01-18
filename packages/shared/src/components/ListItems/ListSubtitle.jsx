@@ -5,7 +5,7 @@ import React from 'react';
 export default function ListSubtitle({ text }) {
   let textValue = text;
   if (textValue === '') {
-    textValue = '';
+    textValue = '...';
   }
   return (
     <ListItem disablePadding>

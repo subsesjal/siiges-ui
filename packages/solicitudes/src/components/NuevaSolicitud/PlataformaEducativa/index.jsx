@@ -16,6 +16,7 @@ export default function PlataformaEducativa() {
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <SectionLayout
+          sectionTitle="Plataforma Educativa"
           sections={section}
           position={position}
           total="5"

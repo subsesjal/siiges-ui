@@ -1,107 +1,97 @@
-import React from 'react';
-import { ButtonStyled, DataTable } from '@siiges-ui/shared';
-import { Grid } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  ActionButtons, ButtonStyled, DataTable, DefaultModal,
+} from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
+import { Grid, Typography } from '@mui/material';
 import Link from 'next/link';
 
+function ModalState() {
+  const [modal, setModal] = useState(false);
+
+  const showModal = () => {
+    setModal(true);
+  };
+  const hideModal = () => {
+    setModal(false);
+  };
+
+  return {
+    modal,
+    showModal,
+    hideModal,
+  };
+}
+
 const columns = [
-  { field: 'user', headerName: 'Usuario', width: 200 },
-  { field: 'email', headerName: 'Correo', width: 250 },
-  { field: 'rol', headerName: 'Rol', width: 180 },
+  { field: 'domicilio', headerName: 'Domicilio', width: 240 },
+  { field: 'colonia', headerName: 'Colonia', width: 240 },
+  { field: 'municipio', headerName: 'Municipio', width: 140 },
+  { field: 'codigoPostal', headerName: 'Codigo Postal', width: 130 },
   {
-    field: 'date',
-    headerName: 'Fecha',
-    type: 'date',
-    width: 180,
-  },
-  { field: 'status', headerName: 'Estatus', width: 150 },
-  { field: 'actions', headerName: 'Acciones', width: 150 },
-];
-
-const rows = [
-  {
-    id: 1,
-    user: 'Jon Snow',
-    email: 'juannieves@gmail.com',
-    rol: 'jefe',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
+    field: 'claveCentroTrabajo',
+    headerName: 'Clave centro de trabajo',
+    width: 200,
   },
   {
-    id: 2,
-    user: 'Cersei Lannister',
-    email: 'cerseilannister@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
-  },
-  {
-    id: 3,
-    user: 'Jaime Lannister',
-    email: 'jaimelannister@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
-  },
-  {
-    id: 4,
-    user: 'Arya Stark',
-    email: 'aryastark@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
-  },
-  {
-    id: 5,
-    user: 'Daenerys Targaryen',
-    email: 'daenerystargaryen@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
-  },
-  {
-    id: 6,
-    user: 'Melisandre',
-    email: 'melisandre@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
-  },
-  {
-    id: 7,
-    user: 'Ferrara Clifford',
-    email: 'ferraraclifford@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
-  },
-  {
-    id: 8,
-    user: 'Rossini Frances',
-    email: 'rossinifrances@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
-  },
-  {
-    id: 9,
-    user: 'Harvey Roxie',
-    email: 'harveyroxie@gmail.com',
-    rol: 'usuario',
-    date: '15/05/2005',
-    status: 'Muerto',
-    actions: 'iconos',
+    field: 'actions',
+    headerName: 'Acciones',
+    width: 150,
+    renderCell: (params) => {
+      const { modal, showModal, hideModal } = ModalState();
+      return (
+        <>
+          <ActionButtons
+            id={params.id}
+            consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
+            editar={`/institucion/${params.row.institucion}/editarPlantel/${params.id}`}
+            eliminar={showModal}
+          />
+          <DefaultModal open={modal} setOpen={hideModal}>
+            <Typography>Desea eliminar este usuario?</Typography>
+            <Grid container spacing={2} justifyContent="flex-end">
+              <Grid item>
+                <ButtonStyled
+                  text="Cancelar"
+                  alt="Cancelar"
+                  onclick={hideModal}
+                >
+                  Cancelar
+                </ButtonStyled>
+              </Grid>
+              <Grid item>
+                <ButtonStyled
+                  text="Confirmar"
+                  alt="Confirmar"
+                  design="error"
+                  onclick={() => {
+                    console.log(params.id);
+                  }}
+                >
+                  Confirmar
+                </ButtonStyled>
+              </Grid>
+            </Grid>
+          </DefaultModal>
+        </>
+      );
+    },
+    sortable: false,
+    filterable: false,
   },
 ];
 
-export default function Planteles() {
+export default function Planteles({ data, institucion }) {
+  const rows = data.map((value) => ({
+    institucion,
+    id: value.id,
+    domicilio: `${value.domicilio.calle} #${value.domicilio.numeroExterior}`,
+    colonia: value.domicilio.colonia,
+    municipio: value.domicilio.municipio.nombre,
+    codigoPostal: value.domicilio.codigoPostal,
+    claveCentroTrabajo: value.claveCentroTrabajo,
+  }));
+
   return (
     <Grid container>
       <Grid item xs={9} sx={{ mt: '20px' }}>
@@ -119,3 +109,15 @@ export default function Planteles() {
     </Grid>
   );
 }
+
+Planteles.propTypes = {
+  institucion: PropTypes.number.isRequired,
+  data: PropTypes.arrayOf({
+    id: PropTypes.number,
+    nombre: PropTypes.string,
+    razonSocial: PropTypes.string,
+    historia: PropTypes.string,
+    vision: PropTypes.string,
+    mision: PropTypes.string,
+  }).isRequired,
+};

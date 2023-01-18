@@ -10,12 +10,13 @@ export default function SectionLayout({
   position,
   total,
   porcentage,
+  sectionTitle,
   next,
   prev,
 }) {
   return (
     <>
-      <Title title="Datos Generales" />
+      <Title title={sectionTitle} />
       <Grid container sx={{ mt: 3 }}>
         <Grid
           item
@@ -70,6 +71,7 @@ export default function SectionLayout({
 
 SectionLayout.propTypes = {
   sections: PropTypes.number.isRequired,
+  sectionTitle: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   position: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,

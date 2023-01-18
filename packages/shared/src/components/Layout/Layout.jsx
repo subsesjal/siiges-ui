@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MenuDrawer from '../Drawer/MenuDrawer';
 import MainNavbar from '../Navbar/MainNavbar';
-import Background from '../Resources/Background';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 import Title from '../Title';
 
@@ -27,15 +26,29 @@ export default function Overlay({
     localtype = false;
   }
   return (
-    <>
-      <Background />
+    <div
+      style={{
+        backgroundImage: 'url(/Fondo.png)',
+        backgroundSize: 'cover',
+        position: 'fixed',
+        overflow: 'auto',
+        zIndex: -1,
+        height: '100%',
+        width: '100%',
+      }}
+    >
       <MainNavbar menuSwitch={() => onClickChange()} />
       <MenuDrawer
         open={open}
         openFunction={() => handleDrawerOpen()}
         closeFunction={() => handleDrawerClose()}
       />
-      <Container sx={{ mt: 5 }}>
+      <Container
+        sx={{
+          paddingTop: 5,
+          paddingBottom: 5,
+        }}
+      >
         {localtype ? (
           <Card>
             <CardContent>
@@ -50,9 +63,10 @@ export default function Overlay({
           </>
         )}
       </Container>
-    </>
+    </div>
   );
 }
+
 Overlay.defaultProps = {
   type: true,
   title: '',

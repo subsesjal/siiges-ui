@@ -25,6 +25,7 @@ export default function PlanEstudios() {
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <SectionLayout
+          sectionTitle="Plan de estudios"
           sections={section}
           position={position}
           total="10"

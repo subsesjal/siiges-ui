@@ -126,26 +126,12 @@ export default function Solicitudes() {
         title="Seleccione una opcion"
         options={options}
         value={option}
-        onChange={handleOnChange}
+        onchange={handleOnChange}
       />
-      {NewRequestContentVisible && (
-        <>
-          <Divider sx={{ mt: 2 }} />
-          <NewRequest />
-        </>
-      )}
-      {ChangeAddressContentVisible && (
-        <>
-          <Divider sx={{ mt: 2 }} />
-          <ChangeAddress />
-        </>
-      )}
-      {RefrendoContentVisible && (
-        <>
-          <Divider sx={{ mt: 2 }} />
-          <Refrendo />
-        </>
-      )}
+      <Divider sx={{ mt: 2 }} />
+      {NewRequestContentVisible && <NewRequest />}
+      {ChangeAddressContentVisible && <ChangeAddress />}
+      {RefrendoContentVisible && <Refrendo />}
       <DataTable title="Tipo de solicitud" rows={rows} columns={columns} />
     </Layout>
   );

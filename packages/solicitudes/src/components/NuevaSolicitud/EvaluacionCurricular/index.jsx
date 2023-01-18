@@ -16,6 +16,7 @@ export default function EvaluacionCurricular() {
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <SectionLayout
+          sectionTitle="Evaluación Curricular"
           sections={section}
           position={position}
           total="1"

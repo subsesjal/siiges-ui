@@ -1,27 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  ButtonStyled, Layout, DataTable, Context,
+  ButtonStyled, Layout, DataTable,
 } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 import Link from 'next/link';
-import { columns } from './Mocks/usuarios';
+import columns from './Mocks/usuarios';
 import getUsers from './utils/getUsers';
 
 export default function Usuarios() {
   const { users, loading } = getUsers();
-  const { session } = useContext(Context);
-  const [auth, setAuth] = useState(false);
-  let rows = '';
-
-  useEffect(() => {
-    if (session.rol === 'admin' || session.rol === 'representante') {
-      setAuth(true);
-    }
-  }, [session]);
-
-  if (users !== undefined) {
-    rows = users;
-  }
+  const [auth] = useState(false);
 
   return (
     <Layout title="Usuarios" subtitle="Consulta todos los usuarios registrados">
@@ -42,7 +30,7 @@ export default function Usuarios() {
           <div />
         )}
         {loading ? (
-          <DataTable rows={rows} columns={columns} title="Tabla de usuarios" />
+          <DataTable rows={users} columns={columns} title="Tabla de usuarios" />
         ) : (
           <div />
         )}
