@@ -25,7 +25,7 @@ ButtonStyled.defaultProps = {
 };
 
 ButtonStyled.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   alt: PropTypes.string.isRequired,
   type: PropTypes.string,
   design: PropTypes.string,

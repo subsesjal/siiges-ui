@@ -40,8 +40,8 @@ const columns = [
         <>
           <ActionButtons
             id={params.id}
-            consultar={`/institucion/consultarInstitucion/${params.id}`}
-            editar={`/institucion/editarInstitucion/${params.id}`}
+            consultar={`/institucion/${params.id}/consultarInstitucion`}
+            editar={`/institucion/${params.id}/editarInstitucion`}
             eliminar={showModal}
           />
           <DefaultModal open={modal} setOpen={hideModal}>

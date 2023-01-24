@@ -10,9 +10,11 @@ import {
 import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { ButtonStyled } from '@siiges-ui/shared';
 
 export default function Institucion({ data }) {
+  const router = useRouter();
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
@@ -80,6 +82,15 @@ export default function Institucion({ data }) {
         <div style={{ marginLeft: 100, marginTop: 15 }}>
           <Typography variant="p">{data.mision}</Typography>
         </div>
+        <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
+          <ButtonStyled
+            text="Editar institución"
+            alt="Editar institución"
+            onclick={() => {
+              router.push(`/institucion/${data.id}/editarInstitucion`);
+            }}
+          />
+        </Grid>
       </Grid>
     </Grid>
   );

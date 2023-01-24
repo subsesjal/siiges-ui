@@ -102,7 +102,7 @@ export default function MenuDrawer({ open, openFunction, closeFunction }) {
 }
 
 MenuDrawer.propTypes = {
-  open: PropTypes.string.isRequired,
+  open: PropTypes.bool.isRequired,
   openFunction: PropTypes.func.isRequired,
   closeFunction: PropTypes.func.isRequired,
 };
