@@ -1,26 +1,20 @@
-import { ButtonsForm, Context, Layout } from '@siiges-ui/shared';
+import React, { useEffect } from 'react';
+import { ButtonsForm, Layout } from '@siiges-ui/shared';
 import {
+  getInstitucionUsuario,
   NewInstitutionForm,
 } from '@siiges-ui/instituciones';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect } from 'react';
 
 export default function nuevaInstitucion() {
   const router = useRouter();
-  const { session } = useContext(Context);
-  // const institucion = getInstitucionUsuario();
+  const institucion = getInstitucionUsuario();
 
-  const institucion = async () => {
-    const response = await fetch(`http://localhost:3000/api/v1/instituciones/usuarios/${session.id}`);
-    console.log(response);
-  };
   useEffect(() => {
-    institucion().then((res) => { console.log(res); });
-  }, [session]);
-
-  if (institucion.id !== undefined) {
-    router.push(`/institucion/${institucion.id}/consultarInstitucion`);
-  }
+    if (institucion.institucion !== undefined) {
+      router.push(`/institucion/${institucion.institucion.id}/consultarInstitucion`);
+    }
+  }, [institucion]);
 
   return (
     <Layout title="Alta Institution">
