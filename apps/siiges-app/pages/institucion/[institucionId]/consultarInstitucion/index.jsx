@@ -8,6 +8,7 @@ import getInstitucion from '../../utils/getInstitucion';
 
 export default function ConsultarInstitucion() {
   const { institucion, loading } = getInstitucion();
+
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {

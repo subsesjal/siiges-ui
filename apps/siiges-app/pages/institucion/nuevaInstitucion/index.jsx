@@ -8,13 +8,13 @@ import { useRouter } from 'next/router';
 
 export default function nuevaInstitucion() {
   const router = useRouter();
-  const institucion = getInstitucionUsuario();
+  const data = getInstitucionUsuario();
 
   useEffect(() => {
-    if (institucion.institucion !== undefined) {
-      router.push(`/institucion/${institucion.institucion.id}/consultarInstitucion`);
+    if (data.institucion !== undefined) {
+      router.push(`/institucion/${data.institucion.id}/consultarInstitucion`);
     }
-  }, [institucion]);
+  }, [data]);
 
   return (
     <Layout title="Alta Institution">

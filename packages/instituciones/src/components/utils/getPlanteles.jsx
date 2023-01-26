@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-export default function getInstitucion() {
-  const [institucion, setInstitucion] = useState();
+export default function getPlanteles() {
+  const [planteles, setPlanteles] = useState();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -15,14 +15,14 @@ export default function getInstitucion() {
         .then((response) => response.json())
         .then((data) => {
           setLoading(true);
-          setInstitucion(data);
+          setPlanteles(data);
         });
       setLoading(false);
     }
   }, [router.isReady]);
 
   return {
-    institucion,
+    planteles,
     loading,
   };
 }

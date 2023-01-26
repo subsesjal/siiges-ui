@@ -6,6 +6,7 @@ import EditPlantelForm from './components/Planteles/editPlantelForm';
 import ConsultPlantelesForm from './components/Planteles/consultPlantelesForm';
 import Planteles from './components/Planteles';
 import getInstitucionUsuario from './components/utils/getInstitucionUsuario';
+import getPlanteles from './components/utils/getPlanteles';
 
 export {
   Institucion,
@@ -16,4 +17,5 @@ export {
   ConsultPlantelesForm,
   Planteles,
   getInstitucionUsuario,
+  getPlanteles,
 };

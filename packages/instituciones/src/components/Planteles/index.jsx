@@ -64,9 +64,7 @@ const columns = [
                   text="Confirmar"
                   alt="Confirmar"
                   design="error"
-                  onclick={() => {
-                    console.log(params.id);
-                  }}
+                  onclick={() => {}}
                 >
                   Confirmar
                 </ButtonStyled>
