@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import {
-  ActionButtons, ButtonStyled, DataTable, DefaultModal,
+  ActionButtons,
+  ButtonStyled,
+  DataTable,
+  DefaultModal,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
@@ -41,12 +44,19 @@ const columns = [
       const { modal, showModal, hideModal } = ModalState();
       return (
         <>
-          <ActionButtons
-            id={params.id}
-            consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
-            editar={`/institucion/${params.row.institucion}/editarPlantel/${params.id}`}
-            eliminar={showModal}
-          />
+          {params.row.claveCentroTrabajo ? (
+            <ActionButtons
+              id={params.id}
+              consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
+            />
+          ) : (
+            <ActionButtons
+              id={params.id}
+              consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
+              editar={`/institucion/${params.row.institucion}/editarPlantel/${params.id}`}
+              eliminar={showModal}
+            />
+          )}
           <DefaultModal open={modal} setOpen={hideModal}>
             <Typography>Desea eliminar este usuario?</Typography>
             <Grid container spacing={2} justifyContent="flex-end">
