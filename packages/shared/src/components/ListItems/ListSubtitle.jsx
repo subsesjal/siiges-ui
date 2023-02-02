@@ -14,6 +14,10 @@ export default function ListSubtitle({ text }) {
   );
 }
 
+ListSubtitle.defaultProps = {
+  text: '',
+};
+
 ListSubtitle.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

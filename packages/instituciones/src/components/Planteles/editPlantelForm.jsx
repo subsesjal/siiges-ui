@@ -21,6 +21,16 @@ export default function EditPlantelForm({ plantel }) {
       || name === 'claveCentroTrabajo'
     ) {
       setForm({ ...form, domicilio: { ...form.domicilio, [name]: value } });
+    } else if (
+      name === 'nombre'
+      || name === 'apellidoMaterno'
+      || name === 'apellidoPaterno'
+      || name === 'nacionalidad'
+      || name === 'curp'
+      || name === 'sexo'
+      || name === 'correoPrimario'
+    ) {
+      setForm({ ...form, directores: { ...form.directores, [name]: value } });
     } else {
       setForm({ ...form, [name]: value });
     }
@@ -137,6 +147,8 @@ export default function EditPlantelForm({ plantel }) {
     const { name } = e.target;
     errors[name]();
   };
+
+  const director = plantel.directores[0];
 
   return (
     <>
@@ -357,6 +369,7 @@ export default function EditPlantelForm({ plantel }) {
               required
               onchange={handleOnChange}
               onblur={handleOnBlur}
+              value={director.persona.nombre}
               errorMessage={error.nombre}
               class="data"
             />
@@ -368,6 +381,7 @@ export default function EditPlantelForm({ plantel }) {
               name="directorLastName1"
               auto="directorLastName1"
               required
+              value={director.persona.apellidoPaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -381,6 +395,7 @@ export default function EditPlantelForm({ plantel }) {
               name="directorLastName2"
               auto="directorLastName2"
               required
+              value={director.persona.apellidoMaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -394,6 +409,7 @@ export default function EditPlantelForm({ plantel }) {
               name="nacionalidad"
               auto="nacionalidad"
               required
+              value={director.persona.nacionalidad}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -407,6 +423,7 @@ export default function EditPlantelForm({ plantel }) {
               name="curp"
               auto="curp"
               onchange={handleOnChange}
+              value={director.persona.curp}
               class="data"
             />
           </Grid>
@@ -417,6 +434,7 @@ export default function EditPlantelForm({ plantel }) {
               name="genero"
               auto="genero"
               required
+              value={director.persona.sexo}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -430,6 +448,7 @@ export default function EditPlantelForm({ plantel }) {
               name="email"
               auto="email"
               required
+              value={director.persona.correoPrimario}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -473,5 +492,19 @@ EditPlantelForm.propTypes = {
     telefono2: PropTypes.string,
     telefono3: PropTypes.string,
     claveCentroTrabajo: PropTypes.string,
+    directores: PropTypes.arrayOf(
+      PropTypes.shape({
+        persona: PropTypes.shape({
+          id: PropTypes.number,
+          nombre: PropTypes.string,
+          curp: PropTypes.string,
+          apellidoPaterno: PropTypes.string,
+          apellidoMaterno: PropTypes.string,
+          sexo: PropTypes.string,
+          nacionalidad: PropTypes.string,
+          correoPrimario: PropTypes.string,
+        }),
+      }),
+    ),
   }).isRequired,
 };

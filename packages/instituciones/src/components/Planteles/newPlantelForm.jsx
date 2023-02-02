@@ -134,35 +134,6 @@ export default function NewPlantelForm() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography variant="h6">Datos rector</Typography>
-      <Grid item sx={{ ml: 15 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <Input
-              label="Nombre(s)"
-              id="rectorName"
-              name="rectorName"
-              auto="rectorName"
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <Input
-              label="Primer Apellido"
-              id="rectorLastName1"
-              name="rectorLastName1"
-              auto="rectorLastName1"
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <Input
-              label="Segundo Apellido"
-              id="rectorLastName2"
-              name="rectorLastName2"
-              auto="rectorLastName2"
-            />
-          </Grid>
-        </Grid>
-      </Grid>
     </>
   );
 }
