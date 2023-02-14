@@ -1,20 +1,21 @@
 import { Grid, TextField, Typography } from '@mui/material';
-import { Input, Select } from '@siiges-ui/shared';
+import { Input } from '@siiges-ui/shared';
+import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import React from 'react';
 
 export default function CaracteristicasHardwareSoftware() {
   const options = [
     {
       id: 1,
-      name: 'Guadalajara',
+      nombre: 'Guadalajara',
     },
     {
       id: 2,
-      name: 'Zapopan',
+      nombre: 'Zapopan',
     },
     {
       id: 3,
-      name: 'Tlaquepaque',
+      nombre: 'Tlaquepaque',
     },
   ];
   return (
@@ -24,11 +25,9 @@ export default function CaracteristicasHardwareSoftware() {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={6}>
-          <Select
+          <BasicSelect
             title="Tipo de alojamiento"
             options={options}
-            value=""
-            onChange={() => {}}
           />
         </Grid>
       </Grid>

@@ -6,13 +6,19 @@ import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
 import React from 'react';
 
 export default function ConsultPlantelesForm({ data }) {
-  const director = data.directores[0];
+  const { directores, domicilio } = data;
+  const director = directores[0].persona;
   return (
     <Grid container spacing={2} sx={{ m: 1 }}>
       <Typography variant="h6" sx={{ mt: 2 }}>
         Domicilio
       </Typography>
-      <Grid container rowSpacing={1} sx={{ my: 3 }} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+      <Grid
+        container
+        rowSpacing={1}
+        sx={{ my: 3 }}
+        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+      >
         <Grid item xs>
           <List>
             <ListTitle text="Calle" />
@@ -24,10 +30,10 @@ export default function ConsultPlantelesForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle text={data.domicilio.calle} />
-            <ListSubtitle text={data.domicilio.numeroInterior} />
-            <ListSubtitle text={data.domicilio.numeroExterior} />
-            <ListSubtitle text={data.domicilio.colonia} />
+            <ListSubtitle text={domicilio.calle} />
+            <ListSubtitle text={domicilio.numeroInterior} />
+            <ListSubtitle text={domicilio.numeroExterior} />
+            <ListSubtitle text={domicilio.colonia} />
           </List>
         </Grid>
         <Grid item xs>
@@ -40,16 +46,21 @@ export default function ConsultPlantelesForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle text={data.domicilio.codigoPostal} />
-            <ListSubtitle text={data.domicilio.municipio.nombre} />
-            <ListSubtitle text={data.domicilio.calle} />
+            <ListSubtitle text={domicilio.codigoPostal} />
+            <ListSubtitle text={domicilio.municipio.nombre} />
+            <ListSubtitle text={domicilio.calle} />
           </List>
         </Grid>
       </Grid>
       <Typography variant="h6" sx={{ mt: 5 }}>
         Datos Generales
       </Typography>
-      <Grid container rowSpacing={1} sx={{ my: 3 }} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+      <Grid
+        container
+        rowSpacing={1}
+        sx={{ my: 3 }}
+        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+      >
         <Grid item xs>
           <List>
             <ListTitle text="Correo institucional" />
@@ -60,9 +71,9 @@ export default function ConsultPlantelesForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle sx={{ my: 2 }} text={data.correo1} />
-            <ListSubtitle text={data.correo2} />
-            <ListSubtitle text={data.correo3} />
+            <ListSubtitle margin={3.5} text={data.correo1} />
+            <ListSubtitle margin={3.5} text={data.correo2} />
+            <ListSubtitle margin={3.5} text={data.correo3} />
           </List>
         </Grid>
         <Grid item xs>
@@ -97,7 +108,12 @@ export default function ConsultPlantelesForm({ data }) {
       <Typography variant="h6" sx={{ mt: 5 }}>
         Datos Director
       </Typography>
-      <Grid container rowSpacing={1} sx={{ my: 3 }} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+      <Grid
+        container
+        rowSpacing={1}
+        sx={{ my: 3 }}
+        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+      >
         <Grid item xs>
           <List>
             <ListTitle text="Nombre(s)" />
@@ -109,10 +125,10 @@ export default function ConsultPlantelesForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle text={director.persona.nombre} />
-            <ListSubtitle text={director.persona.apellidoPaterno} />
-            <ListSubtitle text={director.persona.apellidoMaterno} />
-            <ListSubtitle text={director.persona.sexo} />
+            <ListSubtitle text={director.nombre} />
+            <ListSubtitle text={director.apellidoPaterno} />
+            <ListSubtitle text={director.apellidoMaterno} />
+            <ListSubtitle text={director.sexo} />
           </List>
         </Grid>
         <Grid item xs>
@@ -124,8 +140,8 @@ export default function ConsultPlantelesForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle text={director.persona.nacionalidad} />
-            <ListSubtitle text={director.persona.correoPrimario} />
+            <ListSubtitle text={director.nacionalidad} />
+            <ListSubtitle text={director.correoPrimario} />
           </List>
         </Grid>
       </Grid>

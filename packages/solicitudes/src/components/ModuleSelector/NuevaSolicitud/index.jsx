@@ -8,19 +8,19 @@ function NewRequest() {
   const options = [
     {
       id: 'escolarizada',
-      name: 'Escolarizada',
+      nombre: 'Escolarizada',
     },
     {
       id: 'noEscolarizada',
-      name: 'No escolarizada',
+      nombre: 'No escolarizada',
     },
     {
       id: 'mixta',
-      name: 'Mixta',
+      nombre: 'Mixta',
     },
     {
       id: 'dual',
-      name: 'Dual',
+      nombre: 'Dual',
     },
   ];
   const handleOnChange = (e) => {

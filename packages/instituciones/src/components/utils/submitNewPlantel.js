@@ -10,7 +10,7 @@ export default function submitNewPlantel(
   if (
     Object.values(plantelErrors).every((validation) => validation()) !== false
   ) {
-    if (Object.values(error).every((x) => x === null || x === '')) {
+    if (Object.values(error).every((value) => value === null || value === '')) {
       fetch(
         `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`,
         {

@@ -6,7 +6,7 @@ import { ButtonsForm, Input, SnackAlert } from '@siiges-ui/shared';
 import submitEditPlantel from '../utils/submitEditPlantel';
 
 export default function EditPlantelForm({ plantel }) {
-  const [form, setForm] = useState({ domicilio: {} });
+  const [form, setForm] = useState({ domicilio: {}, directores: {} });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
 

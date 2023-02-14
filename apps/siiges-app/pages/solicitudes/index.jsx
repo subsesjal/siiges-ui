@@ -109,15 +109,15 @@ export default function Solicitudes() {
   const options = [
     {
       id: 'new',
-      name: 'Nueva Solicitud',
+      nombre: 'Nueva Solicitud',
     },
     {
       id: 'refrendo',
-      name: 'Refrendo de plan de estudios',
+      nombre: 'Refrendo de plan de estudios',
     },
     {
       id: 'address',
-      name: 'Cambio de domicilio',
+      nombre: 'Cambio de domicilio',
     },
   ];
   return (
