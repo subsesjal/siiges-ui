@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import {
   ButtonsForm, Context, Input, SnackAlert,
 } from '@siiges-ui/shared';
@@ -7,8 +8,11 @@ import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
 import getMunicipios from '../utils/getMunicipios';
 import submitNewPlantel from '../utils/submitNewPlantel';
+import plantelErrors from '../utils/plantelErrors';
+import formPlantel from '../utils/formPlantel';
+import submitEditPlantel from '../utils/submitEditPlantel';
 
-export default function NewPlantelForm() {
+export default function PlantelForm({ plantel }) {
   const { session } = useContext(Context);
   const router = useRouter();
   const [form, setForm] = useState({
@@ -19,202 +23,17 @@ export default function NewPlantelForm() {
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const { municipios, loading } = getMunicipios();
   let options = [];
+  const director = null;
   if (loading !== false) {
     options = municipios.data.filter((municipio) => municipio.estadoId === 14);
   }
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    if (
-      name === 'calle'
-      || name === 'numeroExterior'
-      || name === 'numeroInterior'
-      || name === 'colonia'
-      || name === 'codigoPostal'
-      || name === 'municipioId'
-    ) {
-      setForm({ ...form, domicilio: { ...form.domicilio, [name]: value } });
-    } else if (
-      name === 'nombre'
-      || name === 'apellidoMaterno'
-      || name === 'apellidoPaterno'
-      || name === 'nacionalidad'
-      || name === 'curp'
-      || name === 'sexo'
-      || name === 'correoPrimario'
-    ) {
-      setForm({
-        ...form,
-        director: {
-          ...form.director,
-          persona: { ...form.director.persona, [name]: value },
-        },
-      });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
+    formPlantel(name, form, setForm, value);
   };
 
-  const validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  const validNumber = /^[0-9]+$/;
-
-  const errors = {
-    calle: () => {
-      if (form.domicilio.calle === '' || form.domicilio.calle === undefined) {
-        setError({ ...error, calle: 'Calle invalida' });
-        return false;
-      }
-      setError({ ...error, calle: '' });
-      return true;
-    },
-    numeroExterior: () => {
-      if (
-        form.domicilio.numeroExterior === ''
-        || form.domicilio.numeroExterior === undefined
-      ) {
-        setError({ ...error, numeroExterior: 'Numero exterior invalido' });
-        return false;
-      }
-      setError({ ...error, numeroExterior: '' });
-      return true;
-    },
-    colonia: () => {
-      if (
-        form.domicilio.colonia === ''
-        || form.domicilio.colonia === undefined
-      ) {
-        setError({ ...error, colonia: 'Colonia invalida' });
-        return false;
-      }
-      setError({ ...error, colonia: '' });
-      return true;
-    },
-    codigoPostal: () => {
-      if (
-        form.domicilio.codigoPostal.match(validNumber)
-        && form.domicilio.codigoPostal !== undefined
-      ) {
-        setError({ ...error, codigoPostal: '' });
-        return true;
-      }
-      setError({ ...error, codigoPostal: 'Codigo postal invalido' });
-      return false;
-    },
-    correo1: () => {
-      if (form.correo1 !== undefined && form.correo1.match(validEmail)) {
-        setError({ ...error, correo1: '' });
-        return true;
-      }
-      setError({ ...error, correo1: 'Correo institucional invalido' });
-      return false;
-    },
-    correo2: () => {
-      if (form.correo2 !== undefined && form.correo2.match(validEmail)) {
-        setError({ ...error, correo2: '' });
-        return true;
-      }
-      setError({ ...error, correo2: 'Correo de contacto invalido' });
-      return false;
-    },
-    municipio: () => {
-      if (form.municipioId === undefined) {
-        setError({ ...error, municipioId: 'Seleccione un municipio' });
-        return false;
-      }
-      setError({ ...error, municipioId: '' });
-      return true;
-    },
-    tipoInmuebleId: () => {
-      if (form.tipoInmuebleId === undefined) {
-        setError({ ...error, tipoInmuebleId: 'Seleccione un tipo de inmueble' });
-        return false;
-      }
-      setError({ ...error, tipoInmuebleId: '' });
-      return true;
-    },
-    telefono1: () => {
-      if (form.telefono1.match(validNumber) && form.telefono1 !== undefined) {
-        setError({ ...error, telefono1: '' });
-        return true;
-      }
-      setError({ ...error, telefono1: 'telefono 1 invalido' });
-      return false;
-    },
-    telefono2: () => {
-      if (form.telefono2.match(validNumber) && form.telefono2 !== undefined) {
-        setError({ ...error, telefono2: '' });
-        return true;
-      }
-      setError({ ...error, telefono2: 'telefono 2 invalido' });
-      return false;
-    },
-    nombre: () => {
-      if (
-        form.director.persona.nombre === ''
-        || form.director.persona.nombre === undefined
-      ) {
-        setError({ ...error, nombre: 'Nombre invalido' });
-        return false;
-      }
-      setError({ ...error, nombre: '' });
-      return true;
-    },
-    apellidoPaterno: () => {
-      if (
-        form.director.persona.apellidoPaterno === ''
-        || form.director.persona.apellidoPaterno === undefined
-      ) {
-        setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
-        return false;
-      }
-      setError({ ...error, apellidoPaterno: '' });
-      return true;
-    },
-    apellidoMaterno: () => {
-      if (
-        form.director.persona.apellidoMaterno === ''
-        || form.director.persona.apellidoMaterno === undefined
-      ) {
-        setError({ ...error, apellidoMaterno: 'Apellido Materno invalido' });
-        return false;
-      }
-      setError({ ...error, apellidoMaterno: '' });
-      return true;
-    },
-    nacionalidad: () => {
-      if (
-        form.director.persona.nacionalidad === ''
-        || form.director.persona.nacionalidad === undefined
-      ) {
-        setError({ ...error, nacionalidad: 'Nacionalidad invalida' });
-        return false;
-      }
-      setError({ ...error, nacionalidad: '' });
-      return true;
-    },
-    sexo: () => {
-      if (
-        form.director.persona.sexo === ''
-        || form.director.persona.sexo === undefined
-      ) {
-        setError({ ...error, sexo: 'Genero invalido' });
-        return false;
-      }
-      setError({ ...error, sexo: '' });
-      return true;
-    },
-    correoPrimario: () => {
-      if (
-        form.director.persona.correoPrimario !== undefined
-        && form.director.persona.correoPrimario.match(validEmail)
-      ) {
-        setError({ ...error, correoPrimario: '' });
-        return true;
-      }
-      setError({ ...error, correoPrimario: 'Correo invalido' });
-      return false;
-    },
-  };
+  const errors = plantelErrors(form, setError, error);
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
@@ -232,6 +51,10 @@ export default function NewPlantelForm() {
     { id: 'femenino', nombre: 'Femenino' },
   ];
 
+  if (plantel !== null) {
+    director[0] = plantel.directores;
+  }
+
   return (
     <>
       <Typography variant="h6" sx={{ mt: 5 }}>
@@ -245,6 +68,7 @@ export default function NewPlantelForm() {
               id="calle"
               name="calle"
               auto="calle"
+              value={plantel ? plantel.domicilio.calle : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.calle}
@@ -257,6 +81,7 @@ export default function NewPlantelForm() {
               id="numeroExterior"
               name="numeroExterior"
               auto="numeroExterior"
+              value={plantel ? plantel.domicilio.numeroExterior : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.numeroExterior}
@@ -269,6 +94,7 @@ export default function NewPlantelForm() {
               id="numeroInterior"
               name="numeroInterior"
               auto="numeroInterior"
+              value={plantel ? plantel.domicilio.numeroInterior : null}
               onchange={handleOnChange}
             />
           </Grid>
@@ -280,6 +106,7 @@ export default function NewPlantelForm() {
               id="colonia"
               name="colonia"
               auto="colonia"
+              value={plantel ? plantel.domicilio.colonia : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.colonia}
@@ -292,6 +119,7 @@ export default function NewPlantelForm() {
               id="codigoPostal"
               name="codigoPostal"
               auto="codigoPostal"
+              value={plantel ? plantel.domicilio.codigoPostal : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.codigoPostal}
@@ -301,8 +129,9 @@ export default function NewPlantelForm() {
           <Grid item xs={3}>
             <BasicSelect
               title="Municipio"
-              options={options}
               name="municipioId"
+              options={options}
+              value={plantel ? plantel.domicilio.municipioId : null}
               onchange={handleOnChange}
               errorMessage={error.municipio}
               required
@@ -311,8 +140,9 @@ export default function NewPlantelForm() {
           <Grid item xs={3}>
             <BasicSelect
               title="Tipo Inmueble"
-              options={inmuebles}
               name="tipoInmuebleId"
+              value={plantel ? plantel.domicilio.tipoInmuebleId : null}
+              options={inmuebles}
               onchange={handleOnChange}
               errorMessage={error.tipoInmuebleId}
               required
@@ -329,6 +159,7 @@ export default function NewPlantelForm() {
               id="correo1"
               name="correo1"
               auto="correo1"
+              value={plantel ? plantel.correo1 : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo1}
@@ -341,6 +172,7 @@ export default function NewPlantelForm() {
               id="correo2"
               name="correo2"
               auto="correo2"
+              value={plantel ? plantel.correo2 : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo2}
@@ -353,6 +185,7 @@ export default function NewPlantelForm() {
               id="correo3"
               name="correo3"
               auto="correo3"
+              value={plantel ? plantel.correo3 : null}
               onchange={handleOnChange}
             />
           </Grid>
@@ -364,6 +197,7 @@ export default function NewPlantelForm() {
               id="telefono1"
               name="telefono1"
               auto="telefono1"
+              value={plantel ? plantel.telefono1 : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.telefono1}
@@ -376,6 +210,7 @@ export default function NewPlantelForm() {
               id="telefono2"
               name="telefono2"
               auto="telefono2"
+              value={plantel ? plantel.telefono2 : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.telefono2}
@@ -388,6 +223,7 @@ export default function NewPlantelForm() {
               id="telefono3"
               name="telefono3"
               auto="telefono3"
+              value={plantel ? plantel.telefono3 : null}
               onchange={handleOnChange}
             />
           </Grid>
@@ -399,6 +235,7 @@ export default function NewPlantelForm() {
               id="claveCentroTrabajo"
               name="claveCentroTrabajo"
               auto="claveCentroTrabajo"
+              value={plantel ? plantel.claveCentroTrabajo : null}
               onchange={handleOnChange}
             />
           </Grid>
@@ -431,6 +268,7 @@ export default function NewPlantelForm() {
               id="nombre"
               name="nombre"
               auto="nombre"
+              value={plantel ? director.persona.nombre : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -443,6 +281,7 @@ export default function NewPlantelForm() {
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
+              value={plantel ? director.persona.apellidoPaterno : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.apellidoPaterno}
@@ -455,6 +294,7 @@ export default function NewPlantelForm() {
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
+              value={plantel ? director.persona.apellidoMaterno : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.apellidoMaterno}
@@ -467,6 +307,7 @@ export default function NewPlantelForm() {
               id="nacionalidad"
               name="nacionalidad"
               auto="nacionalidad"
+              value={plantel ? director.persona.nacionalidad : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nacionalidad}
@@ -479,15 +320,17 @@ export default function NewPlantelForm() {
               id="curp"
               name="curp"
               auto="curp"
+              value={plantel ? director.persona.curp : null}
               onchange={handleOnChange}
             />
           </Grid>
           <Grid item xs={3}>
             <BasicSelect
               title="Genero"
+              name="sexo"
+              value={plantel ? director.persona.sexo : null}
               options={sexo}
               onchange={handleOnChange}
-              name="sexo"
               errorMessage={error.sexo}
               required
             />
@@ -498,6 +341,7 @@ export default function NewPlantelForm() {
               id="correoPrimario"
               name="correoPrimario"
               auto="correoPrimario"
+              value={plantel ? director.persona.correoPrimario : null}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correoPrimario}
@@ -507,7 +351,11 @@ export default function NewPlantelForm() {
         </Grid>
         <ButtonsForm
           cancel={router.back}
-          confirm={() => submitNewPlantel(errors, error, form, setNoti, session.id)}
+          confirm={
+            plantel
+              ? () => submitNewPlantel(errors, error, form, setNoti, session.id)
+              : () => submitEditPlantel(errors, error, form, setNoti, session.id)
+          }
         />
       </Grid>
       <SnackAlert
@@ -521,3 +369,37 @@ export default function NewPlantelForm() {
     </>
   );
 }
+
+PlantelForm.defaultProps = {
+  plantel: null,
+};
+
+PlantelForm.propTypes = {
+  plantel: PropTypes.shape({
+    domicilio: PropTypes.objectOf(PropTypes.string),
+    institucionId: PropTypes.number,
+    id: PropTypes.number,
+    tipoInmuebleId: PropTypes.number,
+    correo1: PropTypes.string,
+    correo2: PropTypes.string,
+    correo3: PropTypes.string,
+    telefono1: PropTypes.string,
+    telefono2: PropTypes.string,
+    telefono3: PropTypes.string,
+    claveCentroTrabajo: PropTypes.string,
+    directores: PropTypes.arrayOf(
+      PropTypes.shape({
+        persona: PropTypes.shape({
+          id: PropTypes.number,
+          nombre: PropTypes.string,
+          curp: PropTypes.string,
+          apellidoPaterno: PropTypes.string,
+          apellidoMaterno: PropTypes.string,
+          sexo: PropTypes.string,
+          nacionalidad: PropTypes.string,
+          correoPrimario: PropTypes.string,
+        }),
+      }),
+    ),
+  }),
+};

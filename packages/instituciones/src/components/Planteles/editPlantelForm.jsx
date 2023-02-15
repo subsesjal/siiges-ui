@@ -4,6 +4,8 @@ import router from 'next/router';
 import { Grid, Typography } from '@mui/material';
 import { ButtonsForm, Input, SnackAlert } from '@siiges-ui/shared';
 import submitEditPlantel from '../utils/submitEditPlantel';
+import plantelErrors from '../utils/plantelErrors';
+import formPlantel from '../utils/formPlantel';
 
 export default function EditPlantelForm({ plantel }) {
   const [form, setForm] = useState({ domicilio: {}, directores: {} });
@@ -12,136 +14,10 @@ export default function EditPlantelForm({ plantel }) {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    if (
-      name === 'calle'
-      || name === 'numeroExterior'
-      || name === 'numeroInterior'
-      || name === 'colonia'
-      || name === 'codigoPostal'
-      || name === 'claveCentroTrabajo'
-    ) {
-      setForm({ ...form, domicilio: { ...form.domicilio, [name]: value } });
-    } else if (
-      name === 'nombre'
-      || name === 'apellidoMaterno'
-      || name === 'apellidoPaterno'
-      || name === 'nacionalidad'
-      || name === 'curp'
-      || name === 'sexo'
-      || name === 'correoPrimario'
-    ) {
-      setForm({ ...form, directores: { ...form.directores, [name]: value } });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
+    formPlantel(name, form, setForm, value);
   };
 
-  const errors = {
-    calle: () => {
-      if (form.domicilio.calle === '') {
-        setError({ ...error, calle: 'Calle invalida' });
-        return false;
-      }
-      setError({ ...error, calle: '' });
-      return true;
-    },
-    numeroExterior: () => {
-      if (form.domicilio.numeroExterior === '') {
-        setError({ ...error, numeroExterior: 'Numero exterior invalido' });
-        return false;
-      }
-      setError({ ...error, numeroExterior: '' });
-      return true;
-    },
-    colonia: () => {
-      if (form.domicilio.colonia === '') {
-        setError({ ...error, colonia: 'Colonia invalida' });
-        return false;
-      }
-      setError({ ...error, colonia: '' });
-      return true;
-    },
-    codigoPostal: () => {
-      if (form.domicilio.codigoPostal === '') {
-        setError({ ...error, codigoPostal: 'Codigo postal invalido' });
-        return false;
-      }
-      setError({ ...error, codigoPostal: '' });
-      return true;
-    },
-    correo1: () => {
-      if (form.correo1 === '') {
-        setError({ ...error, correo1: 'Correo institucional invalido' });
-        return false;
-      }
-      setError({ ...error, correo1: '' });
-      return true;
-    },
-    correo2: () => {
-      if (form.correo2 === '') {
-        setError({ ...error, correo2: 'Correo de contacto invalido' });
-        return false;
-      }
-      setError({ ...error, correo2: '' });
-      return true;
-    },
-    correo3: () => {
-      if (form.correo3 === '') {
-        setError({ ...error, correo3: 'Correo secundario invalido' });
-        return false;
-      }
-      setError({ ...error, correo3: '' });
-      return true;
-    },
-    telefono1: () => {
-      if (form.telefono1 === '') {
-        setError({ ...error, telefono1: 'telefono 1 invalido' });
-        return false;
-      }
-      setError({ ...error, telefono1: '' });
-      return true;
-    },
-    telefono2: () => {
-      if (form.telefono2 === '') {
-        setError({ ...error, telefono2: 'telefono 2 invalido' });
-        return false;
-      }
-      setError({ ...error, telefono2: '' });
-      return true;
-    },
-    nombre: () => {
-      if (form.director.nombre === '') {
-        setError({ ...error, nombre: 'Nombre invalido' });
-        return false;
-      }
-      setError({ ...error, nombre: '' });
-      return true;
-    },
-    apellidoPaterno: () => {
-      if (form.director.apellidoPaterno === '') {
-        setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
-        return false;
-      }
-      setError({ ...error, apellidoPaterno: '' });
-      return true;
-    },
-    apellidoMaterno: () => {
-      if (form.director.apellidoMaterno === '') {
-        setError({ ...error, apellidoMaterno: 'Apellido Materno invalido' });
-        return false;
-      }
-      setError({ ...error, apellidoMaterno: '' });
-      return true;
-    },
-    nacionalidad: () => {
-      if (form.director.nacionalidad === '') {
-        setError({ ...error, nacionalidad: 'Nacionalidad invalida' });
-        return false;
-      }
-      setError({ ...error, nacionalidad: '' });
-      return true;
-    },
-  };
+  const errors = plantelErrors(form, setError, error);
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
