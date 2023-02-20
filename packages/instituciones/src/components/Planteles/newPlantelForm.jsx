@@ -23,9 +23,13 @@ export default function PlantelForm({ plantel }) {
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const { municipios, loading } = getMunicipios();
   let options = [];
-  const director = null;
   if (loading !== false) {
     options = municipios.data.filter((municipio) => municipio.estadoId === 14);
+  }
+
+  let director = '';
+  if (plantel && plantel.directores[0] !== undefined) {
+    director = plantel.directores[0].persona;
   }
 
   const handleOnChange = (e) => {
@@ -33,7 +37,7 @@ export default function PlantelForm({ plantel }) {
     formPlantel(name, form, setForm, value);
   };
 
-  const errors = plantelErrors(form, setError, error);
+  const errors = plantelErrors(form, setError, error, plantel);
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
@@ -51,10 +55,6 @@ export default function PlantelForm({ plantel }) {
     { id: 'femenino', nombre: 'Femenino' },
   ];
 
-  if (plantel !== null) {
-    director[0] = plantel.directores;
-  }
-
   return (
     <>
       <Typography variant="h6" sx={{ mt: 5 }}>
@@ -68,7 +68,7 @@ export default function PlantelForm({ plantel }) {
               id="calle"
               name="calle"
               auto="calle"
-              value={plantel ? plantel.domicilio.calle : null}
+              value={plantel ? plantel.domicilio.calle : ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.calle}
@@ -81,7 +81,7 @@ export default function PlantelForm({ plantel }) {
               id="numeroExterior"
               name="numeroExterior"
               auto="numeroExterior"
-              value={plantel ? plantel.domicilio.numeroExterior : null}
+              value={plantel ? plantel.domicilio.numeroExterior : ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.numeroExterior}
@@ -94,7 +94,7 @@ export default function PlantelForm({ plantel }) {
               id="numeroInterior"
               name="numeroInterior"
               auto="numeroInterior"
-              value={plantel ? plantel.domicilio.numeroInterior : null}
+              value={plantel ? plantel.domicilio.numeroInterior : ''}
               onchange={handleOnChange}
             />
           </Grid>
@@ -106,7 +106,7 @@ export default function PlantelForm({ plantel }) {
               id="colonia"
               name="colonia"
               auto="colonia"
-              value={plantel ? plantel.domicilio.colonia : null}
+              value={plantel ? plantel.domicilio.colonia : ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.colonia}
@@ -119,7 +119,7 @@ export default function PlantelForm({ plantel }) {
               id="codigoPostal"
               name="codigoPostal"
               auto="codigoPostal"
-              value={plantel ? plantel.domicilio.codigoPostal : null}
+              value={plantel ? plantel.domicilio.codigoPostal : ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.codigoPostal}
@@ -130,10 +130,11 @@ export default function PlantelForm({ plantel }) {
             <BasicSelect
               title="Municipio"
               name="municipioId"
+              value={plantel ? plantel.domicilio.municipioId : ''}
               options={options}
-              value={plantel ? plantel.domicilio.municipioId : null}
               onchange={handleOnChange}
-              errorMessage={error.municipio}
+              onblur={handleOnBlur}
+              errorMessage={error.municipioId}
               required
             />
           </Grid>
@@ -141,8 +142,9 @@ export default function PlantelForm({ plantel }) {
             <BasicSelect
               title="Tipo Inmueble"
               name="tipoInmuebleId"
-              value={plantel ? plantel.domicilio.tipoInmuebleId : null}
+              value={plantel ? plantel.domicilio.tipoInmuebleId : ''}
               options={inmuebles}
+              onblur={handleOnBlur}
               onchange={handleOnChange}
               errorMessage={error.tipoInmuebleId}
               required
@@ -159,7 +161,7 @@ export default function PlantelForm({ plantel }) {
               id="correo1"
               name="correo1"
               auto="correo1"
-              value={plantel ? plantel.correo1 : null}
+              value={plantel ? plantel.correo1 : ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo1}
@@ -172,7 +174,7 @@ export default function PlantelForm({ plantel }) {
               id="correo2"
               name="correo2"
               auto="correo2"
-              value={plantel ? plantel.correo2 : null}
+              value={plantel ? plantel.correo2 : ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo2}
@@ -185,7 +187,7 @@ export default function PlantelForm({ plantel }) {
               id="correo3"
               name="correo3"
               auto="correo3"
-              value={plantel ? plantel.correo3 : null}
+              value={plantel ? plantel.correo3 : ''}
               onchange={handleOnChange}
             />
           </Grid>
@@ -197,7 +199,7 @@ export default function PlantelForm({ plantel }) {
               id="telefono1"
               name="telefono1"
               auto="telefono1"
-              value={plantel ? plantel.telefono1 : null}
+              value={plantel ? plantel.telefono1 : ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.telefono1}
@@ -210,7 +212,7 @@ export default function PlantelForm({ plantel }) {
               id="telefono2"
               name="telefono2"
               auto="telefono2"
-              value={plantel ? plantel.telefono2 : null}
+              value={plantel ? plantel.telefono2 : ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.telefono2}
@@ -223,7 +225,7 @@ export default function PlantelForm({ plantel }) {
               id="telefono3"
               name="telefono3"
               auto="telefono3"
-              value={plantel ? plantel.telefono3 : null}
+              value={plantel ? plantel.telefono3 : ''}
               onchange={handleOnChange}
             />
           </Grid>
@@ -235,7 +237,7 @@ export default function PlantelForm({ plantel }) {
               id="claveCentroTrabajo"
               name="claveCentroTrabajo"
               auto="claveCentroTrabajo"
-              value={plantel ? plantel.claveCentroTrabajo : null}
+              value={plantel ? plantel.claveCentroTrabajo : ''}
               onchange={handleOnChange}
             />
           </Grid>
@@ -268,7 +270,7 @@ export default function PlantelForm({ plantel }) {
               id="nombre"
               name="nombre"
               auto="nombre"
-              value={plantel ? director.persona.nombre : null}
+              value={director.nombre}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -281,7 +283,7 @@ export default function PlantelForm({ plantel }) {
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
-              value={plantel ? director.persona.apellidoPaterno : null}
+              value={director.apellidoPaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.apellidoPaterno}
@@ -294,7 +296,7 @@ export default function PlantelForm({ plantel }) {
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
-              value={plantel ? director.persona.apellidoMaterno : null}
+              value={director.apellidoMaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.apellidoMaterno}
@@ -307,7 +309,7 @@ export default function PlantelForm({ plantel }) {
               id="nacionalidad"
               name="nacionalidad"
               auto="nacionalidad"
-              value={plantel ? director.persona.nacionalidad : null}
+              value={director.nacionalidad}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nacionalidad}
@@ -320,17 +322,21 @@ export default function PlantelForm({ plantel }) {
               id="curp"
               name="curp"
               auto="curp"
-              value={plantel ? director.persona.curp : null}
+              value={director.curp}
               onchange={handleOnChange}
+              errorMessage={error.curp}
+              onblur={handleOnBlur}
+              required
             />
           </Grid>
           <Grid item xs={3}>
             <BasicSelect
               title="Genero"
               name="sexo"
-              value={plantel ? director.persona.sexo : null}
+              value={director.sexo}
               options={sexo}
               onchange={handleOnChange}
+              onblur={handleOnBlur}
               errorMessage={error.sexo}
               required
             />
@@ -341,7 +347,7 @@ export default function PlantelForm({ plantel }) {
               id="correoPrimario"
               name="correoPrimario"
               auto="correoPrimario"
-              value={plantel ? director.persona.correoPrimario : null}
+              value={director.correoPrimario}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correoPrimario}
@@ -353,8 +359,8 @@ export default function PlantelForm({ plantel }) {
           cancel={router.back}
           confirm={
             plantel
-              ? () => submitNewPlantel(errors, error, form, setNoti, session.id)
-              : () => submitEditPlantel(errors, error, form, setNoti, session.id)
+              ? () => submitEditPlantel(errors, error, form, setNoti, session.id)
+              : () => submitNewPlantel(errors, error, form, setNoti, session.id)
           }
         />
       </Grid>
@@ -376,7 +382,16 @@ PlantelForm.defaultProps = {
 
 PlantelForm.propTypes = {
   plantel: PropTypes.shape({
-    domicilio: PropTypes.objectOf(PropTypes.string),
+    domicilio: PropTypes.shape({
+      id: PropTypes.number,
+      calle: PropTypes.string,
+      numeroExterior: PropTypes.string,
+      numeroInterior: PropTypes.string,
+      colonia: PropTypes.string,
+      codigoPostal: PropTypes.number,
+      municipioId: PropTypes.number,
+      tipoInmuebleId: PropTypes.number,
+    }),
     institucionId: PropTypes.number,
     id: PropTypes.number,
     tipoInmuebleId: PropTypes.number,

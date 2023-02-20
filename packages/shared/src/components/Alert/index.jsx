@@ -27,10 +27,15 @@ export default function SnackAlert({
     </Snackbar>
   );
 }
+SnackAlert.defaultProps = {
+  open: false,
+  type: '',
+  mensaje: '',
+};
 
 SnackAlert.propTypes = {
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool,
+  type: PropTypes.string,
+  mensaje: PropTypes.string,
   close: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
-  mensaje: PropTypes.string.isRequired,
 };

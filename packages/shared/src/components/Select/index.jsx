@@ -13,6 +13,7 @@ export default function BasicSelect({
   value,
   name,
   onchange,
+  onblur,
   required,
   errorMessage,
 }) {
@@ -37,6 +38,7 @@ export default function BasicSelect({
           name={name}
           value={option}
           onChange={handleOnChange}
+          onBlur={onblur}
           error={!!errorMessage}
         >
           {options.map((opcion) => (
@@ -56,6 +58,7 @@ BasicSelect.defaultProps = {
   required: false,
   errorMessage: '',
   onchange: () => {},
+  onblur: () => {},
 };
 
 BasicSelect.propTypes = {
@@ -71,4 +74,5 @@ BasicSelect.propTypes = {
   required: PropTypes.bool,
   errorMessage: PropTypes.string,
   onchange: PropTypes.func,
+  onblur: PropTypes.func,
 };

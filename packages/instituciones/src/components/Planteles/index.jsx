@@ -124,12 +124,21 @@ export default function Planteles({ data, institucion }) {
 
 Planteles.propTypes = {
   institucion: PropTypes.number.isRequired,
-  data: PropTypes.arrayOf({
-    id: PropTypes.number,
-    nombre: PropTypes.string,
-    razonSocial: PropTypes.string,
-    historia: PropTypes.string,
-    vision: PropTypes.string,
-    mision: PropTypes.string,
-  }).isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      claveCentroTrabajo: PropTypes.string,
+      domicilio: PropTypes.shape({
+        id: PropTypes.number,
+        calle: PropTypes.string,
+        numeroExterior: PropTypes.string,
+        colonia: PropTypes.string,
+        codigoPostal: PropTypes.number,
+        municipio: PropTypes.shape({
+          id: PropTypes.number,
+          nombre: PropTypes.string,
+        }),
+      }),
+    }),
+  ).isRequired,
 };

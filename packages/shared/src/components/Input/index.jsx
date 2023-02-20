@@ -58,7 +58,10 @@ Input.propTypes = {
   onchange: PropTypes.func,
   onblur: PropTypes.func,
   required: PropTypes.bool,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   errorMessage: PropTypes.string,
   type: PropTypes.string,
   size: PropTypes.string,
