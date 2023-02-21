@@ -9,19 +9,31 @@ import Link from 'next/link';
 export default function ActionButtons({ consultar, editar, eliminar }) {
   return (
     <Stack direction="row" spacing={1}>
-      <Link href={consultar}>
-        <IconButton aria-label="consultar">
-          <DescriptionIcon />
+      {consultar ? (
+        <Link href={consultar}>
+          <IconButton aria-label="consultar">
+            <DescriptionIcon />
+          </IconButton>
+        </Link>
+      ) : (
+        <div />
+      )}
+      {editar ? (
+        <Link href={editar}>
+          <IconButton aria-label="editar">
+            <EditIcon />
+          </IconButton>
+        </Link>
+      ) : (
+        <div />
+      )}
+      {eliminar ? (
+        <IconButton aria-label="eliminar" onClick={eliminar}>
+          <DeleteIcon />
         </IconButton>
-      </Link>
-      <Link href={editar}>
-        <IconButton aria-label="editar">
-          <EditIcon />
-        </IconButton>
-      </Link>
-      <IconButton aria-label="eliminar" onClick={eliminar}>
-        <DeleteIcon />
-      </IconButton>
+      ) : (
+        <div />
+      )}
     </Stack>
   );
 }

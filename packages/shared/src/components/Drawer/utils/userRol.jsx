@@ -16,7 +16,7 @@ export default function userRol(session, setUsers) {
       {
         text: 'Mi institucion',
         icon: <BusinessIcon />,
-        route: '/institucion',
+        route: '/institucion/nuevaInstitucion',
         key: 'intitutions',
       },
       {

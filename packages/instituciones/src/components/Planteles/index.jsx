@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import {
-  ActionButtons, ButtonStyled, DataTable, DefaultModal,
+  ActionButtons,
+  ButtonStyled,
+  DataTable,
+  DefaultModal,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
+import deletePlantel from '../utils/deletePlantel';
 
 function ModalState() {
   const [modal, setModal] = useState(false);
@@ -39,16 +43,24 @@ const columns = [
     width: 150,
     renderCell: (params) => {
       const { modal, showModal, hideModal } = ModalState();
+      const router = useRouter();
       return (
         <>
-          <ActionButtons
-            id={params.id}
-            consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
-            editar={`/institucion/${params.row.institucion}/editarPlantel/${params.id}`}
-            eliminar={showModal}
-          />
+          {params.row.claveCentroTrabajo ? (
+            <ActionButtons
+              id={params.id}
+              consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
+            />
+          ) : (
+            <ActionButtons
+              id={params.id}
+              consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
+              editar={`/institucion/${params.row.institucion}/editarPlantel/${params.id}`}
+              eliminar={showModal}
+            />
+          )}
           <DefaultModal open={modal} setOpen={hideModal}>
-            <Typography>Desea eliminar este usuario?</Typography>
+            <Typography>Desea eliminar este plantel?</Typography>
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
                 <ButtonStyled
@@ -65,7 +77,7 @@ const columns = [
                   alt="Confirmar"
                   design="error"
                   onclick={() => {
-                    console.log(params.id);
+                    deletePlantel(params.row.institucion, params.id, router);
                   }}
                 >
                   Confirmar
@@ -82,6 +94,7 @@ const columns = [
 ];
 
 export default function Planteles({ data, institucion }) {
+  const router = useRouter();
   const rows = data.map((value) => ({
     institucion,
     id: value.id,
@@ -95,15 +108,14 @@ export default function Planteles({ data, institucion }) {
   return (
     <Grid container>
       <Grid item xs={9} sx={{ mt: '20px' }}>
-        <Link href="/institucion/nuevoPlantel">
-          <div>
-            <ButtonStyled
-              text="Nuevo Plantel"
-              alt="Agregar Plantel"
-              type="success"
-            />
-          </div>
-        </Link>
+        <ButtonStyled
+          text="Nuevo Plantel"
+          alt="Agregar Plantel"
+          type="success"
+          onclick={() => {
+            router.push(`/institucion/${institucion}/nuevoPlantel`);
+          }}
+        />
       </Grid>
       <DataTable rows={rows} columns={columns} title="Planteles" />
     </Grid>
@@ -112,12 +124,21 @@ export default function Planteles({ data, institucion }) {
 
 Planteles.propTypes = {
   institucion: PropTypes.number.isRequired,
-  data: PropTypes.arrayOf({
-    id: PropTypes.number,
-    nombre: PropTypes.string,
-    razonSocial: PropTypes.string,
-    historia: PropTypes.string,
-    vision: PropTypes.string,
-    mision: PropTypes.string,
-  }).isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      claveCentroTrabajo: PropTypes.string,
+      domicilio: PropTypes.shape({
+        id: PropTypes.number,
+        calle: PropTypes.string,
+        numeroExterior: PropTypes.string,
+        colonia: PropTypes.string,
+        codigoPostal: PropTypes.number,
+        municipio: PropTypes.shape({
+          id: PropTypes.number,
+          nombre: PropTypes.string,
+        }),
+      }),
+    }),
+  ).isRequired,
 };

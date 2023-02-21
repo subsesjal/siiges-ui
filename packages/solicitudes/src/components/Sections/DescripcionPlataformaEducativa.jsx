@@ -1,20 +1,21 @@
 import { Grid, TextField, Typography } from '@mui/material';
-import { Input, Select } from '@siiges-ui/shared';
+import { Input } from '@siiges-ui/shared';
+import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import React from 'react';
 
 export default function DescripcionPlataformaEducativa() {
   const options = [
     {
       id: 1,
-      name: 'Guadalajara',
+      nombre: 'Guadalajara',
     },
     {
       id: 2,
-      name: 'Zapopan',
+      nombre: 'Zapopan',
     },
     {
       id: 3,
-      name: 'Tlaquepaque',
+      nombre: 'Tlaquepaque',
     },
   ];
   return (
@@ -42,11 +43,9 @@ export default function DescripcionPlataformaEducativa() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Select
+          <BasicSelect
             title="Tipo de enlace de la plataforma educativa"
             options={options}
-            value=""
-            onChange={() => {}}
           />
         </Grid>
         <Grid item xs={6}>

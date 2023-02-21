@@ -1,20 +1,21 @@
 import { Grid, TextField, Typography } from '@mui/material';
-import { Input, Select } from '@siiges-ui/shared';
+import { Input } from '@siiges-ui/shared';
+import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import React from 'react';
 
 export default function UbicacionPlantel() {
   const options = [
     {
       id: 1,
-      name: 'Guadalajara',
+      nombre: 'Guadalajara',
     },
     {
       id: 2,
-      name: 'Zapopan',
+      nombre: 'Zapopan',
     },
     {
       id: 3,
-      name: 'Tlaquepaque',
+      nombre: 'Tlaquepaque',
     },
   ];
   return (
@@ -60,12 +61,7 @@ export default function UbicacionPlantel() {
           <Input id="CP" label="Codigo Postal" name="CP" auto="CP" />
         </Grid>
         <Grid item xs={9}>
-          <Select
-            title="Municipio"
-            options={options}
-            value="city"
-            onChange="city"
-          />
+          <BasicSelect title="Municipio" options={options} />
         </Grid>
         <Grid item xs={9}>
           <Input

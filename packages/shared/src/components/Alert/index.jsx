@@ -5,6 +5,10 @@ import PropTypes from 'prop-types';
 export default function SnackAlert({
   open, close, type, mensaje,
 }) {
+  let AlertType = 'info';
+  if (type !== '') {
+    AlertType = type;
+  }
   return (
     <Snackbar
       open={open}
@@ -12,16 +16,26 @@ export default function SnackAlert({
       onClose={close}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
     >
-      <Alert variant="filled" onClose={close} severity={type} sx={{ width: '100%' }}>
+      <Alert
+        variant="filled"
+        onClose={close}
+        severity={AlertType}
+        sx={{ width: '100%' }}
+      >
         {mensaje}
       </Alert>
     </Snackbar>
   );
 }
+SnackAlert.defaultProps = {
+  open: false,
+  type: '',
+  mensaje: '',
+};
 
 SnackAlert.propTypes = {
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool,
+  type: PropTypes.string,
+  mensaje: PropTypes.string,
   close: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
-  mensaje: PropTypes.string.isRequired,
 };
