@@ -77,6 +77,18 @@ export default function ButtonSection({
         </Grid>
       </Grid>
     ),
+    only: (
+      <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
+        <Grid item xs={12}>
+          <ButtonStyled
+            text="Terminar"
+            alt="Terminar solicitud"
+            type="success"
+            onclick={nextModule}
+          />
+        </Grid>
+      </Grid>
+    ),
   };
   return button[position];
 }
