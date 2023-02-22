@@ -53,7 +53,7 @@ export default function ModuleHeader({
 
 ModuleHeader.propTypes = {
   type: PropTypes.string.isRequired,
-  steps: PropTypes.string.isRequired,
+  steps: PropTypes.arrayOf(PropTypes.string).isRequired,
   date: PropTypes.string.isRequired,
   nextModule: PropTypes.func.isRequired,
   module: PropTypes.number.isRequired,

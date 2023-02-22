@@ -5,7 +5,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Grid } from '@mui/material';
 
-export default function ButtonSection({ position, next, prev }) {
+export default function ButtonSection({
+  position, next, prev, nextModule,
+}) {
   const button = {
     first: (
       <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
@@ -14,6 +16,7 @@ export default function ButtonSection({ position, next, prev }) {
             text="Terminar"
             alt="Terminar solicitud"
             type="success"
+            onclick={nextModule}
           />
         </Grid>
         <Grid item xs={3}>
@@ -41,6 +44,7 @@ export default function ButtonSection({ position, next, prev }) {
             text="Terminar"
             alt="Terminar solicitud"
             type="success"
+            onclick={nextModule}
           />
         </Grid>
         <Grid item xs={2}>
@@ -68,6 +72,7 @@ export default function ButtonSection({ position, next, prev }) {
             text="Terminar"
             alt="Terminar solicitud"
             type="success"
+            onclick={nextModule}
           />
         </Grid>
       </Grid>
@@ -79,5 +84,5 @@ export default function ButtonSection({ position, next, prev }) {
 ButtonSection.propTypes = {
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
-  position: PropTypes.number.isRequired,
+  position: PropTypes.string.isRequired,
 };

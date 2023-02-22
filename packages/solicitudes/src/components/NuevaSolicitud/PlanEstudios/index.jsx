@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
@@ -13,14 +14,13 @@ import AsignaturasFormacionElectiva from '../../Sections/AsignaturasFormacionEle
 import Docentes from '../../Sections/Docentes';
 import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 
-export default function PlanEstudios() {
+export default function PlanEstudios({ nextModule }) {
   const {
-    next,
-    prev,
-    section,
-    position,
-    porcentaje,
-  } = pagination(useState, 10);
+    next, prev, section, position, porcentaje,
+  } = pagination(
+    useState,
+    10,
+  );
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
@@ -30,6 +30,7 @@ export default function PlanEstudios() {
           position={position}
           total="10"
           porcentage={porcentaje}
+          nextModule={nextModule}
           next={next}
           prev={prev}
         >
@@ -48,3 +49,7 @@ export default function PlanEstudios() {
     </Card>
   );
 }
+
+PlanEstudios.propTypes = {
+  nextModule: PropTypes.func.isRequired,
+};
