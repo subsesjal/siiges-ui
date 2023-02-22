@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  ButtonsForm, Context, Input, SnackAlert,
+  ButtonsForm, Input, SnackAlert,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
@@ -13,7 +13,6 @@ import formPlantel from '../utils/formPlantel';
 import submitEditPlantel from '../utils/submitEditPlantel';
 
 export default function PlantelForm({ plantel }) {
-  const { session } = useContext(Context);
   const router = useRouter();
   const [form, setForm] = useState({
     domicilio: { estadoId: 14 },
@@ -359,8 +358,8 @@ export default function PlantelForm({ plantel }) {
           cancel={router.back}
           confirm={
             plantel
-              ? () => submitEditPlantel(errors, error, form, setNoti, session.id)
-              : () => submitNewPlantel(errors, error, form, setNoti, session.id)
+              ? () => submitEditPlantel(errors, error, form, setNoti)
+              : () => submitNewPlantel(errors, error, form, setNoti)
           }
         />
       </Grid>
