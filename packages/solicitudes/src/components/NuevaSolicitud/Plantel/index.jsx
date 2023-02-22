@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
@@ -10,13 +11,9 @@ import InstitucionesAledanas from '../../Sections/InstitucionesAledanas';
 import Infraestructura from '../../Sections/Infraestructura';
 import RatificacionNombre from '../../Sections/RatificacionNombre';
 
-export default function Plantel() {
+export default function Plantel({ nextModule }) {
   const {
-    next,
-    prev,
-    section,
-    position,
-    porcentaje,
+    next, prev, section, position, porcentaje,
   } = pagination(useState, 7);
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
@@ -27,6 +24,7 @@ export default function Plantel() {
           position={position}
           total="7"
           porcentage={porcentaje}
+          nextModule={nextModule}
           next={next}
           prev={prev}
         >
@@ -42,3 +40,7 @@ export default function Plantel() {
     </Card>
   );
 }
+
+Plantel.propTypes = {
+  nextModule: PropTypes.func.isRequired,
+};

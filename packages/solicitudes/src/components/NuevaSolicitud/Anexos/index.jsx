@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import RatificacionNombre from '../../Sections/AnexosSeccion';
 
-export default function Anexos() {
+export default function Anexos({ nextModule }) {
   const {
     next,
     prev,
@@ -21,6 +22,7 @@ export default function Anexos() {
           position={position}
           total="1"
           porcentage={porcentaje}
+          nextModule={nextModule}
           next={next}
           prev={prev}
         >
@@ -30,3 +32,7 @@ export default function Anexos() {
     </Card>
   );
 }
+
+Anexos.propTypes = {
+  nextModule: PropTypes.func.isRequired,
+};
