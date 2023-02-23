@@ -5,11 +5,11 @@ export default function submitNewPlantel(
   error,
   form,
   setNoti,
-  institucionId,
 ) {
   if (
     Object.values(plantelErrors).every((validation) => validation()) !== false
   ) {
+    const { institucionId } = router.query;
     if (Object.values(error).every((value) => value === null || value === '')) {
       fetch(
         `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`,

@@ -5,12 +5,11 @@ export default function submitEditPlantel(
   error,
   form,
   setNoti,
-  institucionId,
-  plantelId,
 ) {
   if (
     Object.values(plantelErrors).every((validation) => validation()) !== false
   ) {
+    const { institucionId, plantelId } = router.query;
     if (Object.values(error).every((x) => x === null || x === '')) {
       fetch(
         `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles/${plantelId}`,
