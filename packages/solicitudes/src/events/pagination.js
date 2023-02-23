@@ -2,7 +2,11 @@ export default function pagination(useState, sections) {
   const step = 100 / sections;
   const lastSection = sections - 1;
   const firstSection = 2;
-  const [position, setPosition] = useState('first');
+  let startPosition = 'first';
+  if (sections === 1) {
+    startPosition = 'only';
+  }
+  const [position, setPosition] = useState(startPosition);
   const [porcentaje, setPorcentaje] = useState(step);
   const [section, setSection] = useState(1);
 
@@ -26,11 +30,11 @@ export default function pagination(useState, sections) {
     }
   };
 
-  return ({
+  return {
     next,
     prev,
     position,
     porcentaje,
     section,
-  });
+  };
 }

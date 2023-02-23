@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import InstitucionData from '../../Sections/InstitucionData';
 import RepresentanteLegalData from '../../Sections/RepresentanteLegalData';
@@ -6,7 +7,7 @@ import DiligenciasData from '../../Sections/DiligenciasData';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 
-export default function DatosGenerales() {
+export default function DatosGenerales({ nextModule }) {
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 3);
@@ -19,6 +20,7 @@ export default function DatosGenerales() {
           position={position}
           total="3"
           porcentage={porcentaje}
+          nextModule={nextModule}
           next={next}
           prev={prev}
         >
@@ -30,3 +32,7 @@ export default function DatosGenerales() {
     </Card>
   );
 }
+
+DatosGenerales.propTypes = {
+  nextModule: PropTypes.func.isRequired,
+};

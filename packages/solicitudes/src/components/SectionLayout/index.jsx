@@ -13,6 +13,7 @@ export default function SectionLayout({
   sectionTitle,
   next,
   prev,
+  nextModule,
 }) {
   return (
     <>
@@ -57,12 +58,12 @@ export default function SectionLayout({
           </Box>
         </Grid>
         <Grid item xs={4}>
-          <ButtonSection position={position} next={next} prev={prev} />
+          <ButtonSection position={position} next={next} prev={prev} nextModule={nextModule} />
         </Grid>
         {children}
         <Grid item xs={8} />
-        <Grid item xs={4} direction="row-reverse">
-          <ButtonSection position={position} next={next} prev={prev} />
+        <Grid item xs={4}>
+          <ButtonSection position={position} next={next} prev={prev} nextModule={nextModule} />
         </Grid>
       </Grid>
     </>
@@ -73,9 +74,10 @@ SectionLayout.propTypes = {
   sections: PropTypes.number.isRequired,
   sectionTitle: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  position: PropTypes.number.isRequired,
-  total: PropTypes.number.isRequired,
+  position: PropTypes.string.isRequired,
+  total: PropTypes.string.isRequired,
   porcentage: PropTypes.number.isRequired,
+  nextModule: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
 };

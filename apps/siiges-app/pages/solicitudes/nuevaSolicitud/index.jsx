@@ -47,11 +47,11 @@ function newRequest() {
           nextModule={nextModule}
           module={module}
         />
-        {module === 0 && <PlanEstudios />}
-        {module === 1 && <DatosGenerales />}
-        {module === 2 && <Plantel />}
-        {module === 3 && <Anexos />}
-        {module === 4 && <EvaluacionCurricular />}
+        {module === 0 && <PlanEstudios nextModule={nextModule} />}
+        {module === 1 && <DatosGenerales nextModule={nextModule} />}
+        {module === 2 && <Plantel nextModule={nextModule} />}
+        {module === 3 && <Anexos nextModule={nextModule} />}
+        {module === 4 && <EvaluacionCurricular nextModule={nextModule} />}
       </Layout>
     );
   }
@@ -64,12 +64,12 @@ function newRequest() {
         nextModule={nextModule}
         module={module}
       />
-      {module === 0 && <PlanEstudios />}
-      {module === 1 && <DatosGenerales />}
-      {module === 2 && <Plantel />}
-      {module === 3 && <PlataformaEducativa />}
-      {module === 4 && <Anexos />}
-      {module === 5 && <EvaluacionCurricular />}
+      {module === 0 && <PlanEstudios nextModule={nextModule} />}
+      {module === 1 && <DatosGenerales nextModule={nextModule} />}
+      {module === 2 && <Plantel nextModule={nextModule} />}
+      {module === 3 && <PlataformaEducativa nextModule={nextModule} />}
+      {module === 4 && <Anexos nextModule={nextModule} />}
+      {module === 5 && <EvaluacionCurricular nextModule={nextModule} />}
     </Layout>
   );
 }

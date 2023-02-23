@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
@@ -8,7 +9,7 @@ import RolesUsuarios from '../../Sections/RolesUsuarios';
 import SeguridadPlataformaEducativa from '../../Sections/SeguridadPlataformaEducativa';
 import LicenciasPlataformaEducativa from '../../Sections/LicenciasPlataformaEducativa';
 
-export default function PlataformaEducativa() {
+export default function PlataformaEducativa({ nextModule }) {
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 5);
@@ -21,6 +22,7 @@ export default function PlataformaEducativa() {
           position={position}
           total="5"
           porcentage={porcentaje}
+          nextModule={nextModule}
           next={next}
           prev={prev}
         >
@@ -34,3 +36,7 @@ export default function PlataformaEducativa() {
     </Card>
   );
 }
+
+PlataformaEducativa.propTypes = {
+  nextModule: PropTypes.func.isRequired,
+};

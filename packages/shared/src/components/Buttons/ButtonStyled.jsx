@@ -26,7 +26,7 @@ ButtonStyled.defaultProps = {
 
 ButtonStyled.propTypes = {
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  alt: PropTypes.string.isRequired,
+  alt: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   type: PropTypes.string,
   design: PropTypes.string,
   onclick: PropTypes.func,

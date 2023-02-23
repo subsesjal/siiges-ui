@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import DatosGeneralesEvaluacion from '../../Sections/DatosGeneralesEvaluacion';
 
-export default function EvaluacionCurricular() {
+export default function EvaluacionCurricular({ nextModule }) {
   const {
     next,
     prev,
@@ -21,6 +22,7 @@ export default function EvaluacionCurricular() {
           position={position}
           total="1"
           porcentage={porcentaje}
+          nextModule={nextModule}
           next={next}
           prev={prev}
         >
@@ -30,3 +32,6 @@ export default function EvaluacionCurricular() {
     </Card>
   );
 }
+EvaluacionCurricular.propTypes = {
+  nextModule: PropTypes.func.isRequired,
+};
