@@ -35,6 +35,7 @@ export default function BasicSelect({
         <Select
           labelId="select-label"
           id={value}
+          label={title}
           name={name}
           value={option}
           onChange={handleOnChange}
