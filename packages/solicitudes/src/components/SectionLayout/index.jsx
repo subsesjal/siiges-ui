@@ -3,6 +3,8 @@ import { LoadCircle, Title } from '@siiges-ui/shared';
 import { Box, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import ButtonSection from './ButtonSection';
+import submitNewSolicitud from '../utils/submitNewSolicitud';
+import submitEditSolicitud from '../utils/submitEditSolicitud';
 
 export default function SectionLayout({
   children,
@@ -15,6 +17,26 @@ export default function SectionLayout({
   prev,
   nextModule,
 }) {
+  const pito = {
+    solicitudErrors: '',
+    error: '',
+    form: '',
+    setNoti: '',
+  };
+  let fetch = () => submitNewSolicitud(
+    pito.solicitudErrors,
+    pito.error,
+    pito.form,
+    pito.setNoti,
+  );
+  if (position !== 'first') {
+    fetch = () => submitEditSolicitud(
+      pito.solicitudErrors,
+      pito.error,
+      pito.form,
+      pito.setNoti,
+    );
+  }
   return (
     <>
       <Title title={sectionTitle} />
@@ -58,12 +80,24 @@ export default function SectionLayout({
           </Box>
         </Grid>
         <Grid item xs={4}>
-          <ButtonSection position={position} next={next} prev={prev} nextModule={nextModule} />
+          <ButtonSection
+            position={position}
+            next={next}
+            prev={prev}
+            nextModule={nextModule}
+            action={fetch()}
+          />
         </Grid>
         {children}
         <Grid item xs={8} />
         <Grid item xs={4}>
-          <ButtonSection position={position} next={next} prev={prev} nextModule={nextModule} />
+          <ButtonSection
+            position={position}
+            next={next}
+            prev={prev}
+            nextModule={nextModule}
+            action={fetch()}
+          />
         </Grid>
       </Grid>
     </>
