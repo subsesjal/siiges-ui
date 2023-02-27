@@ -85,7 +85,9 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            action={fetch()}
+            action={() => {
+              fetch();
+            }}
           />
         </Grid>
         {children}
@@ -96,7 +98,9 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            action={fetch()}
+            action={() => {
+              fetch();
+            }}
           />
         </Grid>
       </Grid>

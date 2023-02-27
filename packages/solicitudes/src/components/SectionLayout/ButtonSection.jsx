@@ -6,7 +6,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Grid } from '@mui/material';
 
 export default function ButtonSection({
-  position, next, prev, nextModule,
+  position, next, prev, nextModule, action,
 }) {
   const button = {
     first: (
