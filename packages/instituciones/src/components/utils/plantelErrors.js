@@ -21,53 +21,53 @@ export default function plantelErrors(form, setError, error, plantel) {
     correoPrimario: false,
   };
 
-  if (plantel !== null) {
-    if (plantel.domicilio.calle !== undefined) {
+  if (plantel !== undefined) {
+    if (plantel.domicilio.calle !== '') {
       editar.calle = true;
     }
-    if (plantel.domicilio.numeroExterior !== undefined) {
+    if (plantel.domicilio.numeroExterior !== '') {
       editar.numeroExterior = true;
     }
-    if (plantel.domicilio.colonia !== undefined) {
+    if (plantel.domicilio.colonia !== '') {
       editar.colonia = true;
     }
-    if (plantel.domicilio.codigoPostal !== undefined) {
+    if (plantel.domicilio.codigoPostal !== '') {
       editar.codigoPostal = true;
     }
-    if (plantel.domicilio.municipioId !== undefined) {
+    if (plantel.domicilio.municipioId !== '') {
       editar.municipioId = true;
     }
-    if (plantel.correo1 !== undefined) {
+    if (plantel.correo1 !== '') {
       editar.correo1 = true;
     }
-    if (plantel.correo2 !== undefined) {
+    if (plantel.correo2 !== '') {
       editar.correo2 = true;
     }
-    if (plantel.telefono1 !== undefined) {
+    if (plantel.telefono1 !== '') {
       editar.telefono1 = true;
     }
-    if (plantel.telefono2 !== undefined) {
+    if (plantel.telefono2 !== '') {
       editar.telefono2 = true;
     }
-    if (plantel.directores[0].nombre !== undefined) {
+    if (plantel.directores[0]?.nombre !== '') {
       editar.nombre = true;
     }
-    if (plantel.directores[0].apellidoPaterno !== undefined) {
+    if (plantel.directores[0]?.apellidoPaterno !== '') {
       editar.apellidoPaterno = true;
     }
-    if (plantel.directores[0].apellidoMaterno !== undefined) {
+    if (plantel.directores[0]?.apellidoMaterno !== '') {
       editar.apellidoMaterno = true;
     }
-    if (plantel.directores[0].nacionalidad !== undefined) {
+    if (plantel.directores[0]?.nacionalidad !== '') {
       editar.nacionalidad = true;
     }
-    if (plantel.directores[0].curp !== undefined) {
+    if (plantel.directores[0]?.curp !== '') {
       editar.curp = true;
     }
-    if (plantel.directores[0].genero !== undefined) {
+    if (plantel.directores[0]?.genero !== '') {
       editar.genero = true;
     }
-    if (plantel.directores[0].correoPrimario !== undefined) {
+    if (plantel.directores[0]?.correoPrimario !== '') {
       editar.correoPrimario = true;
     }
   }
@@ -87,8 +87,8 @@ export default function plantelErrors(form, setError, error, plantel) {
     numeroExterior: () => {
       if (
         (editar.numeroExterior === false
-          && form.domicilio.numeroExterior === '')
-        || form.domicilio.numeroExterior === undefined
+          && form.domicilio.numeroExterior === undefined)
+        || form.domicilio.numeroExterior === ''
       ) {
         setError({ ...error, numeroExterior: 'Numero exterior invalido' });
         return false;
@@ -99,7 +99,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     colonia: () => {
       if (
         (editar.colonia === false && form.domicilio.colonia === '')
-        || form.domicilio.colonia === undefined
+        || form.domicilio.colonia === ''
       ) {
         setError({ ...error, colonia: 'Colonia invalida' });
         return false;
@@ -109,21 +109,17 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     codigoPostal: () => {
       if (
-        editar.codigoPostal === false
-        && form.domicilio.codigoPostal !== undefined
-        && form.domicilio.codigoPostal.match(validNumber)
+        (editar.codigoPostal === false && form.domicilio.codigoPostal !== undefined)
+        || !form.domicilio.codigoPostal.match(validNumber)
       ) {
-        setError({ ...error, codigoPostal: '' });
-        return true;
+        setError({ ...error, codigoPostal: 'Codigo postal invalido' });
+        return false;
       }
-      setError({ ...error, codigoPostal: 'Codigo postal invalido' });
-      return false;
+      setError({ ...error, codigoPostal: '' });
+      return true;
     },
     municipioId: () => {
-      if (
-        editar.municipioId === false
-        && form.domicilio.municipioId === undefined
-      ) {
+      if (editar.municipioId === false && form.domicilio.municipioId === '') {
         setError({ ...error, municipioId: 'Seleccione un municipio' });
         return false;
       }
@@ -131,10 +127,7 @@ export default function plantelErrors(form, setError, error, plantel) {
       return true;
     },
     tipoInmuebleId: () => {
-      if (
-        editar.tipoInmuebleId === false
-        && form.tipoInmuebleId === undefined
-      ) {
+      if (editar.tipoInmuebleId === false && form.tipoInmuebleId === '') {
         setError({
           ...error,
           tipoInmuebleId: 'Seleccione un tipo de inmueble',
@@ -146,103 +139,99 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     correo1: () => {
       if (
-        editar.correo1 === false
-        && form.correo1 !== undefined
-        && form.correo1.match(validEmail)
+        (editar.correo1 === false && form.correo1 === '')
+        || form.correo1.match(validEmail)
       ) {
-        setError({ ...error, correo1: '' });
-        return true;
+        setError({ ...error, correo1: 'Correo institucional invalido' });
+        return false;
       }
-      setError({ ...error, correo1: 'Correo institucional invalido' });
-      return false;
+      setError({ ...error, correo1: '' });
+      return true;
     },
     correo2: () => {
       if (
-        editar.correo2 === false
-        && form.correo2 !== undefined
-        && form.correo2.match(validEmail)
+        (editar.correo2 === false && form.correo2 === '')
+        || form.correo2.match(validEmail)
       ) {
-        setError({ ...error, correo2: '' });
-        return true;
+        setError({ ...error, correo2: 'Correo de contacto invalido' });
+        return false;
       }
-      setError({ ...error, correo2: 'Correo de contacto invalido' });
-      return false;
+      setError({ ...error, correo2: '' });
+      return true;
     },
     telefono1: () => {
       if (
-        editar.telefono1 === false
-        && form.telefono1 !== undefined
-        && form.telefono1.match(validNumber)
+        (editar.telefono1 === false && form.telefono1 === '')
+        || form.telefono1.match(validNumber)
       ) {
-        setError({ ...error, telefono1: '' });
-        return true;
+        setError({ ...error, telefono1: 'telefono 1 invalido' });
+        return false;
       }
-      setError({ ...error, telefono1: 'telefono 1 invalido' });
-      return false;
+      setError({ ...error, telefono1: '' });
+      return true;
     },
     telefono2: () => {
       if (
-        editar.telefono2 === false
-        && form.telefono2 !== undefined
-        && form.telefono2.match(validNumber)
+        (editar.telefono2 === false && form.telefono2 === '')
+        || form.telefono2.match(validNumber)
       ) {
-        setError({ ...error, telefono2: '' });
-        return true;
+        setError({ ...error, telefono2: 'telefono 2 invalido' });
+        return false;
       }
-      setError({ ...error, telefono2: 'telefono 2 invalido' });
-      return false;
+      setError({ ...error, telefono2: '' });
+      return true;
     },
     nombre: () => {
       if (
         (editar.nombre === false && form.director.persona.nombre === '')
-        || form.director.persona.nombre === undefined
+        || form.director.persona.nombre === ''
       ) {
-        setError({ ...error, nombre: 'Nombre invalido' });
-        return false;
+        setError({ ...error, nombre: '' });
+        return true;
       }
-      setError({ ...error, nombre: '' });
-      return true;
+      setError({ ...error, nombre: 'Nombre invalido' });
+      return false;
     },
     apellidoPaterno: () => {
       if (
         (editar.apellidoPaterno === false
           && form.director.persona.apellidoPaterno === '')
-        || form.director.persona.apellidoPaterno === undefined
+        || form.director.persona.apellidoPaterno === ''
       ) {
-        setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
-        return false;
+        setError({ ...error, apellidoPaterno: '' });
+        return true;
       }
-      setError({ ...error, apellidoPaterno: '' });
-      return true;
+      setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
+      return false;
     },
     apellidoMaterno: () => {
       if (
         (editar.apellidoMaterno === false
           && form.director.persona.apellidoMaterno === '')
-        || form.director.persona.apellidoMaterno === undefined
+        || form.director.persona.apellidoMaterno === ''
       ) {
-        setError({ ...error, apellidoMaterno: 'Apellido Materno invalido' });
-        return false;
+        setError({ ...error, apellidoMaterno: '' });
+        return true;
       }
-      setError({ ...error, apellidoMaterno: '' });
-      return true;
+      setError({ ...error, apellidoMaterno: 'Apellido Materno invalido' });
+      return false;
     },
     nacionalidad: () => {
       if (
         (editar.nacionalidad === false
           && form.director.persona.nacionalidad === '')
-        || form.director.persona.nacionalidad === undefined
+        || form.director.persona.nacionalidad === ''
       ) {
-        setError({ ...error, nacionalidad: 'Nacionalidad invalida' });
-        return false;
+        setError({ ...error, nacionalidad: '' });
+        return true;
       }
-      setError({ ...error, nacionalidad: '' });
-      return true;
+      setError({ ...error, nacionalidad: 'Nacionalidad invalida' });
+      return false;
     },
     curp: () => {
       if (
         editar.curp === false
-        && form.director.persona.curp !== undefined
+        && form.director.persona.curp !== ''
         && form.director.persona.curp.length === 18
       ) {
         setError({ ...error, curp: '' });
@@ -254,7 +243,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     sexo: () => {
       if (
         (editar.sexo === false && form.director.persona.sexo === '')
-        || form.director.persona.sexo === undefined
+        || form.director.persona.sexo === ''
       ) {
         setError({ ...error, sexo: 'Genero invalido' });
         return false;
@@ -264,15 +253,15 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     correoPrimario: () => {
       if (
-        editar.correoPrimario === false
-        && form.director.persona.correoPrimario !== undefined
-        && form.director.persona.correoPrimario.match(validEmail)
+        (editar.correoPrimario === false
+          && form.director.persona.correoPrimario !== '')
+        || form.director.persona.correoPrimario.match(validEmail)
       ) {
-        setError({ ...error, correoPrimario: '' });
-        return true;
+        setError({ ...error, correoPrimario: 'Correo invalido' });
+        return false;
       }
-      setError({ ...error, correoPrimario: 'Correo invalido' });
-      return false;
+      setError({ ...error, correoPrimario: '' });
+      return true;
     },
   };
 

@@ -24,7 +24,7 @@ export default function EditPlantelForm({ plantel }) {
     errors[name]();
   };
 
-  const director = plantel.directores[0];
+  const director = plantel.directores[0]?.persona;
 
   return (
     <>
@@ -245,7 +245,7 @@ export default function EditPlantelForm({ plantel }) {
               required
               onchange={handleOnChange}
               onblur={handleOnBlur}
-              value={director.persona.nombre}
+              value={director?.nombre}
               errorMessage={error.nombre}
               class="data"
             />
@@ -257,7 +257,7 @@ export default function EditPlantelForm({ plantel }) {
               name="directorLastName1"
               auto="directorLastName1"
               required
-              value={director.persona.apellidoPaterno}
+              value={director?.apellidoPaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -271,7 +271,7 @@ export default function EditPlantelForm({ plantel }) {
               name="directorLastName2"
               auto="directorLastName2"
               required
-              value={director.persona.apellidoMaterno}
+              value={director?.apellidoMaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -285,7 +285,7 @@ export default function EditPlantelForm({ plantel }) {
               name="nacionalidad"
               auto="nacionalidad"
               required
-              value={director.persona.nacionalidad}
+              value={director?.nacionalidad}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -299,7 +299,7 @@ export default function EditPlantelForm({ plantel }) {
               name="curp"
               auto="curp"
               onchange={handleOnChange}
-              value={director.persona.curp}
+              value={director?.curp}
               class="data"
             />
           </Grid>
@@ -310,7 +310,7 @@ export default function EditPlantelForm({ plantel }) {
               name="genero"
               auto="genero"
               required
-              value={director.persona.sexo}
+              value={director?.sexo}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
@@ -324,7 +324,7 @@ export default function EditPlantelForm({ plantel }) {
               name="email"
               auto="email"
               required
-              value={director.persona.correoPrimario}
+              value={director?.correoPrimario}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
