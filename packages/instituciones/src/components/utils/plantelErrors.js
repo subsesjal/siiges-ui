@@ -109,10 +109,15 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     codigoPostal: () => {
       if (
-        (editar.codigoPostal === false && form.domicilio.codigoPostal !== undefined)
-        || !form.domicilio.codigoPostal.match(validNumber)
+        (editar.codigoPostal === false
+          && form.domicilio.codigoPostal !== undefined)
+        || (form.domicilio.codigoPostal !== undefined
+          && !form.domicilio.codigoPostal.match(validNumber))
       ) {
-        setError({ ...error, codigoPostal: 'Codigo postal invalido' });
+        setError({
+          ...error,
+          codigoPostal: 'Codigo postal invalido',
+        });
         return false;
       }
       setError({ ...error, codigoPostal: '' });
@@ -140,7 +145,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     correo1: () => {
       if (
         (editar.correo1 === false && form.correo1 === '')
-        || form.correo1.match(validEmail)
+        || (form.correo1 !== undefined && !form.correo1.match(validEmail))
       ) {
         setError({ ...error, correo1: 'Correo institucional invalido' });
         return false;
@@ -151,7 +156,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     correo2: () => {
       if (
         (editar.correo2 === false && form.correo2 === '')
-        || form.correo2.match(validEmail)
+        || (form.correo2 !== undefined && !form.correo2.match(validEmail))
       ) {
         setError({ ...error, correo2: 'Correo de contacto invalido' });
         return false;
@@ -162,7 +167,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     telefono1: () => {
       if (
         (editar.telefono1 === false && form.telefono1 === '')
-        || form.telefono1.match(validNumber)
+        || (form.telefono1 !== undefined && !form.telefono1.match(validEmail))
       ) {
         setError({ ...error, telefono1: 'telefono 1 invalido' });
         return false;
@@ -173,7 +178,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     telefono2: () => {
       if (
         (editar.telefono2 === false && form.telefono2 === '')
-        || form.telefono2.match(validNumber)
+        || (form.telefono2 !== undefined && !form.telefono2.match(validEmail))
       ) {
         setError({ ...error, telefono2: 'telefono 2 invalido' });
         return false;
@@ -186,11 +191,11 @@ export default function plantelErrors(form, setError, error, plantel) {
         (editar.nombre === false && form.director.persona.nombre === '')
         || form.director.persona.nombre === ''
       ) {
-        setError({ ...error, nombre: '' });
-        return true;
+        setError({ ...error, nombre: 'Nombre invalido' });
+        return false;
       }
-      setError({ ...error, nombre: 'Nombre invalido' });
-      return false;
+      setError({ ...error, nombre: '' });
+      return true;
     },
     apellidoPaterno: () => {
       if (
@@ -198,11 +203,11 @@ export default function plantelErrors(form, setError, error, plantel) {
           && form.director.persona.apellidoPaterno === '')
         || form.director.persona.apellidoPaterno === ''
       ) {
-        setError({ ...error, apellidoPaterno: '' });
-        return true;
+        setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
+        return false;
       }
-      setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
-      return false;
+      setError({ ...error, apellidoPaterno: '' });
+      return true;
     },
     apellidoMaterno: () => {
       if (
@@ -210,11 +215,11 @@ export default function plantelErrors(form, setError, error, plantel) {
           && form.director.persona.apellidoMaterno === '')
         || form.director.persona.apellidoMaterno === ''
       ) {
-        setError({ ...error, apellidoMaterno: '' });
-        return true;
+        setError({ ...error, apellidoMaterno: 'Apellido Materno invalido' });
+        return false;
       }
-      setError({ ...error, apellidoMaterno: 'Apellido Materno invalido' });
-      return false;
+      setError({ ...error, apellidoMaterno: '' });
+      return true;
     },
     nacionalidad: () => {
       if (
@@ -222,11 +227,11 @@ export default function plantelErrors(form, setError, error, plantel) {
           && form.director.persona.nacionalidad === '')
         || form.director.persona.nacionalidad === ''
       ) {
-        setError({ ...error, nacionalidad: '' });
-        return true;
+        setError({ ...error, nacionalidad: 'Nacionalidad invalida' });
+        return false;
       }
-      setError({ ...error, nacionalidad: 'Nacionalidad invalida' });
-      return false;
+      setError({ ...error, nacionalidad: '' });
+      return true;
     },
     curp: () => {
       if (
@@ -234,11 +239,11 @@ export default function plantelErrors(form, setError, error, plantel) {
         && form.director.persona.curp !== ''
         && form.director.persona.curp.length === 18
       ) {
-        setError({ ...error, curp: '' });
-        return true;
+        setError({ ...error, curp: 'Curp debe tener 18 caracteres' });
+        return false;
       }
-      setError({ ...error, curp: 'Curp debe tener 18 caracteres' });
-      return false;
+      setError({ ...error, curp: '' });
+      return true;
     },
     sexo: () => {
       if (
@@ -255,7 +260,8 @@ export default function plantelErrors(form, setError, error, plantel) {
       if (
         (editar.correoPrimario === false
           && form.director.persona.correoPrimario !== '')
-        || form.director.persona.correoPrimario.match(validEmail)
+        || (form.director.persona.correoPrimario !== undefined
+          && !form.director.persona.correoPrimario.match(validEmail))
       ) {
         setError({ ...error, correoPrimario: 'Correo invalido' });
         return false;
