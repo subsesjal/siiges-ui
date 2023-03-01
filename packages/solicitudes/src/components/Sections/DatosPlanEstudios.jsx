@@ -15,6 +15,13 @@ export default function DatosPlanEstudios() {
     { id: 8, nombre: 'Educación Continua' },
   ];
 
+  const turno = [
+    { id: 1, nombre: 'Matutino' },
+    { id: 2, nombre: 'Vespertino' },
+    { id: 3, nombre: 'Nocturno' },
+    { id: 4, nombre: 'Mixto' },
+  ];
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -44,7 +51,7 @@ export default function DatosPlanEstudios() {
           <Input id="periodo" label="Periodo" name="periodo" auto="periodo" />
         </Grid>
         <Grid item xs={3}>
-          <Input id="turno" label="Turno" name="turno" auto="turno" />
+          <BasicSelect title="Turno" name="turno" options={turno} multiple required />
         </Grid>
         <Grid item xs={6}>
           <Input
