@@ -32,7 +32,7 @@ export default function ButtonSection({
             onclick={() => {
               next();
               setFetch(true);
-              submit();
+              console.log(submit);
             }}
           />
         </Grid>
@@ -64,7 +64,6 @@ export default function ButtonSection({
             onclick={() => {
               next();
               setFetch(true);
-              submit();
             }}
           />
         </Grid>

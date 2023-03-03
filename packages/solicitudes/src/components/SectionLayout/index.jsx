@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LoadCircle, Title } from '@siiges-ui/shared';
 import { Box, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -26,13 +26,27 @@ export default function SectionLayout({
     setNoti: '',
   };
 
-  let submit;
+  const [submit, setSubmit] = useState(
+    submitEditSolicitud(
+      values.solicitudErrors,
+      values.error,
+      values.form,
+      values.setNoti,
+    ),
+  );
 
-  if (fetch !== true) {
-    submit = submitNewSolicitud(values.solicitudErrors, values.error, values.form, values.setNoti);
-  } else {
-    submit = submitEditSolicitud(values.solicitudErrors, values.error, values.form, values.setNoti);
-  }
+  useEffect(() => {
+    if (fetch === false) {
+      setSubmit(
+        submitNewSolicitud(
+          values.solicitudErrors,
+          values.error,
+          values.form,
+          values.setNoti,
+        ),
+      );
+    }
+  }, [fetch]);
 
   return (
     <>
@@ -83,7 +97,7 @@ export default function SectionLayout({
             prev={prev}
             nextModule={nextModule}
             setFetch={setFetch}
-            submit={submit}
+            submit={() => submit}
           />
         </Grid>
         {children}
@@ -95,7 +109,7 @@ export default function SectionLayout({
             prev={prev}
             nextModule={nextModule}
             setFetch={setFetch}
-            submit={submit}
+            submit={() => submit}
           />
         </Grid>
       </Grid>
