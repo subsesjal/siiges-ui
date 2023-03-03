@@ -16,27 +16,23 @@ export default function SectionLayout({
   next,
   prev,
   nextModule,
+  fetch,
 }) {
-  const pito = {
+  const values = {
     solicitudErrors: '',
     error: '',
     form: '',
     setNoti: '',
   };
-  let fetch = () => submitNewSolicitud(
-    pito.solicitudErrors,
-    pito.error,
-    pito.form,
-    pito.setNoti,
-  );
-  if (position !== 'first') {
-    fetch = () => submitEditSolicitud(
-      pito.solicitudErrors,
-      pito.error,
-      pito.form,
-      pito.setNoti,
-    );
+
+  let submit;
+
+  if (fetch !== true) {
+    submit = submitNewSolicitud(values.solicitudErrors, values.error, values.form, values.setNoti);
+  } else {
+    submit = submitEditSolicitud(values.solicitudErrors, values.error, values.form, values.setNoti);
   }
+
   return (
     <>
       <Title title={sectionTitle} />
@@ -99,7 +95,7 @@ export default function SectionLayout({
             prev={prev}
             nextModule={nextModule}
             action={() => {
-              fetch();
+              submit();
             }}
           />
         </Grid>
@@ -115,6 +111,7 @@ SectionLayout.propTypes = {
   position: PropTypes.string.isRequired,
   total: PropTypes.string.isRequired,
   porcentage: PropTypes.number.isRequired,
+  fetch: PropTypes.bool.isRequired,
   nextModule: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
