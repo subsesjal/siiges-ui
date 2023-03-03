@@ -17,6 +17,7 @@ export default function SectionLayout({
   prev,
   nextModule,
   fetch,
+  setFetch,
 }) {
   const values = {
     solicitudErrors: '',
@@ -81,9 +82,8 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            action={() => {
-              fetch();
-            }}
+            setFetch={setFetch}
+            submit={submit}
           />
         </Grid>
         {children}
@@ -94,9 +94,8 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            action={() => {
-              submit();
-            }}
+            setFetch={setFetch}
+            submit={submit}
           />
         </Grid>
       </Grid>
@@ -112,6 +111,7 @@ SectionLayout.propTypes = {
   total: PropTypes.string.isRequired,
   porcentage: PropTypes.number.isRequired,
   fetch: PropTypes.bool.isRequired,
+  setFetch: PropTypes.func.isRequired,
   nextModule: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,

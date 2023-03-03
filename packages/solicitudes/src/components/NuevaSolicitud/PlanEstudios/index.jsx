@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
@@ -23,16 +23,6 @@ export default function PlanEstudios({ nextModule }) {
   );
 
   const [fetch, setFetch] = useState(false);
-  const [newSolicitud, setNewSolicitud] = useState(true);
-  useEffect(() => {
-    if (
-      newSolicitud === true
-      && (position === 'first' || position === 'only')
-    ) {
-      setFetch(true);
-      setNewSolicitud(false);
-    }
-  }, [position]);
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
@@ -47,6 +37,7 @@ export default function PlanEstudios({ nextModule }) {
           next={next}
           prev={prev}
           fetch={fetch}
+          setFetch={setFetch}
         >
           {section === 1 && <DatosPlanEstudios />}
           {section === 2 && <CoordinadorPrograma />}

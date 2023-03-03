@@ -6,7 +6,12 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Grid } from '@mui/material';
 
 export default function ButtonSection({
-  position, next, prev, nextModule, action,
+  position,
+  next,
+  prev,
+  nextModule,
+  setFetch,
+  submit,
 }) {
   const button = {
     first: (
@@ -24,7 +29,11 @@ export default function ButtonSection({
             text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             type="success"
-            onclick={next}
+            onclick={() => {
+              next();
+              setFetch(true);
+              submit();
+            }}
           />
         </Grid>
       </Grid>
@@ -52,7 +61,11 @@ export default function ButtonSection({
             text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             type="success"
-            onclick={next}
+            onclick={() => {
+              next();
+              setFetch(true);
+              submit();
+            }}
           />
         </Grid>
       </Grid>
@@ -96,5 +109,7 @@ export default function ButtonSection({
 ButtonSection.propTypes = {
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
+  setFetch: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired,
   position: PropTypes.string.isRequired,
 };
