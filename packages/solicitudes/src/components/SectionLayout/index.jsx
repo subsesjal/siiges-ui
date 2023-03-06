@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { LoadCircle, Title } from '@siiges-ui/shared';
 import { Box, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import ButtonSection from './ButtonSection';
-import submitNewSolicitud from '../utils/submitNewSolicitud';
-import submitEditSolicitud from '../utils/submitEditSolicitud';
 
 export default function SectionLayout({
   children,
@@ -16,8 +14,6 @@ export default function SectionLayout({
   next,
   prev,
   nextModule,
-  fetch,
-  setFetch,
 }) {
   const values = {
     solicitudErrors: '',
@@ -25,28 +21,6 @@ export default function SectionLayout({
     form: '',
     setNoti: '',
   };
-
-  const [submit, setSubmit] = useState(
-    submitEditSolicitud(
-      values.solicitudErrors,
-      values.error,
-      values.form,
-      values.setNoti,
-    ),
-  );
-
-  useEffect(() => {
-    if (fetch === false) {
-      setSubmit(
-        submitNewSolicitud(
-          values.solicitudErrors,
-          values.error,
-          values.form,
-          values.setNoti,
-        ),
-      );
-    }
-  }, [fetch]);
 
   return (
     <>
@@ -96,8 +70,7 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            setFetch={setFetch}
-            submit={() => submit}
+            values={values}
           />
         </Grid>
         {children}
@@ -108,8 +81,7 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            setFetch={setFetch}
-            submit={() => submit}
+            values={values}
           />
         </Grid>
       </Grid>
@@ -124,8 +96,6 @@ SectionLayout.propTypes = {
   position: PropTypes.string.isRequired,
   total: PropTypes.string.isRequired,
   porcentage: PropTypes.number.isRequired,
-  fetch: PropTypes.bool.isRequired,
-  setFetch: PropTypes.func.isRequired,
   nextModule: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,

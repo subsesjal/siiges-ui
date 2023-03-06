@@ -22,8 +22,6 @@ export default function PlanEstudios({ nextModule }) {
     10,
   );
 
-  const [fetch, setFetch] = useState(false);
-
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
@@ -36,8 +34,6 @@ export default function PlanEstudios({ nextModule }) {
           nextModule={nextModule}
           next={next}
           prev={prev}
-          fetch={fetch}
-          setFetch={setFetch}
         >
           {section === 1 && <DatosPlanEstudios />}
           {section === 2 && <CoordinadorPrograma />}

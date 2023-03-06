@@ -29,7 +29,7 @@ export default function DatosPlanEstudios() {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={3}>
-          <BasicSelect title="Nivel" name="nivel" options={nivel} required />
+          <BasicSelect title="Nivel" name="nivel" options={nivel} value="" required />
         </Grid>
         <Grid item xs={9}>
           <Input

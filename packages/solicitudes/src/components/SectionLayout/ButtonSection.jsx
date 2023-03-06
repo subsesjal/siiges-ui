@@ -1,18 +1,40 @@
 import { ButtonStyled } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Grid } from '@mui/material';
+import submitNewSolicitud from '../utils/submitNewSolicitud';
+import submitEditSolicitud from '../utils/submitEditSolicitud';
 
 export default function ButtonSection({
   position,
   next,
   prev,
   nextModule,
-  setFetch,
-  submit,
+  values,
 }) {
+  const [fetch, setFetch] = useState(false);
+  let submit = () => submitEditSolicitud(
+    values.solicitudErrors,
+    values.error,
+    values.form,
+    values.setNoti,
+  );
+  if (fetch === false) {
+    submit = () => submitNewSolicitud(
+      values.solicitudErrors,
+      values.error,
+      values.form,
+      values.setNoti,
+    );
+  }
+
+  const nextClick = () => {
+    next();
+    setFetch(true);
+    submit();
+  };
   const button = {
     first: (
       <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
@@ -29,11 +51,7 @@ export default function ButtonSection({
             text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             type="success"
-            onclick={() => {
-              next();
-              setFetch(true);
-              console.log(submit);
-            }}
+            onclick={nextClick}
           />
         </Grid>
       </Grid>
@@ -61,10 +79,7 @@ export default function ButtonSection({
             text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             type="success"
-            onclick={() => {
-              next();
-              setFetch(true);
-            }}
+            onclick={nextClick}
           />
         </Grid>
       </Grid>
@@ -108,7 +123,6 @@ export default function ButtonSection({
 ButtonSection.propTypes = {
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
-  setFetch: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   position: PropTypes.string.isRequired,
 };
