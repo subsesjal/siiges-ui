@@ -7,7 +7,6 @@ import getInstitucion from '../../utils/getInstitucion';
 export default function editarInstitucion() {
   const router = useRouter();
   const { institucion, loading } = getInstitucion();
-  console.log(institucion);
   return (
     <Layout title="Editar Institución">
       {loading ? (

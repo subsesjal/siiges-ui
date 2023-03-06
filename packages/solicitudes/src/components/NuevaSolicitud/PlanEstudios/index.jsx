@@ -21,6 +21,7 @@ export default function PlanEstudios({ nextModule }) {
     useState,
     10,
   );
+
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>

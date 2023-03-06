@@ -9,7 +9,7 @@ export default function ButtonStyled({
   return (
     <ButtonUnstyled
       className={`buttonaction button${design}`}
-      onClick={onclick}
+      onClick={() => onclick()}
       type={type}
     >
       <span className="text">{text}</span>

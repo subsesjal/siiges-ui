@@ -15,6 +15,13 @@ export default function SectionLayout({
   prev,
   nextModule,
 }) {
+  const values = {
+    solicitudErrors: '',
+    error: '',
+    form: '',
+    setNoti: '',
+  };
+
   return (
     <>
       <Title title={sectionTitle} />
@@ -58,12 +65,24 @@ export default function SectionLayout({
           </Box>
         </Grid>
         <Grid item xs={4}>
-          <ButtonSection position={position} next={next} prev={prev} nextModule={nextModule} />
+          <ButtonSection
+            position={position}
+            next={next}
+            prev={prev}
+            nextModule={nextModule}
+            values={values}
+          />
         </Grid>
         {children}
         <Grid item xs={8} />
         <Grid item xs={4}>
-          <ButtonSection position={position} next={next} prev={prev} nextModule={nextModule} />
+          <ButtonSection
+            position={position}
+            next={next}
+            prev={prev}
+            nextModule={nextModule}
+            values={values}
+          />
         </Grid>
       </Grid>
     </>
