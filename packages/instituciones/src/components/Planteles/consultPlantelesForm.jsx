@@ -7,7 +7,7 @@ import React from 'react';
 
 export default function ConsultPlantelesForm({ data }) {
   const { directores, domicilio } = data;
-  const director = directores[0].persona;
+  const director = directores[0]?.persona;
   return (
     <Grid container spacing={2} sx={{ m: 1 }}>
       <Typography variant="h6" sx={{ mt: 2 }}>
@@ -125,10 +125,10 @@ export default function ConsultPlantelesForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle text={director.nombre} />
-            <ListSubtitle text={director.apellidoPaterno} />
-            <ListSubtitle text={director.apellidoMaterno} />
-            <ListSubtitle text={director.sexo} />
+            <ListSubtitle text={director?.nombre} />
+            <ListSubtitle text={director?.apellidoPaterno} />
+            <ListSubtitle text={director?.apellidoMaterno} />
+            <ListSubtitle text={director?.sexo} />
           </List>
         </Grid>
         <Grid item xs>
@@ -140,8 +140,8 @@ export default function ConsultPlantelesForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle text={director.nacionalidad} />
-            <ListSubtitle text={director.correoPrimario} />
+            <ListSubtitle text={director?.nacionalidad} />
+            <ListSubtitle text={director?.correoPrimario} />
           </List>
         </Grid>
       </Grid>
