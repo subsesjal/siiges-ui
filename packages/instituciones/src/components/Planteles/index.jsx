@@ -12,8 +12,10 @@ import deletePlantel from '../utils/deletePlantel';
 
 function ModalState() {
   const [modal, setModal] = useState(false);
+  const [modalId, setModalId] = useState();
 
-  const showModal = () => {
+  const showModal = (id) => {
+    setModalId(id);
     setModal(true);
   };
   const hideModal = () => {
@@ -24,27 +26,47 @@ function ModalState() {
     modal,
     showModal,
     hideModal,
+    modalId,
   };
 }
 
-const columns = [
-  { field: 'domicilio', headerName: 'Domicilio', width: 240 },
-  { field: 'colonia', headerName: 'Colonia', width: 240 },
-  { field: 'municipio', headerName: 'Municipio', width: 140 },
-  { field: 'codigoPostal', headerName: 'Codigo Postal', width: 130 },
-  {
-    field: 'claveCentroTrabajo',
-    headerName: 'Clave centro de trabajo',
-    width: 200,
-  },
-  {
-    field: 'actions',
-    headerName: 'Acciones',
-    width: 150,
-    renderCell: (params) => {
-      const { modal, showModal, hideModal } = ModalState();
-      const router = useRouter();
-      return (
+export default function Planteles({ data, institucion }) {
+  const router = useRouter();
+  const {
+    modal, showModal, hideModal, modalId,
+  } = ModalState();
+
+  const [rows, setRows] = useState(
+    data.map((value) => ({
+      institucion,
+      id: value.id,
+      domicilio: `${value.domicilio.calle} #${value.domicilio.numeroExterior}`,
+      colonia: value.domicilio.colonia,
+      municipio: value.domicilio.municipio.nombre,
+      codigoPostal: value.domicilio.codigoPostal,
+      claveCentroTrabajo: value.claveCentroTrabajo,
+    })),
+  );
+
+  const handleDeleteClick = (id) => () => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  const columns = [
+    { field: 'domicilio', headerName: 'Domicilio', width: 240 },
+    { field: 'colonia', headerName: 'Colonia', width: 240 },
+    { field: 'municipio', headerName: 'Municipio', width: 140 },
+    { field: 'codigoPostal', headerName: 'Codigo Postal', width: 130 },
+    {
+      field: 'claveCentroTrabajo',
+      headerName: 'Clave centro de trabajo',
+      width: 200,
+    },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      width: 150,
+      renderCell: (params) => (
         <>
           {params.row.claveCentroTrabajo ? (
             <ActionButtons
@@ -56,10 +78,10 @@ const columns = [
               id={params.id}
               consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
               editar={`/institucion/${params.row.institucion}/editarPlantel/${params.id}`}
-              eliminar={showModal}
+              eliminar={() => showModal(params.id)}
             />
           )}
-          <DefaultModal open={modal} setOpen={hideModal}>
+          <DefaultModal open={modal} setOpen={hideModal} id={modalId}>
             <Typography>Desea eliminar este plantel?</Typography>
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
@@ -77,7 +99,12 @@ const columns = [
                   alt="Confirmar"
                   design="error"
                   onclick={() => {
-                    deletePlantel(params.row.institucion, params.id, router);
+                    hideModal();
+                    deletePlantel(
+                      params.row.institucion,
+                      modalId,
+                      handleDeleteClick,
+                    );
                   }}
                 >
                   Confirmar
@@ -86,24 +113,11 @@ const columns = [
             </Grid>
           </DefaultModal>
         </>
-      );
+      ),
+      sortable: false,
+      filterable: false,
     },
-    sortable: false,
-    filterable: false,
-  },
-];
-
-export default function Planteles({ data, institucion }) {
-  const router = useRouter();
-  const rows = data.map((value) => ({
-    institucion,
-    id: value.id,
-    domicilio: `${value.domicilio.calle} #${value.domicilio.numeroExterior}`,
-    colonia: value.domicilio.colonia,
-    municipio: value.domicilio.municipio.nombre,
-    codigoPostal: value.domicilio.codigoPostal,
-    claveCentroTrabajo: value.claveCentroTrabajo,
-  }));
+  ];
 
   return (
     <Grid container>
