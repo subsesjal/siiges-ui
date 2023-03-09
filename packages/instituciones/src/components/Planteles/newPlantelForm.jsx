@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import {
-  ButtonsForm, Input, SnackAlert,
-} from '@siiges-ui/shared';
+import { ButtonsForm, Input, SnackAlert } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
 import getMunicipios from '../utils/getMunicipios';
@@ -37,6 +35,7 @@ export default function PlantelForm({ plantel }) {
   };
 
   const errors = plantelErrors(form, setError, error, plantel);
+  console.log(plantel);
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
