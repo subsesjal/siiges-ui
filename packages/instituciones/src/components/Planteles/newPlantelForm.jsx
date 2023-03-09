@@ -35,7 +35,6 @@ export default function PlantelForm({ plantel }) {
   };
 
   const errors = plantelErrors(form, setError, error, plantel);
-  console.log(plantel);
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
