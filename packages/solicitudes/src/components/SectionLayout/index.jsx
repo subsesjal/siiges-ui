@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { LoadCircle, SnackAlert, Title } from '@siiges-ui/shared';
+import React from 'react';
+import { LoadCircle, Title } from '@siiges-ui/shared';
 import { Box, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import ButtonSection from './ButtonSection';
@@ -13,18 +13,9 @@ export default function SectionLayout({
   sectionTitle,
   next,
   prev,
+  values,
   nextModule,
 }) {
-  const [form, setForm] = useState();
-  const [error, setError] = useState({});
-  const [noti, setNoti] = useState({ open: false, message: '', type: '' });
-  const values = {
-    form,
-    error,
-    setNoti: '',
-    solicitudErrors: '',
-  };
-
   return (
     <>
       <Title title={sectionTitle} />
@@ -88,14 +79,6 @@ export default function SectionLayout({
           />
         </Grid>
       </Grid>
-      <SnackAlert
-        open={noti.open}
-        close={() => {
-          setNoti(false);
-        }}
-        type={noti.type}
-        mensaje={noti.message}
-      />
     </>
   );
 }
@@ -106,6 +89,7 @@ SectionLayout.propTypes = {
   children: PropTypes.node.isRequired,
   position: PropTypes.string.isRequired,
   total: PropTypes.string.isRequired,
+  values: PropTypes.string.isRequired,
   porcentage: PropTypes.number.isRequired,
   nextModule: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
