@@ -37,6 +37,7 @@ export default function DatosPlanEstudios() {
             label="Nombre del programa de estudio"
             name="nameProgramaEstudio"
             auto="nameProgramaEstudio"
+            required
           />
         </Grid>
         <Grid item xs={3}>
@@ -45,10 +46,11 @@ export default function DatosPlanEstudios() {
             label="Modalidad"
             name="modalidad"
             auto="modalidad"
+            required
           />
         </Grid>
         <Grid item xs={3}>
-          <Input id="periodo" label="Periodo" name="periodo" auto="periodo" />
+          <Input id="periodo" label="Periodo" name="periodo" auto="periodo" required />
         </Grid>
         <Grid item xs={3}>
           <BasicSelect title="Turno" name="turno" options={turno} multiple required />
@@ -59,6 +61,7 @@ export default function DatosPlanEstudios() {
             label="Duracion del programa"
             name="programDuration"
             auto="programDuration"
+            required
           />
         </Grid>
         <Grid item xs={6} sx={{ mt: 3 }}>
@@ -70,6 +73,7 @@ export default function DatosPlanEstudios() {
             label="Creditos necesarios para concluir el programa"
             name="creditos"
             auto="creditos"
+            required
           />
         </Grid>
         <Grid item xs={9}>
@@ -78,6 +82,7 @@ export default function DatosPlanEstudios() {
             label="Nivel educativo previo"
             name="nivelPrevio"
             auto="nivelPrevio"
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -87,6 +92,7 @@ export default function DatosPlanEstudios() {
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            required
           />
         </Grid>
       </Grid>
