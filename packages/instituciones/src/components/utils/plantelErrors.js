@@ -1,18 +1,22 @@
-import { useState } from 'react';
-
 export default function plantelErrors(form, setError, error, plantel) {
   const validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const validNumber = /^[0-9]+$/;
-  const [director, setDirector] = useState();
+  let director;
+  let domicilio;
+  let data;
 
-  if (plantel.directores[0] !== undefined) {
-    setDirector(plantel.directores[0].persona);
+  if (plantel !== null) {
+    domicilio = plantel.domicilio;
+    data = plantel;
+    if (plantel.directores[0] !== undefined) {
+      director = plantel.directores[0].persona;
+    }
   }
 
   const errors = {
     calle: () => {
       if (
-        plantel.domicilio.calle === null
+        (domicilio === undefined || domicilio.calle === null)
         && (form.domicilio.calle === undefined || form.domicilio.calle === '')
       ) {
         setError({ ...error, calle: 'Calle invalida' });
@@ -23,7 +27,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     numeroExterior: () => {
       if (
-        plantel.domicilio.numeroExterior === null
+        (domicilio === undefined || domicilio.numeroExterior === null)
         && (form.domicilio.numeroExterior === undefined
           || form.domicilio.numeroExterior === '')
       ) {
@@ -35,7 +39,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     colonia: () => {
       if (
-        plantel.domicilio.colonia === null
+        (domicilio === undefined || domicilio.colonia === null)
         && (form.domicilio.colonia === undefined || form.domicilio.colonia === '')
       ) {
         setError({ ...error, colonia: 'Colonia invalida' });
@@ -46,7 +50,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     codigoPostal: () => {
       if (
-        plantel.domicilio.codigoPostal === null
+        (domicilio === undefined || domicilio.codigoPostal === null)
         && (form.domicilio.codigoPostal === undefined
           || form.domicilio.codigoPostal === ''
           || !form.domicilio.codigoPostal.match(validNumber))
@@ -62,7 +66,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     municipioId: () => {
       if (
-        plantel.domicilio.municipioId === null
+        (domicilio === undefined || domicilio.municipioId === null)
         && (form.domicilio.municipioId === undefined
           || form.domicilio.municipioId === '')
       ) {
@@ -74,7 +78,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     tipoInmuebleId: () => {
       if (
-        plantel.tipoInmuebleId === null
+        (data === undefined || data.tipoInmuebleId === null)
         && (form.tipoInmuebleId === undefined || form.tipoInmuebleId === '')
       ) {
         setError({
@@ -88,7 +92,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     correo1: () => {
       if (
-        plantel.correo1 === null
+        (data === undefined || data.correo1 === null)
         && (form.correo1 === undefined
           || form.correo1 === ''
           || !form.correo1.match(validEmail))
@@ -101,7 +105,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     correo2: () => {
       if (
-        plantel.correo2 === null
+        (data === undefined || data.correo2 === null)
         && (form.correo2 === undefined
           || form.correo2 === ''
           || !form.correo2.match(validEmail))
@@ -114,7 +118,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     telefono1: () => {
       if (
-        plantel.telefono1 === null
+        (data === undefined || data.telefono1 === null)
         && (form.telefono1 === undefined
           || form.telefono1 === ''
           || !form.telefono1.match(validNumber))
@@ -127,7 +131,7 @@ export default function plantelErrors(form, setError, error, plantel) {
     },
     telefono2: () => {
       if (
-        plantel.telefono2 === null
+        (data === undefined || data.telefono2 === null)
         && (form.telefono2 === undefined
           || form.telefono2 === ''
           || !form.telefono2.match(validNumber))
@@ -214,8 +218,8 @@ export default function plantelErrors(form, setError, error, plantel) {
     correoPrimario: () => {
       if (
         (director === undefined || director.correoPrimario === null)
-        && (form.director.persona.correoPrimario !== undefined
-          || form.director.persona.correoPrimario !== ''
+        && (form.director.persona.correoPrimario === undefined
+          || form.director.persona.correoPrimario === ''
           || !form.director.persona.correoPrimario.match(validEmail))
       ) {
         setError({ ...error, correoPrimario: 'Correo invalido' });
