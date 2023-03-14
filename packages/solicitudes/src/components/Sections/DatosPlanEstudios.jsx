@@ -1,9 +1,12 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, TextField, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import React from 'react';
+import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
+import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
 
-export default function DatosPlanEstudios() {
+export default function DatosPlanEstudios({ values }) {
   const nivel = [
     { id: 1, nombre: 'Bachillerato' },
     { id: 2, nombre: 'Licenciatura' },
@@ -22,6 +25,24 @@ export default function DatosPlanEstudios() {
     { id: 4, nombre: 'Mixto' },
   ];
 
+  const {
+    form, setForm, error, setError,
+  } = values;
+
+  const data = {};
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    formDatosPlanEstudios(name, form, setForm, value);
+  };
+
+  const errors = errorDatosPlanEstudios(form, setError, error, data);
+
+  const handleOnBlur = (e) => {
+    const { name } = e.target;
+    errors[name]();
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -29,14 +50,26 @@ export default function DatosPlanEstudios() {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={3}>
-          <BasicSelect title="Nivel" name="nivel" options={nivel} value="" required />
+          <BasicSelect
+            title="Nivel"
+            name="nivel"
+            options={nivel}
+            value=""
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.nivel}
+            required
+          />
         </Grid>
         <Grid item xs={9}>
           <Input
-            id="nameProgramaEstudio"
+            id="nombreProgramaEstudio"
             label="Nombre del programa de estudio"
-            name="nameProgramaEstudio"
-            auto="nameProgramaEstudio"
+            name="nombreProgramaEstudio"
+            auto="nombreProgramaEstudio"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.nombreProgramaEstudio}
             required
           />
         </Grid>
@@ -46,21 +79,45 @@ export default function DatosPlanEstudios() {
             label="Modalidad"
             name="modalidad"
             auto="modalidad"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.modalidad}
             required
           />
         </Grid>
         <Grid item xs={3}>
-          <Input id="periodo" label="Periodo" name="periodo" auto="periodo" required />
+          <Input
+            id="periodo"
+            label="Periodo"
+            name="periodo"
+            auto="periodo"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.periodo}
+            required
+          />
         </Grid>
         <Grid item xs={3}>
-          <BasicSelect title="Turno" name="turno" options={turno} multiple required />
+          <BasicSelect
+            title="Turno"
+            name="turno"
+            options={turno}
+            multiple
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.turno}
+            required
+          />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="programDuration"
+            id="programaDuracion"
             label="Duracion del programa"
-            name="programDuration"
-            auto="programDuration"
+            name="programaDuracion"
+            auto="programaDuracion"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.programaDuracion}
             required
           />
         </Grid>
@@ -73,6 +130,9 @@ export default function DatosPlanEstudios() {
             label="Creditos necesarios para concluir el programa"
             name="creditos"
             auto="creditos"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.creditos}
             required
           />
         </Grid>
@@ -82,16 +142,22 @@ export default function DatosPlanEstudios() {
             label="Nivel educativo previo"
             name="nivelPrevio"
             auto="nivelPrevio"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.nivelPrevio}
             required
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="generalObjective"
+            id="objetivoGeneral"
             label="Objetivo General"
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.objetivoGeneral}
             required
           />
         </Grid>
@@ -99,3 +165,7 @@ export default function DatosPlanEstudios() {
     </Grid>
   );
 }
+
+DatosPlanEstudios.propTypes = {
+  values: PropTypes.objectOf(PropTypes.func).isRequired,
+};

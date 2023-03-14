@@ -36,11 +36,14 @@ function newRequest() {
   const [form, setForm] = useState();
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
+
   const values = {
     form,
+    setForm,
     error,
+    setError,
+    noti,
     setNoti,
-    solicitudErrors: '',
   };
   const nextModule = () => {
     setModule(module + 1);
@@ -56,11 +59,11 @@ function newRequest() {
           nextModule={nextModule}
           module={module}
         />
-        {module === 0 && <PlanEstudios nextModule={nextModule} />}
-        {module === 1 && <DatosGenerales nextModule={nextModule} />}
-        {module === 2 && <Plantel nextModule={nextModule} />}
-        {module === 3 && <Anexos nextModule={nextModule} />}
-        {module === 4 && <EvaluacionCurricular nextModule={nextModule} />}
+        {module === 0 && <PlanEstudios nextModule={nextModule} values={values} />}
+        {module === 1 && <DatosGenerales nextModule={nextModule} values={values} />}
+        {module === 2 && <Plantel nextModule={nextModule} values={values} />}
+        {module === 3 && <Anexos nextModule={nextModule} values={values} />}
+        {module === 4 && <EvaluacionCurricular nextModule={nextModule} values={values} />}
       </Layout>
     );
   }
@@ -74,12 +77,12 @@ function newRequest() {
           nextModule={nextModule}
           module={module}
         />
-        {module === 0 && <PlanEstudios nextModule={nextModule} />}
-        {module === 1 && <DatosGenerales nextModule={nextModule} />}
-        {module === 2 && <Plantel nextModule={nextModule} />}
-        {module === 3 && <PlataformaEducativa nextModule={nextModule} />}
-        {module === 4 && <Anexos nextModule={nextModule} />}
-        {module === 5 && <EvaluacionCurricular nextModule={nextModule} />}
+        {module === 0 && <PlanEstudios nextModule={nextModule} values={values} />}
+        {module === 1 && <DatosGenerales nextModule={nextModule} values={values} />}
+        {module === 2 && <Plantel nextModule={nextModule} values={values} />}
+        {module === 3 && <PlataformaEducativa nextModule={nextModule} values={values} />}
+        {module === 4 && <Anexos nextModule={nextModule} values={values} />}
+        {module === 5 && <EvaluacionCurricular nextModule={nextModule} values={values} />}
       </Layout>
       <SnackAlert
         open={noti.open}
