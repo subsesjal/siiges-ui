@@ -1,3 +1,3 @@
-export default function formDatosPlanEstudios() {
-  return 0;
+export default function formDatosPlanEstudios(name, form, setForm, value) {
+  setForm({ ...form, [name]: value });
 }

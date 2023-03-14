@@ -33,7 +33,7 @@ function newRequest() {
   const { query } = router;
   const { modalidad } = query;
   const [module, setModule] = useState(0);
-  const [form, setForm] = useState();
+  const [form, setForm] = useState({});
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
 

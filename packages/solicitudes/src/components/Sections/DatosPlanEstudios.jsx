@@ -29,14 +29,12 @@ export default function DatosPlanEstudios({ values }) {
     form, setForm, error, setError,
   } = values;
 
-  const data = {};
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formDatosPlanEstudios(name, form, setForm, value);
   };
 
-  const errors = errorDatosPlanEstudios(form, setError, error, data);
+  const errors = errorDatosPlanEstudios(form, setError, error);
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
@@ -111,13 +109,13 @@ export default function DatosPlanEstudios({ values }) {
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="programaDuracion"
+            id="duracionPrograma"
             label="Duracion del programa"
-            name="programaDuracion"
-            auto="programaDuracion"
+            name="duracionPrograma"
+            auto="duracionPrograma"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.programaDuracion}
+            errorMessage={error.duracionPrograma}
             required
           />
         </Grid>
