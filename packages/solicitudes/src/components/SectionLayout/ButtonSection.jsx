@@ -20,21 +20,25 @@ export default function ButtonSection({
     values.error,
     values.form,
     values.setNoti,
+    next,
+    setFetch,
   );
+
   if (fetch === false) {
     submit = () => submitNewSolicitud(
       values.solicitudErrors,
       values.error,
       values.form,
       values.setNoti,
+      next,
+      setFetch,
     );
   }
 
   const nextClick = () => {
-    next();
-    setFetch(true);
     submit();
   };
+
   const button = {
     first: (
       <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>

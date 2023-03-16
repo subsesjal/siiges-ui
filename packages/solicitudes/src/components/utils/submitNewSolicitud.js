@@ -3,6 +3,8 @@ export default function submitNewSolicitud(
   error,
   form,
   setNoti,
+  next,
+  setFetch,
 ) {
   if (
     Object.values(solicitudErrors).every((validation) => validation()) !== false
@@ -12,7 +14,10 @@ export default function submitNewSolicitud(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
-      });
+      }).then(
+        next(),
+        setFetch(true),
+      );
     } else {
       setNoti({
         open: true,

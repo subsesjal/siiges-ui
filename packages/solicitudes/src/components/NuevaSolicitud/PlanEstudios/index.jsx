@@ -38,6 +38,7 @@ export default function PlanEstudios({ nextModule, values }) {
           nextModule={nextModule}
           next={next}
           prev={prev}
+          values={values}
         >
           {section === 1 && <DatosPlanEstudios values={values} />}
           {section === 2 && <CoordinadorPrograma values={values} />}
