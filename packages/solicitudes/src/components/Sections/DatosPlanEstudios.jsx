@@ -26,7 +26,7 @@ export default function DatosPlanEstudios({ values }) {
   ];
 
   const {
-    form, setForm, error, setError,
+    form, setForm, error, setError, setErrors,
   } = values;
 
   const handleOnChange = (e) => {
@@ -34,11 +34,11 @@ export default function DatosPlanEstudios({ values }) {
     formDatosPlanEstudios(name, form, setForm, value);
   };
 
-  const errors = errorDatosPlanEstudios(form, setError, error);
+  setErrors(errorDatosPlanEstudios(form, setError, error));
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
-    errors[name]();
+    setErrors[name]();
   };
 
   return (

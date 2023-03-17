@@ -16,7 +16,7 @@ export default function ButtonSection({
 }) {
   const [fetch, setFetch] = useState(false);
   let submit = () => submitEditSolicitud(
-    values.solicitudErrors,
+    values.errors,
     values.error,
     values.form,
     values.setNoti,
@@ -26,7 +26,7 @@ export default function ButtonSection({
 
   if (fetch === false) {
     submit = () => submitNewSolicitud(
-      values.solicitudErrors,
+      values.errors,
       values.error,
       values.form,
       values.setNoti,
