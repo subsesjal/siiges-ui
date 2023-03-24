@@ -14,30 +14,7 @@ export default function ButtonSection({
   nextModule,
   values,
 }) {
-  const [fetch, setFetch] = useState(false);
-  let submit = () => submitEditSolicitud(
-    values.errors,
-    values.error,
-    values.form,
-    values.setNoti,
-    next,
-    setFetch,
-  );
-
-  if (fetch === false) {
-    submit = () => submitNewSolicitud(
-      values.errors,
-      values.error,
-      values.form,
-      values.setNoti,
-      next,
-      setFetch,
-    );
-  }
-
-  const nextClick = () => {
-    submit();
-  };
+  const [newSubmit, setNewSubmit] = useState(true);
 
   const button = {
     first: (
@@ -55,7 +32,11 @@ export default function ButtonSection({
             text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             type="success"
-            onclick={nextClick}
+            onclick={
+              newSubmit
+                ? () => submitNewSolicitud(values, next, setNewSubmit)
+                : () => submitEditSolicitud(values, next, setNewSubmit)
+            }
           />
         </Grid>
       </Grid>
@@ -83,7 +64,11 @@ export default function ButtonSection({
             text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             type="success"
-            onclick={nextClick}
+            onclick={
+              newSubmit
+                ? () => submitNewSolicitud(values, next, setNewSubmit)
+                : () => submitEditSolicitud(values, next, setNewSubmit)
+            }
           />
         </Grid>
       </Grid>
