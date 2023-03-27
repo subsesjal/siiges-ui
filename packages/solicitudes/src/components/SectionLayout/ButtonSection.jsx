@@ -1,7 +1,5 @@
 import { ButtonStyled } from '@siiges-ui/shared';
-import React, {
-  useCallback, useEffect, useRef, useState,
-} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -17,31 +15,9 @@ export default function ButtonSection({
   values,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
-  const [isSending, setIsSending] = useState(false);
-  const isMounted = useRef(true);
-
-  useEffect(
-    () => () => {
-      isMounted.current = false;
-    },
-    [],
-  );
-
-  let submit;
-  if (newSubmit === true) {
-    submit = () => submitNewSolicitud(values, next, setNewSubmit);
-  } else {
-    submit = () => submitEditSolicitud(values, next, setNewSubmit);
-  }
-
-  const nextClick = useCallback(async () => {
-    if (isSending) return;
-    setIsSending(true);
-    await submit();
-    if (isMounted.current) {
-      setIsSending(false);
-    }
-  }, [isSending]);
+  const submit = newSubmit
+    ? () => submitNewSolicitud(values, next, setNewSubmit)
+    : () => submitEditSolicitud(values, next, setNewSubmit);
 
   const button = {
     first: (
@@ -59,7 +35,7 @@ export default function ButtonSection({
             text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             type="success"
-            onclick={nextClick}
+            onclick={submit}
           />
         </Grid>
       </Grid>
@@ -87,7 +63,7 @@ export default function ButtonSection({
             text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
             type="success"
-            onclick={nextClick}
+            onclick={submit}
           />
         </Grid>
       </Grid>

@@ -10,6 +10,7 @@ import NewRequest from './components/ModuleSelector/NuevaSolicitud';
 import Refrendo from './components/ModuleSelector/Refrendo';
 import ModuleHeader from './components/ModuleHeader';
 import getSolicitudes from './components/utils/getSolicitudes';
+import errorDatosPlanEstudios from './components/utils/sections/errors/errorDatosPlanEstudios';
 
 export {
   NewRequest,
@@ -24,4 +25,5 @@ export {
   PlataformaEducativa,
   Anexos,
   getSolicitudes,
+  errorDatosPlanEstudios,
 };

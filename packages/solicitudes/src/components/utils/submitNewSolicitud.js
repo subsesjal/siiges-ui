@@ -1,30 +1,33 @@
-export default function submitNewSolicitud({ values }) {
-  console.log(values);
-  /* if (
-    Object.values(values.errors).every((validation) => validation()) !== false
+export default function submitNewSolicitud(values) {
+  const {
+    errors, error, form, setNoti,
+  } = values;
+  /* console.log(Object.values(errors).every((validation) => console.log(validation))); */
+  if (
+    Object.values(errors).every((validation) => validation()) !== false
   ) {
     if (
-      Object.values(values.error).every(
+      Object.values(error).every(
         (value) => value === null || value === '',
       )
     ) {
       fetch('http://localhost:3000/api/v1/solicitudes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values.form),
-      }).then(next(), setNewSubmit(false));
+        body: JSON.stringify(form),
+      });
     } else {
-      values.setNoti({
+      setNoti({
         open: true,
         message: 'Algo salio mal, revisa que los campos esten correctos',
         type: 'error',
       });
     }
   } else {
-    values.setNoti({
+    setNoti({
       open: true,
       message: 'Algo salio mal, revisa que los campos esten correctos',
       type: 'error',
     });
-  } */
+  }
 }
