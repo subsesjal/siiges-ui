@@ -35,7 +35,7 @@ function newRequest() {
   const [module, setModule] = useState(0);
   const [form, setForm] = useState({});
   const [error, setError] = useState({});
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
 
   const values = {

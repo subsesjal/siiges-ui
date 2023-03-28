@@ -30,8 +30,9 @@ export default function DatosPlanEstudios({ values }) {
   } = values;
 
   const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    formDatosPlanEstudios(name, form, setForm, value);
+    /* const { name, value } = e.target;
+    formDatosPlanEstudios(name, form, setForm, value); */
+    console.log(e);
   };
 
   setErrors(errorDatosPlanEstudios(form, setError, error));
@@ -48,7 +49,7 @@ export default function DatosPlanEstudios({ values }) {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={3}>
-          <BasicSelect
+          {/* <BasicSelect
             title="Nivel"
             name="nivel"
             options={nivel}
@@ -57,7 +58,7 @@ export default function DatosPlanEstudios({ values }) {
             onblur={handleOnBlur}
             errorMessage={error.nivel}
             required
-          />
+          /> */}
         </Grid>
         <Grid item xs={9}>
           <Input
