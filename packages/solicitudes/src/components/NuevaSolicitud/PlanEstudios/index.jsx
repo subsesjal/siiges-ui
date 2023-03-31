@@ -14,7 +14,7 @@ import AsignaturasFormacionElectiva from '../../Sections/AsignaturasFormacionEle
 import Docentes from '../../Sections/Docentes';
 import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 
-export default function PlanEstudios({ nextModule, values }) {
+export default function PlanEstudios({ nextModule }) {
   const {
     next,
     prev,
@@ -38,18 +38,18 @@ export default function PlanEstudios({ nextModule, values }) {
           nextModule={nextModule}
           next={next}
           prev={prev}
-          values={values}
+
         >
-          {section === 1 && <DatosPlanEstudios values={values} />}
-          {section === 2 && <CoordinadorPrograma values={values} />}
-          {section === 3 && <FundamentosPlanEstudios values={values} />}
-          {section === 4 && <Ingreso values={values} />}
-          {section === 5 && <Egreso values={values} />}
-          {section === 6 && <Curricula values={values} />}
-          {section === 7 && <Asignaturas values={values} />}
-          {section === 8 && <AsignaturasFormacionElectiva values={values} />}
-          {section === 9 && <Docentes values={values} />}
-          {section === 10 && <TrayectoriaEducativa values={values} />}
+          {section === 1 && <DatosPlanEstudios />}
+          {section === 2 && <CoordinadorPrograma />}
+          {section === 3 && <FundamentosPlanEstudios />}
+          {section === 4 && <Ingreso />}
+          {section === 5 && <Egreso />}
+          {section === 6 && <Curricula />}
+          {section === 7 && <Asignaturas />}
+          {section === 8 && <AsignaturasFormacionElectiva />}
+          {section === 9 && <Docentes />}
+          {section === 10 && <TrayectoriaEducativa />}
         </SectionLayout>
       </CardContent>
     </Card>
@@ -58,5 +58,4 @@ export default function PlanEstudios({ nextModule, values }) {
 
 PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  values: PropTypes.objectOf(PropTypes.func).isRequired,
 };

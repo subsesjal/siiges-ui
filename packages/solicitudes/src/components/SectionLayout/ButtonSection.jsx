@@ -12,12 +12,11 @@ export default function ButtonSection({
   next,
   prev,
   nextModule,
-  values,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
   const submit = newSubmit
-    ? () => submitNewSolicitud(values, next, setNewSubmit)
-    : () => submitEditSolicitud(values, next, setNewSubmit);
+    ? () => submitNewSolicitud(next, setNewSubmit)
+    : () => submitEditSolicitud(next, setNewSubmit);
 
   return (
     <>
@@ -110,5 +109,4 @@ ButtonSection.propTypes = {
   prev: PropTypes.func.isRequired,
   nextModule: PropTypes.number.isRequired,
   position: PropTypes.string.isRequired,
-  values: PropTypes.objectOf(PropTypes.func).isRequired,
 };

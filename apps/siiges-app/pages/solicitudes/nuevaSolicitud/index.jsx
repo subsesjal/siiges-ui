@@ -1,4 +1,4 @@
-import { Layout, SnackAlert } from '@siiges-ui/shared';
+import { Layout } from '@siiges-ui/shared';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -10,6 +10,7 @@ import {
   EvaluacionCurricular,
   PlataformaEducativa,
 } from '@siiges-ui/solicitudes';
+import { solicitudContext } from '@siiges-ui/solicitudes/src/components/utils/Context/centextSolicitudes';
 
 const stepsEscolarizada = [
   'Plan de estudios',
@@ -33,21 +34,6 @@ function newRequest() {
   const { query } = router;
   const { modalidad } = query;
   const [module, setModule] = useState(0);
-  const [form, setForm] = useState({});
-  const [error, setError] = useState({});
-  const [errors, setErrors] = useState([]);
-  const [noti, setNoti] = useState({ open: false, message: '', type: '' });
-
-  const values = {
-    form,
-    setForm,
-    error,
-    setError,
-    errors,
-    setErrors,
-    noti,
-    setNoti,
-  };
 
   const nextModule = () => {
     setModule(module + 1);
@@ -55,24 +41,26 @@ function newRequest() {
 
   if (modalidad === 'escolarizada') {
     return (
-      <Layout type={false}>
-        <ModuleHeader
-          steps={stepsEscolarizada}
-          type="Nueva solicitud"
-          date="22 de Agosto 2022"
-          nextModule={nextModule}
-          module={module}
-        />
-        {module === 0 && <PlanEstudios nextModule={nextModule} values={values} />}
-        {module === 1 && <DatosGenerales nextModule={nextModule} values={values} />}
-        {module === 2 && <Plantel nextModule={nextModule} values={values} />}
-        {module === 3 && <Anexos nextModule={nextModule} values={values} />}
-        {module === 4 && <EvaluacionCurricular nextModule={nextModule} values={values} />}
-      </Layout>
+      <solicitudContext.Provider>
+        <Layout type={false}>
+          <ModuleHeader
+            steps={stepsEscolarizada}
+            type="Nueva solicitud"
+            date="22 de Agosto 2022"
+            nextModule={nextModule}
+            module={module}
+          />
+          {module === 0 && <PlanEstudios nextModule={nextModule} />}
+          {module === 1 && <DatosGenerales nextModule={nextModule} />}
+          {module === 2 && <Plantel nextModule={nextModule} />}
+          {module === 3 && <Anexos nextModule={nextModule} />}
+          {module === 4 && <EvaluacionCurricular nextModule={nextModule} />}
+        </Layout>
+      </solicitudContext.Provider>
     );
   }
   return (
-    <>
+    <solicitudContext.Provider>
       <Layout type={false}>
         <ModuleHeader
           steps={stepsNoEscolarizada}
@@ -81,22 +69,22 @@ function newRequest() {
           nextModule={nextModule}
           module={module}
         />
-        {module === 0 && <PlanEstudios nextModule={nextModule} values={values} />}
-        {module === 1 && <DatosGenerales nextModule={nextModule} values={values} />}
-        {module === 2 && <Plantel nextModule={nextModule} values={values} />}
-        {module === 3 && <PlataformaEducativa nextModule={nextModule} values={values} />}
-        {module === 4 && <Anexos nextModule={nextModule} values={values} />}
-        {module === 5 && <EvaluacionCurricular nextModule={nextModule} values={values} />}
+        {module === 0 && <PlanEstudios nextModule={nextModule} />}
+        {module === 1 && <DatosGenerales nextModule={nextModule} />}
+        {module === 2 && <Plantel nextModule={nextModule} />}
+        {module === 3 && <PlataformaEducativa nextModule={nextModule} />}
+        {module === 4 && <Anexos nextModule={nextModule} />}
+        {module === 5 && <EvaluacionCurricular nextModule={nextModule} />}
       </Layout>
-      <SnackAlert
+      {/* <SnackAlert
         open={noti.open}
         close={() => {
           setNoti(false);
         }}
         type={noti.type}
         mensaje={noti.message}
-      />
-    </>
+      /> */}
+    </solicitudContext.Provider>
   );
 }
 

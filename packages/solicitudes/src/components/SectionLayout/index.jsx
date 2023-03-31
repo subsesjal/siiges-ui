@@ -13,7 +13,6 @@ export default function SectionLayout({
   sectionTitle,
   next,
   prev,
-  values,
   nextModule,
 }) {
   return (
@@ -64,7 +63,6 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            values={values}
           />
         </Grid>
         {children}
@@ -75,7 +73,6 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            values={values}
           />
         </Grid>
       </Grid>
@@ -89,7 +86,6 @@ SectionLayout.propTypes = {
   children: PropTypes.node.isRequired,
   position: PropTypes.string.isRequired,
   total: PropTypes.string.isRequired,
-  values: PropTypes.string.isRequired,
   porcentage: PropTypes.number.isRequired,
   nextModule: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
