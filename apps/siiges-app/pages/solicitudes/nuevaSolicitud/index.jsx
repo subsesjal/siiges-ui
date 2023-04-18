@@ -10,7 +10,6 @@ import {
   EvaluacionCurricular,
   PlataformaEducativa,
 } from '@siiges-ui/solicitudes';
-import { solicitudContext } from '@siiges-ui/solicitudes/src/components/utils/Context/centextSolicitudes';
 
 const stepsEscolarizada = [
   'Plan de estudios',
@@ -41,26 +40,24 @@ function newRequest() {
 
   if (modalidad === 'escolarizada') {
     return (
-      <solicitudContext.Provider>
-        <Layout type={false}>
-          <ModuleHeader
-            steps={stepsEscolarizada}
-            type="Nueva solicitud"
-            date="22 de Agosto 2022"
-            nextModule={nextModule}
-            module={module}
-          />
-          {module === 0 && <PlanEstudios nextModule={nextModule} />}
-          {module === 1 && <DatosGenerales nextModule={nextModule} />}
-          {module === 2 && <Plantel nextModule={nextModule} />}
-          {module === 3 && <Anexos nextModule={nextModule} />}
-          {module === 4 && <EvaluacionCurricular nextModule={nextModule} />}
-        </Layout>
-      </solicitudContext.Provider>
+      <Layout type={false}>
+        <ModuleHeader
+          steps={stepsEscolarizada}
+          type="Nueva solicitud"
+          date="22 de Agosto 2022"
+          nextModule={nextModule}
+          module={module}
+        />
+        {module === 0 && <PlanEstudios nextModule={nextModule} />}
+        {module === 1 && <DatosGenerales nextModule={nextModule} />}
+        {module === 2 && <Plantel nextModule={nextModule} />}
+        {module === 3 && <Anexos nextModule={nextModule} />}
+        {module === 4 && <EvaluacionCurricular nextModule={nextModule} />}
+      </Layout>
     );
   }
   return (
-    <solicitudContext.Provider>
+    <>
       <Layout type={false}>
         <ModuleHeader
           steps={stepsNoEscolarizada}
@@ -84,7 +81,7 @@ function newRequest() {
         type={noti.type}
         mensaje={noti.message}
       /> */}
-    </solicitudContext.Provider>
+    </>
   );
 }
 

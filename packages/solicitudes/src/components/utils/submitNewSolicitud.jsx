@@ -1,10 +1,7 @@
-import { useContext } from 'react';
-import { solicitudContext } from './Context/centextSolicitudes';
-
-function submitNewSolicitud() {
+function submitNewSolicitud(validations) {
   const {
     errors, error, form, setNoti,
-  } = useContext(solicitudContext);
+  } = validations;
   if (Object.values(errors).every((validation) => validation()) !== false) {
     if (Object.values(error).every((value) => value === null || value === '')) {
       fetch('http://localhost:3000/api/v1/solicitudes', {

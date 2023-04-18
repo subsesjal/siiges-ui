@@ -70,11 +70,7 @@ export default function Solicitudes() {
       {NewRequestContentVisible && <NewRequest />}
       {ChangeAddressContentVisible && <ChangeAddress />}
       {RefrendoContentVisible && <Refrendo />}
-      <DataTable
-        title="Tipo de solicitud"
-        rows={rows}
-        columns={columns}
-      />
+      <DataTable title="Tipo de solicitud" rows={rows} columns={columns} />
     </Layout>
   );
 }

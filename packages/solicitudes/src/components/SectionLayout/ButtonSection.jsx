@@ -1,11 +1,12 @@
 import { ButtonStyled } from '@siiges-ui/shared';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Grid } from '@mui/material';
 import submitNewSolicitud from '../utils/submitNewSolicitud';
 import submitEditSolicitud from '../utils/submitEditSolicitud';
+import SolicitudContext from '../utils/Context/solicitudContext';
 
 export default function ButtonSection({
   position,
@@ -14,9 +15,10 @@ export default function ButtonSection({
   nextModule,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
+  const validations = useContext(SolicitudContext);
   const submit = newSubmit
-    ? () => submitNewSolicitud(next, setNewSubmit)
-    : () => submitEditSolicitud(next, setNewSubmit);
+    ? () => submitNewSolicitud(validations, next, setNewSubmit)
+    : () => submitEditSolicitud(validations, next, setNewSubmit);
 
   return (
     <>

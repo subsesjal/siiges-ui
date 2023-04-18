@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 import { Grid, TextField, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
+import SolicitudContext from '../utils/Context/solicitudContext';
 
-export default function DatosPlanEstudios({ values }) {
+export default function DatosPlanEstudios() {
   const nivel = [
     { id: 1, nombre: 'Bachillerato' },
     { id: 2, nombre: 'Licenciatura' },
@@ -27,7 +27,7 @@ export default function DatosPlanEstudios({ values }) {
 
   const {
     form, setForm, error, setError, setErrors,
-  } = values;
+  } = useContext(SolicitudContext);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -163,7 +163,3 @@ export default function DatosPlanEstudios({ values }) {
     </Grid>
   );
 }
-
-DatosPlanEstudios.propTypes = {
-  values: PropTypes.objectOf(PropTypes.func).isRequired,
-};

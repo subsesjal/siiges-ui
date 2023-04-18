@@ -11,6 +11,7 @@ import Refrendo from './components/ModuleSelector/Refrendo';
 import ModuleHeader from './components/ModuleHeader';
 import getSolicitudes from './components/utils/getSolicitudes';
 import errorDatosPlanEstudios from './components/utils/sections/errors/errorDatosPlanEstudios';
+import SolicitudContext from './components/utils/Context/solicitudContext';
 
 export {
   NewRequest,
@@ -26,4 +27,5 @@ export {
   Anexos,
   getSolicitudes,
   errorDatosPlanEstudios,
+  SolicitudContext,
 };
