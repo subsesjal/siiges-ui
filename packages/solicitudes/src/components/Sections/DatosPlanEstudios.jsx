@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Grid, TextField, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
@@ -34,12 +34,18 @@ export default function DatosPlanEstudios() {
     formDatosPlanEstudios(name, form, setForm, value);
   };
 
-  setErrors(errorDatosPlanEstudios(form, setError, error));
+  const errors = errorDatosPlanEstudios(form, setError, error);
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
-    setErrors[name]();
+    errors[name]();
   };
+
+  useEffect(() => {
+    if (errors !== undefined) {
+      setErrors(errors);
+    }
+  }, [error]);
 
   return (
     <Grid container spacing={2}>
@@ -148,14 +154,17 @@ export default function DatosPlanEstudios() {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="objetivoGeneral"
             label="Objetivo General"
+            id="objetivoGeneral"
+            name="objetivoGeneral"
+            auto="objetivoGeneral"
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.objetivoGeneral}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            helperText={error.objetivoGeneral}
+            error={!!error.objetivoGeneral}
             required
           />
         </Grid>

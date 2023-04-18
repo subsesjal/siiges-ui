@@ -34,8 +34,8 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     turno: () => {
-      if (form.turno === undefined || form.turno === '') {
-        setError({ ...error, turno: 'Turno invalida' });
+      if (form.turno === undefined || form.turno.lenth === 0) {
+        setError({ ...error, turno: 'Turno invalido' });
         return false;
       }
       setError({ ...error, turno: '' });

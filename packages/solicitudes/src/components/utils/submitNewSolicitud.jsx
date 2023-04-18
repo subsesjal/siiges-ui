@@ -1,4 +1,4 @@
-function submitNewSolicitud(validations) {
+function submitNewSolicitud(validations, next, setNewSubmit) {
   const {
     errors, error, form, setNoti,
   } = validations;
@@ -8,7 +8,7 @@ function submitNewSolicitud(validations) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
-      });
+      }).then(next(), setNewSubmit(false));
     } else {
       setNoti({
         open: true,
