@@ -1,7 +1,10 @@
+import React, { useContext, useEffect } from 'react';
 import { Grid, TextField, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import React from 'react';
+import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
+import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
+import SolicitudContext from '../utils/Context/solicitudContext';
 
 export default function DatosPlanEstudios() {
   const nivel = [
@@ -22,6 +25,28 @@ export default function DatosPlanEstudios() {
     { id: 4, nombre: 'Mixto' },
   ];
 
+  const {
+    form, setForm, error, setError, setErrors,
+  } = useContext(SolicitudContext);
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    formDatosPlanEstudios(name, form, setForm, value);
+  };
+
+  const errors = errorDatosPlanEstudios(form, setError, error);
+
+  const handleOnBlur = (e) => {
+    const { name } = e.target;
+    errors[name]();
+  };
+
+  useEffect(() => {
+    if (errors !== undefined) {
+      setErrors(errors);
+    }
+  }, [error]);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -29,14 +54,27 @@ export default function DatosPlanEstudios() {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={3}>
-          <BasicSelect title="Nivel" name="nivel" options={nivel} value="" required />
+          <BasicSelect
+            title="Nivel"
+            name="nivel"
+            options={nivel}
+            value=""
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.nivel}
+            required
+          />
         </Grid>
         <Grid item xs={9}>
           <Input
-            id="nameProgramaEstudio"
+            id="nombreProgramaEstudio"
             label="Nombre del programa de estudio"
-            name="nameProgramaEstudio"
-            auto="nameProgramaEstudio"
+            name="nombreProgramaEstudio"
+            auto="nombreProgramaEstudio"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.nombreProgramaEstudio}
+            required
           />
         </Grid>
         <Grid item xs={3}>
@@ -45,20 +83,46 @@ export default function DatosPlanEstudios() {
             label="Modalidad"
             name="modalidad"
             auto="modalidad"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.modalidad}
+            required
           />
         </Grid>
         <Grid item xs={3}>
-          <Input id="periodo" label="Periodo" name="periodo" auto="periodo" />
+          <Input
+            id="periodo"
+            label="Periodo"
+            name="periodo"
+            auto="periodo"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.periodo}
+            required
+          />
         </Grid>
         <Grid item xs={3}>
-          <BasicSelect title="Turno" name="turno" options={turno} multiple required />
+          <BasicSelect
+            title="Turno"
+            name="turno"
+            options={turno}
+            multiple
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.turno}
+            required
+          />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="programDuration"
+            id="duracionPrograma"
             label="Duracion del programa"
-            name="programDuration"
-            auto="programDuration"
+            name="duracionPrograma"
+            auto="duracionPrograma"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.duracionPrograma}
+            required
           />
         </Grid>
         <Grid item xs={6} sx={{ mt: 3 }}>
@@ -70,6 +134,10 @@ export default function DatosPlanEstudios() {
             label="Creditos necesarios para concluir el programa"
             name="creditos"
             auto="creditos"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.creditos}
+            required
           />
         </Grid>
         <Grid item xs={9}>
@@ -78,15 +146,26 @@ export default function DatosPlanEstudios() {
             label="Nivel educativo previo"
             name="nivelPrevio"
             auto="nivelPrevio"
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.nivelPrevio}
+            required
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="generalObjective"
             label="Objetivo General"
+            id="objetivoGeneral"
+            name="objetivoGeneral"
+            auto="objetivoGeneral"
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            helperText={error.objetivoGeneral}
+            error={!!error.objetivoGeneral}
+            required
           />
         </Grid>
       </Grid>

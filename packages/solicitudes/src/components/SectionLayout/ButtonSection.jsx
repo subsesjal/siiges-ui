@@ -1,128 +1,114 @@
 import { ButtonStyled } from '@siiges-ui/shared';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Grid } from '@mui/material';
 import submitNewSolicitud from '../utils/submitNewSolicitud';
 import submitEditSolicitud from '../utils/submitEditSolicitud';
+import SolicitudContext from '../utils/Context/solicitudContext';
 
 export default function ButtonSection({
   position,
   next,
   prev,
   nextModule,
-  values,
 }) {
-  const [fetch, setFetch] = useState(false);
-  let submit = () => submitEditSolicitud(
-    values.solicitudErrors,
-    values.error,
-    values.form,
-    values.setNoti,
-  );
-  if (fetch === false) {
-    submit = () => submitNewSolicitud(
-      values.solicitudErrors,
-      values.error,
-      values.form,
-      values.setNoti,
-    );
-  }
+  const [newSubmit, setNewSubmit] = useState(true);
+  const validations = useContext(SolicitudContext);
+  const submit = newSubmit
+    ? () => submitNewSolicitud(validations, next, setNewSubmit)
+    : () => submitEditSolicitud(validations, next, setNewSubmit);
 
-  const nextClick = () => {
-    next();
-    setFetch(true);
-    submit();
-  };
-  const button = {
-    first: (
-      <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-        <Grid item xs={9}>
-          <ButtonStyled
-            text="Terminar"
-            alt="Terminar solicitud"
-            type="success"
-            onclick={nextModule}
-          />
+  return (
+    <>
+      {position === 'first' && (
+        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
+          <Grid item xs={9}>
+            <ButtonStyled
+              text="Terminar"
+              alt="Terminar solicitud"
+              type="success"
+              onclick={nextModule}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <ButtonStyled
+              text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+              alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+              type="success"
+              onclick={submit}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <ButtonStyled
-            text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-            alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-            type="success"
-            onclick={nextClick}
-          />
+      )}
+      {position === 'middle' && (
+        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
+          <Grid item xs={5}>
+            <ButtonStyled
+              text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+              alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+              type="success"
+              onclick={prev}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <ButtonStyled
+              text="Terminar"
+              alt="Terminar solicitud"
+              type="success"
+              onclick={nextModule}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <ButtonStyled
+              text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+              alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+              type="success"
+              onclick={submit}
+            />
+          </Grid>
         </Grid>
-      </Grid>
-    ),
-    middle: (
-      <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-        <Grid item xs={5}>
-          <ButtonStyled
-            text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-            alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-            type="success"
-            onclick={prev}
-          />
+      )}
+      {position === 'last' && (
+        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
+          <Grid item xs={8}>
+            <ButtonStyled
+              text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+              alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+              type="success"
+              onclick={prev}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <ButtonStyled
+              text="Terminar"
+              alt="Terminar solicitud"
+              type="success"
+              onclick={nextModule}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={4}>
-          <ButtonStyled
-            text="Terminar"
-            alt="Terminar solicitud"
-            type="success"
-            onclick={nextModule}
-          />
+      )}
+      {position === 'only' && (
+        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
+          <Grid item xs={12}>
+            <ButtonStyled
+              text="Terminar"
+              alt="Terminar solicitud"
+              type="success"
+              onclick={nextModule}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <ButtonStyled
-            text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-            alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-            type="success"
-            onclick={nextClick}
-          />
-        </Grid>
-      </Grid>
-    ),
-    last: (
-      <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-        <Grid item xs={8}>
-          <ButtonStyled
-            text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-            alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-            type="success"
-            onclick={prev}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <ButtonStyled
-            text="Terminar"
-            alt="Terminar solicitud"
-            type="success"
-            onclick={nextModule}
-          />
-        </Grid>
-      </Grid>
-    ),
-    only: (
-      <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-        <Grid item xs={12}>
-          <ButtonStyled
-            text="Terminar"
-            alt="Terminar solicitud"
-            type="success"
-            onclick={nextModule}
-          />
-        </Grid>
-      </Grid>
-    ),
-  };
-  return button[position];
+      )}
+    </>
+  );
 }
 
 ButtonSection.propTypes = {
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
-  submit: PropTypes.func.isRequired,
+  nextModule: PropTypes.number.isRequired,
   position: PropTypes.string.isRequired,
 };

@@ -15,13 +15,6 @@ export default function SectionLayout({
   prev,
   nextModule,
 }) {
-  const values = {
-    solicitudErrors: '',
-    error: '',
-    form: '',
-    setNoti: '',
-  };
-
   return (
     <>
       <Title title={sectionTitle} />
@@ -70,7 +63,6 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            values={values}
           />
         </Grid>
         {children}
@@ -81,7 +73,6 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             nextModule={nextModule}
-            values={values}
           />
         </Grid>
       </Grid>
