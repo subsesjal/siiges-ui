@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   NewRequest,
   ChangeAddress,
   Refrendo,
   getSolicitudes,
 } from '@siiges-ui/solicitudes';
-import { Layout, Select, DataTable } from '@siiges-ui/shared';
+import { Layout, Select, DataTable, Context } from '@siiges-ui/shared';
 import { Divider } from '@mui/material';
 
 const columns = [
@@ -17,18 +17,28 @@ const columns = [
 ];
 
 export default function Solicitudes() {
+  const { session } = useContext(Context);
+  const [newSolicitud, setNewSolicitud] = useState(false);
   const [option, setOption] = useState();
   const [NewRequestContentVisible, setNewRequestContentVisible] = useState(false);
   const [ChangeAddressContentVisible, setChangeAddressContentVisible] = useState(false);
   const [RefrendoContentVisible, setRefrendoContentVisible] = useState(false);
-  const [rows, setRows] = useState({});
-  const { solicitudes, loading } = getSolicitudes();
+  const [rows, setRows] = useState([]);
+  const { solicitudes } = getSolicitudes();
 
   useEffect(() => {
-    if (loading !== false) {
+    if (solicitudes !== undefined) {
       setRows(solicitudes);
     }
-  }, [loading]);
+  }, [solicitudes]);
+
+  useEffect(() => {
+    if (session.rol !== 'admin') {
+      setNewSolicitud(true);
+    }
+  }, [session]);
+
+  console.log(rows);
 
   useEffect(() => {
     if (option === 'new') setNewRequestContentVisible(true);
@@ -60,12 +70,15 @@ export default function Solicitudes() {
 
   return (
     <Layout title="Solicitudes">
-      <Select
-        title="Seleccione una opcion"
-        options={options}
-        value={option}
-        onchange={handleOnChange}
-      />
+      {newSolicitud &&
+        <Select
+          title="Seleccione una opcion"
+          name="options"
+          options={options}
+          value=""
+          onchange={handleOnChange}
+        />
+      }
       <Divider sx={{ mt: 2 }} />
       {NewRequestContentVisible && <NewRequest />}
       {ChangeAddressContentVisible && <ChangeAddress />}
