@@ -1,56 +1,94 @@
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
-import { ButtonStyled, Input, Select } from '@siiges-ui/shared';
-import Link from 'next/link';
-import React, { useState } from 'react';
+import { ButtonStyled } from '@siiges-ui/shared';
+import BasicSelect from '@siiges-ui/shared/src/components/Select';
+import formData from '../../utils/sections/forms/formData';
+import errorDatosNuevaSolicitud from '../../utils/sections/errors/errorDatosNuevaSolicitud';
+import getPlantelesUsuario from '../../utils/getPlantelesUsuario';
+import modalidades from '../../utils/Mocks/mockModalidades';
 
 function NewRequest() {
-  const [modalidad, setModalidad] = useState();
-  const options = [
-    {
-      id: 'escolarizada',
-      nombre: 'Escolarizada',
-    },
-    {
-      id: 'noEscolarizada',
-      nombre: 'No escolarizada',
-    },
-    {
-      id: 'mixta',
-      nombre: 'Mixta',
-    },
-    {
-      id: 'dual',
-      nombre: 'Dual',
-    },
-  ];
+  const { planteles } = getPlantelesUsuario();
+  const router = useRouter();
+  const [form, setForm] = useState({});
+  const [error, setError] = useState({});
+  const [plantelesData, setPlantelesData] = useState([]);
+  const [validation, setValidation] = useState([]);
+
+  useEffect(() => {
+    if (planteles !== undefined) {
+      setPlantelesData(planteles.map((plantel) => ({
+        id: plantel.id,
+        nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+      })));
+    }
+  }, [planteles]);
+
   const handleOnChange = (e) => {
-    setModalidad(e.target.value);
+    const { name, value } = e.target;
+    formData(name, value, form, setForm);
   };
+
+  const errors = errorDatosNuevaSolicitud(form, setError, error);
+
+  const handleOnBlur = (e) => {
+    const { name } = e.target;
+    errors[name]();
+  };
+
+  const submit = () => {
+    if (Object.values(validation).every((option) => option()) !== false) {
+      if (Object.values(error).every((value) => value === null || value === '')) {
+        const { modalidad, plantel } = form;
+        router.push(
+          {
+            pathname: '/solicitudes/nuevaSolicitud',
+            query: { modalidad, plantel },
+          },
+          '/solicitudes/nuevaSolicitud',
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (errors !== undefined) {
+      setValidation(errors);
+    }
+  }, [error]);
+
   return (
     <Grid item>
       <Grid container spacing={2}>
         <Grid item xs={5}>
-          <Select
+          <BasicSelect
             title="Modalidad"
-            options={options}
-            value={modalidad}
-            onChange={handleOnChange}
+            name="modalidad"
+            value=""
+            options={modalidades}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.modalidad}
+            required
           />
         </Grid>
         <Grid item xs={5}>
-          <Input label="Plantel" id="plantel" name="plantel" auto="plantel" />
+          <BasicSelect
+            title="Plantel"
+            name="plantel"
+            value=""
+            options={plantelesData}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.plantel}
+            required
+          />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
-          <Link
-            href={{
-              pathname: '/solicitudes/nuevaSolicitud',
-              query: { modalidad },
-            }}
-          >
-            <div style={{ height: '100%' }}>
-              <ButtonStyled text="Crear" alt="Nueva Solicitud" />
-            </div>
-          </Link>
+          <div style={{ height: '100%' }}>
+            <ButtonStyled onclick={submit} text="Crear" alt="Nueva Solicitud" />
+          </div>
         </Grid>
       </Grid>
     </Grid>

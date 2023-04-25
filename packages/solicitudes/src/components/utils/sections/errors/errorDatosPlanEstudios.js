@@ -17,17 +17,9 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       setError({ ...error, nombreProgramaEstudio: '' });
       return true;
     },
-    modalidad: () => {
-      if (form.modalidad === undefined || form.modalidad === '') {
-        setError({ ...error, modalidad: 'Modalidad invalida' });
-        return false;
-      }
-      setError({ ...error, modalidad: '' });
-      return true;
-    },
     periodo: () => {
       if (form.periodo === undefined || form.periodo === '') {
-        setError({ ...error, periodo: 'Periodo invalida' });
+        setError({ ...error, periodo: 'Periodo invalido' });
         return false;
       }
       setError({ ...error, periodo: '' });

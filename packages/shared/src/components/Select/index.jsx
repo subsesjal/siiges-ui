@@ -11,6 +11,7 @@ export default function BasicSelect({
   title,
   options,
   value,
+  disabled,
   name,
   onchange,
   multiple,
@@ -28,6 +29,7 @@ export default function BasicSelect({
       <FormControl fullWidth size="small">
         <InputLabel
           id="select-label"
+          disabled={disabled}
           required={required}
           error={!!errorMessage}
         >
@@ -43,6 +45,7 @@ export default function BasicSelect({
           onBlur={onblur}
           multiple={multiple}
           error={!!errorMessage}
+          disabled={disabled}
         >
           {options.map((opcion) => (
             <MenuItem key={opcion.id} value={opcion.id}>
@@ -60,6 +63,7 @@ BasicSelect.defaultProps = {
   value: [],
   required: false,
   multiple: false,
+  disabled: false,
   errorMessage: '',
   onchange: () => {},
   onblur: () => {},
@@ -77,6 +81,7 @@ BasicSelect.propTypes = {
   name: PropTypes.string.isRequired,
   required: PropTypes.bool,
   multiple: PropTypes.bool,
+  disabled: PropTypes.bool,
   errorMessage: PropTypes.string,
   onchange: PropTypes.func,
   onblur: PropTypes.func,

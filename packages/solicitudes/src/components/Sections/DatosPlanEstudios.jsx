@@ -1,12 +1,18 @@
 import React, { useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Grid, TextField, Typography } from '@mui/material';
-import { Input } from '@siiges-ui/shared';
+import { Context, Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
+import formData from '../utils/sections/forms/formData';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
 import SolicitudContext from '../utils/Context/solicitudContext';
+import modalidades from '../utils/Mocks/mockModalidades';
 
 export default function DatosPlanEstudios() {
+  const { session } = useContext(Context);
+  const router = useRouter();
+  const { query } = router;
+
   const nivel = [
     { id: 1, nombre: 'Bachillerato' },
     { id: 2, nombre: 'Licenciatura' },
@@ -16,6 +22,13 @@ export default function DatosPlanEstudios() {
     { id: 6, nombre: 'Doctorado' },
     { id: 7, nombre: 'Profesional Asociado' },
     { id: 8, nombre: 'Educación Continua' },
+  ];
+
+  const periodo = [
+    { id: 1, nombre: 'Semestral' },
+    { id: 2, nombre: 'Cuatrimestral' },
+    { id: 3, nombre: 'Semestral curriculum flexible' },
+    { id: 4, nombre: 'Cuatrimestral curriculum flexible' },
   ];
 
   const turno = [
@@ -29,9 +42,22 @@ export default function DatosPlanEstudios() {
     form, setForm, error, setError, setErrors,
   } = useContext(SolicitudContext);
 
+  useEffect(() => {
+    if (query !== undefined) {
+      setForm({
+        tipoSolicitudId: 1,
+        usuarioId: session.id,
+        estatusSolicitudId: 1,
+        programa: {
+          plantelId: query.plantel,
+        },
+      });
+    }
+  }, [router]);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formDatosPlanEstudios(name, form, setForm, value);
+    formData(name, value, form, setForm);
   };
 
   const errors = errorDatosPlanEstudios(form, setError, error);
@@ -78,23 +104,19 @@ export default function DatosPlanEstudios() {
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
-            id="modalidad"
-            label="Modalidad"
+          <BasicSelect
+            title="Modalidad"
             name="modalidad"
-            auto="modalidad"
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.modalidad}
-            required
+            value={query.modalidad}
+            options={modalidades}
+            disabled
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
-            id="periodo"
-            label="Periodo"
+          <BasicSelect
+            title="Periodo"
             name="periodo"
-            auto="periodo"
+            options={periodo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.periodo}

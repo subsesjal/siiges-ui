@@ -6,6 +6,7 @@ function Input({
   id,
   label,
   required,
+  disabled,
   name,
   auto,
   type,
@@ -27,6 +28,7 @@ function Input({
       id={id}
       label={label}
       required={required}
+      disabled={disabled}
       type={type}
       name={name}
       autoComplete={auto}
@@ -47,6 +49,7 @@ Input.defaultProps = {
   errorMessage: '',
   value: '',
   required: false,
+  disabled: false,
   onchange: () => {},
   onblur: () => {},
 };
@@ -58,6 +61,7 @@ Input.propTypes = {
   onchange: PropTypes.func,
   onblur: PropTypes.func,
   required: PropTypes.bool,
+  disabled: PropTypes.bool,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
