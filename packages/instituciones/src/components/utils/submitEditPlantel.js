@@ -11,6 +11,10 @@ export default function submitEditPlantel(
   ) {
     const { institucionId, plantelId } = router.query;
     if (Object.values(error).every((x) => x === null || x === '')) {
+      if (form.correo3 === '') {
+        // eslint-disable-next-line no-param-reassign
+        form.correo3 = undefined;
+      }
       fetch(
         `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles/${plantelId}`,
         {
