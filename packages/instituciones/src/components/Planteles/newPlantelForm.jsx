@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { ButtonsForm, Input, SnackAlert } from '@siiges-ui/shared';
@@ -9,7 +9,6 @@ import submitNewPlantel from '../utils/submitNewPlantel';
 import plantelErrors from '../utils/plantelErrors';
 import formPlantel from '../utils/formPlantel';
 import submitEditPlantel from '../utils/submitEditPlantel';
-import validateForm from '../utils/validateForm';
 
 export default function PlantelForm({ plantel }) {
   const router = useRouter();
@@ -25,22 +24,16 @@ export default function PlantelForm({ plantel }) {
     options = municipios.data.filter((municipio) => municipio.estadoId === 14);
   }
 
-  useEffect(() => {
-    if (plantel !== null) {
-      validateForm(setForm, plantel);
-    }
-  }, []);
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formPlantel(name, form, setForm, value);
   };
 
-  const errors = plantelErrors(form, setError, error, plantel);
+  const errors = plantelErrors(form, setError, error);
 
   const handleOnBlur = (e) => {
-    const { name } = e.target;
-    errors[name]();
+    const { name, value } = e.target;
+    errors[name](value);
   };
 
   const inmuebles = [
@@ -401,7 +394,7 @@ export default function PlantelForm({ plantel }) {
         <ButtonsForm
           cancel={router.back}
           confirm={plantel
-            ? () => submitEditPlantel(errors, error, form, setNoti)
+            ? () => submitEditPlantel(form, setNoti)
             : () => submitNewPlantel(errors, error, form, setNoti)}
         />
       </Grid>
