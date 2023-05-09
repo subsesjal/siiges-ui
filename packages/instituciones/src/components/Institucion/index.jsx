@@ -5,32 +5,28 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ButtonStyled, SubmitDocument } from '@siiges-ui/shared';
+import { ButtonStyled, SubmitDocument, fileToFormData } from '@siiges-ui/shared';
 import { DropzoneDialog } from 'mui-file-dropzone';
 
 export default function Institucion({ data }) {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const [open, setOpen] = useState(false);
-  const formData = new FormData();
-  formData.append('tipoEntidad', 'INSTITUCION');
-  formData.append('entidadId', data.id);
-  formData.append('tipoDocumento', 'ACTA_CONSTITUTIVA');
-  formData.append('institucionId', router.query.institucionId);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleSave = () => {
+  const handleSave = async () => {
     if (files.length > 0) {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(files[0]);
-      fileReader.onload = (event) => {
-        const fileContent = event.target.result;
-        const fileName = files[0].name;
-        const fileBlob = new Blob([fileContent], { type: files[0].type });
-        formData.append('archivoAdjunto', fileBlob, fileName);
+      try {
+        const formData = await fileToFormData(files[0]);
+        formData.append('tipoEntidad', 'INSTITUCION');
+        formData.append('entidadId', data.id);
+        formData.append('tipoDocumento', 'ACTA_CONSTITUTIVA');
+        formData.append('institucionId', router.query.institucionId);
         SubmitDocument(formData);
         console.log('FormData:', formData);
-      };
+      } catch (error) {
+        console.error('Error:', error);
+      }
     } else {
       console.log('No file submitted.');
     }
