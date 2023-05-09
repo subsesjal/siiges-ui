@@ -18,8 +18,8 @@ import Logo from './components/Images/Logo';
 import LogoWhite from './components/Images/LogoWhite';
 import LoadCircle from './components/Resources/LoadCircle';
 import MenuDrawer from './components/Drawer/MenuDrawer';
-import MainNavbar from './components/Navbar/MainNavbar';
 import Navbar from './components/Navbar';
+import MainNavbar from './components/Navbar/MainNavbar';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
 import Select from './components/Select';
@@ -31,6 +31,7 @@ import ListTitle from './components/ListItems/ListTitle';
 import ListSubtitle from './components/ListItems/ListSubtitle';
 import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import SnackAlert from './components/Alert';
+import SubmitDocument from './components/Submit/SubmitDocument';
 
 export {
   ActionButtons,
@@ -52,7 +53,6 @@ export {
   LoadCircle,
   Logo,
   LogoWhite,
-  MainNavbar,
   MenuDrawer,
   Navbar,
   Overlay,
@@ -66,4 +66,6 @@ export {
   ListSubtitle,
   useCheckMobileScreen,
   SnackAlert,
+  MainNavbar,
+  SubmitDocument,
 };
