@@ -5,12 +5,15 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ButtonStyled, SubmitDocument, fileToFormData } from '@siiges-ui/shared';
+import {
+  ButtonStyled, SnackAlert, SubmitDocument, fileToFormData,
+} from '@siiges-ui/shared';
 import { DropzoneDialog } from 'mui-file-dropzone';
 
 export default function Institucion({ data }) {
   const router = useRouter();
   const [files, setFiles] = useState([]);
+  const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -23,12 +26,19 @@ export default function Institucion({ data }) {
         formData.append('tipoDocumento', 'ACTA_CONSTITUTIVA');
         formData.append('institucionId', router.query.institucionId);
         SubmitDocument(formData);
-        console.log('FormData:', formData);
       } catch (error) {
-        console.error('Error:', error);
+        setNoti({
+          open: true,
+          message: 'Algo salio mal, revise su documento',
+          type: 'error',
+        });
       }
     } else {
-      console.log('No file submitted.');
+      setNoti({
+        open: true,
+        message: 'Algo salio mal, ingrese un documento',
+        type: 'error',
+      });
     }
     setOpen(false);
   };
@@ -113,6 +123,14 @@ export default function Institucion({ data }) {
         </Grid>
       </Grid>
       <DropzoneDialog open={open} dropzoneText="Arrastre un archivo aquí, o haga click" dialogTitle="Subir archivo" submitButtonText="Aceptar" cancelButtonText="Cancelar" filesLimit={1} showPreviews onChange={(newFiles) => setFiles(newFiles)} onSave={handleSave} maxFileSize={5000000} onClose={handleClose} />
+      <SnackAlert
+        open={noti.open}
+        close={() => {
+          setNoti(false);
+        }}
+        type={noti.type}
+        mensaje={noti.message}
+      />
     </>
   );
 }
