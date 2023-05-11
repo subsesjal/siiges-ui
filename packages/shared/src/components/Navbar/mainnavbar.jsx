@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoWhite from '../Images/LogoWhite';
-import MenuNavbar from './menuNavbar';
+import MenuNavbar from './MenuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 
 export default function MainNavbar({ menuSwitch }) {
