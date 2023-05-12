@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import { Grid, TextField, Typography } from '@mui/material';
 import { Context, Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import formData from '../utils/sections/forms/formData';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import modalidades from '../utils/Mocks/mockModalidades';
+import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 
 export default function DatosPlanEstudios() {
   const { session } = useContext(Context);
@@ -46,18 +46,21 @@ export default function DatosPlanEstudios() {
     if (query !== undefined) {
       setForm({
         tipoSolicitudId: 1,
-        usuarioId: session.id,
+        usuarioId: parseInt(session.id, 10),
         estatusSolicitudId: 1,
         programa: {
-          plantelId: query.plantel,
+          plantelId: parseInt(query.plantel, 10),
+          modalidadId: parseInt(query.modalidad, 10),
         },
       });
     }
   }, [router]);
 
+  console.log(query.modalidadId);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formData(name, value, form, setForm);
+    formDatosPlanEstudios(name, value, form, setForm);
   };
 
   const errors = errorDatosPlanEstudios(form, setError, error);
@@ -82,12 +85,12 @@ export default function DatosPlanEstudios() {
         <Grid item xs={3}>
           <BasicSelect
             title="Nivel"
-            name="nivel"
+            name="nivelId"
             options={nivel}
             value=""
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.nivel}
+            errorMessage={error.nivelId}
             required
           />
         </Grid>
@@ -106,7 +109,7 @@ export default function DatosPlanEstudios() {
         <Grid item xs={3}>
           <BasicSelect
             title="Modalidad"
-            name="modalidad"
+            name="modalidadId"
             value={query.modalidad}
             options={modalidades}
             disabled
@@ -115,23 +118,23 @@ export default function DatosPlanEstudios() {
         <Grid item xs={3}>
           <BasicSelect
             title="Periodo"
-            name="periodo"
+            name="cicloId"
             options={periodo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.periodo}
+            errorMessage={error.cicloId}
             required
           />
         </Grid>
         <Grid item xs={3}>
           <BasicSelect
             title="Turno"
-            name="turno"
+            name="programaTurnos"
             options={turno}
             multiple
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.turno}
+            errorMessage={error.programaTurnos}
             required
           />
         </Grid>

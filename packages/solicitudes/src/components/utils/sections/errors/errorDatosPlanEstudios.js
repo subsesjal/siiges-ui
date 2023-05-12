@@ -1,11 +1,11 @@
 export default function errorDatosPlanEstudios(form, setError, error) {
   const errors = {
-    nivel: () => {
-      if (form.nivel === undefined || form.nivel === '') {
-        setError({ ...error, nivel: 'Seleccione un nivel' });
+    nivelId: () => {
+      if (form.programa.nivelId === undefined || form.programa.nivelId === '') {
+        setError({ ...error, nivelId: 'Seleccione un nivel' });
         return false;
       }
-      setError({ ...error, nivel: '' });
+      setError({ ...error, nivelId: '' });
       return true;
     },
     nombreProgramaEstudio: () => {
@@ -17,20 +17,20 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       setError({ ...error, nombreProgramaEstudio: '' });
       return true;
     },
-    periodo: () => {
-      if (form.periodo === undefined || form.periodo === '') {
-        setError({ ...error, periodo: 'Periodo invalido' });
+    cicloId: () => {
+      if (form.programa.cicloId === undefined || form.programa.cicloId === '') {
+        setError({ ...error, cicloId: 'Periodo invalido' });
         return false;
       }
-      setError({ ...error, periodo: '' });
+      setError({ ...error, cicloId: '' });
       return true;
     },
-    turno: () => {
-      if (form.turno === undefined || form.turno.lenth === 0) {
-        setError({ ...error, turno: 'Turno invalido' });
+    programaTurnos: () => {
+      if (form.programa.programaTurnos === undefined || form.programa.programaTurnos.lenth === 0) {
+        setError({ ...error, programaTurnos: 'Turnos invalidos' });
         return false;
       }
-      setError({ ...error, turno: '' });
+      setError({ ...error, programaTurnos: '' });
       return true;
     },
     duracionPrograma: () => {

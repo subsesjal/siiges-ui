@@ -4,6 +4,7 @@ function submitNewSolicitud(validations, next, setNewSubmit) {
   } = validations;
   if (Object.values(errors).every((validation) => validation()) !== false) {
     if (Object.values(error).every((value) => value === null || value === '')) {
+      console.log(form);
       fetch('http://localhost:3000/api/v1/solicitudes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

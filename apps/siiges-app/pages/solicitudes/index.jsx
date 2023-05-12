@@ -5,7 +5,9 @@ import {
   Refrendo,
   getSolicitudes,
 } from '@siiges-ui/solicitudes';
-import { Layout, Select, DataTable, Context } from '@siiges-ui/shared';
+import {
+  Layout, Select, DataTable, Context,
+} from '@siiges-ui/shared';
 import { Divider } from '@mui/material';
 
 const columns = [
@@ -38,8 +40,6 @@ export default function Solicitudes() {
     }
   }, [session]);
 
-  console.log(rows);
-
   useEffect(() => {
     if (option === 'new') setNewRequestContentVisible(true);
     else setNewRequestContentVisible(false);
@@ -70,7 +70,8 @@ export default function Solicitudes() {
 
   return (
     <Layout title="Solicitudes">
-      {newSolicitud &&
+      {newSolicitud
+        && (
         <Select
           title="Seleccione una opcion"
           name="options"
@@ -78,7 +79,7 @@ export default function Solicitudes() {
           value=""
           onchange={handleOnChange}
         />
-      }
+        )}
       <Divider sx={{ mt: 2 }} />
       {NewRequestContentVisible && <NewRequest />}
       {ChangeAddressContentVisible && <ChangeAddress />}
