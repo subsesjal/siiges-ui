@@ -56,8 +56,6 @@ export default function DatosPlanEstudios() {
     }
   }, [router]);
 
-  console.log(query.modalidadId);
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formDatosPlanEstudios(name, value, form, setForm);
@@ -87,7 +85,7 @@ export default function DatosPlanEstudios() {
             title="Nivel"
             name="nivelId"
             options={nivel}
-            value=""
+            value={form.programa?.nivelId}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.nivelId}
@@ -102,6 +100,7 @@ export default function DatosPlanEstudios() {
             auto="nombreProgramaEstudio"
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            value={form.nombreProgramaEstudio}
             errorMessage={error.nombreProgramaEstudio}
             required
           />
@@ -119,6 +118,7 @@ export default function DatosPlanEstudios() {
           <BasicSelect
             title="Periodo"
             name="cicloId"
+            value={form.programa?.cicloId}
             options={periodo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -133,6 +133,7 @@ export default function DatosPlanEstudios() {
             options={turno}
             multiple
             onchange={handleOnChange}
+            value={form.programa?.programaTurnos}
             onblur={handleOnBlur}
             errorMessage={error.programaTurnos}
             required
@@ -145,6 +146,7 @@ export default function DatosPlanEstudios() {
             name="duracionPrograma"
             auto="duracionPrograma"
             onchange={handleOnChange}
+            value={form.duracionPrograma}
             onblur={handleOnBlur}
             errorMessage={error.duracionPrograma}
             required
@@ -159,6 +161,7 @@ export default function DatosPlanEstudios() {
             label="Creditos necesarios para concluir el programa"
             name="creditos"
             auto="creditos"
+            value={form.creditos}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.creditos}
@@ -171,6 +174,7 @@ export default function DatosPlanEstudios() {
             label="Nivel educativo previo"
             name="nivelPrevio"
             auto="nivelPrevio"
+            value={form.nivelPrevio}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.nivelPrevio}
@@ -183,6 +187,7 @@ export default function DatosPlanEstudios() {
             id="objetivoGeneral"
             name="objetivoGeneral"
             auto="objetivoGeneral"
+            value={form.objetivoGeneral}
             rows={4}
             multiline
             sx={{ width: '100%' }}
