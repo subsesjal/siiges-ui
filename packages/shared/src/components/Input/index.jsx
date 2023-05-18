@@ -15,6 +15,7 @@ function Input({
   errorMessage,
   onchange,
   onblur,
+  onfocus,
 }) {
   const [input, setInput] = useState(value);
   const handleOnChange = (e) => {
@@ -36,6 +37,7 @@ function Input({
       value={input}
       onChange={handleOnChange}
       onBlur={onblur}
+      onFocus={onfocus}
       helperText={errorMessage}
       error={!!errorMessage}
       className="data-form"
@@ -52,6 +54,7 @@ Input.defaultProps = {
   disabled: false,
   onchange: () => {},
   onblur: () => {},
+  onfocus: () => {},
 };
 
 Input.propTypes = {
@@ -61,6 +64,7 @@ Input.propTypes = {
   onchange: PropTypes.func,
   onblur: PropTypes.func,
   required: PropTypes.bool,
+  onfocus: PropTypes.func,
   disabled: PropTypes.bool,
   value: PropTypes.oneOfType([
     PropTypes.string,

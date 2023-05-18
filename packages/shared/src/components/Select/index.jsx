@@ -14,6 +14,7 @@ export default function BasicSelect({
   disabled,
   name,
   onchange,
+  onfocus,
   multiple,
   onblur,
   required,
@@ -43,6 +44,7 @@ export default function BasicSelect({
           value={option}
           onChange={handleOnChange}
           onBlur={onblur}
+          onFocus={onfocus}
           multiple={multiple}
           error={!!errorMessage}
           disabled={disabled}
@@ -67,6 +69,7 @@ BasicSelect.defaultProps = {
   errorMessage: '',
   onchange: () => {},
   onblur: () => {},
+  onfocus: () => {},
 };
 
 BasicSelect.propTypes = {
@@ -85,4 +88,5 @@ BasicSelect.propTypes = {
   errorMessage: PropTypes.string,
   onchange: PropTypes.func,
   onblur: PropTypes.func,
+  onfocus: PropTypes.func,
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Grid, TextField, Typography } from '@mui/material';
 import { Context, Input } from '@siiges-ui/shared';
@@ -11,6 +11,7 @@ import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios
 export default function DatosPlanEstudios() {
   const { session } = useContext(Context);
   const router = useRouter();
+  const [initialValues, setInitialValues] = useState({});
   const { query } = router;
 
   const nivel = [
@@ -64,8 +65,17 @@ export default function DatosPlanEstudios() {
   const errors = errorDatosPlanEstudios(form, setError, error);
 
   const handleOnBlur = (e) => {
-    const { name } = e.target;
-    errors[name]();
+    const { name, value } = e.target;
+    const initialValue = initialValues[name];
+
+    if (value !== initialValue || value === '') {
+      errors[name]();
+    }
+  };
+
+  const handleInputFocus = (e) => {
+    const { name, value } = e.target;
+    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
   useEffect(() => {
@@ -88,6 +98,7 @@ export default function DatosPlanEstudios() {
             value={form.programa?.nivelId}
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.nivelId}
             required
           />
@@ -100,6 +111,7 @@ export default function DatosPlanEstudios() {
             auto="nombreProgramaEstudio"
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             value={form.nombreProgramaEstudio}
             errorMessage={error.nombreProgramaEstudio}
             required
@@ -110,6 +122,7 @@ export default function DatosPlanEstudios() {
             title="Modalidad"
             name="modalidadId"
             value={query.modalidad}
+            onfocus={handleInputFocus}
             options={modalidades}
             disabled
           />
@@ -122,6 +135,7 @@ export default function DatosPlanEstudios() {
             options={periodo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.cicloId}
             required
           />
@@ -135,6 +149,7 @@ export default function DatosPlanEstudios() {
             onchange={handleOnChange}
             value={form.programa?.programaTurnos}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}
             required
           />
@@ -148,6 +163,7 @@ export default function DatosPlanEstudios() {
             onchange={handleOnChange}
             value={form.duracionPrograma}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.duracionPrograma}
             required
           />
@@ -164,6 +180,7 @@ export default function DatosPlanEstudios() {
             value={form.creditos}
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.creditos}
             required
           />
@@ -177,6 +194,7 @@ export default function DatosPlanEstudios() {
             value={form.nivelPrevio}
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.nivelPrevio}
             required
           />
@@ -193,6 +211,7 @@ export default function DatosPlanEstudios() {
             sx={{ width: '100%' }}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
             helperText={error.objetivoGeneral}
             error={!!error.objetivoGeneral}
             required

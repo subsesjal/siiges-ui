@@ -1,7 +1,8 @@
 export default function errorDatosPlanEstudios(form, setError, error) {
+  const validNumber = /^-?\d*\.?\d+$/;
   const errors = {
     nivelId: () => {
-      if (form.programa.nivelId === undefined || form.programa.nivelId === '') {
+      if (form.programa?.nivelId === undefined || form.programa?.nivelId === '') {
         setError({ ...error, nivelId: 'Seleccione un nivel' });
         return false;
       }
@@ -9,8 +10,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     nombreProgramaEstudio: () => {
-      if (form.nombreProgramaEstudio === undefined
-        || form.nombreProgramaEstudio === '') {
+      if (form.nombreProgramaEstudio === undefined || form.nombreProgramaEstudio === '') {
         setError({ ...error, nombreProgramaEstudio: 'Nombre invalido' });
         return false;
       }
@@ -18,7 +18,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     cicloId: () => {
-      if (form.programa.cicloId === undefined || form.programa.cicloId === '') {
+      if (form.programa?.cicloId === undefined || form.programa?.cicloId === '') {
         setError({ ...error, cicloId: 'Periodo invalido' });
         return false;
       }
@@ -26,7 +26,8 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     programaTurnos: () => {
-      if (form.programa.programaTurnos === undefined || form.programa.programaTurnos.lenth === 0) {
+      if (form.programa?.programaTurnos === undefined
+        || form.programa?.programaTurnos.lenth === 0) {
         setError({ ...error, programaTurnos: 'Turnos invalidos' });
         return false;
       }
@@ -45,7 +46,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     creditos: () => {
-      if (form.creditos === undefined || form.creditos === '') {
+      if (form.creditos === undefined || form.creditos === '' || !validNumber.test(form.creditos)) {
         setError({ ...error, creditos: 'Creditos invalidos' });
         return false;
       }
