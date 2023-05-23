@@ -1,8 +1,9 @@
 export default function errorDatosPlanEstudios(form, setError, error) {
+  const formData = form[0];
   const validNumber = /^-?\d*\.?\d+$/;
   const errors = {
     nivelId: () => {
-      if (form.programa?.nivelId === undefined || form.programa?.nivelId === '') {
+      if (formData.programa?.nivelId === undefined || formData.programa?.nivelId === '') {
         setError({ ...error, nivelId: 'Seleccione un nivel' });
         return false;
       }
@@ -10,7 +11,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     nombreProgramaEstudio: () => {
-      if (form.nombreProgramaEstudio === undefined || form.nombreProgramaEstudio === '') {
+      if (formData.nombreProgramaEstudio === undefined || formData.nombreProgramaEstudio === '') {
         setError({ ...error, nombreProgramaEstudio: 'Nombre invalido' });
         return false;
       }
@@ -18,7 +19,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     cicloId: () => {
-      if (form.programa?.cicloId === undefined || form.programa?.cicloId === '') {
+      if (formData.programa?.cicloId === undefined || formData.programa?.cicloId === '') {
         setError({ ...error, cicloId: 'Periodo invalido' });
         return false;
       }
@@ -26,8 +27,8 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     programaTurnos: () => {
-      if (form.programa?.programaTurnos === undefined
-        || form.programa?.programaTurnos.lenth === 0) {
+      if (formData.programa?.programaTurnos === undefined
+        || formData.programa?.programaTurnos.lenth === 0) {
         setError({ ...error, programaTurnos: 'Turnos invalidos' });
         return false;
       }
@@ -35,7 +36,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     duracionPrograma: () => {
-      if (form.duracionPrograma === undefined || form.duracionPrograma === '') {
+      if (formData.duracionPrograma === undefined || formData.duracionPrograma === '') {
         setError({
           ...error,
           duracionPrograma: 'Duracion del programa invalida',
@@ -46,7 +47,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     creditos: () => {
-      if (form.creditos === undefined || form.creditos === '' || !validNumber.test(form.creditos)) {
+      if (formData.creditos === undefined || formData.creditos === '' || !validNumber.test(formData.creditos)) {
         setError({ ...error, creditos: 'Creditos invalidos' });
         return false;
       }
@@ -54,7 +55,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     nivelPrevio: () => {
-      if (form.nivelPrevio === undefined || form.nivelPrevio === '') {
+      if (formData.nivelPrevio === undefined || formData.nivelPrevio === '') {
         setError({ ...error, nivelPrevio: 'Nivel previo invalido' });
         return false;
       }
@@ -62,7 +63,7 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       return true;
     },
     objetivoGeneral: () => {
-      if (form.objetivoGeneral === undefined || form.objetivoGeneral === '') {
+      if (formData.objetivoGeneral === undefined || formData.objetivoGeneral === '') {
         setError({ ...error, objetivoGeneral: 'Objetivo general invalido' });
         return false;
       }

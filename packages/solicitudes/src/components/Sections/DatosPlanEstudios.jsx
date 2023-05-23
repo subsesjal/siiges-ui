@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Grid, TextField, Typography } from '@mui/material';
-import { Context, Input } from '@siiges-ui/shared';
+import { Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
 import SolicitudContext from '../utils/Context/solicitudContext';
@@ -9,10 +9,9 @@ import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 
 export default function DatosPlanEstudios() {
-  const { session } = useContext(Context);
   const router = useRouter();
-  const [initialValues, setInitialValues] = useState({});
   const { query } = router;
+  const [initialValues, setInitialValues] = useState({});
 
   const nivel = [
     { id: 1, nombre: 'Bachillerato' },
@@ -42,20 +41,6 @@ export default function DatosPlanEstudios() {
   const {
     form, setForm, error, setError, setErrors,
   } = useContext(SolicitudContext);
-
-  useEffect(() => {
-    if (query !== undefined) {
-      setForm({
-        tipoSolicitudId: 1,
-        usuarioId: parseInt(session.id, 10),
-        estatusSolicitudId: 1,
-        programa: {
-          plantelId: parseInt(query.plantel, 10),
-          modalidadId: parseInt(query.modalidad, 10),
-        },
-      });
-    }
-  }, [router]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;

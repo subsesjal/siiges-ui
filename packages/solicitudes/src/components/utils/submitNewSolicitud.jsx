@@ -1,15 +1,35 @@
-function submitNewSolicitud(validations, next, setNewSubmit) {
+/* function submitNewSolicitud(validations, next, setNewSubmit) {
   const {
-    errors, error, form, setNoti,
+    errors, error, form, setNoti, setId,
   } = validations;
-  if (Object.values(errors).every((validation) => validation()) !== false) {
+
+  const isValid = Object.keys(errors).every((campo) => errors[campo]());
+  if (!isValid) {
+    console.log('Failure :c');
+    return;
+  }
+
+  console.log(form); */
+/* if (Object.values(errors).every((validation) => validation()) !== false) {
     if (Object.values(error).every((value) => value === null || value === '')) {
-      console.log(form);
       fetch('http://localhost:3000/api/v1/solicitudes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      }).then(next(), setNewSubmit(false));
+        body: JSON.stringify(form[1]),
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Error submitting the request');
+        })
+        .then((data) => {
+          setId(data.data.id);
+        })
+        .then(next(), setNewSubmit(false))
+        .catch((err) => {
+          console.error('Error:', err);
+        });
     } else {
       setNoti({
         open: true,
@@ -23,7 +43,7 @@ function submitNewSolicitud(validations, next, setNewSubmit) {
       message: 'Algo salio mal, revisa que los campos esten correctos',
       type: 'error',
     });
-  }
-}
+  } */
+/* }
 
-export default submitNewSolicitud;
+export default submitNewSolicitud; */

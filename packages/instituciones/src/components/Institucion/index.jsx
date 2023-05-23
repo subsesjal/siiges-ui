@@ -22,9 +22,8 @@ export default function Institucion({ data }) {
       try {
         const formData = await fileToFormData(files[0]);
         formData.append('tipoEntidad', 'INSTITUCION');
-        formData.append('entidadId', data.id);
+        formData.append('entidadId', router.query.institucionId);
         formData.append('tipoDocumento', 'ACTA_CONSTITUTIVA');
-        formData.append('institucionId', router.query.institucionId);
         SubmitDocument(formData);
       } catch (error) {
         setNoti({
@@ -122,7 +121,19 @@ export default function Institucion({ data }) {
           </Grid>
         </Grid>
       </Grid>
-      <DropzoneDialog open={open} dropzoneText="Arrastre un archivo aquí, o haga click" dialogTitle="Subir archivo" submitButtonText="Aceptar" cancelButtonText="Cancelar" filesLimit={1} showPreviews onChange={(newFiles) => setFiles(newFiles)} onSave={handleSave} maxFileSize={5000000} onClose={handleClose} />
+      <DropzoneDialog
+        open={open}
+        dropzoneText="Arrastre un archivo aquí, o haga click"
+        dialogTitle="Subir archivo"
+        submitButtonText="Aceptar"
+        cancelButtonText="Cancelar"
+        filesLimit={1}
+        showPreviews
+        onChange={(newFiles) => setFiles(newFiles)}
+        onSave={handleSave}
+        maxFileSize={5000000}
+        onClose={handleClose}
+      />
       <SnackAlert
         open={noti.open}
         close={() => {
