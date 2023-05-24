@@ -10,7 +10,7 @@ export default function FundamentosPlanEstudios() {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 0, width: '100%' }}>
         <Grid item xs={9}>
-          <InputFile label="FPD01" />
+          <InputFile label="FDP01" />
         </Grid>
         <Grid item xs={12}>
           <Typography>

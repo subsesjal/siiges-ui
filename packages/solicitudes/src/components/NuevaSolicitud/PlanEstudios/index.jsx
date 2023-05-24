@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
+import { Context } from '@siiges-ui/shared';
+import { useRouter } from 'next/router';
 import pagination from '../../../events/pagination';
 import SectionLayout from '../../SectionLayout';
 import DatosPlanEstudios from '../../Sections/DatosPlanEstudios';
-import CoordinadorPrograma from '../../Sections/CoordinadorPrograma';
 import FundamentosPlanEstudios from '../../Sections/FundamentosPlanEstudios';
 import Ingreso from '../../Sections/Ingreso';
 import Egreso from '../../Sections/Egreso';
@@ -16,7 +17,29 @@ import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 import SolicitudContext from '../../utils/Context/solicitudContext';
 
 export default function PlanEstudios({ nextModule }) {
-  const [form, setForm] = useState({});
+  const { session } = useContext(Context);
+  const router = useRouter();
+  const { query } = router;
+  const [form, setForm] = useState({
+    1: {
+      tipoSolicitudId: 1,
+      usuarioId: parseInt(session.id, 10),
+      estatusSolicitudId: 1,
+      programa: {
+        plantelId: parseInt(query.plantel, 10),
+        modalidadId: parseInt(query.modalidad, 10),
+      },
+    },
+    2: {},
+    3: {},
+    4: {},
+    5: {},
+    6: {},
+    7: {},
+    8: {},
+    9: {},
+  });
+  const [id, setId] = useState();
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
@@ -31,15 +54,14 @@ export default function PlanEstudios({ nextModule }) {
       setErrors,
       noti,
       setNoti,
+      id,
+      setId,
     }),
-    [form, error, errors, noti],
+    [form, error, errors, noti, id],
   );
   const {
     next, prev, section, position, porcentaje,
-  } = pagination(
-    useState,
-    10,
-  );
+  } = pagination(useState, 9);
 
   return (
     <SolicitudContext.Provider value={value}>
@@ -49,22 +71,21 @@ export default function PlanEstudios({ nextModule }) {
             sectionTitle="Plan de estudios"
             sections={section}
             position={position}
-            total="10"
+            total="9"
             porcentage={porcentaje}
             nextModule={nextModule}
             next={next}
             prev={prev}
           >
             {section === 1 && <DatosPlanEstudios />}
-            {section === 2 && <CoordinadorPrograma />}
-            {section === 3 && <FundamentosPlanEstudios />}
-            {section === 4 && <Ingreso />}
-            {section === 5 && <Egreso />}
-            {section === 6 && <Curricula />}
-            {section === 7 && <Asignaturas />}
-            {section === 8 && <AsignaturasFormacionElectiva />}
-            {section === 9 && <Docentes />}
-            {section === 10 && <TrayectoriaEducativa />}
+            {section === 2 && <FundamentosPlanEstudios />}
+            {section === 3 && <Ingreso />}
+            {section === 4 && <Egreso />}
+            {section === 5 && <Curricula />}
+            {section === 6 && <Asignaturas />}
+            {section === 7 && <AsignaturasFormacionElectiva />}
+            {section === 8 && <Docentes />}
+            {section === 9 && <TrayectoriaEducativa />}
           </SectionLayout>
         </CardContent>
       </Card>

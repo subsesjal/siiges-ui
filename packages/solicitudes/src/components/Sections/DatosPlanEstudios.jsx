@@ -1,17 +1,17 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Grid, TextField, Typography } from '@mui/material';
-import { Context, Input } from '@siiges-ui/shared';
+import { Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import formData from '../utils/sections/forms/formData';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import modalidades from '../utils/Mocks/mockModalidades';
+import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 
 export default function DatosPlanEstudios() {
-  const { session } = useContext(Context);
   const router = useRouter();
   const { query } = router;
+  const [initialValues, setInitialValues] = useState({});
 
   const nivel = [
     { id: 1, nombre: 'Bachillerato' },
@@ -42,29 +42,25 @@ export default function DatosPlanEstudios() {
     form, setForm, error, setError, setErrors,
   } = useContext(SolicitudContext);
 
-  useEffect(() => {
-    if (query !== undefined) {
-      setForm({
-        tipoSolicitudId: 1,
-        usuarioId: session.id,
-        estatusSolicitudId: 1,
-        programa: {
-          plantelId: query.plantel,
-        },
-      });
-    }
-  }, [router]);
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formData(name, value, form, setForm);
+    formDatosPlanEstudios(name, value, form, setForm);
   };
 
   const errors = errorDatosPlanEstudios(form, setError, error);
 
   const handleOnBlur = (e) => {
-    const { name } = e.target;
-    errors[name]();
+    const { name, value } = e.target;
+    const initialValue = initialValues[name];
+
+    if (value !== initialValue || value === '') {
+      errors[name]();
+    }
+  };
+
+  const handleInputFocus = (e) => {
+    const { name, value } = e.target;
+    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
   useEffect(() => {
@@ -82,12 +78,13 @@ export default function DatosPlanEstudios() {
         <Grid item xs={3}>
           <BasicSelect
             title="Nivel"
-            name="nivel"
+            name="nivelId"
             options={nivel}
-            value=""
+            value={form.programa?.nivelId}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.nivel}
+            onfocus={handleInputFocus}
+            errorMessage={error.nivelId}
             required
           />
         </Grid>
@@ -99,6 +96,8 @@ export default function DatosPlanEstudios() {
             auto="nombreProgramaEstudio"
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
+            value={form.nombreProgramaEstudio}
             errorMessage={error.nombreProgramaEstudio}
             required
           />
@@ -106,8 +105,9 @@ export default function DatosPlanEstudios() {
         <Grid item xs={3}>
           <BasicSelect
             title="Modalidad"
-            name="modalidad"
+            name="modalidadId"
             value={query.modalidad}
+            onfocus={handleInputFocus}
             options={modalidades}
             disabled
           />
@@ -115,23 +115,27 @@ export default function DatosPlanEstudios() {
         <Grid item xs={3}>
           <BasicSelect
             title="Periodo"
-            name="periodo"
+            name="cicloId"
+            value={form.programa?.cicloId}
             options={periodo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.periodo}
+            onfocus={handleInputFocus}
+            errorMessage={error.cicloId}
             required
           />
         </Grid>
         <Grid item xs={3}>
           <BasicSelect
             title="Turno"
-            name="turno"
+            name="programaTurnos"
             options={turno}
             multiple
             onchange={handleOnChange}
+            value={form.programa?.programaTurnos}
             onblur={handleOnBlur}
-            errorMessage={error.turno}
+            onfocus={handleInputFocus}
+            errorMessage={error.programaTurnos}
             required
           />
         </Grid>
@@ -142,7 +146,9 @@ export default function DatosPlanEstudios() {
             name="duracionPrograma"
             auto="duracionPrograma"
             onchange={handleOnChange}
+            value={form.duracionPrograma}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.duracionPrograma}
             required
           />
@@ -156,8 +162,10 @@ export default function DatosPlanEstudios() {
             label="Creditos necesarios para concluir el programa"
             name="creditos"
             auto="creditos"
+            value={form.creditos}
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.creditos}
             required
           />
@@ -168,8 +176,10 @@ export default function DatosPlanEstudios() {
             label="Nivel educativo previo"
             name="nivelPrevio"
             auto="nivelPrevio"
+            value={form.nivelPrevio}
             onchange={handleOnChange}
             onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.nivelPrevio}
             required
           />
@@ -180,11 +190,13 @@ export default function DatosPlanEstudios() {
             id="objetivoGeneral"
             name="objetivoGeneral"
             auto="objetivoGeneral"
+            value={form.objetivoGeneral}
             rows={4}
             multiline
             sx={{ width: '100%' }}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
             helperText={error.objetivoGeneral}
             error={!!error.objetivoGeneral}
             required
