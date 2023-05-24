@@ -1,5 +1,5 @@
 export default function errorDatosPlanEstudios(form, setError, error) {
-  const formData = form[0];
+  const formData = form[1];
   const validNumber = /^-?\d*\.?\d+$/;
   const errors = {
     nivelId: () => {
