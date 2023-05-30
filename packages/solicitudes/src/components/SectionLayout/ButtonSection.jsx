@@ -9,16 +9,17 @@ import submitEditSolicitud from '../utils/submitEditSolicitud';
 import SolicitudContext from '../utils/Context/solicitudContext';
 
 export default function ButtonSection({
+  id,
+  sections,
   position,
   next,
   prev,
-  nextModule,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
   const validations = useContext(SolicitudContext);
   const submit = newSubmit
-    ? () => submitNewSolicitud(validations, next, setNewSubmit)
-    : () => submitEditSolicitud(validations, next, setNewSubmit);
+    ? () => submitNewSolicitud(validations, setNewSubmit)
+    : () => submitEditSolicitud(validations, sections, id);
 
   return (
     <>
@@ -29,7 +30,7 @@ export default function ButtonSection({
               text="Terminar"
               alt="Terminar solicitud"
               type="success"
-              onclick={nextModule}
+              onclick={submit}
             />
           </Grid>
           <Grid item xs={3}>
@@ -37,7 +38,7 @@ export default function ButtonSection({
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               type="success"
-              onclick={submit}
+              onclick={next}
             />
           </Grid>
         </Grid>
@@ -57,7 +58,7 @@ export default function ButtonSection({
               text="Terminar"
               alt="Terminar solicitud"
               type="success"
-              onclick={nextModule}
+              onclick={submit}
             />
           </Grid>
           <Grid item xs={2}>
@@ -65,7 +66,7 @@ export default function ButtonSection({
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               type="success"
-              onclick={submit}
+              onclick={next}
             />
           </Grid>
         </Grid>
@@ -85,7 +86,7 @@ export default function ButtonSection({
               text="Terminar"
               alt="Terminar solicitud"
               type="success"
-              onclick={nextModule}
+              onclick={submit}
             />
           </Grid>
         </Grid>
@@ -97,7 +98,7 @@ export default function ButtonSection({
               text="Terminar"
               alt="Terminar solicitud"
               type="success"
-              onclick={nextModule}
+              onclick={submit}
             />
           </Grid>
         </Grid>
@@ -109,6 +110,8 @@ export default function ButtonSection({
 ButtonSection.propTypes = {
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
-  nextModule: PropTypes.number.isRequired,
+  /* nextModule: PropTypes.number.isRequired, */
   position: PropTypes.string.isRequired,
+  sections: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
 };

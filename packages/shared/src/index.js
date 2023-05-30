@@ -33,6 +33,7 @@ import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import SnackAlert from './components/Alert';
 import SubmitDocument from './components/Submit/SubmitDocument';
 import fileToFormData from './components/Submit/FileToFormData';
+import GetFile from './utils/handlers/getFile';
 
 export {
   ActionButtons,
@@ -70,4 +71,5 @@ export {
   MainNavbar,
   SubmitDocument,
   fileToFormData,
+  GetFile,
 };

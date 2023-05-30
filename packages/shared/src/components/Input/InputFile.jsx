@@ -7,7 +7,9 @@ import fileToFormData from '../Submit/FileToFormData';
 import SnackAlert from '../Alert';
 import SubmitDocument from '../Submit/SubmitDocument';
 
-export default function InputFile({ label, id }) {
+export default function InputFile({
+  label, id, tipoEntidad, tipoDocumento, setLoaded, setUrl, disabled,
+}) {
   const [files, setFiles] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [open, setOpen] = useState(false);
@@ -17,10 +19,10 @@ export default function InputFile({ label, id }) {
     if (files.length > 0) {
       try {
         const formData = await fileToFormData(files[0]);
-        formData.append('tipoEntidad', 'SOLICITUD');
+        formData.append('tipoEntidad', tipoEntidad);
         formData.append('entidadId', id);
-        formData.append('tipoDocumento', 'FORMATO_PEDAGOGICO_01');
-        SubmitDocument(formData);
+        formData.append('tipoDocumento', tipoDocumento);
+        SubmitDocument(formData, setLoaded, setUrl);
       } catch (error) {
         setNoti({
           open: true,
@@ -39,7 +41,7 @@ export default function InputFile({ label, id }) {
   };
   return (
     <>
-      <Button onClick={handleOpen} variant="contained">
+      <Button onClick={handleOpen} variant="contained" disabled={disabled}>
         {label}
       </Button>
       <DropzoneDialog
@@ -70,4 +72,9 @@ export default function InputFile({ label, id }) {
 InputFile.propTypes = {
   label: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  tipoDocumento: PropTypes.string.isRequired,
+  tipoEntidad: PropTypes.string.isRequired,
+  setLoaded: PropTypes.func.isRequired,
+  setUrl: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
