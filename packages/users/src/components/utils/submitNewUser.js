@@ -6,13 +6,13 @@ export default function submitNewUser(userErrors, error, form, setNoti, session)
       if (session.rol === 'admin') {
         fetch('http://localhost:3000/api/v1/usuarios/', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
           body: JSON.stringify(form),
         });
       } else if (session.rol === 'representante') {
         fetch(`http://localhost:3000/api/v1/usuarios/${session.id}/usuario`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
           body: JSON.stringify(form),
         });
       } else {

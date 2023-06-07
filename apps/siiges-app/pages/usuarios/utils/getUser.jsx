@@ -9,7 +9,7 @@ export default function getUser() {
   useEffect(() => {
     if (router.isReady) {
       const { id } = router.query;
-      fetch(`http://localhost:3000/api/v1/usuarios/${id}`)
+      fetch(`http://localhost:3000/api/v1/usuarios/${id}`, { headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' } })
         .then((response) => response.json())
         .then((data) => {
           setLoading(true);

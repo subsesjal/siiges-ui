@@ -4,7 +4,7 @@ export default function submitEditPlantel(form, setNoti) {
   const { institucionId, plantelId } = router.query;
   fetch(`http://localhost:3000/api/v1/instituciones/${institucionId}/planteles/${plantelId}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
     body: JSON.stringify(form),
   })
     .then(

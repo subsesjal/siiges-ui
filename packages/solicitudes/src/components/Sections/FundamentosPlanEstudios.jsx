@@ -17,14 +17,14 @@ export default function FundamentosPlanEstudios({ disabled }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Datos del plan de estudios</Typography>
+        <Typography variant="h6">Fundamentos del plan de estudios</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 0, width: '100%' }}>
         <Grid item xs={9}>
           {form[2].url ? <div />
             : (
               <InputFile
-                tipoEntidad="SOLICITUD"
+                tipoEntidad="PROGRAMA"
                 tipoDocumento="FORMATO_PEDAGOGICO_01"
                 id={id}
                 label="FDP01"

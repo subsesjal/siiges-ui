@@ -9,9 +9,9 @@ export default function getInstitucion() {
   useEffect(() => {
     if (router.isReady) {
       const { institucionId } = router.query;
-      fetch(
-        `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`,
-      )
+      fetch(`http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`, {
+        headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
+      })
         .then((response) => response.json())
         .then((data) => {
           setLoading(true);

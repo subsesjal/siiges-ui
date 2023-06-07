@@ -1,4 +1,4 @@
-export default function errorEgreso(form, setError, error) {
+export default function errorTrayectoriaEducativa(form, setError, error) {
   const formData = form[4];
   const errors = {
     perfilEgresoConocimientos: () => {

@@ -15,7 +15,7 @@ export default function submitNewPlantel(
         `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
           body: JSON.stringify(form),
         },
       );

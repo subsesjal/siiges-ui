@@ -5,7 +5,7 @@ export default function submitEditUser(userErrors, error, form, setNoti, id) {
     if (Object.values(error).every((x) => x === null || x === '')) {
       fetch(`http://localhost:3000/api/v1/usuarios/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
         body: JSON.stringify(form),
       });
       setNoti({

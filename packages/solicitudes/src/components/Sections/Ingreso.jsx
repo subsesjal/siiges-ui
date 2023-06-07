@@ -2,8 +2,8 @@ import { Grid, TextField, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import SolicitudContext from '../utils/Context/solicitudContext';
-import formIngreso from '../utils/sections/forms/formIngreso';
 import errorIngreso from '../utils/sections/errors/errorIngreso';
+import formPrograma from '../utils/sections/forms/formPrograma';
 
 export default function Ingreso({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
@@ -14,7 +14,7 @@ export default function Ingreso({ disabled }) {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formIngreso(name, value, form, setForm);
+    formPrograma(name, value, setForm, 3);
   };
 
   const errors = errorIngreso(form, setError, error);
@@ -53,6 +53,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[3].metodosInduccion}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -75,6 +76,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[3].perfilIngresoConocimientos}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -92,6 +94,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[3].perfilIngresoHabilidades}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -109,6 +112,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[3].perfilIngresoActitudes}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -126,6 +130,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[3].procesoSeleccion}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}

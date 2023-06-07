@@ -15,9 +15,15 @@ export default function getSolicitudes() {
       } else {
         url = 'http://localhost:3000/api/v1/solicitudes/';
       }
-      fetch(url)
+      fetch(url, {
+        headers: {
+          method: 'GET',
+          api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx',
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           setLoading(true);
           if (data !== undefined) {
             solicitudData = data.data;

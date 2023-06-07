@@ -15,7 +15,7 @@ export default function submitEditSolicitud(validations, sections, id) {
 
   fetch(`http://localhost:3000/api/v1/solicitudes/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
     body: JSON.stringify(form[sections]),
   })
     .then((response) => {

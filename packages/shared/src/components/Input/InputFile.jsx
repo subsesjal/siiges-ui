@@ -8,7 +8,7 @@ import SnackAlert from '../Alert';
 import SubmitDocument from '../Submit/SubmitDocument';
 
 export default function InputFile({
-  label, id, tipoEntidad, tipoDocumento, setLoaded, setUrl, disabled,
+  label, id, tipoEntidad, tipoDocumento, setUrl, disabled,
 }) {
   const [files, setFiles] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
@@ -22,7 +22,7 @@ export default function InputFile({
         formData.append('tipoEntidad', tipoEntidad);
         formData.append('entidadId', id);
         formData.append('tipoDocumento', tipoDocumento);
-        SubmitDocument(formData, setLoaded, setUrl);
+        SubmitDocument(formData, setUrl);
       } catch (error) {
         setNoti({
           open: true,
@@ -74,7 +74,6 @@ InputFile.propTypes = {
   id: PropTypes.number.isRequired,
   tipoDocumento: PropTypes.string.isRequired,
   tipoEntidad: PropTypes.string.isRequired,
-  setLoaded: PropTypes.func.isRequired,
   setUrl: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
 };

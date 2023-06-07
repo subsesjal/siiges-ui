@@ -2,8 +2,8 @@ import { Grid, TextField, Typography } from '@mui/material';
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SolicitudContext from '../utils/Context/solicitudContext';
-import formEgreso from '../utils/sections/forms/formEgreso';
 import errorEgreso from '../utils/sections/errors/errorEgreso';
+import formPrograma from '../utils/sections/forms/formPrograma';
 
 export default function Egreso({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
@@ -14,7 +14,7 @@ export default function Egreso({ disabled }) {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formEgreso(name, value, form, setForm);
+    formPrograma(name, value, setForm, 4);
   };
 
   const errors = errorEgreso(form, setError, error);
@@ -56,6 +56,7 @@ export default function Egreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[4].perfilEgresoConocimientos}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -76,6 +77,7 @@ export default function Egreso({ disabled }) {
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
+            value={form[4].perfilEgresoHabilidades}
             helperText={error.perfilEgresoHabilidades}
             error={!!error.perfilEgresoHabilidades}
             disabled={disabled}
@@ -93,6 +95,7 @@ export default function Egreso({ disabled }) {
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
+            value={form[4].perfilEgresoActitudes}
             helperText={error.perfilEgresoActitudes}
             error={!!error.perfilEgresoActitudes}
             disabled={disabled}
@@ -110,6 +113,7 @@ export default function Egreso({ disabled }) {
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
+            value={form[4].seguimientoEgresados}
             helperText={error.seguimientoEgresados}
             error={!!error.seguimientoEgresados}
             disabled={disabled}

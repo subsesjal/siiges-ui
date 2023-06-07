@@ -1,6 +1,7 @@
 /* export default function GetFile(fileType, setForm, setLoaded) {
   fetch(
     `http://localhost:3000/api/v1/files?tipoEntidad=${fileType.tipoEntidad}&entidadId=${fileType.entidadId}&tipoDocumento=${fileType.tipoDocumento}`,
+    { headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' } }
     {
       method: 'GET',
     }

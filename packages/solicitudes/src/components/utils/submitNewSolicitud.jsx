@@ -15,7 +15,7 @@ function submitNewSolicitud(validations, setNewSubmit) {
 
   fetch('http://localhost:3000/api/v1/solicitudes', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
     body: JSON.stringify(form[1]),
   })
     .then((response) => {

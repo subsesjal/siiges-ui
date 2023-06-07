@@ -41,7 +41,7 @@ export default function UserForm({ user }) {
 
     fetch(`http://localhost:3000/api/v1/usuarios/${session.id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
       body: JSON.stringify(data),
     });
   }

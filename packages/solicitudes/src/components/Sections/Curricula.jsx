@@ -1,8 +1,62 @@
 import { Grid, TextField, Typography } from '@mui/material';
 import { InputFile } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import SolicitudContext from '../utils/Context/solicitudContext';
+import formPrograma from '../utils/sections/forms/formPrograma';
+import errorCurricula from '../utils/sections/errors/errorCurricula';
 
-export default function Curricula() {
+export default function Curricula({ disabled }) {
+  const [initialValues, setInitialValues] = useState({});
+  const [loaded, setLoaded] = useState([]);
+  const [fileURLs, setFileURLs] = useState([]);
+
+  const {
+    form, setForm, error, setError, setErrors, id,
+  } = useContext(SolicitudContext);
+
+  useEffect(() => {
+    if (fileURLs > 0) {
+      setForm({ ...form, 5: { ...form['5'], urls: fileURLs } });
+    }
+  }, [fileURLs]);
+
+  const handleFileLoaded = (index, url) => {
+    setLoaded((prevLoaded) => [
+      ...prevLoaded.slice(0, index), true, ...prevLoaded.slice(index + 1),
+    ]);
+    setFileURLs((prevURLs) => [
+      ...prevURLs.slice(0, index), url, ...prevURLs.slice(index + 1),
+    ]);
+  };
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    formPrograma(name, value, setForm, 5);
+  };
+
+  const errors = errorCurricula(form, setError, error);
+
+  const handleOnBlur = (e) => {
+    const { name, value } = e.target;
+    const initialValue = initialValues[name];
+
+    if (value !== initialValue || value === '') {
+      errors[name]();
+    }
+  };
+
+  const handleInputFocus = (e) => {
+    const { name, value } = e.target;
+    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
+  };
+
+  useEffect(() => {
+    if (errors !== undefined) {
+      setErrors(errors);
+    }
+  }, [error]);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -12,59 +66,171 @@ export default function Curricula() {
         <Grid item xs={12}>
           <TextField
             id="mapaCurricular"
+            name="mapaCurricular"
             label="Mapa curricular"
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[5].mapaCurricular}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
+            helperText={error.mapaCurricular}
+            error={!!error.mapaCurricular}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="flexibilidadCurriular"
+            id="flexibilidadCurricular"
+            name="flexibilidadCurricular"
             label="Flexibilidad curriular"
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[5].flexibilidadCurricular}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
+            helperText={error.flexibilidadCurricular}
+            error={!!error.flexibilidadCurricular}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="lineasGeneracionConocimiento"
+            id="lineasGeneracionAplicacionConocimiento"
+            name="lineasGeneracionAplicacionConocimiento"
             label="lineas de generacion del conocimiento"
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[5].lineasGeneracionAplicacionConocimiento}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
+            helperText={error.lineasGeneracionAplicacionConocimiento}
+            error={!!error.lineasGeneracionAplicacionConocimiento}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="update"
+            id="actualizacion"
+            name="actualizacion"
             label="Actualizacion del plan de estudios"
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[5].actualizacion}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
+            helperText={error.actualizacion}
+            error={!!error.actualizacion}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="vinculation"
+            id="conveniosVinculacion"
+            name="conveniosVinculacion"
             label="Vinculacion con colegios de profesionista, academias profesionales entre otras"
             rows={4}
             multiline
             sx={{ width: '100%' }}
+            value={form[5].conveniosVinculacion}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
+            helperText={error.conveniosVinculacion}
+            error={!!error.conveniosVinculacion}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={9}>
-          <InputFile label="Mapa curricular" />
+          {loaded[0]
+            ? (
+              <a
+                href={fileURLs[0]}
+                alt="alt text"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Mapa Curricular
+              </a>
+            ) : <div />}
+          <InputFile
+            tipoEntidad="PROGRAMA"
+            tipoDocumento="MAPA_CURRICULAR"
+            id={id}
+            label="Mapa curricular"
+            setuRL={(url) => handleFileLoaded(0, url)}
+            disabled={disabled}
+          />
         </Grid>
         <Grid item xs={9}>
-          <InputFile label="Reglas de operacion de las academias" />
+          {loaded[1]
+            ? (
+              <a
+                href={fileURLs[1]}
+                alt="alt text"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Reglas de operacion de las academias
+              </a>
+            ) : <div />}
+          <InputFile
+            tipoEntidad="PROGRAMA"
+            tipoDocumento="REGLAS_ACADEMICAS"
+            id={id}
+            label="Reglas de operacion de las academias"
+            setuRL={(url) => handleFileLoaded(1, url)}
+            disabled={disabled}
+          />
         </Grid>
         <Grid item xs={9}>
-          <InputFile label="Asignaturas a detalle" />
+          {loaded[2]
+            ? (
+              <a
+                href={fileURLs[2]}
+                alt="alt text"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Asignaturas a detalle
+              </a>
+            ) : <div />}
+          <InputFile
+            tipoEntidad="PROGRAMA"
+            tipoDocumento="ASIGNATURAS_DETALLE"
+            id={id}
+            label="Asignaturas a detalle"
+            setuRL={(url) => handleFileLoaded(2, url)}
+            disabled={disabled}
+          />
         </Grid>
         <Grid item xs={9}>
-          <InputFile label="Propuesta hemerobibliografica" />
+          {loaded[3]
+            ? (
+              <a
+                href={fileURLs[3]}
+                alt="alt text"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Propuesta hemerobibliografica
+              </a>
+            ) : <div />}
+          <InputFile
+            tipoEntidad="PROGRAMA"
+            tipoDocumento="PROPUESTA_HEMEROGRAFICA"
+            id={id}
+            label="Propuesta hemerobibliografica"
+            setuRL={(url) => handleFileLoaded(3, url)}
+            disabled={disabled}
+          />
         </Grid>
         <Grid item xs={12}>
           <Typography>
@@ -88,3 +254,7 @@ export default function Curricula() {
     </Grid>
   );
 }
+
+Curricula.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+};
