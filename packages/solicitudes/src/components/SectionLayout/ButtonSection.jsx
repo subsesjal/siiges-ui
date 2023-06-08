@@ -110,7 +110,6 @@ export default function ButtonSection({
 ButtonSection.propTypes = {
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
-  /* nextModule: PropTypes.number.isRequired, */
   position: PropTypes.string.isRequired,
   sections: PropTypes.number.isRequired,
   id: PropTypes.number.isRequired,

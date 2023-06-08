@@ -19,7 +19,7 @@ export default function getUsers() {
     fetch(url, {
       headers: {
         api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx',
-        Authorization: 'Bearer [eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyUGF5bG9hZCI6eyJpZCI6NSwicm9sIjoicmVwcmVzZW50YW50ZSIsInVzdWFyaW8iOiJhcmlhbmFnIn0sImlhdCI6MTY4NjA3ODc4OCwiZXhwIjoxNjg2MTY1MTg4fQ.VldlevEBi_waHjVS2WOdX1XzMqLZK9tXWYBSdn1lfOw]',
+        Authorization: `Bearer ${session.token}`,
       },
     })
       .then((response) => response.json())
