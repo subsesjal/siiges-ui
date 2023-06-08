@@ -19,7 +19,6 @@ export default function getUser() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           setLoading(true);
           setUser(data);
         });
