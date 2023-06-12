@@ -63,5 +63,18 @@
       "nombre": "gestor",
       "descripcion": "Gestor"
     }
+  },
+  {
+    "id": 6,
+    "usuario": "arianag",
+    "contrasena": "Aa/1234567890",
+    "rolId": 2,
+    "estatus": 1,
+    "actualizado": true,
+    "rol": {
+      "id": 2,
+      "nombre": "admin",
+      "descripcion": "Administracion"
+    }
   }
 ]

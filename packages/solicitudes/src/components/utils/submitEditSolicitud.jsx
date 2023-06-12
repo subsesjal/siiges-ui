@@ -1,7 +1,7 @@
-function submitNewSolicitud(validations, setNewSubmit) {
+export default function submitEditSolicitud(validations, sections, id) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const {
-    errors, form, setNoti, setId,
+    errors, form, setNoti,
   } = validations;
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
@@ -14,10 +14,10 @@ function submitNewSolicitud(validations, setNewSubmit) {
     return;
   }
 
-  fetch('http://localhost:3000/api/v1/solicitudes', {
-    method: 'POST',
+  fetch(`http://localhost:3000/api/v1/solicitudes/${id}`, {
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', api_key: apikey },
-    body: JSON.stringify(form[1]),
+    body: JSON.stringify(form[sections]),
   })
     .then((response) => {
       if (response.ok) {
@@ -25,11 +25,7 @@ function submitNewSolicitud(validations, setNewSubmit) {
       }
       throw new Error('Error submitting the request');
     })
-    .then((data) => {
-      setId(data.data.id);
-    })
     .then(
-      setNewSubmit(false),
       setNoti({
         open: true,
         message: 'Exito, no hubo problemas en esta sección',
@@ -40,5 +36,3 @@ function submitNewSolicitud(validations, setNewSubmit) {
       console.error('Error:', err);
     });
 }
-
-export default submitNewSolicitud;

@@ -5,6 +5,7 @@ export default function getSolicitudes() {
   const { session } = useContext(Context);
   const [solicitudes, setSolicitudes] = useState();
   const [loading, setLoading] = useState(false);
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
   let url;
   let solicitudData = {};
 
@@ -15,9 +16,15 @@ export default function getSolicitudes() {
       } else {
         url = 'http://localhost:3000/api/v1/solicitudes/';
       }
-      fetch(url)
+      fetch(url, {
+        headers: {
+          method: 'GET',
+          api_key: apikey,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           setLoading(true);
           if (data !== undefined) {
             solicitudData = data.data;

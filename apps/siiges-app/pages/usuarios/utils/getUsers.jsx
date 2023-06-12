@@ -8,6 +8,7 @@ export default function getUsers() {
   const active = 1;
   let userData = {};
   let url;
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
   if (session.rol === 'admin') {
     url = 'http://localhost:3000/api/v1/usuarios';
@@ -16,7 +17,12 @@ export default function getUsers() {
   }
 
   useEffect(() => {
-    fetch(url)
+    fetch(url, {
+      headers: {
+        api_key: apikey,
+        Authorization: `Bearer ${session.token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setLoading(true);

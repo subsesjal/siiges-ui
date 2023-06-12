@@ -6,6 +6,7 @@ export default function submitNewPlantel(
   form,
   setNoti,
 ) {
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
   if (
     Object.values(plantelErrors).every((validation) => validation()) !== false
   ) {
@@ -15,7 +16,7 @@ export default function submitNewPlantel(
         `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { api_key: apikey },
           body: JSON.stringify(form),
         },
       );

@@ -9,18 +9,18 @@ import DataTable from './components/DataTable';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
 import Input from './components/Input';
-import InputPassword from './components/Input/inputPassword';
+import InputPassword from './components/Input/InputPassword';
 import InputFile from './components/Input/InputFile';
 import Layout from './components/Layout/Layout';
 import LoginLayout from './components/Layout/LoginLayout';
 import LinkButton from './components/LinkButton';
-import Logo from './components/Images/logo';
+import Logo from './components/Images/Logo';
 import LogoWhite from './components/Images/LogoWhite';
 import LoadCircle from './components/Resources/LoadCircle';
 import MenuDrawer from './components/Drawer/MenuDrawer';
 import Navbar from './components/Navbar';
 import Overlay from './components/Resources/Overlay';
-import MainNavbar from './components/Navbar/mainNavbar';
+import MainNavbar from './components/Navbar/MainNavbar';
 import PaperHome from './components/Paper/PaperHome';
 import Select from './components/Select';
 import ParseCookies from './utils/handlers/cookieHandler';
@@ -33,6 +33,7 @@ import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import SnackAlert from './components/Alert';
 import SubmitDocument from './components/Submit/SubmitDocument';
 import fileToFormData from './components/Submit/FileToFormData';
+import GetFile from './utils/handlers/getFile';
 
 export {
   ActionButtons,
@@ -70,4 +71,5 @@ export {
   MainNavbar,
   SubmitDocument,
   fileToFormData,
+  GetFile,
 };

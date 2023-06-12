@@ -1,11 +1,12 @@
 import router from 'next/router';
 
 export default function submitEditUser(userErrors, error, form, setNoti, id) {
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
   if (Object.values(userErrors).every((validation) => validation()) !== false) {
     if (Object.values(error).every((x) => x === null || x === '')) {
       fetch(`http://localhost:3000/api/v1/usuarios/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { api_key: apikey },
         body: JSON.stringify(form),
       });
       setNoti({

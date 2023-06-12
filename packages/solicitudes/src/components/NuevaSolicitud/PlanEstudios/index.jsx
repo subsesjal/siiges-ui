@@ -1,7 +1,9 @@
-import React, { useState, useMemo, useContext } from 'react';
+import React, {
+  useState, useMemo, useContext, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
-import { Context } from '@siiges-ui/shared';
+import { Context, SnackAlert } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import pagination from '../../../events/pagination';
 import SectionLayout from '../../SectionLayout';
@@ -40,9 +42,16 @@ export default function PlanEstudios({ nextModule }) {
     9: {},
   });
   const [id, setId] = useState();
+  const [disabled, setDisabled] = useState(true);
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
+
+  useEffect(() => {
+    if (id !== undefined) {
+      setDisabled(false);
+    }
+  }, [id]);
 
   const value = useMemo(
     () => ({
@@ -68,6 +77,7 @@ export default function PlanEstudios({ nextModule }) {
       <Card sx={{ mt: 3, mb: 3 }}>
         <CardContent>
           <SectionLayout
+            id={id}
             sectionTitle="Plan de estudios"
             sections={section}
             position={position}
@@ -78,17 +88,23 @@ export default function PlanEstudios({ nextModule }) {
             prev={prev}
           >
             {section === 1 && <DatosPlanEstudios />}
-            {section === 2 && <FundamentosPlanEstudios />}
-            {section === 3 && <Ingreso />}
-            {section === 4 && <Egreso />}
-            {section === 5 && <Curricula />}
-            {section === 6 && <Asignaturas />}
-            {section === 7 && <AsignaturasFormacionElectiva />}
-            {section === 8 && <Docentes />}
-            {section === 9 && <TrayectoriaEducativa />}
+            {section === 2 && <FundamentosPlanEstudios disabled={disabled} />}
+            {section === 3 && <Ingreso disabled={disabled} />}
+            {section === 4 && <Egreso disabled={disabled} />}
+            {section === 5 && <Curricula disabled={disabled} />}
+            {section === 6 && <Asignaturas disabled={disabled} />}
+            {section === 7 && <AsignaturasFormacionElectiva disabled={disabled} />}
+            {section === 8 && <Docentes disabled={disabled} />}
+            {section === 9 && <TrayectoriaEducativa disabled={disabled} />}
           </SectionLayout>
         </CardContent>
       </Card>
+      <SnackAlert
+        open={noti.open}
+        close={() => { setNoti(false); }}
+        type={noti.type}
+        mensaje={noti.message}
+      />
     </SolicitudContext.Provider>
   );
 }
