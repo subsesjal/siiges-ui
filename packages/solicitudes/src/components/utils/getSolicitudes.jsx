@@ -5,6 +5,7 @@ export default function getSolicitudes() {
   const { session } = useContext(Context);
   const [solicitudes, setSolicitudes] = useState();
   const [loading, setLoading] = useState(false);
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
   let url;
   let solicitudData = {};
 
@@ -18,7 +19,7 @@ export default function getSolicitudes() {
       fetch(url, {
         headers: {
           method: 'GET',
-          api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx',
+          api_key: apikey,
         },
       })
         .then((response) => response.json())

@@ -5,13 +5,14 @@ export default function getPlanteles() {
   const [planteles, setPlanteles] = useState();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
   useEffect(() => {
     if (router.isReady) {
       const { institucionId } = router.query;
       fetch(
         `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`,
-        { headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' } },
+        { headers: { api_key: apikey } },
       )
         .then((response) => response.json())
         .then((data) => {

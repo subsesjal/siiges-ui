@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Context } from '@siiges-ui/shared';
 
 export default function getUser() {
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
   const { session } = useContext(Context);
@@ -13,7 +14,7 @@ export default function getUser() {
       const { id } = router.query;
       fetch(`http://localhost:3000/api/v1/usuarios/${id}`, {
         headers: {
-          api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx',
+          api_key: apikey,
           Authorization: `Bearer ${session.token}`,
         },
       })

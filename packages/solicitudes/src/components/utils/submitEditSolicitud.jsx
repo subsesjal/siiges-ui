@@ -1,4 +1,5 @@
 export default function submitEditSolicitud(validations, sections, id) {
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const {
     errors, form, setNoti,
   } = validations;
@@ -15,7 +16,7 @@ export default function submitEditSolicitud(validations, sections, id) {
 
   fetch(`http://localhost:3000/api/v1/solicitudes/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
+    headers: { 'Content-Type': 'application/json', api_key: apikey },
     body: JSON.stringify(form[sections]),
   })
     .then((response) => {

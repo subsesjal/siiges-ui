@@ -1,18 +1,19 @@
 import router from 'next/router';
 
 export default function submitNewUser(userErrors, error, form, setNoti, session) {
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
   if (Object.values(userErrors).every((validation) => validation()) !== false) {
     if (Object.values(error).every((x) => x === null || x === '')) {
       if (session.rol === 'admin') {
         fetch('http://localhost:3000/api/v1/usuarios/', {
           method: 'POST',
-          headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
+          headers: { api_key: apikey },
           body: JSON.stringify(form),
         });
       } else if (session.rol === 'representante') {
         fetch(`http://localhost:3000/api/v1/usuarios/${session.id}/usuario`, {
           method: 'POST',
-          headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
+          headers: { api_key: apikey },
           body: JSON.stringify(form),
         });
       } else {

@@ -17,6 +17,7 @@ export default function UserForm({ user }) {
   const [userRol, setUserrol] = useState([]);
   const [form, setForm] = useState({});
   const [error, setError] = useState({});
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +42,7 @@ export default function UserForm({ user }) {
 
     fetch(`http://localhost:3000/api/v1/usuarios/${session.id}`, {
       method: 'PATCH',
-      headers: { api_key: 'zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx' },
+      headers: { api_key: apikey },
       body: JSON.stringify(data),
     });
   }
