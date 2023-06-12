@@ -10,12 +10,12 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       setError({ ...error, nivelId: '' });
       return true;
     },
-    nombreProgramaEstudio: () => {
-      if (formData.nombreProgramaEstudio === undefined || formData.nombreProgramaEstudio === '') {
-        setError({ ...error, nombreProgramaEstudio: 'Nombre invalido' });
+    nombre: () => {
+      if (formData.programa?.nombre === undefined || formData.programa?.nombre === '') {
+        setError({ ...error, nombre: 'Nombre invalido' });
         return false;
       }
-      setError({ ...error, nombreProgramaEstudio: '' });
+      setError({ ...error, nombre: '' });
       return true;
     },
     cicloId: () => {

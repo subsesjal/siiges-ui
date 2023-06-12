@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ButtonSection from './ButtonSection';
 
 export default function SectionLayout({
+  id,
   children,
   sections,
   position,
@@ -59,6 +60,8 @@ export default function SectionLayout({
         </Grid>
         <Grid item xs={4}>
           <ButtonSection
+            id={id}
+            sections={sections}
             position={position}
             next={next}
             prev={prev}
@@ -69,6 +72,8 @@ export default function SectionLayout({
         <Grid item xs={8} />
         <Grid item xs={4}>
           <ButtonSection
+            id={id}
+            sections={sections}
             position={position}
             next={next}
             prev={prev}
@@ -82,6 +87,7 @@ export default function SectionLayout({
 
 SectionLayout.propTypes = {
   sections: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
   sectionTitle: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   position: PropTypes.string.isRequired,

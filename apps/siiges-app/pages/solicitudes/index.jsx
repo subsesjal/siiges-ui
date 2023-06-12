@@ -29,7 +29,7 @@ export default function Solicitudes() {
   const { solicitudes } = getSolicitudes();
 
   useEffect(() => {
-    if (solicitudes !== undefined) {
+    if (solicitudes !== undefined && solicitudes !== null) {
       setRows(solicitudes);
     }
   }, [solicitudes]);

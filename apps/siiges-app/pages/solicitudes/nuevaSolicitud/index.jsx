@@ -57,31 +57,21 @@ function newRequest() {
     );
   }
   return (
-    <>
-      <Layout type={false}>
-        <ModuleHeader
-          steps={stepsNoEscolarizada}
-          type="Nueva solicitud"
-          date="22 de Agosto 2022"
-          nextModule={nextModule}
-          module={module}
-        />
-        {module === 0 && <PlanEstudios nextModule={nextModule} />}
-        {module === 1 && <DatosGenerales nextModule={nextModule} />}
-        {module === 2 && <Plantel nextModule={nextModule} />}
-        {module === 3 && <PlataformaEducativa nextModule={nextModule} />}
-        {module === 4 && <Anexos nextModule={nextModule} />}
-        {module === 5 && <EvaluacionCurricular nextModule={nextModule} />}
-      </Layout>
-      {/* <SnackAlert
-        open={noti.open}
-        close={() => {
-          setNoti(false);
-        }}
-        type={noti.type}
-        mensaje={noti.message}
-      /> */}
-    </>
+    <Layout type={false}>
+      <ModuleHeader
+        steps={stepsNoEscolarizada}
+        type="Nueva solicitud"
+        date="22 de Agosto 2022"
+        nextModule={nextModule}
+        module={module}
+      />
+      {module === 0 && <PlanEstudios nextModule={nextModule} />}
+      {module === 1 && <DatosGenerales nextModule={nextModule} />}
+      {module === 2 && <Plantel nextModule={nextModule} />}
+      {module === 3 && <PlataformaEducativa nextModule={nextModule} />}
+      {module === 4 && <Anexos nextModule={nextModule} />}
+      {module === 5 && <EvaluacionCurricular nextModule={nextModule} />}
+    </Layout>
   );
 }
 

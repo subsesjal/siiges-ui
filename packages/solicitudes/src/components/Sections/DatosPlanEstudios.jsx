@@ -13,31 +13,6 @@ export default function DatosPlanEstudios() {
   const { query } = router;
   const [initialValues, setInitialValues] = useState({});
 
-  const nivel = [
-    { id: 1, nombre: 'Bachillerato' },
-    { id: 2, nombre: 'Licenciatura' },
-    { id: 3, nombre: 'Técnico Superior Universitario' },
-    { id: 4, nombre: 'Especialidad' },
-    { id: 5, nombre: 'Maestria' },
-    { id: 6, nombre: 'Doctorado' },
-    { id: 7, nombre: 'Profesional Asociado' },
-    { id: 8, nombre: 'Educación Continua' },
-  ];
-
-  const periodo = [
-    { id: 1, nombre: 'Semestral' },
-    { id: 2, nombre: 'Cuatrimestral' },
-    { id: 3, nombre: 'Semestral curriculum flexible' },
-    { id: 4, nombre: 'Cuatrimestral curriculum flexible' },
-  ];
-
-  const turno = [
-    { id: 1, nombre: 'Matutino' },
-    { id: 2, nombre: 'Vespertino' },
-    { id: 3, nombre: 'Nocturno' },
-    { id: 4, nombre: 'Mixto' },
-  ];
-
   const {
     form, setForm, error, setError, setErrors,
   } = useContext(SolicitudContext);
@@ -69,6 +44,31 @@ export default function DatosPlanEstudios() {
     }
   }, [error]);
 
+  const nivel = [
+    { id: 1, nombre: 'Bachillerato' },
+    { id: 2, nombre: 'Licenciatura' },
+    { id: 3, nombre: 'Técnico Superior Universitario' },
+    { id: 4, nombre: 'Especialidad' },
+    { id: 5, nombre: 'Maestria' },
+    { id: 6, nombre: 'Doctorado' },
+    { id: 7, nombre: 'Profesional Asociado' },
+    { id: 8, nombre: 'Educación Continua' },
+  ];
+
+  const periodo = [
+    { id: 1, nombre: 'Semestral' },
+    { id: 2, nombre: 'Cuatrimestral' },
+    { id: 3, nombre: 'Semestral curriculum flexible' },
+    { id: 4, nombre: 'Cuatrimestral curriculum flexible' },
+  ];
+
+  const turno = [
+    { id: 1, nombre: 'Matutino' },
+    { id: 2, nombre: 'Vespertino' },
+    { id: 3, nombre: 'Nocturno' },
+    { id: 4, nombre: 'Mixto' },
+  ];
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -80,7 +80,7 @@ export default function DatosPlanEstudios() {
             title="Nivel"
             name="nivelId"
             options={nivel}
-            value={form.programa?.nivelId}
+            value={form[1].programa?.nivelId}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -90,15 +90,15 @@ export default function DatosPlanEstudios() {
         </Grid>
         <Grid item xs={9}>
           <Input
-            id="nombreProgramaEstudio"
+            id="nombre"
             label="Nombre del programa de estudio"
-            name="nombreProgramaEstudio"
-            auto="nombreProgramaEstudio"
+            name="nombre"
+            auto="nombre"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            value={form.nombreProgramaEstudio}
-            errorMessage={error.nombreProgramaEstudio}
+            value={form[1].programa?.nombre}
+            errorMessage={error.nombre}
             required
           />
         </Grid>
@@ -116,7 +116,7 @@ export default function DatosPlanEstudios() {
           <BasicSelect
             title="Periodo"
             name="cicloId"
-            value={form.programa?.cicloId}
+            value={form[1].programa?.cicloId}
             options={periodo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -132,7 +132,7 @@ export default function DatosPlanEstudios() {
             options={turno}
             multiple
             onchange={handleOnChange}
-            value={form.programa?.programaTurnos}
+            value={form[1].programa?.programaTurnos}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}
@@ -146,7 +146,7 @@ export default function DatosPlanEstudios() {
             name="duracionPrograma"
             auto="duracionPrograma"
             onchange={handleOnChange}
-            value={form.duracionPrograma}
+            value={form[1].duracionPrograma}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.duracionPrograma}
@@ -162,7 +162,7 @@ export default function DatosPlanEstudios() {
             label="Creditos necesarios para concluir el programa"
             name="creditos"
             auto="creditos"
-            value={form.creditos}
+            value={form[1].creditos}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -176,7 +176,7 @@ export default function DatosPlanEstudios() {
             label="Nivel educativo previo"
             name="nivelPrevio"
             auto="nivelPrevio"
-            value={form.nivelPrevio}
+            value={form[1].nivelPrevio}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -190,7 +190,7 @@ export default function DatosPlanEstudios() {
             id="objetivoGeneral"
             name="objetivoGeneral"
             auto="objetivoGeneral"
-            value={form.objetivoGeneral}
+            value={form[1].objetivoGeneral}
             rows={4}
             multiline
             sx={{ width: '100%' }}
