@@ -23,8 +23,8 @@ export default function createInstitucion(institucionForm, errors, setNoti, rout
       throw new Error('Error submitting the request');
     })
     .then((data) => {
-      console.log(data);
-      router.push(`/institucion/${data.id}/consultarInstitucion`);
+      console.log(data.data.id);
+      router.push(`/institucion/${data.data.id}/consultarInstitucion`);
     })
     .then(() => {
       setNoti({
