@@ -1,22 +1,16 @@
 export default function formPlantel(name, form, setForm, value) {
-  if (
-    name === 'calle'
-    || name === 'numeroExterior'
-    || name === 'numeroInterior'
-    || name === 'colonia'
-    || name === 'codigoPostal'
-    || name === 'municipioId'
-  ) {
+  if (name === 'correo3') {
+    if (value === '') {
+      setForm((prevForm) => {
+        const { correo3, ...updatedForm } = prevForm;
+        return updatedForm;
+      });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  } else if (['calle', 'numeroExterior', 'numeroInterior', 'colonia', 'codigoPostal', 'municipioId'].includes(name)) {
     setForm({ ...form, domicilio: { ...form.domicilio, [name]: value } });
-  } else if (
-    name === 'nombre'
-    || name === 'apellidoMaterno'
-    || name === 'apellidoPaterno'
-    || name === 'nacionalidad'
-    || name === 'curp'
-    || name === 'sexo'
-    || name === 'correoPrimario'
-  ) {
+  } else if (['nombre', 'apellidoMaterno', 'apellidoPaterno', 'nacionalidad', 'curp', 'sexo', 'correoPrimario'].includes(name)) {
     setForm({
       ...form,
       director: {
