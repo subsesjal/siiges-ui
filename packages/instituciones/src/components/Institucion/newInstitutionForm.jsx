@@ -1,5 +1,5 @@
-import { Grid, TextField, Typography } from '@mui/material';
-import { Input, InputFile } from '@siiges-ui/shared';
+import { Grid, TextField } from '@mui/material';
+import { Input } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
@@ -133,7 +133,7 @@ export default function NewInstitutionForm({ form, setForm, setErrors }) {
               errorMessage={error.valoresInstitucionles}
             />
           </Grid>
-          <Grid item xs={8}>
+          {/* <Grid item xs={8}>
             <InputFile label="Acta constitutiva de la institución" />
           </Grid>
           <Grid item xs={12}>
@@ -236,7 +236,7 @@ export default function NewInstitutionForm({ form, setForm, setErrors }) {
               onfocus={handleInputFocus}
               errorMessage={error.programaTurnos}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </Grid>
