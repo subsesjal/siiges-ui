@@ -14,6 +14,7 @@ import errorDatosPlanEstudios from './components/utils/sections/errors/errorDato
 import errorDatosNuevaSolicitud from './components/utils/sections/errors/errorDatosNuevaSolicitud';
 import SolicitudContext from './components/utils/Context/solicitudContext';
 import modalidades from './components/utils/Mocks/mockModalidades';
+import formData from './components/utils/sections/forms/formData';
 
 export {
   NewRequest,
@@ -32,4 +33,5 @@ export {
   errorDatosNuevaSolicitud,
   SolicitudContext,
   modalidades,
+  formData,
 };
