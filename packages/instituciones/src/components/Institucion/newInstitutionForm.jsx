@@ -1,5 +1,6 @@
 import { Grid, TextField } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { formData } from '@siiges-ui/solicitudes/';
@@ -235,7 +236,7 @@ export default function NewInstitutionForm({ form, setForm, setErrors }) {
               onfocus={handleInputFocus}
               errorMessage={error.programaTurnos}
             />
-        </Grid> */}
+          </Grid> */}
         </Grid>
       </Grid>
     </Grid>
