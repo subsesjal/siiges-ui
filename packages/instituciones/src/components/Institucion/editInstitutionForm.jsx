@@ -1,6 +1,5 @@
 import { Grid, TextField, Typography } from '@mui/material';
 import { Input, InputFile } from '@siiges-ui/shared';
-
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import React from 'react';

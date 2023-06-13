@@ -1,9 +1,41 @@
-import { Grid, TextField, Typography } from '@mui/material';
-import { Input, InputFile } from '@siiges-ui/shared';
+import { Grid, TextField } from '@mui/material';
+import { Input } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { formData } from '@siiges-ui/solicitudes/';
+import errorDatosNewInstitucion from '../utils/errorDatosNewInstitucion';
 
-export default function NewInstitutionForm() {
+export default function NewInstitutionForm({ form, setForm, setErrors }) {
+  const [initialValues, setInitialValues] = useState({});
+  const [error, setError] = useState({});
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    formData(name, value, form, setForm);
+  };
+
+  const errors = errorDatosNewInstitucion(form, setError, error);
+
+  const handleOnBlur = (e) => {
+    const { name, value } = e.target;
+    const initialValue = initialValues[name];
+    if (value !== initialValue || value === '') {
+      errors[name]();
+    }
+  };
+
+  const handleInputFocus = (e) => {
+    const { name, value } = e.target;
+    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
+  };
+
+  useEffect(() => {
+    if (errors !== undefined) {
+      setErrors(errors);
+    }
+  }, [error]);
+
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
@@ -24,11 +56,15 @@ export default function NewInstitutionForm() {
           <Grid item xs={8}>
             <Input
               label="Nombre de institución"
-              id="nombreInstitucion"
-              name="nombreInstitucion"
-              auto="nombreInstitucion"
+              id="nombre"
+              name="nombre"
+              auto="nombre"
               required
               class="data"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.nombre}
             />
           </Grid>
           <Grid item xs={8}>
@@ -39,45 +75,65 @@ export default function NewInstitutionForm() {
               auto="razonSocial"
               required
               class="data"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.razonSocial}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              id="historiaInstitucion"
+              id="historia"
+              name="historia"
               label="Histroria de la institución"
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              onChange={handleOnChange}
+              onFocus={handleInputFocus}
+              errorMessage={error.historia}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               id="vision"
+              name="vision"
               label="Visión"
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              onChange={handleOnChange}
+              onFocus={handleInputFocus}
+              errorMessage={error.vision}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               id="mision"
+              name="mision"
               label="Misión"
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              onChange={handleOnChange}
+              onFocus={handleInputFocus}
+              errorMessage={error.mision}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              id="valoresInstitucionales"
+              id="valoresInstitucionles"
+              name="valoresInstitucionles"
               label="Valores Institucionales"
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              onChange={handleOnChange}
+              onFocus={handleInputFocus}
+              errorMessage={error.valoresInstitucionles}
             />
           </Grid>
-          <Grid item xs={8}>
+          {/* <Grid item xs={8}>
             <InputFile label="Acta constitutiva de la institución" />
           </Grid>
           <Grid item xs={12}>
@@ -91,6 +147,10 @@ export default function NewInstitutionForm() {
               auto="nombre"
               required
               class="data"
+              onchae={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.programaTurnos}
             />
           </Grid>
           <Grid item xs={6}>
@@ -101,6 +161,10 @@ export default function NewInstitutionForm() {
               auto="apellidoPaterno"
               required
               class="data"
+              onchae={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.programaTurnos}
             />
           </Grid>
           <Grid item xs={6}>
@@ -111,6 +175,10 @@ export default function NewInstitutionForm() {
               auto="apellidoMaterno"
               required
               class="data"
+              onchae={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.programaTurnos}
             />
           </Grid>
           <Grid item xs={3}>
@@ -121,6 +189,10 @@ export default function NewInstitutionForm() {
               auto="nacionalidad"
               required
               class="data"
+              onchae={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.programaTurnos}
             />
           </Grid>
           <Grid item xs={3}>
@@ -131,6 +203,10 @@ export default function NewInstitutionForm() {
               auto="curp"
               required
               class="data"
+              onchae={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.programaTurnos}
             />
           </Grid>
           <Grid item xs={3}>
@@ -141,6 +217,10 @@ export default function NewInstitutionForm() {
               auto="genero"
               required
               class="data"
+              onchae={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.programaTurnos}
             />
           </Grid>
           <Grid item xs={6}>
@@ -151,10 +231,20 @@ export default function NewInstitutionForm() {
               auto="correo"
               required
               class="data"
+              onchae={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              errorMessage={error.programaTurnos}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </Grid>
   );
 }
+
+NewInstitutionForm.propTypes = {
+  setForm: PropTypes.func.isRequired,
+  setErrors: PropTypes.func.isRequired,
+  form: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
