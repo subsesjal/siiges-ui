@@ -1,6 +1,4 @@
-import React, {
-  useState, useMemo, useContext, useEffect,
-} from 'react';
+import React, { useState, useMemo, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import { Context, SnackAlert } from '@siiges-ui/shared';
@@ -66,11 +64,9 @@ export default function PlanEstudios({ nextModule }) {
       id,
       setId,
     }),
-    [form, error, errors, noti, id],
+    [form, error, errors, noti, id]
   );
-  const {
-    next, prev, section, position, porcentaje,
-  } = pagination(useState, 9);
+  const { next, prev, section, position, porcentaje } = pagination(useState, 9);
 
   return (
     <SolicitudContext.Provider value={value}>
@@ -93,7 +89,9 @@ export default function PlanEstudios({ nextModule }) {
             {section === 4 && <Egreso disabled={disabled} />}
             {section === 5 && <Curricula disabled={disabled} />}
             {section === 6 && <Asignaturas disabled={disabled} />}
-            {section === 7 && <AsignaturasFormacionElectiva disabled={disabled} />}
+            {section === 7 && (
+              <AsignaturasFormacionElectiva disabled={disabled} />
+            )}
             {section === 8 && <Docentes disabled={disabled} />}
             {section === 9 && <TrayectoriaEducativa disabled={disabled} />}
           </SectionLayout>
@@ -101,7 +99,9 @@ export default function PlanEstudios({ nextModule }) {
       </Card>
       <SnackAlert
         open={noti.open}
-        close={() => { setNoti(false); }}
+        close={() => {
+          setNoti(false);
+        }}
         type={noti.type}
         mensaje={noti.message}
       />

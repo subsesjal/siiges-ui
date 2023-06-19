@@ -5,9 +5,9 @@ import '../../styles/buttons/ButtonAdd.css';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Typography } from '@mui/material';
 
-export default function ButtonAdd({ text }) {
+export default function ButtonAdd({ text, onClick }) {
   return (
-    <ButtonUnstyled className="buttonAdd">
+    <ButtonUnstyled className="buttonAdd" onClick={onClick}>
       <PersonAddIcon sx={{ verticalAlign: 'middle' }} />
       &nbsp;&nbsp;
       <Typography variant="p" sx={{ verticalAlign: 'middle' }}>{text}</Typography>
@@ -17,4 +17,5 @@ export default function ButtonAdd({ text }) {
 
 ButtonAdd.propTypes = {
   text: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };

@@ -15,7 +15,7 @@ const style = {
   p: 4,
 };
 
-export default function DefaultModal({ open, setOpen, children }) {
+export default function DefaultModal({ open, setOpen, children, title }) {
   const handleClose = () => setOpen(false);
   return (
     <Modal
@@ -26,7 +26,7 @@ export default function DefaultModal({ open, setOpen, children }) {
     >
       <Box sx={style}>
         <Typography id="modal-confirmación" variant="h6" component="h2">
-          <Title title="Confirmación" />
+          <Title title={title} />
         </Typography>
         <Typography
           id="modal-confirmación-asignación-inspectores"
@@ -43,4 +43,5 @@ DefaultModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+  title: PropTypes.string.isRequired,
 };
