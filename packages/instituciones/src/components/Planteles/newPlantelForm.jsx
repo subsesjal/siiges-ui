@@ -395,7 +395,7 @@ export default function PlantelForm({ plantel }) {
           cancel={router.back}
           confirm={plantel
             ? () => submitEditPlantel(form, setNoti)
-            : () => submitNewPlantel(errors, error, form, setNoti)}
+            : () => submitNewPlantel(errors, form, setNoti)}
         />
       </Grid>
       <SnackAlert
