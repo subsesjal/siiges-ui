@@ -227,7 +227,7 @@ export default function NewUserForm() {
               id="contrasena"
               name="contrasena"
               auto="contrasena"
-              required
+              required = {true}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.contrasena}
@@ -239,7 +239,7 @@ export default function NewUserForm() {
               id="repeatContrasena"
               name="repeatContrasena"
               auto="repeatContrasena"
-              required
+              required = {true}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.repeatContrasena}

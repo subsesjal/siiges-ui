@@ -27,7 +27,12 @@ export default function SignIn() {
     submitNewLogin(form, errors, setErrorMessages, activateAuth);
   };
 
-  const errorMessage = (usuario) => usuario === errorMessages.usuario && errorMessages.message;
+  const errorMessage = (field) => {
+    if (errorMessages && errorMessages[field]) {
+      return errorMessages[field];
+    }
+    return null;
+  };
 
   return (
     <Box
@@ -64,7 +69,7 @@ export default function SignIn() {
           auto="usuario"
           size="normal"
           onchange={handleOnChange}
-          errorMessage={errorMessage('usuario')}
+          errorMessage={errorMessages.usuario}
         />
         <InputPassword
           label="Contraseña"
@@ -74,7 +79,7 @@ export default function SignIn() {
           type="contrasena"
           size="normal"
           onchange={handleOnChange}
-          errorMessage={errorMessage('contrasena')}
+          errorMessage={errorMessages.contrasena}
         />
         <Box
           display="flex"

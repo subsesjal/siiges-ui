@@ -87,7 +87,7 @@ InputPassword.propTypes = {
   onblur: PropTypes.func,
   name: PropTypes.string.isRequired,
   auto: PropTypes.string.isRequired,
-  required: PropTypes,
+  required: PropTypes.bool,
   onchange: PropTypes.func,
   value: PropTypes.string,
   errorMessage: PropTypes.string,
