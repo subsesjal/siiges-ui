@@ -11,10 +11,10 @@ import {
 import { Divider } from '@mui/material';
 
 const columns = [
-  { field: 'folio', headerName: 'Folio', width: 100 },
+  { field: 'folio', headerName: 'Folio', width: 125 },
   { field: 'studyPlan', headerName: 'Plan de estudios', width: 350 },
   { field: 'estatusSolicitudId', headerName: 'Estatus', width: 120 },
-  { field: 'plantel', headerName: 'Plantel', width: 370 },
+  { field: 'plantel', headerName: 'Plantel', width: 345 },
   { field: 'actions', headerName: 'Acciones', width: 150 },
 ];
 
