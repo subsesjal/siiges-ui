@@ -2,6 +2,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import getTokenLocalStorage from './getToken';
 
 export const Context = createContext();
 
@@ -12,7 +13,16 @@ function Provider({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (session !== undefined) {
+    const storedData = getTokenLocalStorage();
+    if (storedData) {
+      setSession(storedData);
+      setAuth(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedData = getTokenLocalStorage();
+    if (storedData) {
       setAuth(true);
     } else {
       router.push('/');
