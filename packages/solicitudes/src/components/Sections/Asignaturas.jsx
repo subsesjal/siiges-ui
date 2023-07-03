@@ -1,17 +1,14 @@
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import {
-  ButtonAdd,
-  ButtonStyled,
-  DefaultModal,
-  Input,
-} from '@siiges-ui/shared';
-import React, { useState } from 'react';
-import { rows, columns } from './Mocks/Asignaturas';
+import { ButtonAdd } from '@siiges-ui/shared';
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import columns from './Mocks/Asignaturas';
+import AsignaturasModal from '../utils/Components/AsignaturasModales/AsignaturasCreateModal';
+import { AsignaturasContext } from '../utils/Context/asignaturasContext';
 
-export default function Asignaturas() {
+export default function Asignaturas({ disabled }) {
   const [modal, setModal] = useState(false);
-
   const showModal = () => {
     setModal(true);
   };
@@ -20,118 +17,41 @@ export default function Asignaturas() {
     setModal(false);
   };
 
+  const {
+    asignaturasList,
+    setAsignaturasList,
+  } = useContext(AsignaturasContext);
+
+  const tableColumns = columns(setAsignaturasList, asignaturasList);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">Asignaturas</Typography>
       </Grid>
       <Grid item xs={3}>
-        <ButtonAdd onClick={showModal} text="agregar" />
+        {!disabled && <ButtonAdd onClick={showModal} text="agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
-            rows={rows}
-            columns={columns}
+            rows={asignaturasList}
+            columns={tableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />
         </div>
       </Grid>
-      <DefaultModal open={modal} setOpen={hideModal} title="Añadir asignaturas">
-        <Grid container spacing={2}>
-          <Grid container spacing={2} sx={{ m: 'auto', width: '100%' }}>
-            <Grid item xs={3}>
-              <Input id="grado" label="Grado" name="grado" auto="grado" />
-            </Grid>
-            <Grid item xs={3}>
-              <Input id="name" label="Nombre(s)" name="name" auto="name" />
-            </Grid>
-            <Grid item xs={3}>
-              <Input id="clave" label="Clave" name="clave" auto="clave" />
-            </Grid>
-            <Grid item xs={3}>
-              <Input
-                id="creditos"
-                label="Creditos"
-                name="creditos"
-                auto="creditos"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Input
-                id="formacionEspecializada"
-                label="Formacion especializada"
-                name="formacionEspecializada"
-                auto="formacionEspecializada"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Input
-                id="seriacion"
-                label="Seriacion"
-                name="seriacion"
-                auto="seriacion"
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Input
-                id="horasDocente"
-                label="Horas docente"
-                name="horasDocente"
-                auto="horasDocente"
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Input
-                id="creditos"
-                label="Horas independiente"
-                name="creditos"
-                auto="creditos"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                id="academia"
-                label="Academia"
-                name="academia"
-                auto="academia"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                id="totalHorasDocente"
-                label="Total horas docente"
-                name="totalHorasDocente"
-                auto="totalHorasDocente"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                id="totalHorasIndependiente"
-                label="Total horas independiente"
-                name="totalHorasIndependiente"
-                auto="totalHorasIndependiente"
-              />
-            </Grid>
-            <Grid item>
-              <ButtonStyled
-                text="Cancelar"
-                alt="Cancelar"
-                design="error"
-                onclick={hideModal}
-              >
-                Cancelar
-              </ButtonStyled>
-            </Grid>
-            <Grid item>
-              <ButtonStyled text="Confirmar" alt="Confirmar" onclick={() => {}}>
-                Confirmar
-              </ButtonStyled>
-            </Grid>
-          </Grid>
-        </Grid>
-      </DefaultModal>
+      <AsignaturasModal
+        open={modal}
+        hideModal={hideModal}
+        type="crear"
+        title="Crear Asignatura"
+      />
     </Grid>
   );
 }
+
+Asignaturas.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+};
