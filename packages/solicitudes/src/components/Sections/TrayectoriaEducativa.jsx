@@ -179,7 +179,7 @@ export default function TrayectoriaEducativa({ disabled }) {
             ) : <div />}
           <InputFile
             tipoEntidad="PROGRAMA"
-            tipoDocumento="PROPUESTA_HEMEROGRAFICA"
+            tipoDocumento="INFORME_RESULTADOS_TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Informe de resultados"
             setuRL={(url) => handleFileLoaded(0, url)}
@@ -200,7 +200,7 @@ export default function TrayectoriaEducativa({ disabled }) {
             ) : <div />}
           <InputFile
             tipoEntidad="PROGRAMA"
-            tipoDocumento="PROPUESTA_HEMEROGRAFICA"
+            tipoDocumento="INSTRUMENTOS_TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Instrumentos o formatos utilizados para dar seguimiento al programa de trayectoria y tutoría académica"
             setuRL={(url) => handleFileLoaded(1, url)}
@@ -221,7 +221,7 @@ export default function TrayectoriaEducativa({ disabled }) {
             ) : <div />}
           <InputFile
             tipoEntidad="PROGRAMA"
-            tipoDocumento="PROPUESTA_HEMEROGRAFICA"
+            tipoDocumento="TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Trayectoria educativa y tutoría de los estudiantes (opcional)"
             setuRL={(url) => handleFileLoaded(2, url)}
