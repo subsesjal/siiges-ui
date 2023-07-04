@@ -39,6 +39,7 @@ function Provider({ children }) {
         rol: userData.data.rol.nombre,
         token: userData.token,
       });
+      localStorage.setItem("token", JSON.stringify(userData.token));
       setAuth(true);
       router.push('../home');
     },
