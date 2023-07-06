@@ -9,7 +9,10 @@ import handleEdit from '../../submitEditAsignaturas';
 import { AsignaturasContext } from '../../Context/asignaturasContext';
 
 export default function AsignaturasEditModal({
-  open, hideModal, rowItem, edit,
+  open,
+  hideModal,
+  edit,
+  rowItem,
 }) {
   const {
     area,
@@ -26,13 +29,12 @@ export default function AsignaturasEditModal({
     setNoti,
   } = useContext(AsignaturasContext);
 
-  const selectedGrade = grados.semestral;
-  const errorsAsignatura = errorDatosAsignaturas(form, setError, error);
-
   useEffect(() => {
     setForm(rowItem);
-    setInitialValues(rowItem);
   }, [rowItem]);
+
+  const selectedGrade = grados.semestral;
+  const errorsAsignatura = errorDatosAsignaturas(form, setError, error);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -76,25 +78,27 @@ export default function AsignaturasEditModal({
           <BasicSelect
             title="Grado"
             name="grado"
-            value={form.grado ?? ''}
+            value={rowItem.grado ?? ''}
             options={selectedGrade}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.grado}
             textValue
             required
+            disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
         <Grid item xs={6}>
           <BasicSelect
             title="Area"
             name="area"
-            value={form.area ?? ''}
+            value={rowItem.area ?? ''}
             options={area}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.area}
             required
+            disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
         <Grid item xs={6}>
@@ -103,11 +107,12 @@ export default function AsignaturasEditModal({
             label="Nombre(s)"
             name="nombre"
             auto="nombre"
-            value={form.nombre}
+            value={rowItem.nombre}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
+            disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.nombre}
           />
         </Grid>
@@ -117,11 +122,12 @@ export default function AsignaturasEditModal({
             label="Clave"
             name="clave"
             auto="clave"
-            value={form.clave}
+            value={rowItem.clave}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
+            disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.clave}
           />
         </Grid>
@@ -131,11 +137,12 @@ export default function AsignaturasEditModal({
             label="Creditos"
             name="creditos"
             auto="creditos"
-            value={form.creditos}
+            value={rowItem.creditos}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
+            disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.creditos}
           />
         </Grid>
@@ -145,11 +152,12 @@ export default function AsignaturasEditModal({
             label="Formacion especializada"
             name="formacionEspecializada"
             auto="formacionEspecializada"
-            value={form.formacionEspecializada}
+            value={rowItem.formacionEspecializada}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
+            disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.formacionEspecializada}
           />
         </Grid>
@@ -159,7 +167,7 @@ export default function AsignaturasEditModal({
             label="Seriacion"
             name="seriacion"
             auto="seriacion"
-            value={form.seriacion}
+            value={rowItem.seriacion}
             onchange={handleOnChange}
             onfocus={handleInputFocus}
           />
@@ -170,11 +178,12 @@ export default function AsignaturasEditModal({
             label="Horas docente"
             name="horasDocente"
             auto="horasDocente"
-            value={form.horasDocente}
+            value={rowItem.horasDocente}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
+            disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.horasDocente}
           />
         </Grid>
@@ -184,22 +193,34 @@ export default function AsignaturasEditModal({
             label="Horas independiente"
             name="horasIndependiente"
             auto="horasIndependiente"
-            value={form.horasIndependiente}
+            value={rowItem.horasIndependiente}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
+            disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.horasIndependiente}
           />
         </Grid>
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
-        <ButtonStyled text="Cancelar" alt="Cancelar" design="error" onclick={hideModal}>
-          Cancelar
+        <ButtonStyled
+          text={edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
+          alt={edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
+          design="error"
+          onclick={hideModal}
+        >
+          {edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
         </ButtonStyled>
-        <ButtonStyled text="Confirmar" alt="Confirmar" onclick={handleOnSubmit}>
-          Confirmar
-        </ButtonStyled>
+        {edit !== 'Consultar Asignatura' && (
+          <ButtonStyled
+            text="Confirmar"
+            alt="Confirmar"
+            onclick={handleOnSubmit}
+          >
+            Confirmar
+          </ButtonStyled>
+        )}
       </Grid>
     </DefaultModal>
   );
@@ -210,6 +231,14 @@ AsignaturasEditModal.propTypes = {
   edit: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
   rowItem: PropTypes.shape({
-    // Define the shape of the asignatura object
+    grado: PropTypes.string,
+    area: PropTypes.number,
+    nombre: PropTypes.string,
+    clave: PropTypes.string,
+    creditos: PropTypes.string,
+    formacionEspecializada: PropTypes.string,
+    seriacion: PropTypes.string,
+    horasDocente: PropTypes.number,
+    horasIndependiente: PropTypes.number,
   }).isRequired,
 };
