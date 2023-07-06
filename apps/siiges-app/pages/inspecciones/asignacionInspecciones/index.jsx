@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function AsignacionInspecciones() {
   return (
-    <Layout title="Asignacion de inspecciones">
+    <Layout title="Asignación de inspecciones">
       <FormAsignacionInspecciones />
     </Layout>
   );
