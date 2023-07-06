@@ -14,7 +14,7 @@ const handleEdit = (
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
+      message: 'Algo salió mal, revisa que los campos estén correctos',
       type: 'error',
     });
     return;
@@ -27,8 +27,15 @@ const handleEdit = (
   })
     .then((response) => response.json())
     .then((data) => {
-      const newData = { ...form, id: data.data.id };
-      setAsignaturasList((prevList) => [...prevList, newData]);
+      const updatedData = { ...form, id: data.data.id };
+      setAsignaturasList((prevList) => {
+        const newList = [...prevList];
+        const index = newList.findIndex((item) => item.id === updatedData.id);
+        if (index !== -1) {
+          newList[index] = updatedData;
+        }
+        return newList;
+      });
       setForm({ programaId: id });
       setInitialValues({});
       hideModal();

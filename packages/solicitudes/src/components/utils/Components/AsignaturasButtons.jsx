@@ -3,14 +3,19 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
 import AsignaturasEditModal from './AsignaturasModales/AsignaturasEditModal';
 
-export default function AsignaturasButtons({ id, rowItem }) {
+import { AsignaturasContext } from '../Context/asignaturasContext';
+
+export default function AsignaturasButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+
+  const { asignaturasList } = useContext(AsignaturasContext);
+  const rowItem = asignaturasList.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);
@@ -45,15 +50,18 @@ export default function AsignaturasButtons({ id, rowItem }) {
       {modalOpen && (
         <AsignaturasEditModal
           hideModal={handleModalClose}
-          open={modalOpen}
-          asignaturaId={id}
           rowItem={rowItem}
+          open={modalOpen}
           edit={isEdit ? 'Editar Asignatura' : 'Consultar Asignatura'}
         />
       )}
 
       {deleteDialogOpen && (
-        <DeleteAsignatura modal={deleteDialogOpen} hideModal={handleDeleteDialogClose} id={id} />
+        <DeleteAsignatura
+          modal={deleteDialogOpen}
+          hideModal={handleDeleteDialogClose}
+          rowItem={rowItem}
+        />
       )}
     </Stack>
   );
