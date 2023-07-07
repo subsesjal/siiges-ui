@@ -6,15 +6,15 @@ import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleCreate from '../../submitNewAsignaturas';
-import { AsignaturasContext } from '../../Context/asignaturasContext';
+import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 
 export default function AsignaturasCreateModal({ open, hideModal, title }) {
   const {
     area,
     grados,
     setAsignaturasList,
-    form,
-    setForm,
+    formAsignaturas,
+    setFormAsignaturas,
     setError,
     error,
     errors,
@@ -23,15 +23,15 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setInitialValues,
     id,
     setNoti,
-  } = useContext(AsignaturasContext);
+  } = useContext(TablesPlanEstudiosContext);
 
   const selectedGrade = grados.semestral;
 
-  const errorsAsignatura = errorDatosAsignaturas(form, setError, error);
+  const errorsAsignatura = errorDatosAsignaturas(formAsignaturas, setError, error);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setForm((prevData) => ({
+    setFormAsignaturas((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -59,8 +59,8 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
 
   const handleOnSubmit = () => {
     handleCreate(
-      form,
-      setForm,
+      formAsignaturas,
+      setFormAsignaturas,
       setInitialValues,
       setAsignaturasList,
       hideModal,

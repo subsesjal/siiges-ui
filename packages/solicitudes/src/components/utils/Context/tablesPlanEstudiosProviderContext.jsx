@@ -5,19 +5,21 @@ import React, {
 import PropTypes from 'prop-types';
 import SolicitudContext from './solicitudContext';
 
-export const AsignaturasContext = createContext();
+export const TablesPlanEstudiosContext = createContext();
 
-export function AsignaturasProvider({ children }) {
+export function TablesPlanEstudiosProvider({ children }) {
+  const { id, setNoti } = useContext(SolicitudContext);
+  const [formAsignaturas, setFormAsignaturas] = useState({ tipo: 1 });
+  const [formAsignaturasFormacion, setFormAsignaturasFormacion] = useState({ tipo: 1 });
   const [asignaturasList, setAsignaturasList] = useState([]);
+  const [asignaturasFormacionList, setAsignaturasFormacionList] = useState([]);
   const [initialValues, setInitialValues] = useState({});
   const [error, setError] = useState({});
   const [errors, setErrors] = useState({});
-  const { id, setNoti } = useContext(SolicitudContext);
-  const [form, setForm] = useState({ tipo: 1 });
 
   useEffect(() => {
     if (id) {
-      setForm((prevForm) => ({
+      setFormAsignaturas((prevForm) => ({
         ...prevForm,
         programaId: id,
       }));
@@ -68,14 +70,18 @@ export function AsignaturasProvider({ children }) {
     () => ({
       asignaturasList,
       setAsignaturasList,
+      asignaturasFormacionList,
+      setAsignaturasFormacionList,
       initialValues,
       setInitialValues,
       error,
       setError,
       errors,
       setErrors,
-      form,
-      setForm,
+      formAsignaturas,
+      setFormAsignaturas,
+      formAsignaturasFormacion,
+      setFormAsignaturasFormacion,
       id,
       setNoti,
       area,
@@ -84,14 +90,18 @@ export function AsignaturasProvider({ children }) {
     [
       asignaturasList,
       setAsignaturasList,
+      asignaturasFormacionList,
+      setAsignaturasFormacionList,
       initialValues,
       setInitialValues,
       error,
       setError,
       errors,
       setErrors,
-      form,
-      setForm,
+      formAsignaturas,
+      setFormAsignaturas,
+      formAsignaturasFormacion,
+      setFormAsignaturasFormacion,
       id,
       setNoti,
       area,
@@ -100,12 +110,12 @@ export function AsignaturasProvider({ children }) {
   );
 
   return (
-    <AsignaturasContext.Provider value={contextValue}>
+    <TablesPlanEstudiosContext.Provider value={contextValue}>
       {children}
-    </AsignaturasContext.Provider>
+    </TablesPlanEstudiosContext.Provider>
   );
 }
 
-AsignaturasProvider.propTypes = {
+TablesPlanEstudiosProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };

@@ -5,7 +5,7 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import columns from './Mocks/Asignaturas';
 import AsignaturasModal from '../utils/Components/AsignaturasModales/AsignaturasCreateModal';
-import { AsignaturasContext } from '../utils/Context/asignaturasContext';
+import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 
 export default function Asignaturas({ disabled }) {
   const [modal, setModal] = useState(false);
@@ -20,7 +20,7 @@ export default function Asignaturas({ disabled }) {
   const {
     asignaturasList,
     setAsignaturasList,
-  } = useContext(AsignaturasContext);
+  } = useContext(TablesPlanEstudiosContext);
 
   const tableColumns = columns(setAsignaturasList, asignaturasList);
 

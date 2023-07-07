@@ -6,15 +6,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState, useContext } from 'react';
 import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
 import AsignaturasEditModal from './AsignaturasModales/AsignaturasEditModal';
-
-import { AsignaturasContext } from '../Context/asignaturasContext';
+import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
 
 export default function AsignaturasButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const { asignaturasList } = useContext(AsignaturasContext);
+  const { asignaturasList } = useContext(TablesPlanEstudiosContext);
   const rowItem = asignaturasList.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
