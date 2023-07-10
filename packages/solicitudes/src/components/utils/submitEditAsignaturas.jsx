@@ -7,6 +7,7 @@ const handleEdit = (
   errors,
   setNoti,
   id,
+  tipo,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -36,7 +37,7 @@ const handleEdit = (
         }
         return newList;
       });
-      setForm({ programaId: id });
+      setForm({ programaId: id, tipo });
       setInitialValues({});
       hideModal();
     })

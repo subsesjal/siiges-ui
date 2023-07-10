@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleEdit from '../../submitEditAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
+import { area, grados } from '../../Mocks/mockAsignaturas';
 
 export default function AsignaturasEditModal({
   open,
@@ -15,8 +16,6 @@ export default function AsignaturasEditModal({
   rowItem,
 }) {
   const {
-    area,
-    grados,
     initialValues,
     error,
     setError,
@@ -68,6 +67,7 @@ export default function AsignaturasEditModal({
       errors,
       setNoti,
       id,
+      1,
     );
   };
 

@@ -7,6 +7,7 @@ const handleCreate = (
   errors,
   setNoti,
   id,
+  tipo,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -29,7 +30,7 @@ const handleCreate = (
     .then((data) => {
       const newData = { ...form, id: data.data.id };
       setAsignaturasList((prevList) => [...prevList, newData]);
-      setForm({ programaId: id, tipo: 1 });
+      setForm({ programaId: id, tipo });
       setInitialValues({});
       hideModal();
     })

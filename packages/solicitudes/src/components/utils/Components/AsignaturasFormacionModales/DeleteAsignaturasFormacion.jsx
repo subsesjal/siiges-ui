@@ -3,11 +3,11 @@ import { ButtonStyled, DefaultModal } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-function DeleteAsignatura({ modal, hideModal, id }) {
+export default function DeleteAsignaturaFormacion({ modal, hideModal, id }) {
   console.log(id);
   return (
     <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>Desea eliminar esta asignatura?</Typography>
+      <Typography>Desea eliminar esta asignatura de formación electiva?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled
@@ -29,10 +29,8 @@ function DeleteAsignatura({ modal, hideModal, id }) {
   );
 }
 
-DeleteAsignatura.propTypes = {
+DeleteAsignaturaFormacion.propTypes = {
   id: PropTypes.number.isRequired,
   modal: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
 };
-
-export default DeleteAsignatura;

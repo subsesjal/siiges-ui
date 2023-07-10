@@ -1,23 +1,43 @@
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import PropTypes from 'prop-types';
 import { ButtonAdd, Input } from '@siiges-ui/shared';
-import React from 'react';
-import { columns, rows } from './Mocks/AsignaturasFormacionElectiva';
+import React, { useContext, useState } from 'react';
+import columns from './Mocks/AsignaturasFormacionElectiva';
+import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
+import AsignaturasFormacionCreateModal from '../utils/Components/AsignaturasFormacionModales/AsignaturasFormacionCreateModal';
 
-export default function AsignaturasFormacionElectiva() {
+export default function AsignaturasFormacionElectiva({ disabled }) {
+  const [modal, setModal] = useState(false);
+
+  const showModal = () => {
+    setModal(true);
+  };
+
+  const hideModal = () => {
+    setModal(false);
+  };
+
+  const {
+    asignaturasFormacionList,
+    setAsignaturasFormacionList,
+  } = useContext(TablesPlanEstudiosContext);
+
+  const tableColumns = columns(setAsignaturasFormacionList, asignaturasFormacionList);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Asignaturas formacion electiva</Typography>
+        <Typography variant="h6">Asignaturas formación electiva</Typography>
       </Grid>
       <Grid item xs={3}>
-        <ButtonAdd text="agregar" />
+        {!disabled && <ButtonAdd onClick={showModal} text="agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
-            rows={rows}
-            columns={columns}
+            rows={asignaturasFormacionList}
+            columns={tableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />
@@ -39,6 +59,16 @@ export default function AsignaturasFormacionElectiva() {
           auto="credMin"
         />
       </Grid>
+      <AsignaturasFormacionCreateModal
+        open={modal}
+        hideModal={hideModal}
+        type="crear"
+        title="Crear Asignatura"
+      />
     </Grid>
   );
 }
+
+AsignaturasFormacionElectiva.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+};
