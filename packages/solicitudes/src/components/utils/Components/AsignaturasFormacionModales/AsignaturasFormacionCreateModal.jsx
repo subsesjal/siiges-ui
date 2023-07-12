@@ -4,14 +4,18 @@ import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
-import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
-import { grados } from '../../Mocks/mockAsignaturas';
+import { grados, area } from '../../Mocks/mockAsignaturas';
+import errorDatosAsignaturasFormacion from '../../sections/errors/errorDatosAsignaturasFormacion';
 
-export default function AsignaturasFormacionCreateModal({ open, hideModal, title }) {
+export default function AsignaturasFormacionCreateModal({
+  open,
+  hideModal,
+  title,
+}) {
   const {
-    setAsignaturasList,
+    setAsignaturasFormacionList,
     formAsignaturasFormacion,
     setFormAsignaturasFormacion,
     setError,
@@ -26,7 +30,11 @@ export default function AsignaturasFormacionCreateModal({ open, hideModal, title
 
   const selectedGrade = grados.semestral;
 
-  const errorsAsignatura = errorDatosAsignaturas(formAsignaturasFormacion, setError, error);
+  const errorsAsignatura = errorDatosAsignaturasFormacion(
+    formAsignaturasFormacion,
+    setError,
+    error,
+  );
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -61,7 +69,7 @@ export default function AsignaturasFormacionCreateModal({ open, hideModal, title
       formAsignaturasFormacion,
       setFormAsignaturasFormacion,
       setInitialValues,
-      setAsignaturasList,
+      setAsignaturasFormacionList,
       hideModal,
       errors,
       setNoti,
@@ -73,7 +81,7 @@ export default function AsignaturasFormacionCreateModal({ open, hideModal, title
   return (
     <DefaultModal open={open} setOpen={hideModal} title={title}>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <BasicSelect
             title="Grado"
             name="grado"
@@ -85,7 +93,18 @@ export default function AsignaturasFormacionCreateModal({ open, hideModal, title
             required
           />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={6}>
+          <BasicSelect
+            title="Area"
+            name="area"
+            options={area}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.area}
+            required
+          />
+        </Grid>
+        <Grid item xs={6}>
           <Input
             id="nombre"
             label="Nombre(s)"
@@ -137,7 +156,7 @@ export default function AsignaturasFormacionCreateModal({ open, hideModal, title
             errorMessage={error.formacionEspecializada}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Input
             id="seriacion"
             label="Seriacion"
@@ -162,15 +181,15 @@ export default function AsignaturasFormacionCreateModal({ open, hideModal, title
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="creditos"
+            id="horasIndependiente"
             label="Horas independiente"
-            name="creditos"
-            auto="creditos"
+            name="horasIndependiente"
+            auto="horasIndependiente"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
-            errorMessage={error.creditos}
+            errorMessage={error.horasIndependiente}
           />
         </Grid>
         <Grid item>

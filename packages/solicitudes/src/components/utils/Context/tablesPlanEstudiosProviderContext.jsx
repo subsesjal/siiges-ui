@@ -10,7 +10,7 @@ export const TablesPlanEstudiosContext = createContext();
 export function TablesPlanEstudiosProvider({ children }) {
   const { id, setNoti } = useContext(SolicitudContext);
   const [formAsignaturas, setFormAsignaturas] = useState({ tipo: 1 });
-  const [formAsignaturasFormacion, setFormAsignaturasFormacion] = useState({ tipo: 1 });
+  const [formAsignaturasFormacion, setFormAsignaturasFormacion] = useState({ tipo: 2 });
   const [asignaturasList, setAsignaturasList] = useState([]);
   const [asignaturasFormacionList, setAsignaturasFormacionList] = useState([]);
   const [initialValues, setInitialValues] = useState({});

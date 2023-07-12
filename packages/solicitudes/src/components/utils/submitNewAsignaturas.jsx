@@ -12,6 +12,7 @@ const handleCreate = (
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
+
   if (!isValid) {
     setNoti({
       open: true,

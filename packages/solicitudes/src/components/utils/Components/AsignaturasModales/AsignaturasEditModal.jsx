@@ -170,6 +170,7 @@ export default function AsignaturasEditModal({
             value={rowItem.seriacion}
             onchange={handleOnChange}
             onfocus={handleInputFocus}
+            disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
         <Grid item xs={6}>
