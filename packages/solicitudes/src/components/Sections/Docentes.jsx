@@ -1,44 +1,57 @@
+import React, { useContext, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { ButtonAdd, Input } from '@siiges-ui/shared';
-import React from 'react';
-import { rows, columns } from './Mocks/Docentes';
+import { ButtonAdd } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
+import columns from './Mocks/Docentes';
+import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
+import DocentesCreateModal from '../utils/Components/DocentesModales/DocentesCreateModal';
 
-export default function Docentes() {
+export default function Docentes({ disabled }) {
+  const [modal, setModal] = useState(false);
+  const showModal = () => {
+    setModal(true);
+  };
+
+  const hideModal = () => {
+    setModal(false);
+  };
+
+  const {
+    docentesList,
+    setDocentesList,
+  } = useContext(TablesPlanEstudiosContext);
+
+  const tableColumns = columns(setDocentesList, docentesList);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">Docentes</Typography>
       </Grid>
       <Grid item xs={3}>
-        <ButtonAdd text="agregar" />
+        {!disabled && <ButtonAdd onClick={showModal} text="agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
-            rows={rows}
-            columns={columns}
+            rows={docentesList}
+            columns={tableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />
         </div>
       </Grid>
-      <Grid item xs={9}>
-        <Input
-          id="horasMin"
-          label="Numero de horas minimas que se deberan acreditar bajo la conduccion de un docente"
-          name="horasMin"
-          auto="horasMin"
-        />
-      </Grid>
-      <Grid item xs={9}>
-        <Input
-          id="credMin"
-          label="Numero minimo de creditos que se deberan acreditar"
-          name="credMin"
-          auto="credMin"
-        />
-      </Grid>
+      <DocentesCreateModal
+        open={modal}
+        hideModal={hideModal}
+        type="crear"
+        title="Agregar Docente"
+      />
     </Grid>
   );
 }
+
+Docentes.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+};

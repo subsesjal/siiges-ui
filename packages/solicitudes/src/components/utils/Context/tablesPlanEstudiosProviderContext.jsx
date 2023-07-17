@@ -11,8 +11,10 @@ export function TablesPlanEstudiosProvider({ children }) {
   const { id, setNoti } = useContext(SolicitudContext);
   const [formAsignaturas, setFormAsignaturas] = useState({ tipo: 1 });
   const [formAsignaturasFormacion, setFormAsignaturasFormacion] = useState({ tipo: 2 });
+  const [formDocentes, setFormDocentes] = useState({});
   const [asignaturasList, setAsignaturasList] = useState([]);
   const [asignaturasFormacionList, setAsignaturasFormacionList] = useState([]);
+  const [docentesList, setDocentesList] = useState([]);
   const [initialValues, setInitialValues] = useState({});
   const [error, setError] = useState({});
   const [errors, setErrors] = useState({});
@@ -27,6 +29,10 @@ export function TablesPlanEstudiosProvider({ children }) {
         ...prevForm,
         programaId: id,
       }));
+      setFormDocentes((prevForm) => ({
+        ...prevForm,
+        programaId: id,
+      }));
     }
   }, [id]);
 
@@ -34,6 +40,8 @@ export function TablesPlanEstudiosProvider({ children }) {
     () => ({
       asignaturasList,
       setAsignaturasList,
+      docentesList,
+      setDocentesList,
       asignaturasFormacionList,
       setAsignaturasFormacionList,
       initialValues,
@@ -46,6 +54,8 @@ export function TablesPlanEstudiosProvider({ children }) {
       setFormAsignaturas,
       formAsignaturasFormacion,
       setFormAsignaturasFormacion,
+      formDocentes,
+      setFormDocentes,
       id,
       setNoti,
     }),
