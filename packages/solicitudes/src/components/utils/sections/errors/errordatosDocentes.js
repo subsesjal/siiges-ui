@@ -1,20 +1,11 @@
 export default function errorDatosDocentes(form, setError, error) {
-  const validNumber = /^-?\d*\.?\d+$/;
   const errors = {
-    grado: () => {
-      if (form.grado === undefined || form.grado === '') {
-        setError({ ...error, grado: 'Seleccione un nivel' });
+    tipoDocente: () => {
+      if (form.tipoDocente === undefined || form.tipoDocente === '') {
+        setError({ ...error, tipoDocente: 'Seleccione un nivel' });
         return false;
       }
-      setError({ ...error, grado: '' });
-      return true;
-    },
-    area: () => {
-      if (form.area === undefined || form.area === '') {
-        setError({ ...error, area: 'Seleccione un area' });
-        return false;
-      }
-      setError({ ...error, area: '' });
+      setError({ ...error, tipoDocente: '' });
       return true;
     },
     nombre: () => {
@@ -25,62 +16,141 @@ export default function errorDatosDocentes(form, setError, error) {
       setError({ ...error, nombre: '' });
       return true;
     },
-    clave: () => {
-      if (form.clave === undefined || form.clave === '') {
-        setError({ ...error, clave: 'Clave invalida' });
+    apellidoPaterno: () => {
+      if (form.apellidoPaterno === undefined || form.apellidoPaterno === '') {
+        setError({ ...error, apellidoPaterno: 'Apellido paterno invalido' });
         return false;
       }
-      setError({ ...error, clave: '' });
+      setError({ ...error, apellidoPaterno: '' });
       return true;
     },
-    creditos: () => {
+    apellidoMaterno: () => {
+      if (form.apellidoMaterno === undefined || form.apellidoMaterno === '') {
+        setError({ ...error, apellidoMaterno: 'Apellido materno invalido' });
+        return false;
+      }
+      setError({ ...error, apellidoMaterno: '' });
+      return true;
+    },
+    nivelUltimoGrado: () => {
+      if (form.nivelUltimoGrado === undefined || form.nivelUltimoGrado === '') {
+        setError({ ...error, nivelUltimoGrado: 'Seleccione un Nivel' });
+        return false;
+      }
+      setError({ ...error, nivelUltimoGrado: '' });
+      return true;
+    },
+    nombreUltimoGrado: () => {
       if (
-        form.creditos === undefined
-        || form.creditos === ''
-        || !validNumber.test(form.creditos)
+        form.nombreUltimoGrado === undefined
+        || form.nombreUltimoGrado === ''
       ) {
-        setError({ ...error, creditos: 'Creditos invalidos' });
+        setError({ ...error, nombreUltimoGrado: 'Nombre invalido' });
         return false;
       }
-      setError({ ...error, creditos: '' });
+      setError({ ...error, nombreUltimoGrado: '' });
       return true;
     },
-    formacionEspecializada: () => {
+    documentoPresentadoUltimoGrado: () => {
       if (
-        form.formacionEspecializada === undefined
-        || form.formacionEspecializada === ''
+        form.documentoPresentadoUltimoGrado === undefined
+        || form.documentoPresentadoUltimoGrado === ''
       ) {
         setError({
           ...error,
-          formacionEspecializada: 'Formación especializada invalida',
+          documentoPresentadoUltimoGrado: 'Seleccione un documento',
         });
         return false;
       }
-      setError({ ...error, formacionEspecializada: '' });
+      setError({ ...error, documentoPresentadoUltimoGrado: '' });
       return true;
     },
-    horasDocente: () => {
+    nivelPenultimoGrado: () => {
       if (
-        form.horasDocente === undefined
-        || form.horasDocente === ''
-        || !validNumber.test(form.horasDocente)
+        form.nivelPenultimoGrado === undefined
+        || form.nivelPenultimoGrado === ''
       ) {
-        setError({ ...error, horasDocente: 'Horas docente invalidos' });
+        setError({ ...error, nivelPenultimoGrado: 'Seleccione un Nivel' });
         return false;
       }
-      setError({ ...error, horasDocente: '' });
+      setError({ ...error, nivelPenultimoGrado: '' });
       return true;
     },
-    horasIndependiente: () => {
+    nombrePenultimoGrado: () => {
       if (
-        form.horasIndependiente === undefined
-        || form.horasIndependiente === ''
-        || !validNumber.test(form.horasIndependiente)
+        form.nombrePenultimoGrado === undefined
+        || form.nombrePenultimoGrado === ''
       ) {
-        setError({ ...error, horasIndependiente: 'Horas independiente invalidos' });
+        setError({ ...error, nombrePenultimoGrado: 'Nombre invalido' });
         return false;
       }
-      setError({ ...error, horasIndependiente: '' });
+      setError({ ...error, nombrePenultimoGrado: '' });
+      return true;
+    },
+    documentoPresentadoPenultimoGrado: () => {
+      if (
+        form.documentoPresentadoPenultimoGrado === undefined
+        || form.documentoPresentadoPenultimoGrado === ''
+      ) {
+        setError({
+          ...error,
+          documentoPresentadoPenultimoGrado: 'Seleccione un documento',
+        });
+        return false;
+      }
+      setError({ ...error, documentoPresentadoPenultimoGrado: '' });
+      return true;
+    },
+    asignaturasPropuesta: () => {
+      if (
+        form.asignaturasPropuesta === undefined
+        || form.asignaturasPropuesta === ''
+      ) {
+        setError({
+          ...error,
+          asignaturasPropuesta: 'Seleccione una asignatura',
+        });
+        return false;
+      }
+      setError({ ...error, asignaturasPropuesta: '' });
+      return true;
+    },
+    tipoContratacion: () => {
+      if (form.tipoContratacion === undefined || form.tipoContratacion === '') {
+        setError({ ...error, tipoContratacion: 'Seleccione una asignatura' });
+        return false;
+      }
+      setError({ ...error, tipoContratacion: '' });
+      return true;
+    },
+    antiguedad: () => {
+      if (form.antiguedad === undefined || form.antiguedad === '') {
+        setError({ ...error, antiguedad: 'Nombre invalido' });
+        return false;
+      }
+      setError({ ...error, antiguedad: '' });
+      return true;
+    },
+    totalHorasIndependiente: () => {
+      if (
+        form.totalHorasIndependiente === undefined
+        || form.totalHorasIndependiente === ''
+      ) {
+        setError({ ...error, totalHorasIndependiente: 'Nombre invalido' });
+        return false;
+      }
+      setError({ ...error, totalHorasIndependiente: '' });
+      return true;
+    },
+    experienciaLaboral: () => {
+      if (
+        form.experienciaLaboral === undefined
+        || form.experienciaLaboral === ''
+      ) {
+        setError({ ...error, experienciaLaboral: 'Nombre invalido' });
+        return false;
+      }
+      setError({ ...error, experienciaLaboral: '' });
       return true;
     },
   };

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import errorDatosDocentes from '../../sections/errors/errordatosDocentes';
+import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 
@@ -21,7 +21,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
     setErrors,
     initialValues,
     setInitialValues,
-    id,
+    programaId,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
 
@@ -64,8 +64,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
       hideModal,
       errors,
       setNoti,
-      id,
-      1,
+      programaId,
     );
   };
 
@@ -266,8 +265,8 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             </Grid>
             <Grid item xs={6}>
               <BasicSelect
-                title="Documento presentado"
-                name="Tipo de contratación"
+                title="Tipo de contratación"
+                name="tipoContratacion"
                 options={tipoContratacion}
                 onchange={handleOnChange}
                 onblur={handleOnBlur}

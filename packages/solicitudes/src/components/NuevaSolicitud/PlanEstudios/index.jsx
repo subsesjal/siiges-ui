@@ -43,6 +43,7 @@ export default function PlanEstudios({ nextModule }) {
     9: {},
   });
   const [id, setId] = useState();
+  const [programaId, setProgramaId] = useState();
   const [disabled, setDisabled] = useState(true);
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
@@ -66,8 +67,10 @@ export default function PlanEstudios({ nextModule }) {
       setNoti,
       id,
       setId,
+      programaId,
+      setProgramaId,
     }),
-    [form, error, errors, noti, id],
+    [form, error, errors, noti, id, programaId],
   );
   const {
     next, prev, section, position, porcentaje,
