@@ -7,6 +7,23 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
 function DataTable({ title, rows, columns }) {
+  const [searchText, setSearchText] = React.useState('');
+  const [filteredRows, setFilteredRows] = React.useState(rows);
+
+  const handleSearch = (event) => {
+    const value = event.target.value.toLowerCase();
+    setSearchText(value);
+    if (value === '') {
+      setFilteredRows(rows);
+    } else {
+      const filteredData = rows.filter(
+        (row) => Object.values(row).some(
+          (data) => data !== null && data.toString().toLowerCase().includes(value.trim()),
+        ),
+      );
+      setFilteredRows(filteredData);
+    }
+  };
   return (
     <>
       <Grid container>
@@ -27,6 +44,8 @@ function DataTable({ title, rows, columns }) {
             autoFocus
             size="small"
             sx={{ mt: 2 }}
+            value={searchText}
+            onChange={handleSearch}
             InputProps={{
               endAdornment: (
                 <IconButton position="end">
@@ -39,7 +58,7 @@ function DataTable({ title, rows, columns }) {
       </Grid>
       <div style={{ height: 400, width: '100%', marginTop: 15 }}>
         <DataGrid
-          rows={rows}
+          rows={filteredRows}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
