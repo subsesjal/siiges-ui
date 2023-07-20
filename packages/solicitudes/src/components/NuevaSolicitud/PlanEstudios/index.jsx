@@ -17,7 +17,7 @@ import AsignaturasFormacionElectiva from '../../Sections/AsignaturasFormacionEle
 import Docentes from '../../Sections/Docentes';
 import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 import SolicitudContext from '../../utils/Context/solicitudContext';
-import { AsignaturasProvider } from '../../utils/Context/asignaturasContext';
+import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
 
 export default function PlanEstudios({ nextModule }) {
   const { session } = useContext(Context);
@@ -43,6 +43,7 @@ export default function PlanEstudios({ nextModule }) {
     9: {},
   });
   const [id, setId] = useState();
+  const [programaId, setProgramaId] = useState();
   const [disabled, setDisabled] = useState(true);
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
@@ -66,8 +67,10 @@ export default function PlanEstudios({ nextModule }) {
       setNoti,
       id,
       setId,
+      programaId,
+      setProgramaId,
     }),
-    [form, error, errors, noti, id],
+    [form, error, errors, noti, id, programaId],
   );
   const {
     next, prev, section, position, porcentaje,
@@ -75,7 +78,7 @@ export default function PlanEstudios({ nextModule }) {
 
   return (
     <SolicitudContext.Provider value={value}>
-      <AsignaturasProvider>
+      <TablesPlanEstudiosProvider>
         <Card sx={{ mt: 3, mb: 3 }}>
           <CardContent>
             <SectionLayout
@@ -111,7 +114,7 @@ export default function PlanEstudios({ nextModule }) {
           type={noti.type}
           mensaje={noti.message}
         />
-      </AsignaturasProvider>
+      </TablesPlanEstudiosProvider>
     </SolicitudContext.Provider>
   );
 }

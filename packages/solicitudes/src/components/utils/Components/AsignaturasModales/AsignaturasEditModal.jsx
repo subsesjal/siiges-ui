@@ -6,7 +6,8 @@ import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleEdit from '../../submitEditAsignaturas';
-import { AsignaturasContext } from '../../Context/asignaturasContext';
+import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
+import { area, grados } from '../../Mocks/mockAsignaturas';
 
 export default function AsignaturasEditModal({
   open,
@@ -15,30 +16,28 @@ export default function AsignaturasEditModal({
   rowItem,
 }) {
   const {
-    area,
-    grados,
     initialValues,
     error,
     setError,
     errors,
-    form,
-    setForm,
+    formAsignaturas,
+    setFormAsignaturas,
     setInitialValues,
     setAsignaturasList,
     id,
     setNoti,
-  } = useContext(AsignaturasContext);
+  } = useContext(TablesPlanEstudiosContext);
 
   useEffect(() => {
-    setForm(rowItem);
+    setFormAsignaturas(rowItem);
   }, [rowItem]);
 
   const selectedGrade = grados.semestral;
-  const errorsAsignatura = errorDatosAsignaturas(form, setError, error);
+  const errorsAsignatura = errorDatosAsignaturas(formAsignaturas, setError, error);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setForm((prevData) => ({
+    setFormAsignaturas((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -60,14 +59,15 @@ export default function AsignaturasEditModal({
 
   const handleOnSubmit = () => {
     handleEdit(
-      form,
-      setForm,
+      formAsignaturas,
+      setFormAsignaturas,
       setInitialValues,
       setAsignaturasList,
       hideModal,
       errors,
       setNoti,
       id,
+      1,
     );
   };
 
@@ -170,6 +170,7 @@ export default function AsignaturasEditModal({
             value={rowItem.seriacion}
             onchange={handleOnChange}
             onfocus={handleInputFocus}
+            disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
         <Grid item xs={6}>

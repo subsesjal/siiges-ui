@@ -6,11 +6,12 @@ const handleCreate = (
   hideModal,
   errors,
   setNoti,
-  id,
+  programaId,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
+
   if (!isValid) {
     setNoti({
       open: true,
@@ -20,7 +21,7 @@ const handleCreate = (
     return;
   }
 
-  fetch('http://localhost:3000/api/v1/asignaturas', {
+  fetch('http://localhost:3000/api/v1/docentes', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', api_key: apikey },
     body: JSON.stringify(form),
@@ -29,7 +30,7 @@ const handleCreate = (
     .then((data) => {
       const newData = { ...form, id: data.data.id };
       setAsignaturasList((prevList) => [...prevList, newData]);
-      setForm({ programaId: id, tipo: 1 });
+      setForm({ programaId });
       setInitialValues({});
       hideModal();
     })

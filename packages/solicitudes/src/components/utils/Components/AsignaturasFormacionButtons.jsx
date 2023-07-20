@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState, useContext } from 'react';
-import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
-import AsignaturasEditModal from './AsignaturasModales/AsignaturasEditModal';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
+import AsignaturasFormacionEditModal from './AsignaturasFormacionModales/AsignaturasFormacionEditModal';
+import DeleteAsignaturaFormacion from './AsignaturasFormacionModales/DeleteAsignaturasFormacion';
 
-export default function AsignaturasButtons({ id }) {
+export default function AsignaturasFormacionButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const { asignaturasList } = useContext(TablesPlanEstudiosContext);
-  const rowItem = asignaturasList.find((item) => item.id === id);
+  const { asignaturasFormacionList } = useContext(TablesPlanEstudiosContext);
+  const rowItem = asignaturasFormacionList.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);
@@ -47,7 +47,7 @@ export default function AsignaturasButtons({ id }) {
       </IconButton>
 
       {modalOpen && (
-        <AsignaturasEditModal
+        <AsignaturasFormacionEditModal
           hideModal={handleModalClose}
           rowItem={rowItem}
           open={modalOpen}
@@ -56,7 +56,7 @@ export default function AsignaturasButtons({ id }) {
       )}
 
       {deleteDialogOpen && (
-        <DeleteAsignatura
+        <DeleteAsignaturaFormacion
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
           rowItem={rowItem}
@@ -66,7 +66,7 @@ export default function AsignaturasButtons({ id }) {
   );
 }
 
-AsignaturasButtons.propTypes = {
+AsignaturasFormacionButtons.propTypes = {
   id: PropTypes.number.isRequired,
   rowItem: PropTypes.shape({
     programaID: PropTypes.number,

@@ -52,15 +52,16 @@ export default function BasicSelect({
           error={!!errorMessage}
           disabled={disabled}
         >
-          {options.map((opcion) => (textValue ? (
-            <MenuItem key={opcion.id} value={opcion.nombre}>
-              {opcion.nombre}
-            </MenuItem>
-          ) : (
-            <MenuItem key={opcion.id} value={opcion.id}>
-              {opcion.nombre}
-            </MenuItem>
-          )))}
+          {options
+            && options.map((opcion) => (textValue ? (
+              <MenuItem key={opcion.id} value={opcion.nombre}>
+                {opcion.nombre}
+              </MenuItem>
+            ) : (
+              <MenuItem key={opcion.id} value={opcion.id}>
+                {opcion.nombre}
+              </MenuItem>
+            )))}
         </Select>
         <FormHelperText error>{errorMessage}</FormHelperText>
       </FormControl>

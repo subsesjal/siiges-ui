@@ -6,7 +6,7 @@ export default function AsignaturasFormacionElectivaAdd() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Asignaturas de formacion electiva</Typography>
+        <Typography variant="h6">Asignaturas de formación electiva</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={3}>

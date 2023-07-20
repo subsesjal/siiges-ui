@@ -4,16 +4,20 @@ import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
-import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
-import { area, grados } from '../../Mocks/mockAsignaturas';
+import { grados, area } from '../../Mocks/mockAsignaturas';
+import errorDatosAsignaturasFormacion from '../../sections/errors/errorDatosAsignaturasFormacion';
 
-export default function AsignaturasCreateModal({ open, hideModal, title }) {
+export default function AsignaturasFormacionCreateModal({
+  open,
+  hideModal,
+  title,
+}) {
   const {
-    setAsignaturasList,
-    formAsignaturas,
-    setFormAsignaturas,
+    setAsignaturasFormacionList,
+    formAsignaturasFormacion,
+    setFormAsignaturasFormacion,
     setError,
     error,
     errors,
@@ -26,11 +30,15 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
 
   const selectedGrade = grados.semestral;
 
-  const errorsAsignatura = errorDatosAsignaturas(formAsignaturas, setError, error);
+  const errorsAsignatura = errorDatosAsignaturasFormacion(
+    formAsignaturasFormacion,
+    setError,
+    error,
+  );
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFormAsignaturas((prevData) => ({
+    setFormAsignaturasFormacion((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -58,15 +66,15 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
 
   const handleOnSubmit = () => {
     handleCreate(
-      formAsignaturas,
-      setFormAsignaturas,
+      formAsignaturasFormacion,
+      setFormAsignaturasFormacion,
       setInitialValues,
-      setAsignaturasList,
+      setAsignaturasFormacionList,
       hideModal,
       errors,
       setNoti,
       id,
-      1,
+      2,
     );
   };
 
@@ -135,7 +143,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             errorMessage={error.creditos}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Input
             id="formacionEspecializada"
             label="Formacion especializada"
@@ -148,7 +156,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             errorMessage={error.formacionEspecializada}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Input
             id="seriacion"
             label="Seriacion"
@@ -208,7 +216,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
   );
 }
 
-AsignaturasCreateModal.propTypes = {
+AsignaturasFormacionCreateModal.propTypes = {
   open: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
