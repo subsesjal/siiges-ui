@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '@siiges-ui/shared';
 
-export default function getProgramas(programaId) {
+export default function getAsignaturas(programaId) {
   const { session } = useContext(Context);
-  const [asignaturas, setAsignaturas] = useState();
+  const [asignaturas, setAsignaturas] = useState([]);
   const [loading, setLoading] = useState(false);
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   let asignaturasData = {};
@@ -23,6 +23,7 @@ export default function getProgramas(programaId) {
             asignaturasData = data.data;
           }
           setAsignaturas(asignaturasData);
+          console.log(asignaturas);
         });
       setLoading(false);
     }

@@ -8,7 +8,7 @@ import SolicitudContext from './solicitudContext';
 export const TablesPlanEstudiosContext = createContext();
 
 export function TablesPlanEstudiosProvider({ children }) {
-  const { id, setNoti } = useContext(SolicitudContext);
+  const { id, setNoti, programaId } = useContext(SolicitudContext);
   const [formAsignaturas, setFormAsignaturas] = useState({ tipo: 1 });
   const [formAsignaturasFormacion, setFormAsignaturasFormacion] = useState({ tipo: 2 });
   const [formDocentes, setFormDocentes] = useState({});
@@ -23,15 +23,15 @@ export function TablesPlanEstudiosProvider({ children }) {
     if (id) {
       setFormAsignaturas((prevForm) => ({
         ...prevForm,
-        programaId: id,
+        programaId,
       }));
       setFormAsignaturasFormacion((prevForm) => ({
         ...prevForm,
-        programaId: id,
+        programaId,
       }));
       setFormDocentes((prevForm) => ({
         ...prevForm,
-        programaId: id,
+        programaId,
       }));
     }
   }, [id]);
@@ -58,6 +58,7 @@ export function TablesPlanEstudiosProvider({ children }) {
       setFormDocentes,
       id,
       setNoti,
+      programaId,
     }),
     [
       asignaturasList,
@@ -74,8 +75,11 @@ export function TablesPlanEstudiosProvider({ children }) {
       setFormAsignaturas,
       formAsignaturasFormacion,
       setFormAsignaturasFormacion,
+      formDocentes,
+      setFormDocentes,
       id,
       setNoti,
+      programaId,
     ],
   );
 

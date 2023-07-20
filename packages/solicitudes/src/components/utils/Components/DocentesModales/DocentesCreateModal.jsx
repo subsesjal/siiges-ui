@@ -9,6 +9,7 @@ import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
+import getAsignaturas from '../../getAsignaturas';
 
 export default function DocentesCreateModal({ open, hideModal, title }) {
   const {
@@ -25,8 +26,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
 
-  const errorsAsignatura = errorDatosDocentes(formDocentes, setError, error);
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormDocentes((prevData) => ({
@@ -35,12 +34,15 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
     }));
   };
 
+  const errorsDocentes = errorDatosDocentes(formDocentes, setError);
+  const asignaturas = getAsignaturas(programaId);
+
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
     const initialValue = initialValues[name];
 
     if (value !== initialValue || value === '') {
-      errorsAsignatura[name]();
+      errorsDocentes[name]();
     }
   };
 
@@ -50,10 +52,10 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
   };
 
   useEffect(() => {
-    if (errorsAsignatura !== undefined) {
-      setErrors(errorsAsignatura);
+    if (errorsDocentes !== undefined) {
+      setErrors(errorsDocentes);
     }
-  }, [error]);
+  }, [errors]);
 
   const handleOnSubmit = () => {
     handleCreate(
@@ -103,229 +105,215 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
     { id: 6, nombre: 'Profesional Asociado' },
   ];
 
-  const renderSection = () => {
-    switch (currentSection) {
-      case 1:
-        return (
-          <Grid container spacing={2} sx={{ width: '100%' }}>
-            <Grid item xs={3}>
-              <BasicSelect
-                title="Tipo de docente"
-                name="tipoDocente"
-                options={tiposDocentes}
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                errorMessage={error.tipoDocente}
-                textValue
-                required
-              />
-            </Grid>
-            <Grid item xs={9}>
-              <Input
-                id="nombre"
-                label="Nombre(s)"
-                name="nombre"
-                auto="nombre"
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                onfocus={handleInputFocus}
-                required
-                errorMessage={error.nombre}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                id="apellidoPaterno"
-                label="Apellido paterno"
-                name="apellidoPaterno"
-                auto="apellidoPaterno"
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                onfocus={handleInputFocus}
-                required
-                errorMessage={error.apellidoPaterno}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                id="apellidoMaterno"
-                label="Apellido materno"
-                name="apellidoMaterno"
-                auto="apellidoMaterno"
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                onfocus={handleInputFocus}
-                required
-                errorMessage={error.apellidoMaterno}
-              />
-            </Grid>
-          </Grid>
-        );
-      case 2:
-        return (
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h6">Ultimo grado</Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <BasicSelect
-                title="Nivel"
-                name="nivelUltimoGrado"
-                options={nivel}
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                errorMessage={error.nivelUltimoGrado}
-                textValue
-                required
-              />
-            </Grid>
-            <Grid item xs={9}>
-              <Input
-                id="nombreUltimoGrado"
-                label="Nombre"
-                name="nombreUltimoGrado"
-                auto="nombreUltimoGrado"
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                onfocus={handleInputFocus}
-                required
-                errorMessage={error.nombreUltimoGrado}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <BasicSelect
-                title="Documento presentado"
-                name="documentoPresentadoUltimoGrado"
-                options={documentosPresentados}
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                errorMessage={error.documentoPresentadoUltimoGrado}
-                textValue
-                required
-              />
-            </Grid>
-          </Grid>
-        );
-      case 3:
-        return (
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h6">Penultimo grado</Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <BasicSelect
-                title="Nivel"
-                name="nivelPenultimoGrado"
-                options={nivel}
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                errorMessage={error.nivelPenultimoGrado}
-                textValue
-                required
-              />
-            </Grid>
-            <Grid item xs={9}>
-              <Input
-                id="naombrePenultimoGrado"
-                label="Nombre"
-                name="naombrePenultimoGrado"
-                auto="naombrePenultimoGrado"
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                onfocus={handleInputFocus}
-                required
-                errorMessage={error.naombrePenultimoGrado}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <BasicSelect
-                title="Documento presentado"
-                name="documentoPresentadoPenultimoGrado"
-                options={documentosPresentados}
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                errorMessage={error.documentoPresentadoPenultimoGrado}
-                textValue
-                required
-              />
-            </Grid>
-            <br />
-            <Grid item xs={12}>
-              <Input
-                id="asignaturasPropuesta"
-                label="Asignaturas para las que se propone"
-                name="asignaturasPropuesta"
-                auto="asignaturasPropuesta"
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                onfocus={handleInputFocus}
-                required
-                errorMessage={error.asignaturasPropuesta}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <BasicSelect
-                title="Tipo de contratación"
-                name="tipoContratacion"
-                options={tipoContratacion}
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                errorMessage={error.tipoContratacion}
-                textValue
-                required
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Input
-                id="antiguedad"
-                label="Antiguedad"
-                name="antiguedad"
-                auto="antiguedad"
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                onfocus={handleInputFocus}
-                required
-                errorMessage={error.antiguedad}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Input
-                id="totalHorasIndependiente"
-                label="Total horas independiente"
-                name="totalHorasIndependiente"
-                auto="totalHorasIndependiente"
-                onchange={handleOnChange}
-                onblur={handleOnBlur}
-                onfocus={handleInputFocus}
-                required
-                errorMessage={error.totalHorasIndependiente}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="experienciaLaboral"
-                name="experienciaLaboral"
-                label="Experiencia laboral"
-                rows={4}
-                multiline
-                sx={{ width: '100%' }}
-                onChange={handleOnChange}
-                onBlur={handleOnBlur}
-                onFocus={handleInputFocus}
-                required
-                errorMessage={error.experienciaLaboral}
-              />
-            </Grid>
-          </Grid>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <DefaultModal open={open} setOpen={hideModal} title={title}>
-      {renderSection()}
+      {currentSection === 1 && (
+        <Grid container spacing={2} sx={{ width: '100%' }}>
+          <Grid item xs={3}>
+            <BasicSelect
+              title="Tipo de docente"
+              name="tipoDocente"
+              options={tiposDocentes}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.tipoDocente}
+              required
+            />
+          </Grid>
+          <Grid item xs={9}>
+            <Input
+              id="nombre"
+              label="Nombre(s)"
+              name="nombre"
+              auto="nombre"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.nombre}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Input
+              id="apellidoPaterno"
+              label="Apellido paterno"
+              name="apellidoPaterno"
+              auto="apellidoPaterno"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.apellidoPaterno}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Input
+              id="apellidoMaterno"
+              label="Apellido materno"
+              name="apellidoMaterno"
+              auto="apellidoMaterno"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.apellidoMaterno}
+            />
+          </Grid>
+        </Grid>
+      )}
+      {currentSection === 2 && (
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h6">Ultimo grado</Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <BasicSelect
+              title="Nivel"
+              name="nivelUltimoGrado"
+              options={nivel}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.nivelUltimoGrado}
+              textValue
+              required
+            />
+          </Grid>
+          <Grid item xs={9}>
+            <Input
+              id="nombreUltimoGrado"
+              label="Nombre"
+              name="nombreUltimoGrado"
+              auto="nombreUltimoGrado"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.nombreUltimoGrado}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <BasicSelect
+              title="Documento presentado"
+              name="documentoPresentadoUltimoGrado"
+              options={documentosPresentados}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.documentoPresentadoUltimoGrado}
+              textValue
+              required
+            />
+          </Grid>
+        </Grid>
+      )}
+      {currentSection === 3 && (
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h6">Penultimo grado</Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <BasicSelect
+              title="Nivel"
+              name="nivelPenultimoGrado"
+              options={nivel}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.nivelPenultimoGrado}
+              textValue
+              required
+            />
+          </Grid>
+          <Grid item xs={9}>
+            <Input
+              id="nombrePenultimoGrado"
+              label="Nombre"
+              name="nombrePenultimoGrado"
+              auto="nombrePenultimoGrado"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.nombrePenultimoGrado}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <BasicSelect
+              title="Documento presentado"
+              name="documentoPresentadoPenultimoGrado"
+              options={documentosPresentados}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.documentoPresentadoPenultimoGrado}
+              textValue
+              required
+            />
+          </Grid>
+          <br />
+          <Grid item xs={12}>
+            <BasicSelect
+              title="Asignaturas para las que se propone"
+              name="asignaturasPropuesta"
+              options={asignaturas.asignaturas}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.asignaturasPropuesta}
+              required
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <BasicSelect
+              title="Tipo de contratación"
+              name="tipoContratacion"
+              options={tipoContratacion}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.tipoContratacion}
+              textValue
+              required
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <Input
+              id="antiguedad"
+              label="Antiguedad"
+              name="antiguedad"
+              auto="antiguedad"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.antiguedad}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <Input
+              id="totalHorasIndependiente"
+              label="Total horas independiente"
+              name="totalHorasIndependiente"
+              auto="totalHorasIndependiente"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.totalHorasIndependiente}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="experienciaLaboral"
+              name="experienciaLaboral"
+              label="Experiencia laboral"
+              rows={4}
+              multiline
+              sx={{ width: '100%' }}
+              onChange={handleOnChange}
+              onBlur={handleOnBlur}
+              onFocus={handleInputFocus}
+              required
+              error={error.experienciaLaboral}
+            />
+          </Grid>
+        </Grid>
+      )}
       <Grid container sx={{ mt: 2 }}>
         <Grid item xs={8}>
           <ButtonStyled
