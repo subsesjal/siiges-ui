@@ -24,7 +24,6 @@ export default function getSolicitudes() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           setLoading(true);
           if (data !== undefined) {
             solicitudData = data.data;
