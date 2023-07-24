@@ -7,10 +7,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-  ],
+  extends: ['plugin:react/recommended', 'airbnb'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -18,22 +15,19 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-  ],
+  plugins: ['react'],
   rules: {
-    "linebreak-style": 0,
-    'import/no-extraneous-dependencies':
-      [
-        'error',
-        {
-          packageDir: [
-            __dirname,
-            path.join(__dirname, 'packages/authentication'),
-            path.join(__dirname, 'packages/shared'),
-            path.join(__dirname, 'apps/siiges-app'),
-          ],
-        },
-      ],
+    'linebreak-style': 0,
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        packageDir: [
+          __dirname,
+          path.join(__dirname, 'packages/authentication'),
+          path.join(__dirname, 'packages/shared'),
+          path.join(__dirname, 'apps/siiges-app'),
+        ],
+      },
+    ],
   },
 };

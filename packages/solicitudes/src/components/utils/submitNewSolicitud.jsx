@@ -1,7 +1,7 @@
 function submitNewSolicitud(validations, setNewSubmit) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const {
-    errors, form, setNoti, setId,
+    errors, form, setNoti, setId, setProgramaId,
   } = validations;
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
@@ -27,6 +27,7 @@ function submitNewSolicitud(validations, setNewSubmit) {
     })
     .then((data) => {
       setId(data.data.id);
+      setProgramaId(data.data.programa.id);
     })
     .then(
       setNewSubmit(false),

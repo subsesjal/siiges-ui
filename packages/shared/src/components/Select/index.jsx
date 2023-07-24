@@ -19,12 +19,15 @@ export default function BasicSelect({
   onblur,
   required,
   errorMessage,
+  textValue,
 }) {
   const [option, setOption] = useState(value);
+
   const handleOnChange = (e) => {
     setOption(e.target.value);
     onchange(e);
   };
+
   return (
     <Box sx={{ minWidth: 120, mt: 2 }}>
       <FormControl fullWidth size="small">
@@ -41,7 +44,7 @@ export default function BasicSelect({
           id={value}
           label={title}
           name={name}
-          value={option}
+          value={option ?? ''}
           onChange={handleOnChange}
           onBlur={onblur}
           onFocus={onfocus}
@@ -49,11 +52,16 @@ export default function BasicSelect({
           error={!!errorMessage}
           disabled={disabled}
         >
-          {options.map((opcion) => (
-            <MenuItem key={opcion.id} value={opcion.id}>
-              {opcion.nombre}
-            </MenuItem>
-          ))}
+          {options
+            && options.map((opcion) => (textValue ? (
+              <MenuItem key={opcion.id} value={opcion.nombre}>
+                {opcion.nombre}
+              </MenuItem>
+            ) : (
+              <MenuItem key={opcion.id} value={opcion.id}>
+                {opcion.nombre}
+              </MenuItem>
+            )))}
         </Select>
         <FormHelperText error>{errorMessage}</FormHelperText>
       </FormControl>
@@ -66,6 +74,7 @@ BasicSelect.defaultProps = {
   required: false,
   multiple: false,
   disabled: false,
+  textValue: false,
   errorMessage: '',
   onchange: () => {},
   onblur: () => {},
@@ -85,6 +94,7 @@ BasicSelect.propTypes = {
   required: PropTypes.bool,
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,
+  textValue: PropTypes.bool,
   errorMessage: PropTypes.string,
   onchange: PropTypes.func,
   onblur: PropTypes.func,
