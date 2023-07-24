@@ -8,7 +8,7 @@ import { DataGrid } from '@mui/x-data-grid';
 
 function DataTable({ title, rows, columns }) {
   const [searchText, setSearchText] = React.useState('');
-  const [filteredRows, setFilteredRows] = React.useState(rows);
+  const [filteredRows, setFilteredRows] = React.useState();
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
@@ -24,6 +24,7 @@ function DataTable({ title, rows, columns }) {
       setFilteredRows(filteredData);
     }
   };
+
   return (
     <>
       <Grid container>
@@ -58,7 +59,7 @@ function DataTable({ title, rows, columns }) {
       </Grid>
       <div style={{ height: 400, width: '100%', marginTop: 15 }}>
         <DataGrid
-          rows={filteredRows}
+          rows={filteredRows || rows}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
