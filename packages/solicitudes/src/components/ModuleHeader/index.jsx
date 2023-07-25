@@ -7,6 +7,7 @@ import {
 import { ButtonStyled, StepperComponent } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useRouter } from 'next/router';
 
 export default function ModuleHeader({
   steps,
@@ -15,6 +16,7 @@ export default function ModuleHeader({
   nextModule,
   module,
 }) {
+  const router = useRouter();
   return (
     <Card sx={{ width: '100%', mt: 5 }}>
       <CardContent>
@@ -43,7 +45,7 @@ export default function ModuleHeader({
               onclick={nextModule}
             />
             <span>&nbsp;&nbsp;</span>
-            <ButtonStyled text="Salir" alt="Salir" type="success" />
+            <ButtonStyled text="Salir" alt="Salir" type="success" onclick={() => router.push('/home')} />
           </Grid>
         </Grid>
       </CardContent>
