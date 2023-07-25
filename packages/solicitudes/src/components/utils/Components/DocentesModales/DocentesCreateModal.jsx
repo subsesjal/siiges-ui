@@ -7,7 +7,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
-import handleCreate from '../../submitNewAsignaturas';
+import handleCreate from '../../submitNewDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
 
@@ -28,10 +28,32 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFormDocentes((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormDocentes((prevData) => {
+      if (name === 'asignaturasDocentes') {
+        const newValue = Array.isArray(value) ? value : [value];
+        return {
+          ...prevData,
+          asignaturasDocentes: newValue,
+        };
+      } if (
+        name === 'nombre'
+        || name === 'apellidoPaterno'
+        || name === 'apellidoMaterno'
+      ) {
+        return {
+          ...prevData,
+          persona: {
+            ...prevData.persona,
+            [name]: value,
+          },
+        };
+      }
+      return {
+        ...prevData,
+        [name]: value,
+      };
+    });
+    console.log(formDocentes);
   };
 
   const errorsDocentes = errorDatosDocentes(formDocentes, setError);
@@ -251,11 +273,11 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
           <Grid item xs={12}>
             <BasicSelect
               title="Asignaturas para las que se propone"
-              name="asignaturasPropuesta"
+              name="asignaturasDocentes"
               options={asignaturas.asignaturas}
               onchange={handleOnChange}
               onblur={handleOnBlur}
-              errorMessage={error.asignaturasPropuesta}
+              errorMessage={error.asignaturasDocentes}
               required
             />
           </Grid>
@@ -267,7 +289,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.tipoContratacion}
-              textValue
               required
             />
           </Grid>
