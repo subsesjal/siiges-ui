@@ -3,12 +3,12 @@ import AsignaturasButtons from '../../../utils/Components/AsignaturasButtons';
 
 const columns = () => [
   { field: 'nombre', headerName: 'Nombre', width: 170 },
-  { field: 'tipo', headerName: 'Tipo' },
+  { field: 'tipoDocente', headerName: 'Tipo' },
   { field: 'formacion', headerName: 'Formacion profecional', width: 180 },
   { field: 'asignatura', headerName: 'Asignatura', width: 170 },
-  { field: 'experiencia', headerName: 'Experiencia', width: 170 },
+  { field: 'experienciaLaboral', headerName: 'Experiencia', width: 170 },
   {
-    field: 'contratacionAntiguedad',
+    field: 'tipoContratacion',
     headerName: 'Contratacion y antiguedad',
     width: 220,
   },

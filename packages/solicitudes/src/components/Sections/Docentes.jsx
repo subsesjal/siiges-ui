@@ -7,6 +7,16 @@ import columns from './Mocks/Docentes';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import DocentesCreateModal from '../utils/Components/DocentesModales/DocentesCreateModal';
 
+export const transformDataForTable = (data) => data.map((item) => ({
+  id: item.id,
+  nombre: item.persona.nombre,
+  tipoDocente: item.tipoDocente,
+  formacion: `${item.nombreUltimoGrado} - ${item.nombrePenultimoGrado}`,
+  asignatura: item.asignaturasDocentes.join(', '),
+  experienciaLaboral: item.experienciaLaboral,
+  tipoContratacion: `${item.tipoContratacion} - ${item.antiguedad} años`,
+}));
+
 export default function Docentes({ disabled }) {
   const [modal, setModal] = useState(false);
   const showModal = () => {
@@ -22,6 +32,8 @@ export default function Docentes({ disabled }) {
     setDocentesList,
   } = useContext(TablesPlanEstudiosContext);
 
+  const transformedData = transformDataForTable(docentesList);
+
   const tableColumns = columns(setDocentesList, docentesList);
 
   return (
@@ -35,7 +47,7 @@ export default function Docentes({ disabled }) {
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
-            rows={docentesList}
+            rows={transformedData}
             columns={tableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}

@@ -134,6 +134,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Tipo de docente"
               name="tipoDocente"
+              value={formDocentes.tipoDocente}
               options={tiposDocentes}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -147,6 +148,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Nombre(s)"
               name="nombre"
               auto="nombre"
+              value={formDocentes.persona?.nombre}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -160,6 +162,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Apellido paterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
+              value={formDocentes.persona?.apellidoPaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -173,6 +176,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Apellido materno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
+              value={formDocentes.persona?.apellidoMaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -191,6 +195,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Nivel"
               name="nivelUltimoGrado"
+              value={formDocentes.nivelUltimoGrado}
               options={nivel}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -205,6 +210,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Nombre"
               name="nombreUltimoGrado"
               auto="nombreUltimoGrado"
+              value={formDocentes.nombreUltimoGrado}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -216,6 +222,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Documento presentado"
               name="documentoPresentadoUltimoGrado"
+              value={formDocentes.documentoPresentadoUltimoGrado}
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -235,6 +242,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Nivel"
               name="nivelPenultimoGrado"
+              value={formDocentes.nivelPenultimoGrado}
               options={nivel}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -249,6 +257,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Nombre"
               name="nombrePenultimoGrado"
               auto="nombrePenultimoGrado"
+              value={formDocentes.nombrePenultimoGrado}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -260,6 +269,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Documento presentado"
               name="documentoPresentadoPenultimoGrado"
+              value={formDocentes.documentoPresentadoPenultimoGrado}
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -273,6 +283,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Asignaturas para las que se propone"
               name="asignaturasDocentes"
+              value={formDocentes.asignaturasDocentes}
               options={asignaturas.asignaturas}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -284,6 +295,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Tipo de contratación"
               name="tipoContratacion"
+              value={formDocentes.tipoContratacion}
               options={tipoContratacion}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -297,6 +309,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Antiguedad"
               name="antiguedad"
               auto="antiguedad"
+              value={formDocentes.antiguedad}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -310,6 +323,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Total horas independiente"
               name="totalHorasIndependiente"
               auto="totalHorasIndependiente"
+              value={formDocentes.totalHorasIndependiente}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -325,6 +339,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              value={formDocentes.experienciaLaboral}
               onChange={handleOnChange}
               onBlur={handleOnBlur}
               onFocus={handleInputFocus}
