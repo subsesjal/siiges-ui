@@ -53,7 +53,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
         [name]: value,
       };
     });
-    console.log(formDocentes);
   };
 
   const errorsDocentes = errorDatosDocentes(formDocentes, setError);

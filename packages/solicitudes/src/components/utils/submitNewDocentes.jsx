@@ -28,7 +28,6 @@ const handleCreate = (
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const newData = { ...form, id: data.data.id };
       setDocentesList((prevList) => [...prevList, newData]);
       setForm({ programaId });
