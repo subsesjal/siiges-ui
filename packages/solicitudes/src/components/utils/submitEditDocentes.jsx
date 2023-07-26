@@ -1,4 +1,4 @@
-const handleCreate = (
+const handleEdit = (
   form,
   setForm,
   setInitialValues,
@@ -22,8 +22,8 @@ const handleCreate = (
     return;
   }
 
-  fetch('http://localhost:3000/api/v1/docentes', {
-    method: 'POST',
+  fetch(`http://localhost:3000/api/v1/docentes/${form.id}`, {
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', api_key: apikey },
     body: JSON.stringify(form),
   })
@@ -41,4 +41,4 @@ const handleCreate = (
     });
 };
 
-export default handleCreate;
+export default handleEdit;

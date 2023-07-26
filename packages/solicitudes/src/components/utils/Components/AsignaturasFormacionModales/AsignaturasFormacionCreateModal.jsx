@@ -85,6 +85,7 @@ export default function AsignaturasFormacionCreateModal({
           <BasicSelect
             title="Grado"
             name="grado"
+            value=""
             options={selectedGrade}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -97,6 +98,7 @@ export default function AsignaturasFormacionCreateModal({
           <BasicSelect
             title="Area"
             name="area"
+            value=""
             options={area}
             onchange={handleOnChange}
             onblur={handleOnBlur}

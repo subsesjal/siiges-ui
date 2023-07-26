@@ -1,5 +1,5 @@
 import React from 'react';
-import AsignaturasButtons from '../../../utils/Components/AsignaturasButtons';
+import DocentesButtons from '../../../utils/Components/DocentesButtons';
 
 const columns = () => [
   { field: 'nombre', headerName: 'Nombre', width: 170 },
@@ -16,7 +16,7 @@ const columns = () => [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => <AsignaturasButtons id={params.id} />,
+    renderCell: (params) => <DocentesButtons id={params.id} />,
     sortable: false,
     filterable: false,
   },
