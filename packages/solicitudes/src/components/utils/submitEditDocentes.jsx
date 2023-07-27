@@ -1,13 +1,13 @@
-const handleCreate = (
+const handleEdit = (
   form,
   setForm,
   setInitialValues,
-  setAsignaturasList,
+  setDocentesList,
   hideModal,
   errors,
   setNoti,
   programaId,
-  tipo,
+  setCurrentSection,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -22,17 +22,25 @@ const handleCreate = (
     return;
   }
 
-  fetch('http://localhost:3000/api/v1/asignaturas', {
-    method: 'POST',
+  fetch(`http://localhost:3000/api/v1/docentes/${form.id}`, {
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', api_key: apikey },
     body: JSON.stringify(form),
   })
     .then((response) => response.json())
     .then((data) => {
-      const newData = { ...form, id: data.data.id };
-      setAsignaturasList((prevList) => [...prevList, newData]);
-      setForm({ programaId, tipo });
+      const updatedData = { ...form, id: data.data.id };
+      setDocentesList((prevList) => {
+        const newList = [...prevList];
+        const index = newList.findIndex((item) => item.id === updatedData.id);
+        if (index !== -1) {
+          newList[index] = updatedData;
+        }
+        return newList;
+      });
+      setForm({ programaId, esAceptado: true, asignaturasDocentes: [] });
       setInitialValues({});
+      setCurrentSection(1);
       hideModal();
     })
     .catch((error) => {
@@ -40,4 +48,4 @@ const handleCreate = (
     });
 };
 
-export default handleCreate;
+export default handleEdit;

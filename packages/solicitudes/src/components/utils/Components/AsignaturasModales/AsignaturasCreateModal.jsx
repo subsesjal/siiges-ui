@@ -26,7 +26,11 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
 
   const selectedGrade = grados.semestral;
 
-  const errorsAsignatura = errorDatosAsignaturas(formAsignaturas, setError, error);
+  const errorsAsignatura = errorDatosAsignaturas(
+    formAsignaturas,
+    setError,
+    error,
+  );
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -77,6 +81,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
           <BasicSelect
             title="Grado"
             name="grado"
+            value=""
             options={selectedGrade}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -89,6 +94,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
           <BasicSelect
             title="Area"
             name="area"
+            value=""
             options={area}
             onchange={handleOnChange}
             onblur={handleOnBlur}

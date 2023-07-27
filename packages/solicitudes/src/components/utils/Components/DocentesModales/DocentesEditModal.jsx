@@ -7,11 +7,15 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
-import handleCreate from '../../submitNewDocentes';
+import handleEdit from '../../submitEditDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
 
-export default function DocentesCreateModal({ open, hideModal, title }) {
+export default function DocentesEditModal({
+  open,
+  hideModal,
+  edit,
+}) {
   const {
     setDocentesList,
     formDocentes,
@@ -27,7 +31,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
   } = useContext(TablesPlanEstudiosContext);
 
   const [currentSection, setCurrentSection] = useState(1);
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormDocentes((prevData) => {
@@ -37,7 +40,8 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
           ...prevData,
           asignaturasDocentes: newValue,
         };
-      } if (
+      }
+      if (
         name === 'nombre'
         || name === 'apellidoPaterno'
         || name === 'apellidoMaterno'
@@ -81,7 +85,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
   }, [errors]);
 
   const handleOnSubmit = () => {
-    handleCreate(
+    handleEdit(
       formDocentes,
       setFormDocentes,
       setInitialValues,
@@ -91,7 +95,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
       setNoti,
       programaId,
       setCurrentSection,
-      1,
     );
   };
 
@@ -134,19 +137,20 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
   ];
 
   return (
-    <DefaultModal open={open} setOpen={hideModal} title={title}>
+    <DefaultModal open={open} setOpen={hideModal} title={edit}>
       {currentSection === 1 && (
         <Grid container spacing={2} sx={{ width: '100%' }}>
           <Grid item xs={3}>
             <BasicSelect
               title="Tipo de docente"
               name="tipoDocente"
-              value={formDocentes.tipoDocente ?? ''}
+              value={formDocentes.tipoDocente}
               options={tiposDocentes}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.tipoDocente}
               required
+              disabled={edit === 'Consultar Docentes'}
             />
           </Grid>
           <Grid item xs={9}>
@@ -160,6 +164,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              disabled={edit === 'Consultar Docentes'}
               errorMessage={error.nombre}
             />
           </Grid>
@@ -174,6 +179,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              disabled={edit === 'Consultar Docentes'}
               errorMessage={error.apellidoPaterno}
             />
           </Grid>
@@ -188,6 +194,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              disabled={edit === 'Consultar Docentes'}
               errorMessage={error.apellidoMaterno}
             />
           </Grid>
@@ -202,13 +209,14 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Nivel"
               name="nivelUltimoGrado"
-              value={formDocentes.nivelUltimoGrado ?? ''}
+              value={formDocentes.nivelUltimoGrado}
               options={nivel}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nivelUltimoGrado}
               textValue
               required
+              disabled={edit === 'Consultar Docentes'}
             />
           </Grid>
           <Grid item xs={9}>
@@ -217,11 +225,12 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Nombre"
               name="nombreUltimoGrado"
               auto="nombreUltimoGrado"
-              value={formDocentes.nombreUltimoGrado ?? ''}
+              value={formDocentes.nombreUltimoGrado}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              disabled={edit === 'Consultar Docentes'}
               errorMessage={error.nombreUltimoGrado}
             />
           </Grid>
@@ -229,13 +238,14 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Documento presentado"
               name="documentoPresentadoUltimoGrado"
-              value={formDocentes.documentoPresentadoUltimoGrado ?? ''}
+              value={formDocentes.documentoPresentadoUltimoGrado}
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.documentoPresentadoUltimoGrado}
               textValue
               required
+              disabled={edit === 'Consultar Docentes'}
             />
           </Grid>
         </Grid>
@@ -249,13 +259,14 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Nivel"
               name="nivelPenultimoGrado"
-              value={formDocentes.nivelPenultimoGrado ?? ''}
+              value={formDocentes.nivelPenultimoGrado}
               options={nivel}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nivelPenultimoGrado}
               textValue
               required
+              disabled={edit === 'Consultar Docentes'}
             />
           </Grid>
           <Grid item xs={9}>
@@ -269,6 +280,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              disabled={edit === 'Consultar Docentes'}
               errorMessage={error.nombrePenultimoGrado}
             />
           </Grid>
@@ -276,13 +288,14 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Documento presentado"
               name="documentoPresentadoPenultimoGrado"
-              value={formDocentes.documentoPresentadoPenultimoGrado ?? ''}
+              value={formDocentes.documentoPresentadoPenultimoGrado}
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.documentoPresentadoPenultimoGrado}
               textValue
               required
+              disabled={edit === 'Consultar Docentes'}
             />
           </Grid>
           <br />
@@ -290,25 +303,26 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <BasicSelect
               title="Asignaturas para las que se propone"
               name="asignaturasDocentes"
-              multiple
-              value={formDocentes.asignaturasDocentes ?? ''}
+              value={formDocentes.asignaturasDocentes}
               options={asignaturas.asignaturas}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.asignaturasDocentes}
               required
+              disabled={edit === 'Consultar Docentes'}
             />
           </Grid>
           <Grid item xs={6}>
             <BasicSelect
               title="Tipo de contratación"
               name="tipoContratacion"
-              value={formDocentes.tipoContratacion ?? ''}
+              value={formDocentes.tipoContratacion}
               options={tipoContratacion}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.tipoContratacion}
               required
+              disabled={edit === 'Consultar Docentes'}
             />
           </Grid>
           <Grid item xs={3}>
@@ -322,6 +336,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              disabled={edit === 'Consultar Docentes'}
               errorMessage={error.antiguedad}
             />
           </Grid>
@@ -336,6 +351,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              disabled={edit === 'Consultar Docentes'}
               errorMessage={error.totalHorasIndependiente}
             />
           </Grid>
@@ -352,6 +368,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               onBlur={handleOnBlur}
               onFocus={handleInputFocus}
               required
+              disabled={edit === 'Consultar Docentes'}
               error={error.experienciaLaboral}
             />
           </Grid>
@@ -419,8 +436,19 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
   );
 }
 
-DocentesCreateModal.propTypes = {
+DocentesEditModal.propTypes = {
   open: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
+  edit: PropTypes.string.isRequired,
+  rowItem: PropTypes.shape({
+    grado: PropTypes.string,
+    area: PropTypes.number,
+    nombre: PropTypes.string,
+    clave: PropTypes.string,
+    creditos: PropTypes.string,
+    formacionEspecializada: PropTypes.string,
+    seriacion: PropTypes.string,
+    horasDocente: PropTypes.number,
+    horasIndependiente: PropTypes.number,
+  }).isRequired,
 };

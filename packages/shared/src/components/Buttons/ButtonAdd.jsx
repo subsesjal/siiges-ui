@@ -15,7 +15,11 @@ export default function ButtonAdd({ text, onClick }) {
   );
 }
 
+ButtonAdd.defaultProps = {
+  onClick: () => {}, // Default empty function
+};
+
 ButtonAdd.propTypes = {
   text: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 };

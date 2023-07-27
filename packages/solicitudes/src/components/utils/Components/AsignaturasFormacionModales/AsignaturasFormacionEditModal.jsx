@@ -216,9 +216,7 @@ export default function AsignaturasFormacionEditModal({
             text="Confirmar"
             alt="Confirmar"
             onclick={handleOnSubmit}
-          >
-            Confirmar
-          </ButtonStyled>
+          />
         )}
       </Grid>
     </DefaultModal>

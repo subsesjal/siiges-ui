@@ -1,14 +1,14 @@
 import React from 'react';
-import AsignaturasButtons from '../../../utils/Components/AsignaturasButtons';
+import DocentesButtons from '../../../utils/Components/DocentesButtons';
 
 const columns = () => [
   { field: 'nombre', headerName: 'Nombre', width: 170 },
-  { field: 'tipo', headerName: 'Tipo' },
+  { field: 'tipoDocente', headerName: 'Tipo' },
   { field: 'formacion', headerName: 'Formacion profecional', width: 180 },
   { field: 'asignatura', headerName: 'Asignatura', width: 170 },
-  { field: 'experiencia', headerName: 'Experiencia', width: 170 },
+  { field: 'experienciaLaboral', headerName: 'Experiencia', width: 170 },
   {
-    field: 'contratacionAntiguedad',
+    field: 'tipoContratacion',
     headerName: 'Contratacion y antiguedad',
     width: 220,
   },
@@ -16,7 +16,7 @@ const columns = () => [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => <AsignaturasButtons id={params.id} />,
+    renderCell: (params) => <DocentesButtons id={params.id} />,
     sortable: false,
     filterable: false,
   },
