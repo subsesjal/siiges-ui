@@ -3,7 +3,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import DeleteDocentes from './DocentesModales/DeleteDocentes';
 import DocentesEditModal from './DocentesModales/DocentesEditModal';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
@@ -13,8 +13,12 @@ export default function DocentesButtons({ id }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const { docentesList } = useContext(TablesPlanEstudiosContext);
+  const { docentesList, setFormDocentes } = useContext(TablesPlanEstudiosContext);
   const rowItem = docentesList.find((item) => item.id === id);
+
+  useEffect(() => {
+    setFormDocentes(rowItem);
+  }, [rowItem]);
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);

@@ -91,6 +91,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
       setNoti,
       programaId,
       setCurrentSection,
+      1,
     );
   };
 
@@ -104,7 +105,7 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
 
   const handleModalClose = () => {
     hideModal();
-    setCurrentSection(1); // Reset the current section to 1
+    setCurrentSection(1);
   };
 
   const tiposDocentes = [

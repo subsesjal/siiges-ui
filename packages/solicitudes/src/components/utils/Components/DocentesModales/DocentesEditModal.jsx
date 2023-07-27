@@ -7,7 +7,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
-import handleEdit from '../../submitNewDocentes';
+import handleEdit from '../../submitEditDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
 
@@ -15,7 +15,6 @@ export default function DocentesEditModal({
   open,
   hideModal,
   edit,
-  rowItem,
 }) {
   const {
     setDocentesList,
@@ -32,11 +31,6 @@ export default function DocentesEditModal({
   } = useContext(TablesPlanEstudiosContext);
 
   const [currentSection, setCurrentSection] = useState(1);
-
-  useEffect(() => {
-    setFormDocentes(rowItem);
-  }, [rowItem]);
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormDocentes((prevData) => {

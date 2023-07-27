@@ -29,8 +29,15 @@ const handleEdit = (
   })
     .then((response) => response.json())
     .then((data) => {
-      const newData = { ...form, id: data.data.id };
-      setDocentesList((prevList) => [...prevList, newData]);
+      const updatedData = { ...form, id: data.data.id };
+      setDocentesList((prevList) => {
+        const newList = [...prevList];
+        const index = newList.findIndex((item) => item.id === updatedData.id);
+        if (index !== -1) {
+          newList[index] = updatedData;
+        }
+        return newList;
+      });
       setForm({ programaId, esAceptado: true, asignaturasDocentes: [] });
       setInitialValues({});
       setCurrentSection(1);
