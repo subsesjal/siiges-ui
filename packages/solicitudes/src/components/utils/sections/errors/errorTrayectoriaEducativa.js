@@ -1,39 +1,70 @@
 export default function errorTrayectoriaEducativa(form, setError, error) {
-  const formData = form[4];
+  const formData = form[9];
   const errors = {
-    perfilEgresoConocimientos: () => {
-      if (formData.programa?.perfilEgresoConocimientos === undefined || formData.programa?.perfilEgresoConocimientos === '') {
-        setError({ ...error, perfilEgresoConocimientos: 'Conocimientos invalidos' });
+    programaSeguimiento: () => {
+      if (
+        formData.programaSeguimiento === undefined
+        || formData.programaSeguimiento === ''
+      ) {
+        setError({ ...error, programaSeguimiento: 'Conocimientos invalidos' });
         return false;
       }
-      setError({ ...error, perfilEgresoConocimientos: '' });
+      setError({ ...error, programaSeguimiento: '' });
       return true;
     },
-    perfilEgresoHabilidades: () => {
-      if (formData.programa?.perfilEgresoHabilidades === undefined || formData.programa?.perfilEgresoHabilidades === '') {
-        setError({ ...error, perfilEgresoHabilidades: 'Habilidades invalidas' });
+    funcionTutorial: () => {
+      if (
+        formData.funcionTutorial === undefined
+        || formData.funcionTutorial === ''
+      ) {
+        setError({ ...error, funcionTutorial: 'Habilidades invalidas' });
         return false;
       }
-      setError({ ...error, perfilEgresoHabilidades: '' });
+      setError({ ...error, funcionTutorial: '' });
       return true;
     },
-    perfilEgresoActitudes: () => {
-      if (formData.programa?.perfilEgresoActitudes === undefined || formData.programa?.perfilEgresoActitudes === '') {
-        setError({ ...error, perfilEgresoActitudes: 'Turnos invalidos' });
+    tipoTutoria: () => {
+      if (formData.tipoTutoria === undefined || formData.tipoTutoria === '') {
+        setError({ ...error, tipoTutoria: 'Turnos invalidos' });
         return false;
       }
-      setError({ ...error, perfilEgresoActitudes: '' });
+      setError({ ...error, tipoTutoria: '' });
       return true;
     },
-    seguimientoEgresados: () => {
-      if (formData.programa?.seguimientoEgresados === undefined || formData.programa?.seguimientoEgresados === '') {
+    tipoEgreso: () => {
+      if (formData.tipoEgreso === undefined || formData.tipoEgreso === '') {
         setError({
           ...error,
-          seguimientoEgresados: 'Proceso de selección invalida',
+          tipoEgreso: 'Proceso de selección invalida',
         });
         return false;
       }
-      setError({ ...error, seguimientoEgresados: '' });
+      setError({ ...error, tipoEgreso: '' });
+      return true;
+    },
+    estadisticasTitulacion: () => {
+      if (
+        formData.estadisticasTitulacion === undefined
+        || formData.estadisticasTitulacion === ''
+      ) {
+        setError({ ...error, estadisticasTitulacion: 'Turnos invalidos' });
+        return false;
+      }
+      setError({ ...error, estadisticasTitulacion: '' });
+      return true;
+    },
+    modalidadesTitulacion: () => {
+      if (
+        formData.modalidadesTitulacion === undefined
+        || formData.modalidadesTitulacion === ''
+      ) {
+        setError({
+          ...error,
+          modalidadesTitulacion: 'Proceso de selección invalida',
+        });
+        return false;
+      }
+      setError({ ...error, modalidadesTitulacion: '' });
       return true;
     },
   };

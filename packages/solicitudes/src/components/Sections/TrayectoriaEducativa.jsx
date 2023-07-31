@@ -3,36 +3,54 @@ import { InputFile } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import SolicitudContext from '../utils/Context/solicitudContext';
-import formPrograma from '../utils/sections/forms/formPrograma';
 import errorTrayectoriaEducativa from '../utils/sections/errors/errorTrayectoriaEducativa';
+import formtrayectoria from '../utils/sections/forms/formTrayectoria';
 
 export default function TrayectoriaEducativa({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
   const [loaded, setLoaded] = useState([]);
   const [fileURLs, setFileURLs] = useState([]);
+  const [areFilesLoaded, setAreFilesLoaded] = useState([false, false, false]);
 
   const {
     form, setForm, error, setError, setErrors, id,
   } = useContext(SolicitudContext);
 
   useEffect(() => {
+    const allFilesLoaded = areFilesLoaded.every((fileLoaded) => fileLoaded);
+    setForm((prevForm) => ({
+      ...prevForm,
+      10: { ...prevForm[10], filesLoaded: allFilesLoaded },
+    }));
+  }, [areFilesLoaded]);
+
+  useEffect(() => {
     if (fileURLs > 0) {
-      setForm({ ...form, 5: { ...form['5'], urls: fileURLs } });
+      setForm({ ...form, 9: { ...form['9'], urls: fileURLs } });
     }
   }, [fileURLs]);
 
   const handleFileLoaded = (index, url) => {
     setLoaded((prevLoaded) => [
-      ...prevLoaded.slice(0, index), true, ...prevLoaded.slice(index + 1),
+      ...prevLoaded.slice(0, index),
+      true,
+      ...prevLoaded.slice(index + 1),
     ]);
     setFileURLs((prevURLs) => [
-      ...prevURLs.slice(0, index), url, ...prevURLs.slice(index + 1),
+      ...prevURLs.slice(0, index),
+      url,
+      ...prevURLs.slice(index + 1),
+    ]);
+    setAreFilesLoaded((prevLoaded) => [
+      ...prevLoaded.slice(0, index),
+      true,
+      ...prevLoaded.slice(index + 1),
     ]);
   };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formPrograma(name, value, setForm, 5);
+    formtrayectoria(name, value, setForm, 9);
   };
 
   const errors = errorTrayectoriaEducativa(form, setError, error);
@@ -62,7 +80,7 @@ export default function TrayectoriaEducativa({ disabled }) {
       <Grid item xs={12}>
         <Typography variant="h6">Trayectoria educativa</Typography>
       </Grid>
-      <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
+      <Grid container spacing={2} sx={{ ml: 15, mt: 2, width: '100%' }}>
         <Grid item xs={12}>
           <TextField
             id="programaSeguimiento"
@@ -178,11 +196,11 @@ export default function TrayectoriaEducativa({ disabled }) {
               </a>
             ) : <div />}
           <InputFile
-            tipoEntidad="PROGRAMA"
+            tipoEntidad="TRAYECTORIA"
             tipoDocumento="INFORME_RESULTADOS_TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Informe de resultados"
-            setuRL={(url) => handleFileLoaded(0, url)}
+            setUrl={(url) => handleFileLoaded(0, url)}
             disabled={disabled}
           />
         </Grid>
@@ -199,11 +217,11 @@ export default function TrayectoriaEducativa({ disabled }) {
               </a>
             ) : <div />}
           <InputFile
-            tipoEntidad="PROGRAMA"
+            tipoEntidad="TRAYECTORIA"
             tipoDocumento="INSTRUMENTOS_TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Instrumentos o formatos utilizados para dar seguimiento al programa de trayectoria y tutoría académica"
-            setuRL={(url) => handleFileLoaded(1, url)}
+            setUrl={(url) => handleFileLoaded(1, url)}
             disabled={disabled}
           />
         </Grid>
@@ -220,11 +238,11 @@ export default function TrayectoriaEducativa({ disabled }) {
               </a>
             ) : <div />}
           <InputFile
-            tipoEntidad="PROGRAMA"
+            tipoEntidad="TRAYECTORIA"
             tipoDocumento="TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Trayectoria educativa y tutoría de los estudiantes (opcional)"
-            setuRL={(url) => handleFileLoaded(2, url)}
+            setUrl={(url) => handleFileLoaded(2, url)}
             disabled={disabled}
           />
         </Grid>
