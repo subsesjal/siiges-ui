@@ -22,7 +22,6 @@ export default function TrayectoriaEducativa({ disabled }) {
       ...prevForm,
       10: { ...prevForm[10], filesLoaded: allFilesLoaded },
     }));
-    console.log(areFilesLoaded);
   }, [areFilesLoaded]);
 
   useEffect(() => {
@@ -201,7 +200,7 @@ export default function TrayectoriaEducativa({ disabled }) {
             tipoDocumento="INFORME_RESULTADOS_TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Informe de resultados"
-            setuRL={(url) => handleFileLoaded(0, url)}
+            setUrl={(url) => handleFileLoaded(0, url)}
             disabled={disabled}
           />
         </Grid>
@@ -222,7 +221,7 @@ export default function TrayectoriaEducativa({ disabled }) {
             tipoDocumento="INSTRUMENTOS_TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Instrumentos o formatos utilizados para dar seguimiento al programa de trayectoria y tutoría académica"
-            setuRL={(url) => handleFileLoaded(1, url)}
+            setUrl={(url) => handleFileLoaded(1, url)}
             disabled={disabled}
           />
         </Grid>
@@ -243,7 +242,7 @@ export default function TrayectoriaEducativa({ disabled }) {
             tipoDocumento="TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Trayectoria educativa y tutoría de los estudiantes (opcional)"
-            setuRL={(url) => handleFileLoaded(2, url)}
+            setUrl={(url) => handleFileLoaded(2, url)}
             disabled={disabled}
           />
         </Grid>
