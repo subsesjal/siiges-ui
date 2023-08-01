@@ -33,6 +33,7 @@ function newRequest() {
   const { query } = router;
   const { modalidad } = query;
   const [module, setModule] = useState(0);
+  const [id, setId] = useState();
 
   const nextModule = () => {
     setModule(module + 1);
@@ -48,11 +49,11 @@ function newRequest() {
           nextModule={nextModule}
           module={module}
         />
-        {module === 0 && <PlanEstudios nextModule={nextModule} />}
-        {module === 1 && <DatosGenerales nextModule={nextModule} />}
-        {module === 2 && <Plantel nextModule={nextModule} />}
-        {module === 3 && <Anexos nextModule={nextModule} />}
-        {module === 4 && <EvaluacionCurricular nextModule={nextModule} />}
+        {module === 0 && <PlanEstudios nextModule={nextModule} id={id} setId={setId} />}
+        {module === 1 && <DatosGenerales nextModule={nextModule} id={id} />}
+        {module === 2 && <Plantel nextModule={nextModule} id={id} />}
+        {module === 3 && <Anexos nextModule={nextModule} id={id} />}
+        {module === 4 && <EvaluacionCurricular nextModule={nextModule} id={id} />}
       </Layout>
     );
   }
@@ -65,12 +66,12 @@ function newRequest() {
         nextModule={nextModule}
         module={module}
       />
-      {module === 0 && <PlanEstudios nextModule={nextModule} />}
-      {module === 1 && <DatosGenerales nextModule={nextModule} />}
-      {module === 2 && <Plantel nextModule={nextModule} />}
-      {module === 3 && <PlataformaEducativa nextModule={nextModule} />}
-      {module === 4 && <Anexos nextModule={nextModule} />}
-      {module === 5 && <EvaluacionCurricular nextModule={nextModule} />}
+      {module === 0 && <PlanEstudios nextModule={nextModule} id={id} setId={setId} />}
+      {module === 1 && <DatosGenerales nextModule={nextModule} id={id} />}
+      {module === 2 && <Plantel nextModule={nextModule} id={id} />}
+      {module === 3 && <PlataformaEducativa nextModule={nextModule} id={id} />}
+      {module === 4 && <Anexos nextModule={nextModule} id={id} />}
+      {module === 5 && <EvaluacionCurricular nextModule={nextModule} id={id} />}
     </Layout>
   );
 }
