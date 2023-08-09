@@ -6,7 +6,7 @@ export default function deleteUser(id, token) {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,
-      api_key: apikey
+      api_key: apikey,
     },
   });
 

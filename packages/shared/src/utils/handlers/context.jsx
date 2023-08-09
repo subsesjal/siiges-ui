@@ -3,12 +3,14 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import getTokenLocalStorage from './getToken';
+import SnackAlert from '../../components/Alert';
 
 export const Context = createContext();
 
 function Provider({ children }) {
   const [session, setSession] = useState({});
   const [auth, setAuth] = useState(false);
+  const [noti, setNoti] = useState(false);
 
   const router = useRouter();
 
@@ -32,6 +34,8 @@ function Provider({ children }) {
   const value = {
     session,
     auth,
+    noti,
+    setNoti,
     activateAuth: (userData) => {
       setSession({
         id: userData.data.id,
@@ -50,7 +54,19 @@ function Provider({ children }) {
       router.push('/');
     },
   };
-  return <Context.Provider value={value}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={value}>
+      {children}
+      <SnackAlert
+        open={noti.open}
+        close={() => {
+          setNoti(false);
+        }}
+        type={noti.type}
+        mensaje={noti.message}
+      />
+    </Context.Provider>
+  );
 }
 
 Provider.propTypes = {

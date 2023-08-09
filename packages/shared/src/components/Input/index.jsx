@@ -18,10 +18,18 @@ function Input({
   onfocus,
 }) {
   const [input, setInput] = useState(value);
+
   const handleOnChange = (e) => {
-    setInput(e.target.value);
-    onchange(e);
+    const newValue = e.target.value;
+    setInput(newValue);
+    onchange({
+      target: {
+        name,
+        value: type === 'date' || type === 'time' ? newValue : e.target.value,
+      },
+    });
   };
+
   return (
     <TextField
       margin="normal"
@@ -30,7 +38,7 @@ function Input({
       label={label}
       required={required}
       disabled={disabled}
-      type={type}
+      type={type === 'time' ? 'time' : type}
       name={name}
       autoComplete={auto}
       size={size}
@@ -41,6 +49,9 @@ function Input({
       helperText={errorMessage}
       error={!!errorMessage}
       className="data-form"
+      InputLabelProps={
+        type === 'date' || type === 'time' ? { shrink: true } : {}
+      }
     />
   );
 }

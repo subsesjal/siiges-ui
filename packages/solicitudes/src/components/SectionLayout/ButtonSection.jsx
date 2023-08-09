@@ -1,4 +1,4 @@
-import { ButtonStyled } from '@siiges-ui/shared';
+import { ButtonStyled, Context } from '@siiges-ui/shared';
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -7,6 +7,9 @@ import { Grid } from '@mui/material';
 import submitNewSolicitud from '../utils/submitNewSolicitud';
 import submitEditSolicitud from '../utils/submitEditSolicitud';
 import SolicitudContext from '../utils/Context/solicitudContext';
+import submitInstitucion from '../utils/submitInstitucion';
+import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
+import submitRepresentante from '../utils/submitRepresentante';
 
 export default function ButtonSection({
   id,
@@ -14,12 +17,35 @@ export default function ButtonSection({
   position,
   next,
   prev,
+  sectionTitle,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
+  const { session, setNoti } = useContext(Context);
   const validations = useContext(SolicitudContext);
-  const submit = newSubmit
-    ? () => submitNewSolicitud(validations, setNewSubmit)
-    : () => submitEditSolicitud(validations, sections, id);
+  const datosGeneralesValidations = useContext(DatosGeneralesContext);
+  let submit;
+
+  if (sectionTitle === 'Datos Generales') {
+    if (sections === 1) {
+      submit = () => {
+        submitInstitucion(datosGeneralesValidations, sections);
+      };
+    } else if (sections === 2) {
+      submit = () => {
+        submitRepresentante(datosGeneralesValidations, sections, session.token, setNoti);
+      };
+    } else if (sections === 3) {
+      submit = () => {
+        console.log(
+          'Performing action for "Datos Generales" with sections === 3',
+        );
+      };
+    }
+  } else if (newSubmit) {
+    submit = () => submitNewSolicitud(validations, setNewSubmit);
+  } else {
+    submit = () => submitEditSolicitud(validations, sections, id);
+  }
 
   return (
     <>
@@ -113,4 +139,5 @@ ButtonSection.propTypes = {
   position: PropTypes.string.isRequired,
   sections: PropTypes.number.isRequired,
   id: PropTypes.number.isRequired,
+  sectionTitle: PropTypes.string.isRequired,
 };

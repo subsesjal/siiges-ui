@@ -48,6 +48,7 @@ function newRequest() {
           date="22 de Agosto 2022"
           nextModule={nextModule}
           module={module}
+          id={id}
         />
         {module === 0 && <PlanEstudios nextModule={nextModule} id={id} setId={setId} />}
         {module === 1 && <DatosGenerales nextModule={nextModule} id={id} />}

@@ -8,7 +8,7 @@ export default function getCurrentUser() {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/v1/usuarios/${session.id}`, {
+    fetch(`http://localhost:3000/api/v1/usuarios/${session.id}/detalle`, {
       headers: {
         api_key: apikey,
         Authorization: `Bearer ${session.token}`,
@@ -17,7 +17,7 @@ export default function getCurrentUser() {
       .then((response) => response.json())
       .then((data) => {
         setLoading(true);
-        setUser(data);
+        setUser(data.data);
       });
     setLoading(false);
   }, [session]);
