@@ -99,7 +99,6 @@ export default function DiligenciasCreateModal({
       hideModal,
       errors,
       setNoti,
-      id,
     );
   };
 

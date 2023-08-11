@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Grid, TextField, Typography } from '@mui/material';
-import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
+import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -27,8 +27,8 @@ export default function DocentesEditModal({
     initialValues,
     setInitialValues,
     programaId,
-    setNoti,
   } = useContext(TablesPlanEstudiosContext);
+  const { setNoti } = useContext(Context);
 
   const [currentSection, setCurrentSection] = useState(1);
   const handleOnChange = (e) => {
