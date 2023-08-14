@@ -2,9 +2,26 @@ import { Grid, TextField, Typography } from '@mui/material';
 import { Input, InputFile } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import errorDatosNewInstitucion from '../utils/errorDatosNewInstitucion';
+import { formData } from '@siiges-ui/solicitudes/';
 
-export default function EditInstitutionForm({ data }) {
+export default function EditInstitutionForm({ data, form, setForm, setErrors}) {
+  const [error, setError] = useState({});
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    formData(name, value, form, setForm);
+  };
+
+  const errors = errorDatosNewInstitucion(form, setError, error);
+
+  useEffect(() => {
+    if (errors !== undefined) {
+      setErrors(errors);
+    }
+  }, [error]);
+
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
@@ -25,11 +42,13 @@ export default function EditInstitutionForm({ data }) {
           <Grid item xs={8}>
             <Input
               label="Nombre de institución"
-              id="nombreInstitucion"
-              name="nombreInstitucion"
+              id="nombre"
+              name="nombre"
               auto="nombreInstitucion"
               required
               class="data"
+              onchange={handleOnChange}
+              errorMessage={error.nombre}
               value={data.nombre}
             />
           </Grid>
@@ -41,6 +60,8 @@ export default function EditInstitutionForm({ data }) {
               auto="razonSocial"
               required
               class="data"
+              onchange={handleOnChange}
+              errorMessage={error.razonSocial}
               value={data.razonSocial}
             />
           </Grid>
@@ -48,9 +69,11 @@ export default function EditInstitutionForm({ data }) {
             <TextField
               id="historiaInstitucion"
               label="Histroria de la institución"
+              name="historia"
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              onChange={handleOnChange}
               value={data.historia}
             />
           </Grid>
@@ -61,6 +84,7 @@ export default function EditInstitutionForm({ data }) {
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              onChange={handleOnChange}
               value={data.vision}
             />
           </Grid>
@@ -71,6 +95,7 @@ export default function EditInstitutionForm({ data }) {
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              onChange={handleOnChange}
               value={data.mision}
             />
           </Grid>
@@ -81,6 +106,7 @@ export default function EditInstitutionForm({ data }) {
               rows={4}
               multiline
               sx={{ width: '100%' }}
+              onChange={handleOnChange}
               value={data.valoresInstitucional}
             />
           </Grid>
@@ -94,9 +120,10 @@ export default function EditInstitutionForm({ data }) {
             <Input
               label="Nombre(s)"
               id="nombre"
-              name="nombre"
+              name="nombreRector"
               auto="nombre"
               required
+              onchange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -106,6 +133,7 @@ export default function EditInstitutionForm({ data }) {
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
+              onchange={handleOnChange}
               required
               class="data"
             />
@@ -116,6 +144,7 @@ export default function EditInstitutionForm({ data }) {
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
+              onchange={handleOnChange}
               required
               class="data"
             />
@@ -126,6 +155,7 @@ export default function EditInstitutionForm({ data }) {
               id="nacionalidad"
               name="nacionalidad"
               auto="nacionalidad"
+              onchange={handleOnChange}
               required
               class="data"
             />
@@ -137,6 +167,7 @@ export default function EditInstitutionForm({ data }) {
               name="curp"
               auto="curp"
               required
+              onchange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -147,6 +178,7 @@ export default function EditInstitutionForm({ data }) {
               name="genero"
               auto="genero"
               required
+              onchange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -157,6 +189,7 @@ export default function EditInstitutionForm({ data }) {
               name="correo"
               auto="correo"
               required
+              onchange={handleOnChange}
               class="data"
             />
           </Grid>

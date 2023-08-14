@@ -34,6 +34,7 @@ import SnackAlert from './components/Alert';
 import SubmitDocument from './components/Submit/SubmitDocument';
 import fileToFormData from './components/Submit/FileToFormData';
 import GetFile from './utils/handlers/getFile';
+import getCurrentUser from './utils/handlers/getCurrentUser';
 
 export {
   ActionButtons,
@@ -72,4 +73,5 @@ export {
   SubmitDocument,
   fileToFormData,
   GetFile,
+  getCurrentUser,
 };
