@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 function Input({
@@ -18,10 +18,28 @@ function Input({
   onfocus,
 }) {
   const [input, setInput] = useState(value);
+
+  useEffect(() => {
+    if (type === 'time' && value instanceof Date) {
+      const hours = value.getHours().toString().padStart(2, '0');
+      const minutes = value.getMinutes().toString().padStart(2, '0');
+      setInput(`${hours}:${minutes}`);
+    } else {
+      setInput(value);
+    }
+  }, [type, value]);
+
   const handleOnChange = (e) => {
-    setInput(e.target.value);
-    onchange(e);
+    const newValue = e.target.value;
+    setInput(newValue);
+    onchange({
+      target: {
+        name,
+        value: type === 'date' || type === 'time' ? newValue : e.target.value,
+      },
+    });
   };
+
   return (
     <TextField
       margin="normal"
@@ -30,7 +48,7 @@ function Input({
       label={label}
       required={required}
       disabled={disabled}
-      type={type}
+      type={type === 'time' ? 'time' : type}
       name={name}
       autoComplete={auto}
       size={size}
@@ -41,6 +59,9 @@ function Input({
       helperText={errorMessage}
       error={!!errorMessage}
       className="data-form"
+      InputLabelProps={
+        type === 'date' || type === 'time' ? { shrink: true } : {}
+      }
     />
   );
 }

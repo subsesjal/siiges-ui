@@ -1,12 +1,12 @@
-import { Context } from '@siiges-ui/shared';
-import { useContext, useEffect, useState } from 'react';
-import { ActionButtons, ButtonStyled, DefaultModal } from '@siiges-ui/shared';
+import React, { useContext, useState } from 'react';
+import {
+  ActionButtons, ButtonStyled, DefaultModal, Context,
+} from '@siiges-ui/shared';
 import { Grid, Typography } from '@mui/material';
 import deleteUser from '../utils/deleteUser';
 
 function ModalState() {
   const [modal, setModal] = useState(false);
-
 
   const showModal = () => {
     setModal(true);

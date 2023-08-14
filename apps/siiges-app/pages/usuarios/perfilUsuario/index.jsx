@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-import { Context, Layout } from '@siiges-ui/shared';
+import { Context, Layout, getCurrentUser } from '@siiges-ui/shared';
 import { UserConsult, UserInfo } from '@siiges-ui/users';
 import Grid from '@mui/material/Grid';
-import getCurrentUser from '../utils/getCurrentUser';
 
 export default function UserProfile() {
   const { session } = useContext(Context);

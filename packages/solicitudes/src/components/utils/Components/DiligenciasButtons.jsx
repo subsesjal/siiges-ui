@@ -3,22 +3,18 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState, useContext, useEffect } from 'react';
-import DeleteDocentes from './DocentesModales/DeleteDocentes';
-import DocentesEditModal from './DocentesModales/DocentesEditModal';
-import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
+import React, { useState, useContext } from 'react';
+import DeleteDiligencia from './DiligenciasModales/DeleteDiligencia';
+import DiligenciasEditModal from './DiligenciasModales/DiligenciasEditModal';
+import DatosGeneralesContext from '../Context/datosGeneralesContext';
 
-export default function DocentesButtons({ id }) {
+export default function DiligenciasButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const { docentesList, setFormDocentes } = useContext(TablesPlanEstudiosContext);
-  const rowItem = docentesList.find((item) => item.id === id);
-
-  useEffect(() => {
-    setFormDocentes(rowItem);
-  }, [rowItem]);
+  const { diligencias } = useContext(DatosGeneralesContext);
+  const rowItem = diligencias.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);
@@ -51,17 +47,16 @@ export default function DocentesButtons({ id }) {
       </IconButton>
 
       {modalOpen && (
-        <DocentesEditModal
+        <DiligenciasEditModal
           hideModal={handleModalClose}
           rowItem={rowItem}
           open={modalOpen}
-          id={id}
-          edit={isEdit ? 'Editar Docentes' : 'Consultar Docentes'}
+          edit={isEdit ? 'Editar Diligencia' : 'Consultar Diligencia'}
         />
       )}
 
       {deleteDialogOpen && (
-        <DeleteDocentes
+        <DeleteDiligencia
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
           rowItem={rowItem}
@@ -71,7 +66,7 @@ export default function DocentesButtons({ id }) {
   );
 }
 
-DocentesButtons.propTypes = {
+DiligenciasButtons.propTypes = {
   id: PropTypes.number.isRequired,
   rowItem: PropTypes.shape({
     programaID: PropTypes.number,
