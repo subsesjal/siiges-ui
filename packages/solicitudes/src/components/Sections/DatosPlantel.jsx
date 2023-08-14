@@ -1,8 +1,12 @@
-import { Grid, TextField, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import React from 'react';
 
-export default function DatosPlantel() {
+export default function DatosPlantel({ plantel }) {
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    formPlantel(name, form, setForm, value);
+  };
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -11,60 +15,102 @@ export default function DatosPlantel() {
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={9}>
           <Input
-            id="cct"
             label="Clave de centro de trabajo"
-            name="cct"
-            auto="cct"
+            id="claveCentroTrabajo"
+            name="claveCentroTrabajo"
+            auto="claveCentroTrabajo"
+            value={plantel.domicilio.claveCentroTrabajo}
+            onchange={handleOnChange}
+            class="data"
           />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="institutionEmail"
-            label="Correo electronico institucional"
-            name="institutionEmail"
-            auto="institutionEmail"
+            label="Correo institucional"
+            id="correo1"
+            name="correo1"
+            auto="correo1"
+            value={plantel.correo1}
+            onchange={handleOnChange}
+            class="data"
           />
-        </Grid>
-        <Grid item xs={6}>
-          <Input id="phone1" label="Telefono 1" name="phone1" auto="phone1" />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="email1"
-            label="Correo electronico sin dominio 1"
-            name="email1"
-            auto="email1"
+            label="Telefono 1"
+            id="telefono1"
+            name="telefono1"
+            auto="telefono1"
+            value={plantel.telefono1}
+            onchange={handleOnChange}
+            class="data"
           />
-        </Grid>
-        <Grid item xs={6}>
-          <Input id="phone2" label="Telefono 2" name="phone2" auto="phone2" />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="email2"
-            label="Correo electronico sin dominio 2"
-            name="email2"
-            auto="email2"
+            label="Correo de contacto"
+            id="correo2"
+            name="correo2"
+            auto="correo2"
+            value={plantel.correo2}
+            required
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.correo2}
+            class="data"
           />
         </Grid>
         <Grid item xs={6}>
-          <Input id="phone3" label="Telefono 3" name="phone3" auto="phone3" />
+          <Input
+            label="Telefono 2"
+            id="telefono2"
+            name="telefono2"
+            auto="telefono2"
+            value={plantel.telefono2}
+            onchange={handleOnChange}
+            class="data"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            label="Correo secundario"
+            id="correo3"
+            name="correo3"
+            auto="correo3"
+            value={plantel.correo3}
+            onchange={handleOnChange}
+            class="data"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            label="Telefono 3"
+            id="telefono3"
+            name="telefono3"
+            auto="telefono3"
+            value={plantel.telefono3}
+            onchange={handleOnChange}
+            class="data"
+          />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            id="socialNetwork"
+          <Input
             label="Redes sociales"
-            rows={4}
-            multiline
-            sx={{ width: '100%' }}
+            id="socialNetwork"
+            name="socialNetwork"
+            auto="socialNetwork"
+            onchange={handleOnChange}
+            class="data"
           />
         </Grid>
         <Grid item xs={9}>
           <Input
-            id="website"
-            label="Pagina web"
-            name="website"
-            auto="website"
+            label="Pagina Web"
+            id="webSite"
+            name="webSite"
+            auto="webSite"
+            onchange={handleOnChange}
+            class="data"
           />
         </Grid>
       </Grid>
