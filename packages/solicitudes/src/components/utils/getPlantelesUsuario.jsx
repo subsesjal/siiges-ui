@@ -11,6 +11,7 @@ export default function getPlantelesUsuario() {
     fetch(`http://localhost:3000/api/v1/planteles/usuarios/${session.id}`, {
       headers: {
         api_key: apikey,
+        Authorization: `Bearer ${session.token}`,
       },
     })
       .then((response) => response.json())

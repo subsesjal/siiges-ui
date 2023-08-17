@@ -13,7 +13,12 @@ export default function getInstitucionUsuario() {
         setLoading(true);
         const response = await fetch(
           `http://localhost:3000/api/v1/instituciones/usuarios/${session.id}`,
-          { headers: { api_key: apikey } },
+          {
+            headers: {
+              api_key: apikey,
+              Authorization: `Bearer ${session.token}`,
+            },
+          },
         );
         const data = await response.json();
         setInstitucion(data.data);

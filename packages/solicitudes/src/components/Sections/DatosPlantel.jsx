@@ -1,12 +1,59 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid, TextField, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
-import React from 'react';
+import BasicSelect from '@siiges-ui/shared/src/components/Select';
+import React, { useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import getPlantelesUsuario from '../utils/getPlantelesUsuario';
+import PlantelContext from '../utils/Context/plantelContext';
+import formPrograma from '../utils/sections/forms/formPrograma';
 
-export default function DatosPlantel({ plantel }) {
+export default function DatosPlantel({ disabled }) {
+  const { query } = useRouter();
+  const { planteles } = getPlantelesUsuario();
+  const { setForm } = useContext(PlantelContext);
+  const [plantelesSelect, setPlantelesSelect] = useState([]);
+  const [plantelesData, setPlantelesData] = useState({});
+  const [plantelId, setPlantelId] = useState(query.plantel);
+
+  const options = [
+    {
+      id: 1,
+      nombre: 'Guadalajara',
+    },
+    {
+      id: 2,
+      nombre: 'Zapopan',
+    },
+    {
+      id: 3,
+      nombre: 'Tlaquepaque',
+    },
+  ];
+
+  useEffect(() => {
+    if (planteles !== undefined) {
+      const mappedPlanteles = planteles.map((plantel) => ({
+        id: plantel.id,
+        nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+      }));
+      setPlantelesSelect(mappedPlanteles);
+
+      const selectedPlantel = planteles.find(
+        (plantel) => plantel.id === Number(plantelId),
+      );
+      if (selectedPlantel) {
+        setPlantelesData(selectedPlantel);
+      }
+    }
+  }, [planteles, plantelId]);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formPlantel(name, form, setForm, value);
+    formPrograma(name, value, setForm, 1);
+    setPlantelId(value);
   };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -14,106 +61,189 @@ export default function DatosPlantel({ plantel }) {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={9}>
+          <BasicSelect
+            title="Plantel"
+            name="plantelId"
+            options={plantelesSelect}
+            value={plantelId}
+            onchange={handleOnChange}
+            disabled={disabled}
+          />
+        </Grid>
+        <Grid item xs={3}>
           <Input
+            id="cct"
             label="Clave de centro de trabajo"
-            id="claveCentroTrabajo"
-            name="claveCentroTrabajo"
-            auto="claveCentroTrabajo"
-            value={plantel.domicilio.claveCentroTrabajo}
-            onchange={handleOnChange}
-            class="data"
+            name="cct"
+            auto="cct"
+            value={plantelesData?.claveCentroTrebajo}
+            disabled
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={2}>
           <Input
-            label="Correo institucional"
-            id="correo1"
-            name="correo1"
-            auto="correo1"
-            value={plantel.correo1}
-            onchange={handleOnChange}
-            class="data"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Input
+            id="phone1"
             label="Telefono 1"
-            id="telefono1"
-            name="telefono1"
-            auto="telefono1"
-            value={plantel.telefono1}
-            onchange={handleOnChange}
-            class="data"
+            name="phone1"
+            auto="phone1"
+            value={plantelesData?.telefono1}
+            disabled
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={2}>
           <Input
-            label="Correo de contacto"
-            id="correo2"
-            name="correo2"
-            auto="correo2"
-            value={plantel.correo2}
-            required
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.correo2}
-            class="data"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Input
+            id="phone2"
             label="Telefono 2"
-            id="telefono2"
-            name="telefono2"
-            auto="telefono2"
-            value={plantel.telefono2}
-            onchange={handleOnChange}
-            class="data"
+            name="phone2"
+            auto="phone2"
+            value={plantelesData?.telefono2}
+            disabled
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={2}>
           <Input
-            label="Correo secundario"
-            id="correo3"
-            name="correo3"
-            auto="correo3"
-            value={plantel.correo3}
-            onchange={handleOnChange}
-            class="data"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Input
+            id="phone3"
             label="Telefono 3"
-            id="telefono3"
-            name="telefono3"
-            auto="telefono3"
-            value={plantel.telefono3}
-            onchange={handleOnChange}
-            class="data"
+            name="phone3"
+            auto="phone3"
+            value={plantelesData?.telefono3}
+            disabled
           />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="institutionEmail"
+            label="Correo electronico institucional"
+            name="institutionEmail"
+            auto="institutionEmail"
+            value={plantelesData?.correo1}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="website"
+            label="Pagina web"
+            name="website"
+            auto="website"
+            value={plantelesData?.paginaWeb}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="email1"
+            label="Correo electronico sin dominio 1"
+            name="email1"
+            auto="email1"
+            value={plantelesData?.correo2}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={6} sx={{ mt: 2 }}>
+          <TextField
+            id="socialNetwork"
+            label="Redes sociales"
+            rows={3}
+            multiline
+            sx={{ width: '100%' }}
+            value={plantelesData?.redesSociales}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="email2"
+            label="Correo electronico sin dominio 2"
+            name="email2"
+            auto="email2"
+            value={plantelesData?.correo3}
+            disabled
+          />
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="h6">Ubicación del Plantel</Typography>
+      </Grid>
+      <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
+        <Grid item xs={6}>
+          <Input
+            id="street"
+            label="Calle"
+            name="street"
+            auto="street"
+            value={plantelesData?.domicilio?.calle}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Input
+            id="numExt"
+            label="Numero exterior"
+            name="numExt"
+            auto="numExt"
+            value={plantelesData?.domicilio?.numeroExterior}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Input
+            id="numInt"
+            label="Numero interor"
+            name="numInt"
+            auto="numInt"
+            value={plantelesData?.domicilio?.numeroInterior}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="colony"
+            label="Colonia"
+            name="colony"
+            auto="colony"
+            value={plantelesData?.domicilio?.colonia}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Input
+            id="CP"
+            label="Codigo Postal"
+            name="CP"
+            auto="CP"
+            value={plantelesData?.domicilio?.codigoPostal}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <BasicSelect title="Municipio" options={options} disabled />
         </Grid>
         <Grid item xs={12}>
           <Input
-            label="Redes sociales"
-            id="socialNetwork"
-            name="socialNetwork"
-            auto="socialNetwork"
-            onchange={handleOnChange}
-            class="data"
+            id="coordinates"
+            label="Coordenadas"
+            name="coordinates"
+            auto="coordinates"
+            value={`${plantelesData?.domicilio?.latitud}, ${plantelesData?.domicilio?.longitud}`}
+            disabled
           />
         </Grid>
-        <Grid item xs={9}>
-          <Input
-            label="Pagina Web"
-            id="webSite"
-            name="webSite"
-            auto="webSite"
-            onchange={handleOnChange}
-            class="data"
+        <Grid item xs={12}>
+          <TextField
+            id="especifications"
+            label="Especificaciones"
+            rows={4}
+            multiline
+            sx={{ width: '100%' }}
+            disabled
           />
         </Grid>
       </Grid>
     </Grid>
   );
 }
+
+DatosPlantel.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+};

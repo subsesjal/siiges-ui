@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { ButtonsForm, Layout, Context, SnackAlert } from '@siiges-ui/shared';
+import { ButtonsForm, Layout, SnackAlert } from '@siiges-ui/shared';
 import { EditInstitutionForm } from '@siiges-ui/instituciones';
 import getInstitucion from '../../utils/getInstitucion';
 import updateInstitucion from '../../utils/updateInstitucion';
 
 export default function editarInstitucion() {
-  const { session } = useContext(Context);
   const router = useRouter();
   const { institucion, loading } = getInstitucion();
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
@@ -23,8 +22,7 @@ export default function editarInstitucion() {
 
   return (
     <Layout title="Editar Institución">
-      {loading ?
-       (
+      {loading ? (
         <>
           <EditInstitutionForm
             data={institucion.data}

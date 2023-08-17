@@ -1,6 +1,6 @@
 import router from 'next/router';
 
-export default function submitNewPlantel(plantelErrors, form, setNoti) {
+export default function submitNewPlantel(plantelErrors, form, setNoti, token) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
   const isValid = Object.keys(plantelErrors).every((campo) => plantelErrors[campo]());
@@ -15,11 +15,18 @@ export default function submitNewPlantel(plantelErrors, form, setNoti) {
   }
 
   const { institucionId } = router.query;
-  fetch(`http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', api_key: apikey },
-    body: JSON.stringify(form),
-  })
+  fetch(
+    `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        api_key: apikey,
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(form),
+    },
+  )
     .then((response) => {
       if (response.ok) {
         return response.json();
