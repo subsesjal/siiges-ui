@@ -6,11 +6,12 @@ export default function getAsignaturas(programaId) {
   const [asignaturas, setAsignaturas] = useState([]);
   const [loading, setLoading] = useState(false);
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
   let asignaturasData = {};
 
   useEffect(() => {
     if (session !== undefined) {
-      fetch(`http://localhost:3000/api/v1/asignaturas/programas/${programaId}`, {
+      fetch(`${url}/api/v1/asignaturas/programas/${programaId}`, {
         headers: {
           method: 'GET',
           api_key: apikey,

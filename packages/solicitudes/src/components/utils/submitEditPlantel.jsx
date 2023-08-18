@@ -1,23 +1,15 @@
-export default function submitEditSolicitud(validations, sections, id) {
+export default function submitInstitucion(validations, sections, id, token, setNoti) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const {
-    errors, form, setNoti,
-  } = validations;
-
-  const isValid = Object.keys(errors).every((campo) => errors[campo]());
-  if (!isValid) {
-    setNoti({
-      open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
-      type: 'error',
-    });
-    return;
-  }
+  const { form } = validations;
 
   fetch(`${url}/api/v1/solicitudes/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', api_key: apikey },
+    headers: {
+      'Content-Type': 'application/json',
+      api_key: apikey,
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(form[sections]),
   })
     .then((response) => {

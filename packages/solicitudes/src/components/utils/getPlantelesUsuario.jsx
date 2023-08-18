@@ -6,11 +6,13 @@ export default function getPlantelesUsuario() {
   const [loading, setLoading] = useState(false);
   const { session } = useContext(Context);
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/v1/planteles/usuarios/${session.id}`, {
+    fetch(`${url}/api/v1/planteles/usuarios/${session.id}`, {
       headers: {
         api_key: apikey,
+        Authorization: `Bearer ${session.token}`,
       },
     })
       .then((response) => response.json())

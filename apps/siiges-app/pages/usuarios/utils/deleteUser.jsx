@@ -2,7 +2,8 @@ import router from 'next/router';
 
 export default function deleteUser(id, token) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  fetch(`http://localhost:3000/api/v1/usuarios/${id}`, {
+  const url = process.env.NEXT_PUBLIC_URL;
+  fetch(`${url}/api/v1/usuarios/${id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,

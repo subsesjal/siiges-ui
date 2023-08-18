@@ -1,5 +1,6 @@
 function submitNewSolicitud(validations, setNewSubmit) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
   const {
     errors, form, setNoti, setId, setProgramaId,
   } = validations;
@@ -14,7 +15,7 @@ function submitNewSolicitud(validations, setNewSubmit) {
     return;
   }
 
-  fetch('http://localhost:3000/api/v1/solicitudes', {
+  fetch(`${url}/api/v1/solicitudes`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', api_key: apikey },
     body: JSON.stringify(form[1]),

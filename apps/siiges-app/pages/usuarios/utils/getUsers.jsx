@@ -7,17 +7,18 @@ export default function getUsers() {
   const { session } = useContext(Context);
   const active = 1;
   let userData = {};
-  let url;
+  let varUrl;
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
 
   if (session.rol === 'admin') {
-    url = 'http://localhost:3000/api/v1/usuarios';
+    varUrl = `${url}/api/v1/usuarios`;
   } else {
-    url = `http://localhost:3000/api/v1/usuarios/${session.id}/usuarios`;
+    varUrl = `${url}/api/v1/usuarios/${session.id}/usuarios`;
   }
 
   useEffect(() => {
-    fetch(url, {
+    fetch(varUrl, {
       headers: {
         api_key: apikey,
         Authorization: `Bearer ${session.token}`,

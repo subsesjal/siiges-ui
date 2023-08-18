@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { ButtonsForm, Input, SnackAlert } from '@siiges-ui/shared';
+import {
+  ButtonsForm, Context, Input, SnackAlert,
+} from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
 import getMunicipios from '../utils/getMunicipios';
@@ -12,17 +14,14 @@ import submitEditPlantel from '../utils/submitEditPlantel';
 
 export default function PlantelForm({ plantel }) {
   const router = useRouter();
+  const { session } = useContext(Context);
   const [form, setForm] = useState({
     domicilio: { estadoId: 14 },
     director: { persona: {} },
   });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
-  const { municipios, loading } = getMunicipios();
-  let options = [];
-  if (loading !== false) {
-    options = municipios.data.filter((municipio) => municipio.estadoId === 14);
-  }
+  const { municipios } = getMunicipios();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -135,7 +134,7 @@ export default function PlantelForm({ plantel }) {
               value={plantel
                 ? plantel.domicilio.municipioId
                 : ''}
-              options={options}
+              options={municipios}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.municipioId}
@@ -394,8 +393,8 @@ export default function PlantelForm({ plantel }) {
         <ButtonsForm
           cancel={router.back}
           confirm={plantel
-            ? () => submitEditPlantel(form, setNoti)
-            : () => submitNewPlantel(errors, form, setNoti)}
+            ? () => submitEditPlantel(form, setNoti, session.token)
+            : () => submitNewPlantel(errors, form, setNoti, session.token)}
         />
       </Grid>
       <SnackAlert

@@ -6,17 +6,18 @@ export default function getSolicitudes() {
   const [solicitudes, setSolicitudes] = useState();
   const [loading, setLoading] = useState(false);
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  let url;
+  const url = process.env.NEXT_PUBLIC_URL;
+  let varUrl;
   let solicitudData = {};
 
   useEffect(() => {
     if (session !== undefined) {
       if (session.rol === 'representante') {
-        url = `http://localhost:3000/api/v1/solicitudes/usuarios/${session.id}`;
+        varUrl = `${url}/api/v1/solicitudes/usuarios/${session.id}`;
       } else {
-        url = 'http://localhost:3000/api/v1/solicitudes/';
+        varUrl = `${url}/api/v1/solicitudes/`;
       }
-      fetch(url, {
+      fetch(varUrl, {
         headers: {
           method: 'GET',
           api_key: apikey,

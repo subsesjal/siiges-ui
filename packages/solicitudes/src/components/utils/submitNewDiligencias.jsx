@@ -8,7 +8,7 @@ const handleCreate = (
   setNoti,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
-
+  const url = process.env.NEXT_PUBLIC_URL;
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
 
   if (!isValid) {
@@ -20,7 +20,7 @@ const handleCreate = (
     return;
   }
 
-  fetch('http://localhost:3000/api/v1/diligencias', {
+  fetch(`${url}/api/v1/diligencias`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', api_key: apikey },
     body: JSON.stringify(form),

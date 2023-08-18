@@ -44,7 +44,7 @@ export default function BasicSelect({
           id={value}
           label={title}
           name={name}
-          value={option ?? ''}
+          value={option || ''}
           onChange={handleOnChange}
           onBlur={onblur}
           onFocus={onfocus}

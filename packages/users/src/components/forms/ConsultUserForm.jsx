@@ -18,6 +18,7 @@ export default function UserForm({ user }) {
   const [form, setForm] = useState({});
   const [error, setError] = useState({});
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +41,7 @@ export default function UserForm({ user }) {
       ...dataSelects,
     };
 
-    fetch(`http://localhost:3000/api/v1/usuarios/${session.id}`, {
+    fetch(`${url}/api/v1/usuarios/${session.id}`, {
       method: 'PATCH',
       headers: { api_key: apikey },
       body: JSON.stringify(data),
