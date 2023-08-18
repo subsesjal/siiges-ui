@@ -4,6 +4,7 @@ import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import React, { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import getMunicipios from '@siiges-ui/instituciones/src/components/utils/getMunicipios';
 import getPlantelesUsuario from '../utils/getPlantelesUsuario';
 import PlantelContext from '../utils/Context/plantelContext';
 import formPrograma from '../utils/sections/forms/formPrograma';
@@ -15,24 +16,11 @@ export default function DatosPlantel({ disabled }) {
   const [plantelesSelect, setPlantelesSelect] = useState([]);
   const [plantelesData, setPlantelesData] = useState({});
   const [plantelId, setPlantelId] = useState(query.plantel);
-
-  const options = [
-    {
-      id: 1,
-      nombre: 'Guadalajara',
-    },
-    {
-      id: 2,
-      nombre: 'Zapopan',
-    },
-    {
-      id: 3,
-      nombre: 'Tlaquepaque',
-    },
-  ];
+  const { municipios } = getMunicipios();
+  const [municipioId, setMunicipioId] = useState();
 
   useEffect(() => {
-    if (planteles !== undefined) {
+    if (planteles) {
       const mappedPlanteles = planteles.map((plantel) => ({
         id: plantel.id,
         nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
@@ -46,7 +34,10 @@ export default function DatosPlantel({ disabled }) {
         setPlantelesData(selectedPlantel);
       }
     }
-  }, [planteles, plantelId]);
+    if (!plantelesData.domicilio) {
+      setMunicipioId(plantelesData?.domicilio?.municipioId);
+    }
+  }, [planteles, plantelId, municipios, plantelesData, municipioId]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -65,7 +56,7 @@ export default function DatosPlantel({ disabled }) {
             title="Plantel"
             name="plantelId"
             options={plantelesSelect}
-            value={plantelId}
+            value={plantelId || ''}
             onchange={handleOnChange}
             disabled={disabled}
           />
@@ -217,7 +208,13 @@ export default function DatosPlantel({ disabled }) {
           />
         </Grid>
         <Grid item xs={3}>
-          <BasicSelect title="Municipio" options={options} disabled />
+          <BasicSelect
+            title="Municipio"
+            name="municipioId"
+            value={municipioId || ''}
+            options={municipios}
+            disabled
+          />
         </Grid>
         <Grid item xs={12}>
           <Input

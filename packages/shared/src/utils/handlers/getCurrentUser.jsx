@@ -6,9 +6,10 @@ export default function getCurrentUser() {
   const [loading, setLoading] = useState(false);
   const { session } = useContext(Context);
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/v1/usuarios/${session.id}/detalle`, {
+    fetch(`${url}/api/v1/usuarios/${session.id}/detalle`, {
       headers: {
         api_key: apikey,
         Authorization: `Bearer ${session.token}`,

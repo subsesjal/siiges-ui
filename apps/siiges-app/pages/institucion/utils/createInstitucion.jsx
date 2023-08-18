@@ -1,14 +1,12 @@
-import { Context } from '@siiges-ui/shared';
-import { useContext } from 'react';
-
 export default function createInstitucion(
   institucionForm,
   errors,
   setNoti,
   router,
+  token,
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  const { session } = useContext(Context);
+  const url = process.env.NEXT_PUBLIC_URL;
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
   if (!isValid) {
@@ -20,12 +18,12 @@ export default function createInstitucion(
     return;
   }
 
-  fetch('http://localhost:3000/api/v1/instituciones', {
+  fetch(`${url}/api/v1/instituciones`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       api_key: apikey,
-      Authorization: `Bearer ${session.token}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(institucionForm),
   })

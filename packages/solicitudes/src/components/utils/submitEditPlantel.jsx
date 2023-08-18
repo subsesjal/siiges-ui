@@ -1,8 +1,9 @@
 export default function submitInstitucion(validations, sections, id, token, setNoti) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
   const { form } = validations;
 
-  fetch(`http://localhost:3000/api/v1/solicitudes/${id}`, {
+  fetch(`${url}/api/v1/solicitudes/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

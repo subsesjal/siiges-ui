@@ -21,11 +21,7 @@ export default function PlantelForm({ plantel }) {
   });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
-  const { municipios, loading } = getMunicipios();
-  let options = [];
-  if (loading !== false) {
-    options = municipios.data.filter((municipio) => municipio.estadoId === 14);
-  }
+  const { municipios } = getMunicipios();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -138,7 +134,7 @@ export default function PlantelForm({ plantel }) {
               value={plantel
                 ? plantel.domicilio.municipioId
                 : ''}
-              options={options}
+              options={municipios}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.municipioId}

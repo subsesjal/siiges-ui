@@ -10,6 +10,7 @@ const handleCreate = (
   tipo,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
 
@@ -22,7 +23,7 @@ const handleCreate = (
     return;
   }
 
-  fetch('http://localhost:3000/api/v1/asignaturas', {
+  fetch(`${url}/api/v1/asignaturas`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', api_key: apikey },
     body: JSON.stringify(form),

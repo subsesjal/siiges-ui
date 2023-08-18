@@ -1,9 +1,8 @@
-// import { response } from "msw";
-
 function submitNewLogin(form, errors, setErrorMessages, activateAuth) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
   if (form.usuario !== '' && form.contrasena !== '') {
-    fetch('http://localhost:3000/api/v1/auth/login', {
+    fetch(`${url}/api/v1/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', api_key: apikey },
       body: JSON.stringify(form),

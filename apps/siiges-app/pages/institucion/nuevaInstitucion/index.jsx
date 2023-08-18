@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  ButtonsForm, Context, Layout, SnackAlert,
+  ButtonsForm, Context, Layout,
 } from '@siiges-ui/shared';
 import { getInstitucionUsuario, NewInstitutionForm } from '@siiges-ui/instituciones';
 import { useRouter } from 'next/router';
 import createInstitucion from '../utils/createInstitucion';
 
 export default function NuevaInstitucion() {
-  const { session } = useContext(Context);
+  const { session, setNoti } = useContext(Context);
   const router = useRouter();
   const data = getInstitucionUsuario();
-  const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [institucionForm, setInstitucionForm] = useState({ usuarioId: session.id });
   const [errors, setErrors] = useState({});
 
@@ -21,15 +20,11 @@ export default function NuevaInstitucion() {
   }, [data, router]);
 
   const handleConfirm = () => {
-    createInstitucion(institucionForm, errors, setNoti, router);
+    createInstitucion(institucionForm, errors, setNoti, router, session.token);
   };
 
   const handleCancel = () => {
     router.back();
-  };
-
-  const handleClose = () => {
-    setNoti({ ...noti, open: false });
   };
 
   return (
@@ -42,12 +37,6 @@ export default function NuevaInstitucion() {
       <ButtonsForm
         confirm={handleConfirm}
         cancel={handleCancel}
-      />
-      <SnackAlert
-        open={noti.open}
-        close={handleClose}
-        type={noti.type}
-        mensaje={noti.message}
       />
     </Layout>
   );

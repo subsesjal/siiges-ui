@@ -2,7 +2,7 @@ import router from 'next/router';
 
 export default function submitNewPlantel(plantelErrors, form, setNoti, token) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
-
+  const url = process.env.NEXT_PUBLIC_URL;
   const isValid = Object.keys(plantelErrors).every((campo) => plantelErrors[campo]());
 
   if (!isValid) {
@@ -16,7 +16,7 @@ export default function submitNewPlantel(plantelErrors, form, setNoti, token) {
 
   const { institucionId } = router.query;
   fetch(
-    `http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`,
+    `${url}/api/v1/instituciones/${institucionId}/planteles`,
     {
       method: 'POST',
       headers: {

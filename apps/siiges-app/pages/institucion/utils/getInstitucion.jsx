@@ -8,11 +8,12 @@ export default function getInstitucion() {
   const router = useRouter();
   const { session } = useContext(Context);
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
     if (router.isReady) {
       const { institucionId } = router.query;
-      fetch(`http://localhost:3000/api/v1/instituciones/${institucionId}/planteles`, {
+      fetch(`${url}/api/v1/instituciones/${institucionId}/planteles`, {
         headers: { api_key: apikey, Authorization: `Bearer ${session.token}` },
       })
         .then((response) => response.json())
