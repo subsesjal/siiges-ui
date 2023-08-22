@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { Context } from '@siiges-ui/shared';
-import MainNavbar from '../../../src/components/Navbar/mainnavbar';
+import MainNavbar from '../../../src/components/Navbar/MainNavbar';
 
 test.todo('Some test I still need to do');
 
