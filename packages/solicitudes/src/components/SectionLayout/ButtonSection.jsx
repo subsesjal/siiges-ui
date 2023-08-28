@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Grid } from '@mui/material';
+import { useRouter } from 'next/router';
 import submitEditPlantel from '../utils/submitEditPlantel';
 import submitNewSolicitud from '../utils/submitNewSolicitud';
 import submitEditSolicitud from '../utils/submitEditSolicitud';
@@ -12,6 +13,7 @@ import submitInstitucion from '../utils/submitInstitucion';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import submitRepresentante from '../utils/submitRepresentante';
 import PlantelContext from '../utils/Context/plantelContext';
+import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
 
 export default function ButtonSection({
   id,
@@ -26,6 +28,7 @@ export default function ButtonSection({
   const validations = useContext(SolicitudContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
   const plantelesValidations = useContext(PlantelContext);
+  const router = useRouter();
   let submit;
 
   if (sectionTitle === 'Datos Generales') {
@@ -52,19 +55,29 @@ export default function ButtonSection({
   } else if (sectionTitle === 'Plantel') {
     if (sections === 1) {
       submit = () => {
-        submitEditPlantel(plantelesValidations, sections, id, session.token, setNoti);
+        submitEditPlantel(
+          plantelesValidations,
+          sections,
+          id,
+          session.token,
+          setNoti,
+          router,
+        );
       };
     } else if (sections === 2) {
       submit = () => {
-        console.log(
-          'Performing action for "Plantel" with sections === 2',
+        submitDescripcionPlantel(
+          plantelesValidations,
+          sections,
+          id,
+          session.token,
+          setNoti,
+          router.query.plantel,
         );
       };
     } else if (sections === 3) {
       submit = () => {
-        console.log(
-          'Performing action for "Plantel" with sections === 3',
-        );
+        console.log('Performing action for "Plantel" with sections === 3');
       };
     }
   } else if (newSubmit) {

@@ -1,6 +1,4 @@
-import React, {
-  createContext, useState, useMemo,
-} from 'react';
+import React, { createContext, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 const PlantelContext = createContext();
@@ -14,30 +12,38 @@ export function PlantelProvider({ children }) {
     5: {},
     6: {},
   });
-
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const [disabled, setDisabled] = useState(true);
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
-  const [formDiligencias, setFormDiligencias] = useState({ });
+  const [formDiligencias, setFormDiligencias] = useState({});
+  const [formInfraestructuras, setFormInfraestructuras] = useState({});
   const [diligencias, setDiligencias] = useState([]);
   const [initialValues, setInitialValues] = useState({});
+  const [infraestructuras, setInfraestructuras] = useState([]);
 
   const value = useMemo(
     () => ({
       form,
-      setForm,
       error,
-      setError,
       errors,
-      setErrors,
       disabled,
-      setDisabled,
       diligencias,
-      setDiligencias,
       initialValues,
-      setInitialValues,
       formDiligencias,
+      selectedCheckboxes,
+      formInfraestructuras,
+      infraestructuras,
+      setDiligencias,
+      setError,
+      setErrors,
+      setDisabled,
+      setForm,
+      setInitialValues,
       setFormDiligencias,
+      setSelectedCheckboxes,
+      setFormInfraestructuras,
+      setInfraestructuras,
     }),
     [
       form,
@@ -47,13 +53,14 @@ export function PlantelProvider({ children }) {
       diligencias,
       initialValues,
       formDiligencias,
+      selectedCheckboxes,
+      formInfraestructuras,
+      infraestructuras,
     ],
   );
 
   return (
-    <PlantelContext.Provider value={value}>
-      {children}
-    </PlantelContext.Provider>
+    <PlantelContext.Provider value={value}>{children}</PlantelContext.Provider>
   );
 }
 

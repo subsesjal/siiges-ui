@@ -11,6 +11,7 @@ import HomePage from './components/HomePage';
 import Input from './components/Input';
 import InputPassword from './components/Input/InputPassword';
 import InputFile from './components/Input/InputFile';
+import InputNumber from './components/Input/InputNumber';
 import Layout from './components/Layout/Layout';
 import LoginLayout from './components/Layout/LoginLayout';
 import LinkButton from './components/LinkButton';
@@ -74,4 +75,5 @@ export {
   fileToFormData,
   GetFile,
   getCurrentUser,
+  InputNumber,
 };
