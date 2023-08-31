@@ -80,7 +80,7 @@ export default function DatosPlanEstudios() {
             title="Nivel"
             name="nivelId"
             options={nivel}
-            value={form[1].programa?.nivelId}
+            value={form[1].programa?.nivelId || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -97,7 +97,7 @@ export default function DatosPlanEstudios() {
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            value={form[1].programa?.nombre}
+            value={form[1].programa?.nombre || ''}
             errorMessage={error.nombre}
             required
           />
@@ -106,7 +106,7 @@ export default function DatosPlanEstudios() {
           <BasicSelect
             title="Modalidad"
             name="modalidadId"
-            value={query.modalidad}
+            value={query.modalidad || ''}
             onfocus={handleInputFocus}
             options={modalidades}
             disabled
@@ -116,7 +116,7 @@ export default function DatosPlanEstudios() {
           <BasicSelect
             title="Periodo"
             name="cicloId"
-            value={form[1].programa?.cicloId}
+            value={form[1].programa?.cicloId || ''}
             options={periodo}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -132,7 +132,7 @@ export default function DatosPlanEstudios() {
             options={turno}
             multiple
             onchange={handleOnChange}
-            value={form[1].programa?.programaTurnos}
+            value={form[1].programa?.programaTurnos || []}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}

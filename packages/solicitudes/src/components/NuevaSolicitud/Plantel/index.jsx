@@ -12,7 +12,7 @@ import Infraestructura from '../../Sections/Infraestructura';
 import RatificacionNombre from '../../Sections/RatificacionNombre';
 import { PlantelProvider } from '../../utils/Context/plantelContext';
 
-export default function Plantel({ nextModule, id }) {
+export default function Plantel({ nextModule, id, programaId }) {
   const [disabled, setDisabled] = useState(true);
   const { query } = useRouter();
   const [plantelesData, setPlantelesData] = useState({
@@ -59,7 +59,7 @@ export default function Plantel({ nextModule, id }) {
             )}
             {section === 3 && <HigienePlantel disabled={disabled} />}
             {section === 4 && <InstitucionesAledanas disabled={disabled} />}
-            {section === 5 && <Infraestructura disabled={disabled} />}
+            {section === 5 && <Infraestructura disabled={disabled} programaId={programaId} />}
             {section === 6 && <RatificacionNombre disabled={disabled} />}
           </SectionLayout>
         </PlantelProvider>
@@ -71,5 +71,7 @@ export default function Plantel({ nextModule, id }) {
 Plantel.propTypes = {
   nextModule: PropTypes.func.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
+    .isRequired,
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
     .isRequired,
 };

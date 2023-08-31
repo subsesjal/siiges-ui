@@ -7,7 +7,7 @@ import columns from './Mocks/Infraestructura';
 import PlantelContext from '../utils/Context/plantelContext';
 import InfraestructuraCreateModal from '../utils/Components/InfraestructuraModales/InfraestructuraCreateModal';
 
-export default function Infraestructura({ disabled }) {
+export default function Infraestructura({ disabled, programaId }) {
   const [modal, setModal] = useState(false);
   const [rows, setRows] = useState([]);
 
@@ -27,12 +27,12 @@ export default function Infraestructura({ disabled }) {
   useEffect(() => {
     const infraestructurasRows = infraestructuras.map((item) => ({
       id: item.id,
-      nombre: item.persona.nombre,
-      tituloCargo: item.persona.tituloCargo,
-      telefono: item.persona.telefono,
-      celular: item.persona.celular,
-      correo_primario: item.persona.correo_primario,
-      schedule: `${item.horaInicio.toLocaleTimeString()} - ${item.horaFin.toLocaleTimeString()}`,
+      tipoInstalacion: item.tipoInstalacion,
+      capacidad: item.capacidad,
+      metros: item.metros,
+      recursos: item.recursos,
+      ubicacion: item.ubicacion,
+      asignaturas: item.asignaturaInfraestructura.map((asignaturaId) => asignaturaId),
     }));
     setRows(infraestructurasRows);
   }, [infraestructuras]);
@@ -60,7 +60,8 @@ export default function Infraestructura({ disabled }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-        title="Crear Asignatura"
+        title="Crear Infraestructura"
+        programaId={programaId}
       />
     </Grid>
   );
@@ -68,4 +69,6 @@ export default function Infraestructura({ disabled }) {
 
 Infraestructura.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
+    .isRequired,
 };

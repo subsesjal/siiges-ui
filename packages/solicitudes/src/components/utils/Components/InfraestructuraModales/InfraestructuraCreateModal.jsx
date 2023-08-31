@@ -1,16 +1,20 @@
 import React, { useEffect, useContext } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
+import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
 import handleCreate from '../../submitNewInfraestructuras';
 import PlantelContext from '../../Context/plantelContext';
+import getAsignaturas from '../../getAsignaturas';
 
-export default function InfraestructuraCreateModal({ open, hideModal, title }) {
+export default function InfraestructuraCreateModal({
+  open, hideModal, title, programaId,
+}) {
   const {
-    setInfraestructurasList,
+    setInfraestructuras,
     formInfraestructuras,
     setFormInfraestructuras,
     setError,
@@ -20,14 +24,31 @@ export default function InfraestructuraCreateModal({ open, hideModal, title }) {
     initialValues,
     setInitialValues,
   } = useContext(PlantelContext);
-  const { setNoti } = useContext(Context);
+  const { setNoti, session } = useContext(Context);
   const { query } = useRouter();
+  const asignaturas = getAsignaturas(programaId);
 
-  const errorsAsignatura = errorDatosInfraestructuras(
+  const errorsInfraestructura = errorDatosInfraestructuras(
     formInfraestructuras,
     setError,
     error,
   );
+
+  const instalacion = [
+    { id: 1, nombre: 'Aula' },
+    { id: 2, nombre: 'Cubiculo' },
+    { id: 3, nombre: 'Auditorio' },
+    { id: 4, nombre: 'Laboratorio fisico' },
+    { id: 5, nombre: 'Laboratorio virtual' },
+    { id: 6, nombre: 'Taller fisico' },
+    { id: 7, nombre: 'Taller virtual' },
+    { id: 8, nombre: 'Laboratorio de computo' },
+    { id: 9, nombre: 'Biblioteca fisica' },
+    { id: 10, nombre: 'Biblioteca virtual' },
+    { id: 11, nombre: 'Otros' },
+    { id: 12, nombre: 'Area administrativa' },
+    { id: 13, nombre: 'Archivo muerto' },
+  ];
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +63,7 @@ export default function InfraestructuraCreateModal({ open, hideModal, title }) {
     const initialValue = initialValues[name];
 
     if (value !== initialValue || value === '') {
-      errorsAsignatura[name]();
+      errorsInfraestructura[name]();
     }
   };
 
@@ -52,8 +73,8 @@ export default function InfraestructuraCreateModal({ open, hideModal, title }) {
   };
 
   useEffect(() => {
-    if (errorsAsignatura !== undefined) {
-      setErrors(errorsAsignatura);
+    if (errorsInfraestructura !== undefined) {
+      setErrors(errorsInfraestructura);
     }
   }, [error]);
 
@@ -62,11 +83,12 @@ export default function InfraestructuraCreateModal({ open, hideModal, title }) {
       formInfraestructuras,
       setFormInfraestructuras,
       setInitialValues,
-      setInfraestructurasList,
+      setInfraestructuras,
       hideModal,
       errors,
       setNoti,
       query.plantel,
+      session.token,
     );
   };
 
@@ -74,91 +96,93 @@ export default function InfraestructuraCreateModal({ open, hideModal, title }) {
     <DefaultModal open={open} setOpen={hideModal} title={title}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
+          <BasicSelect
+            title="Instalación"
+            name="tipoInstalacionId"
+            value=""
+            options={instalacion}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.tipoInstalacionId}
+            required
+          />
+        </Grid>
+        <Grid item xs={6}>
           <Input
             id="nombre"
-            label="Nombre(s)"
+            label="Nombre"
             name="nombre"
             auto="nombre"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            required
             errorMessage={error.nombre}
+            required
           />
         </Grid>
         <Grid item xs={3}>
           <Input
-            id="clave"
-            label="Clave"
-            name="clave"
-            auto="clave"
+            id="capacidad"
+            label="Capacidad"
+            name="capacidad"
+            auto="capacidad"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
+            errorMessage={error.capacidad}
             required
-            errorMessage={error.clave}
           />
         </Grid>
         <Grid item xs={3}>
           <Input
-            id="creditos"
-            label="Creditos"
-            name="creditos"
-            auto="creditos"
+            id="metros"
+            label="Metros cuadrados"
+            name="metros"
+            auto="metros"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
+            errorMessage={error.metros}
             required
-            errorMessage={error.creditos}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Input
-            id="formacionEspecializada"
-            label="Formacion especializada"
-            name="formacionEspecializada"
-            auto="formacionEspecializada"
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
-            required
-            errorMessage={error.formacionEspecializada}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Input
-            id="seriacion"
-            label="Seriacion"
-            name="seriacion"
-            auto="seriacion"
-            onchange={handleOnChange}
-            onfocus={handleInputFocus}
           />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="horasDocente"
-            label="Horas docente"
-            name="horasDocente"
-            auto="horasDocente"
+            id="ubicacion"
+            label="Ubicacion"
+            name="ubicacion"
+            auto="ubicacion"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
+            errorMessage={error.ubicacion}
             required
-            errorMessage={error.horasDocente}
           />
         </Grid>
-        <Grid item xs={6}>
-          <Input
-            id="horasIndependiente"
-            label="Horas independiente"
-            name="horasIndependiente"
-            auto="horasIndependiente"
+        <Grid item xs={12}>
+          <TextField
+            id="recursos"
+            name="recursos"
+            label="Recursos materiales"
+            rows={4}
+            sx={{ width: '100%' }}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
+            helperText={error.recursos}
+            error={!!error.recursos}
+            required
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <BasicSelect
+            title="Asignatura que atiende"
+            name="asignaturaInfraestructura"
+            multiple
+            value={[]}
+            options={asignaturas.asignaturas}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
+            errorMessage={error.asignaturaInfraestructura}
             required
-            errorMessage={error.horasIndependiente}
           />
         </Grid>
         <Grid item>
@@ -167,18 +191,14 @@ export default function InfraestructuraCreateModal({ open, hideModal, title }) {
             alt="Cancelar"
             design="error"
             onclick={hideModal}
-          >
-            Cancelar
-          </ButtonStyled>
+          />
         </Grid>
         <Grid item>
           <ButtonStyled
             text="Confirmar"
             alt="Confirmar"
             onclick={handleOnSubmit}
-          >
-            Confirmar
-          </ButtonStyled>
+          />
         </Grid>
       </Grid>
     </DefaultModal>
@@ -189,4 +209,6 @@ InfraestructuraCreateModal.propTypes = {
   open: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
+    .isRequired,
 };

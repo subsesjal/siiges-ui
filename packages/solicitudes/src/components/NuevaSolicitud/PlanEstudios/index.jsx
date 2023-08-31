@@ -19,7 +19,9 @@ import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 import SolicitudContext from '../../utils/Context/solicitudContext';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
 
-export default function PlanEstudios({ nextModule, id, setId }) {
+export default function PlanEstudios({
+  nextModule, id, setId, programaId, setProgramaId,
+}) {
   const { session } = useContext(Context);
   const router = useRouter();
   const { query } = router;
@@ -42,7 +44,6 @@ export default function PlanEstudios({ nextModule, id, setId }) {
     8: {},
     9: {},
   });
-  const [programaId, setProgramaId] = useState();
   const [disabled, setDisabled] = useState(true);
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
@@ -121,5 +122,7 @@ export default function PlanEstudios({ nextModule, id, setId }) {
 PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]).isRequired,
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]).isRequired,
   setId: PropTypes.func.isRequired,
+  setProgramaId: PropTypes.func.isRequired,
 };

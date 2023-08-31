@@ -20,7 +20,6 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setErrors,
     initialValues,
     setInitialValues,
-    id,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
 
@@ -69,7 +68,6 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
       hideModal,
       errors,
       setNoti,
-      id,
       1,
     );
   };

@@ -1,4 +1,4 @@
-const handleCreate = (
+const handleEdit = (
   form,
   setForm,
   setInitialValues,
@@ -13,18 +13,17 @@ const handleCreate = (
   const url = process.env.NEXT_PUBLIC_URL;
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
-
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
+      message: 'Algo salió mal, revisa que los campos estén correctos',
       type: 'error',
     });
     return;
   }
 
-  fetch(`${url}/api/v1/planteles/${plantelId}/infraestructuras`, {
-    method: 'POST',
+  fetch(`${url}/api/v1/asignaturas/${form.id}`, {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       api_key: apikey,
@@ -34,9 +33,15 @@ const handleCreate = (
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      const newData = { ...form, id: data.data.id };
-      setInfraestructuras((prevList) => [...prevList, newData]);
+      const updatedData = { ...form, id: data.data.id };
+      setInfraestructuras((prevList) => {
+        const newList = [...prevList];
+        const index = newList.findIndex((item) => item.id === updatedData.id);
+        if (index !== -1) {
+          newList[index] = updatedData;
+        }
+        return newList;
+      });
       setForm({ plantelId });
       setInitialValues({});
       hideModal();
@@ -46,4 +51,4 @@ const handleCreate = (
     });
 };
 
-export default handleCreate;
+export default handleEdit;

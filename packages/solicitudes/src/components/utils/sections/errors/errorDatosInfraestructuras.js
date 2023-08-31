@@ -1,20 +1,12 @@
 export default function errorDatosInfraestructuras(form, setError, error) {
   const validNumber = /^-?\d*\.?\d+$/;
   const errors = {
-    grado: () => {
-      if (form.grado === undefined || form.grado === '') {
-        setError({ ...error, grado: 'Seleccione un nivel' });
+    tipoInstalacionId: () => {
+      if (form.tipoInstalacionId === undefined || form.tipoInstalacionId === '') {
+        setError({ ...error, tipoInstalacionId: 'Seleccione una instalación' });
         return false;
       }
-      setError({ ...error, grado: '' });
-      return true;
-    },
-    area: () => {
-      if (form.area === undefined || form.area === '') {
-        setError({ ...error, area: 'Seleccione un area' });
-        return false;
-      }
-      setError({ ...error, area: '' });
+      setError({ ...error, tipoInstalacionId: '' });
       return true;
     },
     nombre: () => {
@@ -25,62 +17,58 @@ export default function errorDatosInfraestructuras(form, setError, error) {
       setError({ ...error, nombre: '' });
       return true;
     },
-    clave: () => {
-      if (form.clave === undefined || form.clave === '') {
-        setError({ ...error, clave: 'Clave invalida' });
-        return false;
-      }
-      setError({ ...error, clave: '' });
-      return true;
-    },
-    creditos: () => {
+    capacidad: () => {
       if (
-        form.creditos === undefined
-        || form.creditos === ''
-        || !validNumber.test(form.creditos)
+        form.capacidad === undefined
+        || form.capacidad === ''
+        || !validNumber.test(form.capacidad)
       ) {
-        setError({ ...error, creditos: 'Creditos invalidos' });
+        setError({ ...error, capacidad: 'Capacidad invalidos' });
         return false;
       }
-      setError({ ...error, creditos: '' });
+      setError({ ...error, capacidad: '' });
       return true;
     },
-    formacionEspecializada: () => {
+    metros: () => {
       if (
-        form.formacionEspecializada === undefined
-        || form.formacionEspecializada === ''
+        form.metros === undefined
+        || form.metros === ''
+        || !validNumber.test(form.metros)
+      ) {
+        setError({ ...error, metros: 'Metros cuadrados invalidos' });
+        return false;
+      }
+      setError({ ...error, metros: '' });
+      return true;
+    },
+    ubicacion: () => {
+      if (form.ubicacion === undefined || form.ubicacion === '') {
+        setError({ ...error, ubicacion: 'Ubicacion invalida' });
+        return false;
+      }
+      setError({ ...error, ubicacion: '' });
+      return true;
+    },
+    recursos: () => {
+      if (
+        form.recursos === undefined
+        || form.recursos === ''
       ) {
         setError({
           ...error,
-          formacionEspecializada: 'Formación especializada invalida',
+          recursos: 'Recursos materiales invalidos',
         });
         return false;
       }
-      setError({ ...error, formacionEspecializada: '' });
+      setError({ ...error, recursos: '' });
       return true;
     },
-    horasDocente: () => {
-      if (
-        form.horasDocente === undefined
-        || form.horasDocente === ''
-        || !validNumber.test(form.horasDocente)
-      ) {
-        setError({ ...error, horasDocente: 'Horas docente invalidos' });
+    asignaturaInfraestructura: () => {
+      if (form.asignaturaInfraestructura === undefined || form.asignaturaInfraestructura === '') {
+        setError({ ...error, asignaturaInfraestructura: 'Asignaturas invalidas' });
         return false;
       }
-      setError({ ...error, horasDocente: '' });
-      return true;
-    },
-    horasIndependiente: () => {
-      if (
-        form.horasIndependiente === undefined
-        || form.horasIndependiente === ''
-        || !validNumber.test(form.horasIndependiente)
-      ) {
-        setError({ ...error, horasIndependiente: 'Horas independiente invalidos' });
-        return false;
-      }
-      setError({ ...error, horasIndependiente: '' });
+      setError({ ...error, asignaturaInfraestructura: '' });
       return true;
     },
   };

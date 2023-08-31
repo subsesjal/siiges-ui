@@ -1,43 +1,73 @@
 import React, { useContext, useEffect } from 'react';
-import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
+import { Grid, TextField } from '@mui/material';
+import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
-import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
+import { useRouter } from 'next/router';
 import handleEdit from '../../submitEditAsignaturas';
-import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
-import { area, grados } from '../../Mocks/mockAsignaturas';
+import PlantelContext from '../../Context/plantelContext';
+import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
+import getAsignaturas from '../../getAsignaturas';
 
 export default function InfraestructuraEditModal({
   open,
   hideModal,
   edit,
   rowItem,
+  programaId,
 }) {
   const {
-    initialValues,
-    error,
+    setInfraestructuras,
+    formInfraestructuras,
+    setFormInfraestructuras,
     setError,
+    error,
     errors,
-    formAsignaturas,
-    setFormAsignaturas,
+    setErrors,
+    initialValues,
     setInitialValues,
-    setAsignaturasList,
-    id,
-    setNoti,
-  } = useContext(TablesPlanEstudiosContext);
+  } = useContext(PlantelContext);
+
+  const { setNoti, session } = useContext(Context);
+  const { query } = useRouter();
+  const asignaturas = getAsignaturas(programaId);
+
+  const instalacion = [
+    { id: 1, nombre: 'Aula' },
+    { id: 2, nombre: 'Cubiculo' },
+    { id: 3, nombre: 'Auditorio' },
+    { id: 4, nombre: 'Laboratorio fisico' },
+    { id: 5, nombre: 'Laboratorio virtual' },
+    { id: 6, nombre: 'Taller fisico' },
+    { id: 7, nombre: 'Taller virtual' },
+    { id: 8, nombre: 'Laboratorio de computo' },
+    { id: 9, nombre: 'Biblioteca fisica' },
+    { id: 10, nombre: 'Biblioteca virtual' },
+    { id: 11, nombre: 'Otros' },
+    { id: 12, nombre: 'Area administrativa' },
+    { id: 13, nombre: 'Archivo muerto' },
+  ];
 
   useEffect(() => {
-    setFormAsignaturas(rowItem);
+    setFormInfraestructuras(rowItem);
   }, [rowItem]);
 
-  const selectedGrade = grados.semestral;
-  const errorsAsignatura = errorDatosAsignaturas(formAsignaturas, setError, error);
+  const errorsInfraestructura = errorDatosInfraestructuras(
+    formInfraestructuras,
+    setError,
+    error,
+  );
+
+  useEffect(() => {
+    if (errorsInfraestructura !== undefined) {
+      setErrors(errorsInfraestructura);
+    }
+  }, [error]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFormAsignaturas((prevData) => ({
+    setFormInfraestructuras((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -48,7 +78,7 @@ export default function InfraestructuraEditModal({
     const initialValue = initialValues[name];
 
     if (value !== initialValue || value === '') {
-      errorsAsignatura[name]();
+      errorsInfraestructura[name]();
     }
   };
 
@@ -59,15 +89,15 @@ export default function InfraestructuraEditModal({
 
   const handleOnSubmit = () => {
     handleEdit(
-      formAsignaturas,
-      setFormAsignaturas,
+      formInfraestructuras,
+      setFormInfraestructuras,
       setInitialValues,
-      setAsignaturasList,
+      setInfraestructuras,
       hideModal,
       errors,
       setNoti,
-      id,
-      1,
+      query.plantel,
+      session.token,
     );
   };
 
@@ -76,152 +106,109 @@ export default function InfraestructuraEditModal({
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <BasicSelect
-            title="Grado"
-            name="grado"
-            value={rowItem.grado ?? ''}
-            options={selectedGrade}
+            title="Instalación"
+            name="tipoInstalacionId"
+            value=""
+            options={instalacion}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.grado}
-            textValue
+            errorMessage={error.tipoInstalacionId}
             required
-            disabled={edit === 'Consultar Asignatura'}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <BasicSelect
-            title="Area"
-            name="area"
-            value={rowItem.area ?? ''}
-            options={area}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.area}
-            required
-            disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
         <Grid item xs={6}>
           <Input
             id="nombre"
-            label="Nombre(s)"
+            label="Nombre"
             name="nombre"
             auto="nombre"
-            value={rowItem.nombre}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            required
-            disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.nombre}
+            required
           />
         </Grid>
         <Grid item xs={3}>
           <Input
-            id="clave"
-            label="Clave"
-            name="clave"
-            auto="clave"
-            value={rowItem.clave}
+            id="capacidad"
+            label="Capacidad"
+            name="capacidad"
+            auto="capacidad"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
+            errorMessage={error.capacidad}
             required
-            disabled={edit === 'Consultar Asignatura'}
-            errorMessage={error.clave}
           />
         </Grid>
         <Grid item xs={3}>
           <Input
-            id="creditos"
-            label="Creditos"
-            name="creditos"
-            auto="creditos"
-            value={rowItem.creditos}
+            id="metros"
+            label="Metros cuadrados"
+            name="metros"
+            auto="metros"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
+            errorMessage={error.metros}
             required
-            disabled={edit === 'Consultar Asignatura'}
-            errorMessage={error.creditos}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Input
-            id="formacionEspecializada"
-            label="Formacion especializada"
-            name="formacionEspecializada"
-            auto="formacionEspecializada"
-            value={rowItem.formacionEspecializada}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
-            required
-            disabled={edit === 'Consultar Asignatura'}
-            errorMessage={error.formacionEspecializada}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Input
-            id="seriacion"
-            label="Seriacion"
-            name="seriacion"
-            auto="seriacion"
-            value={rowItem.seriacion}
-            onchange={handleOnChange}
-            onfocus={handleInputFocus}
-            disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="horasDocente"
-            label="Horas docente"
-            name="horasDocente"
-            auto="horasDocente"
-            value={rowItem.horasDocente}
+            id="ubicacion"
+            label="Ubicacion"
+            name="ubicacion"
+            auto="ubicacion"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
+            errorMessage={error.ubicacion}
             required
-            disabled={edit === 'Consultar Asignatura'}
-            errorMessage={error.horasDocente}
           />
         </Grid>
-        <Grid item xs={6}>
-          <Input
-            id="horasIndependiente"
-            label="Horas independiente"
-            name="horasIndependiente"
-            auto="horasIndependiente"
-            value={rowItem.horasIndependiente}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
+        <Grid item xs={12}>
+          <TextField
+            id="recursos"
+            name="recursos"
+            label="Recursos materiales"
+            rows={4}
+            sx={{ width: '100%' }}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
+            helperText={error.recursos}
+            error={!!error.recursos}
             required
-            disabled={edit === 'Consultar Asignatura'}
-            errorMessage={error.horasIndependiente}
           />
         </Grid>
-      </Grid>
-      <Grid container justifyContent="flex-end" marginTop={2}>
-        <ButtonStyled
-          text={edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-          alt={edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-          design="error"
-          onclick={hideModal}
-        >
-          {edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-        </ButtonStyled>
-        {edit !== 'Consultar Asignatura' && (
+        <Grid item xs={12}>
+          <BasicSelect
+            title="Asignatura que atiende"
+            name="asignaturaInfraestructura"
+            multiple
+            value={[]}
+            options={asignaturas.asignaturas}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.asignaturaInfraestructura}
+            required
+          />
+        </Grid>
+        <Grid item>
+          <ButtonStyled
+            text="Cancelar"
+            alt="Cancelar"
+            design="error"
+            onclick={hideModal}
+          />
+        </Grid>
+        <Grid item>
           <ButtonStyled
             text="Confirmar"
             alt="Confirmar"
             onclick={handleOnSubmit}
-          >
-            Confirmar
-          </ButtonStyled>
-        )}
+          />
+        </Grid>
       </Grid>
     </DefaultModal>
   );
@@ -242,4 +229,8 @@ InfraestructuraEditModal.propTypes = {
     horasDocente: PropTypes.number,
     horasIndependiente: PropTypes.number,
   }).isRequired,
+  programaId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([undefined]),
+  ]).isRequired,
 };
