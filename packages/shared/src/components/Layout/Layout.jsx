@@ -10,9 +10,11 @@ export default function Overlay({
   children, title, subtitle, type,
 }) {
   const [open, setOpen] = useState(false);
+  const [section, setSection] = useState(1);
   const onClickChange = () => {
     setOpen(!open);
   };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -37,11 +39,16 @@ export default function Overlay({
         width: '100%',
       }}
     >
-      <MainNavbar menuSwitch={() => onClickChange()} />
+      <MainNavbar
+        menuSwitch={() => onClickChange()}
+        section={section}
+        setSection={setSection}
+      />
       <MenuDrawer
         open={open}
         openFunction={() => handleDrawerOpen()}
         closeFunction={() => handleDrawerClose()}
+        section={section}
       />
       <Container
         sx={{

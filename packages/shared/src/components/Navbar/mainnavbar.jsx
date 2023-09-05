@@ -7,16 +7,36 @@ import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
+import { MenuItem, Select } from '@mui/material';
 import LogoWhite from '../Images/LogoWhite';
 import MenuNavbar from './MenuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 
-export default function MainNavbar({ menuSwitch }) {
+export default function MainNavbar({ menuSwitch, section, setSection }) {
+  const options = [
+    { id: 1, nombre: 'Incorporación' },
+    { id: 2, nombre: 'Servicios escolares' },
+  ];
+
+  const customSelectStyles = {
+    backgroundColor: 'transparent',
+    color: 'white',
+    border: 'none',
+    outline: 'none',
+    appearance: 'none',
+    fontSize: '1rem',
+    marginRight: '10px',
+    '&:focus': {
+      border: 'none',
+      outline: 'none',
+    },
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
-          {useCheckMobileScreen() ? (
+          {useCheckMobileScreen() && (
             <IconButton
               size="large"
               edge="start"
@@ -26,8 +46,6 @@ export default function MainNavbar({ menuSwitch }) {
             >
               <MenuIcon />
             </IconButton>
-          ) : (
-            <div />
           )}
           <Link href="/home">
             <IconButton
@@ -50,6 +68,19 @@ export default function MainNavbar({ menuSwitch }) {
           >
             <b>SIIGES</b>
           </Typography>
+          <div style={{ position: 'relative' }}>
+            <Select
+              value={section}
+              onChange={(e) => setSection(e.target.value)}
+              sx={customSelectStyles}
+            >
+              {options.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.nombre}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
           <MenuNavbar />
         </Toolbar>
       </AppBar>
@@ -59,4 +90,6 @@ export default function MainNavbar({ menuSwitch }) {
 
 MainNavbar.propTypes = {
   menuSwitch: PropTypes.func.isRequired,
+  section: PropTypes.number.isRequired,
+  setSection: PropTypes.func.isRequired,
 };

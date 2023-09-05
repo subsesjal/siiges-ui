@@ -7,32 +7,25 @@ import React from 'react';
 import Link from 'next/link';
 
 export default function ActionButtons({ consultar, editar, eliminar }) {
+  const renderButton = (link, label, icon) => {
+    if (link) {
+      return (
+        <Link href={link}>
+          <IconButton aria-label={label}>{icon}</IconButton>
+        </Link>
+      );
+    }
+    return null;
+  };
+
   return (
     <Stack direction="row" spacing={1}>
-      {consultar ? (
-        <Link href={consultar}>
-          <IconButton aria-label="consultar">
-            <DescriptionIcon />
-          </IconButton>
-        </Link>
-      ) : (
-        <div />
-      )}
-      {editar ? (
-        <Link href={editar}>
-          <IconButton aria-label="editar">
-            <EditIcon />
-          </IconButton>
-        </Link>
-      ) : (
-        <div />
-      )}
-      {eliminar ? (
+      {renderButton(consultar, 'consultar', <DescriptionIcon />)}
+      {renderButton(editar, 'editar', <EditIcon />)}
+      {eliminar && (
         <IconButton aria-label="eliminar" onClick={eliminar}>
           <DeleteIcon />
         </IconButton>
-      ) : (
-        <div />
       )}
     </Stack>
   );
