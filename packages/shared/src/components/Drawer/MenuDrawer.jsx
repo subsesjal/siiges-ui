@@ -55,13 +55,15 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MenuDrawer({ open, openFunction, closeFunction }) {
+export default function MenuDrawer({
+  open, openFunction, closeFunction, section,
+}) {
   const { session } = useContext(Context);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    userRol(session, setUsers);
-  }, [session]);
+    userRol(session, setUsers, section);
+  }, [session, section]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -105,4 +107,5 @@ MenuDrawer.propTypes = {
   open: PropTypes.bool.isRequired,
   openFunction: PropTypes.func.isRequired,
   closeFunction: PropTypes.func.isRequired,
+  section: PropTypes.number.isRequired,
 };
