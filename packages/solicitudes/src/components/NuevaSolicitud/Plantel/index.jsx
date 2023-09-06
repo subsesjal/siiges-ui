@@ -31,7 +31,7 @@ export default function Plantel({ nextModule, id, programaId }) {
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
-        <PlantelProvider>
+        <PlantelProvider plantelId={query.plantel}>
           <SectionLayout
             sectionTitle="Plantel"
             sections={section}

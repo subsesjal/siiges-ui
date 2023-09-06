@@ -20,7 +20,12 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
   ];
 
   const {
-    form, setForm, selectedCheckboxes, setSelectedCheckboxes,
+    form,
+    setForm,
+    selectedCheckboxes,
+    setSelectedCheckboxes,
+    seguridad,
+    setSeguridad,
   } = useContext(PlantelContext);
   const handleCheckboxChange = (id) => {
     setSelectedCheckboxes((prevSelectedCheckboxes) => {
@@ -40,6 +45,18 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formPrograma(name, value, setForm, 2);
+  };
+
+  const handleOnChangeSeguridad = (e, index) => {
+    const { value } = e.target;
+
+    setSeguridad((prevForm) => prevForm.map((item, i) => (i === index
+      ? {
+        ...item,
+        seguridadSistemaId: i + 1,
+        cantidad: parseInt(value, 10),
+      }
+      : item)));
   };
 
   return (
@@ -105,8 +122,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Recubrimientos plasticos en pisos y escalones"
             name="recubrimientosPlasticos"
             auto="recubrimientosPlasticos"
-            value={form[2].recubrimientosPlasticos || ''}
-            onchange={handleOnChange}
+            value={seguridad[0].cantidad || ''}
+            onchange={(e) => handleOnChangeSeguridad(e, 0)}
             required
             disabled={disabled}
           />
@@ -115,8 +132,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Alarma contra incendios y/o terremotos"
             name="alarmaIncendiosTerremotos"
             auto="alarmaIncendiosTerremotos"
-            value={form[2].alarmaIncendiosTerremotos || ''}
-            onchange={handleOnChange}
+            value={seguridad[1].cantidad || ''}
+            onchange={(e) => handleOnChangeSeguridad(e, 1)}
             required
             disabled={disabled}
           />
@@ -125,8 +142,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Señalamientos de evacuacion"
             name="senalamientosEvacuacion"
             auto="senalamientosEvacuacion"
-            value={form[2].senalamientoEvacuacion || ''}
-            onchange={handleOnChange}
+            value={seguridad[2].cantidad || ''}
+            onchange={(e) => handleOnChangeSeguridad(e, 2)}
             required
             disabled={disabled}
           />
@@ -135,8 +152,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Botiquin"
             name="botiquin"
             auto="botiquin"
-            value={form[2].botiquin || ''}
-            onchange={handleOnChange}
+            value={seguridad[3].cantidad || ''}
+            onchange={(e) => handleOnChangeSeguridad(e, 3)}
             required
             disabled={disabled}
           />
@@ -145,8 +162,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Escaleras de emergencia"
             name="escalerasEmergencia"
             auto="escalerasEmergencia"
-            value={form[2].escalerasEmergencia || ''}
-            onchange={handleOnChange}
+            value={seguridad[4].cantidad || ''}
+            onchange={(e) => handleOnChangeSeguridad(e, 4)}
             required
             disabled={disabled}
           />
@@ -155,8 +172,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Area de seguridad"
             name="areaSeguridad"
             auto="areaSeguridad"
-            value={form[2].areaSeguridad || ''}
-            onchange={handleOnChange}
+            value={seguridad[5].cantidad || ''}
+            onchange={(e) => handleOnChangeSeguridad(e, 5)}
             required
             disabled={disabled}
           />
@@ -165,8 +182,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Extintores"
             name="extintores"
             auto="extintores"
-            value={form[2].extintores || ''}
-            onchange={handleOnChange}
+            value={seguridad[6].cantidad || ''}
+            onchange={(e) => handleOnChangeSeguridad(e, 6)}
             required
             disabled={disabled}
           />
@@ -175,8 +192,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Puntos de reunion para evacuacion"
             name="puntosReunionEvacuacion"
             auto="puntosReunionEvacuacion"
-            value={form[2].puntosReunionEvacuacion || ''}
-            onchange={handleOnChange}
+            value={seguridad[7].cantidad || ''}
+            onchange={(e) => handleOnChangeSeguridad(e, 7)}
             required
             disabled={disabled}
           />

@@ -3,16 +3,30 @@ import PropTypes from 'prop-types';
 
 const PlantelContext = createContext();
 
-export function PlantelProvider({ children }) {
+export function PlantelProvider({ children, plantelId }) {
   const [form, setForm] = useState({
     1: {},
     2: {},
-    3: {},
+    3: Array(11)
+      .fill(0)
+      .map((_, index) => ({
+        higieneId: index + 1,
+        cantidad: 0,
+      })),
     4: {},
     5: {},
     6: {},
   });
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+  const [seguridad, setSeguridad] = useState(
+    Array(11)
+      .fill(0)
+      .map((_, index) => ({
+        plantelId,
+        seguridadSistemaId: index + 1,
+        cantidad: 0,
+      })),
+  );
   const [disabled, setDisabled] = useState(true);
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
@@ -34,6 +48,8 @@ export function PlantelProvider({ children }) {
       selectedCheckboxes,
       formInfraestructuras,
       infraestructuras,
+      seguridad,
+      setSeguridad,
       setDiligencias,
       setError,
       setErrors,
@@ -50,6 +66,7 @@ export function PlantelProvider({ children }) {
       error,
       errors,
       disabled,
+      seguridad,
       diligencias,
       initialValues,
       formDiligencias,
@@ -66,6 +83,7 @@ export function PlantelProvider({ children }) {
 
 PlantelProvider.propTypes = {
   children: PropTypes.node.isRequired,
+  plantelId: PropTypes.number.isRequired,
 };
 
 export default PlantelContext;

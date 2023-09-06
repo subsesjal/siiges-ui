@@ -14,6 +14,7 @@ import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import submitRepresentante from '../utils/submitRepresentante';
 import PlantelContext from '../utils/Context/plantelContext';
 import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
+import submitHigienesPlantel from '../utils/submitHigienesPlantel';
 
 export default function ButtonSection({
   id,
@@ -68,8 +69,6 @@ export default function ButtonSection({
       submit = () => {
         submitDescripcionPlantel(
           plantelesValidations,
-          sections,
-          id,
           session.token,
           setNoti,
           router.query.plantel,
@@ -77,7 +76,12 @@ export default function ButtonSection({
       };
     } else if (sections === 3) {
       submit = () => {
-        console.log('Performing action for "Plantel" with sections === 3');
+        submitHigienesPlantel(
+          plantelesValidations,
+          session.token,
+          setNoti,
+          router.query.plantel,
+        );
       };
     }
   } else if (newSubmit) {
