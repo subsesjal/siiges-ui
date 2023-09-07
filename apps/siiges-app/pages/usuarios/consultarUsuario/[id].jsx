@@ -1,8 +1,7 @@
 import React from 'react';
 import { Layout } from '@siiges-ui/shared';
-import { UserConsult, UserInfo } from '@siiges-ui/users';
+import { UserConsult, UserInfo, getUser } from '@siiges-ui/users';
 import Grid from '@mui/material/Grid';
-import getUser from '../utils/getUser';
 
 export default function ConsultUser() {
   const { user, loading } = getUser();

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Layout, DataTable } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
-import columns from '../Mocks/instituciones';
-import getInstituciones from '../utils/getInstituciones';
+import columns from '@siiges-ui/instituciones/src/Mocks/instituciones';
+import getInstituciones from '@siiges-ui/instituciones/src/utils/getInstituciones';
 
 export default function Instituciones() {
   const { instituciones, loading } = getInstituciones();

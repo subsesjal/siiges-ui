@@ -43,8 +43,7 @@ export default function submitNewPlantel(plantelErrors, form, setNoti, token) {
         router.back();
       }, 3000),
     )
-    .catch((err) => {
-      console.error('Error:', err);
+    .catch(() => {
       setNoti({
         open: true,
         message: 'Algo salio mal, revisa que los campos esten correctos',

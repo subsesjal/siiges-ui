@@ -24,7 +24,12 @@ module.exports = {
         packageDir: [
           __dirname,
           path.join(__dirname, 'packages/authentication'),
+          path.join(__dirname, 'packages/inspecciones'),
+          path.join(__dirname, 'packages/instituciones'),
+          path.join(__dirname, 'packages/serviciosescolares'),
           path.join(__dirname, 'packages/shared'),
+          path.join(__dirname, 'packages/solicitudes'),
+          path.join(__dirname, 'packages/users'),
           path.join(__dirname, 'apps/siiges-app'),
         ],
       },

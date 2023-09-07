@@ -4,7 +4,7 @@ import {
 } from '@siiges-ui/shared';
 import { getInstitucionUsuario, NewInstitutionForm } from '@siiges-ui/instituciones';
 import { useRouter } from 'next/router';
-import createInstitucion from '../utils/createInstitucion';
+import createInstitucion from '@siiges-ui/instituciones/src/utils/createInstitucion';
 
 export default function NuevaInstitucion() {
   const { session, setNoti } = useContext(Context);

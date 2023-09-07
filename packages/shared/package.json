@@ -22,5 +22,8 @@
 	},
 	"devDependencies": {
 		"microbundle": "^0.15.0"
+	},
+	"dependencies": {
+		"@siiges-ui/serviciosescolares": "^1.0.0"
 	}
 }
