@@ -1,5 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
+/* eslint-disable */
 import React, { useEffect } from 'react';
 import '../styles/globals.css';
 import { CookiesProvider } from 'react-cookie';
@@ -11,7 +10,6 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
-      // eslint-disable-next-line no-param-reassign
       event.returnValue = '';
     };
 

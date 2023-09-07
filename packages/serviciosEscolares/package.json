@@ -1,0 +1,34 @@
+{
+  "name": "@siiges-ui/serviciosescolares",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Luis Manuel <elmejorlui@gmail.com>",
+  "homepage": "https://github.com/elmejorlui/siiges-ui#readme",
+  "license": "ISC",
+  "main": "lib/serviciosEscolares.js",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "src",
+    "__tests__"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elmejorlui/siiges-ui.git"
+  },
+  "scripts": {
+    "lint": "eslint .",
+		"lint:fix": "eslint --fix .",
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"precommit": "yarn lint && yarn test"
+  },
+  "bugs": {
+    "url": "https://github.com/elmejorlui/siiges-ui/issues"
+  }
+}
