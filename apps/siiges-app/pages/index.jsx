@@ -1,6 +1,11 @@
 import React from 'react';
-import Login from './autenticacion/login';
+import { LoginLayout } from '@siiges-ui/shared';
+import { SignIn } from '@siiges-ui/authentication';
 
 export default function Home() {
-  return <Login />;
+  return (
+    <LoginLayout>
+      <SignIn />
+    </LoginLayout>
+  );
 }

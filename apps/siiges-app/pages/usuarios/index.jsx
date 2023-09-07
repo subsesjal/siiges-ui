@@ -4,8 +4,7 @@ import {
 } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 import Link from 'next/link';
-import columns from './Mocks/usuarios';
-import getUsers from './utils/getUsers';
+import { getUsers, columns } from '@siiges-ui/users';
 
 export default function Usuarios() {
   const { users, loading } = getUsers();

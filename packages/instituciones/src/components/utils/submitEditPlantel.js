@@ -19,9 +19,7 @@ export default function submitEditPlantel(form, setNoti, token) {
         type: 'success',
       }),
     )
-    .catch((err) => {
-      console.log(err);
-
+    .catch(() => {
       setNoti({
         open: true,
         message: 'Algo salio mal, revisa que los campos esten correctos',
