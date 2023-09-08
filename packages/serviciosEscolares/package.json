@@ -5,7 +5,7 @@
   "author": "Luis Manuel <elmejorlui@gmail.com>",
   "homepage": "https://github.com/elmejorlui/siiges-ui#readme",
   "license": "ISC",
-  "main": "lib/serviciosEscolares.js",
+  "main": "src/serviciosEscolares.js",
   "directories": {
     "src": "src",
     "test": "__tests__"

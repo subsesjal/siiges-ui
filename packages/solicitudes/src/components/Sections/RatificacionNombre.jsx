@@ -11,6 +11,7 @@ export default function RatificacionNombre() {
     const { name, value } = e.target;
     formPrograma(name, value, setForm, 3);
   };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
