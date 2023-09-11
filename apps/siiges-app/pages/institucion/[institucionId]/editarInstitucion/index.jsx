@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-  ButtonsForm, Layout, SnackAlert, getInstitucion,
-} from '@siiges-ui/shared';
-import { EditInstitutionForm } from '@siiges-ui/instituciones';
+import { ButtonsForm, Layout, SnackAlert } from '@siiges-ui/shared';
+import { EditInstitutionForm, getInstitucion } from '@siiges-ui/instituciones';
 import updateInstitucion from '@siiges-ui/instituciones/src/utils/updateInstitucion';
 
 export default function editarInstitucion() {
