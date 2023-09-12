@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const PlantelContext = createContext();
 
-export function PlantelProvider({ children, plantelId }) {
+export function PlantelProvider({ children, plantelId, institucionId }) {
   const [form, setForm] = useState({
     1: {},
     2: {},
@@ -15,7 +15,7 @@ export function PlantelProvider({ children, plantelId }) {
       })),
     4: {},
     5: {},
-    6: {},
+    6: { institucionId, esNombreAutorizado: false },
   });
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const [seguridad, setSeguridad] = useState(
@@ -35,31 +35,34 @@ export function PlantelProvider({ children, plantelId }) {
   const [diligencias, setDiligencias] = useState([]);
   const [initialValues, setInitialValues] = useState({});
   const [infraestructuras, setInfraestructuras] = useState([]);
+  const [validNombres, setValidNombres] = useState(false);
 
   const value = useMemo(
     () => ({
       form,
       error,
       errors,
-      disabled,
-      diligencias,
-      initialValues,
-      formDiligencias,
-      selectedCheckboxes,
-      formInfraestructuras,
-      infraestructuras,
-      seguridad,
-      setSeguridad,
-      setDiligencias,
-      setError,
-      setErrors,
-      setDisabled,
       setForm,
+      setError,
+      disabled,
+      seguridad,
+      setErrors,
+      diligencias,
+      setDisabled,
+      setSeguridad,
+      validNombres,
+      initialValues,
+      setDiligencias,
+      setValidNombres,
+      formDiligencias,
+      infraestructuras,
       setInitialValues,
       setFormDiligencias,
+      selectedCheckboxes,
+      setInfraestructuras,
+      formInfraestructuras,
       setSelectedCheckboxes,
       setFormInfraestructuras,
-      setInfraestructuras,
     }),
     [
       form,
@@ -68,11 +71,12 @@ export function PlantelProvider({ children, plantelId }) {
       disabled,
       seguridad,
       diligencias,
+      validNombres,
       initialValues,
       formDiligencias,
+      infraestructuras,
       selectedCheckboxes,
       formInfraestructuras,
-      infraestructuras,
     ],
   );
 
@@ -84,6 +88,7 @@ export function PlantelProvider({ children, plantelId }) {
 PlantelProvider.propTypes = {
   children: PropTypes.node.isRequired,
   plantelId: PropTypes.number.isRequired,
+  institucionId: PropTypes.number.isRequired,
 };
 
 export default PlantelContext;

@@ -15,6 +15,7 @@ import submitRepresentante from '../utils/submitRepresentante';
 import PlantelContext from '../utils/Context/plantelContext';
 import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
 import submitHigienesPlantel from '../utils/submitHigienesPlantel';
+import submitRatificacion from '../utils/submitRatificacion';
 
 export default function ButtonSection({
   id,
@@ -82,6 +83,10 @@ export default function ButtonSection({
           setNoti,
           router.query.plantel,
         );
+      };
+    } else if (sections === 6) {
+      submit = () => {
+        submitRatificacion(plantelesValidations, session.token, setNoti);
       };
     }
   } else if (newSubmit) {

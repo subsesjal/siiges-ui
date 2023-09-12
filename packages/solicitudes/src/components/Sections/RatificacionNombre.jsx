@@ -2,15 +2,9 @@ import { Grid, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import React, { useContext } from 'react';
 import PlantelContext from '../utils/Context/plantelContext';
-import formPrograma from '../utils/sections/forms/formPrograma';
 
 export default function RatificacionNombre() {
-  const { form, setForm } = useContext(PlantelContext);
-
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    formPrograma(name, value, setForm, 3);
-  };
+  const { form } = useContext(PlantelContext);
 
   return (
     <Grid container spacing={2}>
@@ -25,8 +19,8 @@ export default function RatificacionNombre() {
             name="nombreSolicitado"
             auto="nombreSolicitado"
             value={form[6].nombreSolicitado}
-            onchange={handleOnChange}
             required
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -36,8 +30,8 @@ export default function RatificacionNombre() {
             name="nombreAutorizado"
             auto="nombreAutorizado"
             value={form[6].nombreAutorizado}
-            onchange={handleOnChange}
             required
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -47,7 +41,7 @@ export default function RatificacionNombre() {
             name="acuerdo"
             auto="acuerdo"
             value={form[6].acuerdo}
-            onchange={handleOnChange}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -57,8 +51,8 @@ export default function RatificacionNombre() {
             name="instanciaAutoriza"
             auto="instanciaAutoriza"
             value={form[6].instanciaAutoriza}
-            onchange={handleOnChange}
             required
+            disabled
           />
         </Grid>
       </Grid>

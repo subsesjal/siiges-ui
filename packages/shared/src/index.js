@@ -21,7 +21,7 @@ import LoadCircle from './components/Resources/LoadCircle';
 import MenuDrawer from './components/Drawer/MenuDrawer';
 import Navbar from './components/Navbar';
 import Overlay from './components/Resources/Overlay';
-import MainNavbar from './components/Navbar/Mainnavbar';
+import MainNavbar from './components/Navbar/MainNavbar';
 import PaperHome from './components/Paper/PaperHome';
 import Select from './components/Select';
 import ParseCookies from './utils/handlers/cookieHandler';

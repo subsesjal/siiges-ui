@@ -2,7 +2,7 @@ import { Card, CardContent, Container } from '@mui/material';
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import MenuDrawer from '../Drawer/MenuDrawer';
-import MainNavbar from '../Navbar/Mainnavbar';
+import MainNavbar from '../Navbar/MainNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 import Title from '../Title';
 import { Context } from '../../utils/handlers/context';
