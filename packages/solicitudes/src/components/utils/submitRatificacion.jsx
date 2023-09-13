@@ -3,6 +3,8 @@ export default function submitRatificacion(validations, token, setNoti) {
   const url = process.env.NEXT_PUBLIC_URL;
   const { form, validNombres } = validations;
 
+  console.log(form[6]);
+
   if (!validNombres) {
     setNoti({
       open: true,
@@ -38,7 +40,6 @@ export default function submitRatificacion(validations, token, setNoti) {
     .catch((err) => {
       console.error('Error:', err);
 
-      // Display an error message to the user
       setNoti({
         open: true,
         message: 'Hubo un error al enviar la solicitud',

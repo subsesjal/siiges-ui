@@ -28,7 +28,9 @@ export default function NombresPropuestos({ disabled, id }) {
       form[6].nombrePropuesto2,
       form[6].nombrePropuesto3,
     ];
-    const isNombrePropuestoValid = nombrePropuestos.some((nombre) => nombre !== null);
+    const isNombrePropuestoValid = nombrePropuestos.some(
+      (nombre) => nombre !== null,
+    );
 
     const areFilesLoaded = fileURLs.length === 2;
 
@@ -83,7 +85,7 @@ export default function NombresPropuestos({ disabled, id }) {
             tipoDocumento="BIOGRAFIA"
             id={id}
             label="Biografía o Fundamento"
-            setuRL={(url) => handleFileLoaded(0, url)}
+            setUrl={(url) => handleFileLoaded(0, url)}
             disabled={disabled}
           />
         </Grid>
@@ -93,7 +95,7 @@ export default function NombresPropuestos({ disabled, id }) {
             tipoDocumento="BIBLIOGRAFIA"
             id={id}
             label="Bibliografía para fuente de consulta"
-            setuRL={(url) => handleFileLoaded(0, url)}
+            setUrl={(url) => handleFileLoaded(1, url)}
             disabled={disabled}
           />
         </Grid>

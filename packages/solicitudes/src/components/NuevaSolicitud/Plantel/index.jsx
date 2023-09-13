@@ -26,7 +26,11 @@ export default function Plantel({ nextModule, id, programaId }) {
   useEffect(() => {
     setDisabled(!id);
     if (institucion !== undefined) {
-      if (!institucion.ratificacionNombre) {
+      if (
+        !institucion.ratificacionNombre
+        || (Array.isArray(institucion.ratificacionNombre)
+          && institucion.ratificacionNombre.some((item) => !item.esNombreAutorizado))
+      ) {
         setRatificacion(<NombresPropuestos disabled={disabled} id={institucion.id} />);
       }
     }
