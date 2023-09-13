@@ -8,14 +8,26 @@ import {
 import {
   Layout, Select, DataTable, Context,
 } from '@siiges-ui/shared';
-import { Divider } from '@mui/material';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import { Divider, IconButton } from '@mui/material';
+import Link from 'next/link';
 
 const columns = [
   { field: 'folio', headerName: 'Folio', width: 125 },
-  { field: 'studyPlan', headerName: 'Plan de estudios', width: 350 },
-  { field: 'estatusSolicitudId', headerName: 'Estatus', width: 120 },
-  { field: 'plantel', headerName: 'Plantel', width: 345 },
-  { field: 'actions', headerName: 'Acciones', width: 150 },
+  { field: 'studyPlan', headerName: 'Plan de estudios', width: 180 },
+  { field: 'estatusSolicitudId', headerName: 'Estatus', width: 200 },
+  { field: 'plantel', headerName: 'Plantel', width: 450 },
+  {
+    field: 'actions',
+    headerName: 'Acciones',
+    renderCell: (params) => (
+      <Link href={`/solicitudes/detallesSolicitudes/${params.id}`}>
+        <IconButton aria-label="consultar">
+          <ListAltIcon />
+        </IconButton>
+      </Link>
+    ),
+  },
 ];
 
 export default function Solicitudes() {
@@ -30,7 +42,16 @@ export default function Solicitudes() {
 
   useEffect(() => {
     if (solicitudes !== undefined && solicitudes !== null) {
-      setRows(solicitudes);
+      const formattedRows = solicitudes.map((solicitud) => ({
+        id: solicitud.id,
+        folio: solicitud.folio,
+        studyPlan: solicitud.programa.nombre,
+        estatusSolicitudId: solicitud.estatusSolicitud.nombre,
+        plantel: `${solicitud.programa.plantel.domicilio.calle} #${solicitud.programa.plantel.domicilio.numeroExterior}`,
+        actions: 'Actions Placeholder',
+      }));
+
+      setRows(formattedRows);
     }
   }, [solicitudes]);
 
@@ -70,8 +91,7 @@ export default function Solicitudes() {
 
   return (
     <Layout title="Solicitudes">
-      {newSolicitud
-        && (
+      {newSolicitud && (
         <Select
           title="Seleccione una opcion"
           name="options"
@@ -79,7 +99,7 @@ export default function Solicitudes() {
           value=""
           onchange={handleOnChange}
         />
-        )}
+      )}
       <Divider sx={{ mt: 2 }} />
       {NewRequestContentVisible && <NewRequest />}
       {ChangeAddressContentVisible && <ChangeAddress />}

@@ -246,5 +246,5 @@ export default function NewInstitutionForm({ form, setForm, setErrors }) {
 NewInstitutionForm.propTypes = {
   setForm: PropTypes.func.isRequired,
   setErrors: PropTypes.func.isRequired,
-  form: PropTypes.object.isRequired,
+  form: PropTypes.objectOf(PropTypes.string).isRequired,
 };

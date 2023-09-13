@@ -2,11 +2,13 @@ import { Grid, TextField, Typography } from '@mui/material';
 import { Input, InputFile } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
-import React, {useState, useEffect} from 'react';
-import errorDatosNewInstitucion from '../utils/errorDatosNewInstitucion';
+import React, { useState, useEffect } from 'react';
 import { formData } from '@siiges-ui/solicitudes/';
+import errorDatosNewInstitucion from '../utils/errorDatosNewInstitucion';
 
-export default function EditInstitutionForm({ data, form, setForm, setErrors}) {
+export default function EditInstitutionForm({
+  data, form, setForm, setErrors,
+}) {
   const [error, setError] = useState({});
 
   const handleOnChange = (e) => {
@@ -209,4 +211,7 @@ EditInstitutionForm.propTypes = {
     mision: PropTypes.string,
     valoresInstitucional: PropTypes.string,
   }).isRequired,
+  form: PropTypes.objectOf(PropTypes.string).isRequired,
+  setForm: PropTypes.func.isRequired,
+  setErrors: PropTypes.func.isRequired,
 };
