@@ -54,6 +54,8 @@
 		"@mui/material": "^5.8.6",
 		"@mui/x-data-grid": "^5.15.1",
 		"cookie": "^0.5.0",
+		"jspdf": "^2.5.1",
+		"jspdf-autotable": "^3.6.0",
 		"mui-file-dropzone": "^4.0.2",
 		"react": "^18.2.0",
 		"react-cookie": "^4.1.1",

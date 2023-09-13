@@ -16,7 +16,7 @@ export default function detallesSolicitudes() {
             Formatos Administrativos
           </Typography>
           <List component="nav">
-            <Link href="/destino-url">
+            <Link href="/solicitudes/detallesSolicitudes/FDA/FDA01">
               <ListItem button>
                 <ListItemText primary="FDA 01" />
               </ListItem>
