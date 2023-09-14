@@ -1,51 +1,46 @@
-import { Grid, TextField, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import { ButtonAdd } from '@siiges-ui/shared';
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { rows, columns } from '../Mocks/Inspecciones';
+import React, { useEffect, useState } from 'react';
+import { Grid, Typography } from '@mui/material';
+import { DataTable } from '@siiges-ui/shared';
+import getSolicitudesInspecciones from '../../utils/getSolicitudesInspeccion';
+import columns from '../Mocks/Inspecciones';
 
 export default function InspeccionesTable() {
-  const [searchText, setSearchText] = useState('');
+  const { solicitudesInspecciones, loading } = getSolicitudesInspecciones();
+  const [inspecciones, setInspecciones] = useState([]);
 
-  const handleSearchChange = (event) => {
-    setSearchText(event.target.value);
-  };
+  const mapSolicitudesToRows = (solicitudes) => solicitudes.map((solicitud) => ({
+    id: solicitud.id,
+    folio: solicitud.folio,
+    planEstudios: solicitud.programa.nombre,
+    status: solicitud.estatusSolicitud.nombre,
+    plantel: `${solicitud.programa.plantel.domicilio.calle} #${solicitud.programa.plantel.domicilio.numeroExterior}`,
+    instituciones: solicitud.programa.plantel.institucion.nombre,
+  }));
 
-  const filteredRows = searchText
-    ? rows.filter((row) => Object.values(row).some(
-      (value) => value
-            && value.toString().toLowerCase().includes(searchText.toLowerCase()),
-    ))
-    : rows;
+  useEffect(() => {
+    if (!loading && solicitudesInspecciones) {
+      const formattedRows = mapSolicitudesToRows(solicitudesInspecciones);
+      setInspecciones(formattedRows);
+    }
+  }, [loading, solicitudesInspecciones]);
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">Inspecciones</Typography>
       </Grid>
-      <Link href="./inspecciones/asignacionInspecciones">
-        <Grid item xs={3}>
-          <ButtonAdd text="agregar" />
-        </Grid>
-      </Link>
-      <Grid item xs={9} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <TextField
-          size="small"
-          value={searchText}
-          onChange={handleSearchChange}
-          placeholder="Filtrar..."
-        />
-      </Grid>
       <Grid item xs={12}>
-        <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataGrid
-            rows={filteredRows}
+        {loading ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <DataTable
+            title="Solicitudes"
+            rows={inspecciones}
             columns={columns}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />
-        </div>
+        )}
       </Grid>
     </Grid>
   );

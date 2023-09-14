@@ -27,13 +27,6 @@ export default function SignIn() {
     submitNewLogin(form, errors, setErrorMessages, activateAuth);
   };
 
-  const errorMessage = (field) => {
-    if (errorMessages && errorMessages[field]) {
-      return errorMessages[field];
-    }
-    return null;
-  };
-
   return (
     <Box
       sx={{
