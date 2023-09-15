@@ -4,8 +4,11 @@ import {
 import { Layout, Title } from '@siiges-ui/shared';
 import React from 'react';
 import Link from 'next/link';
+import GenerarFDA01 from '../FDA/FDA01/FDA01';
+import GenerarFDA02 from '../FDA/FDA02/FDA02';
 
 export default function detallesSolicitudes() {
+  console.log(GenerarFDA01);
   return (
     <Layout>
       <Title title="Detalles de la solicitud" />
@@ -16,16 +19,13 @@ export default function detallesSolicitudes() {
             Formatos Administrativos
           </Typography>
           <List component="nav">
-            <Link href="/solicitudes/detallesSolicitudes/FDA/FDA01">
-              <ListItem button>
+  
+              <ListItem button onClick={() => GenerarFDA01(1)}>
                 <ListItemText primary="FDA 01" />
               </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
+              <ListItem button onClick={() => GenerarFDA02()}>
                 <ListItemText primary="FDA 02" />
               </ListItem>
-            </Link>
             <Link href="/destino-url">
               <ListItem button>
                 <ListItemText primary="FDA 03" />
