@@ -6,9 +6,12 @@ import React from 'react';
 import Link from 'next/link';
 import GenerarFDA01 from '../FDA/FDA01/FDA01';
 import GenerarFDA02 from '../FDA/FDA02/FDA02';
+import { useRouter } from 'next/router';
 
 export default function detallesSolicitudes() {
-  console.log(GenerarFDA01);
+  const router = useRouter();
+  const { query } = router;
+  console.log(query);
   return (
     <Layout>
       <Title title="Detalles de la solicitud" />
@@ -20,7 +23,7 @@ export default function detallesSolicitudes() {
           </Typography>
           <List component="nav">
   
-              <ListItem button onClick={() => GenerarFDA01(1)}>
+              <ListItem button onClick={() => GenerarFDA01(query)}>
                 <ListItemText primary="FDA 01" />
               </ListItem>
               <ListItem button onClick={() => GenerarFDA02()}>

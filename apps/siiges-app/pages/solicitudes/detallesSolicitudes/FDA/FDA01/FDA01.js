@@ -55,8 +55,6 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
 }
 
 export default function GenerarFDA01(id) {
-  // Mueve la lógica para generar el PDF dentro de useEffect
-console.log(id);
   const doc = new jsPDF();
 
   doc.addImage(img1, 'JPEG', 0, 15, 70, 19);
