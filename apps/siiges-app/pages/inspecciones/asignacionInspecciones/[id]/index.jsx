@@ -7,11 +7,10 @@ import { useRouter } from 'next/router';
 export default function AsignacionInspecciones() {
   const router = useRouter();
   const { query } = router;
-  const solicitud = getSolicitudesById(query.id);
-
+  const { solicitudesInspecciones } = getSolicitudesById(query.id);
   return (
     <Layout title="Asignación de inspecciones">
-      <FormAsignacionInspecciones solicitud={solicitud.solicitudes} />
+      <FormAsignacionInspecciones solicitud={solicitudesInspecciones} />
     </Layout>
   );
 }
