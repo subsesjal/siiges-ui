@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { Input } from '@siiges-ui/shared';
+import { Input, InputNumber } from '@siiges-ui/shared';
 import React from 'react';
 
 export default function UbicacionPlantel() {
@@ -10,14 +10,14 @@ export default function UbicacionPlantel() {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={6}>
-          <Input id="name" label="Nombre(s)" name="name" auto="name" />
+          <Input id="nombre" label="Nombre(s)" name="nombre" auto="nombre" />
         </Grid>
         <Grid item xs={6}>
-          <Input
-            id="arrivalTime"
+          <InputNumber
+            id="tiempoLLegada"
             label="Tiempo aproximado para llegar (minutos)*"
-            name="arrivalTime"
-            auto="arrivalTime"
+            name="tiempoLLegada"
+            auto="tiempoLLegada"
           />
         </Grid>
       </Grid>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layout } from '@siiges-ui/shared';
 import { Institucion, Planteles, getInstitucion } from '@siiges-ui/instituciones';
 import {
-  Box, Grid, Tab, Tabs,
+  Box, Grid, Tab, Tabs, CircularProgress,
 } from '@mui/material';
 
 export default function ConsultarInstitucion() {
@@ -33,7 +33,14 @@ export default function ConsultarInstitucion() {
             />
           )}
         </Grid>
-      ) : null}
+      ) : (
+        <div style={{
+          display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px',
+        }}
+        >
+          <CircularProgress />
+        </div>
+      )}
     </Layout>
   );
 }
