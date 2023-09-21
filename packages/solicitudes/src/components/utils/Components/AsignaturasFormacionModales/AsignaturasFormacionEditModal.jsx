@@ -23,8 +23,8 @@ export default function AsignaturasFormacionEditModal({
     formAsignaturasFormacion,
     setFormAsignaturasFormacion,
     setInitialValues,
-    setAsignaturasList,
-    id,
+    setAsignaturasFormacionList,
+    programaId,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
 
@@ -62,13 +62,16 @@ export default function AsignaturasFormacionEditModal({
       formAsignaturasFormacion,
       setFormAsignaturasFormacion,
       setInitialValues,
-      setAsignaturasList,
+      setAsignaturasFormacionList,
       hideModal,
       errors,
       setNoti,
-      id,
+      programaId,
+      2,
     );
   };
+
+  const cancelButtonText = edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar';
 
   return (
     <DefaultModal open={open} setOpen={hideModal} title={edit}>
@@ -169,6 +172,7 @@ export default function AsignaturasFormacionEditModal({
             value={rowItem.seriacion}
             onchange={handleOnChange}
             onfocus={handleInputFocus}
+            disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
         <Grid item xs={6}>
@@ -203,20 +207,22 @@ export default function AsignaturasFormacionEditModal({
         </Grid>
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
-        <ButtonStyled
-          text={edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-          alt={edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-          design="error"
-          onclick={hideModal}
-        >
-          {edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-        </ButtonStyled>
-        {edit !== 'Consultar Asignatura' && (
+        <Grid item xs={2}>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
-            onclick={handleOnSubmit}
+            text={cancelButtonText}
+            alt={cancelButtonText}
+            design="error"
+            onclick={hideModal}
           />
+        </Grid>
+        {edit !== 'Consultar Asignatura' && (
+          <Grid item xs={2}>
+            <ButtonStyled
+              text="Confirmar"
+              alt="Confirmar"
+              onclick={handleOnSubmit}
+            />
+          </Grid>
         )}
       </Grid>
     </DefaultModal>

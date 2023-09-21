@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
-import PropTypes from 'prop-types';
+
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
@@ -24,12 +25,16 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
   } = useContext(TablesPlanEstudiosContext);
 
   const selectedGrade = grados.semestral;
-
   const errorsAsignatura = errorDatosAsignaturas(
     formAsignaturas,
     setError,
     error,
   );
+  useEffect(() => {
+    if (errorsAsignatura !== undefined) {
+      setErrors(errorsAsignatura);
+    }
+  }, [error]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -52,12 +57,6 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     const { name, value } = e.target;
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-
-  useEffect(() => {
-    if (errorsAsignatura !== undefined) {
-      setErrors(errorsAsignatura);
-    }
-  }, [error]);
 
   const handleOnSubmit = () => {
     handleCreate(
@@ -188,7 +187,9 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             errorMessage={error.horasIndependiente}
           />
         </Grid>
-        <Grid item>
+      </Grid>
+      <Grid container justifyContent="flex-end" marginTop={2}>
+        <Grid item xs={2}>
           <ButtonStyled
             text="Cancelar"
             alt="Cancelar"
@@ -198,7 +199,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             Cancelar
           </ButtonStyled>
         </Grid>
-        <Grid item>
+        <Grid item xs={2}>
           <ButtonStyled
             text="Confirmar"
             alt="Confirmar"

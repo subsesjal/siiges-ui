@@ -119,7 +119,7 @@ export default function TrayectoriaEducativa({ disabled }) {
           <TextField
             id="tipoTutoria"
             name="tipoTutoria"
-            label="tipo de tutoria"
+            label="Tipo de tutoria"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -136,7 +136,7 @@ export default function TrayectoriaEducativa({ disabled }) {
           <TextField
             id="tipoEgreso"
             name="tipoEgreso"
-            label="Tipo de egreso"
+            label="Tasa de egreso"
             rows={4}
             multiline
             sx={{ width: '100%' }}

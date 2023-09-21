@@ -33,7 +33,11 @@ export default function AsignaturasEditModal({
   }, [rowItem]);
 
   const selectedGrade = grados.semestral;
-  const errorsAsignatura = errorDatosAsignaturas(formAsignaturas, setError, error);
+  const errorsAsignatura = errorDatosAsignaturas(
+    formAsignaturas,
+    setError,
+    error,
+  );
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -70,6 +74,8 @@ export default function AsignaturasEditModal({
       1,
     );
   };
+
+  const cancelButtonText = edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar';
 
   return (
     <DefaultModal open={open} setOpen={hideModal} title={edit}>
@@ -205,22 +211,22 @@ export default function AsignaturasEditModal({
         </Grid>
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
-        <ButtonStyled
-          text={edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-          alt={edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-          design="error"
-          onclick={hideModal}
-        >
-          {edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar'}
-        </ButtonStyled>
-        {edit !== 'Consultar Asignatura' && (
+        <Grid item xs={2}>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
-            onclick={handleOnSubmit}
-          >
-            Confirmar
-          </ButtonStyled>
+            text={cancelButtonText}
+            alt={cancelButtonText}
+            design="error"
+            onclick={hideModal}
+          />
+        </Grid>
+        {edit !== 'Consultar Asignatura' && (
+          <Grid item xs={2}>
+            <ButtonStyled
+              text="Confirmar"
+              alt="Confirmar"
+              onclick={handleOnSubmit}
+            />
+          </Grid>
         )}
       </Grid>
     </DefaultModal>

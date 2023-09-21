@@ -202,6 +202,24 @@ export default function DatosPlanEstudios() {
             required
           />
         </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Objetivo Particular"
+            id="objetivoParticular"
+            name="objetivoParticular"
+            auto="objetivoParticular"
+            value={form[1].objetivoParticular}
+            rows={4}
+            multiline
+            sx={{ width: '100%' }}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
+            helperText={error.objetivoParticular}
+            error={!!error.objetivoParticular}
+            required
+          />
+        </Grid>
       </Grid>
     </Grid>
   );
