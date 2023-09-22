@@ -54,7 +54,11 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
   currentPositionY += textHeight + 5; // Espacio después de cada sección
 }
 
-export default function GenerarFDA01(id) {
+
+
+export default function GenerarFDA01(solicitud) {
+  console.log(solicitud);
+  
   const doc = new jsPDF();
 
   doc.addImage(img1, 'JPEG', 0, 15, 70, 19);
@@ -87,7 +91,7 @@ export default function GenerarFDA01(id) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
   doc.setTextColor(0, 0, 0);
-  doc.text(`12/09/23`, 152, 75);
+  doc.text(`12/09/${solicitud.folio}`, 152, 75);
 
   crearSeccion(
     doc,
