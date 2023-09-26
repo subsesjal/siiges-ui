@@ -1,10 +1,30 @@
 import { Grid, Typography } from '@mui/material';
 import { ButtonStyled, Input, DataTable } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { rows, columns } from '../Mocks/inspectores';
+import React, { useEffect, useState } from 'react';
+import { columns } from '../Mocks/inspectores';
+import getInspectoresProgramas from '../../utils/getInspectoresProgramas';
 
 export default function FormAsignacionInspecciones({ solicitud }) {
+  const { inspectoresProgramas, loading } = getInspectoresProgramas();
+  const [inspecciones, setInspecciones] = useState([]);
+
+  const mapSolicitudesToRows = (inspectores) => inspectores.map((inspector) => ({
+    id: inspector.id,
+    nombre: `${inspector.persona.nombre} ${inspector.persona.apellidoPaterno} ${inspector.persona.apellidoMaterno}`,
+    activas: inspector.inspeccionesPendientes,
+    realizadas: inspector.inspeccionesCompletadas,
+    programaId: solicitud.programaId,
+    folio: solicitud.folio,
+    token: solicitud.token,
+  }));
+
+  useEffect(() => {
+    if (!loading && inspectoresProgramas) {
+      const formattedRows = mapSolicitudesToRows(inspectoresProgramas);
+      setInspecciones(formattedRows);
+    }
+  }, [loading, inspectoresProgramas, solicitud]);
   // Solicitud no esta trayendo los datos correctos
   return (
     <Grid container spacing={2}>
@@ -74,7 +94,7 @@ export default function FormAsignacionInspecciones({ solicitud }) {
       <Grid item xs={12}>
         <DataTable
           title="Inspectores"
-          rows={rows}
+          rows={inspecciones}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
@@ -96,5 +116,8 @@ FormAsignacionInspecciones.propTypes = {
     periodo: PropTypes.string,
     institucion: PropTypes.string,
     domicilio: PropTypes.string,
+    programaId: PropTypes.number,
+    folio: PropTypes.string,
+    token: PropTypes.string,
   }).isRequired,
 };
