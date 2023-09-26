@@ -5,6 +5,7 @@ import { Context, Layout, Title } from '@siiges-ui/shared';
 import React,  { useEffect, useState }  from 'react';
 import Link from 'next/link';
 import GenerarFDA01 from '../FDA/FDA01/FDA01';
+import GenerarFDA02 from '../FDA/FDA02/FDA02';
 import { useRouter } from 'next/router';
 import { getSolicitudforPDF } from '@siiges-ui/solicitudes';
 import { useContext } from 'react';
@@ -47,7 +48,7 @@ export default function detallesSolicitudes() {
             <ListItemText primary="FDA 01" />
               </ListItem>
               
-              <ListItem button onClick={() => GenerarFDA02()}>
+              <ListItem button onClick={() => GenerarFDA02(solicitud.data)}>
                 <ListItemText primary="FDA 02" />
               </ListItem>
             <Link href="/destino-url">
