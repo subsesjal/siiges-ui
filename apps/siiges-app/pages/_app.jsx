@@ -4,7 +4,7 @@ import '../styles/globals.css';
 import { CookiesProvider } from 'react-cookie';
 import { ThemeProvider } from '@mui/material/styles';
 import Context from '@siiges-ui/shared/src/utils/handlers/context';
-import theme from './theme';
+import theme from '../styles/theme';
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
