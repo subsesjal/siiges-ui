@@ -56,10 +56,93 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
 
 
 
+
 export default function GenerarFDA01(solicitud) {
   console.log(solicitud);
   
   const doc = new jsPDF();
+
+  var fechaCreacion = solicitud.createdAt;
+
+// Convierte la cadena de texto en un objeto de fecha
+var fecha = new Date(fechaCreacion);
+
+// Obtiene el día, mes y año de la fecha
+var dia = fecha.getDate();
+var mes = fecha.getMonth() + 1; // Los meses son indexados desde 0, por lo que se suma 1
+var año = fecha.getFullYear();
+
+// Formatea la fecha en el formato "día/mes/año"
+var fechaFormateada = dia + '/' + mes + '/' + año;
+
+
+  var tipoSolicitud = ""; // Esta variable almacenará el nombre de la solicitud.
+  if (solicitud.tipoSolicitudId === 1) {
+    tipoSolicitud = "NUEVA SOLICITUD";
+  } else if (solicitud.tipoSolicitudId === 2) {
+    tipoSolicitud = "REFRENDO";
+  } else if (solicitud.tipoSolicitudId === 3) {
+    tipoSolicitud = "CAMBIO DE DOMICILIO";
+  }
+
+  var nombreNivel = ""; 
+if (solicitud.programa.nivelId === 1) {
+  nombreNivel = "Bachillerato";
+} else if (solicitud.programa.nivelId === 2) {
+  nombreNivel = "Licenciatura";
+} else if (solicitud.programa.nivelId === 3) {
+  nombreNivel = "Técnico Superior Universitario";
+} else if (solicitud.programa.nivelId === 4) {
+  nombreNivel = "Especialidad";
+} else if (solicitud.programa.nivelId === 5) {
+  nombreNivel = "Maestría";
+} else if (solicitud.programa.nivelId === 6) {
+  nombreNivel = "Doctorado";
+}
+
+var modalidadTipo = ""; 
+if (solicitud.programa.modalidadId === 1) {
+  modalidadTipo = "Escolarizada";
+} else if (solicitud.programa.modalidadId === 2) {
+  modalidadTipo = "No escolarizada";
+} else if (solicitud.programa.modalidadId === 3) {
+  modalidadTipo = "Mixta";
+} else if (solicitud.programa.modalidadId === 4) {
+  modalidadTipo = "Dual";
+} 
+
+var ciclosTipo = ""; 
+if (solicitud.programa.modalidadId === 1) {
+  ciclosTipo = "Semestral";
+} else if (solicitud.programa.modalidadId === 2) {
+  ciclosTipo = "Cuatrimestral";
+} else if (solicitud.programa.modalidadId === 3) {
+  ciclosTipo = "Anual";
+} else if (solicitud.programa.modalidadId === 4) {
+  ciclosTipo = "Semestral curriculum flexible";
+} else if (solicitud.programa.modalidadId === 5) {
+  ciclosTipo = "Cuatrimestral curriculum flexible";
+} 
+
+var programaTurnos = solicitud.programa.programaTurnos;
+var tiposDeTurno = [];
+programaTurnos.forEach(function(turno) {
+  // Verifica el valor de turnoId y agrega el tipo de turno correspondiente al arreglo tiposDeTurno
+  if (turno.turnoId === 1) {
+    tiposDeTurno.push("Matutino");
+  } else if (turno.turnoId === 2) {
+    tiposDeTurno.push("Vespertino");
+  } else if (turno.turnoId === 3) {
+    tiposDeTurno.push("Nocturno");
+  } else if (turno.turnoId === 4) {
+    tiposDeTurno.push("Mixto");
+  }
+});
+
+// Convierte el arreglo de tipos de turno en un texto separado por comas
+var turnoTipo = tiposDeTurno.join(", ");
+
+
 
   doc.addImage(img1, 'JPEG', 0, 15, 70, 19);
   doc.addImage(img2, 'JPEG', 145, 15, 50, 16);
@@ -91,18 +174,18 @@ export default function GenerarFDA01(solicitud) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
   doc.setTextColor(0, 0, 0);
-  doc.text(`12/09/${solicitud.folio}`, 152, 75);
+  doc.text(fechaFormateada, 152, 75);
 
   crearSeccion(
     doc,
-    'Por este conducto manifiesto que estoy en condiciones para iniciar el trámite de SOLICITUD DE CAMBIO DE DOMICILIO del programa LICENCIATURA en DERECHO, modalidad MIXTA, en periodos CUATRIMESTRAL, turno MATUTINO, VESPERTINO, de la Institución CENTRO UNIVERSITARIO UNE. Así mismo declaro Bajo Protesta de Decir la Verdad que la información y los documentos anexos en la presente solicitud son verídicos y fueron elaborados siguiendo principios éticos profesionales, que son de mi conocimiento las penas en que incurren quienes se conducen con falsedad ante autoridad distinta de la judicial, y señalo como domicilio para recibir notificaciones:'
+    `Por este conducto manifiesto que estoy en condiciones para iniciar el trámite de SOLICITUD DE ${tipoSolicitud} del programa ${nombreNivel} en ${solicitud.programa.nombre}, modalidad ${modalidadTipo}, en periodos ${ciclosTipo}, turno ${turnoTipo}, de la Institución ${solicitud.programa.plantel.institucion.nombre}. Así mismo declaro Bajo Protesta de Decir la Verdad que la información y los documentos anexos en la presente solicitud son verídicos y fueron elaborados siguiendo principios éticos profesionales, que son de mi conocimiento las penas en que incurren quienes se conducen con falsedad ante autoridad distinta de la judicial, y señalo como domicilio para recibir notificaciones:`
   );
 
   crearSeccion(
     doc,
-    `Calle / Av. CHIMALHUACÁN, N° 6, Col. CIUDAD DEL SOL, Municipio ZAPOPAN.
-Número telefónico particular: 80000863
-Número telefónico celular: 80000863`,
+    `Calle: ${solicitud.programa.plantel.domicilio.calle}
+Número telefónico particular: ${solicitud.programa.plantel.telefono1}
+Número telefónico celular: ${solicitud.programa.plantel.telefono2}`,
     'left' // Al cambiar esto a 'right', el contenido se alineará a la derecha
   );
 
