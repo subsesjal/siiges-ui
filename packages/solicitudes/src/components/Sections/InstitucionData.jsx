@@ -114,10 +114,11 @@ function InstitucionData({ id }) {
         </Grid>
         <Grid item xs={12}>
           <InputFile
-            tipoEntidad="PROGRAMA"
-            tipoDocumento="FORMATO_PEDAGOGICO_01"
+            tipoEntidad="INSTITUCION"
+            tipoDocumento="LOGOTIPO"
             id={id}
-            label="FDP01"
+            label="Logo de institución"
+            url={form[1]?.fileUrl}
             setUrl={handleFileUrl}
             disabled={disabled}
           />

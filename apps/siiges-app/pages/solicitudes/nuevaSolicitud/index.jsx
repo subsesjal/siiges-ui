@@ -40,7 +40,7 @@ function newRequest() {
     setModule(module + 1);
   };
 
-  if (modalidad === 'escolarizada') {
+  if (modalidad === '1') {
     return (
       <Layout type={false}>
         <ModuleHeader

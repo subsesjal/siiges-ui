@@ -8,7 +8,6 @@ import errorCurricula from '../utils/sections/errors/errorCurricula';
 
 export default function Curricula({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
-  const [loaded, setLoaded] = useState([]);
   const [fileURLs, setFileURLs] = useState([]);
 
   const {
@@ -16,15 +15,12 @@ export default function Curricula({ disabled }) {
   } = useContext(SolicitudContext);
 
   useEffect(() => {
-    if (fileURLs > 0) {
+    if (fileURLs.length > 0) {
       setForm({ ...form, 5: { ...form['5'], urls: fileURLs } });
     }
   }, [fileURLs]);
 
   const handleFileLoaded = (index, url) => {
-    setLoaded((prevLoaded) => [
-      ...prevLoaded.slice(0, index), true, ...prevLoaded.slice(index + 1),
-    ]);
     setFileURLs((prevURLs) => [
       ...prevURLs.slice(0, index), url, ...prevURLs.slice(index + 1),
     ]);
@@ -149,86 +145,46 @@ export default function Curricula({ disabled }) {
           />
         </Grid>
         <Grid item xs={9}>
-          {loaded[0]
-            ? (
-              <a
-                href={fileURLs[0]}
-                alt="alt text"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Mapa Curricular
-              </a>
-            ) : <div />}
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="MAPA_CURRICULAR"
             id={id}
             label="Mapa curricular"
-            setuRL={(url) => handleFileLoaded(0, url)}
+            url={fileURLs[0]}
+            setUrl={(url) => handleFileLoaded(0, url)}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={9}>
-          {loaded[1]
-            ? (
-              <a
-                href={fileURLs[1]}
-                alt="alt text"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Reglas de operacion de las academias
-              </a>
-            ) : <div />}
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="REGLAS_ACADEMICAS"
             id={id}
             label="Reglas de operacion de las academias"
-            setuRL={(url) => handleFileLoaded(1, url)}
+            url={fileURLs[1]}
+            setUrl={(url) => handleFileLoaded(1, url)}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={9}>
-          {loaded[2]
-            ? (
-              <a
-                href={fileURLs[2]}
-                alt="alt text"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Asignaturas a detalle
-              </a>
-            ) : <div />}
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="ASIGNATURAS_DETALLE"
             id={id}
             label="Asignaturas a detalle"
-            setuRL={(url) => handleFileLoaded(2, url)}
+            url={fileURLs[2]}
+            setUrl={(url) => handleFileLoaded(2, url)}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={9}>
-          {loaded[3]
-            ? (
-              <a
-                href={fileURLs[3]}
-                alt="alt text"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Propuesta hemerobibliografica
-              </a>
-            ) : <div />}
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="PROPUESTA_HEMEROGRAFICA"
             id={id}
             label="Propuesta hemerobibliografica"
-            setuRL={(url) => handleFileLoaded(3, url)}
+            url={fileURLs[3]}
+            setUrl={(url) => handleFileLoaded(3, url)}
             disabled={disabled}
           />
         </Grid>

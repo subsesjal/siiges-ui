@@ -85,6 +85,7 @@ export default function NombresPropuestos({ disabled, id }) {
             tipoDocumento="BIOGRAFIA"
             id={id}
             label="Biografía o Fundamento"
+            url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
             disabled={disabled}
           />
@@ -95,6 +96,7 @@ export default function NombresPropuestos({ disabled, id }) {
             tipoDocumento="BIBLIOGRAFIA"
             id={id}
             label="Bibliografía para fuente de consulta"
+            url={fileURLs[1]}
             setUrl={(url) => handleFileLoaded(1, url)}
             disabled={disabled}
           />

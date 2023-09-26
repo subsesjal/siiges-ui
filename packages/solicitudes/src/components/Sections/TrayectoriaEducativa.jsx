@@ -8,8 +8,7 @@ import formtrayectoria from '../utils/sections/forms/formTrayectoria';
 
 export default function TrayectoriaEducativa({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
-  const [loaded, setLoaded] = useState([]);
-  const [fileURLs, setFileURLs] = useState([]);
+  const [fileURLs, setFileURLs] = useState(Array(3).fill(''));
   const [areFilesLoaded, setAreFilesLoaded] = useState([false, false, false]);
 
   const {
@@ -31,11 +30,6 @@ export default function TrayectoriaEducativa({ disabled }) {
   }, [fileURLs]);
 
   const handleFileLoaded = (index, url) => {
-    setLoaded((prevLoaded) => [
-      ...prevLoaded.slice(0, index),
-      true,
-      ...prevLoaded.slice(index + 1),
-    ]);
     setFileURLs((prevURLs) => [
       ...prevURLs.slice(0, index),
       url,
@@ -184,64 +178,34 @@ export default function TrayectoriaEducativa({ disabled }) {
           />
         </Grid>
         <Grid item xs={12}>
-          {loaded[0]
-            ? (
-              <a
-                href={fileURLs[0]}
-                alt="alt text"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Informe de resultados
-              </a>
-            ) : <div />}
           <InputFile
             tipoEntidad="TRAYECTORIA"
             tipoDocumento="INFORME_RESULTADOS_TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Informe de resultados"
+            url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
-          {loaded[1]
-            ? (
-              <a
-                href={fileURLs[1]}
-                alt="alt text"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Instrumentos de seguimiento
-              </a>
-            ) : <div />}
           <InputFile
             tipoEntidad="TRAYECTORIA"
             tipoDocumento="INSTRUMENTOS_TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Instrumentos o formatos utilizados para dar seguimiento al programa de trayectoria y tutoría académica"
             setUrl={(url) => handleFileLoaded(1, url)}
+            url={fileURLs[1]}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
-          {loaded[2]
-            ? (
-              <a
-                href={fileURLs[2]}
-                alt="alt text"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Trayectoria educativa
-              </a>
-            ) : <div />}
           <InputFile
             tipoEntidad="TRAYECTORIA"
             tipoDocumento="TRAYECTORIA_EDUCATIVA"
             id={id}
             label="Trayectoria educativa y tutoría de los estudiantes (opcional)"
+            url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
             disabled={disabled}
           />

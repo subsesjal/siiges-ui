@@ -204,6 +204,7 @@ function RepresentanteLegalData({ id }) {
             tipoDocumento="FIRMA_REPRESENTANTE"
             id={id}
             label="Subir firma"
+            url={form[2]?.fileUrl}
             setUrl={handleFileUrl}
             disabled={disabled}
           />

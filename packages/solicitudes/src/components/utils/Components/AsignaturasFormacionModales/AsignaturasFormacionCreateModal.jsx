@@ -16,6 +16,7 @@ export default function AsignaturasFormacionCreateModal({
   title,
 }) {
   const {
+    asignaturasFormacionList,
     setAsignaturasFormacionList,
     formAsignaturasFormacion,
     setFormAsignaturasFormacion,
@@ -158,13 +159,13 @@ export default function AsignaturasFormacionCreateModal({
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
-            id="seriacion"
-            label="Seriacion"
+          <BasicSelect
+            title="Seriacion"
             name="seriacion"
-            auto="seriacion"
+            value=""
+            options={asignaturasFormacionList || []}
             onchange={handleOnChange}
-            onfocus={handleInputFocus}
+            textValue
           />
         </Grid>
         <Grid item xs={6}>

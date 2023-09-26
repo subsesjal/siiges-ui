@@ -23,6 +23,7 @@ export default function AsignaturasEditModal({
     formAsignaturas,
     setFormAsignaturas,
     setInitialValues,
+    asignaturasList,
     setAsignaturasList,
     id,
     setNoti,
@@ -168,15 +169,13 @@ export default function AsignaturasEditModal({
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
-            id="seriacion"
-            label="Seriacion"
+          <BasicSelect
+            title="Seriacion"
             name="seriacion"
-            auto="seriacion"
             value={rowItem.seriacion}
+            options={asignaturasList || []}
             onchange={handleOnChange}
-            onfocus={handleInputFocus}
-            disabled={edit === 'Consultar Asignatura'}
+            textValue
           />
         </Grid>
         <Grid item xs={6}>

@@ -12,6 +12,7 @@ import { area, grados } from '../../Mocks/mockAsignaturas';
 
 export default function AsignaturasCreateModal({ open, hideModal, title }) {
   const {
+    asignaturasList,
     setAsignaturasList,
     formAsignaturas,
     setFormAsignaturas,
@@ -152,13 +153,13 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
-            id="seriacion"
-            label="Seriacion"
+          <BasicSelect
+            title="Seriacion"
             name="seriacion"
-            auto="seriacion"
+            value=""
+            options={asignaturasList || []}
             onchange={handleOnChange}
-            onfocus={handleInputFocus}
+            textValue
           />
         </Grid>
         <Grid item xs={6}>
