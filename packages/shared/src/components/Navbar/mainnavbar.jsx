@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,10 +11,10 @@ import { MenuItem, Select } from '@mui/material';
 import LogoWhite from '../Images/LogoWhite';
 import MenuNavbar from './MenuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
+import { Context } from '../../utils/handlers/context';
 
-export default function MainNavbar({
-  menuSwitch, section, setSection, rol,
-}) {
+export default function MainNavbar({ menuSwitch, section, setSection }) {
+  const { session } = useContext(Context);
   const options = [
     { id: 1, nombre: 'Incorporación' },
     { id: 2, nombre: 'Servicios escolares' },
@@ -70,8 +70,8 @@ export default function MainNavbar({
           >
             <b>SIIGES</b>
           </Typography>
-          {rol === 'admin' && (
-            <div className="select-container">
+          {session.rol === 'admin' && (
+            <div style={{ position: 'relative' }}>
               <Select
                 value={section}
                 onChange={(e) => setSection(e.target.value)}
@@ -102,6 +102,5 @@ export default function MainNavbar({
 MainNavbar.propTypes = {
   menuSwitch: PropTypes.func.isRequired,
   section: PropTypes.number.isRequired,
-  rol: PropTypes.string.isRequired,
   setSection: PropTypes.func.isRequired,
 };
