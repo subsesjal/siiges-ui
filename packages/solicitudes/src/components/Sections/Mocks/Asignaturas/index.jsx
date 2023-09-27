@@ -11,11 +11,7 @@ const columns = () => [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => (
-      <AsignaturasButtons
-        id={params.id}
-      />
-    ),
+    renderCell: (params) => <AsignaturasButtons id={params.id} />,
     sortable: false,
     filterable: false,
   },

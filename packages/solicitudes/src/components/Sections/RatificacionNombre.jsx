@@ -1,8 +1,11 @@
 import { Grid, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useContext } from 'react';
+import PlantelContext from '../utils/Context/plantelContext';
 
 export default function RatificacionNombre() {
+  const { form } = useContext(PlantelContext);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -11,34 +14,45 @@ export default function RatificacionNombre() {
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={12}>
           <Input
-            id="nameRequest"
+            id="nombreSolicitado"
             label="Nombre solicitado"
-            name="nameRequest"
-            auto="nameRequest"
+            name="nombreSolicitado"
+            auto="nombreSolicitado"
+            value={form[6].nombreSolicitado}
+            required
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
           <Input
-            id="nameAutorized"
+            id="nombreAutorizado"
             label="Nombre autorizado"
-            name="nameAutorized"
-            auto="nameAutorized"
+            name="nombreAutorizado"
+            auto="nombreAutorizado"
+            value={form[6].nombreAutorizado}
+            required
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
           <Input
-            id="agreement"
+            id="acuerdo"
             label="Acuerdo"
-            name="agreement"
-            auto="agreement"
+            name="acuerdo"
+            auto="acuerdo"
+            value={form[6].acuerdo}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
           <Input
-            id="autorizedInstance"
+            id="instanciaAutoriza"
             label="Instancia que autoriza"
-            name="autorizedInstance"
-            auto="autorizedInstance"
+            name="instanciaAutoriza"
+            auto="instanciaAutoriza"
+            value={form[6].instanciaAutoriza}
+            required
+            disabled
           />
         </Grid>
       </Grid>

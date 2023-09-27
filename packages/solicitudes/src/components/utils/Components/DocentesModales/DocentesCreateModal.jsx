@@ -26,6 +26,9 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
 
+  const errorsDocentes = errorDatosDocentes(formDocentes, setError);
+  const asignaturas = getAsignaturas(programaId);
+
   const [currentSection, setCurrentSection] = useState(1);
 
   const handleOnChange = (e) => {
@@ -56,9 +59,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
       };
     });
   };
-
-  const errorsDocentes = errorDatosDocentes(formDocentes, setError);
-  const asignaturas = getAsignaturas(programaId);
 
   const handleOnBlur = (e) => {
     const { name, value } = e.target;

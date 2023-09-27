@@ -12,7 +12,9 @@ import LogoWhite from '../Images/LogoWhite';
 import MenuNavbar from './MenuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 
-export default function MainNavbar({ menuSwitch, section, setSection }) {
+export default function MainNavbar({
+  menuSwitch, section, setSection, rol,
+}) {
   const options = [
     { id: 1, nombre: 'Incorporación' },
     { id: 2, nombre: 'Servicios escolares' },
@@ -68,22 +70,31 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
           >
             <b>SIIGES</b>
           </Typography>
-          <div style={{ position: 'relative' }}>
-            <Select
-              value={section}
-              onChange={(e) => setSection(e.target.value)}
-              sx={customSelectStyles}
-            >
-              {options.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.nombre}
-                </MenuItem>
-              ))}
-            </Select>
-          </div>
+          {rol === 'admin' && (
+            <div className="select-container">
+              <Select
+                value={section}
+                onChange={(e) => setSection(e.target.value)}
+                sx={customSelectStyles}
+              >
+                {options.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.nombre}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+          )}
           <MenuNavbar />
         </Toolbar>
       </AppBar>
+      <style jsx>
+        {`
+          .select-container {
+            position: relative;
+          }
+        `}
+      </style>
     </Box>
   );
 }
@@ -91,5 +102,6 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
 MainNavbar.propTypes = {
   menuSwitch: PropTypes.func.isRequired,
   section: PropTypes.number.isRequired,
+  rol: PropTypes.string.isRequired,
   setSection: PropTypes.func.isRequired,
 };

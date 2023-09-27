@@ -1,4 +1,4 @@
-const handleEdit = (
+const handleEdit = async (
   form,
   setForm,
   setInitialValues,
@@ -6,45 +6,66 @@ const handleEdit = (
   hideModal,
   errors,
   setNoti,
-  id,
+  programaId,
   tipo,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
 
-  const isValid = Object.keys(errors).every((campo) => errors[campo]());
-  if (!isValid) {
+  try {
+    const isValid = Object.keys(errors).every((campo) => errors[campo]());
+
+    if (!isValid) {
+      setNoti({
+        open: true,
+        message: 'Algo salió mal, revisa que los campos estén correctos',
+        type: 'error',
+      });
+      return;
+    }
+
+    const response = await fetch(`${url}/api/v1/asignaturas/${form.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', api_key: apikey },
+      body: JSON.stringify(form),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    const updatedData = { ...form, id: data.data.id };
+
+    setAsignaturasList((prevList) => {
+      const newList = prevList.map((item) => {
+        if (item.id === updatedData.id) {
+          return updatedData;
+        }
+        return item;
+      });
+      return newList;
+    });
+
+    setForm({ programaId, tipo });
+    setInitialValues({});
+    hideModal();
+
     setNoti({
       open: true,
-      message: 'Algo salió mal, revisa que los campos estén correctos',
+      message: 'Edición de datos exitoso!',
+      type: 'success',
+    });
+  } catch (error) {
+    console.error('Error:', error);
+
+    setNoti({
+      open: true,
+      message: 'Ocurrio un error al guardar los datos. Porfavor intentelo de nuevo.',
       type: 'error',
     });
-    return;
   }
-
-  fetch(`${url}/api/v1/asignaturas/${form.id}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', api_key: apikey },
-    body: JSON.stringify(form),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      const updatedData = { ...form, id: data.data.id };
-      setAsignaturasList((prevList) => {
-        const newList = [...prevList];
-        const index = newList.findIndex((item) => item.id === updatedData.id);
-        if (index !== -1) {
-          newList[index] = updatedData;
-        }
-        return newList;
-      });
-      setForm({ programaId: id, tipo });
-      setInitialValues({});
-      hideModal();
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
 };
 
 export default handleEdit;
