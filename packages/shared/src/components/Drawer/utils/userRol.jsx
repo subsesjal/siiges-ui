@@ -33,19 +33,19 @@ export default function userRol(session, setUsers, section, institucionRoute) {
     if (section === 1) {
       setUsers([
         {
-          text: 'Mis usuarios',
+          text: 'Usuarios',
           icon: <GroupIcon />,
           route: '/usuarios',
           key: 'users',
         },
         {
-          text: 'Mis instituciones',
+          text: 'Instituciones',
           icon: <BusinessIcon />,
           route: '/institucion/instituciones',
           key: 'intitutions',
         },
         {
-          text: 'Mis solicitudes',
+          text: 'Solicitudes',
           icon: <DescriptionIcon />,
           route: '/solicitudes',
           key: 'solicitudes',
