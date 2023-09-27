@@ -63,48 +63,54 @@ export default function GenerarFDA01(solicitud) {
   const doc = new jsPDF();
 
   function crearSeccionConTabla1(doc, titulo, tablaData, tableOptions = {}) {
-    
-    // Titulo de la sección
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 5;
+    const availableSpace = pageHeight - margin;
+    const textHeight = doc.getTextDimensions(titulo, { align: 'justify', maxWidth: 175 }).h;
+
+    if (currentPositionY + textHeight + 20 > availableSpace) {
+        doc.addPage();
+        currentPositionY = margin; // Reiniciar la posición vertical en la nueva página
+    }
+
+    // Título de la sección
     doc.setFillColor(172, 178, 183);
     crearCelda(
-      doc,
-      14,     // cellX
-      currentPositionY, // cellY
-      182,    // cellWidth
-      7,      // cellHeight
-      titulo
+        doc,
+        14,                 // cellX
+        currentPositionY,   // cellY
+        182,                // cellWidth
+        7,                  // cellHeight
+        titulo
     );
-  
+
     const startY = currentPositionY + (tableOptions.spaceBeforeTable || 5);
 
-  const textHeight = doc.getTextDimensions(titulo, { align: 'justify', maxWidth: 175 }).h;
+    const previousY = currentPositionY; // Guardar la posición antes de crear la tabla
 
-  if (currentPositionY + textHeight + 25 > doc.internal.pageSize.height - 20) {
-    doc.addPage();
-    currentPositionY = 20; // Reiniciar la posición vertical en la nueva página
-  }
+    doc.autoTable({
+        startY: startY,
+        head: [tablaData.headers], // Encabezados de la tabla
+        body: tablaData.body,     // Datos de la tabla
+        theme: "grid",
+        styles: {
+            lineColor: [0, 0, 0],
+            lineWidth: 0.3,
+        },
+        headStyles: {
+            fillColor: [172, 178, 183],
+            fontSize: 12,
+            textColor: [20, 20, 20],
+        },
+        ...tableOptions, // Opciones adicionales de la tabla
+    });
 
-  doc.autoTable({
-    startY: startY,
-    head: [tablaData.headers], // Encabezados de la tabla
-    body: tablaData.body, // Datos de la tabla
-    theme: "grid",
-    styles: {
-      lineColor: [0, 0, 0],
-      lineWidth: 0.3,
-    },
-    headStyles: {
-      fillColor: [172, 178, 183],
-      fontSize: 12,
-      textColor: [20, 20, 20],
-    },
-    ...tableOptions, // Opciones adicionales de la tabla
-  });
+    const tableHeight = currentPositionY - previousY; // Altura real de la tabla
 
-  const tableHeight = doc.previousAutoTable.finalY - startY;
-
-  currentPositionY += tableHeight + 20; // Espacio después de la tabla
+    currentPositionY += tableHeight + 20; // Espacio después de la tabla
 }
+  
+  
 
   //---------------------------------------------------------------------------------------
 
@@ -417,6 +423,8 @@ var turnoTipo = tiposDeTurno.join(", ");
 
   });
   currentPositionY = doc.previousAutoTable.finalY - 20;
+
+  
     
   const headers8 = [
     "NÚMERO TELEFÓNICO",
@@ -435,9 +443,155 @@ var turnoTipo = tiposDeTurno.join(", ");
 
   currentPositionY = doc.previousAutoTable.finalY + 10;
   
-
+const tablaData9 = {
+      headers: ["NOMBRE (S)", "APELLIDO PATERNO", "APELLIDO MATERNO"],
+      body: [
+        ['ADRIANA', 'DE LOS REYES', 'MORENO'],
+      ],
+    };
+    
+    crearSeccionConTabla1(doc, "DATOS DEL RECTOR", tablaData9, {
+      spaceBeforeTable: 7,
+      ...tablaData9, // Pasa los estilos de la tabla como parte de las opciones
+    });
+    
+    currentPositionY = doc.previousAutoTable.finalY ;
   
+    const headers10 = [
+      "CORREO INSTITUCIONAL",
+      "CORREO PERSONAL",
+      "TELÉFONO CELULAR",
 
+    ];
+    const tableData10 = [
+      ['primercorreo@hotmail.com','tercercorre@gmail.com', '234131313123']
+    ];
+    generateTable(doc, headers10, tableData10, currentPositionY, {
+      fillColor: [172, 178, 183],
+      fontSize: 12,
+      textColor: [20, 20, 20],
+
+    });
+
+    const tablaData11 = {
+      headers: ["GRADO EDUCATIVO", "NOMBRE DE LOS ESTUDIOS"],
+      body: [
+        ['LICENCIATURA','MEDIOS MASIVOS DE COMUNICACIÓN'],
+      ],
+    };
+    
+    crearSeccionConTabla1(doc, "FORMACIÓN ACADÉMICA", tablaData11, {
+      spaceBeforeTable: 7,
+      ...tablaData11, // Pasa los estilos de la tabla como parte de las opciones
+    });
+
+    currentPositionY = doc.previousAutoTable.finalY + 10;
+  
+const tablaData12 = {
+      headers: ["NOMBRE (S)", "APELLIDO PATERNO", "APELLIDO MATERNO"],
+      body: [
+        ['ADRIANA', 'DE LOS REYES', 'MORENO'],
+      ],
+    };
+    
+    crearSeccionConTabla1(doc, "DATOS DEL DIRECTOR", tablaData12, {
+      spaceBeforeTable: 7,
+      ...tablaData12, // Pasa los estilos de la tabla como parte de las opciones
+    });
+    
+    currentPositionY = doc.previousAutoTable.finalY;
+  
+    const headers14 = [
+      "CORREO INSTITUCIONAL",
+      "CORREO PERSONAL",
+      "TELÉFONO CELULAR",
+
+    ];
+    const tableData14 = [
+      ['primercorreo@hotmail.com','tercercorre@gmail.com', '234131313123']
+    ];
+    generateTable(doc, headers14, tableData14, currentPositionY, {
+      fillColor: [172, 178, 183],
+      fontSize: 12,
+      textColor: [20, 20, 20],
+
+    });
+    
+
+    const tablaData15 = {
+      headers: ["GRADO EDUCATIVO", "NOMBRE DE LOS ESTUDIOS"],
+      body: [
+        ['LICENCIATURA','MEDIOS MASIVOS DE COMUNICACIÓN'],
+      ],
+    };
+    
+    crearSeccionConTabla1(doc, "FORMACIÓN ACADÉMICA", tablaData15, {
+      spaceBeforeTable: 7,
+      ...tablaData15, // Pasa los estilos de la tabla como parte de las opciones
+    });
+    
+    currentPositionY = doc.previousAutoTable.finalY + 5; // Espacio después de la celda
+
+    const tablaData16 = {
+      headers: ["Nombre", "datos"],
+      body: [
+        ['NOMBRE COMPLETO', 'ANA FERNANDA NAVARRO GONZÁLEZ'],
+        ['CARGO', 'VOCAL ACADÉMICA'],
+        ['NÚMERO TELEFÓNICO ', '4747466124, 3787900984'],
+        ['CORREO ELECTRÓNICO', 'primer@gmail.com'],
+        ['HORARIO DE ATENCIÓN', '9 A 14 Y DE 16 A 19 HORAS'],
+      ],
+      showHead: false,
+      columnStyles: {
+        0: {
+          fillColor: [172, 178, 183],
+        },
+        1: {
+          fontStyle: "bold",
+        },
+      },
+    };
+    
+    crearSeccionConTabla1(doc, `PERSONAL DESIGNADO PARA REALIZAR LAS DILIGENCIAS DE LA SOLICITUD DE RVOE`, tablaData16, {
+      spaceBeforeTable: 7,
+      ...tablaData16, // Pasa los estilos de la tabla como parte de las opciones
+    });
+    
+    currentPositionY = doc.previousAutoTable.finalY + 10; // Espacio después de la celda
+
+
+    const tablaData17 = {
+      headers: ["Nombre", "datos"],
+      body: [
+        ['NOMBRE PROPUESTO No. 1', 'CENTRO EDUCATIVO EL SALTO'],
+        ['NOMBRE PROPUESTO No. 2', 'CENTRO DE FORMACIÓN EL SALTO'],
+        ['NOMBRE PROPUESTO No. 3', 'CENTRO DE EDUCACIÓN EL SALTO'],
+      ],
+      showHead: false,
+      columnStyles: {
+        0: {
+          fillColor: [172, 178, 183],
+        },
+        1: {
+          fontStyle: "bold",
+        },
+      },
+    };
+    
+    crearSeccionConTabla1(doc, "NOMBRES PROPUESTOS PARA LA INSTITUCIÓN EDUCATIVA", tablaData17, {
+      spaceBeforeTable: 7,
+      ...tablaData17, // Pasa los estilos de la tabla como parte de las opciones
+    });
+
+
+    currentPositionY += 30;
+
+    crearSeccion(
+      doc,
+      `                                                   BAJO PROTESTA DE DECIR VERDAD
+                                                      GUILLERMO GÓNGORA CHALITA`,
+      'left'
+    );
 
 
 
