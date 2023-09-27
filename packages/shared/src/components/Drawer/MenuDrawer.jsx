@@ -11,6 +11,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
+import { getInstitucionUsuario } from '@siiges-ui/instituciones';
 import userRol from './utils/userRol';
 
 const drawerWidth = 240;
@@ -55,15 +56,27 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MenuDrawer({
+function MenuDrawer({
   open, openFunction, closeFunction, section,
 }) {
   const { session } = useContext(Context);
   const [users, setUsers] = useState([]);
+  const [institucionRoute, setInstitucionRoute] = useState(
+    '/institucion/nuevaInstitucion',
+  );
+  const { institucion } = getInstitucionUsuario();
 
   useEffect(() => {
-    userRol(session, setUsers, section);
-  }, [session, section]);
+    if (institucion) {
+      setInstitucionRoute(
+        `/institucion/${institucion.id}/consultarInstitucion`,
+      );
+    }
+  }, [institucion]);
+
+  useEffect(() => {
+    userRol(session, setUsers, section, institucionRoute);
+  }, [session, section, institucionRoute]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -109,3 +122,5 @@ MenuDrawer.propTypes = {
   closeFunction: PropTypes.func.isRequired,
   section: PropTypes.number.isRequired,
 };
+
+export default MenuDrawer;

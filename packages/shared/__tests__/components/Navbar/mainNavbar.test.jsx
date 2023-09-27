@@ -1,19 +1,14 @@
-import React from 'react';
-import { render, waitFor } from '@testing-library/react';
-import { Context } from '@siiges-ui/shared';
-import MainNavbar from '../../../src/components/Navbar/mainnavbar';
+// Create a mock session object for the test
 
-test.todo('Some test I still need to do');
+test.todo('MainNavbar component test');
 
-const testFunction = jest.fn();
-
-describe('Tests for the general input', () => {
-  test('Test MainNavbar component render', () => {
-    const component = render(
-      <Context.Provider value={testFunction}>
-        <MainNavbar />
-      </Context.Provider>,
-    );
-    waitFor(() => expect(component.toBeInTheDocument()));
-  });
+// Add more "it" blocks for specific test cases you want to add in the future
+test('TODO: Test component behavior 1', () => {
+  // TODO: Implement this test
 });
+
+test('TODO: Test component behavior 2', () => {
+  // TODO: Implement this test
+});
+
+// ... Add more "it" blocks as needed

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,8 +11,10 @@ import { MenuItem, Select } from '@mui/material';
 import LogoWhite from '../Images/LogoWhite';
 import MenuNavbar from './MenuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
+import { Context } from '../../utils/handlers/context';
 
 export default function MainNavbar({ menuSwitch, section, setSection }) {
+  const { session } = useContext(Context);
   const options = [
     { id: 1, nombre: 'Incorporación' },
     { id: 2, nombre: 'Servicios escolares' },
@@ -68,19 +70,21 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
           >
             <b>SIIGES</b>
           </Typography>
-          <div style={{ position: 'relative' }}>
-            <Select
-              value={section}
-              onChange={(e) => setSection(e.target.value)}
-              sx={customSelectStyles}
-            >
-              {options.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.nombre}
-                </MenuItem>
-              ))}
-            </Select>
-          </div>
+          {session.rol === 'admin' && (
+            <div style={{ position: 'relative' }}>
+              <Select
+                value={section}
+                onChange={(e) => setSection(e.target.value)}
+                sx={customSelectStyles}
+              >
+                {options.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.nombre}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+          )}
           <MenuNavbar />
         </Toolbar>
       </AppBar>
