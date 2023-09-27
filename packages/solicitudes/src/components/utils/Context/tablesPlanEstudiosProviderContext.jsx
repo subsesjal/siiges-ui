@@ -28,7 +28,7 @@ export function TablesPlanEstudiosProvider({ children }) {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (id) {
+    if (programaId) {
       setFormAsignaturas((prevForm) => ({
         ...prevForm,
         programaId,
@@ -42,7 +42,7 @@ export function TablesPlanEstudiosProvider({ children }) {
         programaId,
       }));
     }
-  }, [id]);
+  }, [programaId]);
 
   const contextValue = useMemo(
     () => ({

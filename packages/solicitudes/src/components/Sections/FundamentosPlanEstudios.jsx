@@ -5,14 +5,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import SolicitudContext from '../utils/Context/solicitudContext';
 
 export default function FundamentosPlanEstudios({ disabled }) {
-  const [loaded, setLoaded] = useState(false);
   const { form, setForm, id } = useContext(SolicitudContext);
   const [url, setUrl] = useState();
+
   useEffect(() => {
     if (url !== undefined) {
       setForm({ ...form, 2: { ...form['2'], url } });
     }
-  }, [loaded]);
+  }, [url]); // Only run the effect when `url` changes
+
+  console.log(url);
 
   return (
     <Grid container spacing={2}>
@@ -21,18 +23,16 @@ export default function FundamentosPlanEstudios({ disabled }) {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 0, width: '100%' }}>
         <Grid item xs={9}>
-          {form[2].url ? <div />
-            : (
-              <InputFile
-                tipoEntidad="PROGRAMA"
-                tipoDocumento="FORMATO_PEDAGOGICO_01"
-                id={id}
-                label="FDP01"
-                setLoaded={setLoaded}
-                setUrl={setUrl}
-                disabled={disabled}
-              />
-            )}
+          <InputFile
+            tipoEntidad="PROGRAMA"
+            tipoDocumento="FORMATO_PEDAGOGICO_01"
+            id={id}
+            label="FDP01"
+            setLoaded={() => {}}
+            url={url}
+            setUrl={setUrl}
+            disabled={disabled}
+          />
         </Grid>
         <Grid item xs={12}>
           <Typography>

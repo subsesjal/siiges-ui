@@ -70,6 +70,14 @@ export default function errorDatosPlanEstudios(form, setError, error) {
       setError({ ...error, objetivoGeneral: '' });
       return true;
     },
+    objetivoParticular: () => {
+      if (formData.objetivoParticular === undefined || formData.objetivoParticular === '') {
+        setError({ ...error, objetivoParticular: 'Objetivo particular invalido' });
+        return false;
+      }
+      setError({ ...error, objetivoParticular: '' });
+      return true;
+    },
   };
 
   return errors;

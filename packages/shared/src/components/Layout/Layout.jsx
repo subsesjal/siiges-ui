@@ -1,16 +1,18 @@
 import { Card, CardContent, Container } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import MenuDrawer from '../Drawer/MenuDrawer';
 import MainNavbar from '../Navbar/MainNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 import Title from '../Title';
+import { Context } from '../../utils/handlers/context';
 
 export default function Overlay({
   children, title, subtitle, type,
 }) {
   const [open, setOpen] = useState(false);
   const [section, setSection] = useState(1);
+  const { session } = useContext(Context);
   const onClickChange = () => {
     setOpen(!open);
   };
@@ -43,6 +45,7 @@ export default function Overlay({
         menuSwitch={() => onClickChange()}
         section={section}
         setSection={setSection}
+        rol={session.rol}
       />
       <MenuDrawer
         open={open}

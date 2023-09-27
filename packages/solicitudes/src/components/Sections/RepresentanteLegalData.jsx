@@ -10,10 +10,6 @@ import formDatosRepresentante from '../utils/sections/forms/formDatosRepresentan
 function RepresentanteLegalData({ id }) {
   const { municipios } = getMunicipios();
   const { user } = getCurrentUser();
-  let options = [];
-  if (municipios) {
-    options = municipios.data.filter((municipio) => municipio.estadoId === 14);
-  }
 
   const {
     disabled, setDisabled, form, setForm,
@@ -164,7 +160,7 @@ function RepresentanteLegalData({ id }) {
             title="Municipio"
             name="municipioId"
             value={user?.persona?.domicilio?.municipio?.id}
-            options={options}
+            options={municipios}
             onchange={handleOnChange}
             disabled={disabled}
           />
@@ -208,6 +204,7 @@ function RepresentanteLegalData({ id }) {
             tipoDocumento="FIRMA_REPRESENTANTE"
             id={id}
             label="Subir firma"
+            url={form[2]?.fileUrl}
             setUrl={handleFileUrl}
             disabled={disabled}
           />

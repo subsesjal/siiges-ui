@@ -1,23 +1,21 @@
-export default function submitInstitucion(
+export default function submitHigienesPlantel(
   validations,
-  sections,
-  id,
   token,
   setNoti,
-  router,
+  plantelId,
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { form } = validations;
 
-  fetch(`${url}/api/v1/solicitudes/${id}`, {
-    method: 'PATCH',
+  fetch(`${url}/api/v1/planteles/${plantelId}/higienes`, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       api_key: apikey,
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(form[sections]),
+    body: JSON.stringify(form[3]),
   })
     .then((response) => {
       if (response.ok) {
@@ -25,21 +23,12 @@ export default function submitInstitucion(
       }
       throw new Error('Error submitting the request');
     })
-    .then((data) => {
+    .then(() => {
       setNoti({
         open: true,
         message: 'Exito, no hubo problemas en esta sección',
         type: 'success',
       });
-
-      const newPlantelId = data.data.programa.plantelId;
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: { ...router.query, plantel: newPlantelId },
-        },
-        '/solicitudes/nuevaSolicitud',
-      );
     })
     .catch((err) => {
       console.error('Error:', err);

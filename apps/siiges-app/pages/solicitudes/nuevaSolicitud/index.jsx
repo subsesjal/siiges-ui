@@ -34,12 +34,13 @@ function newRequest() {
   const { modalidad } = query;
   const [module, setModule] = useState(0);
   const [id, setId] = useState();
+  const [programaId, setProgramaId] = useState();
 
   const nextModule = () => {
     setModule(module + 1);
   };
 
-  if (modalidad === 'escolarizada') {
+  if (modalidad === '1') {
     return (
       <Layout type={false}>
         <ModuleHeader
@@ -50,11 +51,23 @@ function newRequest() {
           module={module}
           id={id}
         />
-        {module === 0 && <PlanEstudios nextModule={nextModule} id={id} setId={setId} />}
+        {module === 0 && (
+          <PlanEstudios
+            nextModule={nextModule}
+            id={id}
+            setId={setId}
+            programaId={programaId}
+            setProgramaId={setProgramaId}
+          />
+        )}
         {module === 1 && <DatosGenerales nextModule={nextModule} id={id} />}
-        {module === 2 && <Plantel nextModule={nextModule} id={id} />}
+        {module === 2 && (
+          <Plantel nextModule={nextModule} id={id} programaId={programaId} />
+        )}
         {module === 3 && <Anexos nextModule={nextModule} id={id} />}
-        {module === 4 && <EvaluacionCurricular nextModule={nextModule} id={id} />}
+        {module === 4 && (
+          <EvaluacionCurricular nextModule={nextModule} id={id} />
+        )}
       </Layout>
     );
   }
@@ -67,9 +80,17 @@ function newRequest() {
         nextModule={nextModule}
         module={module}
       />
-      {module === 0 && <PlanEstudios nextModule={nextModule} id={id} setId={setId} />}
+      {module === 0 && (
+        <PlanEstudios
+          nextModule={nextModule}
+          id={id}
+          setId={setId}
+          programaId={programaId}
+          setProgramaId={setProgramaId}
+        />
+      )}
       {module === 1 && <DatosGenerales nextModule={nextModule} id={id} />}
-      {module === 2 && <Plantel nextModule={nextModule} id={id} />}
+      {module === 2 && <Plantel nextModule={nextModule} id={id} programaId={programaId} />}
       {module === 3 && <PlataformaEducativa nextModule={nextModule} id={id} />}
       {module === 4 && <Anexos nextModule={nextModule} id={id} />}
       {module === 5 && <EvaluacionCurricular nextModule={nextModule} id={id} />}

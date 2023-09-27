@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
-import PropTypes from 'prop-types';
+
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import { grados, area } from '../../Mocks/mockAsignaturas';
@@ -15,6 +16,7 @@ export default function AsignaturasFormacionCreateModal({
   title,
 }) {
   const {
+    asignaturasFormacionList,
     setAsignaturasFormacionList,
     formAsignaturasFormacion,
     setFormAsignaturasFormacion,
@@ -24,7 +26,6 @@ export default function AsignaturasFormacionCreateModal({
     setErrors,
     initialValues,
     setInitialValues,
-    id,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
 
@@ -35,6 +36,12 @@ export default function AsignaturasFormacionCreateModal({
     setError,
     error,
   );
+
+  useEffect(() => {
+    if (errorsAsignatura !== undefined) {
+      setErrors(errorsAsignatura);
+    }
+  }, [error]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -58,12 +65,6 @@ export default function AsignaturasFormacionCreateModal({
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  useEffect(() => {
-    if (errorsAsignatura !== undefined) {
-      setErrors(errorsAsignatura);
-    }
-  }, [error]);
-
   const handleOnSubmit = () => {
     handleCreate(
       formAsignaturasFormacion,
@@ -73,7 +74,6 @@ export default function AsignaturasFormacionCreateModal({
       hideModal,
       errors,
       setNoti,
-      id,
       2,
     );
   };
@@ -145,7 +145,7 @@ export default function AsignaturasFormacionCreateModal({
             errorMessage={error.creditos}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Input
             id="formacionEspecializada"
             label="Formacion especializada"
@@ -158,14 +158,14 @@ export default function AsignaturasFormacionCreateModal({
             errorMessage={error.formacionEspecializada}
           />
         </Grid>
-        <Grid item xs={6}>
-          <Input
-            id="seriacion"
-            label="Seriacion"
+        <Grid item xs={12}>
+          <BasicSelect
+            title="Seriacion"
             name="seriacion"
-            auto="seriacion"
+            value=""
+            options={asignaturasFormacionList || []}
             onchange={handleOnChange}
-            onfocus={handleInputFocus}
+            textValue
           />
         </Grid>
         <Grid item xs={6}>
@@ -194,7 +194,9 @@ export default function AsignaturasFormacionCreateModal({
             errorMessage={error.horasIndependiente}
           />
         </Grid>
-        <Grid item>
+      </Grid>
+      <Grid container justifyContent="flex-end" marginTop={2}>
+        <Grid item xs={2}>
           <ButtonStyled
             text="Cancelar"
             alt="Cancelar"
@@ -204,7 +206,7 @@ export default function AsignaturasFormacionCreateModal({
             Cancelar
           </ButtonStyled>
         </Grid>
-        <Grid item>
+        <Grid item xs={2}>
           <ButtonStyled
             text="Confirmar"
             alt="Confirmar"

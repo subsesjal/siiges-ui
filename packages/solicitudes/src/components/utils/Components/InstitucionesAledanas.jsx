@@ -1,20 +1,18 @@
-import { IconButton, Stack } from '@mui/material';
-import DescriptionIcon from '@mui/icons-material/Description';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { IconButton, Stack } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState, useContext } from 'react';
-import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
-import AsignaturasEditModal from './AsignaturasModales/AsignaturasEditModal';
-import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
+import DeleteInstitucionesAledanas from './InstitucionesAledanas/DeleteInstitucionesAledanas';
+import InstitucionAledanaEditModal from './InstitucionesAledanas/InstitucionAledanaEditModal';
+import PlantelContext from '../Context/plantelContext';
 
-export default function AsignaturasButtons({ id }) {
+export default function InstitucionesAledanasButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
-  const { asignaturasList } = useContext(TablesPlanEstudiosContext);
-  const rowItem = asignaturasList.find((item) => item.id === id);
+  const { institucionesAledanas } = useContext(PlantelContext);
+  const rowItem = institucionesAledanas.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);
@@ -36,9 +34,6 @@ export default function AsignaturasButtons({ id }) {
 
   return (
     <Stack direction="row" spacing={1}>
-      <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
-        <DescriptionIcon />
-      </IconButton>
       <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
         <EditIcon />
       </IconButton>
@@ -47,16 +42,20 @@ export default function AsignaturasButtons({ id }) {
       </IconButton>
 
       {modalOpen && (
-        <AsignaturasEditModal
+        <InstitucionAledanaEditModal
           hideModal={handleModalClose}
           rowItem={rowItem}
           open={modalOpen}
-          edit={isEdit ? 'Editar Asignatura' : 'Consultar Asignatura'}
+          edit={
+            isEdit
+              ? 'Editar Instituciones Aledañas'
+              : 'Consultar Instituciones Aledañas'
+          }
         />
       )}
 
       {deleteDialogOpen && (
-        <DeleteAsignatura
+        <DeleteInstitucionesAledanas
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
           rowItem={rowItem}
@@ -66,6 +65,9 @@ export default function AsignaturasButtons({ id }) {
   );
 }
 
-AsignaturasButtons.propTypes = {
+InstitucionesAledanasButtons.propTypes = {
   id: PropTypes.number.isRequired,
+  rowItem: PropTypes.shape({
+    programaID: PropTypes.number,
+  }).isRequired,
 };

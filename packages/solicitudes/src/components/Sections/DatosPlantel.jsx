@@ -1,48 +1,49 @@
+import React, { useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Grid, TextField, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import React, { useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import getMunicipios from '@siiges-ui/instituciones/src/components/utils/getMunicipios';
 import getPlantelesUsuario from '../utils/getPlantelesUsuario';
 import PlantelContext from '../utils/Context/plantelContext';
 import formPrograma from '../utils/sections/forms/formPrograma';
 
-export default function DatosPlantel({ disabled }) {
-  const { query } = useRouter();
+export default function DatosPlantel({
+  disabled,
+  plantelesData,
+  setPlantelesData,
+}) {
   const { planteles } = getPlantelesUsuario();
   const { setForm } = useContext(PlantelContext);
   const [plantelesSelect, setPlantelesSelect] = useState([]);
-  const [plantelesData, setPlantelesData] = useState({});
-  const [plantelId, setPlantelId] = useState(query.plantel);
-  const { municipios } = getMunicipios();
-  const [municipioId, setMunicipioId] = useState();
 
   useEffect(() => {
     if (planteles) {
-      const mappedPlanteles = planteles.map((plantel) => ({
-        id: plantel.id,
-        nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+      const mappedPlanteles = planteles.map(({ id, domicilio }) => ({
+        id,
+        nombre: `${domicilio.calle} ${domicilio.numeroExterior}`,
       }));
       setPlantelesSelect(mappedPlanteles);
-
       const selectedPlantel = planteles.find(
-        (plantel) => plantel.id === Number(plantelId),
+        (plantel) => plantel.id === Number(plantelesData.plantelId),
       );
-      if (selectedPlantel) {
-        setPlantelesData(selectedPlantel);
-      }
+      setPlantelesData((prevData) => ({
+        ...prevData,
+        ...selectedPlantel,
+      }));
     }
-    if (!plantelesData.domicilio) {
-      setMunicipioId(plantelesData?.domicilio?.municipioId);
-    }
-  }, [planteles, plantelId, municipios, plantelesData, municipioId]);
+  }, [planteles, plantelesData.plantelId]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formPrograma(name, value, setForm, 1);
-    setPlantelId(value);
+    const selectedPlantel = planteles.find(
+      (plantel) => plantel.id === Number(value),
+    );
+    setPlantelesData((prevData) => ({
+      ...prevData,
+      plantelId: value,
+      ...selectedPlantel,
+    }));
   };
 
   return (
@@ -56,7 +57,7 @@ export default function DatosPlantel({ disabled }) {
             title="Plantel"
             name="plantelId"
             options={plantelesSelect}
-            value={plantelId || ''}
+            value={plantelesData.plantelId}
             onchange={handleOnChange}
             disabled={disabled}
           />
@@ -208,11 +209,12 @@ export default function DatosPlantel({ disabled }) {
           />
         </Grid>
         <Grid item xs={3}>
-          <BasicSelect
-            title="Municipio"
-            name="municipioId"
-            value={municipioId || ''}
-            options={municipios}
+          <Input
+            id="municipio"
+            label="Municipio"
+            name="municipio"
+            auto="municipio"
+            value={plantelesData?.domicilio?.municipio?.nombre}
             disabled
           />
         </Grid>
@@ -243,4 +245,6 @@ export default function DatosPlantel({ disabled }) {
 
 DatosPlantel.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  plantelesData: PropTypes.objectOf(PropTypes.string).isRequired,
+  setPlantelesData: PropTypes.func.isRequired,
 };

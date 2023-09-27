@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState, useContext } from 'react';
-import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
-import AsignaturasEditModal from './AsignaturasModales/AsignaturasEditModal';
-import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
+import PlantelContext from '../Context/plantelContext';
+import DeleteInfraestructura from './InfraestructuraModales/DeleteInfraestructura';
+import InfraestructuraEditModal from './InfraestructuraModales/InfraestructuraEditModal';
 
-export default function AsignaturasButtons({ id }) {
+export default function InfraestructurasButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const { asignaturasList } = useContext(TablesPlanEstudiosContext);
-  const rowItem = asignaturasList.find((item) => item.id === id);
+  const { infraestructuras } = useContext(PlantelContext);
+  const rowItem = infraestructuras.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);
@@ -47,16 +47,16 @@ export default function AsignaturasButtons({ id }) {
       </IconButton>
 
       {modalOpen && (
-        <AsignaturasEditModal
+        <InfraestructuraEditModal
           hideModal={handleModalClose}
           rowItem={rowItem}
           open={modalOpen}
-          edit={isEdit ? 'Editar Asignatura' : 'Consultar Asignatura'}
+          edit={isEdit ? 'Editar Infraestructura' : 'Consultar Infraestructura'}
         />
       )}
 
       {deleteDialogOpen && (
-        <DeleteAsignatura
+        <DeleteInfraestructura
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
           rowItem={rowItem}
@@ -66,6 +66,9 @@ export default function AsignaturasButtons({ id }) {
   );
 }
 
-AsignaturasButtons.propTypes = {
+InfraestructurasButtons.propTypes = {
   id: PropTypes.number.isRequired,
+  rowItem: PropTypes.shape({
+    programaID: PropTypes.number,
+  }).isRequired,
 };
