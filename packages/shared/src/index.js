@@ -31,6 +31,7 @@ import LoadCircle from './components/Resources/LoadCircle';
 import InputPassword from './components/Input/InputPassword';
 import ButtonStyled from './components/Buttons/ButtonStyled';
 import getCurrentUser from './utils/handlers/getCurrentUser';
+import { setToken, getToken } from './utils/handlers/globals';
 import ActionButtons from './components/Buttons/ActionButtons';
 import ListSubtitle from './components/ListItems/ListSubtitle';
 import SubmitDocument from './components/Submit/SubmitDocument';
@@ -48,6 +49,8 @@ export {
   GetFile,
   Context,
   Overlay,
+  setToken,
+  getToken,
   HomePage,
   InputFile,
   ButtonAdd,

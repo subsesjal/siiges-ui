@@ -1,37 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import DatosGeneralesEvaluacion from '../../Sections/DatosGeneralesEvaluacion';
+import { EvaluacionCurricularProvider } from '../../utils/Context/evaluacionCurricularContext';
 
-export default function EvaluacionCurricular({ nextModule }) {
+export default function EvaluacionCurricular({ nextModule, id, programaId }) {
+  console.log(programaId);
+  const [disabled, setDisabled] = useState(true);
+
   const {
-    next,
-    prev,
-    section,
-    position,
-    porcentaje,
+    next, prev, section, position, porcentaje,
   } = pagination(useState, 1);
+
+  useEffect(() => {
+    if (id !== undefined) {
+      setDisabled(false);
+    }
+  }, [id]);
+
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
-        <SectionLayout
-          sectionTitle="Evaluación Curricular"
-          sections={section}
-          position={position}
-          total="1"
-          porcentage={porcentaje}
-          nextModule={nextModule}
-          next={next}
-          prev={prev}
-        >
-          {section === 1 && <DatosGeneralesEvaluacion />}
-        </SectionLayout>
+        <EvaluacionCurricularProvider programaId={programaId}>
+          <SectionLayout
+            sectionTitle="Evaluación Curricular"
+            sections={section}
+            position={position}
+            total="1"
+            porcentage={porcentaje}
+            nextModule={nextModule}
+            next={next}
+            prev={prev}
+          >
+            {section === 1 && (
+              <DatosGeneralesEvaluacion
+                disabled={disabled}
+              />
+            )}
+          </SectionLayout>
+        </EvaluacionCurricularProvider>
       </CardContent>
     </Card>
   );
 }
 EvaluacionCurricular.propTypes = {
   nextModule: PropTypes.func.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
+    .isRequired,
+  programaId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([undefined]),
+  ]).isRequired,
 };

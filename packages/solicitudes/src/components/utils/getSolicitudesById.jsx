@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Context } from '@siiges-ui/shared';
+import { Context, getToken } from '@siiges-ui/shared';
 
 export default function getSolicitudesById(id) {
   const { session, setNoti } = useContext(Context);
@@ -30,6 +30,7 @@ export default function getSolicitudesById(id) {
 
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
+  const token = getToken();
 
   useEffect(() => {
     if (session && id !== undefined) {
@@ -38,6 +39,7 @@ export default function getSolicitudesById(id) {
         method: 'GET',
         headers: {
           api_key: apikey,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((response) => {
@@ -64,7 +66,6 @@ export default function getSolicitudesById(id) {
             periodo: ciclos[solicitud.programa.cicloId],
             programaId: solicitud.programa.id,
             folio: solicitud.folio,
-            token: session.token,
           });
           setLoading(false);
         })

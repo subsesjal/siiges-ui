@@ -1,3 +1,5 @@
+import { getToken } from '@siiges-ui/shared';
+
 const handleEdit = (
   form,
   setForm,
@@ -7,10 +9,10 @@ const handleEdit = (
   errors,
   setNoti,
   plantelId,
-  token,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
+  const token = getToken();
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
   if (!isValid) {

@@ -1,12 +1,10 @@
-export default function submitHigienesPlantel(
-  validations,
-  token,
-  setNoti,
-  plantelId,
-) {
+import { getToken } from '@siiges-ui/shared';
+
+export default function submitHigienesPlantel(validations, setNoti, plantelId) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { form } = validations;
+  const token = getToken();
 
   fetch(`${url}/api/v1/planteles/${plantelId}/higienes`, {
     method: 'POST',

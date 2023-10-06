@@ -1,10 +1,11 @@
-import { Context } from '@siiges-ui/shared';
+import { Context, getToken } from '@siiges-ui/shared';
 import { useContext, useEffect, useState } from 'react';
 
 export default function getUsers() {
   const [users, setUser] = useState();
   const [loading, setLoading] = useState(false);
   const { session } = useContext(Context);
+  const token = getToken();
   const active = 1;
   let userData = {};
   let varUrl;
@@ -21,7 +22,7 @@ export default function getUsers() {
     fetch(varUrl, {
       headers: {
         api_key: apikey,
-        Authorization: `Bearer ${session.token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())

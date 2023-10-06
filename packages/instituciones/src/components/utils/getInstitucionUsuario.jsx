@@ -1,10 +1,11 @@
-import { Context } from '@siiges-ui/shared';
+import { Context, getToken } from '@siiges-ui/shared';
 import { useContext, useEffect, useState } from 'react';
 
 export default function getInstitucionUsuario() {
   const [institucion, setInstitucion] = useState();
   const [loading, setLoading] = useState(false);
   const { session } = useContext(Context);
+  const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
 
@@ -17,7 +18,7 @@ export default function getInstitucionUsuario() {
           {
             headers: {
               api_key: apikey,
-              Authorization: `Bearer ${session.token}`,
+              Authorization: `Bearer ${token}`,
             },
           },
         );

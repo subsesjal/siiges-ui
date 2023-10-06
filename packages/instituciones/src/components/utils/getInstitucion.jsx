@@ -1,12 +1,12 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Context } from '@siiges-ui/shared';
+import { getToken } from '@siiges-ui/shared';
 
 export default function getInstitucion() {
   const [institucion, setInstitucion] = useState();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { session } = useContext(Context);
+  const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
 
@@ -14,7 +14,7 @@ export default function getInstitucion() {
     if (router.isReady) {
       const { institucionId } = router.query;
       fetch(`${url}/api/v1/instituciones/${institucionId}/planteles`, {
-        headers: { api_key: apikey, Authorization: `Bearer ${session.token}` },
+        headers: { api_key: apikey, Authorization: `Bearer ${token}` },
       })
         .then((response) => response.json())
         .then((data) => {

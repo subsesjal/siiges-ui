@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Grid, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { ButtonsForm, DefaultModal, Input } from '@siiges-ui/shared';
+import {
+  ButtonsForm, DefaultModal, Input, getToken,
+} from '@siiges-ui/shared';
 
 const apikey = process.env.NEXT_PUBLIC_API_KEY;
 const url = process.env.NEXT_PUBLIC_URL;
@@ -46,7 +48,8 @@ const columns = [
         return date;
       };
 
-      const fetchData = async ({ path, token, dataBody }) => {
+      const fetchData = async ({ path, dataBody }) => {
+        const token = getToken();
         const response = await fetch(`${url}/api/v1/${path}`, {
           method: 'POST',
           headers: {
@@ -141,8 +144,9 @@ const columns = [
                     {' '}
                     {inspector.nombre}
                     {' '}
-                    p/migrar RVOES SICYT para que
-                    realice la visita de inspeccion. ¿Esta usted seguro?
+                    p/migrar
+                    RVOES SICYT para que realice la visita de inspeccion. ¿Esta
+                    usted seguro?
                   </Card>
                 </Grid>
                 <Grid item xs={6}>

@@ -1,3 +1,5 @@
+import { getToken } from '@siiges-ui/shared';
+
 const handleEdit = async (
   form,
   setForm,
@@ -11,6 +13,7 @@ const handleEdit = async (
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
+  const token = getToken();
 
   try {
     const isValid = Object.keys(errors).every((campo) => errors[campo]());
@@ -26,7 +29,11 @@ const handleEdit = async (
 
     const response = await fetch(`${url}/api/v1/asignaturas/${form.id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', api_key: apikey },
+      headers: {
+        'Content-Type': 'application/json',
+        api_key: apikey,
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(form),
     });
 
@@ -62,7 +69,8 @@ const handleEdit = async (
 
     setNoti({
       open: true,
-      message: 'Ocurrio un error al guardar los datos. Porfavor intentelo de nuevo.',
+      message:
+        'Ocurrio un error al guardar los datos. Porfavor intentelo de nuevo.',
       type: 'error',
     });
   }

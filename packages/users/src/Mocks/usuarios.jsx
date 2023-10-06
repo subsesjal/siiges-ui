@@ -1,7 +1,5 @@
-import React, { useContext, useState } from 'react';
-import {
-  ActionButtons, ButtonStyled, DefaultModal, Context,
-} from '@siiges-ui/shared';
+import React, { useState } from 'react';
+import { ActionButtons, ButtonStyled, DefaultModal } from '@siiges-ui/shared';
 import { Grid, Typography } from '@mui/material';
 import deleteUser from '../utils/deleteUser';
 
@@ -39,7 +37,6 @@ const columns = [
     width: 150,
     renderCell: (params) => {
       const { modal, showModal, hideModal } = ModalState();
-      const { session } = useContext(Context);
       return (
         <>
           <ActionButtons
@@ -66,7 +63,7 @@ const columns = [
                   alt="Confirmar"
                   design="error"
                   onclick={() => {
-                    deleteUser(params.id, session.token);
+                    deleteUser(params.id);
                   }}
                 >
                   Confirmar

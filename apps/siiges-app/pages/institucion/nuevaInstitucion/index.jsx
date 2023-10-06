@@ -13,7 +13,7 @@ export default function NuevaInstitucion() {
   const [errors, setErrors] = useState({});
 
   const handleConfirm = () => {
-    createInstitucion(institucionForm, errors, setNoti, router, session.token);
+    createInstitucion(institucionForm, errors, setNoti, router);
   };
 
   const handleCancel = () => {

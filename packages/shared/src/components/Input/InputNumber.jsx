@@ -16,21 +16,31 @@ function InputNumber({
   onblur,
   onfocus,
   negative,
+  min,
+  max,
 }) {
   const [input, setInput] = useState(value);
+  const [rangeError, setRangeError] = useState(null);
 
   const handleOnChange = (e) => {
     const newValue = e.target.value;
     const numberRegex = negative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
+    const floatValue = newValue === '' ? null : parseFloat(newValue);
 
     if (numberRegex.test(newValue)) {
       setInput(newValue);
       onchange({
         target: {
           name,
-          value: newValue === '' ? null : parseFloat(newValue),
+          value: floatValue,
         },
       });
+
+      if ((min !== null && floatValue < min) || (max !== null && floatValue > max)) {
+        setRangeError(`Number must be between ${min} and ${max}`);
+      } else {
+        setRangeError(null);
+      }
     }
   };
 
@@ -49,8 +59,8 @@ function InputNumber({
       onChange={handleOnChange}
       onBlur={onblur}
       onFocus={onfocus}
-      helperText={errorMessage}
-      error={!!errorMessage}
+      helperText={rangeError || errorMessage}
+      error={!!rangeError || !!errorMessage}
       className="data-form"
       type="text"
     />
@@ -67,6 +77,8 @@ InputNumber.defaultProps = {
   onblur: () => {},
   onfocus: () => {},
   negative: false,
+  min: null,
+  max: null,
 };
 
 InputNumber.propTypes = {
@@ -83,6 +95,8 @@ InputNumber.propTypes = {
   size: PropTypes.string,
   auto: PropTypes.string.isRequired,
   negative: PropTypes.bool,
+  min: PropTypes.number,
+  max: PropTypes.number,
 };
 
 export default InputNumber;

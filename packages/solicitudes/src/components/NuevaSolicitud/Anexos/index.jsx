@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
-import RatificacionNombre from '../../Sections/AnexosSeccion';
+import AnexosSeccion from '../../Sections/AnexosSeccion';
 
-export default function Anexos({ nextModule }) {
+export default function Anexos({ nextModule, id }) {
+  const [form, setForm] = useState([]);
+  const [disabled, setDisabled] = useState(true);
+
   const {
-    next,
-    prev,
-    section,
-    position,
-    porcentaje,
+    next, prev, section, position, porcentaje,
   } = pagination(useState, 1);
+
+  useEffect(() => {
+    if (id !== undefined) {
+      setDisabled(false);
+    }
+  }, [id]);
+
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
@@ -26,7 +32,14 @@ export default function Anexos({ nextModule }) {
           next={next}
           prev={prev}
         >
-          {section === 1 && <RatificacionNombre />}
+          {section === 1 && (
+            <AnexosSeccion
+              form={form}
+              setForm={setForm}
+              disabled={disabled}
+              id={id}
+            />
+          )}
         </SectionLayout>
       </CardContent>
     </Card>
@@ -35,4 +48,6 @@ export default function Anexos({ nextModule }) {
 
 Anexos.propTypes = {
   nextModule: PropTypes.func.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
+    .isRequired,
 };

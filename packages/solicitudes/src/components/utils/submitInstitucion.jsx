@@ -1,11 +1,18 @@
-export default function submitInstitucion(validations, sections, id) {
+import { getToken } from '@siiges-ui/shared';
+
+export default function submitInstitucion(validations, sections, setNoti) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const { form, setNoti } = validations;
+  const { form } = validations;
+  const token = getToken();
 
-  fetch(`${url}/api/v1/instituciones/${id}`, {
+  fetch(`${url}/api/v1/instituciones/${form[sections].id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', api_key: apikey },
+    headers: {
+      'Content-Type': 'application/json',
+      api_key: apikey,
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(form[sections]),
   })
     .then((response) => {

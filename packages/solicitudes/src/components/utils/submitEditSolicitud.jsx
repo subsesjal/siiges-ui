@@ -1,9 +1,10 @@
+import { getToken } from '@siiges-ui/shared';
+
 export default function submitEditSolicitud(validations, sections, id) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const {
-    errors, form, setNoti,
-  } = validations;
+  const { errors, form, setNoti } = validations;
+  const token = getToken();
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
   if (!isValid) {
@@ -17,7 +18,11 @@ export default function submitEditSolicitud(validations, sections, id) {
 
   fetch(`${url}/api/v1/solicitudes/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', api_key: apikey },
+    headers: {
+      'Content-Type': 'application/json',
+      api_key: apikey,
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(form[sections]),
   })
     .then((response) => {

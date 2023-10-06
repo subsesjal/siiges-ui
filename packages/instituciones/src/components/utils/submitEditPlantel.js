@@ -1,6 +1,8 @@
+import { getToken } from '@siiges-ui/shared';
 import router from 'next/router';
 
-export default function submitEditPlantel(form, setNoti, token) {
+export default function submitEditPlantel(form, setNoti) {
+  const token = getToken();
   const { institucionId, plantelId } = router.query;
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;

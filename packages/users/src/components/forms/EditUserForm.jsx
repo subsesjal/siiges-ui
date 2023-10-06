@@ -1,5 +1,4 @@
-import { Context } from '@siiges-ui/shared';
-import { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import router from 'next/router';
 import { Grid } from '@mui/material';
 import {
@@ -19,7 +18,6 @@ export default function EditUserForm({ user }) {
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
-  const { session } = useContext(Context);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -246,7 +244,7 @@ export default function EditUserForm({ user }) {
         </Grid>
         <ButtonsForm
           cancel={() => router.back()}
-          confirm={() => submitEditUser(errors, error, form, setNoti, user.data.id, session.token)}
+          confirm={() => submitEditUser(errors, error, form, setNoti, user.data.id)}
         />
       </Grid>
       <SnackAlert

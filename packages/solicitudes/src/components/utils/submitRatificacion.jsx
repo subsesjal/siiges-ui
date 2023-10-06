@@ -1,9 +1,10 @@
-export default function submitRatificacion(validations, token, setNoti) {
+import { getToken } from '@siiges-ui/shared';
+
+export default function submitRatificacion(validations, setNoti) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { form, validNombres } = validations;
-
-  console.log(form[6]);
+  const token = getToken();
 
   if (!validNombres) {
     setNoti({

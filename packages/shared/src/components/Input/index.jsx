@@ -20,10 +20,16 @@ function Input({
   const [input, setInput] = useState(value);
 
   useEffect(() => {
-    if (type === 'time' && value instanceof Date) {
-      const hours = value.getHours().toString().padStart(2, '0');
-      const minutes = value.getMinutes().toString().padStart(2, '0');
-      setInput(`${hours}:${minutes}`);
+    if (value instanceof Date) {
+      if (type === 'time') {
+        const hours = value.getHours().toString().padStart(2, '0');
+        const minutes = value.getMinutes().toString().padStart(2, '0');
+        setInput(`${hours}:${minutes}`);
+      } else if (type === 'datetime') {
+        setInput(value.toISOString().slice(0, 16));
+      } else {
+        setInput(value);
+      }
     } else {
       setInput(value);
     }
@@ -31,11 +37,21 @@ function Input({
 
   const handleOnChange = (e) => {
     const newValue = e.target.value;
+
+    let formattedValue;
+    if (type === 'datetime') {
+      formattedValue = new Date(newValue);
+    } else if (type === 'date' || type === 'time') {
+      formattedValue = newValue;
+    } else {
+      formattedValue = e.target.value;
+    }
+
     setInput(newValue);
     onchange({
       target: {
         name,
-        value: type === 'date' || type === 'time' ? newValue : e.target.value,
+        value: formattedValue,
       },
     });
   };
@@ -48,7 +64,7 @@ function Input({
       label={label}
       required={required}
       disabled={disabled}
-      type={type === 'time' ? 'time' : type}
+      type={type === 'datetime' ? 'datetime-local' : type}
       name={name}
       autoComplete={auto}
       size={size}
@@ -60,7 +76,9 @@ function Input({
       error={!!errorMessage}
       className="data-form"
       InputLabelProps={
-        type === 'date' || type === 'time' ? { shrink: true } : {}
+        type === 'date' || type === 'time' || type === 'datetime'
+          ? { shrink: true }
+          : {}
       }
     />
   );
@@ -90,6 +108,7 @@ Input.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
+    PropTypes.instanceOf(Date),
   ]),
   errorMessage: PropTypes.string,
   type: PropTypes.string,

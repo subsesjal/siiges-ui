@@ -3,35 +3,47 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import ButtonAdd from '../Buttons/ButtonAdd';
 
-function DataTable({ title, rows, columns }) {
-  const [searchText, setSearchText] = React.useState('');
-  const [filteredRows, setFilteredRows] = React.useState();
+function DataTable({
+  title,
+  rows,
+  columns,
+  buttonAdd,
+  buttonText,
+  buttonClick,
+}) {
+  const [searchText, setSearchText] = useState('');
+  const [filteredRows, setFilteredRows] = useState(rows);
+
+  useEffect(() => {
+    setFilteredRows(rows);
+  }, [rows]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchText(value);
-    if (value === '') {
-      setFilteredRows(rows);
-    } else {
-      const filteredData = rows.filter(
-        (row) => Object.values(row).some(
-          (data) => data !== null && data.toString().toLowerCase().includes(value.trim()),
-        ),
-      );
-      setFilteredRows(filteredData);
-    }
+    const filteredData = value
+      ? rows.filter((row) => Object.values(row).some(
+        (data) => data && data.toString().toLowerCase().includes(value.trim()),
+      ))
+      : rows;
+    setFilteredRows(filteredData);
   };
 
   return (
     <>
       <Grid container>
         <Grid item xs={9} sx={{ mt: '20px' }}>
-          <Typography variant="p" sx={{ pt: 5, fontWeight: 'bold' }}>
-            {title}
-          </Typography>
+          {!buttonAdd ? (
+            <ButtonAdd onClick={buttonClick} text={buttonText} />
+          ) : (
+            <Typography variant="h7" sx={{ fontWeight: 'bold' }}>
+              {title}
+            </Typography>
+          )}
         </Grid>
         <Grid item xs={3}>
           <TextField
@@ -59,7 +71,7 @@ function DataTable({ title, rows, columns }) {
       </Grid>
       <div style={{ height: 400, width: '100%', marginTop: 15 }}>
         <DataGrid
-          rows={filteredRows || rows}
+          rows={filteredRows}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
@@ -69,11 +81,21 @@ function DataTable({ title, rows, columns }) {
   );
 }
 
+DataTable.defaultProps = {
+  title: null,
+  buttonAdd: true,
+  buttonText: null,
+  buttonClick: () => {},
+};
+
 DataTable.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   rows: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })).isRequired,
   columns: PropTypes.arrayOf(PropTypes.shape({ width: PropTypes.number }))
     .isRequired,
+  buttonAdd: PropTypes.bool,
+  buttonText: PropTypes.string,
+  buttonClick: PropTypes.func,
 };
 
 export default DataTable;
