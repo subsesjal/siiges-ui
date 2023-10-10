@@ -1,3 +1,5 @@
+import { getToken } from '@siiges-ui/shared';
+
 // Function to build the API URL
 const buildApiUrl = (id) => {
   const baseUrl = process.env.NEXT_PUBLIC_URL;
@@ -13,10 +15,10 @@ const handleEdit = async (
   errors,
   setNoti,
   id,
-  token,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = buildApiUrl(form.id);
+  const token = getToken();
 
   try {
     const isFormValid = Object.keys(errors).every((campo) => errors[campo]());
@@ -27,7 +29,11 @@ const handleEdit = async (
 
     const response = await fetch(url, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', api_key: apikey, Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        api_key: apikey,
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(form),
     });
 

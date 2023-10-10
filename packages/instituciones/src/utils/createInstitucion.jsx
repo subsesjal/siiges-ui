@@ -1,10 +1,12 @@
+import { getToken } from '@siiges-ui/shared';
+
 export default function createInstitucion(
   institucionForm,
   errors,
   setNoti,
   router,
-  token,
 ) {
+  const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
 

@@ -1,3 +1,4 @@
+import { getToken } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 
 export default function submitEditUser(
@@ -6,11 +7,11 @@ export default function submitEditUser(
   form,
   setNoti,
   id,
-  token,
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const router = useRouter();
+  const token = getToken();
 
   const isSuccessResponse = (response) => response.status === 200;
 

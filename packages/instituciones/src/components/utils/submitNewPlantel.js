@@ -1,6 +1,8 @@
+import { getToken } from '@siiges-ui/shared';
 import router from 'next/router';
 
-export default function submitNewPlantel(plantelErrors, form, setNoti, token) {
+export default function submitNewPlantel(plantelErrors, form, setNoti) {
+  const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const isValid = Object.keys(plantelErrors).every((campo) => plantelErrors[campo]());

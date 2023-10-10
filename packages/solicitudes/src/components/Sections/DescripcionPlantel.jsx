@@ -85,7 +85,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={form[2].dimencionesPlantel || ''}
             onchange={handleOnChange}
             required
-            negative
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={4}>

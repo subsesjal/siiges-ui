@@ -1,14 +1,16 @@
+import { getToken } from '@siiges-ui/shared';
+
 export default function submitInstitucion(
   validations,
   sections,
   id,
-  token,
   setNoti,
   router,
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { form } = validations;
+  const token = getToken();
 
   fetch(`${url}/api/v1/solicitudes/${id}`, {
     method: 'PATCH',

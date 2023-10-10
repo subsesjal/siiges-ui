@@ -66,7 +66,7 @@ function newRequest() {
         )}
         {module === 3 && <Anexos nextModule={nextModule} id={id} />}
         {module === 4 && (
-          <EvaluacionCurricular nextModule={nextModule} id={id} />
+          <EvaluacionCurricular nextModule={nextModule} id={id} programaId={programaId} />
         )}
       </Layout>
     );

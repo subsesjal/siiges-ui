@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { Context } from '@siiges-ui/shared';
+import { Context, getToken } from '@siiges-ui/shared';
 
 export default function getSolicitudes() {
   const { session } = useContext(Context);
+  const token = getToken();
   const [solicitudes, setSolicitudes] = useState();
   const [loading, setLoading] = useState(false);
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
@@ -21,6 +22,7 @@ export default function getSolicitudes() {
         headers: {
           method: 'GET',
           api_key: apikey,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((response) => response.json())

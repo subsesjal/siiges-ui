@@ -16,6 +16,8 @@ import PlantelContext from '../utils/Context/plantelContext';
 import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
 import submitHigienesPlantel from '../utils/submitHigienesPlantel';
 import submitRatificacion from '../utils/submitRatificacion';
+import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularContext';
+import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
 
 export default function ButtonSection({
   id,
@@ -26,26 +28,22 @@ export default function ButtonSection({
   sectionTitle,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
-  const { session, setNoti } = useContext(Context);
+  const { setNoti } = useContext(Context);
   const validations = useContext(SolicitudContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
   const plantelesValidations = useContext(PlantelContext);
+  const evaluacionCurricular = useEvaluacionCurricular();
   const router = useRouter();
   let submit;
 
   if (sectionTitle === 'Datos Generales') {
     if (sections === 1) {
       submit = () => {
-        submitInstitucion(datosGeneralesValidations, sections);
+        submitInstitucion(datosGeneralesValidations, sections, setNoti);
       };
     } else if (sections === 2) {
       submit = () => {
-        submitRepresentante(
-          datosGeneralesValidations,
-          sections,
-          session.token,
-          setNoti,
-        );
+        submitRepresentante(datosGeneralesValidations, sections, setNoti);
       };
     } else if (sections === 3) {
       submit = () => {
@@ -57,20 +55,12 @@ export default function ButtonSection({
   } else if (sectionTitle === 'Plantel') {
     if (sections === 1) {
       submit = () => {
-        submitEditPlantel(
-          plantelesValidations,
-          sections,
-          id,
-          session.token,
-          setNoti,
-          router,
-        );
+        submitEditPlantel(plantelesValidations, sections, id, setNoti, router);
       };
     } else if (sections === 2) {
       submit = () => {
         submitDescripcionPlantel(
           plantelesValidations,
-          session.token,
           setNoti,
           router.query.plantel,
         );
@@ -79,14 +69,19 @@ export default function ButtonSection({
       submit = () => {
         submitHigienesPlantel(
           plantelesValidations,
-          session.token,
           setNoti,
           router.query.plantel,
         );
       };
     } else if (sections === 6) {
       submit = () => {
-        submitRatificacion(plantelesValidations, session.token, setNoti);
+        submitRatificacion(plantelesValidations, setNoti);
+      };
+    }
+  } else if (sectionTitle === 'Evaluación Curricular') {
+    if (sections === 1) {
+      submit = () => {
+        submitEvaluacionCurricular(evaluacionCurricular, setNoti);
       };
     }
   } else if (newSubmit) {

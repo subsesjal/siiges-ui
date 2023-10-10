@@ -24,7 +24,7 @@ export default function InfraestructuraCreateModal({
     initialValues,
     setInitialValues,
   } = useContext(PlantelContext);
-  const { setNoti, session } = useContext(Context);
+  const { setNoti } = useContext(Context);
   const { query } = useRouter();
   const asignaturas = getAsignaturas(programaId);
 
@@ -88,7 +88,6 @@ export default function InfraestructuraCreateModal({
       errors,
       setNoti,
       query.plantel,
-      session.token,
     );
   };
 

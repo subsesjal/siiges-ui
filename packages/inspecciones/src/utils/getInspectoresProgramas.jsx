@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { Context } from '@siiges-ui/shared';
+import { Context, getToken } from '@siiges-ui/shared';
 
 export default function getInspectoresProgramas() {
   const { session } = useContext(Context);
+  const token = getToken();
   const [inspectoresProgramas, setInspectoresProgramas] = useState();
   const [loading, setLoading] = useState(true);
   let solicitudData = {};
@@ -15,7 +16,7 @@ export default function getInspectoresProgramas() {
         headers: {
           method: 'GET',
           api_key: apikey,
-          Authorization: `Bearer ${session.token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((response) => response.json())

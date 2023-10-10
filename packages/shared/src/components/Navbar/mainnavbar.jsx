@@ -15,7 +15,6 @@ import { Context } from '../../utils/handlers/context';
 
 export default function MainNavbar({ menuSwitch, section, setSection }) {
   const { session } = useContext(Context);
-
   const options = [
     { id: 1, nombre: 'Incorporación' },
     { id: 2, nombre: 'Servicios escolares' },
@@ -71,7 +70,6 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
           >
             <b>SIIGES</b>
           </Typography>
-
           {session.rol === 'admin' && (
             <div style={{ position: 'relative' }}>
               <Select
@@ -104,6 +102,5 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
 MainNavbar.propTypes = {
   menuSwitch: PropTypes.func.isRequired,
   section: PropTypes.number.isRequired,
-  rol: PropTypes.string.isRequired,
   setSection: PropTypes.func.isRequired,
 };

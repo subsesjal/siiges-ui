@@ -12,6 +12,15 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat',
   },
+  overrides: {
+    MuiInputBase: {
+      input: {
+        '&::-moz-calendar-picker-indicator': {
+          display: 'none',
+        },
+      },
+    },
+  },
 });
 
 export default theme;

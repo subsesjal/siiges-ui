@@ -1,3 +1,5 @@
+import { getToken } from '@siiges-ui/shared';
+
 const handleCreate = async (
   form,
   setForm,
@@ -10,6 +12,7 @@ const handleCreate = async (
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
+  const token = getToken();
 
   try {
     const isValid = Object.keys(errors).every((campo) => errors[campo]());
@@ -26,7 +29,11 @@ const handleCreate = async (
 
     const response = await fetch(`${url}/api/v1/asignaturas`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', api_key: apikey },
+      headers: {
+        'Content-Type': 'application/json',
+        api_key: apikey,
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(form),
     });
 
@@ -34,7 +41,8 @@ const handleCreate = async (
       const networkError = new Error('Network error');
       setNoti({
         open: true,
-        message: 'Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo.',
+        message:
+          'Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo.',
         type: 'error',
       });
       throw networkError;

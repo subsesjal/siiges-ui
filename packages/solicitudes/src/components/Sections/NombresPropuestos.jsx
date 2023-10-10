@@ -14,6 +14,8 @@ export default function NombresPropuestos({ disabled, id }) {
     formDatosSolicitud(name, value, form, setForm, 6);
   };
 
+  console.log(form[6]);
+
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [
       ...prevURLs.slice(0, index),

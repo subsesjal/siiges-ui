@@ -14,6 +14,8 @@ export default function Curricula({ disabled }) {
     form, setForm, error, setError, setErrors, id,
   } = useContext(SolicitudContext);
 
+  const errors = errorCurricula(form, setError, error);
+
   useEffect(() => {
     if (fileURLs.length > 0) {
       setForm({ ...form, 5: { ...form['5'], urls: fileURLs } });
@@ -30,8 +32,6 @@ export default function Curricula({ disabled }) {
     const { name, value } = e.target;
     formPrograma(name, value, setForm, 5);
   };
-
-  const errors = errorCurricula(form, setError, error);
 
   const handleOnBlur = (e) => {
     const { name, value } = e.target;

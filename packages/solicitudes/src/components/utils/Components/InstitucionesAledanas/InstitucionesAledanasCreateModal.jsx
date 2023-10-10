@@ -25,7 +25,7 @@ export default function InstitucionesAledanasCreateModal({
     initialValues,
     setInitialValues,
   } = useContext(PlantelContext);
-  const { setNoti, session } = useContext(Context);
+  const { setNoti } = useContext(Context);
   const { query } = useRouter();
 
   const errorsInstitucionesAledanas = errorDatosInstitucionAledanas(
@@ -79,7 +79,6 @@ export default function InstitucionesAledanasCreateModal({
       errors,
       setNoti,
       query.plantel,
-      session.token,
     );
   };
 

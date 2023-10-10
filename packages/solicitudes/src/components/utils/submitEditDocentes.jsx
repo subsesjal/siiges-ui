@@ -1,3 +1,5 @@
+import { getToken } from '@siiges-ui/shared';
+
 const handleEdit = (
   form,
   setForm,
@@ -11,6 +13,7 @@ const handleEdit = (
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
+  const token = getToken();
 
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
 
@@ -25,7 +28,11 @@ const handleEdit = (
 
   fetch(`${url}/api/v1/docentes/${form.id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', api_key: apikey },
+    headers: {
+      'Content-Type': 'application/json',
+      api_key: apikey,
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(form),
   })
     .then((response) => response.json())

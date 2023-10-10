@@ -1,7 +1,10 @@
-export default function submitRepresentante(validations, sections, token, setNoti) {
+import { getToken } from '@siiges-ui/shared';
+
+export default function submitRepresentante(validations, sections, setNoti) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { form } = validations;
+  const token = getToken();
 
   fetch(`${url}/api/v1/usuarios/${form[sections].id}`, {
     method: 'PATCH',

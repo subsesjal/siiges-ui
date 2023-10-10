@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { Context } from '@siiges-ui/shared';
+import { Context, getToken } from '@siiges-ui/shared';
 
 export default function getAsignaturas(programaId) {
   const { session } = useContext(Context);
+  const token = getToken();
   const [asignaturas, setAsignaturas] = useState([]);
   const [loading, setLoading] = useState(false);
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
@@ -15,6 +16,7 @@ export default function getAsignaturas(programaId) {
         headers: {
           method: 'GET',
           api_key: apikey,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((response) => response.json())

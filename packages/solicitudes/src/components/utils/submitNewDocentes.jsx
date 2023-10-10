@@ -1,3 +1,5 @@
+import { getToken } from '@siiges-ui/shared';
+
 const handleCreate = (
   form,
   setForm,
@@ -12,6 +14,7 @@ const handleCreate = (
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const isValid = Object.keys(errors).every((campo) => errors[campo]());
+  const token = getToken();
 
   if (!isValid) {
     setNoti({
@@ -24,7 +27,11 @@ const handleCreate = (
 
   fetch(`${url}/api/v1/docentes`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', api_key: apikey },
+    headers: {
+      'Content-Type': 'application/json',
+      api_key: apikey,
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(form),
   })
     .then((response) => response.json())

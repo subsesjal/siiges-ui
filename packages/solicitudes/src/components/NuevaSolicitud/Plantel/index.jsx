@@ -25,7 +25,7 @@ export default function Plantel({ nextModule, id, programaId }) {
 
   useEffect(() => {
     setDisabled(!id);
-    if (institucion !== undefined) {
+    if (!loading && institucion) {
       if (
         !institucion.ratificacionNombre
         || (Array.isArray(institucion.ratificacionNombre)
@@ -34,13 +34,17 @@ export default function Plantel({ nextModule, id, programaId }) {
         setRatificacion(<NombresPropuestos disabled={disabled} id={institucion.id} />);
       }
     }
-  }, [id, loading]);
+  }, [id, loading, disabled, institucion]);
 
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 6);
 
   const renderSection6 = () => (section === 6 ? ratificacion : null);
+
+  if (loading) {
+    return null; // Or return a loading spinner or placeholder
+  }
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>

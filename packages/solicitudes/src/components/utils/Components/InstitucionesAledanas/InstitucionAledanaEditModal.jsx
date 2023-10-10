@@ -26,7 +26,7 @@ export default function InstitucionAledanaEditModal({
     setInitialValues,
   } = useContext(PlantelContext);
 
-  const { setNoti, session } = useContext(Context);
+  const { setNoti } = useContext(Context);
   const { query } = useRouter();
 
   useEffect(() => {
@@ -77,7 +77,6 @@ export default function InstitucionAledanaEditModal({
       errors,
       setNoti,
       query.plantel,
-      session.token,
     );
   };
 
