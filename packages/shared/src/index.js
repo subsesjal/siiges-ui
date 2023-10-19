@@ -22,6 +22,7 @@ import MenuDrawer from './components/Drawer/MenuDrawer';
 import MainNavbar from './components/Navbar/MainNavbar';
 import ListTitle from './components/ListItems/ListTitle';
 import InputNumber from './components/Input/InputNumber';
+import ButtonIcon from './components/Buttons/ButtonIcon';
 import ParseCookies from './utils/handlers/cookieHandler';
 import LoginLayout from './components/Layout/LoginLayout';
 import ButtonsForm from './components/Buttons/ButtonsForm';
@@ -64,6 +65,7 @@ export {
   LoadCircle,
   MainNavbar,
   LinkButton,
+  ButtonIcon,
   InputNumber,
   ButtonsForm,
   ButtonLogin,
