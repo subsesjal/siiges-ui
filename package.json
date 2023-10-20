@@ -57,6 +57,8 @@
 		"cookie": "^0.5.0",
 		"date-fns": "^2.30.0",
 		"dayjs": "^1.11.10",
+		"jspdf": "^2.5.1",
+		"jspdf-autotable": "^3.7.0",
 		"mui-file-dropzone": "^4.0.2",
 		"react": "^18.2.0",
 		"react-cookie": "^4.1.1",
