@@ -1,7 +1,13 @@
-import React from 'react'
+import { DataTable } from '@siiges-ui/shared';
+import React from 'react';
+import columnsProgramas from '../../../Tables/programas';
 
-export default function ProgramasTable() {
+export default function ProgramasTable({ programas }) {
   return (
-    <div>ProgramasTable</div>
-  )
+    <DataTable
+      rows={programas}
+      columns={columnsProgramas}
+      title="Tabla de programas"
+    />
+  );
 }

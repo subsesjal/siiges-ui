@@ -1,35 +1,53 @@
 import { Grid } from '@mui/material';
-import { getInstituciones, getPlantelesByInstitucion } from '@siiges-ui/instituciones';
-import { ButtonIcon } from '@siiges-ui/shared';
-import BasicSelect from '@siiges-ui/shared/src/components/Select';
+import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
+import { Select } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
-import FindInPageIcon from '@mui/icons-material/FindInPage';
 
-export default function ProgramasForm() {
-  const [selectedInstitucion, setSelectedInstitucion] = useState("");
+export default function ProgramasForm({ setProgramas }) {
+  const [selectedInstitucion, setSelectedInstitucion] = useState('');
+  const [selectedPlantel, setSelectedPlantel] = useState('');
   const [planteles, setPlanteles] = useState([]);
   const [isPlantelesDisabled, setIsPlantelesDisabled] = useState(true);
 
   const { instituciones } = getInstituciones();
 
-  console.log(getPlantelesByInstitucion);
-
   useEffect(() => {
     if (selectedInstitucion) {
-      console.log(selectedInstitucion);
-      const { planteles } = getPlantelesByInstitucion(selectedInstitucion);
-      setPlanteles(planteles);
-      setIsPlantelesDisabled(false);
+      getPlantelesByInstitucion(selectedInstitucion, (error, data) => {
+        if (error) {
+          console.error("Failed to fetch planteles:", error);
+          setPlanteles([]);
+          setIsPlantelesDisabled(true);
+        } else {
+          const transformedPlanteles = data.planteles.map(plantel => ({
+            id: plantel.id,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`
+          }));
+          setPlanteles(transformedPlanteles);
+          setIsPlantelesDisabled(false);
+        }
+      });
     } else {
       setPlanteles([]);
       setIsPlantelesDisabled(true);
     }
-  }, [selectedInstitucion]);
+    if (selectedPlantel) {
+      getProgramas(selectedPlantel, (error, data) => {
+        if (error) {
+          console.error("Failed to fetch programas:", error);
+          setProgramas([]);
+        } else {
+          setProgramas(data.programas);
+        }
+      });
+    }
+  }, [selectedInstitucion, selectedPlantel]);
+
 
   return (
     <Grid container spacing={2} alignItems="center">
-      <Grid item xs={4}>
-        <BasicSelect
+      <Grid item xs={6}>
+        <Select
           title="Instituciones"
           name="instituciones"
           value={selectedInstitucion}
@@ -37,22 +55,14 @@ export default function ProgramasForm() {
           onchange={(event) => setSelectedInstitucion(event.target.value)}
         />
       </Grid>
-      <Grid item xs={4}>
-        <BasicSelect
+      <Grid item xs={6}>
+        <Select
           title="Planteles"
           name="planteles"
-          value=""
-          options={planteles}
-          onchange={() => { }}
+          value={selectedPlantel}
+          options={planteles || []}
+          onchange={(event) => setSelectedPlantel(event.target.value)}
           disabled={isPlantelesDisabled}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <ButtonIcon
-          text="Mostrar registros"
-          onclick={() => { }}
-          icon={<FindInPageIcon />}
-          disabled
         />
       </Grid>
     </Grid>

@@ -7,6 +7,7 @@ import Logo from './components/Images/Logo';
 import SnackAlert from './components/Alert';
 import HomePage from './components/HomePage';
 import DefaultModal from './components/Modal';
+import LabelData from './components/LabelData';
 import GetFile from './utils/handlers/getFile';
 import DataTable from './components/DataTable';
 import Layout from './components/Layout/Layout';
@@ -53,6 +54,7 @@ export {
   setToken,
   getToken,
   HomePage,
+  LabelData,
   InputFile,
   ButtonAdd,
   DataTable,
