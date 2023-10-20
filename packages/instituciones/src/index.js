@@ -7,7 +7,10 @@ import ConsultPlantelesForm from './components/Planteles/consultPlantelesForm';
 import Planteles from './components/Planteles';
 import getInstitucionUsuario from './components/utils/getInstitucionUsuario';
 import getPlanteles from './components/utils/getPlanteles';
+import getPlantelesByInstitucion from './utils/getPlantelesByInstitucion';
 import getInstitucion from './components/utils/getInstitucion';
+import getInstituciones from './utils/getInstituciones';
+import getProgramas from './utils/getProgramas';
 import PlantelesInstitucionesAuth from './components/Planteles/plantelesInstitucionesAuth';
 
 export {
@@ -20,6 +23,9 @@ export {
   Planteles,
   getInstitucionUsuario,
   getPlanteles,
+  getProgramas,
   getInstitucion,
+  getInstituciones,
   PlantelesInstitucionesAuth,
+  getPlantelesByInstitucion,
 };

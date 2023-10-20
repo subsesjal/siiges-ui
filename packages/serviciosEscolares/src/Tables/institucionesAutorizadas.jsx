@@ -1,7 +1,7 @@
 import React from 'react';
-import ButtonsInstitucionesAutorizadas from '../Components/ButtonsInstitucionesAutorizadas';
+import ButtonsInstitucionesAutorizadas from '../Components/utils/ButtonsInstitucionesAutorizadas'
 
-const columns = [
+const columnsInstitucionesAutorizadas = [
   { field: 'nombre', headerName: 'Nombre', width: 300 },
   { field: 'razonSocial', headerName: 'Razón Social', width: 320 },
   {
@@ -27,4 +27,4 @@ const columns = [
   },
 ];
 
-export default columns;
+export default columnsInstitucionesAutorizadas;

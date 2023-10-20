@@ -1,25 +1,33 @@
 import React from 'react';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import PropTypes from 'prop-types';
-import '../../styles/buttons/ButtonAdd.css';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
-export default function ButtonAdd({ text, onClick }) {
+import '../../styles/buttons/ButtonAdd.css';
+
+function ButtonAdd({ text, onClick, type }) {
   return (
     <ButtonUnstyled className="buttonAdd" onClick={onClick}>
-      <PersonAddIcon sx={{ verticalAlign: 'middle' }} />
-      &nbsp;&nbsp;
-      <Typography variant="p" sx={{ verticalAlign: 'middle' }}>{text}</Typography>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {type === 'user' ? <PersonAddIcon /> : <AddIcon />}
+        &nbsp;&nbsp;
+        <Typography variant="body1">{text}</Typography>
+      </div>
     </ButtonUnstyled>
   );
 }
 
 ButtonAdd.defaultProps = {
   onClick: () => {}, // Default empty function
+  type: 'user',
 };
 
 ButtonAdd.propTypes = {
   text: PropTypes.string.isRequired,
+  type: PropTypes.string,
   onClick: PropTypes.func,
 };
+
+export default ButtonAdd;
