@@ -74,8 +74,7 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
             <div style={{ position: 'relative' }}>
               <IconButton color="inherit" onClick={handleClick}>
                 <Typography variant="subtitle1">
-                  {options.find((opt) => opt.id === section)?.nombre
-                    || 'Areas'}
+                  {options.find((opt) => opt.id === section)?.nombre || 'Areas'}
                 </Typography>
               </IconButton>
               <Menu

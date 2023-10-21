@@ -1,7 +1,7 @@
 import { getToken } from '@siiges-ui/shared';
 import { useEffect, useState } from 'react';
 
-export default function getInstituciones() {
+export default function getInstituciones(esAutorizado) {
   const [instituciones, setInstituciones] = useState();
   const [loading, setLoading] = useState(false);
   let userData = {};
@@ -10,7 +10,11 @@ export default function getInstituciones() {
   const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
-    fetch(`${url}/api/v1/instituciones`, {
+    const finalURL = esAutorizado 
+      ? `${url}/api/v1/instituciones?esNombreAutorizado=true` 
+      : `${url}/api/v1/instituciones`;
+
+    fetch(finalURL, {
       headers: { api_key: apikey, Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -22,7 +26,7 @@ export default function getInstituciones() {
         setInstituciones(userData);
       });
     setLoading(false);
-  }, []);
+  }, [esAutorizado]);
 
   return {
     instituciones,
