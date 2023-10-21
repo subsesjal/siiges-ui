@@ -8,6 +8,10 @@ import CiclosEscolares from './Components/Programas/ProgramasSections/CiclosEsco
 import Grupos from './Components/Programas/ProgramasSections/Grupos';
 import Reglas from './Components/Programas/ProgramasSections/Reglas';
 import Asignaturas from './Components/Programas/ProgramasSections/Asignaturas';
+import AlumnosForm from './Components/Alumnos/AlumnosForm';
+import AlumnosTable from './Components/Alumnos/AlumnosTable';
+import FormAlumno from './Components/Alumnos/FormAlumno';
+import DocumentosAlumno from './Components/Alumnos/FormAlumno/DocumentosAlumno';
 
 export {
   columnsInstitucionesAutorizadas,
@@ -20,4 +24,8 @@ export {
   Grupos,
   Reglas,
   Asignaturas,
+  AlumnosTable,
+  AlumnosForm,
+  FormAlumno,
+  DocumentosAlumno,
 };
