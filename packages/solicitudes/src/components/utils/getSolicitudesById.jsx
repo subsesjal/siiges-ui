@@ -55,7 +55,7 @@ export default function getSolicitudesById(id) {
         })
         .then((data) => {
 
-          setSolicitudes(data);
+          setSolicitudes(data.data);
           const { data: solicitud } = data;
           setSolicitudesInspecciones({
             id: solicitud.id,
