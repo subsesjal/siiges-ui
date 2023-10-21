@@ -6,32 +6,25 @@ import '../../styles/buttons/ButtonForm.css';
 
 export default function UserForm({ confirm, cancel }) {
   return (
-    <div style={{ marginTop: 15, marginBottom: -5 }}>
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        className="userFormContainer"
-      >
-        <div style={{ marginRight: 7 }}>
-          <ButtonStyled
-            text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={cancel}
-          />
-        </div>
-        <div style={{ marginLeft: 7 }}>
-          <ButtonStyled
-            text="Guardar"
-            alt="Guardar"
-            design="success"
-            type="submit"
-            onclick={confirm}
-          />
-        </div>
+    <Grid container>
+      <Grid item xs={6}>
+        <ButtonStyled
+          text="Cancelar"
+          alt="Cancelar"
+          design="error"
+          onclick={cancel}
+        />
       </Grid>
-    </div>
+      <Grid item xs={6}>
+        <ButtonStyled
+          text="Guardar"
+          alt="Guardar"
+          design="success"
+          type="submit"
+          onclick={confirm}
+        />
+      </Grid>
+    </Grid>
   );
 }
 
