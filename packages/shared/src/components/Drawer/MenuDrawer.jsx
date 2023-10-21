@@ -13,6 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
 import userRol from './utils/userRol';
+import DropdownButton from '../Select/DropdownButton';
 
 const drawerWidth = 240;
 
@@ -85,29 +86,37 @@ function MenuDrawer({
         <List onMouseOver={openFunction} onMouseLeave={closeFunction}>
           {users.map((item) => (
             <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
-              <Link href={item.route}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
+              {item.type === 'dropdown' ? (
+                <DropdownButton
+                  icon={item.icon}
+                  text={item.text}
+                  options={item.options}
+                />
+              ) : (
+                <Link href={item.route}>
+                  <ListItemButton
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
+                      minHeight: 48,
+                      justifyContent: open ? 'initial' : 'center',
+                      px: 2.5,
                     }}
                   >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </Link>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={item.text}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </Link>
+              )}
             </ListItem>
           ))}
         </List>

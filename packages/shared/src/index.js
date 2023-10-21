@@ -7,6 +7,7 @@ import Logo from './components/Images/Logo';
 import SnackAlert from './components/Alert';
 import HomePage from './components/HomePage';
 import DefaultModal from './components/Modal';
+import LabelData from './components/LabelData';
 import GetFile from './utils/handlers/getFile';
 import DataTable from './components/DataTable';
 import Layout from './components/Layout/Layout';
@@ -22,6 +23,7 @@ import MenuDrawer from './components/Drawer/MenuDrawer';
 import MainNavbar from './components/Navbar/MainNavbar';
 import ListTitle from './components/ListItems/ListTitle';
 import InputNumber from './components/Input/InputNumber';
+import ButtonIcon from './components/Buttons/ButtonIcon';
 import ParseCookies from './utils/handlers/cookieHandler';
 import LoginLayout from './components/Layout/LoginLayout';
 import ButtonsForm from './components/Buttons/ButtonsForm';
@@ -52,6 +54,7 @@ export {
   setToken,
   getToken,
   HomePage,
+  LabelData,
   InputFile,
   ButtonAdd,
   DataTable,
@@ -64,6 +67,7 @@ export {
   LoadCircle,
   MainNavbar,
   LinkButton,
+  ButtonIcon,
   InputNumber,
   ButtonsForm,
   ButtonLogin,

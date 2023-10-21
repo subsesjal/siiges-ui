@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import '../../styles/buttons/ButtonStyle.css';
 
 export default function ButtonStyled({
-  text, alt, type, design, onclick,
+  text,
+  alt,
+  type,
+  design,
+  onclick,
+  icon,
 }) {
   return (
     <ButtonUnstyled
@@ -12,6 +17,20 @@ export default function ButtonStyled({
       onClick={() => onclick()}
       type={type}
     >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {icon && (
+          <span className="icon" style={{ marginRight: '5px' }}>
+            {icon}
+          </span>
+        )}
+        <span className="text">{text}</span>
+      </div>
       <span className="text">{text}</span>
       <span>{alt}</span>
     </ButtonUnstyled>
@@ -22,6 +41,7 @@ ButtonStyled.defaultProps = {
   onclick: () => {},
   design: 'normal',
   type: 'button',
+  icon: null,
 };
 
 ButtonStyled.propTypes = {
@@ -30,4 +50,5 @@ ButtonStyled.propTypes = {
   type: PropTypes.string,
   design: PropTypes.string,
   onclick: PropTypes.func,
+  icon: PropTypes.element,
 };

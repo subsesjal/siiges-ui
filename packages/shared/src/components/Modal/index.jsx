@@ -15,9 +15,7 @@ const style = {
   p: 4,
 };
 
-export default function DefaultModal({
-  open, setOpen, children, title,
-}) {
+export default function DefaultModal({ open, setOpen, children, title }) {
   const handleClose = () => setOpen(false);
   return (
     <Modal
