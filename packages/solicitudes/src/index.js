@@ -16,8 +16,10 @@ import SolicitudContext from './components/utils/Context/solicitudContext';
 import modalidades from './components/utils/Mocks/mockModalidades';
 import formData from './components/utils/sections/forms/formData';
 import getSolicitudforPDF from './components/utils/getSolicitudforPDF';
+import getSolicitudforPDFDetalles from './components/utils/getSolicitudforPDFDetalles';
 
 export {
+  getSolicitudforPDFDetalles,
   getSolicitudforPDF,
   NewRequest,
   ChangeAddress,
