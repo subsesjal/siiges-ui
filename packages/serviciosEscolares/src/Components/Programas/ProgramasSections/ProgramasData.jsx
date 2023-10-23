@@ -1,8 +1,9 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import ProgramasPDF from '../../utils/ProgramasPDF';
 
-export default function ProgramasData() {
+export default function ProgramasData({ programa }) {
   const dataSections = [
     {
       titles: [
@@ -14,12 +15,12 @@ export default function ProgramasData() {
         'Turnos',
       ],
       subtitles: [
-        'Ejemplo',
-        'Ejemplo',
-        'Ejemplo de texto extremadamente largo',
-        'Ejemplo',
-        'Ejemplo',
-        'Ejemplo',
+        programa.acuerdoRvoe,
+        programa.nivel,
+        programa.nombre,
+        programa.modalidad,
+        programa.periodo,
+        programa.turno,
       ],
     },
     {
@@ -31,11 +32,11 @@ export default function ProgramasData() {
         'Duracion del programa',
       ],
       subtitles: [
-        'Ejemplo',
-        'Ejemplo',
-        'Ejemplo de texto extremadamente largo',
-        'Ejemplo',
-        'Ejemplo',
+        programa.creditos,
+        programa.objetivoGeneral,
+        programa.objetivosParticulares,
+        programa.fechaSurteEfecto,
+        programa.duracionPeriodos,
       ],
     },
   ];
@@ -72,3 +73,20 @@ export default function ProgramasData() {
     </>
   );
 }
+
+ProgramasData.propTypes = {
+  programa: PropTypes.shape({
+    id: PropTypes.number,
+    acuerdoRvoe: PropTypes.string,
+    nombre: PropTypes.string,
+    nivel: PropTypes.string,
+    turno: PropTypes.string,
+    modalidad: PropTypes.string,
+    periodo: PropTypes.string,
+    creditos: PropTypes.string,
+    objetivoGeneral: PropTypes.string,
+    objetivosParticulares: PropTypes.string,
+    fechaSurteEfecto: PropTypes.string,
+    duracionPeriodos: PropTypes.string,
+  }).isRequired,
+};

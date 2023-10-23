@@ -6,6 +6,7 @@ export default function getSolicitudesById(id) {
   const [solicitudes, setSolicitudes] = useState({});
   const [solicitudesInspecciones, setSolicitudesInspecciones] = useState({});
   const [loading, setLoading] = useState(true);
+  const [solicitudesProgramas, setSolicitudesProgramas] = useState({});
 
   const modalidad = [null, 'Escolarizada', 'No escolarizada', 'Mixta', 'Dual'];
   const niveles = [
@@ -26,6 +27,13 @@ export default function getSolicitudesById(id) {
     'Anual',
     'Semestral curriculum flexible',
     'Cuatrimestral curriculum flexible',
+  ];
+  const turnos = [
+    null,
+    'Matutino',
+    'Vespertino',
+    'Nocturno',
+    'Mixto',
   ];
 
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
@@ -67,6 +75,20 @@ export default function getSolicitudesById(id) {
             programaId: solicitud.programa.id,
             folio: solicitud.folio,
           });
+          setSolicitudesProgramas({
+            id: solicitud.id,
+            acuerdoRvoe: solicitud.programa.acuerdoRvoe,
+            nivel: niveles[solicitud.programa.nivelId],
+            nombre: solicitud.programa.nombre,
+            modalidad: modalidad[solicitud.programa.modalidadId],
+            periodo: ciclos[solicitud.programa.cicloId],
+            turno: turnos[solicitud.programa.programaTurnos[0].turnoId],
+            creditos: solicitud.programa.creditos,
+            objetivoGeneral: solicitud.programa.objetivoGeneral,
+            objetivosParticulares: solicitud.programa.objetivosParticulares,
+            fechaSurteEfecto: solicitud.programa.fechaSurteEfecto,
+            duracionPeriodos: solicitud.programa.duracionPeriodos,
+          });
           setLoading(false);
         })
         .catch((error) => {
@@ -80,5 +102,6 @@ export default function getSolicitudesById(id) {
     solicitudes,
     loading,
     solicitudesInspecciones,
+    solicitudesProgramas,
   };
 }
