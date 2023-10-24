@@ -1,27 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  NewRequest,
-  ChangeAddress,
-  Refrendo,
-  getSolicitudes,
-} from '@siiges-ui/solicitudes';
-import {
-  Layout, Select, DataTable, Context,
-} from '@siiges-ui/shared';
+import { fetchNotificaciones } from '@siiges-ui/notificaciones';
+import { useRouter } from 'next/router';
+import { Layout, DataTable, Context } from '@siiges-ui/shared';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import { Divider, IconButton } from '@mui/material';
 import Link from 'next/link';
 
-const columns = [
-  { field: 'folio', headerName: 'Folio', width: 125 },
-  { field: 'studyPlan', headerName: 'Plan de estudios', width: 180 },
-  { field: 'estatusSolicitudId', headerName: 'Estatus', width: 200 },
-  { field: 'plantel', headerName: 'Plantel', width: 450 },
+const commonColumns = [
+  { field: 'asunto', headerName: 'Asunto', width: 300 },
+  { field: 'notificacion', headerName: 'Notificación', width: 650 },
   {
     field: 'actions',
     headerName: 'Acciones',
-    renderCell: (params) => (
-      <Link href={`/solicitudes/detallesSolicitudes/${params.id}`}>
+    width: 150,
+    renderCell: ({ id }) => (
+      <Link href={`/notificaciones/detallesNotificaciones/${id}`}>
         <IconButton aria-label="consultar">
           <ListAltIcon />
         </IconButton>
@@ -30,81 +23,56 @@ const columns = [
   },
 ];
 
-export default function Solicitudes() {
+const adminColumns = [
+  { field: 'usuario', headerName: 'Usuario', width: 230 },
+  { field: 'email', headerName: 'Correo electrónico', width: 200 },
+  { field: 'asunto', headerName: 'Asunto', width: 150 },
+  { field: 'notificacion', headerName: 'Notificación', width: 300 },
+  { field: 'estatus', headerName: 'Estatus', width: 110 },
+  {
+    field: 'actions',
+    headerName: 'Acciones',
+    width: 110,
+    renderCell: ({ id }) => (
+      <Link href={`/notificaciones/detallesNotificaciones/${id}`}>
+        <IconButton aria-label="consultar">
+          <ListAltIcon />
+        </IconButton>
+      </Link>
+    ),
+  },
+];
+
+export default function Notificaciones() {
   const { session } = useContext(Context);
-  const [newSolicitud, setNewSolicitud] = useState(false);
-  const [option, setOption] = useState();
-  const [NewRequestContentVisible, setNewRequestContentVisible] = useState(false);
-  const [ChangeAddressContentVisible, setChangeAddressContentVisible] = useState(false);
-  const [RefrendoContentVisible, setRefrendoContentVisible] = useState(false);
+  const { rol } = session;
+  const router = useRouter();
+
+  const { notificaciones } = fetchNotificaciones({ session, router });
   const [rows, setRows] = useState([]);
-  const { solicitudes } = getSolicitudes();
 
   useEffect(() => {
-    if (solicitudes !== undefined && solicitudes !== null) {
-      const formattedRows = solicitudes.map((solicitud) => ({
-        id: solicitud.id,
-        folio: solicitud.folio,
-        studyPlan: solicitud.programa.nombre,
-        estatusSolicitudId: solicitud.estatusSolicitud.nombre,
-        plantel: `${solicitud.programa.plantel.domicilio.calle} #${solicitud.programa.plantel.domicilio.numeroExterior}`,
+    if (notificaciones && notificaciones.length) {
+      const formattedRows = notificaciones.map((notificacion) => ({
+        id: notificacion.id,
+        asunto: notificacion.asunto,
+        notificacion: notificacion.template,
+        estatus: notificacion.status,
+        ...(rol === 'admin' && {
+          usuario: `${notificacion.usuario.persona.nombre} ${notificacion.usuario.persona.apellidoPaterno} ${notificacion.usuario.persona.apellidoMaterno}`,
+          email: `${notificacion.usuario.correo}`,
+        }),
         actions: 'Actions Placeholder',
       }));
 
       setRows(formattedRows);
     }
-  }, [solicitudes]);
-
-  useEffect(() => {
-    if (session.rol !== 'admin') {
-      setNewSolicitud(true);
-    }
-  }, [session]);
-
-  useEffect(() => {
-    if (option === 'new') setNewRequestContentVisible(true);
-    else setNewRequestContentVisible(false);
-    if (option === 'address') setChangeAddressContentVisible(true);
-    else setChangeAddressContentVisible(false);
-    if (option === 'refrendo') setRefrendoContentVisible(true);
-    else setRefrendoContentVisible(false);
-  }, [option]);
-
-  const handleOnChange = (e) => {
-    setOption(e.target.value);
-  };
-
-  const options = [
-    {
-      id: 'new',
-      nombre: 'Nueva Solicitud',
-    },
-    {
-      id: 'refrendo',
-      nombre: 'Refrendo de plan de estudios',
-    },
-    {
-      id: 'address',
-      nombre: 'Cambio de domicilio',
-    },
-  ];
+  }, [notificaciones]);
 
   return (
-    <Layout title="Solicitudes">
-      {newSolicitud && (
-        <Select
-          title="Seleccione una opcion"
-          name="options"
-          options={options}
-          value=""
-          onchange={handleOnChange}
-        />
-      )}
+    <Layout title="Notificaciones">
       <Divider sx={{ mt: 2 }} />
-      {NewRequestContentVisible && <NewRequest />}
-      {ChangeAddressContentVisible && <ChangeAddress />}
-      {RefrendoContentVisible && <Refrendo />}
-      <DataTable title="Tipo de solicitud" rows={rows} columns={columns} />
+      <DataTable title="Notificaciones" rows={rows} columns={rol === 'admin' ? adminColumns : commonColumns} />
     </Layout>
   );
 }
