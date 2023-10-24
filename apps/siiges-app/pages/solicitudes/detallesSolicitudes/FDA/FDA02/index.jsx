@@ -58,7 +58,7 @@ export default function GenerarFDA02(solicitud) {
 
   const doc = new jsPDF();
 
-  function crearSeccionConTabla1(doc, titulo, tablaData, tableOptions = {}) {
+  function generarSeccionyTabla(doc, titulo, tablaData, tableOptions = {}) {
     const pageHeight = doc.internal.pageSize.height;
     const margin = 5;
     const availableSpace = pageHeight - margin;
@@ -310,7 +310,7 @@ export default function GenerarFDA02(solicitud) {
     ],
   };
 
-  crearSeccionConTabla1(doc, 'DOMICILIO DE LA INSTITUCIÓN', tablaData1, {
+  generarSeccionyTabla(doc, 'DOMICILIO DE LA INSTITUCIÓN', tablaData1, {
     spaceBeforeTable: 7,
   });
 
@@ -375,7 +375,7 @@ export default function GenerarFDA02(solicitud) {
     },
   };
 
-  crearSeccionConTabla1(
+  generarSeccionyTabla(
     doc,
     'DATOS DEL SOLICITANTE (PERSONA FÍSICA O REPRESENTANTE LEGAL DE LA PERSONA JURÍDICA',
     tablaRepresentante,
@@ -435,7 +435,7 @@ export default function GenerarFDA02(solicitud) {
     body: [['ADRIANA rector', 'DE LOS REYES rector', 'MORENO rector']],
   };
 
-  crearSeccionConTabla1(doc, 'DATOS DEL RECTOR', tablaData9, {
+  generarSeccionyTabla(doc, 'DATOS DEL RECTOR', tablaData9, {
     spaceBeforeTable: 7,
     ...tablaData9, // Pasa los estilos de la tabla como parte de las opciones
   });
@@ -461,7 +461,7 @@ export default function GenerarFDA02(solicitud) {
     body: [['LICENCIATURA rector', 'MEDIOS MASIVOS DE COMUNICACIÓN rector']],
   };
 
-  crearSeccionConTabla1(doc, 'FORMACIÓN ACADÉMICA', tablaData11, {
+  generarSeccionyTabla(doc, 'FORMACIÓN ACADÉMICA', tablaData11, {
     spaceBeforeTable: 7,
     ...tablaData11, // Pasa los estilos de la tabla como parte de las opciones
   });
@@ -480,36 +480,39 @@ export default function GenerarFDA02(solicitud) {
     ]),
   };
 
-  crearSeccionConTabla1(doc, 'DATOS DEL DIRECTOR', tablaDirectores, {
+  generarSeccionyTabla(doc, 'DATOS DEL DIRECTOR', tablaDirectores, {
     spaceBeforeTable: 7,
     ...tablaDirectores, // Pasa los estilos de la tabla como parte de las opciones
   });
 
   currentPositionY = doc.previousAutoTable.finalY;
 
-  const headers14 = [
+  const correoDirectorHeader = [
     'CORREO INSTITUCIONAL',
     'CORREO PERSONAL',
     'TELÉFONO CELULAR',
   ];
-  const tableData14 = [
+  const correoDirectorBody = [
     ['primercorreo@hotmail.com', 'tercercorre@gmail.com', '234131313123'],
   ];
-  generateTable(doc, headers14, tableData14, currentPositionY, {
+
+  
+  generateTable(doc, correoDirectorHeader, correoDirectorBody, currentPositionY, {
     fillColor: [172, 178, 183],
     fontSize: 12,
     textColor: [20, 20, 20],
   });
+  currentPositionY = doc.previousAutoTable.finalY ; // Espacio después de la celda
 
-  const tablaData15 = {
+  const formacionDirector = {
     headers: ['GRADO EDUCATIVO', 'NOMBRE DE LOS ESTUDIOS'],
     body: [
       ['LICENCIATURA director', 'MEDIOS MASIVOS DE COMUNICACIÓN director'],
     ],
   };
-  crearSeccionConTabla1(doc, 'FORMACIÓN ACADÉMICA', tablaData15, {
+  generarSeccionyTabla(doc, 'FORMACIÓN ACADÉMICA', formacionDirector, {
     spaceBeforeTable: 7,
-    ...tablaData15, // Pasa los estilos de la tabla como parte de las opciones
+    ...formacionDirector, // Pasa los estilos de la tabla como parte de las opciones
   });
 
   currentPositionY = doc.previousAutoTable.finalY + 5; // Espacio después de la celda
@@ -541,7 +544,7 @@ export default function GenerarFDA02(solicitud) {
         },
       };
 
-      crearSeccionConTabla1(
+      generarSeccionyTabla(
         doc,
         `Diligente ${index + 1}`,
         tablaDataDiligencia,
@@ -555,7 +558,7 @@ export default function GenerarFDA02(solicitud) {
 
   currentPositionY = doc.previousAutoTable.finalY + 10;
 
-  const tablaData17 = {
+  const nombresPropuestos = {
     headers: ['Nombre', 'datos'],
     body: [
       ['NOMBRE PROPUESTO No. 1', 'CENTRO EDUCATIVO EL SALTO'],
@@ -573,13 +576,15 @@ export default function GenerarFDA02(solicitud) {
     },
   };
 
-  crearSeccionConTabla1(
+  currentPositionY = doc.previousAutoTable.finalY + 5; // Espacio después de la celda
+
+  generarSeccionyTabla(
     doc,
     'NOMBRES PROPUESTOS PARA LA INSTITUCIÓN EDUCATIVA',
-    tablaData17,
+    nombresPropuestos,
     {
       spaceBeforeTable: 7,
-      ...tablaData17, // Pasa los estilos de la tabla como parte de las opciones
+      ...nombresPropuestos, // Pasa los estilos de la tabla como parte de las opciones
     }
   );
 
