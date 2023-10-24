@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Settings from '@mui/icons-material/Settings';
@@ -87,6 +88,14 @@ export default function MenuNavbar() {
           </ListItemIcon>
           Ajustes
         </MenuItem>
+        <Link href="/notificaciones">
+          <MenuItem>
+            <ListItemIcon>
+              <MarkEmailUnreadOutlinedIcon fontSize="small" />
+            </ListItemIcon>
+            Notificaciones
+          </MenuItem>
+        </Link>
         <Link href="/">
           <MenuItem onClick={() => removeAuth()}>
             <ListItemIcon>

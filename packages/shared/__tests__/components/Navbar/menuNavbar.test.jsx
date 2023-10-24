@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { Context } from '@siiges-ui/shared';
-import MenuNavbar from '../../../src/components/Navbar/menuNavbar';
+import MenuNavbar from '../../../src/components/Navbar/MenuNavbar';
 import setHandler from '../../../src/utils/handlers/set-anchor';
 
 let value = true;
