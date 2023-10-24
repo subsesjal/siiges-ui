@@ -88,7 +88,7 @@ export default function MenuNavbar() {
           </ListItemIcon>
           Ajustes
         </MenuItem>
-        <Link href="/">
+        <Link href="/notificaciones">
           <MenuItem>
             <ListItemIcon>
               <MarkEmailUnreadOutlinedIcon fontSize="small" />

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { fetchNotificaciones } from '@siiges-ui/notificaciones';
+import fetchNotificaciones from '@siiges-ui/notificaciones';
 import { useRouter } from 'next/router';
 import { Layout, DataTable, Context } from '@siiges-ui/shared';
 import ListAltIcon from '@mui/icons-material/ListAlt';
