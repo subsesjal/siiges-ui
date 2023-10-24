@@ -20,7 +20,7 @@ import PaperHome from './components/Paper/PaperHome';
 import LogoWhite from './components/Images/LogoWhite';
 import ButtonAdd from './components/Buttons/ButtonAdd';
 import MenuDrawer from './components/Drawer/MenuDrawer';
-import MainNavbar from './components/Navbar/MainNavbar';
+import MainNavbar from './components/Navbar/mainnavbar';
 import ListTitle from './components/ListItems/ListTitle';
 import InputNumber from './components/Input/InputNumber';
 import ButtonIcon from './components/Buttons/ButtonIcon';

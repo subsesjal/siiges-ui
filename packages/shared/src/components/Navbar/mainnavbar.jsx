@@ -10,7 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import LogoWhite from '../Images/LogoWhite';
-import MenuNavbar from './MenuNavbar';
+import MenuNavbar from './menuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 import { Context } from '../../utils/handlers/context';
 
