@@ -1,5 +1,6 @@
 import columnsInstitucionesAutorizadas from './Tables/institucionesAutorizadas';
 import columnsProgramas from './Tables/programas';
+import columnsAsignaturas from './Tables/inscripcionesTable';
 import ProgramasForm from './Components/Programas/ProgramasForm';
 import ProgramasTable from './Components/Programas/ProgramasTable';
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
@@ -12,10 +13,13 @@ import AlumnosForm from './Components/Alumnos/AlumnosForm';
 import AlumnosTable from './Components/Alumnos/AlumnosTable';
 import FormAlumno from './Components/Alumnos/FormAlumno';
 import DocumentosAlumno from './Components/Alumnos/FormAlumno/DocumentosAlumno';
+import InscripcionForm from './Components/Inscripciones/InscripcionesForm';
+import InscripcionesTable from './Components/Inscripciones/InscripcionesTable';
 
 export {
   columnsInstitucionesAutorizadas,
   columnsProgramas,
+  columnsAsignaturas,
   ProgramasForm,
   ProgramasTable,
   ButtonsInstitucionesAutorizadas,
@@ -28,4 +32,6 @@ export {
   AlumnosForm,
   FormAlumno,
   DocumentosAlumno,
+  InscripcionForm,
+  InscripcionesTable,
 };

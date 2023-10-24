@@ -11,6 +11,9 @@ import getPlantelesByInstitucion from './utils/getPlantelesByInstitucion';
 import getInstitucion from './components/utils/getInstitucion';
 import getInstituciones from './utils/getInstituciones';
 import getProgramas from './utils/getProgramas';
+import getGrados from './utils/getGrados';
+import getCiclosEscolares from './utils/getCiclosEscolares';
+import getGrupos from './utils/getGrupos';
 import PlantelesInstitucionesAuth from './components/Planteles/plantelesInstitucionesAuth';
 
 export {
@@ -28,4 +31,7 @@ export {
   getInstituciones,
   PlantelesInstitucionesAuth,
   getPlantelesByInstitucion,
+  getGrados,
+  getCiclosEscolares,
+  getGrupos,
 };
