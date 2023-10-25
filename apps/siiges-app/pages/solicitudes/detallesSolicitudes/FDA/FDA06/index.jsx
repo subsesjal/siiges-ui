@@ -455,13 +455,11 @@ verifique el cumplimiento de esta obligación.`
           "left"
         );
 
-        currentPositionY += 30;
+        currentPositionY += 5;
 
         crearSeccion(
           doc,
-          `                                                   ${solicitud.plantel.domicilio.calle}, ${solicitud.plantel.domicilio.numeroExterior} ${',' + solicitud.plantel.domicilio.numeroInterior}, ${solicitud.plantel.domicilio.municipio.nombre} , ${solicitud.plantel.domicilio.codigoPostal} , ${solicitud.plantel.domicilio.estado.nombre}, MÉXICO 
-          ACUERDO NO. ${solicitud.programa.acuerdoRvoe}
-                                                     `,
+          `                              ${solicitud.programa.plantel.domicilio.calle}, ${solicitud.programa.plantel.domicilio.numeroExterior} ${solicitud.programa.plantel.domicilio.numeroInterior}, ${solicitud.programa.plantel.domicilio.municipio.nombre} , ${solicitud.programa.plantel.domicilio.codigoPostal} , ${solicitud.programa.plantel.domicilio.estado.nombre}, MÉXICO ACUERDO NO. ${solicitud.programa.acuerdoRvoe}`,
           "left"
         );
 
