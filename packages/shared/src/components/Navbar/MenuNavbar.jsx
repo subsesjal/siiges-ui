@@ -15,7 +15,7 @@ import setHandler from '../../utils/handlers/set-anchor';
 import StyledBadge from '../../styles/Navbar/MenuNavbarStyle';
 
 export default function MenuNavbar() {
-  const { removeAuth } = useContext(Context);
+  const { removeAuth, session } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -36,7 +36,7 @@ export default function MenuNavbar() {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-            <Avatar alt="Remy Sharp">RS</Avatar>
+            <Avatar alt={session.nombre}>TS</Avatar>
           </StyledBadge>
         </Stack>
       </IconButton>
@@ -78,7 +78,7 @@ export default function MenuNavbar() {
         <Link href="/usuarios/perfilUsuario">
           <MenuItem>
             <Avatar />
-            Perfil
+            {session.nombre}
           </MenuItem>
         </Link>
         <Divider />
