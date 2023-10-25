@@ -34,7 +34,7 @@ const adminColumns = [
     headerName: 'Acciones',
     width: 110,
     renderCell: ({ id }) => (
-      <Link href={`/notificaciones/detallesNotificaciones/${id}`}>
+      <Link href={`/notificaciones/${id}`}>
         <IconButton aria-label="consultar">
           <ListAltIcon />
         </IconButton>
@@ -60,7 +60,7 @@ export default function Notificaciones() {
         estatus: notificacion.status,
         ...(rol === 'admin' && {
           usuario: `${notificacion.usuario.persona.nombre} ${notificacion.usuario.persona.apellidoPaterno} ${notificacion.usuario.persona.apellidoMaterno}`,
-          email: `${notificacion.usuario.correo}`,
+          email: `${notificacion.email}`,
         }),
         actions: 'Actions Placeholder',
       }));
