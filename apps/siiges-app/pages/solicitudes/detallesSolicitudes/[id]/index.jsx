@@ -2,12 +2,14 @@ import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
 import { Context, Layout, Title } from '@siiges-ui/shared';
-import React,  { useEffect, useState }  from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
-import GenerarFDA01 from '../FDA/FDA01/FDA01';
 import { useRouter } from 'next/router';
-import { getSolicitudforPDF } from '@siiges-ui/solicitudes';
-import { useContext } from 'react';
+import { getSolicitudDetalles } from '@siiges-ui/solicitudes';
+import GenerarFDA01 from '../FDA/FDA01';
+import GenerarFDA02 from '../FDA/FDA02';
+import GenerarFDA06 from '../FDA/FDA06';
+
 
 
 export default function detallesSolicitudes() {
@@ -20,7 +22,7 @@ export default function detallesSolicitudes() {
     const fetchSolicitud = async () => {
       if (query.id !== undefined) {
         try {
-          const solicitudData = await getSolicitudforPDF(query.id, session, setNoti);
+          const solicitudData = await getSolicitudDetalles(query.id, session, setNoti);
           setSolicitud(solicitudData);
         } catch (error) {
           console.error('Error fetching solicitud:', error);
@@ -32,7 +34,7 @@ export default function detallesSolicitudes() {
   }, [query, session, solicitud]);
 
   console.log(solicitud.data);
-  
+
   return (
     <Layout>
       <Title title="Detalles de la solicitud" />
@@ -43,13 +45,12 @@ export default function detallesSolicitudes() {
             Formatos Administrativos
           </Typography>
           <List component="nav">
-          <ListItem button onClick={() => GenerarFDA01(solicitud.data)}>
-            <ListItemText primary="FDA 01" />
-              </ListItem>
-              
-              <ListItem button onClick={() => GenerarFDA02()}>
-                <ListItemText primary="FDA 02" />
-              </ListItem>
+            <ListItem button onClick={() => GenerarFDA01(solicitud.data)}>
+              <ListItemText primary="FDA 01" />
+            </ListItem>
+            <ListItem button onClick={() => GenerarFDA02(solicitud.data)}>
+              <ListItemText primary="FDA 02" />
+            </ListItem>
             <Link href="/destino-url">
               <ListItem button>
                 <ListItemText primary="FDA 03" />
@@ -65,11 +66,9 @@ export default function detallesSolicitudes() {
                 <ListItemText primary="FDA 05" />
               </ListItem>
             </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDA 06" />
-              </ListItem>
-            </Link>
+            <ListItem button onClick={() => GenerarFDA06(solicitud.data)}>
+              <ListItemText primary="FDA 06" />
+            </ListItem>
           </List>
         </Grid>
         <Grid item xs={4}>
