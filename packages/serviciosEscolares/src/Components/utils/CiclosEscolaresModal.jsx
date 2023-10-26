@@ -8,6 +8,7 @@ import {
 import React from 'react';
 import PropTypes from 'prop-types';
 import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
+import postCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/PostCiclosEscolares';
 
 export default function CiclosEscolaresModal({
   open,
@@ -21,11 +22,14 @@ export default function CiclosEscolaresModal({
     nombre: data?.nombre,
     descripcion: data?.descripcion,
   });
-
   const pathCiclosEscolares = async ({ id, ...body }) => {
-    const dato = await updateCiclosEscolares({ id, dataBody: body });
-    setForm({ ...form, nombre: dato.nombre, descripcion: dato.descripcion });
-    setOpen(false);
+    if (type === 'new') {
+      await postCiclosEscolares({ ...body, programaId: data?.programaId });
+      setOpen(false);
+    } else {
+      await updateCiclosEscolares({ id, dataBody: body });
+      setOpen(false);
+    }
   };
   const handleOnChange = (e) => {
     const { name, value } = e.target;

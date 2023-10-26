@@ -6,6 +6,11 @@ import GruposModal from './GruposModal';
 
 export default function ButtonsGrupos({ id }) {
   const [open, setOpen] = useState(false);
+  const params = {
+    cicloEscolarId: id.cicloEscolarId,
+    gradoId: id.gradoId,
+    gradoNombre: id.gradoNombre,
+  };
   return (
     <>
       <Stack direction="row" spacing={1}>
@@ -20,7 +25,13 @@ export default function ButtonsGrupos({ id }) {
           </IconButton>
         )}
       </Stack>
-      <GruposModal open={open} setOpen={setOpen} type="edit" />
+      <GruposModal
+        open={open}
+        setOpen={setOpen}
+        type="edit"
+        data={id}
+        params={params}
+      />
     </>
   );
 }

@@ -1,9 +1,20 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
+import getSolicitudesById from '@siiges-ui/solicitudes/src/components/utils/getSolicitudesById';
 import ProgramasPDF from '../../utils/ProgramasPDF';
 
-export default function ProgramasData({ programa }) {
+export default function ProgramasData() {
+  const router = useRouter();
+  const { query } = router;
+  const { solicitudesProgramas: programa } = getSolicitudesById(query.id);
+  const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+  const fecha = new Date(programa.fechaSurteEfecto)
+    .toLocaleDateString('es', opciones)
+    .replace(/ /g, ' ')
+    .replace('.', '')
+    .replace(/-([a-z])/, (x) => `-${x[1].toUpperCase()}`);
   const dataSections = [
     {
       titles: [
@@ -35,7 +46,7 @@ export default function ProgramasData({ programa }) {
         programa.creditos,
         programa.objetivoGeneral,
         programa.objetivosParticulares,
-        programa.fechaSurteEfecto,
+        fecha,
         programa.duracionPeriodos,
       ],
     },
