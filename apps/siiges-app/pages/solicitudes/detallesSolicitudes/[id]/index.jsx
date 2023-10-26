@@ -7,8 +7,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getSolicitudDetalles } from '@siiges-ui/solicitudes';
 import GenerarFDA01 from '../FDA/FDA01';
-import GenerarFDA02 from '../FDA/FDA02';
+import GenerarFDA02 from '../FDA/FDA02';  
 import GenerarFDA06 from '../FDA/FDA06';
+import GenerarFDP05 from '../FDP/FDP05';
 
 
 
@@ -96,11 +97,9 @@ export default function detallesSolicitudes() {
                 <ListItemText primary="FDP 04" />
               </ListItem>
             </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDP 05" />
-              </ListItem>
-            </Link>
+            <ListItem button onClick={() => GenerarFDP05(solicitud.data)}>
+              <ListItemText primary="FDP 05" />
+            </ListItem>
             <Link href="/destino-url">
               <ListItem button>
                 <ListItemText primary="FDP 06" />

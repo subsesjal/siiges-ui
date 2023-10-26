@@ -6,7 +6,7 @@ const img1 = 'https://i.postimg.cc/HsNJnDCb/img1.png';
 const img2 = 'https://i.postimg.cc/FszdhFw9/img2.png';
 const img3 = 'https://i.postimg.cc/c1Xtqt99/img3.png';
 
-let currentPositionY = 90;
+let currentPositionY = 67;
 
 function crearCelda(doc, x, y, width, height, texto) {
   doc.rect(x, y, width, height, 'F');
@@ -53,7 +53,7 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
   currentPositionY += textHeight + 5; // Espacio después de cada sección
 }
 
-export default function GenerarFDA06(solicitud) {
+export default function GenerarFDP05(solicitud) {
   console.log(solicitud);
 
   const doc = new jsPDF();
@@ -107,6 +107,44 @@ export default function GenerarFDA06(solicitud) {
     const tableHeight = currentPositionY - previousY; // Altura real de la tabla
 
     currentPositionY += tableHeight + 20; // Espacio después de la tabla
+  }
+
+  function crearSeccionConTexto(doc, titulo, contenido) {
+    const margenSuperior = currentPositionY;
+
+    // Titulo de la sección
+    doc.setFillColor(172, 178, 183);
+    crearCelda(
+      doc,
+      20, // cellX
+      currentPositionY, // cellY
+      176, // cellWidth
+      7, // cellHeight
+      titulo
+    );
+
+    const textHeight = doc.getTextDimensions(contenido, {
+      align: "justify",
+      maxWidth: 175,
+    }).h;
+
+    if (
+      currentPositionY + textHeight + 25 >
+      doc.internal.pageSize.height - 20
+    ) {
+      doc.addPage();
+      currentPositionY = 20; // Reiniciar la posición vertical en la nueva página
+    }
+
+    doc.setFont("helvetica");
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text(contenido, 20, currentPositionY + 15, {
+      align: "justify",
+      maxWidth: 175,
+    });
+
+    currentPositionY += textHeight + 20; // Espacio después del texto
   }
 
   function generateTable(
@@ -271,197 +309,96 @@ export default function GenerarFDA06(solicitud) {
 
         doc.setFont("helvetica", "bold");
         doc.setFontSize(12);
-        doc.setFillColor(6, 98, 211);
-        crearCelda(doc, 150, 40, 45, 7, "FDA06");
+        doc.setFillColor(69, 133, 244)
+        crearCelda(doc, 150, 40, 45, 7, "FDP05");
 
         doc.setFont("helvetica", "bold");
         doc.setFontSize(12);
         doc.setTextColor(69, 133, 244);
-        doc.text(`OFICIO DE ENTREGA DE DOCUMENTACIÓN`, 20, 50);
+        doc.text(`TRAYECTORIA EDUCATIVA Y TUTORÍA DE LOS ESTUDIANTES`, 20, 55);
 
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`SUBSECRETARÍA DE EDUCACIÓN SUPERIOR`, 20, 60);
 
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(
-          `AT´N: DIRECTOR GENERAL DE INCORPORACIÓN Y SERVICIOS ESCOLARES.`,
-          40,
-          69
-        );
+    crearSeccionConTexto(
+      doc,
+      "1. PROGRAMA DE SEGUIMIENTO DE LA TRAYECTORIA ACADÉMICA DE LOS ESTUDIANTES",
+      `El Centro Educativo El Salto se preocupa por dar un seguimiento continuo y permanente a las alumnas desde su ingreso hasta el egreso del programa educativo con el fin de poder cumplir con las metas y objetivos establecidos, a través de un acompañamiento continuo y permanente que abarque tanto el aspecto académico como el desarrollo integral de las alumnas.`
+    );
 
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(fechaFormateada, 152, 58);
+    crearSeccion(
+      doc,
+      "Se ofrecerá la carrera Técnico Superior Universitario en Hotelería, modalidad escolarizada, con duración de dos años, divididos en seis cuatrimestres, con capacidad para atender a 25 alumnas por cohorte generacional. De acuerdo a la naturaleza del plan de estudios se brindará la modalidad de tutoría individual y personalizada. "
+    );
 
-        crearSeccion(
-          doc,
-          `La C. ADRIANA DE LOS REYES MORENO de declara, bajo protesta de decir verdad, que los
-datos proporcionados en la solicitud ${solicitud.folio} cuenta con un inmueble con las condiciones
-de seguridad, higiénicas necesarias para impartir el plan de estudios para el programa
-${nombreNivel} EN ${solicitud.programa.nombre}, modalidad ${modalidadTipo}, en
-periodos ${ciclosTipo}, asimismo ACEPTA cumplir y se compromete con las siguientes
-obligaciones derivadas del otorgamiento del Reconocimiento de Validez Oficial de Estudios.`
-        );
+    crearSeccion(
+      doc,
+      "La tutoría se llevará mediante un acompañamiento de tipo personal que el tutor realizará a lo largo del proceso formativo de la alumna, para ayudarla a mejorar su rendimiento académico, solucionar problemas dentro de la institución, desarrollar hábitos de estudio, espacios para la reflexión yconvivencia social, promoviendo el desarrollo humano y académico de las alumnas, con el propósito de que logren la permanencia y culminación del programa de estudios"
+    );
+    
+    crearSeccion(
+      doc,
+      `Objetivo general: Apoyar a las estudiantes del Centro Educativo El Salto en su trayecto educativo, a través de la implementación de acciones y estrategias específicas para que estén en condiciones de conseguir el máximo aprovechamiento así como satisfacer sus necesidades de desarrollo personal y social y de esta manera promover su autonomía y formación integral, así como mejorar la eficiencia terminal a través de un acompañamiento individual a lo largo de la trayectoria educativa, para atender puntualmente problemas específicos.`
+    );
 
-        crearSeccion(
-          doc,
-          `1.- Cumplir con lo dispuesto en el artículo 3° de la Constitución Política de los Estados Unidos
-Mexicanos, en la Ley General de Educación, la Ley General de Educación Superior, la Ley de
-Educación del Estado Libre y Soberano de Jalisco, la Ley de Educación Superior del Estado de
-Jalisco y demás disposiciones legales y administrativas que le sean aplicables.`
-        );
+    crearSeccion(
+      doc,
+      `Objetivo general: Apoyar a las estudiantes del Centro Educativo El Salto en su trayecto educativo, a través de la implementación de acciones y estrategias específicas para que estén en condiciones de conseguir el máximo aprovechamiento así como satisfacer sus necesidades de desarrollo personal y social y de esta manera promover su autonomía y formación integral, así como mejorar la eficiencia terminal a través de un acompañamiento individual a lo largo de la trayectoria educativa, para atender puntualmente problemas específicos.`
+    );
 
-        crearSeccion(
-          doc,
-          `2.- Mencionar, en toda su documentación y publicidad que expida, la fecha y número del
-acuerdo por el cual se otorgó el Reconocimiento de Validez Oficial de Estudios, así como la
-autoridad que lo expidió y el periodo establecido.`
-        );
+    crearSeccionConTexto(
+      doc,
+      "2. FUNCIÓN TUTORIAL",
+      `El Centro Educativo El Salto se preocupa por dar un seguimiento continuo y permanente a las alumnas desde su ingreso hasta el egreso del programa educativo con el fin de poder cumplir con las metas y objetivos establecidos, a través de un acompañamiento continuo y permanente que abarque tanto el aspecto académico como el desarrollo integral de las alumnas.`
+    );
 
-        crearSeccion(
-          doc,
-          `3.- Respetar los lineamientos descritos en el Acuerdo que establece las bases mínimas de
-información para la comercialización de los servicios educativos que prestan los particulares.`
-        );
+    crearSeccion(
+      doc,
+      `Objetivo general: Apoyar a las estudiantes del Centro Educativo El Salto en su trayecto educativo, a través de la implementación de acciones y estrategias específicas para que estén en condiciones de conseguir el máximo aprovechamiento así como satisfacer sus necesidades de desarrollo personal y social y de esta manera promover su autonomía y formación integral, así como mejorar la eficiencia terminal a través de un acompañamiento individual a lo largo de la trayectoria educativa, para atender puntualmente problemas específicos.`
+    );
 
-        crearSeccion(
-          doc,
-          `4.- Ceñirse a los planes y programas autorizados por la Autoridad Educativa y a los tiempos
-aprobados para su aplicación.`
-        );
+    crearSeccion(
+      doc,
+      `Objetivo general: Apoyar a las estudiantes del Centro Educativo El Salto en su trayecto educativo, a través de la implementación de acciones y estrategias específicas para que estén en condiciones de conseguir el máximo aprovechamiento así como satisfacer sus necesidades de desarrollo personal y social y de esta manera promover su autonomía y formación integral, así como mejorar la eficiencia terminal a través de un acompañamiento individual a lo largo de la trayectoria educativa, para atender puntualmente problemas específicos.`
+    );
 
-        crearSeccion(
-          doc,
-          `5.- Los planes y programas de estudio validados por la Autoridad Educativa, una vez que son
-aprobados no podrán modificarse hasta su vencimiento, de lo contrario no tendrá validez
-para cualquier trámite ante cualquier autoridad competente.`
-        );
+    crearSeccionConTexto(
+      doc,
+      "3. TIPO DE TUTORIA",
+      `El Centro Educativo El Salto se preocupa por dar un seguimiento continuo y permanente a las alumnas desde su ingreso hasta el egreso del programa educativo con el fin de poder cumplir con las metas y objetivos establecidos, a través de un acompañamiento continuo y permanente que abarque tanto el aspecto académico como el desarrollo integral de las alumnas.`
+    );
 
-        crearSeccion(
-          doc,
-          `6.- La Institución se compromete a mantener actualizados los planes y programas de estudio
-de acuerdo a los avances de la materia y someterlos a refrendo al término del periodo
-establecido por la Autoridad Educativa.`
-        );
+    crearSeccion(
+      doc,
+      `Objetivo general: Apoyar a las estudiantes del Centro Educativo El Salto en su trayecto educativo, a través de la implementación de acciones y estrategias específicas para que estén en condiciones de conseguir el máximo aprovechamiento así como satisfacer sus necesidades de desarrollo personal y social y de esta manera promover su autonomía y formación integral, así como mejorar la eficiencia terminal a través de un acompañamiento individual a lo largo de la trayectoria educativa, para atender puntualmente problemas específicos.`
+    );
 
-        crearSeccion(
-          doc,
-          `7.- Reportar a la Autoridad Educativa, cualquier daño o modificación que sufra el inmueble en
-su estructura, con posterioridad a la fecha de presentación de la solicitud de autorización del
-Reconocimiento de Validez Oficial de Estudios, proporcionando, en su caso, los datos de la
-nueva constancia en la que se acredite que las reparaciones o modificaciones cumplen con
-las normas mínimas de construcción y seguridad.`
-        );
+    crearSeccion(
+      doc,
+      `Objetivo general: Apoyar a las estudiantes del Centro Educativo El Salto en su trayecto educativo, a través de la implementación de acciones y estrategias específicas para que estén en condiciones de conseguir el máximo aprovechamiento así como satisfacer sus necesidades de desarrollo personal y social y de esta manera promover su autonomía y formación integral, así como mejorar la eficiencia terminal a través de un acompañamiento individual a lo largo de la trayectoria educativa, para atender puntualmente problemas específicos.`
+    );
 
-        crearSeccion(
-          doc,
-          `8.- Facilitar y colaborar en las actividades de evaluación, inspección y vigilancia que las
-autoridades competentes realicen u ordenen.`
-        );
+    crearSeccionConTexto(
+      doc,
+      "4. TASA DE EGRESOS",
+      `El Centro Educativo El Salto se preocupa por dar un seguimiento continuo y permanente a las alumnas desde su ingreso hasta el egreso del programa educativo con el fin de poder cumplir con las metas y objetivos establecidos, a través de un acompañamiento continuo y permanente que abarque tanto el aspecto académico como el desarrollo integral de las alumnas.`
+    );
 
-        crearSeccion(
-          doc,
-          `9.- Conservar de manera física en el domicilio en el que se autorizó el RVOE, todos los
-documentos administrativos y de control escolar que se generen, de conformidad a la Ley
-General de Educación en su artículo 151.`
-        );
+    crearSeccion(
+      doc,
+      `Objetivo general: Apoyar a las estudiantes del Centro Educativo El Salto en su trayecto educativo, a través de la implementación de acciones y estrategias específicas para que estén en condiciones de conseguir el máximo aprovechamiento así como satisfacer sus necesidades de desarrollo personal y social y de esta manera promover su autonomía y formación integral, así como mejorar la eficiencia terminal a través de un acompañamiento individual a lo largo de la trayectoria educativa, para atender puntualmente problemas específicos.`
+    );
 
-        crearSeccion(
-          doc,
-          `10.- Mantener vigente la Posesión Legal del Inmueble, el Dictamen de Seguridad Estructural,
-Licencia de Uso de Suelo, Dictamen de Protección Civil y Licencia Municipal.`
-        );
+    crearSeccion(
+      doc,
+      `Objetivo general: Apoyar a las estudiantes del Centro Educativo El Salto en su trayecto educativo, a través de la implementación de acciones y estrategias específicas para que estén en condiciones de conseguir el máximo aprovechamiento así como satisfacer sus necesidades de desarrollo personal y social y de esta manera promover su autonomía y formación integral, así como mejorar la eficiencia terminal a través de un acompañamiento individual a lo largo de la trayectoria educativa, para atender puntualmente problemas específicos.`
+    );
 
-        crearSeccion(
-          doc,
-          `11.- Constituir el Comité de Seguridad Escolar, de conformidad con los lineamientos
-establecidos en el Diario Oficial de la Federación del 4 de septiembre de 1986.`
-        );
+    currentPositionY += 20;
 
-        crearSeccion(
-          doc,
-          `12.- La SICyT verificará las instalaciones para que cumplan con la normatividad vigente,
-higiene seguridad y pedagogía.`
-        );
-
-        crearSeccion(
-          doc,
-          `13.- Cumplir con el perfil de personal docente, tanto de nuevo ingreso como los propuestos a
-una asignatura diferente. Cualquier modificación deberá presentarse a la autoridad
-educativa para su autorización.`
-        );
-
-        crearSeccion(
-          doc,
-          `14.- Contar con el acervo bibliográfico y los recursos didácticos requeridos para el desarrollo
-del plan de estudios y sus respectivos programas.`
-        );
-
-        crearSeccion(
-          doc,
-          `15.- Proporcionar un mínimo de becas del 5% del total de población estudiantil, establecidas
-en la Ley y los lineamientos en la materia. Generar documentación que lo acredite y tenerla
-en físico dado a que la SICyT puede solicitarla en alguna visita de vigilancia`
-        );
-
-        crearSeccion(
-          doc,
-          `16.- Pagar anualmente la matrícula de alumnos por cada RVOE otorgado y alumno activo en
-cada ejercicio escolar, acatando los requisitos y tiempos establecidos en la convocatoria
-correspondiente.`
-        );
-
-        crearSeccion(
-          doc,
-          `17.- Dar el seguimiento académico y reportar a la Dirección de Servicios Escolares los avances
-académicos de los alumnos a partir de su inscripción, acreditación, regularización,
-reinscripción, certificación y titulación.`
-        );
-
-        crearSeccion(
-          doc,
-          `18.- Una vez recibido el Acuerdo de Incorporación, el particular deberá realizar los registros
-ante las autoridades correspondientes, los trámites para la asignación de la clave de centro
-de trabajo ante la Secretaría de Educación Jalisco, su registro ante la Dirección de
-Profesiones del Estado de Jalisco y la Dirección General de Profesiones de la Secretaría de
-Educación Pública y aquellos que correspondan.`
-        );
-
-        crearSeccion(
-          doc,
-          `19.- Es obligación de la Institución Educativa, que la documentación que presenta sea
-auténtica.`
-        );
-
-        crearSeccion(
-          doc,
-          `20.- Emitir sus propios reglamentos internos, solicitar la autorización a la Secretaría de
-Innovación Ciencia y Tecnología; una vez autorizados, los dará a conocer antes del trámite de
-inscripción o reinscripción. Deberá conservar evidencia a fin de que la autoridad educativa
-verifique el cumplimiento de esta obligación.`
-        );
-
-        currentPositionY += 50;
-
-        crearSeccion(
-          doc,
-          `                                                   BAJO PROTESTA DE DECIR VERDAD
-                                                      GUILLERMO GÓNGORA CHALITA`,
-          "left"
-        );
-
-        currentPositionY += 5;
-
-        crearSeccion(
-          doc,
-          `                              ${solicitud.programa.plantel.domicilio.calle}, ${solicitud.programa.plantel.domicilio.numeroExterior} ${solicitud.programa.plantel.domicilio.numeroInterior}, ${solicitud.programa.plantel.domicilio.municipio.nombre} , ${solicitud.programa.plantel.domicilio.codigoPostal} , ${solicitud.programa.plantel.domicilio.estado.nombre}, MÉXICO ACUERDO NO. ${solicitud.programa.acuerdoRvoe}`,
-          "left"
-        );
+    crearSeccion(
+      doc,
+      `                                                            BAJO PROTESTA DE DECIR VERDAD                                                                                                                   GUILLERMO GÓNGORA CHALITA`,
+      'left'
+    );
 
   const totalPages = doc.internal.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
