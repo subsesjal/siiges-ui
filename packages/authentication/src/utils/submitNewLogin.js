@@ -1,5 +1,3 @@
-import { setToken } from '@siiges-ui/shared';
-
 function submitNewLogin(form, errors, setErrorMessages, activateAuth) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -25,7 +23,6 @@ function submitNewLogin(form, errors, setErrorMessages, activateAuth) {
         throw new Error(response.status);
       })
       .then((data) => {
-        setToken(data.token);
         activateAuth(data);
       })
       .catch((err) => {

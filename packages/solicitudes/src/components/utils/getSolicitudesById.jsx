@@ -62,6 +62,7 @@ export default function getSolicitudesById(id) {
           return response.json();
         })
         .then((data) => {
+
           setSolicitudes(data.data);
           const { data: solicitud } = data;
           setSolicitudesInspecciones({

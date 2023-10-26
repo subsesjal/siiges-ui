@@ -7,5 +7,5 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
   "editor.guides.bracketPairs": true,
-  "editor.lineNumbers": "off"
+  "editor.lineNumbers": "on"
 }

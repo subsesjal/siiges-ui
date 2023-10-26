@@ -15,8 +15,10 @@ import errorDatosNuevaSolicitud from './components/utils/sections/errors/errorDa
 import SolicitudContext from './components/utils/Context/solicitudContext';
 import modalidades from './components/utils/Mocks/mockModalidades';
 import formData from './components/utils/sections/forms/formData';
+import getSolicitudDetalles from './components/utils/getSolicitudDetalles';
 
 export {
+  getSolicitudDetalles,
   NewRequest,
   ChangeAddress,
   EvaluacionCurricular,
