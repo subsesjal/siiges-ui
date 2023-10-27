@@ -4,63 +4,32 @@ import PropTypes from 'prop-types';
 import { LabelData, Select } from '@siiges-ui/shared';
 import {
   getCiclosEscolares,
+  getGrados,
   getGrupos,
   getInstituciones,
   getPlantelesByInstitucion,
   getProgramas,
 } from '@siiges-ui/instituciones';
-import MockGrados from '../Mocks/grados';
+import getAsignaturas from '@siiges-ui/instituciones/src/utils/getAsignaturas';
 
-export default function InscripcionForm({ setAsignaturas }) {
+export default function InscripcionForm({ setAsignaturas, setProgramaId }) {
   const { instituciones } = getInstituciones();
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
-  const [planteles, setPlanteles] = useState([]);
   const [selectedPlantel, setSelectedPlantel] = useState('');
-  const [programas, setProgramas] = useState([]);
   const [selectedPrograma, setSelectedPrograma] = useState('');
-  const [ciclosEscolares, setCiclosEscolares] = useState([]);
   const [selectedCicloEscolar, setSelectedCicloEscolar] = useState('');
-  const [grados, setGrados] = useState([]);
   const [selectedGrado, setSelectedGrado] = useState('');
-  const [grupos, setGrupos] = useState([]);
   const [selectedGrupo, setSelectedGrupo] = useState('');
+  const [ciclosEscolares, setCiclosEscolares] = useState([]);
+  const [planteles, setPlanteles] = useState([]);
+  const [programas, setProgramas] = useState([]);
+  const [grados, setGrados] = useState([]);
+  const [grupos, setGrupos] = useState([]);
   const [labelPrograma, setLabelPrograma] = useState('');
   const [labelGrado, setLabelGrado] = useState('');
   const [labelGrupo, setLabelGrupo] = useState('');
   const [labelTurno, setLabelTurno] = useState('');
   const [labelCicloEscolar, setLabelCicloEscolar] = useState('');
-
-  const fetchCiclosEscolares = (programaId) => {
-    getCiclosEscolares(programaId, (error, data) => {
-      if (error) {
-        console.error('Failed to fetch ciclosEscolares:', error);
-        setCiclosEscolares([]);
-      } else {
-        setCiclosEscolares(data.ciclosEscolares);
-      }
-    });
-  };
-
-  const fetchGrados = (cicloEscolarId) => {
-    // getGrados(cicloEscolarId);
-    console.log(cicloEscolarId);
-    setGrados(MockGrados);
-  };
-
-  const fetchGrupos = (gradoId) => {
-    getGrupos(gradoId, selectedCicloEscolar, (error, data) => {
-      if (error) {
-        console.error('Failed to fetch grupos:', error);
-        setGrupos([]);
-      } else {
-        const transformedGrupos = data.grupos.map((programa) => ({
-          id: programa.id,
-          nombre: programa.descripcion,
-        }));
-        setGrupos(transformedGrupos);
-      }
-    });
-  };
 
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
@@ -93,98 +62,52 @@ export default function InscripcionForm({ setAsignaturas }) {
     });
   };
 
-  const handleCicloEscolarChange = (event) => {
-    const cicloEscolarId = event.target.value;
-    const selectedCicloObj = ciclosEscolares.find(
-      (ciclo) => ciclo.id === cicloEscolarId,
-    );
-
-    setSelectedCicloEscolar(cicloEscolarId);
-    setLabelCicloEscolar(selectedCicloObj ? selectedCicloObj.nombre : '');
-
-    setGrados([]);
-    setSelectedGrado('');
-    setGrupos([]);
-    setSelectedGrupo('');
-
-    if (cicloEscolarId) {
-      fetchGrados(cicloEscolarId);
-    } else {
-      setGrados([]);
-    }
+  const fetchCiclosEscolares = (programaId) => {
+    getCiclosEscolares(programaId, (error, data) => {
+      if (error) {
+        console.error('Failed to fetch ciclosEscolares:', error);
+        setCiclosEscolares([]);
+      } else {
+        setCiclosEscolares(data.ciclosEscolares);
+      }
+    });
   };
 
-  const handleGradoChange = (event) => {
-    const gradoId = event.target.value;
-    const selectedGradoObj = grados.find((grado) => grado.id === gradoId);
-
-    setSelectedGrado(gradoId);
-    setLabelGrado(selectedGradoObj ? selectedGradoObj.nombre : '');
-
-    setGrupos([]);
-    setSelectedGrupo('');
-
-    if (gradoId) {
-      fetchGrupos(gradoId);
-    } else {
-      setGrupos([]);
-    }
+  const fetchGrados = () => {
+    getGrados(selectedPrograma, (error, data) => {
+      if (error) {
+        console.error('Failed to fetch Grados:', error);
+        setGrados([]);
+      } else {
+        setGrados(data.grados);
+      }
+    });
   };
 
-  const handleGrupoChange = (event) => {
-    const grupoId = event.target.value;
-    const selectedGrupoObj = grupos.find((grupo) => grupo.id === grupoId);
-
-    setSelectedGrupo(grupoId);
-    setLabelGrupo(selectedGrupoObj ? selectedGrupoObj.nombre : '');
-    if (grupoId) {
-      fetchCiclosEscolares(grupoId);
-    } else {
-      setAsignaturas([]);
-    }
+  const fetchGrupos = (gradoId) => {
+    getGrupos(gradoId, selectedCicloEscolar, (error, data) => {
+      if (error) {
+        console.error('Failed to fetch grupos:', error);
+        setGrupos([]);
+      } else {
+        const transformedGrupos = data.grupos.map((programa) => ({
+          id: programa.id,
+          nombre: programa.descripcion,
+        }));
+        setGrupos(transformedGrupos);
+      }
+    });
   };
 
-  const handleProgramaChange = (event) => {
-    const programaId = event.target.value;
-    const selectedProgramaObj = programas.find(
-      (programa) => programa.id === programaId,
-    );
-
-    setSelectedPrograma(programaId);
-    setLabelTurno(selectedProgramaObj ? selectedProgramaObj.turno : '');
-    setLabelPrograma(selectedProgramaObj ? selectedProgramaObj.nombre : '');
-
-    setCiclosEscolares([]);
-    setSelectedCicloEscolar('');
-    setGrados([]);
-    setSelectedGrado('');
-    setGrupos([]);
-    setSelectedGrupo('');
-
-    if (programaId) {
-      fetchCiclosEscolares(programaId);
-    } else {
-      setCiclosEscolares([]);
-    }
-  };
-
-  const handlePlantelChange = (event) => {
-    const plantelId = event.target.value;
-    setSelectedPlantel(plantelId);
-
-    setSelectedPrograma('');
-    setCiclosEscolares([]);
-    setSelectedCicloEscolar('');
-    setGrados([]);
-    setSelectedGrado('');
-    setGrupos([]);
-    setSelectedGrupo('');
-
-    if (plantelId) {
-      fetchProgramas(plantelId);
-    } else {
-      setProgramas([]);
-    }
+  const fetchAsignaturas = (gradoId) => {
+    getAsignaturas(gradoId, selectedPrograma, (error, data) => {
+      if (error) {
+        console.error('Failed to fetch Grados:', error);
+        setAsignaturas([]);
+      } else {
+        setAsignaturas(data.asignaturas);
+      }
+    });
   };
 
   const handleInstitucionChange = (event) => {
@@ -208,6 +131,102 @@ export default function InscripcionForm({ setAsignaturas }) {
     }
   };
 
+  const handlePlantelChange = (event) => {
+    const plantelId = event.target.value;
+    setSelectedPlantel(plantelId);
+
+    setSelectedPrograma('');
+    setCiclosEscolares([]);
+    setSelectedCicloEscolar('');
+    setGrados([]);
+    setSelectedGrado('');
+    setGrupos([]);
+    setSelectedGrupo('');
+
+    if (plantelId) {
+      fetchProgramas(plantelId);
+    } else {
+      setProgramas([]);
+    }
+  };
+
+  const handleProgramaChange = (event) => {
+    const programaId = event.target.value;
+    const selectedProgramaObj = programas.find(
+      (programa) => programa.id === programaId,
+    );
+
+    setSelectedPrograma(programaId);
+    setLabelTurno(selectedProgramaObj ? selectedProgramaObj.turno : '');
+    setLabelPrograma(selectedProgramaObj ? selectedProgramaObj.nombre : '');
+
+    setCiclosEscolares([]);
+    setSelectedCicloEscolar('');
+    setGrados([]);
+    setSelectedGrado('');
+    setGrupos([]);
+    setSelectedGrupo('');
+
+    if (programaId) {
+      fetchCiclosEscolares(programaId);
+      setProgramaId(programaId);
+    } else {
+      setCiclosEscolares([]);
+    }
+  };
+
+  const handleCicloEscolarChange = (event) => {
+    const cicloEscolarId = event.target.value;
+    const selectedCicloObj = ciclosEscolares.find(
+      (ciclo) => ciclo.id === cicloEscolarId,
+    );
+
+    setSelectedCicloEscolar(cicloEscolarId);
+    setLabelCicloEscolar(selectedCicloObj ? selectedCicloObj.nombre : '');
+
+    setGrados([]);
+    setSelectedGrado('');
+    setGrupos([]);
+    setSelectedGrupo('');
+
+    if (cicloEscolarId) {
+      fetchGrados();
+    } else {
+      setGrados([]);
+    }
+  };
+
+  const handleGradoChange = (event) => {
+    const gradoId = event.target.value;
+    const selectedGradoObj = grados.find((grado) => grado.id === gradoId);
+
+    setSelectedGrado(gradoId);
+    setLabelGrado(selectedGradoObj ? selectedGradoObj.nombre : '');
+
+    setGrupos([]);
+    setSelectedGrupo('');
+
+    if (gradoId) {
+      fetchGrupos(gradoId);
+      fetchAsignaturas(gradoId);
+    } else {
+      setGrupos([]);
+    }
+  };
+
+  const handleGrupoChange = (event) => {
+    const grupoId = event.target.value;
+    const selectedGrupoObj = grupos.find((grupo) => grupo.id === grupoId);
+
+    setSelectedGrupo(grupoId);
+    setLabelGrupo(selectedGrupoObj ? selectedGrupoObj.nombre : '');
+    if (grupoId) {
+      fetchAsignaturas(grupoId);
+    } else {
+      setAsignaturas([]);
+    }
+  };
+
   return (
     <>
       <Grid container spacing={2} alignItems="center">
@@ -227,7 +246,7 @@ export default function InscripcionForm({ setAsignaturas }) {
             value={selectedPlantel}
             options={planteles || []}
             onchange={handlePlantelChange}
-            disabled={planteles.length === 0}
+            disabled={!selectedInstitucion}
           />
         </Grid>
         <Grid item xs={4}>
@@ -237,7 +256,7 @@ export default function InscripcionForm({ setAsignaturas }) {
             value={selectedPrograma}
             options={programas || []}
             onchange={handleProgramaChange}
-            disabled={programas.length === 0}
+            disabled={!selectedPlantel}
           />
         </Grid>
         <Grid item xs={4}>
@@ -247,7 +266,7 @@ export default function InscripcionForm({ setAsignaturas }) {
             value={selectedCicloEscolar}
             options={ciclosEscolares || []}
             onchange={handleCicloEscolarChange}
-            disabled={ciclosEscolares.length === 0}
+            disabled={!selectedPrograma}
           />
         </Grid>
         <Grid item xs={4}>
@@ -257,7 +276,7 @@ export default function InscripcionForm({ setAsignaturas }) {
             value={selectedGrado}
             options={grados || []}
             onchange={handleGradoChange}
-            disabled={grados.length === 0}
+            disabled={!selectedCicloEscolar}
           />
         </Grid>
         <Grid item xs={4}>
@@ -267,7 +286,7 @@ export default function InscripcionForm({ setAsignaturas }) {
             value={selectedGrupo}
             options={grupos || []}
             onchange={handleGrupoChange}
-            disabled={grupos.length === 0}
+            disabled={!selectedGrado}
           />
         </Grid>
       </Grid>
@@ -297,4 +316,5 @@ export default function InscripcionForm({ setAsignaturas }) {
 
 InscripcionForm.propTypes = {
   setAsignaturas: PropTypes.func.isRequired,
+  setProgramaId: PropTypes.func.isRequired,
 };

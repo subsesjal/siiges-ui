@@ -7,9 +7,11 @@ import AddIcon from '@mui/icons-material/Add';
 
 import '../../styles/buttons/ButtonAdd.css';
 
-function ButtonAdd({ text, onClick, type }) {
+function ButtonAdd({
+  text, onClick, type, disabled,
+}) {
   return (
-    <ButtonUnstyled className="buttonAdd" onClick={onClick}>
+    <ButtonUnstyled className="buttonAdd" onClick={onClick} disabled={disabled}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {type === 'user' ? <PersonAddIcon /> : <AddIcon />}
         &nbsp;&nbsp;
@@ -20,14 +22,16 @@ function ButtonAdd({ text, onClick, type }) {
 }
 
 ButtonAdd.defaultProps = {
-  onClick: () => {}, // Default empty function
+  onClick: () => {},
   type: 'user',
+  disabled: false,
 };
 
 ButtonAdd.propTypes = {
   text: PropTypes.string.isRequired,
   type: PropTypes.string,
   onClick: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 export default ButtonAdd;

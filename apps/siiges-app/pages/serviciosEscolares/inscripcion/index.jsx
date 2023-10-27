@@ -7,13 +7,12 @@ import {
 
 export default function Inscripcion() {
   const [asignaturas, setAsignaturas] = useState();
-
-  console.log(asignaturas);
+  const [programaId, setProgramaId] = useState();
 
   return (
     <Layout title="Inscripción">
-      <InscripcionForm setAsignaturas={setAsignaturas} />
-      <InscripcionesTable />
+      <InscripcionForm setAsignaturas={setAsignaturas} setProgramaId={setProgramaId} />
+      {asignaturas && <InscripcionesTable asignaturas={asignaturas} programaId={programaId} />}
     </Layout>
   );
 }

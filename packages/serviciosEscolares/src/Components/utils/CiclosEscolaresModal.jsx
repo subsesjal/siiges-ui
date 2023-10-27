@@ -6,10 +6,11 @@ import {
   Input,
   LabelData,
 } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default function CiclosEscolaresModal({ open, setOpen, type }) {
-  const title = type === "new" ? "Agregar Ciclo Escolar" : "Editar Ciclo Escolar";
+  const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Editar Ciclo Escolar';
   return (
     <DefaultModal open={open} setOpen={setOpen} title={title}>
       <Grid container spacing={1}>
@@ -56,3 +57,9 @@ export default function CiclosEscolaresModal({ open, setOpen, type }) {
     </DefaultModal>
   );
 }
+
+CiclosEscolaresModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+};
