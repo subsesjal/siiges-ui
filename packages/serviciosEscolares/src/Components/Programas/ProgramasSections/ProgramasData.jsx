@@ -1,8 +1,20 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
+import getSolicitudesById from '@siiges-ui/solicitudes/src/components/utils/getSolicitudesById';
 import ProgramasPDF from '../../utils/ProgramasPDF';
 
 export default function ProgramasData() {
+  const router = useRouter();
+  const { query } = router;
+  const { solicitudesProgramas: programa } = getSolicitudesById(query.id);
+  const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+  const fecha = new Date(programa.fechaSurteEfecto)
+    .toLocaleDateString('es', opciones)
+    .replace(/ /g, ' ')
+    .replace('.', '')
+    .replace(/-([a-z])/, (x) => `-${x[1].toUpperCase()}`);
   const dataSections = [
     {
       titles: [
@@ -14,12 +26,12 @@ export default function ProgramasData() {
         'Turnos',
       ],
       subtitles: [
-        'Ejemplo',
-        'Ejemplo',
-        'Ejemplo de texto extremadamente largo',
-        'Ejemplo',
-        'Ejemplo',
-        'Ejemplo',
+        programa.acuerdoRvoe,
+        programa.nivel,
+        programa.nombre,
+        programa.modalidad,
+        programa.periodo,
+        programa.turno,
       ],
     },
     {
@@ -31,11 +43,11 @@ export default function ProgramasData() {
         'Duracion del programa',
       ],
       subtitles: [
-        'Ejemplo',
-        'Ejemplo',
-        'Ejemplo de texto extremadamente largo',
-        'Ejemplo',
-        'Ejemplo',
+        programa.creditos,
+        programa.objetivoGeneral,
+        programa.objetivosParticulares,
+        fecha,
+        programa.duracionPeriodos,
       ],
     },
   ];
@@ -72,3 +84,20 @@ export default function ProgramasData() {
     </>
   );
 }
+
+ProgramasData.propTypes = {
+  programa: PropTypes.shape({
+    id: PropTypes.number,
+    acuerdoRvoe: PropTypes.string,
+    nombre: PropTypes.string,
+    nivel: PropTypes.string,
+    turno: PropTypes.string,
+    modalidad: PropTypes.string,
+    periodo: PropTypes.string,
+    creditos: PropTypes.string,
+    objetivoGeneral: PropTypes.string,
+    objetivosParticulares: PropTypes.string,
+    fechaSurteEfecto: PropTypes.string,
+    duracionPeriodos: PropTypes.string,
+  }).isRequired,
+};

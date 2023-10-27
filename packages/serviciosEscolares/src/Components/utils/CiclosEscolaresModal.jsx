@@ -1,27 +1,59 @@
 import { Grid } from '@mui/material';
 import {
-  Select,
   ButtonStyled,
   DefaultModal,
   Input,
   LabelData,
 } from '@siiges-ui/shared';
 import React from 'react';
+import PropTypes from 'prop-types';
+import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
+import postCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/PostCiclosEscolares';
 
-export default function CiclosEscolaresModal({ open, setOpen, type }) {
-  const title = type === "new" ? "Agregar Ciclo Escolar" : "Editar Ciclo Escolar";
+export default function CiclosEscolaresModal({
+  open,
+  setOpen,
+  type,
+  data,
+}) {
+  const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Editar Ciclo Escolar';
+  const [form, setForm] = React.useState({
+    id: data?.id,
+    nombre: data?.nombre,
+    descripcion: data?.descripcion,
+  });
+  const pathCiclosEscolares = async ({ id, ...body }) => {
+    if (type === 'new') {
+      await postCiclosEscolares({ ...body, programaId: data?.programaId });
+      setOpen(false);
+    } else {
+      await updateCiclosEscolares({ id, dataBody: body });
+      setOpen(false);
+    }
+  };
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
   return (
     <DefaultModal open={open} setOpen={setOpen} title={title}>
       <Grid container spacing={1}>
         <Grid item xs={2}>
-          <LabelData title="ID" subtitle="288" />
+          <LabelData title="ID" subtitle={data?.id} />
         </Grid>
         <Grid item xs={3}>
-          <LabelData title="Programa ID" subtitle="882" />
+          <LabelData title="Programa ID" subtitle={data?.programaId} />
         </Grid>
         <Grid item xs={6} />
         <Grid item xs={4}>
-          <Select title="Nombre de ciclo escolar" options={[]} />
+          <Input
+            id="nombre"
+            label="Nombre de ciclo escolar"
+            name="nombre"
+            auto="nombre"
+            onchange={handleOnChange}
+            value={form?.nombre}
+          />
         </Grid>
         <Grid item xs={8}>
           <Input
@@ -29,8 +61,8 @@ export default function CiclosEscolaresModal({ open, setOpen, type }) {
             label="Descripción"
             name="descripcion"
             auto="descripcion"
-            onchange={() => {}}
-            value=""
+            onchange={handleOnChange}
+            value={form?.descripcion}
           />
         </Grid>
       </Grid>
@@ -48,7 +80,7 @@ export default function CiclosEscolaresModal({ open, setOpen, type }) {
             text="Confirmar"
             alt="Confirmar"
             onclick={() => {
-              console.log('confirmar');
+              pathCiclosEscolares(form);
             }}
           />
         </Grid>
@@ -56,3 +88,23 @@ export default function CiclosEscolaresModal({ open, setOpen, type }) {
     </DefaultModal>
   );
 }
+
+CiclosEscolaresModal.propTypes = {
+  type: PropTypes.string.isRequired,
+  setOpen: PropTypes.bool.isRequired,
+  open: PropTypes.bool.isRequired,
+  data: PropTypes.shape({
+    id: PropTypes.number,
+    nombre: PropTypes.string,
+    descripcion: PropTypes.string,
+    programaId: PropTypes.number,
+    turno: PropTypes.string,
+    modalidad: PropTypes.string,
+    periodo: PropTypes.string,
+    creditos: PropTypes.string,
+    objetivoGeneral: PropTypes.string,
+    objetivosParticulares: PropTypes.string,
+    fechaSurteEfecto: PropTypes.string,
+    duracionPeriodos: PropTypes.string,
+  }).isRequired,
+};

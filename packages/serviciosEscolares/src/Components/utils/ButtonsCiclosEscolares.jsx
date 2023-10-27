@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import CiclosEscolaresModal from './CiclosEscolaresModal';
 
-export default function ButtonsCiclosEscolares({ id }) {
+export default function ButtonsCiclosEscolares({ row }) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Stack direction="row" spacing={1}>
-        {id && (
+        {row && (
           <IconButton
             aria-label="Ciclos Escolares Editar"
             onClick={() => {
@@ -20,11 +20,11 @@ export default function ButtonsCiclosEscolares({ id }) {
           </IconButton>
         )}
       </Stack>
-      <CiclosEscolaresModal open={open} setOpen={setOpen} type="edit" />
+      <CiclosEscolaresModal open={open} setOpen={setOpen} type="edit" data={row} />
     </>
   );
 }
 
 ButtonsCiclosEscolares.propTypes = {
-  id: PropTypes.number.isRequired,
+  row: PropTypes.number.isRequired,
 };
