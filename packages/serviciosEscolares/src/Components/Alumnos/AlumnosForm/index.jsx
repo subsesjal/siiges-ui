@@ -8,7 +8,7 @@ import {
 } from '@siiges-ui/instituciones';
 import getAlumnosByPrograma from '@siiges-ui/instituciones/src/utils/getAlumnosByPrograma';
 
-export default function AlumnosForm({ setAlumnos }) {
+export default function AlumnosForm({ setAlumnos, setPrograma }) {
   const { instituciones = [] } = getInstituciones();
 
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
@@ -38,6 +38,7 @@ export default function AlumnosForm({ setAlumnos }) {
 
   const handleProgramaChange = (event) => {
     const programaId = event.target.value;
+    setPrograma(programaId);
     setSelectedPrograma(programaId);
     if (programaId) {
       fetchAlumnos(programaId);

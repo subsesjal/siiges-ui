@@ -5,12 +5,13 @@ import React, { useState } from 'react';
 
 export default function Alumnos() {
   const [alumnos, setAlumnos] = useState();
+  const [programa, setPrograma] = useState();
 
   return (
     <Layout title="Alumnos">
-      <AlumnosForm setAlumnos={setAlumnos} />
+      <AlumnosForm setAlumnos={setAlumnos} setPrograma={setPrograma} />
       <Divider sx={{ marginTop: 2 }} />
-      {alumnos && <AlumnosTable alumnos={alumnos} />}
+      {alumnos && <AlumnosTable alumnos={alumnos} programa={programa} />}
     </Layout>
   );
 }
