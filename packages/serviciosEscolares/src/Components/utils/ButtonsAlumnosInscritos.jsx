@@ -1,27 +1,44 @@
 import { IconButton, Stack } from '@mui/material';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { getInscripcionesAlumnos } from '@siiges-ui/instituciones';
+import { Context } from '@siiges-ui/shared';
 import ModalAlumnosInscritos from './ModalAlumnosInscritos';
 
-export default function ButtonsAlumnosInscritos({
-  id,
-  asignaturas,
-}) {
+export default function ButtonsAlumnosInscritos({ id, asignaturas, grupoId }) {
+  const { setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
-  const [checkedIDs, setCheckedIDs] = useState([]);
+  const [selectedAlumnoAsignaturas, setSelectedAlumnoAsignaturas] = useState(
+    [],
+  );
 
-  const handleCheckboxChange = (isChecked) => {
-    setCheckedIDs((prevIDs) => {
-      if (isChecked) {
-        return [...prevIDs, id];
-      }
-      return prevIDs.filter((item) => item !== id);
-    });
-  };
+  useEffect(() => {
+    if (grupoId) {
+      getInscripcionesAlumnos(grupoId, (error, result) => {
+        if (!error && result.inscripciones) {
+          const filteredAsignaturas = result.inscripciones
+            .filter((item) => item.alumnoId === id)
+            .map((item) => item.alumnoAsignaturas)
+            .flat();
+
+          setSelectedAlumnoAsignaturas(filteredAsignaturas);
+        }
+        if (error) {
+          console.error('Failed to fetch inscripciones:', error);
+          setNoti({
+            open: true,
+            message:
+              'Algo salio mal al inscribir el alumno, reintente mas tarde',
+            type: 'error',
+          });
+        }
+      });
+    }
+  }, [grupoId, id]);
 
   return (
     <>
@@ -49,14 +66,14 @@ export default function ButtonsAlumnosInscritos({
         </IconButton>
       </Stack>
       <ModalAlumnosInscritos
-        id={id}
+        alumnoId={id}
+        grupoId={grupoId}
         open={open}
         setOpen={setOpen}
         onClose={() => setOpen(false)}
         asignaturas={asignaturas}
         title={title}
-        handleCheckboxChange={handleCheckboxChange}
-        checkedIDs={checkedIDs}
+        alumnoAsignaturas={selectedAlumnoAsignaturas}
       />
     </>
   );
@@ -64,5 +81,6 @@ export default function ButtonsAlumnosInscritos({
 
 ButtonsAlumnosInscritos.propTypes = {
   id: PropTypes.number.isRequired,
+  grupoId: PropTypes.number.isRequired,
   asignaturas: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

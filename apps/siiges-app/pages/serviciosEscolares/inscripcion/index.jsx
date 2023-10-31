@@ -8,11 +8,22 @@ import {
 export default function Inscripcion() {
   const [asignaturas, setAsignaturas] = useState();
   const [programaId, setProgramaId] = useState();
+  const [grupoId, setGrupoId] = useState();
 
   return (
     <Layout title="Inscripción">
-      <InscripcionForm setAsignaturas={setAsignaturas} setProgramaId={setProgramaId} />
-      {asignaturas && <InscripcionesTable asignaturas={asignaturas} programaId={programaId} />}
+      <InscripcionForm
+        setAsignaturas={setAsignaturas}
+        setProgramaId={setProgramaId}
+        setGrupoId={setGrupoId}
+      />
+      {grupoId && (
+        <InscripcionesTable
+          asignaturas={asignaturas}
+          programaId={programaId}
+          grupoId={grupoId}
+        />
+      )}
     </Layout>
   );
 }

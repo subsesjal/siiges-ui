@@ -54,20 +54,19 @@ export default function InscripcionesTable({
         },
       ];
 
-      postAsignaturasAlumno(dataToSend, grupoId, (error, result) => {
+      postAsignaturasAlumno(dataToSend, grupoId, (error) => {
         if (error) {
           console.error('Failed to enroll the student:', error);
           setNoti({
             open: true,
             message:
-              'Algo salio mal al cargar al inscribir al alumno, reintente mas tarde',
+              'Algo salio mal al inscribir el alumno, reintente mas tarde',
             type: 'error',
           });
         } else {
-          console.log('Student enrolled successfully:', result.alumnos);
           setNoti({
             open: true,
-            message: 'Exito al inscribir al alumno!',
+            message: 'Exito al inscribir el alumno!',
             type: 'success',
           });
           setAlumnosInscritos((prev) => [...prev, alumnoByMatricula]);
@@ -109,7 +108,7 @@ export default function InscripcionesTable({
       <Grid item xs={12}>
         <DataTable
           rows={alumnosInscritos}
-          columns={columnsAlumnosInscritos(asignaturas)}
+          columns={columnsAlumnosInscritos(asignaturas, grupoId)}
           title="Alumnos inscritos"
         />
       </Grid>

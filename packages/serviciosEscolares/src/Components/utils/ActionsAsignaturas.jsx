@@ -7,10 +7,11 @@ export default function ActionsAsignaturas({
   onCheckboxChange,
   selectedAsignaturas,
 }) {
-  const [checked, setChecked] = useState(selectedAsignaturas.includes(id));
-
+  const [checked, setChecked] = useState([]);
   useEffect(() => {
-    setChecked(selectedAsignaturas.includes(id));
+    if (selectedAsignaturas) {
+      setChecked(selectedAsignaturas.includes(id));
+    }
   }, [selectedAsignaturas, id]);
 
   return (

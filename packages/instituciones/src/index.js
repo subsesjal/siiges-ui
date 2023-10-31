@@ -17,6 +17,7 @@ import getGrupos from './utils/getGrupos';
 import getAlumnoByMatricula from './utils/getAlumnoByMatricula';
 import PlantelesInstitucionesAuth from './components/Planteles/plantelesInstitucionesAuth';
 import postAsignaturasAlumno from './utils/postAsignaturasAlumno';
+import getInscripcionesAlumnos from './utils/getInscripcionesAlumnos';
 
 export {
   Institucion,
@@ -38,4 +39,5 @@ export {
   getGrupos,
   getAlumnoByMatricula,
   postAsignaturasAlumno,
+  getInscripcionesAlumnos,
 };

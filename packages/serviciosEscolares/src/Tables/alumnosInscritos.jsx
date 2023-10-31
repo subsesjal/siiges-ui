@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonsAlumnosInscritos from '../Components/utils/ButtonsAlumnosInscritos';
 
-const columnsAlumnosInscritos = (asignaturas) => [
+const columnsAlumnosInscritos = (asignaturas, grupoId) => [
   { field: 'matricula', headerName: 'Matricula', width: 170 },
   {
     field: 'apellidoPaterno',
@@ -29,7 +29,11 @@ const columnsAlumnosInscritos = (asignaturas) => [
     headerName: 'Acciones',
     width: 150,
     renderCell: (params) => (
-      <ButtonsAlumnosInscritos id={params.id} asignaturas={asignaturas} />
+      <ButtonsAlumnosInscritos
+        id={params.id}
+        grupoId={grupoId}
+        asignaturas={asignaturas}
+      />
     ),
     sortable: false,
     filterable: false,

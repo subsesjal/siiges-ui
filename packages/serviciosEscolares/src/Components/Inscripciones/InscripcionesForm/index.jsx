@@ -12,7 +12,7 @@ import {
 } from '@siiges-ui/instituciones';
 import getAsignaturas from '@siiges-ui/instituciones/src/utils/getAsignaturas';
 
-export default function InscripcionForm({ setAsignaturas, setProgramaId }) {
+export default function InscripcionForm({ setAsignaturas, setProgramaId, setGrupoId }) {
   const { instituciones } = getInstituciones();
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [selectedPlantel, setSelectedPlantel] = useState('');
@@ -219,12 +219,8 @@ export default function InscripcionForm({ setAsignaturas, setProgramaId }) {
     const selectedGrupoObj = grupos.find((grupo) => grupo.id === grupoId);
 
     setSelectedGrupo(grupoId);
+    setGrupoId(grupoId);
     setLabelGrupo(selectedGrupoObj ? selectedGrupoObj.nombre : '');
-    if (grupoId) {
-      fetchAsignaturas(grupoId);
-    } else {
-      setAsignaturas([]);
-    }
   };
 
   return (
@@ -317,4 +313,5 @@ export default function InscripcionForm({ setAsignaturas, setProgramaId }) {
 InscripcionForm.propTypes = {
   setAsignaturas: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
+  setGrupoId: PropTypes.func.isRequired,
 };

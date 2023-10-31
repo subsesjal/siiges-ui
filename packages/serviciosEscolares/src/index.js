@@ -16,6 +16,7 @@ import DocumentosAlumno from './Components/Alumnos/FormAlumno/DocumentosAlumno';
 import InscripcionForm from './Components/Inscripciones/InscripcionesForm';
 import InscripcionesTable from './Components/Inscripciones/InscripcionesTable';
 import ModalAlumnosInscritos from './Components/utils/ModalAlumnosInscritos';
+import ActionsAlumnosInscritos from './Components/utils/ActionsAlumnosInscritos';
 
 export {
   columnsInstitucionesAutorizadas,
@@ -36,4 +37,5 @@ export {
   InscripcionForm,
   InscripcionesTable,
   ModalAlumnosInscritos,
+  ActionsAlumnosInscritos,
 };
