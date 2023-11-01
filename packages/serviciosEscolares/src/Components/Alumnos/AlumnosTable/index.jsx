@@ -4,7 +4,7 @@ import columnsAlumnos from '../../../Tables/AlumnosTable';
 import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 
-export default function AlumnosTable({ alumnos }) {
+export default function AlumnosTable({ alumnos, programa }) {
   const router = useRouter();
   return (
     <Grid container sx={{ marginTop: 2 }}>
@@ -12,7 +12,9 @@ export default function AlumnosTable({ alumnos }) {
         <ButtonAdd
           text="Agregar Alumno"
           type="add"
-          onClick={() => {router.push(`/serviciosEscolares/alumnos/NuevoAlumno`)}}
+          onClick={() => {
+            router.push(`/serviciosEscolares/alumnos/${programa}/NuevoAlumno`);
+          }}
         />
       </Grid>
       <DataTable
