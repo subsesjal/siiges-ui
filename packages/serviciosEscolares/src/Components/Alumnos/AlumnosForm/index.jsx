@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Grid } from '@mui/material';
 import { Select } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import {
   getInstituciones,
   getPlantelesByInstitucion,
@@ -130,3 +131,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma }) {
     </Grid>
   );
 }
+
+AlumnosForm.propTypes = {
+  setAlumnos: PropTypes.func.isRequired,
+};

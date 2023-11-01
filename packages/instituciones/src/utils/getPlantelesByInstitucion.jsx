@@ -1,4 +1,4 @@
-import { getToken } from "@siiges-ui/shared";
+import { getToken } from '@siiges-ui/shared';
 
 export default function getPlantelesByInstitucion(institucionId, callback) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;

@@ -26,6 +26,7 @@
 
 .buttonAdd:disabled {
   pointer-events: none;
+  border-color: gray;
 }
 
 .buttonAdd:hover {

@@ -78,13 +78,12 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         <Grid item xs={6}>
           <BasicSelect
             title="Grado"
-            name="grado"
+            name="gradoId"
             value=""
             options={selectedGrade}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.grado}
-            textValue
+            errorMessage={error.gradoId}
             required
           />
         </Grid>

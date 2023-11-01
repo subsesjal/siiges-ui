@@ -1,12 +1,12 @@
 export default function errorDatosAsignaturas(form, setError, error) {
   const validNumber = /^-?\d*\.?\d+$/;
   const errors = {
-    grado: () => {
-      if (form.grado === undefined || form.grado === '') {
-        setError({ ...error, grado: 'Seleccione un nivel' });
+    gradoId: () => {
+      if (form.gradoId === undefined || form.gradoId === '') {
+        setError({ ...error, gradoId: 'Seleccione un nivel' });
         return false;
       }
-      setError({ ...error, grado: '' });
+      setError({ ...error, gradoId: '' });
       return true;
     },
     area: () => {
