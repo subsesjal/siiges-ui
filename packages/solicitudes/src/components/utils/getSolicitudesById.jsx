@@ -28,13 +28,7 @@ export default function getSolicitudesById(id) {
     'Semestral curriculum flexible',
     'Cuatrimestral curriculum flexible',
   ];
-  const turnos = [
-    null,
-    'Matutino',
-    'Vespertino',
-    'Nocturno',
-    'Mixto',
-  ];
+  const turnos = [null, 'Matutino', 'Vespertino', 'Nocturno', 'Mixto'];
 
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -62,7 +56,6 @@ export default function getSolicitudesById(id) {
           return response.json();
         })
         .then((data) => {
-
           setSolicitudes(data.data);
           const { data: solicitud } = data;
           setSolicitudesInspecciones({
