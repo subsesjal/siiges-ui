@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes
 import { Grid, Typography, Divider } from '@mui/material';
 
 function LabelData({ title, subtitle }) {
@@ -16,5 +17,10 @@ function LabelData({ title, subtitle }) {
     </Grid>
   );
 }
+
+LabelData.propTypes = {
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string.isRequired,
+};
 
 export default LabelData;

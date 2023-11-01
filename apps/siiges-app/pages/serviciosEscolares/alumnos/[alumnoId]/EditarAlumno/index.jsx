@@ -1,8 +1,7 @@
-import { Grid, Tab, Tabs } from '@mui/material'
-import { DocumentosAlumno, FormAlumno } from '@siiges-ui/serviciosescolares'
-import { Layout } from '@siiges-ui/shared'
-import React from 'react'
-import { useState } from 'react';
+import { Grid, Tab, Tabs } from '@mui/material';
+import { DocumentosAlumno, FormAlumno } from '@siiges-ui/serviciosescolares';
+import { Layout } from '@siiges-ui/shared';
+import React, { useState } from 'react';
 
 export default function EditarAlumno() {
   const [value, setValue] = useState(0);
@@ -13,7 +12,9 @@ export default function EditarAlumno() {
   return (
     <Layout title="Editar Alumno">
       <Grid container>
-        <Grid item xs={12}
+        <Grid
+          item
+          xs={12}
           sx={{
             display: 'flex',
             justifyContent: 'end',
@@ -28,5 +29,5 @@ export default function EditarAlumno() {
         {value === 1 && <DocumentosAlumno />}
       </Grid>
     </Layout>
-  )
+  );
 }
