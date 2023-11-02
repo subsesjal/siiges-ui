@@ -35,7 +35,6 @@ function submitNewSolicitud(validations, setNewSubmit) {
       throw new Error('Error submitting the request');
     })
     .then((data) => {
-      console.log(data);
       setId(data.data.id);
       setProgramaId(data.data.programa.id);
     })

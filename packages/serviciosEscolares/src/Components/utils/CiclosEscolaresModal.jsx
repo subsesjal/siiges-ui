@@ -7,7 +7,6 @@ import {
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
-import PropTypes from 'prop-types';
 import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
 import postCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/PostCiclosEscolares';
 
