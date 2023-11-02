@@ -11,7 +11,13 @@ import getPlantelesByInstitucion from './utils/getPlantelesByInstitucion';
 import getInstitucion from './components/utils/getInstitucion';
 import getInstituciones from './utils/getInstituciones';
 import getProgramas from './utils/getProgramas';
+import getGrados from './utils/getGrados';
+import getCiclosEscolares from './utils/getCiclosEscolares';
+import getGrupos from './utils/getGrupos';
+import getAlumnoByMatricula from './utils/getAlumnoByMatricula';
 import PlantelesInstitucionesAuth from './components/Planteles/plantelesInstitucionesAuth';
+import postAsignaturasAlumno from './utils/postAsignaturasAlumno';
+import getInscripcionesAlumnos from './utils/getInscripcionesAlumnos';
 
 export {
   Institucion,
@@ -28,4 +34,10 @@ export {
   getInstituciones,
   PlantelesInstitucionesAuth,
   getPlantelesByInstitucion,
+  getGrados,
+  getCiclosEscolares,
+  getGrupos,
+  getAlumnoByMatricula,
+  postAsignaturasAlumno,
+  getInscripcionesAlumnos,
 };

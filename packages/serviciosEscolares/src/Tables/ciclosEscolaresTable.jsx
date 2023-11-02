@@ -11,7 +11,7 @@ const columnsCiclosEscolares = [
     width: 150,
     renderCell: (params) => (
       <ButtonsCiclosEscolares
-        id={params.id}
+        row={params.row}
       />
     ),
     sortable: false,

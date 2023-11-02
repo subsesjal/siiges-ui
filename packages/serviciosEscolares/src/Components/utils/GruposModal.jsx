@@ -1,4 +1,6 @@
+import React, { useState } from 'react';
 import { Grid } from '@mui/material';
+import PropTypes from 'prop-types';
 import {
   ButtonStyled,
   DefaultModal,
@@ -6,35 +8,59 @@ import {
   LabelData,
   Select,
 } from '@siiges-ui/shared';
-import React from 'react';
+import grupoService from './gruposService';
 
-export default function GruposModal({ open, setOpen, type }) {
-  const title = type === "new" ? "Agregar Grupo" : "Editar Grupo";
+const turnos = [{ id: 1, nombre: 'Matutino' }, { id: 2, nombre: 'Vespertino' }, { id: 3, nombre: 'Nocturno' }, { id: 4, nombre: 'Mixto' }];
+export default function GruposModal({
+  open, setOpen, type, data, params,
+}) {
+  const title = type === 'new' ? 'Agregar Grupo' : 'Editar Grupo';
+  const [form, setForm] = useState();
+  const pathGrupo = async (dataform) => {
+    const dataBody = { ...dataform, ...params };
+    if (data?.id) {
+      grupoService({ id: data.id, dataBody });
+    } else {
+      grupoService({ dataBody });
+    }
+    setOpen(false);
+  };
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
   return (
     <DefaultModal open={open} setOpen={setOpen} title={title}>
       <Grid container spacing={1}>
         <Grid item xs={2}>
-          <LabelData title="ID" subtitle="288" />
+          <LabelData title="ID" subtitle={data?.id} />
         </Grid>
         <Grid item xs={4}>
-          <LabelData title="Ciclo Escolar ID" subtitle="882" />
+          <LabelData title="Ciclo Escolar ID" subtitle={params?.gradoId} />
         </Grid>
         <Grid item xs={4}>
-          <LabelData title="Grado" subtitle="Primer Semestre" />
+          <LabelData title="Grado" subtitle={params?.gradoNombre} />
         </Grid>
         <Grid item xs={2} />
         <Grid item xs={4}>
           <Input
-            id="grupo"
-            label="Grupo"
-            name="grupo"
-            auto="grupo"
-            onchange={() => {}}
-            value=""
+            id="descripcion"
+            label="Descripcion"
+            name="descripcion"
+            auto="descripcion"
+            onchange={handleOnChange}
+            value={data?.descripcion}
           />
         </Grid>
         <Grid item xs={4}>
-          <Select title="Turno" options={[]} />
+          <Select
+            title="Turno"
+            value={data?.turnoId}
+            options={turnos}
+            onchange={handleOnChange}
+            id="turnoId"
+            name="turnoId"
+          />
         </Grid>
         <Grid item xs={4}>
           <Input
@@ -42,30 +68,30 @@ export default function GruposModal({ open, setOpen, type }) {
             label="Generación"
             name="generacion"
             auto="generacion"
-            onchange={() => {}}
-            value=""
+            onchange={handleOnChange}
+            value={data?.generacion}
           />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="fechaInicio"
+            id="generacionFechaInicio"
             label="Fecha de inicio de generación"
-            name="fechaInicio"
-            auto="fechaInicio"
-            onchange={() => {}}
+            name="generacionFechaInicio"
+            auto="generacionFechaInicio"
+            onchange={handleOnChange}
             type="date"
-            value=""
+            value={data?.generacionFechaInicio}
           />
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="fechaFin"
+            id="generacionFechaFin"
             label="Fecha de fin de generación"
-            name="fechaFin"
-            auto="fechaFin"
-            onchange={() => {}}
+            name="generacionFechaFin"
+            auto="generacionFechaFin"
+            onchange={handleOnChange}
             type="date"
-            value=""
+            value={data?.generacionFechaFin}
           />
         </Grid>
       </Grid>
@@ -83,7 +109,7 @@ export default function GruposModal({ open, setOpen, type }) {
             text="Confirmar"
             alt="Confirmar"
             onclick={() => {
-              console.log('confirmar');
+              pathGrupo(form);
             }}
           />
         </Grid>
@@ -91,3 +117,21 @@ export default function GruposModal({ open, setOpen, type }) {
     </DefaultModal>
   );
 }
+
+GruposModal.propTypes = {
+  type: PropTypes.string.isRequired,
+  params: PropTypes.string.isRequired,
+  setOpen: PropTypes.bool.isRequired,
+  open: PropTypes.bool.isRequired,
+  data: PropTypes.shape({
+    id: PropTypes.number,
+    cicloEscolarId: PropTypes.number,
+    turnoId: PropTypes.number,
+    gradoId: PropTypes.number,
+    descripcion: PropTypes.string,
+    gradoNombre: PropTypes.string,
+    generacion: PropTypes.string,
+    generacionFechaInicio: PropTypes.string,
+    generacionFechaFin: PropTypes.string,
+  }).isRequired,
+};
