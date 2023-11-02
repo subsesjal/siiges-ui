@@ -1,7 +1,9 @@
 import fetchNotificaciones from './Components/utils/fetchNotificaciones';
-import ConsultarNotificacionForm from './Components/ConsultarNotificacionForm';
+import NotificacionForm from './Components/Notificaciones/NotificacionForm';
+import NotificacionTable from './Components/Notificaciones/NotificacionTable';
 
 export {
   fetchNotificaciones,
-  ConsultarNotificacionForm,
+  NotificacionForm,
+  NotificacionTable,
 };

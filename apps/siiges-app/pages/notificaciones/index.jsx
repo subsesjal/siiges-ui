@@ -1,78 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
-import fetchNotificaciones from '@siiges-ui/notificaciones';
-import { useRouter } from 'next/router';
-import { Layout, DataTable, Context } from '@siiges-ui/shared';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import { Divider, IconButton } from '@mui/material';
-import Link from 'next/link';
+import React, { useContext } from 'react';
+import { Layout, Context } from '@siiges-ui/shared';
+import { NotificacionTable, fetchNotificaciones } from '@siiges-ui/notificaciones/src';
+import { Divider } from '@mui/material';
 
-const commonColumns = [
-  { field: 'asunto', headerName: 'Asunto', width: 300 },
-  { field: 'notificacion', headerName: 'Notificación', width: 650 },
-  {
-    field: 'actions',
-    headerName: 'Acciones',
-    width: 150,
-    renderCell: ({ id }) => (
-      <Link href={`/notificaciones/detallesNotificaciones/${id}`}>
-        <IconButton aria-label="consultar">
-          <ListAltIcon />
-        </IconButton>
-      </Link>
-    ),
-  },
-];
-
-const adminColumns = [
-  { field: 'usuario', headerName: 'Usuario', width: 230 },
-  { field: 'email', headerName: 'Correo electrónico', width: 200 },
-  { field: 'asunto', headerName: 'Asunto', width: 150 },
-  { field: 'notificacion', headerName: 'Notificación', width: 300 },
-  { field: 'estatus', headerName: 'Estatus', width: 110 },
-  {
-    field: 'actions',
-    headerName: 'Acciones',
-    width: 110,
-    renderCell: ({ id }) => (
-      <Link href={`/notificaciones/${id}`}>
-        <IconButton aria-label="consultar">
-          <ListAltIcon />
-        </IconButton>
-      </Link>
-    ),
-  },
-];
-
-export default function Notificaciones() {
+export default function InstitutionPage() {
   const { session } = useContext(Context);
-  const { rol } = session;
-  const router = useRouter();
 
-  const { notificaciones } = fetchNotificaciones({ session, router });
-  const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    if (notificaciones && notificaciones.length) {
-      const formattedRows = notificaciones.map((notificacion) => ({
-        id: notificacion.id,
-        asunto: notificacion.asunto,
-        notificacion: notificacion.template,
-        estatus: notificacion.status,
-        ...(rol === 'admin' && {
-          usuario: `${notificacion.usuario.persona.nombre} ${notificacion.usuario.persona.apellidoPaterno} ${notificacion.usuario.persona.apellidoMaterno}`,
-          email: `${notificacion.email}`,
-        }),
-        actions: 'Actions Placeholder',
-      }));
-
-      setRows(formattedRows);
-    }
-  }, [notificaciones]);
+  const {
+    notificaciones,
+  } = fetchNotificaciones({ session });
 
   return (
     <Layout title="Notificaciones">
-      <Divider sx={{ mt: 2 }} />
-      <DataTable title="Notificaciones" rows={rows} columns={rol === 'admin' ? adminColumns : commonColumns} />
+      <Divider sx={{ marginTop: 2 }} />
+      {notificaciones && (
+      <NotificacionTable notificaciones={notificaciones} session={session} />
+      )}
     </Layout>
   );
 }

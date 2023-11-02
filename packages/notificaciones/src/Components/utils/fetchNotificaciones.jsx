@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getToken } from '@siiges-ui/shared';
 
 const ENDPOINT_MAPPING = {
@@ -6,13 +6,11 @@ const ENDPOINT_MAPPING = {
   admin: () => '/api/v1/notificaciones',
 };
 
-export default function fetchNotificaciones({ router, session }) {
+export default function fetchNotificaciones({ session }) {
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const basePath = process.env.NEXT_PUBLIC_URL;
-
   const [notificaciones, setNotificaciones] = useState();
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (session && session.id) {
@@ -29,17 +27,12 @@ export default function fetchNotificaciones({ router, session }) {
       })
         .then((response) => response.json())
         .then(({ data }) => {
-          setNotificaciones(data || {}); // Set data or an empty object
-          setLoading(true);
-        })
-        .catch(() => setLoading(false));
-    } else {
-      router.push('autenticacion/login');
+          setNotificaciones(data);
+        });
     }
   }, [session]);
 
   return {
     notificaciones,
-    loading,
   };
 }
