@@ -44,8 +44,18 @@ export default function DatosPlanEstudios() {
     }
   }, [error]);
 
-  const nivel = [
+  const nivelPrevio = [
     { id: 1, nombre: 'Bachillerato' },
+    { id: 2, nombre: 'Licenciatura' },
+    { id: 3, nombre: 'Técnico Superior Universitario' },
+    { id: 4, nombre: 'Especialidad' },
+    { id: 5, nombre: 'Maestria' },
+    { id: 6, nombre: 'Doctorado' },
+    { id: 7, nombre: 'Profesional Asociado' },
+    { id: 8, nombre: 'Educación Continua' },
+  ];
+
+  const nivel = [
     { id: 2, nombre: 'Licenciatura' },
     { id: 3, nombre: 'Técnico Superior Universitario' },
     { id: 4, nombre: 'Especialidad' },
@@ -171,16 +181,16 @@ export default function DatosPlanEstudios() {
           />
         </Grid>
         <Grid item xs={9}>
-          <Input
-            id="nivelPrevio"
-            label="Nivel educativo previo"
+          <BasicSelect
+            title="Nivel Previo"
             name="nivelPrevio"
-            auto="nivelPrevio"
-            value={form[1].nivelPrevio}
+            options={nivelPrevio}
+            value={form[1].programa?.nivelPrevio || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.nivelPrevio}
+            textValue
             required
           />
         </Grid>

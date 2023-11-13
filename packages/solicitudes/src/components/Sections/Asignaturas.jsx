@@ -22,6 +22,8 @@ export default function Asignaturas({ disabled }) {
     setAsignaturasList,
   } = useContext(TablesPlanEstudiosContext);
 
+  console.log(asignaturasList);
+
   const tableColumns = columns(setAsignaturasList, asignaturasList);
 
   return (

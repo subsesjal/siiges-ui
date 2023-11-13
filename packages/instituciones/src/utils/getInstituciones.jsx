@@ -10,8 +10,8 @@ export default function getInstituciones(esAutorizado) {
   const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
-    const finalURL = esAutorizado 
-      ? `${url}/api/v1/instituciones?esNombreAutorizado=true` 
+    const finalURL = esAutorizado
+      ? `${url}/api/v1/instituciones?esNombreAutorizado=true`
       : `${url}/api/v1/instituciones`;
 
     fetch(finalURL, {

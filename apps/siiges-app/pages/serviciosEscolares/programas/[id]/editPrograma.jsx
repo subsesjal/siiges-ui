@@ -12,31 +12,36 @@ import { Grid, Tab, Tabs } from '@mui/material';
 export default function EditPrograma() {
   const [value, setValue] = useState(0);
 
+  const tabsConfig = [
+    { label: 'Programa', component: <ProgramasData /> },
+    { label: 'Ciclos Escolares', component: <CiclosEscolares /> },
+    { label: 'Grupos', component: <Grupos /> },
+    { label: 'Reglas', component: <Reglas /> },
+    { label: 'Asignaturas', component: <Asignaturas /> },
+  ];
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
     <Layout title="Programas">
       <Grid container>
-        <Grid item xs={12}
+        <Grid
+          item
+          xs={12}
           sx={{
             display: 'flex',
             justifyContent: 'end',
           }}
         >
           <Tabs value={value} onChange={handleChange}>
-            <Tab label="Programa" />
-            <Tab label="Ciclos Escolares" />
-            <Tab label="Grupos" />
-            <Tab label="Reglas" />
-            <Tab label="Asignaturas" />
+            {tabsConfig.map((tab) => (
+              <Tab key={tab.label} label={tab.label} />
+            ))}
           </Tabs>
         </Grid>
-        {value === 0 && <ProgramasData />}
-        {value === 1 && <CiclosEscolares />}
-        {value === 2 && <Grupos />}
-        {value === 3 && <Reglas />}
-        {value === 4 && <Asignaturas />}
+        {tabsConfig[value].component}
       </Grid>
     </Layout>
   );

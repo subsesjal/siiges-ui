@@ -1,29 +1,30 @@
 import { Grid } from '@mui/material';
 import { ButtonAdd, DataTable } from '@siiges-ui/shared';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import columnsCiclosEscolares from '../../../Tables/ciclosEscolaresTable';
 import CiclosEscolaresModal from '../../utils/CiclosEscolaresModal';
+import getCiclosEscolares from '../../utils/getCiclosEscolares';
 
 export default function CiclosEscolares() {
   const [open, setOpen] = useState(false);
+  const [ciclos, setCiclos] = useState([]);
 
-  const ciclosEscolares = [
-    {
-      id: 1,
-      nombre: 'Ciclo 2023',
-      descripcion: 'Descripción del Ciclo 2023',
-    },
-    {
-      id: 2,
-      nombre: 'Ciclo 2022',
-      descripcion: 'Descripción del Ciclo 2022',
-    },
-    {
-      id: 3,
-      nombre: 'Ciclo 2021',
-      descripcion: 'Descripción del Ciclo 2021',
-    },
-  ];
+  const router = useRouter();
+  const { id: programaId } = router.query;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const ciclosEscolaresData = await getCiclosEscolares(programaId);
+        setCiclos(ciclosEscolaresData);
+      } catch (error) {
+        console.error('Error fetching ciclos escolares:', error);
+      }
+    };
+
+    fetchData();
+  }, [open, setOpen]);
 
   return (
     <Grid container spacing={2}>
@@ -36,12 +37,17 @@ export default function CiclosEscolares() {
       </Grid>
       <Grid item xs={12}>
         <DataTable
-          rows={ciclosEscolares}
+          rows={ciclos || []}
           columns={columnsCiclosEscolares}
           title="Tabla de Ciclos escolares"
         />
       </Grid>
-      <CiclosEscolaresModal open={open} setOpen={setOpen} type="new" />
+      <CiclosEscolaresModal
+        open={open}
+        setOpen={setOpen}
+        type="new"
+        data={{ programaId }}
+      />
     </Grid>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import InputLabel from '@mui/material/InputLabel';
@@ -10,7 +10,7 @@ import { FormHelperText } from '@mui/material';
 export default function BasicSelect({
   title,
   options,
-  value,
+  value: propValue,
   disabled,
   name,
   onchange,
@@ -21,7 +21,11 @@ export default function BasicSelect({
   errorMessage,
   textValue,
 }) {
-  const [option, setOption] = useState(value);
+  const [option, setOption] = useState(propValue);
+
+  useEffect(() => {
+    setOption(propValue);
+  }, [propValue]);
 
   const handleOnChange = (e) => {
     setOption(e.target.value);
@@ -41,7 +45,7 @@ export default function BasicSelect({
         </InputLabel>
         <Select
           labelId="select-label"
-          id={value}
+          id={String(propValue)}
           label={title}
           name={name}
           value={option || ''}
@@ -53,15 +57,14 @@ export default function BasicSelect({
           disabled={disabled}
         >
           {options
-            && options.map((opcion) => (textValue ? (
-              <MenuItem key={opcion.id} value={opcion.nombre}>
+            && options.map((opcion) => (
+              <MenuItem
+                key={opcion.id}
+                value={textValue ? opcion.nombre : opcion.id}
+              >
                 {opcion.nombre}
               </MenuItem>
-            ) : (
-              <MenuItem key={opcion.id} value={opcion.id}>
-                {opcion.nombre}
-              </MenuItem>
-            )))}
+            ))}
         </Select>
         <FormHelperText error>{errorMessage}</FormHelperText>
       </FormControl>

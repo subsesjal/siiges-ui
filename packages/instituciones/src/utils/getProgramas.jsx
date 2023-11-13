@@ -1,4 +1,4 @@
-import { getToken } from "@siiges-ui/shared";
+import { getToken } from '@siiges-ui/shared';
 
 export default function getProgramas(plantelId, callback) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;

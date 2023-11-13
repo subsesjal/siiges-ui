@@ -1,12 +1,72 @@
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { Select, Input, ButtonsForm } from '@siiges-ui/shared';
-import React from 'react';
 import { useRouter } from 'next/router';
+import {
+  campos, setAndValidateFormData, mailValidator, generos, nacionalidad,
+} from './dataAlumnos';
+import alumnosService from '../../utils/alumnosService';
 
 export default function FormAlumno({ type, alumno }) {
   const router = useRouter();
+  const { query } = router;
+  const [form, setForm] = useState();
+  const [formSelect, setFormSelect] = useState({
+    situacionId: alumno?.situacionId,
+  });
+  const [error, setError] = useState('');
+  const [errorMail, setErrorMail] = useState('');
+
+  const findId = (param, search) => {
+    const Obj = param.find((n) => n.nombre === alumno[search]);
+    return Obj ? Obj.id : '';
+  };
+
+  useEffect(() => {
+    if (alumno) {
+      setFormSelect((prevForm) => ({
+        ...prevForm,
+        sexo: findId(generos, 'sexo'),
+        nacionalidad: findId(nacionalidad, 'nacionalidad'),
+        situacionId: alumno.situacionId ? alumno.situacionId : '',
+      }));
+    }
+  }, [alumno]);
+  const validator = (name, value) => {
+    if (name === 'correoPrimario') {
+      if (mailValidator(value)) {
+        setErrorMail('');
+      } else setErrorMail('El campo Correo no es válido.');
+    }
+  };
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    validator(name, value);
+    setForm({ ...form, [name]: value.toString().trim() });
+    setError('');
+  };
+  const saveButtonAction = async () => {
+    try {
+      const dataBody = setAndValidateFormData({ ...form, ...query }).formData;
+      if (type === 'edit') {
+        await alumnosService({ id: query.alumnoId, dataBody, method: 'PATCH' });
+      } else {
+        await alumnosService({ dataBody, method: 'POST' });
+      }
+      router.back();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div style={{ padding: '20px' }}>
+      {error && (
+        <Typography variant="body2" style={{ color: 'red' }}>
+          {error}
+        </Typography>
+      )}
       <Typography variant="body1">
         ¡Nota importante! El nombre del alumno se debe registrar tal y como
         aparece en el acta de nacimiento, en mayúsculas y en caso de tener
@@ -14,115 +74,32 @@ export default function FormAlumno({ type, alumno }) {
       </Typography>
       <br />
       <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Input
-            id="nombre"
-            label="Nombre"
-            name="nombre"
-            auto="nombre"
-            onchange={() => {}}
-            value={alumno?.nombre}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            id="apellidoPaterno"
-            label="Apellido Paterno"
-            name="apellidoPaterno"
-            auto="apellidoPaterno"
-            onchange={() => {}}
-            value={alumno?.apellidoPaterno}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            id="apellidoMaterno"
-            label="Apellido Materno"
-            name="apellidoMaterno"
-            auto="apellidoMaterno"
-            onchange={() => {}}
-            value={alumno?.apellidoMaterno}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            id="fechaNacimiento"
-            label="Fecha de nacimiento"
-            name="fechaNacimiento"
-            auto="fechaNacimiento"
-            onchange={() => {}}
-            value={alumno?.fechaNacimiento}
-            type="date"
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Select
-            title="Sexo"
-            name="sexo"
-            value={alumno?.sexo}
-            options={[]}
-            onchange={() => {}}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Select
-            title="Nacionalidad"
-            name="nacionalidad"
-            value={alumno?.nacionalidad}
-            options={[]}
-            onchange={() => {}}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            id="correo"
-            label="Correo"
-            name="correo"
-            auto="correo"
-            onchange={() => {}}
-            value={alumno?.correo}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            id="telefono"
-            label="Telefono"
-            name="telefono"
-            auto="telefono"
-            onchange={() => {}}
-            value={alumno?.telefono}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            id="celular"
-            label="Celular"
-            name="celular"
-            auto="celular"
-            onchange={() => {}}
-            value={alumno?.celular}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            id="curp"
-            label="CURP"
-            name="curp"
-            auto="curp"
-            onchange={() => {}}
-            value={alumno?.curp}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            id="matricula"
-            label="Matricula"
-            name="matricula"
-            auto="matricula"
-            onchange={() => {}}
-            value={alumno?.matriculo}
-          />
-        </Grid>
+        {campos.map((campo) => (
+          <Grid item xs={4} key={campo.id}>
+            {campo.type === 'text' || campo.type === 'date' ? (
+              <Input
+                id={campo.id}
+                label={campo.label}
+                name={campo.id}
+                auto={campo.id}
+                onchange={handleOnChange}
+                value={alumno?.[campo.id]}
+                type={campo.type}
+                disabled={campo.disabled}
+                errorMessage={campo.id === 'correoPrimario' ? errorMail : false}
+              />
+            ) : (
+              <Select
+                title={campo.label}
+                name={campo.id}
+                value={formSelect?.[campo.id] || ''}
+                options={campo.options}
+                onchange={handleOnChange}
+              />
+            )}
+          </Grid>
+        ))}
+
         {type === 'edit' && (
           <Grid item xs={4}>
             <Input
@@ -130,27 +107,34 @@ export default function FormAlumno({ type, alumno }) {
               label="Fecha de registro"
               name="fechaRegistro"
               autoComplete="fechaRegistro"
-              onChange={() => {}}
+              onChange={handleOnChange}
               value={alumno?.fechaRegistro}
               type="date"
               disabled
             />
           </Grid>
         )}
-        <Grid item xs={4}>
-          <Select
-            title="Situación"
-            name="situacion"
-            value={alumno?.situacion}
-            options={[]}
-            onchange={() => {}}
-          />
-        </Grid>
+
         <Grid item xs={9} />
         <Grid item xs={3}>
-          <ButtonsForm confirm={() => {}} cancel={() => {router.back()}} />
+          <ButtonsForm
+            confirm={saveButtonAction}
+            cancel={() => {
+              router.back();
+            }}
+          />
         </Grid>
       </Grid>
     </div>
   );
 }
+
+FormAlumno.propTypes = {
+  type: PropTypes.string.isRequired,
+  alumno: PropTypes.shape({
+    id: PropTypes.number,
+    fechaRegistro: PropTypes.string,
+    situacionId: PropTypes.string,
+    search: PropTypes.string,
+  }).isRequired,
+};

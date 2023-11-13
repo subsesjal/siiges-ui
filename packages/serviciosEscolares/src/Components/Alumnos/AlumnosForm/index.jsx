@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Grid } from '@mui/material';
 import { Select } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import {
   getInstituciones,
   getPlantelesByInstitucion,
@@ -8,7 +9,7 @@ import {
 } from '@siiges-ui/instituciones';
 import getAlumnosByPrograma from '@siiges-ui/instituciones/src/utils/getAlumnosByPrograma';
 
-export default function AlumnosForm({ setAlumnos }) {
+export default function AlumnosForm({ setAlumnos, setPrograma }) {
   const { instituciones = [] } = getInstituciones();
 
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
@@ -38,6 +39,7 @@ export default function AlumnosForm({ setAlumnos }) {
 
   const handleProgramaChange = (event) => {
     const programaId = event.target.value;
+    setPrograma(programaId);
     setSelectedPrograma(programaId);
     if (programaId) {
       fetchAlumnos(programaId);
@@ -129,3 +131,7 @@ export default function AlumnosForm({ setAlumnos }) {
     </Grid>
   );
 }
+
+AlumnosForm.propTypes = {
+  setAlumnos: PropTypes.func.isRequired,
+};
