@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Divider, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { LabelData, Select } from '@siiges-ui/shared';
+import { LabelData, Select, getTurnoById } from '@siiges-ui/shared';
 import {
   getCiclosEscolares,
   getGrados,
@@ -93,6 +93,7 @@ export default function InscripcionForm({ setAsignaturas, setProgramaId, setGrup
         const transformedGrupos = data.grupos.map((programa) => ({
           id: programa.id,
           nombre: programa.descripcion,
+          turnoId: programa.turnoId,
         }));
         setGrupos(transformedGrupos);
       }
@@ -157,7 +158,6 @@ export default function InscripcionForm({ setAsignaturas, setProgramaId, setGrup
     );
 
     setSelectedPrograma(programaId);
-    setLabelTurno(selectedProgramaObj ? selectedProgramaObj.turno : '');
     setLabelPrograma(selectedProgramaObj ? selectedProgramaObj.nombre : '');
 
     setCiclosEscolares([]);
@@ -218,8 +218,11 @@ export default function InscripcionForm({ setAsignaturas, setProgramaId, setGrup
     const grupoId = event.target.value;
     const selectedGrupoObj = grupos.find((grupo) => grupo.id === grupoId);
 
+    const turno = getTurnoById(selectedGrupoObj.turnoId, 'nombre');
+
     setSelectedGrupo(grupoId);
     setGrupoId(grupoId);
+    setLabelTurno(turno);
     setLabelGrupo(selectedGrupoObj ? selectedGrupoObj.nombre : '');
   };
 

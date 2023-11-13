@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
-import { ButtonAdd, Input } from '@siiges-ui/shared';
+import { Button, Input } from '@siiges-ui/shared';
 import React, { useContext, useState, useEffect } from 'react';
 import columns from './Mocks/AsignaturasFormacionElectiva';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
@@ -68,7 +68,7 @@ export default function AsignaturasFormacionElectiva({ disabled }) {
         <Typography variant="h6">Asignaturas formación electiva</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <ButtonAdd onClick={showModal} text="agregar" />}
+        {!disabled && <Button onClick={showModal} text="agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>

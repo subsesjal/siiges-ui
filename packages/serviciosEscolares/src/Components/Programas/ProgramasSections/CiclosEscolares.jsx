@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { ButtonAdd, DataTable } from '@siiges-ui/shared';
+import { Button, DataTable } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import columnsCiclosEscolares from '../../../Tables/ciclosEscolaresTable';
@@ -29,7 +29,7 @@ export default function CiclosEscolares() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <ButtonAdd
+        <Button
           text="Agregar Ciclo Escolar"
           type="add"
           onClick={() => setOpen(true)}

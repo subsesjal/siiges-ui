@@ -1,11 +1,11 @@
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Grid, IconButton, TextField, Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import ButtonAdd from '../Buttons/ButtonAdd';
+import Button from '../Buttons/Button';
 
 function DataTable({
   title,
@@ -14,31 +14,38 @@ function DataTable({
   buttonAdd,
   buttonText,
   buttonClick,
+  buttonType,
 }) {
   const [searchText, setSearchText] = useState('');
   const [filteredRows, setFilteredRows] = useState(rows);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (rows.length > 0) {
+      setLoading(false);
+    }
     setFilteredRows(rows);
   }, [rows]);
 
   const handleSearch = (event) => {
-    const value = event.target.value.toLowerCase();
+    const value = event.target.value.trim().toLowerCase();
     setSearchText(value);
-    const filteredData = value
-      ? rows.filter((row) => Object.values(row).some(
-        (data) => data && data.toString().toLowerCase().includes(value.trim()),
-      ))
-      : rows;
-    setFilteredRows(filteredData);
+    const filteredData = rows.filter(
+      (row) => Object.values(row).some((data) => data.toString().toLowerCase().includes(value)),
+    );
+    setFilteredRows(value ? filteredData : rows);
   };
 
   return (
     <>
       <Grid container>
-        <Grid item xs={9} sx={{ mt: '20px' }}>
-          {!buttonAdd ? (
-            <ButtonAdd onClick={buttonClick} text={buttonText} />
+        <Grid item xs={9} sx={{ mt: 2 }}>
+          {buttonAdd ? (
+            <Button
+              onClick={buttonClick}
+              text={buttonText}
+              type={buttonType}
+            />
           ) : (
             <Typography variant="h7" sx={{ fontWeight: 'bold' }}>
               {title}
@@ -61,7 +68,7 @@ function DataTable({
             onChange={handleSearch}
             InputProps={{
               endAdornment: (
-                <IconButton position="end">
+                <IconButton>
                   <SearchIcon />
                 </IconButton>
               ),
@@ -71,6 +78,7 @@ function DataTable({
       </Grid>
       <div style={{ height: 400, width: '100%', marginTop: 15 }}>
         <DataGrid
+          loading={loading}
           rows={filteredRows}
           columns={columns}
           pageSize={5}
@@ -82,19 +90,20 @@ function DataTable({
 }
 
 DataTable.defaultProps = {
-  title: null,
-  buttonAdd: true,
-  buttonText: null,
+  title: '',
+  buttonAdd: false,
+  buttonText: '',
+  buttonType: '',
   buttonClick: () => {},
 };
 
 DataTable.propTypes = {
   title: PropTypes.string,
   rows: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.shape({ width: PropTypes.number }))
-    .isRequired,
+  columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   buttonAdd: PropTypes.bool,
   buttonText: PropTypes.string,
+  buttonType: PropTypes.string,
   buttonClick: PropTypes.func,
 };
 

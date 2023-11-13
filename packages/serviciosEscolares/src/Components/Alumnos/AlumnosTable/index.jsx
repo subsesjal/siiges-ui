@@ -1,15 +1,16 @@
-import { ButtonAdd, DataTable } from '@siiges-ui/shared';
+import { Button, DataTable } from '@siiges-ui/shared';
 import React from 'react';
-import columnsAlumnos from '../../../Tables/AlumnosTable';
 import { Grid } from '@mui/material';
+import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
+import columnsAlumnos from '../../../Tables/alumnosTable';
 
 export default function AlumnosTable({ alumnos, programa }) {
   const router = useRouter();
   return (
     <Grid container sx={{ marginTop: 2 }}>
       <Grid item xs={12}>
-        <ButtonAdd
+        <Button
           text="Agregar Alumno"
           type="add"
           onClick={() => {
@@ -25,3 +26,8 @@ export default function AlumnosTable({ alumnos, programa }) {
     </Grid>
   );
 }
+
+AlumnosTable.propTypes = {
+  programa: PropTypes.number.isRequired,
+  alumnos: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

@@ -16,6 +16,7 @@ function Input({
   onchange,
   onblur,
   onfocus,
+  variant,
 }) {
   const [input, setInput] = useState(value);
 
@@ -64,6 +65,7 @@ function Input({
       label={label}
       required={required}
       disabled={disabled}
+      variant={variant}
       type={type === 'datetime' ? 'datetime-local' : type}
       name={name}
       autoComplete={auto}
@@ -91,6 +93,7 @@ Input.defaultProps = {
   value: '',
   required: false,
   disabled: false,
+  variant: 'outlined',
   onchange: () => {},
   onblur: () => {},
   onfocus: () => {},
@@ -105,6 +108,7 @@ Input.propTypes = {
   required: PropTypes.bool,
   onfocus: PropTypes.func,
   disabled: PropTypes.bool,
+  variant: PropTypes.string,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,

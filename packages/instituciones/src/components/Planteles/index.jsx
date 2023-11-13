@@ -121,17 +121,17 @@ export default function Planteles({ data, institucion }) {
 
   return (
     <Grid container>
-      <Grid item xs={9} sx={{ mt: '20px' }}>
-        <ButtonStyled
-          text="Nuevo Plantel"
-          alt="Agregar Plantel"
-          type="success"
-          onclick={() => {
-            router.push(`/institucion/${institucion}/nuevoPlantel`);
-          }}
-        />
-      </Grid>
-      <DataTable rows={rows} columns={columns} title="Planteles" />
+      <DataTable
+        rows={rows}
+        columns={columns}
+        title="Planteles"
+        buttonAdd
+        buttonText="Agregar Plantel"
+        buttonType="Add"
+        buttonClick={() => {
+          router.push(`/institucion/${institucion}/nuevoPlantel`);
+        }}
+      />
     </Grid>
   );
 }

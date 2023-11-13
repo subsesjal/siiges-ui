@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { ButtonAdd } from '@siiges-ui/shared';
+import { Button } from '@siiges-ui/shared';
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import columns from './Mocks/Asignaturas';
@@ -22,8 +22,6 @@ export default function Asignaturas({ disabled }) {
     setAsignaturasList,
   } = useContext(TablesPlanEstudiosContext);
 
-  console.log(asignaturasList);
-
   const tableColumns = columns(setAsignaturasList, asignaturasList);
 
   return (
@@ -32,7 +30,7 @@ export default function Asignaturas({ disabled }) {
         <Typography variant="h6">Asignaturas</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <ButtonAdd onClick={showModal} text="agregar" />}
+        {!disabled && <Button onClick={showModal} text="agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>

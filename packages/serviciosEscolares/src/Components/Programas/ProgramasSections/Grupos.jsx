@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Grid } from '@mui/material';
-import { ButtonAdd, DataTable } from '@siiges-ui/shared';
+import { Button, DataTable } from '@siiges-ui/shared';
 import GruposForm from '../../utils/GruposForm';
 import columnsGrupos from '../../../Tables/gruposTable';
 import GruposModal from '../../utils/GruposModal';
@@ -16,7 +16,7 @@ export default function Grupos() {
       </Grid>
       <Grid item xs={12}>
         {parametros.cicloEscolarId && (
-          <ButtonAdd
+          <Button
             text="Agregar Grupo"
             type="add"
             onClick={() => setOpen(true)}

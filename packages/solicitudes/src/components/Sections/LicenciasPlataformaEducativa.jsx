@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { ButtonAdd } from '@siiges-ui/shared';
+import { Button } from '@siiges-ui/shared';
 import React from 'react';
 import { rows, columns } from './Mocks/LicenciasPlataformaEducativa';
 
@@ -13,7 +13,7 @@ export default function LicenciasPlataformaEducativa() {
         </Typography>
       </Grid>
       <Grid item xs={3}>
-        <ButtonAdd text="agregar" />
+        <Button text="agregar" />
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
