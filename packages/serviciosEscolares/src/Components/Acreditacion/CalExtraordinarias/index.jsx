@@ -1,26 +1,90 @@
 import { Box, Grid } from '@mui/material';
-import { Button, DataTable } from '@siiges-ui/shared';
-import React from 'react';
-import PropTypes from 'prop-types';
+import { Button, Context, DataTable } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import columnsInscritosExtra from '../../../Tables/columnsInscritosEdit';
+import submitCalificaciones from '../../utils/submitCalificaciones';
 
-export default function CalExtraordinarias({ disabled, labelAsignatura }) {
+export default function CalExtraordinarias({
+  disabled,
+  labelAsignatura,
+  alumnos,
+  grupoId,
+  asignaturaId,
+}) {
+  const [calificaciones, setCalificaciones] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [response, setResponse] = useState();
+  const { setNoti } = useContext(Context);
+
+  const updateCalificaciones = (alumnoId, newValue, fieldToUpdate) => {
+    setCalificaciones((prevCalificaciones) => {
+      const existingIndex = prevCalificaciones.findIndex(
+        (c) => c.alumnoId === alumnoId,
+      );
+
+      if (existingIndex > -1) {
+        return prevCalificaciones.map((item, index) => (index === existingIndex
+          ? { ...item, [fieldToUpdate]: newValue }
+          : item));
+      }
+      return [
+        ...prevCalificaciones,
+        {
+          alumnoId,
+          calificacion: fieldToUpdate === 'calificacion' ? newValue : '',
+          fechaExamen: fieldToUpdate === 'fechaExamen' ? newValue : '',
+        },
+      ];
+    });
+  };
+
   const router = useRouter();
-  const alumnos = [
-    { id: 1, matricula: 'A001', nombre: 'Juan Pérez' },
-    { id: 2, matricula: 'A002', nombre: 'Laura García' },
-    { id: 3, matricula: 'A003', nombre: 'Carlos Sánchez' },
-    { id: 4, matricula: 'A004', nombre: 'Ana Torres' },
-    { id: 5, matricula: 'A005', nombre: 'Miguel Hernández' },
-  ];
+
+  const validateCalificaciones = () => {
+    if (calificaciones.length === 0) {
+      return false;
+    }
+    return calificaciones.every(
+      (c) => c.alumnoId != null
+        && c.calificacion != null
+        && c.calificacion.trim() !== ''
+        && c.fechaExamen != null
+        && c.fechaExamen.trim() !== '',
+    );
+  };
+
+  const handleSubmit = async () => {
+    if (!validateCalificaciones()) {
+      setNoti({
+        open: true,
+        message: 'Validación fallida: Verifique las calificaciones.',
+        type: 'error',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    await submitCalificaciones(
+      calificaciones,
+      setNoti,
+      grupoId,
+      asignaturaId,
+      2,
+      setResponse,
+    );
+    setIsSubmitting(false);
+    console.log(response);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <DataTable
           title={labelAsignatura}
           rows={alumnos}
-          columns={columnsInscritosExtra(disabled)}
+          columns={columnsInscritosExtra(disabled, updateCalificaciones)}
         />
       </Grid>
       <Grid item xs={3}>
@@ -35,7 +99,12 @@ export default function CalExtraordinarias({ disabled, labelAsignatura }) {
       {!disabled && (
         <Grid item xs={9}>
           <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-            <Button text="Editar calificaciones" type="edit" />
+            <Button
+              text={isSubmitting ? 'Cargando...' : 'Cargar Calificaciones'}
+              type="edit"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            />
           </Box>
         </Grid>
       )}
@@ -46,4 +115,11 @@ export default function CalExtraordinarias({ disabled, labelAsignatura }) {
 CalExtraordinarias.propTypes = {
   disabled: PropTypes.bool.isRequired,
   labelAsignatura: PropTypes.string.isRequired,
+  alumnos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
+  grupoId: PropTypes.number.isRequired,
+  asignaturaId: PropTypes.number.isRequired,
 };

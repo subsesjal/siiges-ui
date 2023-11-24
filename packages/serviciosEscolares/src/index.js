@@ -10,6 +10,8 @@ import Grupos from './Components/Programas/ProgramasSections/Grupos';
 import Reglas from './Components/Programas/ProgramasSections/Reglas';
 import getAsignaturaById from './Components/utils/getAsignaturaById';
 import InscripcionForm from './Components/Inscripciones/InscripcionesForm';
+import submitCalificaciones from './Components/utils/submitCalificaciones';
+import getAlumnosAcreditacion from './Components/utils/getAlumnosAcreditacion';
 import ModalAlumnosInscritos from './Components/utils/ModalAlumnosInscritos';
 import Asignaturas from './Components/Programas/ProgramasSections/Asignaturas';
 import InscripcionesTable from './Components/Inscripciones/InscripcionesTable';
@@ -42,7 +44,9 @@ export {
   columnsAsignaturas,
   InscripcionesTable,
   DetallesAsignatura,
+  submitCalificaciones,
   ModalAlumnosInscritos,
+  getAlumnosAcreditacion,
   ActionsAlumnosInscritos,
   AcreditacionAsignaturas,
   ActionsAcreditacionAsignaturas,
