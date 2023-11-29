@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Input } from '@siiges-ui/shared';
 
-export default function CalificacionExtraordinario({
+export default function CalificacionInput({
   id,
+  value,
   disabled,
   updateCalificaciones,
 }) {
@@ -14,7 +15,8 @@ export default function CalificacionExtraordinario({
   return (
     <div style={{ marginTop: -10 }}>
       <Input
-        name="calificacionExtraordinario"
+        name="calificacionInput"
+        value={value}
         variant="standard"
         disabled={disabled}
         onchange={handleChange}
@@ -23,8 +25,13 @@ export default function CalificacionExtraordinario({
   );
 }
 
-CalificacionExtraordinario.propTypes = {
+CalificacionInput.defaultProps = {
+  value: '',
+};
+
+CalificacionInput.propTypes = {
   id: PropTypes.number.isRequired,
   disabled: PropTypes.bool.isRequired,
+  value: PropTypes.string,
   updateCalificaciones: PropTypes.func.isRequired,
 };

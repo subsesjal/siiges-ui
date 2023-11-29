@@ -19,7 +19,6 @@ function submitNewLogin(form, errors, setErrorMessages, activateAuth) {
           setErrorMessages({ contrasena: errors.contrasena });
           throw new Error('Unauthorized');
         }
-
         throw new Error(response.status);
       })
       .then((data) => {
@@ -30,5 +29,4 @@ function submitNewLogin(form, errors, setErrorMessages, activateAuth) {
       });
   }
 }
-
 export default submitNewLogin;

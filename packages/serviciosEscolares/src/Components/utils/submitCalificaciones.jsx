@@ -30,7 +30,6 @@ export default async function submitCalificaciones(
       throw new Error('Network response was not ok');
     }
 
-    // Assuming the server sends a JSON response
     const data = await response.json();
     setResponse(data);
 

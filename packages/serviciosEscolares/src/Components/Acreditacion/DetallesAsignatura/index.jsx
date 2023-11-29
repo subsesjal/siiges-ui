@@ -6,18 +6,16 @@ import {
 } from '@mui/material';
 import { LabelData, Layout, Loading } from '@siiges-ui/shared';
 import getAsignaturaById from '../../utils/getAsignaturaById';
-import CalOrdinarias from '../CalOrdinarias';
-import CalExtraordinarias from '../CalExtraordinarias';
 import getGrupoById from '../../utils/getGrupoById';
 import getAlumnosAcreditacion from '../../utils/getAlumnosAcreditacion';
+import Calificaciones from '../Calificaciones';
 
 export default function DetallesAsignatura({ type }) {
   const disabled = type !== 'editar';
   const router = useRouter();
   const { asignaturaId, grupoId } = router.query;
   const [asignatura, setAsignatura] = useState(null);
-  const [alumnosOrdinario, setAlumnosOrdinario] = useState([]);
-  const [alumnosExtraordinario, setAlumnosExtraordinario] = useState([]);
+  const [alumnos, setAlumnos] = useState([]);
   const [labelPrograma, setLabelPrograma] = useState();
   const [labelGrado, setLabelGrado] = useState();
   const [labelGrupo, setLabelGrupo] = useState();
@@ -51,11 +49,7 @@ export default function DetallesAsignatura({ type }) {
             asignaturaId,
             grupoId,
           );
-          if (alumnosAcreditacion.estatus === 1) {
-            setAlumnosOrdinario(alumnosAcreditacion);
-          } else {
-            setAlumnosExtraordinario(alumnosAcreditacion);
-          }
+          setAlumnos(alumnosAcreditacion);
         }
       } catch (error) {
         console.error('Error fetching details', error);
@@ -103,19 +97,21 @@ export default function DetallesAsignatura({ type }) {
             </Grid>
           </Grid>
           {value === 0 && (
-            <CalOrdinarias
+            <Calificaciones
+              mode="Ordinarias"
               disabled={disabled}
               labelAsignatura={labelAsignatura}
-              alumnos={alumnosOrdinario}
+              alumnos={alumnos}
               asignaturaId={asignaturaId}
               grupoId={grupoId}
             />
           )}
           {value === 1 && (
-            <CalExtraordinarias
+            <Calificaciones
+              mode="Extraodinarias"
               disabled={disabled}
               labelAsignatura={labelAsignatura}
-              alumnos={alumnosExtraordinario}
+              alumnos={alumnos}
               asignaturaId={asignaturaId}
               grupoId={grupoId}
             />

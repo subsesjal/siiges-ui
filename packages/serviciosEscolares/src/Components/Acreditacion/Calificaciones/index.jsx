@@ -1,12 +1,14 @@
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { Box, Grid } from '@mui/material';
 import { Button, Context, DataTable } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
-import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
-import columnsInscritosExtra from '../../../Tables/columnsInscritosEdit';
+import columnsInscritosOrdinario from '../../../Tables/columnsInscritosOrdinario';
+import columnsInscritosExtra from '../../../Tables/columnsInscritosExtra';
 import submitCalificaciones from '../../utils/submitCalificaciones';
 
-export default function CalExtraordinarias({
+export default function Calificaciones({
+  mode,
   disabled,
   labelAsignatura,
   alumnos,
@@ -17,6 +19,12 @@ export default function CalExtraordinarias({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [response, setResponse] = useState();
   const { setNoti } = useContext(Context);
+  const router = useRouter();
+
+  const isExtraordinarioEnabled = (alumnoId) => {
+    const alumno = alumnos.find((a) => a.id === alumnoId);
+    return alumno && alumno.calificaciones.length === 2;
+  };
 
   const updateCalificaciones = (alumnoId, newValue, fieldToUpdate) => {
     setCalificaciones((prevCalificaciones) => {
@@ -40,8 +48,6 @@ export default function CalExtraordinarias({
     });
   };
 
-  const router = useRouter();
-
   const validateCalificaciones = () => {
     if (calificaciones.length === 0) {
       return false;
@@ -49,9 +55,7 @@ export default function CalExtraordinarias({
     return calificaciones.every(
       (c) => c.alumnoId != null
         && c.calificacion != null
-        && c.calificacion.trim() !== ''
-        && c.fechaExamen != null
-        && c.fechaExamen.trim() !== '',
+        && c.calificacion.trim() !== '',
     );
   };
 
@@ -71,21 +75,21 @@ export default function CalExtraordinarias({
       setNoti,
       grupoId,
       asignaturaId,
-      2,
+      mode === 'Ordinarias' ? 1 : 2,
       setResponse,
     );
     setIsSubmitting(false);
     console.log(response);
   };
 
+  const columns = mode === 'Ordinarias'
+    ? columnsInscritosOrdinario(disabled, updateCalificaciones)
+    : columnsInscritosExtra(disabled, updateCalificaciones, isExtraordinarioEnabled);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <DataTable
-          title={labelAsignatura}
-          rows={alumnos}
-          columns={columnsInscritosExtra(disabled, updateCalificaciones)}
-        />
+        <DataTable title={labelAsignatura} rows={alumnos} columns={columns} />
       </Grid>
       <Grid item xs={3}>
         <Button
@@ -112,7 +116,8 @@ export default function CalExtraordinarias({
   );
 }
 
-CalExtraordinarias.propTypes = {
+Calificaciones.propTypes = {
+  mode: PropTypes.oneOf(['Ordinarias', 'Extraordinarias']).isRequired,
   disabled: PropTypes.bool.isRequired,
   labelAsignatura: PropTypes.string.isRequired,
   alumnos: PropTypes.arrayOf(

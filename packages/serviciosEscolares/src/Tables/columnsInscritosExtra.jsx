@@ -2,12 +2,12 @@ import React from 'react';
 import FechaExamenInput from '../Components/utils/Calificaciones/FechaExamenInput';
 import CalificacionInput from '../Components/utils/Calificaciones/CalificacionInput';
 
-const columnsInscritosOrdinario = (disabled, updateCalificaciones) => [
-  {
-    field: 'matricula',
-    headerName: 'Matricula',
-    width: 150,
-  },
+const columnsInscritosExtra = (
+  disabled,
+  updateCalificaciones,
+  isExtraordinarioEnabled,
+) => [
+  { field: 'matricula', headerName: 'Matricula', width: 150 },
   {
     field: 'nombre',
     headerName: 'Nombre',
@@ -21,16 +21,17 @@ const columnsInscritosOrdinario = (disabled, updateCalificaciones) => [
     },
   },
   {
-    field: 'ordinario',
-    headerName: 'Calificación Ordinario',
+    field: 'extraordinario',
+    headerName: 'Calificación Extraordinario',
+    editable: !disabled,
     width: 220,
     renderCell: (params) => {
-      const calificacion = params.row.calificaciones[0]?.calificacion || '';
+      const calificacion = params.row.calificaciones[1]?.calificacion || '';
       return (
         <CalificacionInput
           id={params.id}
           value={calificacion}
-          disabled={disabled}
+          disabled={!isExtraordinarioEnabled(params.row.id)}
           updateCalificaciones={updateCalificaciones}
         />
       );
@@ -41,14 +42,15 @@ const columnsInscritosOrdinario = (disabled, updateCalificaciones) => [
   {
     field: 'fechaExamen',
     headerName: 'Fecha de examen',
+    editable: !disabled,
     width: 220,
     renderCell: (params) => {
-      const fechaExamen = params.row.calificaciones[0]?.fechaExamen || '';
+      const fechaExamen = params.row.calificaciones[1]?.fechaExamen || '';
       return (
         <FechaExamenInput
           id={params.id}
-          disabled={disabled}
           value={fechaExamen}
+          disabled={!isExtraordinarioEnabled(params.row.id)}
           updateCalificaciones={(alumnoId, newFechaExamen) => updateCalificaciones(alumnoId, newFechaExamen, 'fechaExamen')}
         />
       );
@@ -58,4 +60,4 @@ const columnsInscritosOrdinario = (disabled, updateCalificaciones) => [
   },
 ];
 
-export default columnsInscritosOrdinario;
+export default columnsInscritosExtra;
