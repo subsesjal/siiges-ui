@@ -1,5 +1,5 @@
 import {
-  ButtonAdd, Context, DataTable, Input,
+  Button, Context, DataTable, Input,
 } from '@siiges-ui/shared';
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
@@ -99,7 +99,7 @@ export default function InscripcionesTable({
         />
       </Grid>
       <Grid item xs={12} style={{ textAlign: 'right' }}>
-        <ButtonAdd
+        <Button
           text="Inscribir alumno"
           disabled={!alumnoByMatricula || selectedAsignaturas.length === 0}
           onClick={handleInscribirAlumno}

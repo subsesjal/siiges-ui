@@ -1,41 +1,61 @@
-import columnsInstitucionesAutorizadas from './Tables/institucionesAutorizadas';
 import columnsProgramas from './Tables/programas';
+import FormAlumno from './Components/Alumnos/FormAlumno';
+import AlumnosForm from './Components/Alumnos/AlumnosForm';
+import getGrupoById from './Components/utils/getGrupoById';
 import columnsAsignaturas from './Tables/inscripcionesTable';
+import AlumnosTable from './Components/Alumnos/AlumnosTable';
 import ProgramasForm from './Components/Programas/ProgramasForm';
 import ProgramasTable from './Components/Programas/ProgramasTable';
-import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
-import ProgramasData from './Components/Programas/ProgramasSections/ProgramasData';
-import CiclosEscolares from './Components/Programas/ProgramasSections/CiclosEscolares';
 import Grupos from './Components/Programas/ProgramasSections/Grupos';
 import Reglas from './Components/Programas/ProgramasSections/Reglas';
-import Asignaturas from './Components/Programas/ProgramasSections/Asignaturas';
-import AlumnosForm from './Components/Alumnos/AlumnosForm';
-import AlumnosTable from './Components/Alumnos/AlumnosTable';
-import FormAlumno from './Components/Alumnos/FormAlumno';
-import DocumentosAlumno from './Components/Alumnos/FormAlumno/DocumentosAlumno';
+import getAsignaturaById from './Components/utils/getAsignaturaById';
 import InscripcionForm from './Components/Inscripciones/InscripcionesForm';
-import InscripcionesTable from './Components/Inscripciones/InscripcionesTable';
+import submitCalificaciones from './Components/utils/submitCalificaciones';
+import Calificaciones from './Components/Acreditacion/Calificaciones/index';
+import getAlumnosAcreditacion from './Components/utils/getAlumnosAcreditacion';
 import ModalAlumnosInscritos from './Components/utils/ModalAlumnosInscritos';
+import Asignaturas from './Components/Programas/ProgramasSections/Asignaturas';
+import InscripcionesTable from './Components/Inscripciones/InscripcionesTable';
+import DocumentosAlumno from './Components/Alumnos/FormAlumno/DocumentosAlumno';
+import columnsInstitucionesAutorizadas from './Tables/institucionesAutorizadas';
 import ActionsAlumnosInscritos from './Components/utils/ActionsAlumnosInscritos';
+import FechaExamenInput from './Components/utils/Calificaciones/FechaExamenInput';
+import ProgramasData from './Components/Programas/ProgramasSections/ProgramasData';
+import CalificacionInput from './Components/utils/Calificaciones/CalificacionInput';
+import DetallesAsignatura from './Components/Acreditacion/DetallesAsignatura/index';
+import CiclosEscolares from './Components/Programas/ProgramasSections/CiclosEscolares';
+import AcreditacionAsignaturas from './Components/Acreditacion/AcreditacionAsignaturas.jsx';
+import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditacionAsignaturas';
+import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
 
 export {
-  columnsInstitucionesAutorizadas,
-  columnsProgramas,
-  columnsAsignaturas,
-  ProgramasForm,
-  ProgramasTable,
-  ButtonsInstitucionesAutorizadas,
-  ProgramasData,
-  CiclosEscolares,
   Grupos,
   Reglas,
-  Asignaturas,
-  AlumnosTable,
-  AlumnosForm,
   FormAlumno,
-  DocumentosAlumno,
+  Asignaturas,
+  AlumnosForm,
+  AlumnosTable,
+  getGrupoById,
+  ProgramasForm,
+  ProgramasData,
+  Calificaciones,
+  ProgramasTable,
   InscripcionForm,
+  CiclosEscolares,
+  columnsProgramas,
+  DocumentosAlumno,
+  FechaExamenInput,
+  getAsignaturaById,
+  CalificacionInput,
+  columnsAsignaturas,
   InscripcionesTable,
+  DetallesAsignatura,
+  submitCalificaciones,
   ModalAlumnosInscritos,
+  getAlumnosAcreditacion,
   ActionsAlumnosInscritos,
+  AcreditacionAsignaturas,
+  ActionsAcreditacionAsignaturas,
+  columnsInstitucionesAutorizadas,
+  ButtonsInstitucionesAutorizadas,
 };

@@ -4,16 +4,33 @@ import PropTypes from 'prop-types';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import '../../styles/buttons/ButtonAdd.css';
 
-function ButtonAdd({
+export default function Button({
   text, onClick, type, disabled,
 }) {
+  const renderIcon = () => {
+    switch (type) {
+      case 'edit':
+        return <EditIcon />;
+      case 'user':
+        return <PersonAddIcon />;
+      case 'cancel':
+        return <ArrowBackIosNewIcon />;
+      default:
+        return <AddIcon />;
+    }
+  };
+
+  const buttonClass = `buttonAdd ${type === 'cancel' ? 'cancel' : ''}`;
+
   return (
-    <ButtonUnstyled className="buttonAdd" onClick={onClick} disabled={disabled}>
+    <ButtonUnstyled className={buttonClass} onClick={onClick} disabled={disabled}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        {type === 'user' ? <PersonAddIcon /> : <AddIcon />}
+        {renderIcon()}
         &nbsp;&nbsp;
         <Typography variant="body1">{text}</Typography>
       </div>
@@ -21,17 +38,15 @@ function ButtonAdd({
   );
 }
 
-ButtonAdd.defaultProps = {
+Button.defaultProps = {
   onClick: () => {},
   type: 'user',
   disabled: false,
 };
 
-ButtonAdd.propTypes = {
+Button.propTypes = {
   text: PropTypes.string.isRequired,
-  type: PropTypes.string,
+  type: PropTypes.oneOf(['user', 'add', 'edit']),
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
 };
-
-export default ButtonAdd;

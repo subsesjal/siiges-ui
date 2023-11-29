@@ -40,3 +40,13 @@
   box-shadow: none;
   transform: translateY(0);
 }
+
+/* CSS */
+.buttonAdd.cancel {
+  border-color: red;
+}
+
+.buttonAdd.cancel:hover {
+  background-color: red;
+}
+
