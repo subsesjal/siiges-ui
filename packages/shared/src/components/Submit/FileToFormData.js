@@ -1,6 +1,6 @@
 const fileToFormData = (file) => new Promise((resolve, reject) => {
   const fileReader = new FileReader();
-  fileReader.readAsDataURL(file);
+  fileReader.readAsArrayBuffer(file);
   fileReader.onload = (event) => {
     const fileContent = event.target.result;
     const fileName = file.name;
