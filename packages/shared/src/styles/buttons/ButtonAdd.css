@@ -50,3 +50,11 @@
   background-color: red;
 }
 
+.buttonAdd.guardar {
+  border-color: #0072ce;
+}
+
+.buttonAdd.guardar:hover {
+  background-color: #0072ce;
+}
+

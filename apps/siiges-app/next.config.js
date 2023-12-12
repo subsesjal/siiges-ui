@@ -7,6 +7,7 @@ const withTM = require('next-transpile-modules')([
   '@siiges-ui/instituciones',
   '@siiges-ui/solicitudes',
   '@siiges-ui/serviciosescolares',
+  '@siiges-ui/opds',
 ]);
 
 module.exports = withPlugins([withTM()], {

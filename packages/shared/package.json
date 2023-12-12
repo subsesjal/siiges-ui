@@ -24,6 +24,7 @@
 		"microbundle": "^0.15.0"
 	},
 	"dependencies": {
+		"@siiges-ui/opds": "^1.0.0",
 		"@siiges-ui/serviciosescolares": "^1.0.0"
 	}
 }

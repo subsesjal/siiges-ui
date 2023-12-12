@@ -11,8 +11,7 @@ export default function Overlay({
   children, title, subtitle, type,
 }) {
   const [open, setOpen] = useState(false);
-  const [section, setSection] = useState(1);
-  const { session } = useContext(Context);
+  const { session, section, setSection } = useContext(Context);
   const onClickChange = () => {
     setOpen(!open);
   };

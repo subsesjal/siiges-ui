@@ -6,6 +6,9 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PersonIcon from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import GroupsIcon from '@mui/icons-material/Groups';
+import ArticleIcon from '@mui/icons-material/Article';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import SchoolIcon from '@mui/icons-material/School';
@@ -101,8 +104,14 @@ export default function userRol(session, setUsers, section, institucionRoute) {
           icon: <MoreHorizIcon />,
           type: 'dropdown',
           options: [
-            { text: 'Revalidación y Equivalencias', route: '/serviciosEscolares/revalidacionEquivalencias' },
-            { text: 'Becas y Servicio Social', route: '/serviciosEscolares/becasServicioSocial' },
+            {
+              text: 'Revalidación y Equivalencias',
+              route: '/serviciosEscolares/revalidacionEquivalencias',
+            },
+            {
+              text: 'Becas y Servicio Social',
+              route: '/serviciosEscolares/becasServicioSocial',
+            },
           ],
           key: 'otrosTramites',
         },
@@ -111,6 +120,33 @@ export default function userRol(session, setUsers, section, institucionRoute) {
           icon: <AssignmentLateIcon />,
           route: '/serviciosEscolares/reporte',
           key: 'reporte',
+        },
+      ]);
+    } else if (section === 3) {
+      setUsers([
+        {
+          text: 'Instituciones',
+          icon: <BusinessIcon />,
+          route: '/opds/instituciones',
+          key: 'intitutions',
+        },
+        {
+          text: 'Órganos colegiados',
+          icon: <GroupsIcon />,
+          route: '/opds/organosColegiados',
+          key: 'organosColegiados',
+        },
+        {
+          text: 'Fortalecimiento',
+          icon: <ArticleIcon />,
+          route: '/opds/fortalecimiento',
+          key: 'fortalecimeiento',
+        },
+        {
+          text: 'Presupuesto',
+          icon: <RequestQuoteIcon />,
+          route: '/opds/presupuesto',
+          key: 'presupuesto',
         },
       ]);
     }

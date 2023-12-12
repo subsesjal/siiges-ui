@@ -1,5 +1,5 @@
 import React from 'react';
-import ButtonsInstitucionesAutorizadas from '../Components/utils/ButtonsInstitucionesAutorizadas'
+import ButtonsInstitucionesAutorizadas from '../Components/utils/ButtonsInstitucionesAutorizadas';
 
 const columnsInstitucionesAutorizadas = [
   { field: 'nombre', headerName: 'Nombre', width: 300 },
