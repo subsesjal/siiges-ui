@@ -1,5 +1,6 @@
 import ButtonsAcuerdos from './components/organosColegiados/Tables/ButtonsAcuerdos';
 import columnsAcuerdos from './utils/organosColegiados/Tables/columnsAcuerdos';
+import columnsAnteproyecto from './utils/fortalecimiento/Tables/columnsAnteproyecto';
 import columnsOrganosColegiados from './utils/organosColegiados/Tables/columnsOrganosColegiados';
 import columnsPlanMaestro from './utils/fortalecimiento/Tables/columnsPlanMaestro';
 import findAcuerdoById from './utils/organosColegiados/fetchAcuerdoById';
@@ -11,6 +12,7 @@ import rowsAcuerdos from './utils/organosColegiados/Tables/rowsAcuerdos';
 export {
   ButtonsAcuerdos,
   columnsAcuerdos,
+  columnsAnteproyecto,
   columnsOrganosColegiados,
   columnsPlanMaestro,
   findAcuerdoById,
