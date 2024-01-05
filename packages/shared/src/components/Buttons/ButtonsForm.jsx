@@ -1,28 +1,22 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import ButtonStyled from './ButtonStyled';
-import '../../styles/buttons/ButtonForm.css';
+import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+
+import '../../styles/buttons/ButtonAdd.css';
 
 export default function UserForm({ confirm, cancel }) {
   return (
-    <Grid container>
-      <Grid item xs={6}>
-        <ButtonStyled
-          text="Cancelar"
-          alt="Cancelar"
-          design="error"
-          onclick={cancel}
-        />
+    <Grid container justifyContent="flex-end" spacing={2}>
+      <Grid item>
+        <ButtonUnstyled className="buttonAdd cancel" onClick={cancel}>
+          <Typography variant="body1">Cancelar</Typography>
+        </ButtonUnstyled>
       </Grid>
-      <Grid item xs={6}>
-        <ButtonStyled
-          text="Guardar"
-          alt="Guardar"
-          design="success"
-          type="submit"
-          onclick={confirm}
-        />
+      <Grid item>
+        <ButtonUnstyled className="buttonAdd guardar" onClick={confirm}>
+          <Typography variant="body1">Guardar</Typography>
+        </ButtonUnstyled>
       </Grid>
     </Grid>
   );

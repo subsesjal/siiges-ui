@@ -76,12 +76,8 @@ export default function InputFile({
           <Typography>{label}</Typography>
         </Grid>
         <Grid item xs={3}>
-          <ButtonGroup
-            variant="text"
-            aria-label="text button group"
-            style={buttonGroupStyle}
-          >
-            <Button onClick={handleOpen} disabled={disabled}>
+          <ButtonGroup aria-label="text button group" style={buttonGroupStyle}>
+            <Button onClick={handleOpen} disabled={disabled} variant="text">
               <AttachFileIcon />
             </Button>
             {url && (
@@ -90,7 +86,7 @@ export default function InputFile({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button disabled={disabled}>
+                <Button disabled={disabled} variant="text">
                   <FileOpenIcon />
                 </Button>
               </a>

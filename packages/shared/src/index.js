@@ -7,6 +7,7 @@ import Loading from './components/Loading';
 import Logo from './components/Images/Logo';
 import SnackAlert from './components/Alert';
 import HomePage from './components/HomePage';
+import Carousel from './components/Carousel';
 import DefaultModal from './components/Modal';
 import LabelData from './components/LabelData';
 import GetFile from './utils/handlers/getFile';
@@ -34,12 +35,14 @@ import Background from './components/Resources/Background';
 import LoadCircle from './components/Resources/LoadCircle';
 import InputPassword from './components/Input/InputPassword';
 import ButtonStyled from './components/Buttons/ButtonStyled';
+import ButtonSimple from './components/Buttons/ButtonSimple';
 import getCurrentUser from './utils/handlers/getCurrentUser';
 import { setToken, getToken } from './utils/handlers/globals';
 import ActionButtons from './components/Buttons/ActionButtons';
 import ListSubtitle from './components/ListItems/ListSubtitle';
 import SubmitDocument from './components/Submit/SubmitDocument';
 import fileToFormData from './components/Submit/FileToFormData';
+import PaperInstitucion from './components/Paper/PaperInstitucion';
 import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 
 export {
@@ -55,6 +58,7 @@ export {
   GetFile,
   Context,
   Overlay,
+  Carousel,
   setToken,
   getToken,
   HomePage,
@@ -75,6 +79,7 @@ export {
   ButtonsForm,
   ButtonLogin,
   LoginLayout,
+  ButtonSimple,
   ListSubtitle,
   ParseCookies,
   DefaultModal,
@@ -86,5 +91,6 @@ export {
   fileToFormData,
   getCurrentUser,
   StepperComponent,
+  PaperInstitucion,
   useCheckMobileScreen,
 };

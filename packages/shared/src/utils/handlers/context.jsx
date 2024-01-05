@@ -14,6 +14,7 @@ function Provider({ children }) {
   const [auth, setAuth] = useState(false);
   const [noti, setNoti] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [section, setSection] = useState(1);
 
   const router = useRouter();
 
@@ -46,6 +47,8 @@ function Provider({ children }) {
       auth,
       noti,
       setNoti,
+      section,
+      setSection,
       activateAuth: (userData) => {
         setSession({
           id: userData.data.id,
@@ -59,7 +62,7 @@ function Provider({ children }) {
       },
       removeAuth,
     }),
-    [session, auth, noti, router],
+    [session, auth, noti, router, section],
   );
 
   return (

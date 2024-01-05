@@ -19,6 +19,7 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
   const options = [
     { id: 1, nombre: 'Incorporación' },
     { id: 2, nombre: 'Servicios escolares' },
+    { id: 3, nombre: "OPD'S" },
   ];
 
   const [anchorEl, setAnchorEl] = useState(null);
