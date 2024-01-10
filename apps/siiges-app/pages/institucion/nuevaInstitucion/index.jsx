@@ -3,6 +3,7 @@ import { ButtonsForm, Context, Layout } from '@siiges-ui/shared';
 import { NewInstitutionForm } from '@siiges-ui/instituciones';
 import { useRouter } from 'next/router';
 import createInstitucion from '@siiges-ui/instituciones/src/utils/createInstitucion';
+import { Grid } from '@mui/material';
 
 export default function NuevaInstitucion() {
   const { session, setNoti } = useContext(Context);
@@ -22,12 +23,18 @@ export default function NuevaInstitucion() {
 
   return (
     <Layout title="Alta Institución">
-      <NewInstitutionForm
-        form={institucionForm}
-        setForm={setInstitucionForm}
-        setErrors={setErrors}
-      />
-      <ButtonsForm confirm={handleConfirm} cancel={handleCancel} />
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <NewInstitutionForm
+            form={institucionForm}
+            setForm={setInstitucionForm}
+            setErrors={setErrors}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <ButtonsForm confirm={handleConfirm} cancel={handleCancel} />
+        </Grid>
+      </Grid>
     </Layout>
   );
 }
