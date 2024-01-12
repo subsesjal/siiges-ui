@@ -4,7 +4,6 @@ import { Grid } from '@mui/material';
 import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
-
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
@@ -35,7 +34,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     if (errorsAsignatura !== undefined) {
       setErrors(errorsAsignatura);
     }
-  }, [error]);
+  }, [errorsAsignatura, error]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -49,8 +48,10 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     const { name, value } = e.target;
     const initialValue = initialValues[name];
 
-    if (value !== initialValue || value === '') {
-      errorsAsignatura[name]();
+    if (errorsAsignatura[name] && typeof errorsAsignatura[name] === 'function') {
+      if (value !== initialValue || value === '') {
+        errorsAsignatura[name]();
+      }
     }
   };
 
@@ -60,8 +61,13 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
   };
 
   const handleOnSubmit = () => {
+    const matchingGrade = selectedGrade.find((grade) => grade.id === formAsignaturas.gradoId);
+    const updatedFormAsignaturas = matchingGrade
+      ? { ...formAsignaturas, grado: matchingGrade.nombre }
+      : { ...formAsignaturas };
+
     handleCreate(
-      formAsignaturas,
+      updatedFormAsignaturas,
       setFormAsignaturas,
       setInitialValues,
       setAsignaturasList,
@@ -195,18 +201,14 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             alt="Cancelar"
             design="error"
             onclick={hideModal}
-          >
-            Cancelar
-          </ButtonStyled>
+          />
         </Grid>
         <Grid item xs={2}>
           <ButtonStyled
             text="Confirmar"
             alt="Confirmar"
             onclick={handleOnSubmit}
-          >
-            Confirmar
-          </ButtonStyled>
+          />
         </Grid>
       </Grid>
     </DefaultModal>

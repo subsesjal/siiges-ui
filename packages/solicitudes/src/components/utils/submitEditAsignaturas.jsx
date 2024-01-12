@@ -42,7 +42,6 @@ const handleEdit = async (
     }
 
     const data = await response.json();
-
     const updatedData = { ...form, id: data.data.id };
 
     setAsignaturasList((prevList) => {
