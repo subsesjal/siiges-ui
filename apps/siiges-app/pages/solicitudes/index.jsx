@@ -4,31 +4,12 @@ import {
   ChangeAddress,
   Refrendo,
   getSolicitudes,
+  columnsSolicitudes,
 } from '@siiges-ui/solicitudes';
 import {
   Layout, Select, DataTable, Context,
 } from '@siiges-ui/shared';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import { Divider, IconButton } from '@mui/material';
-import Link from 'next/link';
-
-const columns = [
-  { field: 'folio', headerName: 'Folio', width: 125 },
-  { field: 'studyPlan', headerName: 'Plan de estudios', width: 180 },
-  { field: 'estatusSolicitudId', headerName: 'Estatus', width: 200 },
-  { field: 'plantel', headerName: 'Plantel', width: 450 },
-  {
-    field: 'actions',
-    headerName: 'Acciones',
-    renderCell: (params) => (
-      <Link href={`/solicitudes/detallesSolicitudes/${params.id}`}>
-        <IconButton aria-label="consultar">
-          <ListAltIcon />
-        </IconButton>
-      </Link>
-    ),
-  },
-];
+import { Divider } from '@mui/material';
 
 export default function Solicitudes() {
   const { session } = useContext(Context);
@@ -104,7 +85,7 @@ export default function Solicitudes() {
       {NewRequestContentVisible && <NewRequest />}
       {ChangeAddressContentVisible && <ChangeAddress />}
       {RefrendoContentVisible && <Refrendo />}
-      <DataTable title="Tipo de solicitud" rows={rows} columns={columns} />
+      <DataTable title="Tipo de solicitud" rows={rows} columns={columnsSolicitudes} />
     </Layout>
   );
 }
