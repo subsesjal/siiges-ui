@@ -55,8 +55,13 @@ export default function AsignaturasFormacionCreateModal({
     const { name, value } = e.target;
     const initialValue = initialValues[name];
 
-    if (value !== initialValue || value === '') {
-      errorsAsignatura[name]();
+    if (
+      errorsAsignatura[name]
+      && typeof errorsAsignatura[name] === 'function'
+    ) {
+      if (value !== initialValue || value === '') {
+        errorsAsignatura[name]();
+      }
     }
   };
 
@@ -66,8 +71,15 @@ export default function AsignaturasFormacionCreateModal({
   };
 
   const handleOnSubmit = () => {
+    const matchingGrade = selectedGrade.find(
+      (grade) => grade.id === formAsignaturasFormacion.gradoId,
+    );
+    const updatedFormAsignaturas = matchingGrade
+      ? { ...formAsignaturasFormacion, grado: matchingGrade.nombre }
+      : { ...formAsignaturasFormacion };
+
     handleCreate(
-      formAsignaturasFormacion,
+      updatedFormAsignaturas,
       setFormAsignaturasFormacion,
       setInitialValues,
       setAsignaturasFormacionList,
@@ -84,13 +96,12 @@ export default function AsignaturasFormacionCreateModal({
         <Grid item xs={6}>
           <BasicSelect
             title="Grado"
-            name="grado"
+            name="gradoId"
             value=""
             options={selectedGrade}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.grado}
-            textValue
+            errorMessage={error.gradoId}
             required
           />
         </Grid>

@@ -59,8 +59,14 @@ export default function AsignaturasFormacionEditModal({
   };
 
   const handleOnSubmit = () => {
+    const matchingGrade = selectedGrade.find(
+      (grade) => grade.id === formAsignaturasFormacion.gradoId,
+    );
+    const updatedFormAsignaturas = matchingGrade
+      ? { ...formAsignaturasFormacion, grado: matchingGrade.nombre }
+      : { ...formAsignaturasFormacion };
     handleEdit(
-      formAsignaturasFormacion,
+      updatedFormAsignaturas,
       setFormAsignaturasFormacion,
       setInitialValues,
       setAsignaturasFormacionList,
@@ -80,13 +86,12 @@ export default function AsignaturasFormacionEditModal({
         <Grid item xs={6}>
           <BasicSelect
             title="Grado"
-            name="grado"
-            value={rowItem.grado ?? ''}
+            name="gradoId"
+            value={rowItem.gradoId ?? ''}
             options={selectedGrade}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.grado}
-            textValue
             required
             disabled={edit === 'Consultar Asignatura'}
           />
@@ -234,7 +239,7 @@ AsignaturasFormacionEditModal.propTypes = {
   edit: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
   rowItem: PropTypes.shape({
-    grado: PropTypes.string,
+    gradoId: PropTypes.number,
     area: PropTypes.number,
     nombre: PropTypes.string,
     clave: PropTypes.string,
