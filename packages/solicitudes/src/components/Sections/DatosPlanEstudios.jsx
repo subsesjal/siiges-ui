@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Grid, Typography, TextField } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 
-export default function DatosPlanEstudios() {
+export default function DatosPlanEstudios({ type, data }) {
   const router = useRouter();
   const { query } = router;
   const [initialValues, setInitialValues] = useState({});
@@ -18,31 +19,70 @@ export default function DatosPlanEstudios() {
   } = useContext(SolicitudContext);
 
   const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    formDatosPlanEstudios(name, value, form, setForm);
+    const { name, value } = e?.target || {};
+    if (name && value !== undefined) {
+      formDatosPlanEstudios(name, value, form, setForm);
+    }
   };
 
   const errors = errorDatosPlanEstudios(form, setError, error);
 
   const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (value !== initialValue || value === '') {
-      errors[name]();
+    const { name, value } = e?.target || {};
+    if (name && value !== undefined) {
+      const initialValue = initialValues[name];
+      if (value !== initialValue || value === '') {
+        errors[name]?.();
+      }
     }
   };
 
   const handleInputFocus = (e) => {
-    const { name, value } = e.target;
-    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
+    const { name, value } = e?.target || {};
+    if (name) {
+      setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
+    }
   };
 
   useEffect(() => {
-    if (errors !== undefined) {
+    if (type === 'editar' && data?.programa) {
+      setForm((currentForm) => {
+        const {
+          modalidad,
+          duracionPrograma,
+          creditos,
+          objetivoGeneral,
+          objetivoParticular,
+          ...programaRest
+        } = data.programa;
+
+        const updatedForm = {
+          ...currentForm,
+          1: {
+            ...currentForm[1],
+            modalidad,
+            duracionPrograma,
+            creditos,
+            objetivoGeneral,
+            objetivoParticular,
+            programa: {
+              ...currentForm[1].programa,
+              ...programaRest,
+            },
+          },
+        };
+
+        return updatedForm;
+      });
+      console.log(form);
+    }
+  }, [data, type, setForm]);
+
+  useEffect(() => {
+    if (errors) {
       setErrors(errors);
     }
-  }, [error]);
+  }, [errors, setErrors]);
 
   const nivelPrevio = [
     { id: 1, nombre: 'Bachillerato' },
@@ -234,3 +274,23 @@ export default function DatosPlanEstudios() {
     </Grid>
   );
 }
+
+DatosPlanEstudios.propTypes = {
+  type: PropTypes.string.isRequired,
+  data: PropTypes.shape({
+    programa: PropTypes.shape({
+      nivelId: PropTypes.number,
+      nombre: PropTypes.string,
+      modalidadId: PropTypes.number,
+      cicloId: PropTypes.number,
+      modalidad: PropTypes.string,
+      duracionPrograma: PropTypes.string,
+      creditos: PropTypes.string,
+      objetivoGeneral: PropTypes.string,
+      objetivoParticular: PropTypes.string,
+      programaTurnos: PropTypes.shape({
+        id: PropTypes.number,
+      }),
+    }),
+  }).isRequired,
+};

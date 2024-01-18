@@ -9,6 +9,7 @@ import ChangeAddress from './components/ModuleSelector/CambioDomicilio';
 import NewRequest from './components/ModuleSelector/NuevaSolicitud';
 import Refrendo from './components/ModuleSelector/Refrendo';
 import ModuleHeader from './components/ModuleHeader';
+import NuevaSolicitud from './components/NuevaSolicitud';
 import getSolicitudes from './components/utils/getSolicitudes';
 import errorDatosPlanEstudios from './components/utils/sections/errors/errorDatosPlanEstudios';
 import errorDatosNuevaSolicitud from './components/utils/sections/errors/errorDatosNuevaSolicitud';
@@ -27,6 +28,7 @@ export {
   Refrendo,
   InstitucionData,
   ModuleHeader,
+  NuevaSolicitud,
   DatosGenerales,
   Plantel,
   PlanEstudios,
