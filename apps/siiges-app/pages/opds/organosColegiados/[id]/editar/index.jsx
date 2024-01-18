@@ -4,10 +4,10 @@ import {
 } from '@siiges-ui/shared';
 import React from 'react';
 
-export default function NuevaSesion() {
+export default function EditarSesion() {
   return (
     <Layout title="Organos Colegiados">
-      <OrganosColegiados />
+      <OrganosColegiados type="editar" />
     </Layout>
   );
 }
