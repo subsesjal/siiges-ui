@@ -48,7 +48,7 @@ export default function DatosPlanEstudios({ type, data }) {
     if (type === 'editar' && data?.programa) {
       setForm((currentForm) => {
         const {
-          modalidad,
+          modalidadId,
           duracionPrograma,
           creditos,
           objetivoGeneral,
@@ -60,7 +60,7 @@ export default function DatosPlanEstudios({ type, data }) {
           ...currentForm,
           1: {
             ...currentForm[1],
-            modalidad,
+            modalidadId,
             duracionPrograma,
             creditos,
             objetivoGeneral,
@@ -156,7 +156,7 @@ export default function DatosPlanEstudios({ type, data }) {
           <BasicSelect
             title="Modalidad"
             name="modalidadId"
-            value={query.modalidad || ''}
+            value={form[1].modalidadId || query.modalidad}
             onfocus={handleInputFocus}
             options={modalidades}
             disabled
@@ -182,7 +182,7 @@ export default function DatosPlanEstudios({ type, data }) {
             options={turno}
             multiple
             onchange={handleOnChange}
-            value={form[1].programa?.programaTurnos || []}
+            value={form[1].programa?.programaTurnos?.map((turnos) => turnos.id) || []}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}

@@ -8,7 +8,6 @@ export default function EditarSolicitud() {
   const router = useRouter();
   const { query } = router;
   const { solicitudes } = getSolicitudesById(query.id);
-  console.log(solicitudes);
   return (
     <Layout title="Editar solicitud">
       <NuevaSolicitud type="editar" data={solicitudes} />
