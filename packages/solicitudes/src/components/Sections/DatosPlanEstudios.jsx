@@ -47,34 +47,18 @@ export default function DatosPlanEstudios({ type, data }) {
   useEffect(() => {
     if (type === 'editar' && data?.programa) {
       setForm((currentForm) => {
-        const {
-          modalidadId,
-          duracionPrograma,
-          creditos,
-          objetivoGeneral,
-          objetivoParticular,
-          ...programaRest
-        } = data.programa;
-
         const updatedForm = {
           ...currentForm,
           1: {
-            ...currentForm[1],
-            modalidadId,
-            duracionPrograma,
-            creditos,
-            objetivoGeneral,
-            objetivoParticular,
             programa: {
               ...currentForm[1].programa,
-              ...programaRest,
+              ...data.programa,
             },
           },
         };
 
         return updatedForm;
       });
-      console.log(form);
     }
   }, [data, type, setForm]);
 
@@ -156,7 +140,7 @@ export default function DatosPlanEstudios({ type, data }) {
           <BasicSelect
             title="Modalidad"
             name="modalidadId"
-            value={form[1].modalidadId || query.modalidad}
+            value={form[1].programa?.modalidadId || query.modalidad}
             onfocus={handleInputFocus}
             options={modalidades}
             disabled
@@ -182,7 +166,11 @@ export default function DatosPlanEstudios({ type, data }) {
             options={turno}
             multiple
             onchange={handleOnChange}
-            value={form[1].programa?.programaTurnos?.map((turnos) => turnos.id) || []}
+            value={
+              form[1].programa?.programaTurnos?.map(
+                (turnos) => turnos.turnoId,
+              ) || []
+            }
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}
@@ -196,7 +184,7 @@ export default function DatosPlanEstudios({ type, data }) {
             name="duracionPrograma"
             auto="duracionPrograma"
             onchange={handleOnChange}
-            value={form[1].duracionPrograma}
+            value={form[1].programa?.duracionPrograma || ''}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.duracionPrograma}
@@ -212,7 +200,7 @@ export default function DatosPlanEstudios({ type, data }) {
             label="Creditos necesarios para concluir el programa"
             name="creditos"
             auto="creditos"
-            value={form[1].creditos}
+            value={form[1].programa?.creditos}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -240,7 +228,7 @@ export default function DatosPlanEstudios({ type, data }) {
             id="objetivoGeneral"
             name="objetivoGeneral"
             auto="objetivoGeneral"
-            value={form[1].objetivoGeneral}
+            value={form[1].programa?.objetivoGeneral}
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -255,18 +243,18 @@ export default function DatosPlanEstudios({ type, data }) {
         <Grid item xs={12}>
           <TextField
             label="Objetivo Particular"
-            id="objetivoParticular"
-            name="objetivoParticular"
-            auto="objetivoParticular"
-            value={form[1].objetivoParticular}
+            id="objetivosParticulares"
+            name="objetivosParticulares"
+            auto="objetivosParticulares"
+            value={form[1].programa?.objetivosParticulares}
             rows={4}
             multiline
             sx={{ width: '100%' }}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
-            helperText={error.objetivoParticular}
-            error={!!error.objetivoParticular}
+            helperText={error.objetivosParticulares}
+            error={!!error.objetivosParticulares}
             required
           />
         </Grid>
