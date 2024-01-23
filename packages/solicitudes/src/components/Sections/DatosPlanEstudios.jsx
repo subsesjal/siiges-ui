@@ -46,29 +46,27 @@ export default function DatosPlanEstudios({ type, data }) {
 
   useEffect(() => {
     if (type === 'editar' && data?.programa) {
-      setForm((currentForm) => {
-        const updatedForm = {
-          ...currentForm,
-          1: {
-            programa: {
-              ...currentForm[1].programa,
-              ...data.programa,
-            },
+      setForm((currentForm) => ({
+        ...currentForm,
+        1: {
+          programa: {
+            ...currentForm[1].programa,
+            ...data.programa,
           },
-        };
-
-        return updatedForm;
-      });
+        },
+      }));
     }
-  }, [data, type, setForm]);
 
-  useEffect(() => {
     if (errors) {
       setErrors(errors);
     }
-  }, [errors, setErrors]);
+  }, [type, data, setForm, errors, setErrors]);
 
-  const nivelPrevio = [
+  const programaTurnosValue = form[1].programa?.programaTurnos?.map(
+    (turno) => turno?.turnoId,
+  ) || [];
+
+  const antecedenteAcademico = [
     { id: 1, nombre: 'Bachillerato' },
     { id: 2, nombre: 'Licenciatura' },
     { id: 3, nombre: 'Técnico Superior Universitario' },
@@ -159,42 +157,38 @@ export default function DatosPlanEstudios({ type, data }) {
             required
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <BasicSelect
             title="Turno"
             name="programaTurnos"
             options={turno}
             multiple
+            value={programaTurnosValue}
             onchange={handleOnChange}
-            value={
-              form[1].programa?.programaTurnos?.map(
-                (turnos) => turnos.turnoId,
-              ) || []
-            }
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}
             required
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={3}>
           <Input
-            id="duracionPrograma"
+            id="duracionPeriodos"
             label="Duracion del programa"
-            name="duracionPrograma"
-            auto="duracionPrograma"
+            name="duracionPeriodos"
+            auto="duracionPeriodos"
             onchange={handleOnChange}
-            value={form[1].programa?.duracionPrograma || ''}
+            value={form[1].programa?.duracionPeriodos || ''}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            errorMessage={error.duracionPrograma}
+            errorMessage={error.duracionPeriodos}
             required
           />
         </Grid>
-        <Grid item xs={6} sx={{ mt: 3 }}>
+        <Grid item xs={3} sx={{ mt: 3 }}>
           <Typography>Periodos</Typography>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={6}>
           <Input
             id="creditos"
             label="Creditos necesarios para concluir el programa"
@@ -208,16 +202,16 @@ export default function DatosPlanEstudios({ type, data }) {
             required
           />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={12}>
           <BasicSelect
             title="Nivel Previo"
-            name="nivelPrevio"
-            options={nivelPrevio}
-            value={form[1].programa?.nivelPrevio || ''}
+            name="antecedenteAcademico"
+            options={antecedenteAcademico}
+            value={form[1].programa?.antecedenteAcademico || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            errorMessage={error.nivelPrevio}
+            errorMessage={error.antecedenteAcademico}
             textValue
             required
           />
@@ -228,7 +222,7 @@ export default function DatosPlanEstudios({ type, data }) {
             id="objetivoGeneral"
             name="objetivoGeneral"
             auto="objetivoGeneral"
-            value={form[1].programa?.objetivoGeneral}
+            value={form[1].programa?.objetivoGeneral || ''}
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -246,7 +240,7 @@ export default function DatosPlanEstudios({ type, data }) {
             id="objetivosParticulares"
             name="objetivosParticulares"
             auto="objetivosParticulares"
-            value={form[1].programa?.objetivosParticulares}
+            value={form[1].programa?.objetivosParticulares || ''}
             rows={4}
             multiline
             sx={{ width: '100%' }}

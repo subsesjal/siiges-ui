@@ -10,10 +10,8 @@ import GenerarFDA01 from '../FDA/FDA01';
 import GenerarFDA02 from '../FDA/FDA02';
 import GenerarFDA06 from '../FDA/FDA06';
 
-
-
 export default function detallesSolicitudes() {
-  const {session, setNoti } = useContext(Context);
+  const { session, setNoti } = useContext(Context);
   const router = useRouter();
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
@@ -32,8 +30,6 @@ export default function detallesSolicitudes() {
 
     fetchSolicitud();
   }, [query, session, solicitud]);
-
-  console.log(solicitud.data);
 
   return (
     <Layout>

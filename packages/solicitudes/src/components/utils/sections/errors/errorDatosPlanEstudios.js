@@ -36,11 +36,11 @@ export default function errorDatosPlanEstudios(form, setError) {
       formData.programa?.programaTurnos !== undefined
           && formData.programa?.programaTurnos.length > 0,
     ),
-    duracionPrograma: () => validateField(
-      'duracionPrograma',
+    duracionPeriodos: () => validateField(
+      'duracionPeriodos',
       'Duración del programa es requerida',
-      formData.programa?.duracionPrograma !== undefined
-          && formData.programa?.duracionPrograma !== '',
+      formData.programa?.duracionPeriodos !== undefined
+          && formData.programa?.duracionPeriodos !== '',
     ),
     creditos: () => validateField(
       'creditos',
@@ -49,11 +49,11 @@ export default function errorDatosPlanEstudios(form, setError) {
           && formData.programa?.creditos !== ''
           && validNumber.test(formData.programa?.creditos),
     ),
-    nivelPrevio: () => validateField(
-      'nivelPrevio',
+    antecedenteAcademico: () => validateField(
+      'antecedenteAcademico',
       'Nivel previo es requerido',
-      formData.programa?.nivelPrevio !== undefined
-          && formData.programa?.nivelPrevio !== '',
+      formData.programa?.antecedenteAcademico !== undefined
+          && formData.programa?.antecedenteAcademico !== '',
     ),
     objetivoGeneral: () => validateField(
       'objetivoGeneral',

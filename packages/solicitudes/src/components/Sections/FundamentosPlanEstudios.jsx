@@ -14,8 +14,6 @@ export default function FundamentosPlanEstudios({ disabled }) {
     }
   }, [url]); // Only run the effect when `url` changes
 
-  console.log(url);
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
