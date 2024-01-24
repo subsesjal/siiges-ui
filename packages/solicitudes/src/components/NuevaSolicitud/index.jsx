@@ -30,7 +30,7 @@ const steps = {
 };
 
 // eslint-disable-next-line react/prop-types
-export default function NuevaSolicitud({ type, data }) {
+export default function NuevaSolicitud({ type, data, solicitudId }) {
   const router = useRouter();
   const [modalidad, setModalidad] = useState('escolarizada');
   const [module, setModule] = useState(0);
@@ -41,7 +41,11 @@ export default function NuevaSolicitud({ type, data }) {
     if (router.query.modalidad) {
       setModalidad(router.query.modalidad);
     }
-  }, [router.query.modalidad]);
+
+    if (solicitudId) {
+      setId(solicitudId);
+    }
+  }, [router.query.modalidad, solicitudId]);
 
   const nextModule = () => setModule((prevModule) => prevModule + 1);
 
@@ -106,6 +110,11 @@ export default function NuevaSolicitud({ type, data }) {
   );
 }
 
+NuevaSolicitud.defaultProps = {
+  solicitudId: null,
+};
+
 NuevaSolicitud.propTypes = {
   type: PropTypes.string.isRequired,
+  solicitudId: PropTypes.number,
 };

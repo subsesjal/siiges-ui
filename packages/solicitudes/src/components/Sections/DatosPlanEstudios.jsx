@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import { useRouter } from 'next/router';
 import { Grid, Typography, TextField } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
@@ -25,7 +27,10 @@ export default function DatosPlanEstudios({ type, data }) {
     }
   };
 
-  const errors = errorDatosPlanEstudios(form, setError, error);
+  const errors = useMemo(
+    () => errorDatosPlanEstudios(form, setError, error),
+    [form, setError, error],
+  );
 
   const handleOnBlur = (e) => {
     const { name, value } = e?.target || {};
@@ -46,25 +51,25 @@ export default function DatosPlanEstudios({ type, data }) {
 
   useEffect(() => {
     if (type === 'editar' && data?.programa) {
+      // eslint-disable-next-line react/prop-types
+      const programaTurnosIds = data.programa.programaTurnos?.map((turno) => turno.turnoId) || [];
+
       setForm((currentForm) => ({
         ...currentForm,
         1: {
           programa: {
             ...currentForm[1].programa,
             ...data.programa,
+            programaTurnos: programaTurnosIds,
           },
         },
       }));
     }
 
-    if (errors) {
+    if (Object.keys(errors).length > 0) {
       setErrors(errors);
     }
-  }, [type, data, setForm, errors, setErrors]);
-
-  const programaTurnosValue = form[1].programa?.programaTurnos?.map(
-    (turno) => turno?.turnoId,
-  ) || [];
+  }, [type, data, setForm, setErrors]);
 
   const antecedenteAcademico = [
     { id: 1, nombre: 'Bachillerato' },
@@ -163,7 +168,7 @@ export default function DatosPlanEstudios({ type, data }) {
             name="programaTurnos"
             options={turno}
             multiple
-            value={programaTurnosValue}
+            value={form[1].programa?.programaTurnos || []}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}

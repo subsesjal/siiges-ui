@@ -10,7 +10,7 @@ export default function EditarSolicitud() {
   const { solicitudes } = getSolicitudesById(query.id);
   return (
     <Layout title="Editar solicitud">
-      <NuevaSolicitud type="editar" data={solicitudes} />
+      <NuevaSolicitud type="editar" data={solicitudes} solicitudId={query.id} />
     </Layout>
   );
 }

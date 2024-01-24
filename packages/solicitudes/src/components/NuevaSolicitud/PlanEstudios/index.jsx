@@ -20,7 +20,13 @@ import SolicitudContext from '../../utils/Context/solicitudContext';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
 
 export default function PlanEstudios({
-  nextModule, id, setId, programaId, setProgramaId, type, data,
+  nextModule,
+  id,
+  setId,
+  programaId,
+  setProgramaId,
+  type,
+  data,
 }) {
   const { session } = useContext(Context);
   const router = useRouter();
@@ -82,6 +88,7 @@ export default function PlanEstudios({
         <Card sx={{ mt: 3, mb: 3 }}>
           <CardContent>
             <SectionLayout
+              type={type}
               id={id}
               sectionTitle="Plan de estudios"
               sections={section}
@@ -121,8 +128,12 @@ export default function PlanEstudios({
 
 PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]).isRequired,
-  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]).isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
+    .isRequired,
+  programaId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([undefined]),
+  ]).isRequired,
   setId: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
