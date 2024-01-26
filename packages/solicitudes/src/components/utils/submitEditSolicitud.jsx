@@ -5,6 +5,7 @@ export default function submitEditSolicitud(validations, sections, id) {
   const url = process.env.NEXT_PUBLIC_URL;
   const { form, setNoti } = validations;
   const token = getToken();
+  console.log(form);
 
   fetch(`${url}/api/v1/solicitudes/${id}`, {
     method: 'PATCH',

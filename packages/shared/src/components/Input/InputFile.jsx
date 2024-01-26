@@ -23,7 +23,6 @@ export default function InputFile({
   const [files, setFiles] = useState([]);
   const { setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
-  const mainUrl = process.env.NEXT_PUBLIC_URL;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -82,7 +81,7 @@ export default function InputFile({
             </Button>
             {url && (
               <a
-                href={`${mainUrl}${url}`}
+                href={`https://${url}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

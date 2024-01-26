@@ -100,7 +100,13 @@ export default function PlanEstudios({
               prev={prev}
             >
               {section === 1 && <DatosPlanEstudios type={type} data={data} />}
-              {section === 2 && <FundamentosPlanEstudios disabled={disabled} />}
+              {section === 2 && (
+                <FundamentosPlanEstudios
+                  disabled={disabled}
+                  type={type}
+                  data={data}
+                />
+              )}
               {section === 3 && <Ingreso disabled={disabled} />}
               {section === 4 && <Egreso disabled={disabled} />}
               {section === 5 && <Curricula disabled={disabled} />}
