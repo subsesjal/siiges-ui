@@ -1,20 +1,29 @@
 import { Grid, Typography } from '@mui/material';
-import { InputFile } from '@siiges-ui/shared';
+import { GetFile, InputFile } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import SolicitudContext from '../utils/Context/solicitudContext';
 
-export default function FundamentosPlanEstudios({ disabled }) {
+export default function FundamentosPlanEstudios({ disabled, type }) {
   const { form, setForm, id } = useContext(SolicitudContext);
   const [url, setUrl] = useState();
+  const fileData = {
+    entidadId: id,
+    tipoEntidad: 'PROGRAMA',
+    tipoDocumento: 'FORMATO_PEDAGOGICO_01',
+  };
+
+  useEffect(() => {
+    if (type === 'editar') {
+      GetFile(fileData, setUrl);
+    }
+  }, []);
 
   useEffect(() => {
     if (url !== undefined) {
       setForm({ ...form, 2: { ...form['2'], url } });
     }
-  }, [url]); // Only run the effect when `url` changes
-
-  console.log(url);
+  }, [url]);
 
   return (
     <Grid container spacing={2}>
@@ -52,4 +61,5 @@ export default function FundamentosPlanEstudios({ disabled }) {
 
 FundamentosPlanEstudios.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };

@@ -20,6 +20,7 @@ import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularCo
 import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
 
 export default function ButtonSection({
+  type,
   id,
   sections,
   position,
@@ -85,7 +86,11 @@ export default function ButtonSection({
       };
     }
   } else if (newSubmit) {
-    submit = () => submitNewSolicitud(validations, setNewSubmit);
+    if (type !== 'editar') {
+      submit = () => submitNewSolicitud(validations, setNewSubmit);
+    } else {
+      submit = () => submitEditSolicitud(validations, sections, id);
+    }
   } else {
     submit = () => submitEditSolicitud(validations, sections, id);
   }
@@ -176,7 +181,12 @@ export default function ButtonSection({
   );
 }
 
+ButtonSection.defaultProps = {
+  type: null,
+};
+
 ButtonSection.propTypes = {
+  type: PropTypes.string,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
   position: PropTypes.string.isRequired,

@@ -1,19 +1,27 @@
-/* export default function GetFile(fileType, setForm, setLoaded) {
+export default function GetFile(fileData, setFile) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  const url = process.env.NEXT_PUBLIC_URL;
-  fetch(
-    `http://localhost:3000/api/v1/files?tipoEntidad=${fileType.tipoEntidad}&entidadId=${fileType.entidadId}&tipoDocumento=${fileType.tipoDocumento}`,
-    { headers: { api_key: apikey } }
-    {
-      method: 'GET',
-    }
-      .then((response) => response.json())
-      .then((data) => {
-        setLoaded(true);
-        if (data !== undefined) {
-          solicitudData = data.data;
-        }
-        setForm(solicitudData);
-      }),
-  );
-} */
+  const baseUrl = process.env.NEXT_PUBLIC_URL;
+
+  const url = `${baseUrl}?tipoEntidad=${fileData.tipoEntidad}&entidadId=${fileData.entidadId}&tipoDocumento=${fileData.tipoDocumento}`;
+
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      api_key: apikey,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.data) {
+        setFile(data.data.url);
+      }
+    })
+    .catch((error) => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+}

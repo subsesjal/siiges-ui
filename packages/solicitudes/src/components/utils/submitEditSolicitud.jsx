@@ -3,18 +3,9 @@ import { getToken } from '@siiges-ui/shared';
 export default function submitEditSolicitud(validations, sections, id) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const { errors, form, setNoti } = validations;
+  const { form, setNoti } = validations;
   const token = getToken();
-
-  const isValid = Object.keys(errors).every((campo) => errors[campo]());
-  if (!isValid) {
-    setNoti({
-      open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
-      type: 'error',
-    });
-    return;
-  }
+  console.log(form);
 
   fetch(`${url}/api/v1/solicitudes/${id}`, {
     method: 'PATCH',
