@@ -44,6 +44,8 @@ import SubmitDocument from './components/Submit/SubmitDocument';
 import fileToFormData from './components/Submit/FileToFormData';
 import PaperInstitucion from './components/Paper/PaperInstitucion';
 import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
+import formattedDate from './utils/handlers/formattedDate';
+import submitData from './utils/handlers/submitData';
 
 export {
   Logo,
@@ -93,4 +95,6 @@ export {
   StepperComponent,
   PaperInstitucion,
   useCheckMobileScreen,
+  formattedDate,
+  submitData,
 };

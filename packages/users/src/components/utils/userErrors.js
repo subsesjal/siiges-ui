@@ -1,4 +1,4 @@
-export default function userErrors(form, setError, error) {
+function userErrors(form, setError, error) {
   const errors = {
     nombre: () => {
       if (form.persona.nombre === undefined || form.persona.nombre === '') {
@@ -93,3 +93,6 @@ export default function userErrors(form, setError, error) {
 
   return errors;
 }
+
+
+export { userErrors };

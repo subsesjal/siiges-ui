@@ -46,12 +46,18 @@ export default function Overlay({
         setSection={setSection}
         rol={session.rol}
       />
+      {
+        session
+      && (
       <MenuDrawer
         open={open}
         openFunction={() => handleDrawerOpen()}
         closeFunction={() => handleDrawerClose()}
         section={section}
+        session={session}
       />
+      )
+      }
       <Container
         sx={{
           paddingTop: 5,
