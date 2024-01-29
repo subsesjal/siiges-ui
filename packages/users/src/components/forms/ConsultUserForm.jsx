@@ -11,7 +11,7 @@ import {
   getFormSelectData,
 } from '@siiges-ui/shared/src/utils/forms/getFormData';
 
-export default function UserForm({ user }) {
+export default function ConsultUserForm({ user }) {
   const { persona, rol } = user.data;
   const { session } = useContext(Context);
   const [userRol, setUserrol] = useState([]);
@@ -301,6 +301,6 @@ export default function UserForm({ user }) {
   );
 }
 
-UserForm.propTypes = {
+ConsultUserForm.propTypes = {
   user: PropTypes.objectOf.isRequired,
 };

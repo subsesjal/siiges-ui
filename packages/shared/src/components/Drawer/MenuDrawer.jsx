@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Context } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
@@ -58,19 +57,22 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function MenuDrawer({
-  open, openFunction, closeFunction, section,
+  open, openFunction, closeFunction, section, session,
 }) {
-  const { session } = useContext(Context);
   const [users, setUsers] = useState([]);
   const [institucionRoute, setInstitucionRoute] = useState(
     '/institucion/nuevaInstitucion',
   );
-  const { institucion } = getInstitucionUsuario();
+  const { institucion } = getInstitucionUsuario({ session });
 
   useEffect(() => {
     if (institucion) {
       setInstitucionRoute(
         `/institucion/${institucion.id}/consultarInstitucion`,
+      );
+    } else {
+      setInstitucionRoute(
+        '/institucion/nuevaInstitucion',
       );
     }
   }, [institucion]);
@@ -127,6 +129,12 @@ function MenuDrawer({
 
 MenuDrawer.propTypes = {
   open: PropTypes.bool.isRequired,
+  session: PropTypes.shape({
+    id: PropTypes.number,
+    nombre: PropTypes.string,
+    rol: PropTypes.string,
+    token: PropTypes.string,
+  }).isRequired,
   openFunction: PropTypes.func.isRequired,
   closeFunction: PropTypes.func.isRequired,
   section: PropTypes.number.isRequired,

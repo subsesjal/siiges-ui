@@ -1,39 +1,21 @@
-import React, { useState } from 'react';
-import {
-  ButtonStyled, Layout, DataTable,
-} from '@siiges-ui/shared';
-import { Grid } from '@mui/material';
-import Link from 'next/link';
-import { getUsers, columns } from '@siiges-ui/users';
+import React, { useContext } from 'react';
 
-export default function Usuarios() {
-  const { users, loading } = getUsers();
-  const [auth] = useState(false);
+import { Layout, Context } from '@siiges-ui/shared';
+import { UsuariosTable, fetchUsuarios } from '@siiges-ui/users';
+import { Divider } from '@mui/material';
+
+function Usuarios() {
+  const { session } = useContext(Context);
+  const { usuarios } = fetchUsuarios({ session });
 
   return (
-    <Layout title="Usuarios" subtitle="Consulta todos los usuarios registrados">
-      <Grid container>
-        {auth ? (
-          <Grid item xs={9} sx={{ mt: '20px' }}>
-            <Link href="/usuarios/nuevoUsuario">
-              <div>
-                <ButtonStyled
-                  text="Nuevo Usuario"
-                  alt="Agregar usuario"
-                  type="success"
-                />
-              </div>
-            </Link>
-          </Grid>
-        ) : (
-          <div />
-        )}
-        {loading ? (
-          <DataTable rows={users} columns={columns} title="Tabla de usuarios" />
-        ) : (
-          <div />
-        )}
-      </Grid>
+    <Layout title="Usuarios">
+      <Divider sx={{ marginTop: 2 }} />
+      {usuarios && (
+        <UsuariosTable usuarios={usuarios} session={session} />
+      )}
     </Layout>
   );
 }
+
+export default Usuarios;

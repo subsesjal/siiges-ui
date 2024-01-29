@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { Context, Layout } from '@siiges-ui/shared';
 import router from 'next/router';
-import { NewUserForm } from '@siiges-ui/users';
-import { Divider, Typography } from '@mui/material';
+import { UsuarioForm } from '@siiges-ui/users';
+import { Divider } from '@mui/material';
 
 export default function NewUser() {
   const { session } = useContext(Context);
@@ -14,12 +14,9 @@ export default function NewUser() {
   }, [session]);
 
   return (
-    <Layout title="Nuevo Usuario" subtitle="Llena los siguientes datos">
+    <Layout title="Agregar Usuario">
       <Divider sx={{ mt: 5 }} />
-      <Typography variant="p" sx={{ fontWeight: 'medium' }}>
-        Datos Generales
-      </Typography>
-      <NewUserForm />
+      <UsuarioForm session={session} accion="crear" />
     </Layout>
   );
 }
