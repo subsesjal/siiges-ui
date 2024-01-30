@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-const createUsuarioSchema = {
+const updateUsuarioSchema = {
   type: 'object',
   properties: {
     persona: {
@@ -10,7 +9,6 @@ const createUsuarioSchema = {
         apellidoMaterno: { type: 'string' },
         tituloCargo: { type: 'string' },
       },
-      required: ['nombre', 'apellidoPaterno'],
     },
     rolId: { type: 'string' },
     correo: { type: 'string' },
@@ -20,7 +18,6 @@ const createUsuarioSchema = {
     actualizado: { type: 'number' },
     estatus: { type: 'number' },
   },
-  required: ['persona', 'rolId', 'correo', 'usuario', 'contrasena', 'repeatContrasena', 'actualizado'],
 };
 
-export { createUsuarioSchema };
+export { updateUsuarioSchema };

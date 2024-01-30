@@ -17,12 +17,7 @@ const commonColumns = [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => (
-      <UsuariosActions
-        id={params.id}
-        url={`/usuarios/consultar/${params.id}`}
-      />
-    ),
+    renderCell: (params) => <UsuariosActions id={params.id} />,
     sortable: false,
     filterable: false,
   },
@@ -44,12 +39,7 @@ const adminColumns = [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => (
-      <UsuariosActions
-        id={params.id}
-        url={`/usuarios/consultar/${params.id}`}
-      />
-    ),
+    renderCell: (params) => <UsuariosActions id={params.id} />,
     sortable: false,
     filterable: false,
   },

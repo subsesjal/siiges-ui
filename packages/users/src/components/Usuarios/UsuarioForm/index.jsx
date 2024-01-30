@@ -11,14 +11,17 @@ import {
   submitData,
 } from '@siiges-ui/shared';
 import { createUsuarioSchema } from '../../../schemas/createUsuario.schema';
+import { updateUsuarioSchema } from '../../../schemas/updateUsuario.schema';
 import { handleOnBlur, handleOnChange, handleRolOptions } from '../../../utils/usuarioHandler';
 
-export default function UsuarioForm({ session, accion, usuarioId }) {
+export default function UsuarioForm({ session, accion, usuario }) {
   const [rolOptions, setRolOptions] = useState([{ id: '', nombre: '' }]);
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [path, setPath] = useState('/');
+  const [schema, setSchema] = useState({});
+  const [method, setMethod] = useState('');
   handleRolOptions(setRolOptions, session, useEffect);
 
   useEffect(() => {
@@ -34,16 +37,15 @@ export default function UsuarioForm({ session, accion, usuarioId }) {
       if (session.rol === 'admin') {
         setPath('/usuarios');
       }
+
+      setSchema(createUsuarioSchema);
+      setMethod('POST');
     }
 
     if (accion === 'editar') {
-      if (session.rol === 'representante') {
-        setPath(`/usuarios/${session.id}/usuario/${usuarioId}`);
-      }
-
-      if (session.rol === 'admin') {
-        setPath(`/usuarios/${usuarioId}`);
-      }
+      setPath(`/usuarios/${usuario.id}`);
+      setSchema(updateUsuarioSchema);
+      setMethod('PATCH');
     }
   }, [session.rol]);
 
@@ -57,6 +59,7 @@ export default function UsuarioForm({ session, accion, usuarioId }) {
               id="nombre"
               name="nombre"
               auto="nombre"
+              value={usuario.persona.nombre}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -69,6 +72,7 @@ export default function UsuarioForm({ session, accion, usuarioId }) {
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
+              value={usuario.persona.apellidoPaterno}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -81,6 +85,7 @@ export default function UsuarioForm({ session, accion, usuarioId }) {
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
+              value={usuario.persona.apellidoMaterno}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -93,6 +98,7 @@ export default function UsuarioForm({ session, accion, usuarioId }) {
               options={rolOptions || []}
               id="rolId"
               name="rolId"
+              value={usuario.rol.id}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError, isRequired: true })}
@@ -107,6 +113,7 @@ export default function UsuarioForm({ session, accion, usuarioId }) {
               id="tituloCargo"
               name="tituloCargo"
               auto="tituloCargo"
+              value={usuario.persona.tituloCargo}
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={error.tituloCargo}
@@ -118,6 +125,7 @@ export default function UsuarioForm({ session, accion, usuarioId }) {
               id="correo"
               name="correo"
               auto="correo"
+              value={usuario.correo}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -132,43 +140,52 @@ export default function UsuarioForm({ session, accion, usuarioId }) {
               id="usuario"
               name="usuario"
               auto="usuario"
+              value={usuario.usuario}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={error.usuario}
             />
           </Grid>
-          <Grid item xs={3}>
-            <InputPassword
-              label="Contraseña"
-              id="contrasena"
-              name="contrasena"
-              auto="contrasena"
-              required
-              onchange={(e) => handleOnChange(e, { form, setForm })}
-              onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={error.contrasena}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <InputPassword
-              label="Repetir contraseña"
-              id="repeatContrasena"
-              name="repeatContrasena"
-              auto="repeatContrasena"
-              required
-              onchange={(e) => handleOnChange(e, { form, setForm })}
-              onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={error.repeatContrasena}
-            />
-          </Grid>
+          {
+            (accion === 'crear')
+            && (
+            <>
+              <Grid item xs={3}>
+                <InputPassword
+                  label="Contraseña"
+                  id="contrasena"
+                  name="contrasena"
+                  auto="contrasena"
+                  required
+                  onchange={(e) => handleOnChange(e, { form, setForm })}
+                  onblur={(e) => handleOnBlur(e, { form, setError })}
+                  errorMessage={error.contrasena}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <InputPassword
+                  label="Repetir contraseña"
+                  id="repeatContrasena"
+                  name="repeatContrasena"
+                  auto="repeatContrasena"
+                  required
+                  onchange={(e) => handleOnChange(e, { form, setForm })}
+                  onblur={(e) => handleOnBlur(e, { form, setError })}
+                  errorMessage={error.repeatContrasena}
+                />
+              </Grid>
+            </>
+            )
+          }
         </Grid>
         <ButtonsForm
           cancel={() => router.back()}
           confirm={() => submitData(
             form,
-            createUsuarioSchema,
+            schema,
             path,
+            method,
             setNoti,
           )}
         />
@@ -193,9 +210,11 @@ UsuarioForm.propTypes = {
     token: PropTypes.string.isRequired,
   }).isRequired,
   accion: PropTypes.string.isRequired,
-  usuarioId: PropTypes.string,
+  usuario: ({
+    id: PropTypes.number.isRequired,
+  }),
 };
 
 UsuarioForm.defaultProps = {
-  usuarioId: null,
+  usuario: null,
 };
