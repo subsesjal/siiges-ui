@@ -3,7 +3,10 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable no-restricted-syntax */
 import router from 'next/router';
+import Ajv from 'ajv';
 import getToken from './getToken';
+
+const ajv = new Ajv();
 
 const errorMessages = {
   404: 'Not Found',
@@ -39,41 +42,6 @@ const handleResponse = async (response, setNoti) => {
   return false;
 };
 
-const validateData = (data, schema) => {
-  const errors = [];
-
-  const validateProperty = (property, value, propertySchema) => {
-    if (propertySchema.type === 'object' && typeof value === 'object') {
-      // Validate nested object
-      for (const subProperty in propertySchema.properties) {
-        if (value.hasOwnProperty(subProperty)) {
-          validateProperty(subProperty, value[subProperty], propertySchema.properties[subProperty]);
-        } else {
-          errors.push(`Missing required property: ${subProperty}`);
-        }
-      }
-    } else {
-      // Validate simple type
-      if (typeof value !== propertySchema.type) {
-        errors.push(`Invalid type for property '${property}'. Expected '${propertySchema.type}', got '${typeof value}'`);
-      }
-    }
-  };
-
-  for (const property in schema.properties) {
-    if (data.hasOwnProperty(property)) {
-      validateProperty(property, data[property], schema.properties[property]);
-    } else {
-      errors.push(`Missing required property: ${property}`);
-    }
-  }
-
-  return {
-    valid: errors.length === 0,
-    errors,
-  };
-};
-
 const cleanFormData = (data, schema) => {
   const cleanedData = {};
 
@@ -93,14 +61,17 @@ const cleanFormData = (data, schema) => {
   return cleanedData;
 };
 
-const submitData = async (form, schema, path, setNoti) => {
+const submitData = async (form, schema, path, method, setNoti) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { token } = getToken();
   const basePath = '/api/v1';
-  const validationResult = validateData(form, schema);
 
-  if (!validationResult.valid) {
+  const validate = ajv.compile(schema);
+
+  const valid = validate(form);
+
+  if (!valid) {
     setNoti({
       open: true,
       message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
@@ -113,7 +84,7 @@ const submitData = async (form, schema, path, setNoti) => {
   const cleanedData = cleanFormData(form, schema);
 
   const response = await fetch(`${url}${basePath}${path}`, {
-    method: 'POST',
+    method,
     headers: {
       api_key: apikey,
       Authorization: `Bearer ${token}`,

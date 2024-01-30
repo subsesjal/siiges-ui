@@ -46,6 +46,7 @@ import PaperInstitucion from './components/Paper/PaperInstitucion';
 import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import formattedDate from './utils/handlers/formattedDate';
 import submitData from './utils/handlers/submitData';
+import getData from './utils/handlers/getData';
 
 export {
   Logo,
@@ -97,4 +98,5 @@ export {
   useCheckMobileScreen,
   formattedDate,
   submitData,
+  getData,
 };

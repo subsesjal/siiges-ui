@@ -42,7 +42,6 @@ export default function UsuariosTable({ usuarios, session }) {
         buttonClick={() => {
           router.push('/usuarios/crear');
         }}
-
       />
     </Grid>
   );
