@@ -47,6 +47,8 @@ import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import formattedDate from './utils/handlers/formattedDate';
 import submitData from './utils/handlers/submitData';
 import getData from './utils/handlers/getData';
+import useApi from './utils/hooks/useApi';
+import cleanData from './utils/handlers/cleanData';
 
 export {
   Logo,
@@ -99,4 +101,6 @@ export {
   formattedDate,
   submitData,
   getData,
+  useApi,
+  cleanData,
 };

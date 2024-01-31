@@ -10,44 +10,32 @@ import {
   Select,
   submitData,
 } from '@siiges-ui/shared';
-import { createUsuarioSchema } from '../../../schemas/createUsuario.schema';
-import { updateUsuarioSchema } from '../../../schemas/updateUsuario.schema';
-import { handleOnBlur, handleOnChange, handleRolOptions } from '../../../utils/usuarioHandler';
+import {
+  handleOnBlur,
+  handleOnChange,
+  handleRolOptions,
+  handleUserData,
+} from '../../../utils/usuarioHandler';
 
 export default function UsuarioForm({ session, accion, usuario }) {
   const [rolOptions, setRolOptions] = useState([{ id: '', nombre: '' }]);
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
-  const [path, setPath] = useState('/');
+  const [endpoint, setEndpoint] = useState('/');
   const [schema, setSchema] = useState({});
-  const [method, setMethod] = useState('');
+  const [method, setMethod] = useState({});
+
   handleRolOptions(setRolOptions, session, useEffect);
+  handleUserData({
+    accion, form, session, setEndpoint, setSchema, setMethod, useEffect,
+  });
 
   useEffect(() => {
-    // Update estatus to 1 when rol is 'admin'
     if (session.rol === 'admin') {
       setForm((prevForm) => ({ ...prevForm, estatus: 1 }));
     }
-    if (accion === 'crear') {
-      if (session.rol === 'representante') {
-        setPath(`/usuarios/${session.id}/usuario`);
-      }
-
-      if (session.rol === 'admin') {
-        setPath('/usuarios');
-      }
-
-      setSchema(createUsuarioSchema);
-      setMethod('POST');
-    }
-
-    if (accion === 'editar') {
-      setPath(`/usuarios/${usuario.id}`);
-      setSchema(updateUsuarioSchema);
-      setMethod('PATCH');
-    }
-  }, [session.rol]);
+  }, [session]);
 
   return (
     <>
@@ -59,7 +47,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="nombre"
               name="nombre"
               auto="nombre"
-              value={usuario.persona.nombre}
+              value={usuario && usuario.persona
+                ? usuario.persona.nombre
+                : null}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -72,7 +62,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
-              value={usuario.persona.apellidoPaterno}
+              value={usuario && usuario.persona
+                ? usuario.persona.apellidoPaterno
+                : null}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -85,7 +77,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
-              value={usuario.persona.apellidoMaterno}
+              value={usuario && usuario.persona
+                ? usuario.persona.apellidoMaterno
+                : null}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -98,7 +92,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               options={rolOptions || []}
               id="rolId"
               name="rolId"
-              value={usuario.rol.id}
+              value={usuario && usuario.rol
+                ? usuario.rol.id
+                : ''}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError, isRequired: true })}
@@ -113,7 +109,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="tituloCargo"
               name="tituloCargo"
               auto="tituloCargo"
-              value={usuario.persona.tituloCargo}
+              value={usuario && usuario.persona
+                ? usuario.persona.tituloCargo
+                : null}
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={error.tituloCargo}
@@ -125,7 +123,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="correo"
               name="correo"
               auto="correo"
-              value={usuario.correo}
+              value={usuario && usuario.correo
+                ? usuario.correo
+                : null}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -140,7 +140,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="usuario"
               name="usuario"
               auto="usuario"
-              value={usuario.usuario}
+              value={usuario && usuario.usuario
+                ? usuario.usuario
+                : null}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -181,13 +183,13 @@ export default function UsuarioForm({ session, accion, usuario }) {
         </Grid>
         <ButtonsForm
           cancel={() => router.back()}
-          confirm={() => submitData(
-            form,
+          confirm={() => submitData({
+            endpoint,
             schema,
-            path,
             method,
+            dataBody: form,
             setNoti,
-          )}
+          })}
         />
       </Grid>
       <SnackAlert
@@ -216,5 +218,5 @@ UsuarioForm.propTypes = {
 };
 
 UsuarioForm.defaultProps = {
-  usuario: null,
+  usuario: {},
 };

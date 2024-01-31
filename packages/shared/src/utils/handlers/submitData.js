@@ -1,12 +1,7 @@
-/* eslint-disable valid-typeof */
-/* eslint-disable no-lonely-if */
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable no-restricted-syntax */
 import router from 'next/router';
 import Ajv from 'ajv';
 import getToken from './getToken';
-
-const ajv = new Ajv();
+import cleanData from './cleanData';
 
 const errorMessages = {
   404: 'Not Found',
@@ -42,34 +37,17 @@ const handleResponse = async (response, setNoti) => {
   return false;
 };
 
-const cleanFormData = (data, schema) => {
-  const cleanedData = {};
-
-  for (const property in schema.properties) {
-    if (data.hasOwnProperty(property)) {
-      const value = data[property];
-      const propertySchema = schema.properties[property];
-
-      if (propertySchema.type === 'object' && typeof value === 'object') {
-        cleanedData[property] = cleanFormData(value, propertySchema);
-      } else {
-        cleanedData[property] = value;
-      }
-    }
-  }
-
-  return cleanedData;
-};
-
-const submitData = async (form, schema, path, method, setNoti) => {
+const submitData = async ({
+  schema, endpoint, method, dataBody = null, setNoti,
+}) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { token } = getToken();
-  const basePath = '/api/v1';
+  const ajv = new Ajv({ allErrors: true });
 
   const validate = ajv.compile(schema);
 
-  const valid = validate(form);
+  const valid = validate(dataBody);
 
   if (!valid) {
     setNoti({
@@ -81,16 +59,16 @@ const submitData = async (form, schema, path, method, setNoti) => {
     return false;
   }
 
-  const cleanedData = cleanFormData(form, schema);
+  const cleanedData = cleanData(dataBody, schema);
 
-  const response = await fetch(`${url}${basePath}${path}`, {
+  const response = await fetch(`${url}${endpoint}`, {
     method,
     headers: {
       api_key: apikey,
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(cleanedData),
+    body: method ? JSON.stringify(cleanedData) : null,
   });
 
   return handleResponse(response, setNoti);
