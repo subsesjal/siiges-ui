@@ -9,6 +9,7 @@ import ChangeAddress from './components/ModuleSelector/CambioDomicilio';
 import NewRequest from './components/ModuleSelector/NuevaSolicitud';
 import Refrendo from './components/ModuleSelector/Refrendo';
 import ModuleHeader from './components/ModuleHeader';
+import NuevaSolicitud from './components/NuevaSolicitud';
 import getSolicitudes from './components/utils/getSolicitudes';
 import errorDatosPlanEstudios from './components/utils/sections/errors/errorDatosPlanEstudios';
 import errorDatosNuevaSolicitud from './components/utils/sections/errors/errorDatosNuevaSolicitud';
@@ -16,15 +17,18 @@ import SolicitudContext from './components/utils/Context/solicitudContext';
 import modalidades from './components/utils/Mocks/mockModalidades';
 import formData from './components/utils/sections/forms/formData';
 import getSolicitudDetalles from './components/utils/getSolicitudDetalles';
+import columnsSolicitudes from './components/utils/Tables/solicitudesColumns';
 
 export {
   getSolicitudDetalles,
   NewRequest,
   ChangeAddress,
   EvaluacionCurricular,
+  columnsSolicitudes,
   Refrendo,
   InstitucionData,
   ModuleHeader,
+  NuevaSolicitud,
   DatosGenerales,
   Plantel,
   PlanEstudios,

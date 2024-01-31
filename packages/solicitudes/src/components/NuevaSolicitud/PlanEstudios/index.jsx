@@ -20,7 +20,13 @@ import SolicitudContext from '../../utils/Context/solicitudContext';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
 
 export default function PlanEstudios({
-  nextModule, id, setId, programaId, setProgramaId,
+  nextModule,
+  id,
+  setId,
+  programaId,
+  setProgramaId,
+  type,
+  data,
 }) {
   const { session } = useContext(Context);
   const router = useRouter();
@@ -82,6 +88,7 @@ export default function PlanEstudios({
         <Card sx={{ mt: 3, mb: 3 }}>
           <CardContent>
             <SectionLayout
+              type={type}
               id={id}
               sectionTitle="Plan de estudios"
               sections={section}
@@ -92,8 +99,14 @@ export default function PlanEstudios({
               next={next}
               prev={prev}
             >
-              {section === 1 && <DatosPlanEstudios />}
-              {section === 2 && <FundamentosPlanEstudios disabled={disabled} />}
+              {section === 1 && <DatosPlanEstudios type={type} data={data} />}
+              {section === 2 && (
+                <FundamentosPlanEstudios
+                  disabled={disabled}
+                  type={type}
+                  data={data}
+                />
+              )}
               {section === 3 && <Ingreso disabled={disabled} />}
               {section === 4 && <Egreso disabled={disabled} />}
               {section === 5 && <Curricula disabled={disabled} />}
@@ -121,8 +134,14 @@ export default function PlanEstudios({
 
 PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]).isRequired,
-  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]).isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
+    .isRequired,
+  programaId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([undefined]),
+  ]).isRequired,
   setId: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+  data: PropTypes.objectOf(PropTypes.string).isRequired,
 };

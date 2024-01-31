@@ -14,7 +14,7 @@ export default function Anteproyecto() {
           <DataTable
             columns={columnsAnteproyecto}
             rows={[]}
-            title="Presupuesto de egresos 2024"
+            title="Anteproyecto de egresos 2024"
           />
         </Grid>
       </Grid>
