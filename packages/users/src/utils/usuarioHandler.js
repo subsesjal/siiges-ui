@@ -1,3 +1,24 @@
+import { createUsuarioSchema } from '../schemas/createUsuario.schema';
+import { updateUsuarioSchema } from '../schemas/updateUsuario.schema';
+
+const ENDPOINT_MAP = {
+  representante: (id) => `/api/v1/usuarios/${id}/usuario`,
+  admin: () => '/api/v1/usuarios',
+};
+
+const DATA_MAPPING = {
+  crear: (form, { rol, id }) => ({
+    endpoint: ENDPOINT_MAP[rol](id),
+    method: 'POST',
+    schema: createUsuarioSchema,
+  }),
+  editar: (form) => ({
+    endpoint: `/api/v1/usuarios/${form.id}`,
+    method: 'PATCH',
+    schema: updateUsuarioSchema,
+  }),
+};
+
 const setErrorState = (name, errorMessage, setError) => {
   setError((prevError) => ({ ...prevError, [name]: errorMessage }));
 };
@@ -168,9 +189,22 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
   }, []);
 };
 
+const handleUserData = ({
+  form, session, accion, setEndpoint, setSchema, setMethod, useEffect,
+}) => {
+  useEffect(() => {
+    const { endpoint, method, schema } = DATA_MAPPING[accion](form, session);
+
+    setEndpoint(endpoint);
+    setMethod(method);
+    setSchema(schema);
+  }, session);
+};
+
 export {
   handleOnBlur,
   handleOnChange,
   handleRolOptions,
+  handleUserData,
   errors,
 };
