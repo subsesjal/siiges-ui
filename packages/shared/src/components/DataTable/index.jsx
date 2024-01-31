@@ -13,6 +13,7 @@ function DataTable({
   columns,
   buttonAdd,
   buttonText,
+  buttonDisabled = false,
   buttonClick,
   buttonType,
 }) {
@@ -43,6 +44,7 @@ function DataTable({
           {buttonAdd ? (
             <Button
               onClick={buttonClick}
+              disabled={buttonDisabled}
               text={buttonText}
               type={buttonType}
             />
@@ -92,6 +94,7 @@ function DataTable({
 DataTable.defaultProps = {
   title: '',
   buttonAdd: false,
+  buttonDisabled: false,
   buttonText: '',
   buttonType: '',
   buttonClick: () => {},
@@ -102,6 +105,7 @@ DataTable.propTypes = {
   rows: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })).isRequired,
   columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   buttonAdd: PropTypes.bool,
+  buttonDisabled: PropTypes.bool,
   buttonText: PropTypes.string,
   buttonType: PropTypes.string,
   buttonClick: PropTypes.func,
