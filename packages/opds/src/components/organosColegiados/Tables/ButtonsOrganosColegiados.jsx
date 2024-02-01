@@ -5,10 +5,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/router';
 
-export default function ButtonsOrganosColegiados({ id }) {
+export default function ButtonsOrganosColegiados({ params }) {
   const router = useRouter();
+  const institucion = params?.institucion?.nombre || 'Universidad de Jalisco';
+  const periodo = params?.periodo.descripcion;
+  const sesion = params?.sesion.descripcion;
   const handleButtonClick = (title) => {
-    router.push(`/opds/organosColegiados/${id}/${title}`);
+    router.push({
+      pathname: `/opds/organosColegiados/${params?.id}/${title}`,
+      query: { institucion, periodo, sesion },
+    });
   };
 
   return (
@@ -27,5 +33,16 @@ export default function ButtonsOrganosColegiados({ id }) {
 }
 
 ButtonsOrganosColegiados.propTypes = {
-  id: PropTypes.number.isRequired,
+  params: PropTypes.shape({
+    id: PropTypes.number, // Asumiendo que id es un número, ajusta según sea necesario
+    institucion: PropTypes.shape({
+      nombre: PropTypes.string,
+    }),
+    periodo: PropTypes.shape({
+      descripcion: PropTypes.string,
+    }),
+    sesion: PropTypes.shape({
+      descripcion: PropTypes.string,
+    }),
+  }).isRequired, // Marca params como requerido
 };
