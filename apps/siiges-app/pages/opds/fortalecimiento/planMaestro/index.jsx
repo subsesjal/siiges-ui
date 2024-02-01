@@ -14,11 +14,28 @@ export default function PlanMaestro() {
     { id: 5, nombre: 'Project Epsilon', ano: 2020 },
   ];
 
+  const handleOnChange = (event) => {
+    console.log(`${event.target.name}: ${event.target.value}`);
+  };
+
   return (
     <Layout title="Plan Maestro">
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Select title="Institución" options={[]} nombre="institucion" />
+        <Grid item xs={6}>
+          <Select
+            title="Tipo de Periodo"
+            name="tipoPeriodo"
+            options={[]}
+            onchange={handleOnChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Select
+            title="Tipo de Sesion"
+            name="tipoSesion"
+            options={[]}
+            onchange={handleOnChange}
+          />
         </Grid>
         <Grid item xs={12}>
           <DataTable
