@@ -87,15 +87,15 @@ export default function presupuesto() {
         </Grid>
         <Grid item xs={6}>
           <ButtonSimple
-            text={`Presupuesto de egresos ${year}`}
-            onClick={handleEgresos}
+            text={`Anteproyecto de egresos ${year}`}
+            onClick={handleAnteproyecto}
             align="right"
           />
         </Grid>
         <Grid item xs={6}>
           <ButtonSimple
-            text={`Anteproyecto de egresos ${year}`}
-            onClick={handleAnteproyecto}
+            text={`Presupuesto de egresos ${year}`}
+            onClick={handleEgresos}
           />
         </Grid>
       </Grid>
