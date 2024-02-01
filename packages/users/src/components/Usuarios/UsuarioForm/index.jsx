@@ -8,34 +8,46 @@ import {
   InputPassword,
   SnackAlert,
   Select,
-  submitData,
+  useApi,
 } from '@siiges-ui/shared';
 import {
   handleOnBlur,
   handleOnChange,
   handleRolOptions,
-  handleUserData,
+  createUsuario,
 } from '../../../utils/usuarioHandler';
 
 export default function UsuarioForm({ session, accion, usuario }) {
   const [rolOptions, setRolOptions] = useState([{ id: '', nombre: '' }]);
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
+  const [reload, setReload] = useState(false);
+  const [endpoint, setEndpoint] = useState('');
+  const [method, setMethod] = useState('');
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
-  const [endpoint, setEndpoint] = useState('/');
   const [schema, setSchema] = useState({});
-  const [method, setMethod] = useState({});
 
   handleRolOptions(setRolOptions, session, useEffect);
-  handleUserData({
-    accion, form, session, setEndpoint, setSchema, setMethod, useEffect,
-  });
 
   useEffect(() => {
     if (session.rol === 'admin') {
       setForm((prevForm) => ({ ...prevForm, estatus: 1 }));
     }
-  }, [session]);
+
+    if (usuario) {
+      const updatedUsuario = { ...usuario, actualizado: usuario.actualizado === true ? 1 : 0 };
+      setForm(updatedUsuario);
+    }
+  }, [session, usuario]);
+
+  useApi({
+    endpoint,
+    method,
+    dataBody: form,
+    schema,
+    reload,
+    setNoti,
+  });
 
   return (
     <>
@@ -136,6 +148,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Input
+              disabled
               label="Usuario"
               id="usuario"
               name="usuario"
@@ -183,12 +196,8 @@ export default function UsuarioForm({ session, accion, usuario }) {
         </Grid>
         <ButtonsForm
           cancel={() => router.back()}
-          confirm={() => submitData({
-            endpoint,
-            schema,
-            method,
-            dataBody: form,
-            setNoti,
+          confirm={() => createUsuario({
+            form, session, accion, setEndpoint, setMethod, setReload, setSchema, reload, setNoti,
           })}
         />
       </Grid>

@@ -1,8 +1,15 @@
+import router from 'next/router';
 import { useState, useEffect } from 'react';
-import { getToken } from '@siiges-ui/shared';
+import { getToken, cleanData } from '@siiges-ui/shared';
+
+const errorMessages = {
+  404: 'Not Found',
+  401: 'Unauthorized',
+  409: 'Conflict',
+};
 
 const useApi = ({
-  endpoint, method = 'GET', dataBody = null, reload,
+  endpoint, method = 'GET', dataBody = null, reload, setNoti, schema,
 }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -11,6 +18,8 @@ const useApi = ({
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
+
+  const request = schema ? cleanData(dataBody, schema) : dataBody;
 
   useEffect(() => {
     if (!endpoint) return;
@@ -25,11 +34,20 @@ const useApi = ({
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: method !== 'GET' && dataBody ? JSON.stringify(dataBody) : null,
+          body: method !== 'GET' && request ? JSON.stringify(request) : null,
           redirect: 'follow',
         });
 
         if (!response.ok) {
+          if (setNoti) {
+            const errorMessage = errorMessages[response.status] || `Response status: ${response.status}`;
+
+            setNoti({
+              open: true,
+              message: errorMessage,
+              type: 'error',
+            });
+          }
           throw new Error('Network response was not ok');
         }
 
@@ -38,6 +56,18 @@ const useApi = ({
           setData(result.data);
         } else {
           setData(result);
+        }
+
+        if (setNoti) {
+          setNoti({
+            open: true,
+            message: 'Registro exitoso',
+            type: 'success',
+          });
+
+          setTimeout(() => {
+            router.back();
+          }, 3000);
         }
       } catch (err) {
         setError(err);

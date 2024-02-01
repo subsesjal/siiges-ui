@@ -12,7 +12,7 @@ const createUsuarioSchema = {
       },
       required: ['nombre', 'apellidoPaterno'],
     },
-    rolId: { type: 'string' },
+    rolId: { type: 'number' },
     correo: { type: 'string' },
     usuario: { type: 'string' },
     contrasena: { type: 'string' },

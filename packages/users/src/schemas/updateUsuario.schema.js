@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 const updateUsuarioSchema = {
   type: 'object',
   properties: {
@@ -10,11 +11,8 @@ const updateUsuarioSchema = {
         tituloCargo: { type: 'string' },
       },
     },
-    rolId: { type: 'string' },
+    rolId: { type: 'number' },
     correo: { type: 'string' },
-    usuario: { type: 'string' },
-    contrasena: { type: 'string' },
-    repeatContrasena: { type: 'string' },
     actualizado: { type: 'number' },
     estatus: { type: 'number' },
   },

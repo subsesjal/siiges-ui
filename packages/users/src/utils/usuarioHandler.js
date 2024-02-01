@@ -1,3 +1,4 @@
+import Ajv from 'ajv';
 import { createUsuarioSchema } from '../schemas/createUsuario.schema';
 import { updateUsuarioSchema } from '../schemas/updateUsuario.schema';
 
@@ -189,22 +190,40 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
   }, []);
 };
 
-const handleUserData = ({
-  form, session, accion, setEndpoint, setSchema, setMethod, useEffect,
+const createUsuario = ({
+  accion, form, session, setEndpoint, setMethod, setReload, reload, setSchema, setNoti,
 }) => {
-  useEffect(() => {
-    const { endpoint, method, schema } = DATA_MAPPING[accion](form, session);
+  const { endpoint, method, schema } = DATA_MAPPING[accion](form, session);
+  if (schema) {
+    const ajv = new Ajv({ allErrors: true });
 
-    setEndpoint(endpoint);
-    setMethod(method);
-    setSchema(schema);
-  }, session);
+    const validate = ajv.compile(schema);
+
+    const valid = validate(form);
+
+    if (!valid) {
+      setNoti({
+        open: true,
+        message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+        type: 'error',
+      });
+
+      return false;
+    }
+  }
+
+  setReload(!reload);
+  setMethod(method);
+  setEndpoint(endpoint);
+  setSchema(schema);
+
+  return true;
 };
 
 export {
   handleOnBlur,
   handleOnChange,
   handleRolOptions,
-  handleUserData,
+  createUsuario,
   errors,
 };
