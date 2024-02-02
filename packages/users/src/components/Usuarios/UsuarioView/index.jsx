@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
 import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
 
-export default function UserConsult({ user }) {
-  const { persona = undefined, rol = undefined } = user.data || {};
+export default function UsuarioView({ usuario }) {
+  const { persona = undefined, rol = undefined } = usuario || {};
   return (
     <Grid item xs={8}>
       <Typography variant="h5" gutterBottom component="div">
@@ -32,7 +32,7 @@ export default function UserConsult({ user }) {
               <ListSubtitle
                 text={`${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`}
               />
-              <ListSubtitle text={user.data?.correo} />
+              <ListSubtitle text={usuario?.correo} />
               <ListSubtitle text={persona?.nacionalidad} />
               <ListSubtitle text={persona?.sexo} />
               <ListSubtitle text={persona?.telefono} />
@@ -54,7 +54,7 @@ export default function UserConsult({ user }) {
           <Grid item xs>
             <List>
               <ListSubtitle text={rol?.descripcion} />
-              <ListSubtitle text="Jefe de jefes" />
+              <ListSubtitle text={persona?.tituloCargo} />
               <ListSubtitle text={persona?.ine} />
               <ListSubtitle text={persona?.rfc} />
               <ListSubtitle text={persona?.curp} />
@@ -62,10 +62,11 @@ export default function UserConsult({ user }) {
           </Grid>
         </Grid>
       </Grid>
+
     </Grid>
   );
 }
 
-UserConsult.propTypes = {
-  user: PropTypes.objectOf.isRequired,
+UsuarioView.propTypes = {
+  usuario: PropTypes.objectOf.isRequired,
 };

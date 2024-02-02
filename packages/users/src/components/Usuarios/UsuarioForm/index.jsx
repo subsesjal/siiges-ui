@@ -14,16 +14,16 @@ import {
   handleOnBlur,
   handleOnChange,
   handleRolOptions,
-  createUsuario,
+  submitUsuario,
 } from '../../../utils/usuarioHandler';
 
 export default function UsuarioForm({ session, accion, usuario }) {
   const [rolOptions, setRolOptions] = useState([{ id: '', nombre: '' }]);
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [reload, setReload] = useState(false);
-  const [endpoint, setEndpoint] = useState('');
+  const [endpoint, setEndpoint] = useState();
   const [method, setMethod] = useState('');
-  const [error, setError] = useState({});
+  const [err, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [schema, setSchema] = useState({});
 
@@ -34,13 +34,17 @@ export default function UsuarioForm({ session, accion, usuario }) {
       setForm((prevForm) => ({ ...prevForm, estatus: 1 }));
     }
 
-    if (usuario) {
-      const updatedUsuario = { ...usuario, actualizado: usuario.actualizado === true ? 1 : 0 };
-      setForm(updatedUsuario);
+    if (usuario && accion === 'editar') {
+      const { actualizado, ...usuarioData } = usuario;
+      setForm(usuarioData);
     }
-  }, [session, usuario]);
 
-  useApi({
+    if (endpoint) {
+      setEndpoint(false);
+    }
+  }, []);
+
+  const { error, data } = useApi({
     endpoint,
     method,
     dataBody: form,
@@ -48,6 +52,28 @@ export default function UsuarioForm({ session, accion, usuario }) {
     reload,
     setNoti,
   });
+
+  useEffect(() => {
+    if (error) {
+      setNoti({
+        open: true,
+        message: error.message,
+        type: 'error',
+      });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (data) {
+      setNoti({
+        open: true,
+        message: 'Registro exitoso',
+        type: 'success',
+      });
+
+      router.back();
+    }
+  }, [data]);
 
   return (
     <>
@@ -65,7 +91,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={error.nombre}
+              errorMessage={err.nombre}
             />
           </Grid>
           <Grid item xs={3}>
@@ -80,7 +106,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={error.apellidoPaterno}
+              errorMessage={err.apellidoPaterno}
             />
           </Grid>
           <Grid item xs={3}>
@@ -95,7 +121,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={error.apellidoMaterno}
+              errorMessage={err.apellidoMaterno}
             />
           </Grid>
           <Grid item xs={3}>
@@ -104,13 +130,17 @@ export default function UsuarioForm({ session, accion, usuario }) {
               options={rolOptions || []}
               id="rolId"
               name="rolId"
-              value={usuario && usuario.rol
-                ? usuario.rol.id
-                : ''}
+              value={
+                rolOptions.length > 1
+                && usuario
+                && usuario.rol
+                  ? usuario.rol.id
+                  : ''
+}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError, isRequired: true })}
-              errorMessage={error.rolId}
+              errorMessage={err.rolId}
             />
           </Grid>
         </Grid>
@@ -126,7 +156,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                 : null}
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={error.tituloCargo}
+              errorMessage={err.tituloCargo}
             />
           </Grid>
           <Grid item xs={6}>
@@ -141,14 +171,14 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={error.correo}
+              errorMessage={err.correo}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Input
-              disabled
+              disabled={accion !== 'crear'}
               label="Usuario"
               id="usuario"
               name="usuario"
@@ -159,7 +189,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={error.usuario}
+              errorMessage={err.usuario}
             />
           </Grid>
           {
@@ -175,7 +205,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   required
                   onchange={(e) => handleOnChange(e, { form, setForm })}
                   onblur={(e) => handleOnBlur(e, { form, setError })}
-                  errorMessage={error.contrasena}
+                  errorMessage={err.contrasena}
                 />
               </Grid>
               <Grid item xs={3}>
@@ -187,7 +217,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   required
                   onchange={(e) => handleOnChange(e, { form, setForm })}
                   onblur={(e) => handleOnBlur(e, { form, setError })}
-                  errorMessage={error.repeatContrasena}
+                  errorMessage={err.repeatContrasena}
                 />
               </Grid>
             </>
@@ -196,7 +226,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
         </Grid>
         <ButtonsForm
           cancel={() => router.back()}
-          confirm={() => createUsuario({
+          confirm={() => submitUsuario({
             form, session, accion, setEndpoint, setMethod, setReload, setSchema, reload, setNoti,
           })}
         />
@@ -221,11 +251,26 @@ UsuarioForm.propTypes = {
     token: PropTypes.string.isRequired,
   }).isRequired,
   accion: PropTypes.string.isRequired,
-  usuario: ({
-    id: PropTypes.number.isRequired,
+  usuario: PropTypes.shape({
+    id: PropTypes.number,
+    usuario: PropTypes.string,
+    actualizado: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool,
+    ]),
+    correo: PropTypes.string,
+    persona: PropTypes.shape({
+      nombre: PropTypes.string,
+      apellidoPaterno: PropTypes.string,
+      apellidoMaterno: PropTypes.string,
+      tituloCargo: PropTypes.string,
+    }),
+    rol: PropTypes.shape({
+      id: PropTypes.number,
+    }),
   }),
 };
 
 UsuarioForm.defaultProps = {
-  usuario: {},
+  usuario: {} || undefined,
 };

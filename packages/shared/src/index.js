@@ -45,8 +45,6 @@ import fileToFormData from './components/Submit/FileToFormData';
 import PaperInstitucion from './components/Paper/PaperInstitucion';
 import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import formattedDate from './utils/handlers/formattedDate';
-import submitData from './utils/handlers/submitData';
-import getData from './utils/handlers/getData';
 import useApi from './utils/hooks/useApi';
 import cleanData from './utils/handlers/cleanData';
 
@@ -99,8 +97,6 @@ export {
   PaperInstitucion,
   useCheckMobileScreen,
   formattedDate,
-  submitData,
-  getData,
   useApi,
   cleanData,
 };

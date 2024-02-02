@@ -11,7 +11,7 @@ export default function NewUser() {
     if (session.rol !== 'admin' && session.rol !== 'representante') {
       router.back();
     }
-  }, [session]);
+  }, []);
 
   return (
     <Layout title="Agregar Usuario">

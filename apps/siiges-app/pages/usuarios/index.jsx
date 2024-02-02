@@ -20,14 +20,14 @@ function Usuarios() {
       setEndpoint(ENDPOINT_MAPPING[rol](id));
       setMethod('GET');
     }
-  }, [session]);
+  }, []);
 
-  const { data } = useApi({ endpoint, method });
+  const { data, loading } = useApi({ endpoint, method });
 
   return (
     <Layout title="Usuarios">
       <Divider sx={{ marginTop: 2 }} />
-      {data && (
+      {(data && !loading) && (
         <UsuariosTable usuarios={data} session={session} />
       )}
     </Layout>

@@ -1,15 +1,8 @@
-import router from 'next/router';
 import { useState, useEffect } from 'react';
 import { getToken, cleanData } from '@siiges-ui/shared';
 
-const errorMessages = {
-  404: 'Not Found',
-  401: 'Unauthorized',
-  409: 'Conflict',
-};
-
 const useApi = ({
-  endpoint, method = 'GET', dataBody = null, reload, setNoti, schema,
+  endpoint, method = 'GET', dataBody = null, reload, schema,
 }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,15 +32,6 @@ const useApi = ({
         });
 
         if (!response.ok) {
-          if (setNoti) {
-            const errorMessage = errorMessages[response.status] || `Response status: ${response.status}`;
-
-            setNoti({
-              open: true,
-              message: errorMessage,
-              type: 'error',
-            });
-          }
           throw new Error('Network response was not ok');
         }
 
@@ -56,18 +40,6 @@ const useApi = ({
           setData(result.data);
         } else {
           setData(result);
-        }
-
-        if (setNoti) {
-          setNoti({
-            open: true,
-            message: 'Registro exitoso',
-            type: 'success',
-          });
-
-          setTimeout(() => {
-            router.back();
-          }, 3000);
         }
       } catch (err) {
         setError(err);

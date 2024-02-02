@@ -3,8 +3,8 @@ import { createUsuarioSchema } from '../schemas/createUsuario.schema';
 import { updateUsuarioSchema } from '../schemas/updateUsuario.schema';
 
 const ENDPOINT_MAP = {
-  representante: (id) => `/api/v1/usuarios/${id}/usuario`,
-  admin: () => '/api/v1/usuarios',
+  representante: (id) => `api/v1/usuarios/${id}/usuario`,
+  admin: () => 'api/v1/usuarios',
 };
 
 const DATA_MAPPING = {
@@ -14,7 +14,7 @@ const DATA_MAPPING = {
     schema: createUsuarioSchema,
   }),
   editar: (form) => ({
-    endpoint: `/api/v1/usuarios/${form.id}`,
+    endpoint: `api/v1/usuarios/${form.id}`,
     method: 'PATCH',
     schema: updateUsuarioSchema,
   }),
@@ -190,7 +190,7 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
   }, []);
 };
 
-const createUsuario = ({
+const submitUsuario = ({
   accion, form, session, setEndpoint, setMethod, setReload, reload, setSchema, setNoti,
 }) => {
   const { endpoint, method, schema } = DATA_MAPPING[accion](form, session);
@@ -224,6 +224,6 @@ export {
   handleOnBlur,
   handleOnChange,
   handleRolOptions,
-  createUsuario,
+  submitUsuario,
   errors,
 };

@@ -1,18 +1,46 @@
-import React from 'react';
-import { Layout } from '@siiges-ui/shared';
-import { UserConsult, UserInfo, getUser } from '@siiges-ui/users';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  Context, Layout, useApi, ButtonSimple,
+} from '@siiges-ui/shared';
+import { UsuarioAvatar, UsuarioView } from '@siiges-ui/users';
+import { useRouter } from 'next/router';
 import Grid from '@mui/material/Grid';
 
-export default function ConsultUser() {
-  const { user, loading } = getUser();
+export default function ConsultarUsuario() {
+  const router = useRouter();
+  const { session } = useContext(Context);
+  const [endpoint, setEndpoint] = useState();
+
+  useEffect(() => {
+    if (session.rol !== 'admin' && session.rol !== 'representante') {
+      router.back();
+      return;
+    }
+
+    if (router.isReady) {
+      const { usuarioId } = router.query;
+      setEndpoint(`api/v1/usuarios/${usuarioId}`);
+    }
+  }, [router.isReady]);
+
+  const { data } = useApi({
+    endpoint,
+  });
+
+  // const { user, loading } = getUser();
   return (
     <Layout>
-      {loading ? (
+      {data ? (
         <Grid container spacing={2}>
           <Grid item xs={4} sx={{ marginTop: 7 }}>
-            <UserInfo user={user} />
+            <UsuarioAvatar usuario={data} />
           </Grid>
-          <UserConsult user={user} />
+          <UsuarioView usuario={data} />
+          <Grid container justifyContent="flex-end" spacing={2}>
+            <Grid item>
+              <ButtonSimple onclick={() => router.back()} text="Regresar" />
+            </Grid>
+          </Grid>
         </Grid>
       ) : (
         <div />

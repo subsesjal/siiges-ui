@@ -5,8 +5,8 @@ import Image from 'next/image';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 
-export default function UserInfo({ user }) {
-  const { persona = undefined, rol = undefined } = user.data || {};
+export default function UsuarioAvatar({ usuario }) {
+  const { persona = undefined, rol = undefined } = usuario || {};
   const fullName = `${persona?.nombre} ${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`;
   return (
     <>
@@ -38,6 +38,6 @@ export default function UserInfo({ user }) {
   );
 }
 
-UserInfo.propTypes = {
-  user: PropTypes.objectOf.isRequired,
+UsuarioAvatar.propTypes = {
+  usuario: PropTypes.objectOf.isRequired,
 };
