@@ -1,26 +1,38 @@
+/* eslint-disable react/no-array-index-key */
 import { Carousel, PaperInstitucion } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import React from 'react';
+import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 
-export default function InstitucionesCarousel() {
-  const instituciones = [
-    { id: 1, nombre: 'Universidad Nacional Autónoma' },
-    { id: 2, nombre: 'Instituto Politécnico Nacional' },
-    { id: 3, nombre: 'Universidad Autónoma Metropolitana' },
-    { id: 4, nombre: 'Instituto Tecnológico de Estudios Superiores' },
-    { id: 5, nombre: 'Centro de Investigación y de Estudios Avanzados' },
-    { id: 6, nombre: 'Escuela Superior de Ingeniería Mecánica y Eléctrica' },
-    { id: 7, nombre: 'Universidad Iberoamericana' },
-  ];
+export default function InstitucionesCarousel({ opdType }) {
+  const { data, loading } = useApi({
+    endpoint: 'api/v1/instituciones/?tipoInstitucionId=2',
+  });
 
+  let url = '/opds/fortalecimiento/planMaestro/';
+
+  if (opdType === 'orgColegiado') {
+    url = '/opds/organosColegiados/';
+  }
+  // Verifica si data está disponible y tiene elementos
   return (
-    <Carousel>
-      {instituciones.map((institucion) => (
+    <Carousel isLoading={loading}>
+      {data?.map((institucion) => (
         <PaperInstitucion
           key={institucion.id}
           name={institucion.nombre}
-          route="/opds/fortalecimiento/planMaestro"
+          route={url + institucion.id}
         />
       ))}
     </Carousel>
   );
 }
+
+InstitucionesCarousel.propTypes = {
+  opdType: PropTypes.string,
+};
+
+// Aquí se define el valor predeterminado para opdType
+InstitucionesCarousel.defaultProps = {
+  opdType: '', // Asegúrate de que este valor predeterminado sea adecuado para tu caso de uso
+};

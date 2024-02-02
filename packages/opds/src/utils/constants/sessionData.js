@@ -1,7 +1,7 @@
 const sessionData = [
   {
     id: 1,
-    nombre: 'oridiaria',
+    nombre: 'ordinaria',
     descripcion: 'Sesión Ordinaria',
     created_at: '2023-08-19 19:44:19',
   },
