@@ -8,8 +8,8 @@ import { useRouter } from 'next/router';
 export default function ButtonsOrganosColegiados({ params }) {
   const router = useRouter();
   const institucion = params?.institucion?.nombre || 'Universidad de Jalisco';
-  const periodo = params?.periodo.descripcion;
-  const sesion = params?.sesion.descripcion;
+  const periodo = params?.periodo?.descripcion;
+  const sesion = params?.sesion?.descripcion;
   const handleButtonClick = (title) => {
     router.push({
       pathname: `/opds/organosColegiados/${params?.id}/${title}`,

@@ -13,26 +13,25 @@ export default function organosColegiados() {
   const [method, setMethod] = useState();
   const [auth, setAuth] = useState(true);
   const { id } = router.query;
-  const [reloadData, setReloadData] = useState(false);
   const [path, setPath] = useState();
   const [body, setBody] = useState();
+  const array = Array.from({ length: 5 }, (_, i) => ({ id: i + 1 }));
   const { data } = useApi({
     endpoint: path || `api/v1/orgColegiados/instituciones/${id}`,
     method,
-    reload: reloadData,
     dataBody: body,
   });
+  const [instituciones, setInstituciones] = useState();
 
   const createPlanMaestro = () => {
     setBody({
       institucionId: id,
       periodoId: periodo,
       sesionId: session,
-      fecha: new Date().toISOString(),
+      fecha: new Date().toISOString().split('T')[0],
     });
     setMethod('POST');
-    setPath('api/v1/planMaestro/');
-    setReloadData(true);
+    setPath('api/v1/orgColegiados/'); // En cuanto se cambia el state se ejecuta el useApi
   };
 
   useEffect(() => {
@@ -42,13 +41,18 @@ export default function organosColegiados() {
   }, [session, periodo]);
 
   useEffect(() => {
-    if (reloadData) {
+    // Cuando el request es un array se guarda en el state para que no se modifique cuando
+    // la data traiga un resultado no deseado
+    if (Array.isArray(data)) {
+      setInstituciones(data);
+    }
+    // Cuando se realiza un create devuelve objeto, entonces hacemos un GET request
+    if (Object.prototype.toString.call(data) === '[object Object]') {
       setBody(null);
       setMethod('GET');
       setPath(`api/v1/orgColegiados/instituciones/${id}`);
-      setReloadData(false);
     }
-  }, [reloadData]);
+  }, [data]);
 
   return (
     <Layout title="Organos Colegiados">
@@ -73,7 +77,7 @@ export default function organosColegiados() {
         </Grid>
         <Grid item xs={12}>
           <DataTable
-            rows={data || []}
+            rows={instituciones || array}
             columns={columnsOrganosColegiados}
             buttonAdd
             buttonDisabled={auth}
@@ -81,9 +85,6 @@ export default function organosColegiados() {
             buttonClick={() => {
               createPlanMaestro();
             }}
-            // buttonClick={() => {
-            //   router.push('/opds/organosColegiados/nuevaSesion');
-            // }}
           />
         </Grid>
       </Grid>
