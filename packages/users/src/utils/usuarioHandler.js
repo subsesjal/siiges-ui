@@ -1,4 +1,4 @@
-import Ajv from 'ajv';
+import { validateFormData } from '@siiges-ui/shared';
 import { createUsuarioSchema } from '../schemas/createUsuario.schema';
 import { updateUsuarioSchema } from '../schemas/updateUsuario.schema';
 
@@ -191,31 +191,29 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
 };
 
 const submitUsuario = ({
-  accion, form, session, setEndpoint, setMethod, setReload, reload, setSchema, setNoti,
+  accion, form, session, setForm, setEndpoint, setMethod, setNoti,
 }) => {
   const { endpoint, method, schema } = DATA_MAPPING[accion](form, session);
-  if (schema) {
-    const ajv = new Ajv({ allErrors: true });
 
-    const validate = ajv.compile(schema);
+  const { valid, data } = validateFormData({
+    dataBody: form,
+    cleanData: true,
+    schema,
+  });
 
-    const valid = validate(form);
+  if (!valid) {
+    setNoti({
+      open: true,
+      message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+      type: 'error',
+    });
 
-    if (!valid) {
-      setNoti({
-        open: true,
-        message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
-        type: 'error',
-      });
-
-      return false;
-    }
+    return false;
   }
 
-  setReload(!reload);
+  setForm(data);
   setMethod(method);
   setEndpoint(endpoint);
-  setSchema(schema);
 
   return true;
 };

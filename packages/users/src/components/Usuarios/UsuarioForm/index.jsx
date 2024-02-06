@@ -20,7 +20,6 @@ import {
 export default function UsuarioForm({ session, accion, usuario }) {
   const [rolOptions, setRolOptions] = useState([{ id: '', nombre: '' }]);
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
-  const [reload, setReload] = useState(false);
   const [endpoint, setEndpoint] = useState();
   const [method, setMethod] = useState('');
   const [err, setError] = useState({});
@@ -49,7 +48,6 @@ export default function UsuarioForm({ session, accion, usuario }) {
     method,
     dataBody: form,
     schema,
-    reload,
     setNoti,
   });
 
@@ -227,7 +225,14 @@ export default function UsuarioForm({ session, accion, usuario }) {
         <ButtonsForm
           cancel={() => router.back()}
           confirm={() => submitUsuario({
-            form, session, accion, setEndpoint, setMethod, setReload, setSchema, reload, setNoti,
+            form,
+            session,
+            accion,
+            setEndpoint,
+            setForm,
+            setMethod,
+            setSchema,
+            setNoti,
           })}
         />
       </Grid>

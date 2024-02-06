@@ -3,16 +3,16 @@ import UsuariosActions from '../Usuarios/UsuariosActions';
 
 const commonColumns = [
   { field: 'nombre', headerName: 'Nombre', width: 200 },
-  { field: 'usuario', headerName: 'Usuario', width: 150 },
-  { field: 'correo', headerName: 'Correo', width: 250 },
-  { field: 'rol', headerName: 'Rol', width: 150 },
+  { field: 'usuario', headerName: 'Usuario', width: 130 },
+  { field: 'correo', headerName: 'Correo', width: 200 },
+  { field: 'rol', headerName: 'Rol', width: 180 },
+  { field: 'estatus', headerName: 'Estatus', width: 120 },
   {
     field: 'fecha',
     headerName: 'Fecha de alta',
     type: 'date',
     width: 130,
   },
-  { field: 'estatus', headerName: 'Estatus', width: 120 },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -26,15 +26,15 @@ const commonColumns = [
 const adminColumns = [
   { field: 'nombre', headerName: 'Nombre', width: 200 },
   { field: 'usuario', headerName: 'Usuario', width: 150 },
-  { field: 'correo', headerName: 'Correo', width: 250 },
-  { field: 'rol', headerName: 'Rol', width: 150 },
+  { field: 'correo', headerName: 'Correo', width: 200 },
+  { field: 'rol', headerName: 'Rol', width: 180 },
+  { field: 'estatus', headerName: 'Estatus', width: 120 },
   {
     field: 'fecha',
     headerName: 'Fecha de alta',
     type: 'date',
     width: 130,
   },
-  { field: 'estatus', headerName: 'Estatus', width: 120 },
   {
     field: 'actions',
     headerName: 'Acciones',

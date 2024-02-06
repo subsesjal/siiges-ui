@@ -27,7 +27,6 @@ export default function ConsultarUsuario() {
     endpoint,
   });
 
-  // const { user, loading } = getUser();
   return (
     <Layout>
       {data ? (
@@ -38,12 +37,12 @@ export default function ConsultarUsuario() {
           <UsuarioView usuario={data} />
           <Grid container justifyContent="flex-end" spacing={2}>
             <Grid item>
-              <ButtonSimple onclick={() => router.back()} text="Regresar" />
+              <ButtonSimple onClick={() => router.back()} text="Regresar" />
             </Grid>
           </Grid>
         </Grid>
       ) : (
-        <div />
+        (<div>Loading...</div>)
       )}
     </Layout>
   );

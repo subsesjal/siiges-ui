@@ -46,7 +46,7 @@ import PaperInstitucion from './components/Paper/PaperInstitucion';
 import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import formattedDate from './utils/handlers/formattedDate';
 import useApi from './utils/hooks/useApi';
-import cleanData from './utils/handlers/cleanData';
+import { validateFormData } from './utils/handlers/validateFormData';
 
 export {
   Logo,
@@ -98,5 +98,5 @@ export {
   useCheckMobileScreen,
   formattedDate,
   useApi,
-  cleanData,
+  validateFormData,
 };

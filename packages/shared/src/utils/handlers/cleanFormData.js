@@ -1,6 +1,7 @@
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-prototype-builtins */
-export default function cleanData(data, schema) {
+const cleanFormData = (data, schema) => {
   const cleanedData = {};
 
   for (const property in schema.properties) {
@@ -9,7 +10,7 @@ export default function cleanData(data, schema) {
       const propertySchema = schema.properties[property];
 
       if (propertySchema.type === 'object' && typeof value === 'object') {
-        cleanedData[property] = cleanData(value, propertySchema);
+        cleanedData[property] = cleanFormData(value, propertySchema);
       } else {
         cleanedData[property] = value;
       }
@@ -17,4 +18,8 @@ export default function cleanData(data, schema) {
   }
 
   return cleanedData;
-}
+};
+
+export {
+  cleanFormData,
+};

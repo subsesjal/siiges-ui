@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { getToken, cleanData } from '@siiges-ui/shared';
+import { getToken } from '@siiges-ui/shared';
 
 const useApi = ({
-  endpoint, method = 'GET', dataBody = null, reload, schema,
+  endpoint, method = 'GET', dataBody = null, reload,
 }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -11,8 +11,6 @@ const useApi = ({
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-
-  const request = schema ? cleanData(dataBody, schema) : dataBody;
 
   useEffect(() => {
     if (!endpoint) return;
@@ -27,7 +25,7 @@ const useApi = ({
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: method !== 'GET' && request ? JSON.stringify(request) : null,
+          body: method !== 'GET' && dataBody ? JSON.stringify(dataBody) : null,
           redirect: 'follow',
         });
 

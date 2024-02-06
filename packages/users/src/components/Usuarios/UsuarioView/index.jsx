@@ -18,11 +18,11 @@ export default function UsuarioView({ usuario }) {
             <List>
               <ListTitle text="Nombre(s)" />
               <ListTitle text="Apellidos" />
-              <ListTitle text="Correo electronico" />
+              <ListTitle text="Correo electrónico" />
               <ListTitle text="Nacionalidad" />
               <ListTitle text="Sexo" />
-              <ListTitle text="Telefono" />
               <ListTitle text="Celular" />
+              <ListTitle text="Teléfono" />
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -35,8 +35,8 @@ export default function UsuarioView({ usuario }) {
               <ListSubtitle text={usuario?.correo} />
               <ListSubtitle text={persona?.nacionalidad} />
               <ListSubtitle text={persona?.sexo} />
-              <ListSubtitle text={persona?.telefono} />
               <ListSubtitle text={persona?.celular} />
+              <ListSubtitle text={persona?.telefono} />
             </List>
           </Grid>
         </Grid>
@@ -62,11 +62,31 @@ export default function UsuarioView({ usuario }) {
           </Grid>
         </Grid>
       </Grid>
-
     </Grid>
   );
 }
 
 UsuarioView.propTypes = {
-  usuario: PropTypes.objectOf.isRequired,
+  usuario: PropTypes.shape({
+    id: PropTypes.number,
+    usuario: PropTypes.string,
+    actualizado: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool,
+    ]),
+    correo: PropTypes.string,
+    persona: PropTypes.shape({
+      nombre: PropTypes.string,
+      apellidoPaterno: PropTypes.string,
+      apellidoMaterno: PropTypes.string,
+      tituloCargo: PropTypes.string,
+    }),
+    rol: PropTypes.shape({
+      id: PropTypes.number,
+    }),
+  }),
+};
+
+UsuarioView.defaultProps = {
+  usuario: {} || undefined,
 };
