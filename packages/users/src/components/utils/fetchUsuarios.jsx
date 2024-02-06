@@ -1,22 +1,23 @@
+import { useState, useEffect } from 'react';
 import { getToken } from '@siiges-ui/shared';
-import { useEffect, useState } from 'react';
 
 const ENDPOINT_MAPPING = {
-  representante: (usuarioId) => `/api/v1/instituciones/usuarios/${usuarioId}`,
+  representante: (usuarioId) => `/api/v1/usuarios/${usuarioId}/usuarios`,
+  admin: () => '/api/v1/usuarios',
 };
 
-export default function getInstitucionUsuario({ session }) {
+export default function fetchUsuarios({ session }) {
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const basePath = process.env.NEXT_PUBLIC_URL;
-  const [institucion, setInstitucion] = useState();
+  const [usuarios, setUsuarios] = useState();
 
   useEffect(() => {
-    const { id, rol } = session;
-
-    if (session.rol === 'representante') {
+    if (session && session.id) {
+      const { id, rol } = session;
       const endpoint = ENDPOINT_MAPPING[rol](id);
       const url = `${basePath}${endpoint}`;
+
       fetch(url, {
         method: 'GET',
         headers: {
@@ -26,12 +27,12 @@ export default function getInstitucionUsuario({ session }) {
       })
         .then((response) => response.json())
         .then(({ data }) => {
-          setInstitucion(data);
+          setUsuarios(data);
         });
     }
   }, [session]);
 
   return {
-    institucion,
+    usuarios,
   };
 }

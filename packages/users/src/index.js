@@ -1,21 +1,17 @@
-import NewUserForm from './components/forms/NewUserForm';
-import UserConsult from './components/info/UserConsult';
-import UserForm from './components/forms/ConsultUserForm';
-import UserInfo from './components/info/UserInfo';
-import EditUserForm from './components/forms/EditUserForm';
+import UsuarioAvatar from './Components/Usuarios/UsuarioAvatar';
+import UsuarioView from './Components/Usuarios/UsuarioView';
+import UsuarioForm from './Components/Usuarios/UsuarioForm';
 import deleteUser from './utils/deleteUser';
-import getUsers from './utils/getUsers';
-import getUser from './utils/getUser';
 import columns from './Mocks/usuarios';
+import fetchUsuarios from './Components/utils/fetchUsuarios';
+import UsuariosTable from './Components/Usuarios/UsuariosTable';
 
 export {
-  NewUserForm,
-  EditUserForm,
-  UserConsult,
-  UserForm,
-  UserInfo,
+  UsuarioForm,
+  UsuarioAvatar,
+  UsuarioView,
   deleteUser,
-  getUsers,
-  getUser,
   columns,
+  fetchUsuarios,
+  UsuariosTable,
 };

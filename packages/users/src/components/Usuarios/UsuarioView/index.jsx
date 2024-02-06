@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
 import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
 
-export default function UserConsult({ user }) {
-  const { persona = undefined, rol = undefined } = user.data || {};
+export default function UsuarioView({ usuario }) {
+  const { persona = undefined, rol = undefined } = usuario || {};
   return (
     <Grid item xs={8}>
       <Typography variant="h5" gutterBottom component="div">
@@ -18,11 +18,11 @@ export default function UserConsult({ user }) {
             <List>
               <ListTitle text="Nombre(s)" />
               <ListTitle text="Apellidos" />
-              <ListTitle text="Correo electronico" />
+              <ListTitle text="Correo electrónico" />
               <ListTitle text="Nacionalidad" />
               <ListTitle text="Sexo" />
-              <ListTitle text="Telefono" />
               <ListTitle text="Celular" />
+              <ListTitle text="Teléfono" />
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -32,11 +32,11 @@ export default function UserConsult({ user }) {
               <ListSubtitle
                 text={`${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`}
               />
-              <ListSubtitle text={user.data?.correo} />
+              <ListSubtitle text={usuario?.correo} />
               <ListSubtitle text={persona?.nacionalidad} />
               <ListSubtitle text={persona?.sexo} />
-              <ListSubtitle text={persona?.telefono} />
               <ListSubtitle text={persona?.celular} />
+              <ListSubtitle text={persona?.telefono} />
             </List>
           </Grid>
         </Grid>
@@ -54,7 +54,7 @@ export default function UserConsult({ user }) {
           <Grid item xs>
             <List>
               <ListSubtitle text={rol?.descripcion} />
-              <ListSubtitle text="Jefe de jefes" />
+              <ListSubtitle text={persona?.tituloCargo} />
               <ListSubtitle text={persona?.ine} />
               <ListSubtitle text={persona?.rfc} />
               <ListSubtitle text={persona?.curp} />
@@ -66,6 +66,27 @@ export default function UserConsult({ user }) {
   );
 }
 
-UserConsult.propTypes = {
-  user: PropTypes.objectOf.isRequired,
+UsuarioView.propTypes = {
+  usuario: PropTypes.shape({
+    id: PropTypes.number,
+    usuario: PropTypes.string,
+    actualizado: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool,
+    ]),
+    correo: PropTypes.string,
+    persona: PropTypes.shape({
+      nombre: PropTypes.string,
+      apellidoPaterno: PropTypes.string,
+      apellidoMaterno: PropTypes.string,
+      tituloCargo: PropTypes.string,
+    }),
+    rol: PropTypes.shape({
+      id: PropTypes.number,
+    }),
+  }),
+};
+
+UsuarioView.defaultProps = {
+  usuario: {} || undefined,
 };

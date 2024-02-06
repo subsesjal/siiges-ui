@@ -1,39 +1,37 @@
-import React, { useState } from 'react';
-import {
-  ButtonStyled, Layout, DataTable,
-} from '@siiges-ui/shared';
-import { Grid } from '@mui/material';
-import Link from 'next/link';
-import { getUsers, columns } from '@siiges-ui/users';
+import React, { useContext, useEffect, useState } from 'react';
 
-export default function Usuarios() {
-  const { users, loading } = getUsers();
-  const [auth] = useState(false);
+import { Layout, Context, useApi } from '@siiges-ui/shared';
+import { UsuariosTable } from '@siiges-ui/users';
+import { Divider } from '@mui/material';
+
+const ENDPOINT_MAPPING = {
+  representante: (usuarioId) => `api/v1/usuarios/${usuarioId}/usuarios`,
+  admin: () => 'api/v1/usuarios',
+};
+
+function Usuarios() {
+  const { session } = useContext(Context);
+  const [endpoint, setEndpoint] = useState('/');
+  const [method, setMethod] = useState('');
+
+  useEffect(() => {
+    if (session && session.id) {
+      const { id, rol } = session;
+      setEndpoint(ENDPOINT_MAPPING[rol](id));
+      setMethod('GET');
+    }
+  }, []);
+
+  const { data, loading } = useApi({ endpoint, method });
 
   return (
-    <Layout title="Usuarios" subtitle="Consulta todos los usuarios registrados">
-      <Grid container>
-        {auth ? (
-          <Grid item xs={9} sx={{ mt: '20px' }}>
-            <Link href="/usuarios/nuevoUsuario">
-              <div>
-                <ButtonStyled
-                  text="Nuevo Usuario"
-                  alt="Agregar usuario"
-                  type="success"
-                />
-              </div>
-            </Link>
-          </Grid>
-        ) : (
-          <div />
-        )}
-        {loading ? (
-          <DataTable rows={users} columns={columns} title="Tabla de usuarios" />
-        ) : (
-          <div />
-        )}
-      </Grid>
+    <Layout title="Usuarios">
+      <Divider sx={{ marginTop: 2 }} />
+      {(data && !loading) && (
+        <UsuariosTable usuarios={data} session={session} />
+      )}
     </Layout>
   );
 }
+
+export default Usuarios;
