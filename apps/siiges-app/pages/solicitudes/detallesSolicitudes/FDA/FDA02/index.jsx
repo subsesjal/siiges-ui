@@ -16,9 +16,8 @@ function crearCelda(doc, x, y, width, height, texto) {
   doc.setFontSize(10);
   doc.setTextColor(0, 0, 0);
 
-  const textoWidth =
-    (doc.getStringUnitWidth(texto) * doc.internal.getFontSize()) /
-    doc.internal.scaleFactor;
+  const textoWidth = (doc.getStringUnitWidth(texto) * doc.internal.getFontSize())
+  / doc.internal.scaleFactor;
   const textoX = x + (width - textoWidth) / 2; // Calcula la posición X centrada
 
   doc.text(texto, textoX, y + 5); // Usar la posición X centrada
@@ -40,10 +39,9 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
   }
 
   // Calcular la posición X según la alineación
-  const textX =
-    alineacion === 'right'
-      ? doc.internal.pageSize.width - margenIzquierdo
-      : margenIzquierdo;
+  const textX = alineacion === 'right'
+    ? doc.internal.pageSize.width - margenIzquierdo
+    : margenIzquierdo;
 
   doc.text(textX, currentPositionY, contenido, {
     maxWidth: 175,
@@ -80,7 +78,7 @@ export default function GenerarFDA02(solicitud) {
       currentPositionY, // cellY
       182, // cellWidth
       7, // cellHeight
-      titulo
+      titulo,
     );
 
     const startY = currentPositionY + (tableOptions.spaceBeforeTable || 5);
@@ -115,7 +113,7 @@ export default function GenerarFDA02(solicitud) {
     tableData,
     startY,
     headStyles,
-    showHead
+    showHead,
   ) {
     doc.autoTable({
       head: [headers],
@@ -174,7 +172,7 @@ export default function GenerarFDA02(solicitud) {
 
     const textHeight = doc.getTextDimensions(
       tableData1.join('\n'),
-      tableOptions
+      tableOptions,
     ).h;
 
     if (currentPositionY + textHeight > doc.internal.pageSize.height - 20) {
@@ -277,7 +275,7 @@ export default function GenerarFDA02(solicitud) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
   doc.setTextColor(69, 133, 244);
-  doc.text(`OFICIO DE ENTREGA DE DOCUMENTACIÓN`, 20, 50);
+  doc.text('OFICIO DE ENTREGA DE DOCUMENTACIÓN', 20, 50);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
@@ -382,7 +380,7 @@ export default function GenerarFDA02(solicitud) {
     {
       spaceBeforeTable: 7,
       ...tablaRepresentante, // Pasa los estilos de la tabla como parte de las opciones
-    }
+    },
   );
 
   currentPositionY = doc.previousAutoTable.finalY; // Espacio después de la celda
@@ -496,7 +494,6 @@ export default function GenerarFDA02(solicitud) {
     ['primercorreo@hotmail.com', 'tercercorre@gmail.com', '234131313123'],
   ];
 
-  
   generateTable(doc, correoDirectorHeader, correoDirectorBody, currentPositionY, {
     fillColor: [172, 178, 183],
     fontSize: 12,
@@ -551,7 +548,7 @@ export default function GenerarFDA02(solicitud) {
         {
           spaceBeforeTable: 7,
           ...tablaDataDiligencia,
-        }
+        },
       );
     });
   }
@@ -585,7 +582,7 @@ export default function GenerarFDA02(solicitud) {
     {
       spaceBeforeTable: 7,
       ...nombresPropuestos, // Pasa los estilos de la tabla como parte de las opciones
-    }
+    },
   );
 
   currentPositionY += 30;
@@ -594,7 +591,7 @@ export default function GenerarFDA02(solicitud) {
     doc,
     `                                                   BAJO PROTESTA DE DECIR VERDAD
                                                       GUILLERMO GÓNGORA CHALITA`,
-    'left'
+    'left',
   );
 
   const totalPages = doc.internal.getNumberOfPages();
@@ -608,9 +605,9 @@ export default function GenerarFDA02(solicitud) {
     const pageHeight = doc.internal.pageSize.height;
 
     const pageNumberText = `Página ${i} de ${totalPages}`;
-    const pageNumberTextWidth =
-      (doc.getStringUnitWidth(pageNumberText) * doc.internal.getFontSize()) /
-      doc.internal.scaleFactor;
+    const pageNumberTextWidth = (doc.getStringUnitWidth(pageNumberText)
+    * doc.internal.getFontSize())
+    / doc.internal.scaleFactor;
     const pageNumberTextX = pageWidth - 20 - pageNumberTextWidth;
     const pageNumberTextY = pageHeight - 10;
 
@@ -628,7 +625,7 @@ export default function GenerarFDA02(solicitud) {
       imgBottomLeftX,
       imgBottomLeftY - imgBottomLeftHeight,
       imgBottomLeftWidth,
-      imgBottomLeftHeight
+      imgBottomLeftHeight,
     );
 
     const pdfDataUri = doc.output('dataurlnewwindow');

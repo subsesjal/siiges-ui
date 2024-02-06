@@ -16,9 +16,8 @@ function crearCelda(doc, x, y, width, height, texto) {
   doc.setFontSize(10);
   doc.setTextColor(0, 0, 0);
 
-  const textoWidth =
-    (doc.getStringUnitWidth(texto) * doc.internal.getFontSize()) /
-    doc.internal.scaleFactor;
+  const textoWidth = (doc.getStringUnitWidth(texto) * doc.internal.getFontSize())
+  / doc.internal.scaleFactor;
   const textoX = x + (width - textoWidth) / 2; // Calcula la posición X centrada
 
   doc.text(texto, textoX, y + 5); // Usar la posición X centrada
@@ -40,10 +39,9 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
   }
 
   // Calcular la posición X según la alineación
-  const textX =
-    alineacion === 'right'
-      ? doc.internal.pageSize.width - margenIzquierdo
-      : margenIzquierdo;
+  const textX = alineacion === 'right'
+    ? doc.internal.pageSize.width - margenIzquierdo
+    : margenIzquierdo;
 
   doc.text(textX, currentPositionY, contenido, {
     maxWidth: 175,
@@ -80,7 +78,7 @@ export default function GenerarFDA02(solicitud) {
       currentPositionY, // cellY
       182, // cellWidth
       7, // cellHeight
-      titulo
+      titulo,
     );
 
     const startY = currentPositionY + (tableOptions.spaceBeforeTable || 5);
@@ -115,7 +113,7 @@ export default function GenerarFDA02(solicitud) {
     tableData,
     startY,
     headStyles,
-    showHead
+    showHead,
   ) {
     doc.autoTable({
       head: [headers],
@@ -174,7 +172,7 @@ export default function GenerarFDA02(solicitud) {
 
     const textHeight = doc.getTextDimensions(
       tableData1.join('\n'),
-      tableOptions
+      tableOptions,
     ).h;
 
     if (currentPositionY + textHeight > doc.internal.pageSize.height - 20) {
@@ -269,199 +267,199 @@ export default function GenerarFDA02(solicitud) {
   doc.addImage(img1, 'JPEG', 0, 15, 70, 19);
   doc.addImage(img2, 'JPEG', 145, 15, 50, 16);
 
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.setFillColor(6, 98, 211);
-        crearCelda(doc, 150, 40, 45, 7, "FDA06");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.setFillColor(6, 98, 211);
+  crearCelda(doc, 150, 40, 45, 7, 'FDA06');
 
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.setTextColor(69, 133, 244);
-        doc.text(`OFICIO DE ENTREGA DE DOCUMENTACIÓN`, 20, 50);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(69, 133, 244);
+  doc.text('OFICIO DE ENTREGA DE DOCUMENTACIÓN', 20, 50);
 
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`SUBSECRETARÍA DE EDUCACIÓN SUPERIOR`, 20, 60);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+  doc.text('SUBSECRETARÍA DE EDUCACIÓN SUPERIOR', 20, 60);
 
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(
-          `AT´N: DIRECTOR GENERAL DE INCORPORACIÓN Y SERVICIOS ESCOLARES.`,
-          40,
-          69
-        );
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+  doc.text(
+    'AT´N: DIRECTOR GENERAL DE INCORPORACIÓN Y SERVICIOS ESCOLARES.',
+    40,
+    69,
+  );
 
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(fechaFormateada, 152, 58);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+  doc.text(fechaFormateada, 152, 58);
 
-        crearSeccion(
-          doc,
-          `La C. ADRIANA DE LOS REYES MORENO de declara, bajo protesta de decir verdad, que los
+  crearSeccion(
+    doc,
+    `La C. ADRIANA DE LOS REYES MORENO de declara, bajo protesta de decir verdad, que los
 datos proporcionados en la solicitud ${solicitud.folio} cuenta con un inmueble con las condiciones
 de seguridad, higiénicas necesarias para impartir el plan de estudios para el programa
 ${nombreNivel} EN ${solicitud.programa.nombre}, modalidad ${modalidadTipo}, en
 periodos ${ciclosTipo}, asimismo ACEPTA cumplir y se compromete con las siguientes
-obligaciones derivadas del otorgamiento del Reconocimiento de Validez Oficial de Estudios.`
-        );
+obligaciones derivadas del otorgamiento del Reconocimiento de Validez Oficial de Estudios.`,
+  );
 
-        crearSeccion(
-          doc,
-          `1.- Cumplir con lo dispuesto en el artículo 3° de la Constitución Política de los Estados Unidos
+  crearSeccion(
+    doc,
+    `1.- Cumplir con lo dispuesto en el artículo 3° de la Constitución Política de los Estados Unidos
 Mexicanos, en la Ley General de Educación, la Ley General de Educación Superior, la Ley de
 Educación del Estado Libre y Soberano de Jalisco, la Ley de Educación Superior del Estado de
-Jalisco y demás disposiciones legales y administrativas que le sean aplicables.`
-        );
+Jalisco y demás disposiciones legales y administrativas que le sean aplicables.`,
+  );
 
-        crearSeccion(
-          doc,
-          `2.- Mencionar, en toda su documentación y publicidad que expida, la fecha y número del
+  crearSeccion(
+    doc,
+    `2.- Mencionar, en toda su documentación y publicidad que expida, la fecha y número del
 acuerdo por el cual se otorgó el Reconocimiento de Validez Oficial de Estudios, así como la
-autoridad que lo expidió y el periodo establecido.`
-        );
+autoridad que lo expidió y el periodo establecido.`,
+  );
 
-        crearSeccion(
-          doc,
-          `3.- Respetar los lineamientos descritos en el Acuerdo que establece las bases mínimas de
-información para la comercialización de los servicios educativos que prestan los particulares.`
-        );
+  crearSeccion(
+    doc,
+    `3.- Respetar los lineamientos descritos en el Acuerdo que establece las bases mínimas de
+información para la comercialización de los servicios educativos que prestan los particulares.`,
+  );
 
-        crearSeccion(
-          doc,
-          `4.- Ceñirse a los planes y programas autorizados por la Autoridad Educativa y a los tiempos
-aprobados para su aplicación.`
-        );
+  crearSeccion(
+    doc,
+    `4.- Ceñirse a los planes y programas autorizados por la Autoridad Educativa y a los tiempos
+aprobados para su aplicación.`,
+  );
 
-        crearSeccion(
-          doc,
-          `5.- Los planes y programas de estudio validados por la Autoridad Educativa, una vez que son
+  crearSeccion(
+    doc,
+    `5.- Los planes y programas de estudio validados por la Autoridad Educativa, una vez que son
 aprobados no podrán modificarse hasta su vencimiento, de lo contrario no tendrá validez
-para cualquier trámite ante cualquier autoridad competente.`
-        );
+para cualquier trámite ante cualquier autoridad competente.`,
+  );
 
-        crearSeccion(
-          doc,
-          `6.- La Institución se compromete a mantener actualizados los planes y programas de estudio
+  crearSeccion(
+    doc,
+    `6.- La Institución se compromete a mantener actualizados los planes y programas de estudio
 de acuerdo a los avances de la materia y someterlos a refrendo al término del periodo
-establecido por la Autoridad Educativa.`
-        );
+establecido por la Autoridad Educativa.`,
+  );
 
-        crearSeccion(
-          doc,
-          `7.- Reportar a la Autoridad Educativa, cualquier daño o modificación que sufra el inmueble en
+  crearSeccion(
+    doc,
+    `7.- Reportar a la Autoridad Educativa, cualquier daño o modificación que sufra el inmueble en
 su estructura, con posterioridad a la fecha de presentación de la solicitud de autorización del
 Reconocimiento de Validez Oficial de Estudios, proporcionando, en su caso, los datos de la
 nueva constancia en la que se acredite que las reparaciones o modificaciones cumplen con
-las normas mínimas de construcción y seguridad.`
-        );
+las normas mínimas de construcción y seguridad.`,
+  );
 
-        crearSeccion(
-          doc,
-          `8.- Facilitar y colaborar en las actividades de evaluación, inspección y vigilancia que las
-autoridades competentes realicen u ordenen.`
-        );
+  crearSeccion(
+    doc,
+    `8.- Facilitar y colaborar en las actividades de evaluación, inspección y vigilancia que las
+autoridades competentes realicen u ordenen.`,
+  );
 
-        crearSeccion(
-          doc,
-          `9.- Conservar de manera física en el domicilio en el que se autorizó el RVOE, todos los
+  crearSeccion(
+    doc,
+    `9.- Conservar de manera física en el domicilio en el que se autorizó el RVOE, todos los
 documentos administrativos y de control escolar que se generen, de conformidad a la Ley
-General de Educación en su artículo 151.`
-        );
+General de Educación en su artículo 151.`,
+  );
 
-        crearSeccion(
-          doc,
-          `10.- Mantener vigente la Posesión Legal del Inmueble, el Dictamen de Seguridad Estructural,
-Licencia de Uso de Suelo, Dictamen de Protección Civil y Licencia Municipal.`
-        );
+  crearSeccion(
+    doc,
+    `10.- Mantener vigente la Posesión Legal del Inmueble, el Dictamen de Seguridad Estructural,
+Licencia de Uso de Suelo, Dictamen de Protección Civil y Licencia Municipal.`,
+  );
 
-        crearSeccion(
-          doc,
-          `11.- Constituir el Comité de Seguridad Escolar, de conformidad con los lineamientos
-establecidos en el Diario Oficial de la Federación del 4 de septiembre de 1986.`
-        );
+  crearSeccion(
+    doc,
+    `11.- Constituir el Comité de Seguridad Escolar, de conformidad con los lineamientos
+establecidos en el Diario Oficial de la Federación del 4 de septiembre de 1986.`,
+  );
 
-        crearSeccion(
-          doc,
-          `12.- La SICyT verificará las instalaciones para que cumplan con la normatividad vigente,
-higiene seguridad y pedagogía.`
-        );
+  crearSeccion(
+    doc,
+    `12.- La SICyT verificará las instalaciones para que cumplan con la normatividad vigente,
+higiene seguridad y pedagogía.`,
+  );
 
-        crearSeccion(
-          doc,
-          `13.- Cumplir con el perfil de personal docente, tanto de nuevo ingreso como los propuestos a
+  crearSeccion(
+    doc,
+    `13.- Cumplir con el perfil de personal docente, tanto de nuevo ingreso como los propuestos a
 una asignatura diferente. Cualquier modificación deberá presentarse a la autoridad
-educativa para su autorización.`
-        );
+educativa para su autorización.`,
+  );
 
-        crearSeccion(
-          doc,
-          `14.- Contar con el acervo bibliográfico y los recursos didácticos requeridos para el desarrollo
-del plan de estudios y sus respectivos programas.`
-        );
+  crearSeccion(
+    doc,
+    `14.- Contar con el acervo bibliográfico y los recursos didácticos requeridos para el desarrollo
+del plan de estudios y sus respectivos programas.`,
+  );
 
-        crearSeccion(
-          doc,
-          `15.- Proporcionar un mínimo de becas del 5% del total de población estudiantil, establecidas
+  crearSeccion(
+    doc,
+    `15.- Proporcionar un mínimo de becas del 5% del total de población estudiantil, establecidas
 en la Ley y los lineamientos en la materia. Generar documentación que lo acredite y tenerla
-en físico dado a que la SICyT puede solicitarla en alguna visita de vigilancia`
-        );
+en físico dado a que la SICyT puede solicitarla en alguna visita de vigilancia`,
+  );
 
-        crearSeccion(
-          doc,
-          `16.- Pagar anualmente la matrícula de alumnos por cada RVOE otorgado y alumno activo en
+  crearSeccion(
+    doc,
+    `16.- Pagar anualmente la matrícula de alumnos por cada RVOE otorgado y alumno activo en
 cada ejercicio escolar, acatando los requisitos y tiempos establecidos en la convocatoria
-correspondiente.`
-        );
+correspondiente.`,
+  );
 
-        crearSeccion(
-          doc,
-          `17.- Dar el seguimiento académico y reportar a la Dirección de Servicios Escolares los avances
+  crearSeccion(
+    doc,
+    `17.- Dar el seguimiento académico y reportar a la Dirección de Servicios Escolares los avances
 académicos de los alumnos a partir de su inscripción, acreditación, regularización,
-reinscripción, certificación y titulación.`
-        );
+reinscripción, certificación y titulación.`,
+  );
 
-        crearSeccion(
-          doc,
-          `18.- Una vez recibido el Acuerdo de Incorporación, el particular deberá realizar los registros
+  crearSeccion(
+    doc,
+    `18.- Una vez recibido el Acuerdo de Incorporación, el particular deberá realizar los registros
 ante las autoridades correspondientes, los trámites para la asignación de la clave de centro
 de trabajo ante la Secretaría de Educación Jalisco, su registro ante la Dirección de
 Profesiones del Estado de Jalisco y la Dirección General de Profesiones de la Secretaría de
-Educación Pública y aquellos que correspondan.`
-        );
+Educación Pública y aquellos que correspondan.`,
+  );
 
-        crearSeccion(
-          doc,
-          `19.- Es obligación de la Institución Educativa, que la documentación que presenta sea
-auténtica.`
-        );
+  crearSeccion(
+    doc,
+    `19.- Es obligación de la Institución Educativa, que la documentación que presenta sea
+auténtica.`,
+  );
 
-        crearSeccion(
-          doc,
-          `20.- Emitir sus propios reglamentos internos, solicitar la autorización a la Secretaría de
+  crearSeccion(
+    doc,
+    `20.- Emitir sus propios reglamentos internos, solicitar la autorización a la Secretaría de
 Innovación Ciencia y Tecnología; una vez autorizados, los dará a conocer antes del trámite de
 inscripción o reinscripción. Deberá conservar evidencia a fin de que la autoridad educativa
-verifique el cumplimiento de esta obligación.`
-        );
+verifique el cumplimiento de esta obligación.`,
+  );
 
-        currentPositionY += 50;
+  currentPositionY += 50;
 
-        crearSeccion(
-          doc,
-          `                                                   BAJO PROTESTA DE DECIR VERDAD
+  crearSeccion(
+    doc,
+    `                                                   BAJO PROTESTA DE DECIR VERDAD
                                                       GUILLERMO GÓNGORA CHALITA`,
-          "left"
-        );
+    'left',
+  );
 
-        currentPositionY += 5;
+  currentPositionY += 5;
 
-        crearSeccion(
-          doc,
-          `                              ${solicitud.programa.plantel.domicilio.calle}, ${solicitud.programa.plantel.domicilio.numeroExterior} ${solicitud.programa.plantel.domicilio.numeroInterior}, ${solicitud.programa.plantel.domicilio.municipio.nombre} , ${solicitud.programa.plantel.domicilio.codigoPostal} , ${solicitud.programa.plantel.domicilio.estado.nombre}, MÉXICO ACUERDO NO. ${solicitud.programa.acuerdoRvoe}`,
-          "left"
-        );
+  crearSeccion(
+    doc,
+    `                              ${solicitud.programa.plantel.domicilio.calle}, ${solicitud.programa.plantel.domicilio.numeroExterior} ${solicitud.programa.plantel.domicilio.numeroInterior}, ${solicitud.programa.plantel.domicilio.municipio.nombre} , ${solicitud.programa.plantel.domicilio.codigoPostal} , ${solicitud.programa.plantel.domicilio.estado.nombre}, MÉXICO ACUERDO NO. ${solicitud.programa.acuerdoRvoe}`,
+    'left',
+  );
 
   const totalPages = doc.internal.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
@@ -474,9 +472,9 @@ verifique el cumplimiento de esta obligación.`
     const pageHeight = doc.internal.pageSize.height;
 
     const pageNumberText = `Página ${i} de ${totalPages}`;
-    const pageNumberTextWidth =
-      (doc.getStringUnitWidth(pageNumberText) * doc.internal.getFontSize()) /
-      doc.internal.scaleFactor;
+    const pageNumberTextWidth = (doc.getStringUnitWidth(pageNumberText)
+    * doc.internal.getFontSize())
+     / doc.internal.scaleFactor;
     const pageNumberTextX = pageWidth - 20 - pageNumberTextWidth;
     const pageNumberTextY = pageHeight - 10;
 
@@ -494,7 +492,7 @@ verifique el cumplimiento de esta obligación.`
       imgBottomLeftX,
       imgBottomLeftY - imgBottomLeftHeight,
       imgBottomLeftWidth,
-      imgBottomLeftHeight
+      imgBottomLeftHeight,
     );
 
     const pdfDataUri = doc.output('dataurlnewwindow');
