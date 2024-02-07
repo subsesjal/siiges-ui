@@ -1,30 +1,59 @@
 import { Grid, TextField, Typography } from '@mui/material';
-import { InputFile } from '@siiges-ui/shared';
+import { GetFile, InputFile } from '@siiges-ui/shared';
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import formPrograma from '../utils/sections/forms/formPrograma';
 import errorCurricula from '../utils/sections/errors/errorCurricula';
 
-export default function Curricula({ disabled }) {
+export default function Curricula({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
   const [fileURLs, setFileURLs] = useState([]);
-
   const {
     form, setForm, error, setError, setErrors, id,
   } = useContext(SolicitudContext);
-
   const errors = errorCurricula(form, setError, error);
+
+  const fileData = [
+    'MAPA_CURRICULAR',
+    'REGLAS_ACADEMICAS',
+    'ASIGNATURAS_DETALLE',
+    'PROPUESTA_HEMEROGRAFICA',
+  ].map((tipoDocumento) => ({
+    entidadId: id,
+    tipoEntidad: 'PROGRAMA',
+    tipoDocumento,
+  }));
+
+  useEffect(() => {
+    if (type === 'editar') {
+      fileData.forEach((fileInfo, index) => {
+        GetFile(fileInfo, (url, err) => {
+          if (err) {
+            console.error('Failed to fetch file:', err);
+            return;
+          }
+          setFileURLs((currentURLs) => {
+            const updatedURLs = currentURLs ? [...currentURLs] : [];
+            updatedURLs[index] = url;
+            return updatedURLs;
+          });
+        });
+      });
+    }
+  }, [type, id]);
 
   useEffect(() => {
     if (fileURLs.length > 0) {
-      setForm({ ...form, 5: { ...form['5'], urls: fileURLs } });
+      setForm({ ...form, 5: { ...form[5], urls: fileURLs } });
     }
-  }, [fileURLs]);
+  }, [fileURLs, setForm, form]);
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [
-      ...prevURLs.slice(0, index), url, ...prevURLs.slice(index + 1),
+      ...prevURLs.slice(0, index),
+      url,
+      ...prevURLs.slice(index + 1),
     ]);
   };
 
@@ -51,7 +80,7 @@ export default function Curricula({ disabled }) {
     if (errors !== undefined) {
       setErrors(errors);
     }
-  }, [error]);
+  }, [errors, setErrors]);
 
   return (
     <Grid container spacing={2}>
@@ -67,7 +96,7 @@ export default function Curricula({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[5].mapaCurricular}
+            value={form[5].programa?.mapaCurricular}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -84,7 +113,7 @@ export default function Curricula({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[5].flexibilidadCurricular}
+            value={form[5].programa?.flexibilidadCurricular}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -101,7 +130,7 @@ export default function Curricula({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[5].lineasGeneracionAplicacionConocimiento}
+            value={form[5].programa?.lineasGeneracionAplicacionConocimiento}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -118,7 +147,7 @@ export default function Curricula({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[5].actualizacion}
+            value={form[5].programa?.actualizacion}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -135,7 +164,7 @@ export default function Curricula({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[5].conveniosVinculacion}
+            value={form[5].programa?.conveniosVinculacion}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -211,6 +240,11 @@ export default function Curricula({ disabled }) {
   );
 }
 
+Curricula.defaultProps = {
+  type: null,
+};
+
 Curricula.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  type: PropTypes.string,
 };
