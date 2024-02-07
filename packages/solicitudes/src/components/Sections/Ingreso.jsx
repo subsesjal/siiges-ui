@@ -53,7 +53,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[3].metodosInduccion}
+            value={form[3].programa?.metodosInduccion}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -76,7 +76,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[3].perfilIngresoConocimientos}
+            value={form[3].programa?.perfilIngresoConocimientos}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -94,7 +94,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[3].perfilIngresoHabilidades}
+            value={form[3].programa?.perfilIngresoHabilidades}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -112,7 +112,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[3].perfilIngresoActitudes}
+            value={form[3].programa?.perfilIngresoActitudes}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -130,7 +130,7 @@ export default function Ingreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[3].procesoSeleccion}
+            value={form[3].programa?.procesoSeleccion}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
