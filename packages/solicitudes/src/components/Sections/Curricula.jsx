@@ -31,10 +31,16 @@ export default function Curricula({ disabled, type }) {
         GetFile(fileInfo, (url, err) => {
           if (err) {
             console.error('Failed to fetch file:', err);
+            // Decide how to handle the error state here. For example:
+            setFileURLs((currentURLs) => {
+              const updatedURLs = [...currentURLs];
+              updatedURLs[index] = 'Error'; // Placeholder for an error state
+              return updatedURLs;
+            });
             return;
           }
           setFileURLs((currentURLs) => {
-            const updatedURLs = currentURLs ? [...currentURLs] : [];
+            const updatedURLs = [...currentURLs];
             updatedURLs[index] = url;
             return updatedURLs;
           });
@@ -42,12 +48,6 @@ export default function Curricula({ disabled, type }) {
       });
     }
   }, [type, id]);
-
-  useEffect(() => {
-    if (fileURLs.length > 0) {
-      setForm({ ...form, 5: { ...form[5], urls: fileURLs } });
-    }
-  }, [fileURLs, setForm, form]);
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [

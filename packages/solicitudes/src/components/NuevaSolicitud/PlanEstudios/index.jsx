@@ -183,15 +183,15 @@ export default function PlanEstudios({
               {section === 2 && (
                 <FundamentosPlanEstudios disabled={disabled} type={type} />
               )}
-              {section === 3 && <Ingreso disabled={disabled} />}
-              {section === 4 && <Egreso disabled={disabled} />}
-              {section === 5 && <Curricula disabled={disabled} />}
-              {section === 6 && <Asignaturas disabled={disabled} />}
+              {section === 3 && <Ingreso disabled={disabled} type={type} />}
+              {section === 4 && <Egreso disabled={disabled} type={type} />}
+              {section === 5 && <Curricula disabled={disabled} type={type} />}
+              {section === 6 && <Asignaturas disabled={disabled} type={type} />}
               {section === 7 && (
-                <AsignaturasFormacionElectiva disabled={disabled} />
+                <AsignaturasFormacionElectiva disabled={disabled} type={type} />
               )}
-              {section === 8 && <Docentes disabled={disabled} />}
-              {section === 9 && <TrayectoriaEducativa disabled={disabled} />}
+              {section === 8 && <Docentes disabled={disabled} type={type} />}
+              {section === 9 && <TrayectoriaEducativa disabled={disabled} type={type} />}
             </SectionLayout>
           </CardContent>
         </Card>
