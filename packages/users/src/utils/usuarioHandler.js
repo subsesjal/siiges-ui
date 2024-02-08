@@ -1,4 +1,4 @@
-import { validateFormData } from '@siiges-ui/shared';
+import { validateFormData, getToken } from '@siiges-ui/shared';
 import { createUsuarioSchema } from '../schemas/createUsuario.schema';
 import { updateUsuarioSchema } from '../schemas/updateUsuario.schema';
 
@@ -82,9 +82,12 @@ const errors = {
 
     if (!contrasena) {
       errorMessage = 'Contraseña inválida';
-    } else if (contrasena.length < 4) {
-      errorMessage = 'La contraseña debe contener al menos 4 caracteres';
+    } else if (contrasena.length < 8 || contrasena.length > 25) {
+      errorMessage = 'La contraseña debe contener entre 8 y 25 caracteres';
+    } else if (!contrasena.match(/^(?!.* )(?=.*[a-z])(?=.*[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&./])[A-Za-z0-9@$!%*?&./]{8,25}$/)) {
+      errorMessage = 'La contraseña no cumple con los criterios de seguridad';
     }
+
     setErrorState('contrasena', errorMessage, setError);
   },
   repeatContrasena: (form, setError) => setErrorState(
@@ -190,10 +193,22 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
   }, []);
 };
 
+const validateErrorFields = (obj) => Object.keys(obj).every((key) => typeof obj[key] !== 'string' || obj[key].trim() === '');
+
 const submitUsuario = ({
-  accion, form, session, setForm, setEndpoint, setMethod, setNoti,
+  accion, form, session, setForm, setEndpoint, setMethod, setNoti, errorFields,
 }) => {
   const { endpoint, method, schema } = DATA_MAPPING[accion](form, session);
+
+  if (!validateErrorFields(errorFields)) {
+    setNoti({
+      open: true,
+      message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+      type: 'error',
+    });
+
+    return false;
+  }
 
   const { valid, data } = validateFormData({
     dataBody: form,
@@ -218,10 +233,24 @@ const submitUsuario = ({
   return true;
 };
 
+const deleteUsuario = (id, handleDeleteClick) => {
+  const token = getToken();
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
+  fetch(
+    `${url}/api/v1/usuarios/${id}`,
+    {
+      method: 'DELETE',
+      headers: { api_key: apikey, Authorization: `Bearer ${token}` },
+    },
+  ).then(handleDeleteClick(id));
+};
+
 export {
   handleOnBlur,
   handleOnChange,
   handleRolOptions,
   submitUsuario,
+  deleteUsuario,
   errors,
 };
