@@ -19,10 +19,10 @@ function Provider({ children }) {
   const router = useRouter();
 
   const removeAuth = () => {
+    router.push('/');
     localStorage.removeItem('token');
     setSession({});
     setAuth(false);
-    router.push('/');
   };
 
   useEffect(() => {

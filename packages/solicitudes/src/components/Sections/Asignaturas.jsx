@@ -1,28 +1,33 @@
+import React, { useState, useContext, useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@siiges-ui/shared';
-import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import columns from './Mocks/Asignaturas';
 import AsignaturasModal from '../utils/Components/AsignaturasModales/AsignaturasCreateModal';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
+import SolicitudContext from '../utils/Context/solicitudContext';
+import useAsignaturas from '../utils/getAsignaturas';
 
-export default function Asignaturas({ disabled }) {
+export default function Asignaturas({ disabled, type }) {
+  const { programaId } = useContext(SolicitudContext);
+  const { setAsignaturasList } = useContext(TablesPlanEstudiosContext);
   const [modal, setModal] = useState(false);
-  const showModal = () => {
-    setModal(true);
-  };
 
-  const hideModal = () => {
-    setModal(false);
-  };
+  const { asignaturas, loading } = type === 'editar'
+    ? useAsignaturas(programaId)
+    : { asignaturas: [], loading: false };
 
-  const {
-    asignaturasList,
-    setAsignaturasList,
-  } = useContext(TablesPlanEstudiosContext);
+  useEffect(() => {
+    if (type === 'editar' && !loading) {
+      setAsignaturasList(asignaturas);
+    }
+  }, [asignaturas, loading, setAsignaturasList, type]);
 
-  const tableColumns = columns(setAsignaturasList, asignaturasList);
+  const showModal = () => setModal(true);
+  const hideModal = () => setModal(false);
+
+  const tableColumns = columns(setAsignaturasList, asignaturas);
 
   return (
     <Grid container spacing={2}>
@@ -30,15 +35,16 @@ export default function Asignaturas({ disabled }) {
         <Typography variant="h6">Asignaturas</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <Button onClick={showModal} text="agregar" />}
+        {!disabled && <Button onClick={showModal} text="Agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
-            rows={asignaturasList}
+            rows={asignaturas}
             columns={tableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}
+            loading={loading}
           />
         </div>
       </Grid>
@@ -52,6 +58,11 @@ export default function Asignaturas({ disabled }) {
   );
 }
 
+Asignaturas.defaultProps = {
+  type: null,
+};
+
 Asignaturas.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  type: PropTypes.string,
 };

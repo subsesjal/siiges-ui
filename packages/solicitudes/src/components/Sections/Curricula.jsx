@@ -30,11 +30,9 @@ export default function Curricula({ disabled, type }) {
       fileData.forEach((fileInfo, index) => {
         GetFile(fileInfo, (url, err) => {
           if (err) {
-            console.error('Failed to fetch file:', err);
-            // Decide how to handle the error state here. For example:
             setFileURLs((currentURLs) => {
               const updatedURLs = [...currentURLs];
-              updatedURLs[index] = 'Error'; // Placeholder for an error state
+              updatedURLs[index] = 'Error';
               return updatedURLs;
             });
             return;
