@@ -1,35 +1,36 @@
 import { useContext, useEffect, useState } from 'react';
 import { Context, getToken } from '@siiges-ui/shared';
 
-export default function getAsignaturas(programaId) {
+export default function useAsignaturas(programaId) {
   const { session } = useContext(Context);
-  const token = getToken();
   const [asignaturas, setAsignaturas] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  const url = process.env.NEXT_PUBLIC_URL;
-  let asignaturasData = {};
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (session !== undefined) {
+    if (session && programaId) {
+      const token = getToken();
+      const apikey = process.env.NEXT_PUBLIC_API_KEY;
+      const url = process.env.NEXT_PUBLIC_URL;
+
       fetch(`${url}/api/v1/asignaturas/programas/${programaId}`, {
+        method: 'GET',
         headers: {
-          method: 'GET',
           api_key: apikey,
           Authorization: `Bearer ${token}`,
         },
       })
         .then((response) => response.json())
         .then((data) => {
-          setLoading(true);
-          if (data !== undefined) {
-            asignaturasData = data.data;
+          if (data && data.data) {
+            setAsignaturas(data.data);
           }
-          setAsignaturas(asignaturasData);
-        });
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    } else {
       setLoading(false);
     }
-  }, [session]);
+  }, [programaId, session]);
 
   return {
     asignaturas,
