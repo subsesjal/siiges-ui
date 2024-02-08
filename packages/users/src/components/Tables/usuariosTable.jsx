@@ -1,7 +1,7 @@
 import React from 'react';
-import UsuariosActions from '../Usuarios/UsuariosActions';
+import { ActionButtons } from '@siiges-ui/shared';
 
-const commonColumns = [
+const commonColumns = () => [
   { field: 'nombre', headerName: 'Nombre', width: 200 },
   { field: 'usuario', headerName: 'Usuario', width: 130 },
   { field: 'correo', headerName: 'Correo', width: 200 },
@@ -17,13 +17,19 @@ const commonColumns = [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => <UsuariosActions id={params.id} />,
+    renderCell: (params) => (
+      <ActionButtons
+        id={params.id}
+        editar={`/usuarios/editar/${params.id}`}
+        consultar={`/usuarios/consultar/${params.id}`}
+      />
+    ),
     sortable: false,
     filterable: false,
   },
 ];
 
-const adminColumns = [
+const adminColumns = (showModal) => [
   { field: 'nombre', headerName: 'Nombre', width: 200 },
   { field: 'usuario', headerName: 'Usuario', width: 150 },
   { field: 'correo', headerName: 'Correo', width: 200 },
@@ -39,7 +45,14 @@ const adminColumns = [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => <UsuariosActions id={params.id} />,
+    renderCell: (params) => (
+      <ActionButtons
+        id={params.id}
+        editar={`/usuarios/editar/${params.id}`}
+        consultar={`/usuarios/consultar/${params.id}`}
+        eliminar={() => showModal(params)}
+      />
+    ),
     sortable: false,
     filterable: false,
   },

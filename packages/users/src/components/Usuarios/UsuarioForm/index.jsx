@@ -22,7 +22,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
   const [form, setForm] = useState({ actualizado: 1, persona: {} });
   const [endpoint, setEndpoint] = useState();
   const [method, setMethod] = useState('');
-  const [err, setError] = useState({});
+  const [errorFields, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [schema, setSchema] = useState({});
 
@@ -89,7 +89,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={err.nombre}
+              errorMessage={errorFields.nombre}
             />
           </Grid>
           <Grid item xs={3}>
@@ -104,7 +104,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={err.apellidoPaterno}
+              errorMessage={errorFields.apellidoPaterno}
             />
           </Grid>
           <Grid item xs={3}>
@@ -119,7 +119,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={err.apellidoMaterno}
+              errorMessage={errorFields.apellidoMaterno}
             />
           </Grid>
           <Grid item xs={3}>
@@ -138,7 +138,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError, isRequired: true })}
-              errorMessage={err.rolId}
+              errorMessage={errorFields.rolId}
             />
           </Grid>
         </Grid>
@@ -154,7 +154,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                 : null}
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={err.tituloCargo}
+              errorMessage={errorFields.tituloCargo}
             />
           </Grid>
           <Grid item xs={6}>
@@ -169,7 +169,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={err.correo}
+              errorMessage={errorFields.correo}
             />
           </Grid>
         </Grid>
@@ -187,7 +187,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
-              errorMessage={err.usuario}
+              errorMessage={errorFields.usuario}
             />
           </Grid>
           {
@@ -203,7 +203,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   required
                   onchange={(e) => handleOnChange(e, { form, setForm })}
                   onblur={(e) => handleOnBlur(e, { form, setError })}
-                  errorMessage={err.contrasena}
+                  errorMessage={errorFields.contrasena}
                 />
               </Grid>
               <Grid item xs={3}>
@@ -215,7 +215,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   required
                   onchange={(e) => handleOnChange(e, { form, setForm })}
                   onblur={(e) => handleOnBlur(e, { form, setError })}
-                  errorMessage={err.repeatContrasena}
+                  errorMessage={errorFields.repeatContrasena}
                 />
               </Grid>
             </>
@@ -225,6 +225,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
         <ButtonsForm
           cancel={() => router.back()}
           confirm={() => submitUsuario({
+            errorFields,
             form,
             session,
             accion,
