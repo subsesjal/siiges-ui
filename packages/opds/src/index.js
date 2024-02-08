@@ -9,6 +9,7 @@ import ModalAcuerdos from './components/organosColegiados/modalAcuerdos';
 import PlanMaestro from './components/fortalecimiento/PlanMaestro';
 import rowsAcuerdos from './utils/organosColegiados/Tables/rowsAcuerdos';
 import OrganosColegiados from './components/organosColegiados/Form/organosColegiados';
+import DatosProyectoForm from './components/fortalecimiento/DatosProyectoForm';
 
 export {
   ButtonsAcuerdos,
@@ -16,6 +17,7 @@ export {
   columnsAnteproyecto,
   columnsOrganosColegiados,
   columnsPlanMaestro,
+  DatosProyectoForm,
   findAcuerdoById,
   InstitucionesCarousel,
   ModalAcuerdos,

@@ -35,6 +35,7 @@ import Background from './components/Resources/Background';
 import LoadCircle from './components/Resources/LoadCircle';
 import InputPassword from './components/Input/InputPassword';
 import ButtonStyled from './components/Buttons/ButtonStyled';
+import ButtonsModal from './components/Buttons/ButtonsModal';
 import ButtonSimple from './components/Buttons/ButtonSimple';
 import getCurrentUser from './utils/handlers/getCurrentUser';
 import { setToken, getToken } from './utils/handlers/globals';
@@ -82,6 +83,7 @@ export {
   ButtonsForm,
   ButtonLogin,
   LoginLayout,
+  ButtonsModal,
   ButtonSimple,
   ListSubtitle,
   ParseCookies,

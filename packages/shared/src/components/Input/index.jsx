@@ -17,6 +17,9 @@ function Input({
   onblur,
   onfocus,
   variant,
+  multiline,
+  rows,
+  maxRows,
 }) {
   const [input, setInput] = useState(value);
 
@@ -45,7 +48,7 @@ function Input({
     } else if (type === 'date' || type === 'time') {
       formattedValue = newValue;
     } else {
-      formattedValue = e.target.value;
+      formattedValue = newValue;
     }
 
     setInput(newValue);
@@ -77,6 +80,9 @@ function Input({
       helperText={errorMessage}
       error={!!errorMessage}
       className="data-form"
+      multiline={multiline}
+      rows={multiline ? rows : undefined}
+      maxRows={multiline ? maxRows : undefined}
       InputLabelProps={
         type === 'date' || type === 'time' || type === 'datetime'
           ? { shrink: true }
@@ -97,6 +103,9 @@ Input.defaultProps = {
   onchange: () => {},
   onblur: () => {},
   onfocus: () => {},
+  multiline: false,
+  rows: 1,
+  maxRows: 1,
 };
 
 Input.propTypes = {
@@ -118,6 +127,9 @@ Input.propTypes = {
   type: PropTypes.string,
   size: PropTypes.string,
   auto: PropTypes.string.isRequired,
+  multiline: PropTypes.bool,
+  rows: PropTypes.number,
+  maxRows: PropTypes.number,
 };
 
 export default Input;
