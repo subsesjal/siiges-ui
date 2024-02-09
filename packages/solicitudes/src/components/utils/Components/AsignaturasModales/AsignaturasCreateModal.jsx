@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
@@ -15,26 +15,14 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setAsignaturasList,
     formAsignaturas,
     setFormAsignaturas,
-    setError,
     error,
+    setError,
     errors,
     setErrors,
-    initialValues,
     setInitialValues,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
-
   const selectedGrade = grados.semestral;
-  const errorsAsignatura = errorDatosAsignaturas(
-    formAsignaturas,
-    setError,
-    error,
-  );
-  useEffect(() => {
-    if (errorsAsignatura !== undefined) {
-      setErrors(errorsAsignatura);
-    }
-  }, [errorsAsignatura, error]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -45,14 +33,12 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
   };
 
   const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (errorsAsignatura[name] && typeof errorsAsignatura[name] === 'function') {
-      if (value !== initialValue || value === '') {
-        errorsAsignatura[name]();
-      }
-    }
+    const { name } = e.target;
+    const formValidationResults = errorDatosAsignaturas(formAsignaturas, setError);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: formValidationResults[name] || '',
+    }));
   };
 
   const handleInputFocus = (e) => {
@@ -60,22 +46,38 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const handleOnSubmit = () => {
-    const matchingGrade = selectedGrade.find((grade) => grade.id === formAsignaturas.gradoId);
+  const handleOnSubmit = async () => {
+    const validationErrors = errorDatosAsignaturas(formAsignaturas, setError);
+    const hasErrors = Object.values(validationErrors).some(
+      (err) => err !== '',
+    );
+
+    if (hasErrors) {
+      console.error('Validation errors:', validationErrors);
+      return;
+    }
+
+    const matchingGrade = selectedGrade.find(
+      (grade) => grade.id === formAsignaturas.gradoId,
+    );
     const updatedFormAsignaturas = matchingGrade
       ? { ...formAsignaturas, grado: matchingGrade.nombre }
       : { ...formAsignaturas };
 
-    handleCreate(
-      updatedFormAsignaturas,
-      setFormAsignaturas,
-      setInitialValues,
-      setAsignaturasList,
-      hideModal,
-      errors,
-      setNoti,
-      1,
-    );
+    try {
+      await handleCreate(
+        updatedFormAsignaturas,
+        setFormAsignaturas,
+        setInitialValues,
+        setAsignaturasList,
+        hideModal,
+        errors,
+        setNoti,
+        1,
+      );
+    } catch (err) {
+      console.error('Submission failed:', err);
+    }
   };
 
   return (
