@@ -15,16 +15,16 @@ const handleCreate = async (
   const token = getToken();
 
   try {
-    const isValid = Object.keys(errors).every((campo) => errors[campo]());
+    // Ensure all error messages are empty, indicating no validation errors
+    const isValid = Object.values(errors).every((error) => error === '');
 
     if (!isValid) {
-      const validationError = new Error('Validation failed');
       setNoti({
         open: true,
         message: 'Algo salió mal, revisa que los campos estén correctos',
         type: 'error',
       });
-      throw validationError;
+      throw new Error('Validation failed');
     }
 
     const response = await fetch(`${url}/api/v1/asignaturas`, {
@@ -38,24 +38,23 @@ const handleCreate = async (
     });
 
     if (!response.ok) {
-      const networkError = new Error('Network error');
       setNoti({
         open: true,
         message:
           'Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo.',
         type: 'error',
       });
-      throw networkError;
+      throw new Error('Network error');
     }
 
     const data = await response.json();
     const newData = { ...form, id: data.data.id };
 
     setAsignaturasList((prevList) => [...prevList, newData]);
-
     setForm({ programaId: data.data.programaId, tipo });
     setInitialValues({});
-    hideModal();
+
+    hideModal(); // Close the modal upon successful creation
 
     setNoti({
       open: true,
@@ -63,9 +62,11 @@ const handleCreate = async (
       type: 'success',
     });
 
-    return newData;
+    return newData; // Optionally, return the new data for further processing
   } catch (error) {
     console.error('Error:', error);
+    // In case of error, it might be beneficial to also set a notification for the error here
+    // if it doesn't interfere with other error handling mechanisms
     throw error;
   }
 };

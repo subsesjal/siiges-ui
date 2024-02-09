@@ -51,6 +51,7 @@ import { validateFormData } from './utils/handlers/validateFormData';
 import {
   getData, deleteRecord, createRecord, updateRecord,
 } from './utils/handlers/apiUtils';
+import validateField from './utils/handlers/validateField';
 
 export {
   Logo,
@@ -108,4 +109,5 @@ export {
   deleteRecord,
   createRecord,
   updateRecord,
+  validateField,
 };
