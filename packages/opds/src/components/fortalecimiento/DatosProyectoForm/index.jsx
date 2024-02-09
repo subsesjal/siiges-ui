@@ -9,7 +9,7 @@ import rows from './Columns/MockRows';
 import Modal from './Modal';
 
 export default function DatosProyectoForm({ type }) {
-  const [disabled] = useState(type !== 'editar');
+  const [disabled] = useState(type === 'consultar');
   const [checkboxState, setCheckboxState] = useState({
     obraNueva: false,
     obraDeContinuidad: false,

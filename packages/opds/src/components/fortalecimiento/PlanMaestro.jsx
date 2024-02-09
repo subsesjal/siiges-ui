@@ -1,12 +1,14 @@
 import { Grid, Typography } from '@mui/material';
 import { ButtonsForm, DataTable, Input } from '@siiges-ui/shared';
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import EvidenciaFotografica from './EvidenciaFotografica';
 import Columns from './Tables/Columns';
 import rows from './Tables/Columns/MockRows';
 
 export default function PlanMaestro() {
   const [fileURLs, setFileURLs] = useState([]);
+  const router = useRouter();
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [
@@ -84,7 +86,7 @@ export default function PlanMaestro() {
         />
       </Grid>
       <Grid item xs={12}>
-        <ButtonsForm />
+        <ButtonsForm cancel={() => router.back()} />
       </Grid>
     </Grid>
   );
