@@ -36,7 +36,6 @@ export default function PlanMaestro() {
     if (!!session && !!periodo) {
       setAuth(false);
     } else setAuth(true);
-    console.log(session, periodo);
   }, [session, periodo]);
 
   useEffect(() => {

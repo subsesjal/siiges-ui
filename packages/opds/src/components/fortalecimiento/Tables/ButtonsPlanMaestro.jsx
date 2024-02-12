@@ -1,18 +1,19 @@
 import { IconButton, Stack } from '@mui/material';
 import React from 'react';
+import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/router';
 
-export default function ButtonsPlanMaestro() {
+export default function ButtonsPlanMaestro({ id }) {
   const router = useRouter();
   return (
     <Stack direction="row" spacing={1}>
       <IconButton
         aria-label="Consultar"
         onClick={() => {
-          router.push('/opds/fortalecimiento/planMaestro/1/consultPlanMaestro');
+          router.push(`/opds/fortalecimiento/planMaestro/${id}/consultPlanMaestro`);
         }}
       >
         <ListAltIcon />
@@ -20,7 +21,7 @@ export default function ButtonsPlanMaestro() {
       <IconButton
         aria-label="Editar"
         onClick={() => {
-          router.push('/opds/fortalecimiento/planMaestro/1/editPlanMaestro');
+          router.push(`/opds/fortalecimiento/planMaestro/${id}/editPlanMaestro`);
         }}
       >
         <EditIcon />
@@ -31,3 +32,7 @@ export default function ButtonsPlanMaestro() {
     </Stack>
   );
 }
+
+ButtonsPlanMaestro.propTypes = {
+  id: PropTypes.number.isRequired,
+};
