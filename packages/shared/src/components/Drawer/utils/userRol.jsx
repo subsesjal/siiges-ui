@@ -25,7 +25,7 @@ export default function userRol(session, setUsers, section, institucionRoute) {
         key: 'users',
       },
       {
-        text: 'Mi institucion',
+        text: 'Mi institución',
         icon: <BusinessIcon />,
         route: institucionRoute,
         key: 'intitutions',
@@ -51,7 +51,7 @@ export default function userRol(session, setUsers, section, institucionRoute) {
         {
           text: 'Instituciones',
           icon: <BusinessIcon />,
-          route: '/institucion/instituciones',
+          route: '/instituciones',
           key: 'intitutions',
         },
         {
