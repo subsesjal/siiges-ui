@@ -6,14 +6,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState, useContext } from 'react';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
 import AsignaturasFormacionEditModal from './AsignaturasFormacionModales/AsignaturasFormacionEditModal';
-import DeleteAsignaturaFormacion from './AsignaturasFormacionModales/DeleteAsignaturasFormacion';
+import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
 
 export default function AsignaturasFormacionButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const { asignaturasFormacionList } = useContext(TablesPlanEstudiosContext);
+  const {
+    setFormAsignaturasFormacion,
+    setAsignaturasFormacionList,
+    asignaturasFormacionList,
+    programaId,
+  } = useContext(TablesPlanEstudiosContext);
   const rowItem = asignaturasFormacionList.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
@@ -23,7 +28,7 @@ export default function AsignaturasFormacionButtons({ id }) {
 
   const handleModalClose = () => {
     setModalOpen(false);
-    setDeleteDialogOpen(false);
+    setFormAsignaturasFormacion(() => ({ programaId, tipo: 1 }));
   };
 
   const handleDeleteDialogOpen = () => {
@@ -32,6 +37,7 @@ export default function AsignaturasFormacionButtons({ id }) {
 
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
+    setFormAsignaturasFormacion(() => ({ programaId, tipo: 1 }));
   };
 
   return (
@@ -56,10 +62,11 @@ export default function AsignaturasFormacionButtons({ id }) {
       )}
 
       {deleteDialogOpen && (
-        <DeleteAsignaturaFormacion
+        <DeleteAsignatura
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
-          rowItem={rowItem}
+          id={rowItem.id}
+          setAsignaturasList={setAsignaturasFormacionList}
         />
       )}
     </Stack>

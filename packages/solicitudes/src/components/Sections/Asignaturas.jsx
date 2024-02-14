@@ -1,4 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState, useContext, useEffect, useMemo,
+} from 'react';
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@siiges-ui/shared';
@@ -11,23 +13,25 @@ import useAsignaturas from '../utils/getAsignaturas';
 
 export default function Asignaturas({ disabled, type }) {
   const { programaId } = useContext(SolicitudContext);
-  const { setAsignaturasList } = useContext(TablesPlanEstudiosContext);
   const [modal, setModal] = useState(false);
-
+  const showModal = () => setModal(true);
+  const hideModal = () => setModal(false);
+  const { asignaturasList, setAsignaturasList } = useContext(
+    TablesPlanEstudiosContext,
+  );
   const { asignaturas, loading } = type === 'editar'
     ? useAsignaturas(programaId)
     : { asignaturas: [], loading: false };
+  const tableColumns = useMemo(
+    () => columns(setAsignaturasList, asignaturasList),
+    [setAsignaturasList, asignaturas],
+  );
 
   useEffect(() => {
     if (type === 'editar' && !loading) {
       setAsignaturasList(asignaturas);
     }
-  }, [asignaturas, loading, setAsignaturasList, type]);
-
-  const showModal = () => setModal(true);
-  const hideModal = () => setModal(false);
-
-  const tableColumns = columns(setAsignaturasList, asignaturas);
+  }, [loading, asignaturas]);
 
   return (
     <Grid container spacing={2}>
@@ -40,7 +44,7 @@ export default function Asignaturas({ disabled, type }) {
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
-            rows={asignaturas}
+            rows={asignaturasList}
             columns={tableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}

@@ -55,6 +55,7 @@ export default function PlanEstudios({
       setModalidad(query.modalidad);
     }
     if (!loading && solicitudes.programa && type === 'editar') {
+      setProgramaId(solicitudes.programa.id);
       setModalidad(solicitudes.programa.modalidadId);
       const programaTurnosIds = solicitudes.programa.programaTurnos.map(
         (turno) => turno.turnoId,

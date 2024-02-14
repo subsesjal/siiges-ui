@@ -7,7 +7,7 @@ import Input from '@siiges-ui/shared/src/components/Input';
 
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
-import { grados, area } from '../../Mocks/mockAsignaturas';
+import { grados } from '../../Mocks/mockAsignaturas';
 import errorDatosAsignaturasFormacion from '../../sections/errors/errorDatosAsignaturasFormacion';
 
 export default function AsignaturasFormacionCreateModal({
@@ -106,18 +106,6 @@ export default function AsignaturasFormacionCreateModal({
           />
         </Grid>
         <Grid item xs={6}>
-          <BasicSelect
-            title="Area"
-            name="area"
-            value=""
-            options={area}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.area}
-            required
-          />
-        </Grid>
-        <Grid item xs={6}>
           <Input
             id="nombre"
             label="Nombre(s)"
@@ -130,7 +118,7 @@ export default function AsignaturasFormacionCreateModal({
             errorMessage={error.nombre}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <Input
             id="clave"
             label="Clave"
@@ -143,7 +131,7 @@ export default function AsignaturasFormacionCreateModal({
             errorMessage={error.clave}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <Input
             id="creditos"
             label="Creditos"
@@ -158,15 +146,15 @@ export default function AsignaturasFormacionCreateModal({
         </Grid>
         <Grid item xs={12}>
           <Input
-            id="formacionEspecializada"
-            label="Formacion especializada"
-            name="formacionEspecializada"
-            auto="formacionEspecializada"
+            id="academia"
+            label="Academia"
+            name="academia"
+            auto="academia"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
-            errorMessage={error.formacionEspecializada}
+            errorMessage={error.academia}
           />
         </Grid>
         <Grid item xs={12}>
