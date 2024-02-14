@@ -10,7 +10,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
-import { getInstitucionUsuario } from '@siiges-ui/instituciones';
 import userRol from './utils/userRol';
 import DropdownButton from '../Select/DropdownButton';
 
@@ -60,26 +59,10 @@ function MenuDrawer({
   open, openFunction, closeFunction, section, session,
 }) {
   const [users, setUsers] = useState([]);
-  const [institucionRoute, setInstitucionRoute] = useState(
-    '/institucion/nuevaInstitucion',
-  );
-  const { institucion } = getInstitucionUsuario({ session });
 
   useEffect(() => {
-    if (institucion) {
-      setInstitucionRoute(
-        `/institucion/${institucion.id}/consultarInstitucion`,
-      );
-    } else {
-      setInstitucionRoute(
-        '/institucion/nuevaInstitucion',
-      );
-    }
-  }, [institucion]);
-
-  useEffect(() => {
-    userRol(session, setUsers, section, institucionRoute);
-  }, [session, section, institucionRoute]);
+    userRol(session, setUsers, section);
+  }, [session, section]);
 
   return (
     <Box sx={{ display: 'flex' }}>

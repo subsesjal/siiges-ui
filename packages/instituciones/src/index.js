@@ -1,11 +1,12 @@
-import Institucion from './Components/Instituciones';
+import InstitucionLayout from './Components/Instituciones/InstitucionLayout';
+import InstitucionView from './Components/Instituciones/InstitucionView';
 import InstitucionesTable from './Components/Instituciones/InstitucionesTable';
-import NewInstitutionForm from './Components/Instituciones/newInstitutionForm';
+import InstitutionForm from './Components/Instituciones/InstitucionForm';
 import EditInstitutionForm from './Components/Instituciones/editInstitutionForm';
 import NewPlantelForm from './Components/Planteles/newPlantelForm';
 import EditPlantelForm from './Components/Planteles/editPlantelForm';
 import ConsultPlantelesForm from './Components/Planteles/consultPlantelesForm';
-import Planteles from './Components/Planteles';
+import PlantelesTable from './Components/Planteles/PlantelesTable';
 import getInstitucionUsuario from './Components/utils/getInstitucionUsuario';
 import getPlanteles from './Components/utils/getPlanteles';
 import getPlantelesByInstitucion from './utils/getPlantelesByInstitucion';
@@ -21,14 +22,15 @@ import postAsignaturasAlumno from './utils/postAsignaturasAlumno';
 import getInscripcionesAlumnos from './utils/getInscripcionesAlumnos';
 
 export {
-  Institucion,
+  InstitucionLayout,
+  InstitucionView,
   InstitucionesTable,
-  NewInstitutionForm,
+  InstitutionForm,
   EditInstitutionForm,
   NewPlantelForm,
   EditPlantelForm,
   ConsultPlantelesForm,
-  Planteles,
+  PlantelesTable,
   getInstitucionUsuario,
   getPlanteles,
   getProgramas,

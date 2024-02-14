@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import router from 'next/router';
 import { Divider } from '@mui/material';
 import { Layout, Context } from '@siiges-ui/shared';
-import { InstitucionesTable } from '@siiges-ui/instituciones';
-import getInstituciones from '@siiges-ui/instituciones/src/utils/getInstituciones';
+import { InstitucionesTable, getInstituciones } from '@siiges-ui/instituciones';
 
 export default function Instituciones() {
   const { session } = useContext(Context);

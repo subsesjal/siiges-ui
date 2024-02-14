@@ -15,7 +15,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 
-export default function userRol(session, setUsers, section, institucionRoute) {
+export default function userRol(session, setUsers, section) {
   if (session.rol === 'representante') {
     setUsers([
       {
@@ -27,7 +27,7 @@ export default function userRol(session, setUsers, section, institucionRoute) {
       {
         text: 'Mi institución',
         icon: <BusinessIcon />,
-        route: institucionRoute,
+        route: '/instituciones/miInstitucion',
         key: 'intitutions',
       },
       {

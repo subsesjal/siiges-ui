@@ -8,7 +8,7 @@ import {
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import deletePlantel from '../utils/deletePlantel';
+import deletePlantel from '../../utils/deletePlantel';
 
 function ModalState() {
   const [modal, setModal] = useState(false);
