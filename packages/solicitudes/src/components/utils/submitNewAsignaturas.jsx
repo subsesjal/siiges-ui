@@ -6,7 +6,6 @@ const handleCreate = async (
   setInitialValues,
   setAsignaturasList,
   hideModal,
-  errors,
   setNoti,
   tipo,
 ) => {
@@ -15,18 +14,6 @@ const handleCreate = async (
   const token = getToken();
 
   try {
-    // Ensure all error messages are empty, indicating no validation errors
-    const isValid = Object.values(errors).every((error) => error === '');
-
-    if (!isValid) {
-      setNoti({
-        open: true,
-        message: 'Algo salió mal, revisa que los campos estén correctos',
-        type: 'error',
-      });
-      throw new Error('Validation failed');
-    }
-
     const response = await fetch(`${url}/api/v1/asignaturas`, {
       method: 'POST',
       headers: {
@@ -54,7 +41,7 @@ const handleCreate = async (
     setForm({ programaId: data.data.programaId, tipo });
     setInitialValues({});
 
-    hideModal(); // Close the modal upon successful creation
+    hideModal();
 
     setNoti({
       open: true,
@@ -62,11 +49,9 @@ const handleCreate = async (
       type: 'success',
     });
 
-    return newData; // Optionally, return the new data for further processing
+    return newData;
   } catch (error) {
     console.error('Error:', error);
-    // In case of error, it might be beneficial to also set a notification for the error here
-    // if it doesn't interfere with other error handling mechanisms
     throw error;
   }
 };

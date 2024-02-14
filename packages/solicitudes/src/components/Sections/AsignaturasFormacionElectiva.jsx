@@ -1,66 +1,42 @@
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
-import { Button, Input } from '@siiges-ui/shared';
-import React, { useContext, useState, useEffect } from 'react';
+import { Button } from '@siiges-ui/shared';
+import React, {
+  useContext, useState, useEffect, useMemo,
+} from 'react';
 import columns from './Mocks/AsignaturasFormacionElectiva';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import AsignaturasFormacionCreateModal from '../utils/Components/AsignaturasFormacionModales/AsignaturasFormacionCreateModal';
 import SolicitudContext from '../utils/Context/solicitudContext';
-import errorFormacionElectiva from '../utils/sections/errors/errorFormacionElectiva';
-import formPrograma from '../utils/sections/forms/formPrograma';
+import useAsignaturas from '../utils/getAsignaturas';
 
-export default function AsignaturasFormacionElectiva({ disabled }) {
+export default function AsignaturasFormacionElectiva({ disabled, type }) {
+  const { programaId } = useContext(SolicitudContext);
   const [modal, setModal] = useState(false);
-  const [initialValues, setInitialValues] = useState({});
-
+  const showModal = () => setModal(true);
+  const hideModal = () => setModal(false);
   const {
-    form, setForm, error, setError, setErrors,
-  } = useContext(SolicitudContext);
+    asignaturasFormacionList,
+    setAsignaturasFormacionList,
+    setAsignaturasTotalList,
+  } = useContext(TablesPlanEstudiosContext);
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    formPrograma(name, value, setForm, 7);
-  };
+  const { asignaturasFormacion, asignaturasTotal, loading } = type === 'editar'
+    ? useAsignaturas(programaId)
+    : { asignaturasFormacion: [], loading: false };
 
-  const errors = errorFormacionElectiva(form, setError, error);
-
-  const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (value !== initialValue || value === '') {
-      errors[name]();
-    }
-  };
-
-  const handleInputFocus = (e) => {
-    const { name, value } = e.target;
-    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
-  };
+  const tableColumns = useMemo(
+    () => columns(setAsignaturasFormacionList, asignaturasFormacionList),
+    [setAsignaturasFormacionList, asignaturasFormacion],
+  );
 
   useEffect(() => {
-    if (errors !== undefined) {
-      setErrors(errors);
+    if (type === 'editar' && !loading) {
+      setAsignaturasFormacionList(asignaturasFormacion);
+      setAsignaturasTotalList(asignaturasTotal);
     }
-  }, [error]);
-
-  const showModal = () => {
-    setModal(true);
-  };
-
-  const hideModal = () => {
-    setModal(false);
-  };
-
-  const { asignaturasFormacionList, setAsignaturasFormacionList } = useContext(
-    TablesPlanEstudiosContext,
-  );
-
-  const tableColumns = columns(
-    setAsignaturasFormacionList,
-    asignaturasFormacionList,
-  );
+  }, [loading, asignaturasFormacion]);
 
   return (
     <Grid container spacing={2}>
@@ -80,34 +56,6 @@ export default function AsignaturasFormacionElectiva({ disabled }) {
           />
         </div>
       </Grid>
-      <Grid item xs={9}>
-        <Input
-          id="minimoHorasOptativas"
-          label="Numero de horas minimas que se deberan acreditar bajo la conduccion de un docente"
-          name="minimoHorasOptativas"
-          auto="minimoHorasOptativas"
-          onchange={handleOnChange}
-          onblur={handleOnBlur}
-          onfocus={handleInputFocus}
-          value={form[7].programa?.minimoHorasOptativas}
-          errorMessage={error.minimoHorasOptativas}
-          required
-        />
-      </Grid>
-      <Grid item xs={9}>
-        <Input
-          id="minimoCreditosOptativas"
-          label="Numero minimo de creditos que se deberan acreditar"
-          name="minimoCreditosOptativas"
-          auto="minimoCreditosOptativas"
-          onchange={handleOnChange}
-          onblur={handleOnBlur}
-          onfocus={handleInputFocus}
-          value={form[7].programa?.minimoCreditosOptativas}
-          errorMessage={error.minimoCreditosOptativas}
-          required
-        />
-      </Grid>
       <AsignaturasFormacionCreateModal
         open={modal}
         hideModal={hideModal}
@@ -118,6 +66,11 @@ export default function AsignaturasFormacionElectiva({ disabled }) {
   );
 }
 
+AsignaturasFormacionElectiva.defaultProps = {
+  type: null,
+};
+
 AsignaturasFormacionElectiva.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  type: PropTypes.string,
 };

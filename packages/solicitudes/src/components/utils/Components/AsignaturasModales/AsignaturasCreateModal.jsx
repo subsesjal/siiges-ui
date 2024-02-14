@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
+import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
@@ -18,7 +18,6 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     error,
     setError,
     errors,
-    setErrors,
     setInitialValues,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
@@ -34,11 +33,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
-    const formValidationResults = errorDatosAsignaturas(formAsignaturas, setError);
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: formValidationResults[name] || '',
-    }));
+    validateField(formAsignaturas, name, setError, errorDatosAsignaturas);
   };
 
   const handleInputFocus = (e) => {
@@ -47,16 +42,6 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
   };
 
   const handleOnSubmit = async () => {
-    const validationErrors = errorDatosAsignaturas(formAsignaturas, setError);
-    const hasErrors = Object.values(validationErrors).some(
-      (err) => err !== '',
-    );
-
-    if (hasErrors) {
-      console.error('Validation errors:', validationErrors);
-      return;
-    }
-
     const matchingGrade = selectedGrade.find(
       (grade) => grade.id === formAsignaturas.gradoId,
     );
@@ -148,15 +133,15 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         </Grid>
         <Grid item xs={12}>
           <Input
-            id="formacionEspecializada"
-            label="Formacion especializada"
-            name="formacionEspecializada"
-            auto="formacionEspecializada"
+            id="academia"
+            label="Academia"
+            name="academia"
+            auto="academia"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
-            errorMessage={error.formacionEspecializada}
+            errorMessage={error.academia}
           />
         </Grid>
         <Grid item xs={12}>

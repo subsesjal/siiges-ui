@@ -4,7 +4,7 @@ const errorDatosAsignaturas = {
   nombre: { message: 'Nombre invalido' },
   clave: { message: 'Clave invalida' },
   creditos: { message: 'Creditos invalidos', isNumber: true },
-  formacionEspecializada: { message: 'Formación especializada invalida' },
+  academia: { message: 'Academia invalida' },
   horasDocente: { message: 'Horas docente invalidos', isNumber: true },
   horasIndependiente: {
     message: 'Horas independiente invalidos',
