@@ -1,9 +1,18 @@
 import { Grid } from '@mui/material';
 import { ButtonsModal, DefaultModal, Input } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-function Modal({ id, modalState, setModalState }) {
+function Modal({
+  id, modalState, setModalState, setRowsData,
+}) {
+  const [form, setForm] = useState({});
+  const updateForm = (field, value) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      [field]: value,
+    }));
+  };
   return (
     <DefaultModal
       title={modalState.title}
@@ -16,7 +25,7 @@ function Modal({ id, modalState, setModalState }) {
             name="nombre"
             label="Nombre"
             id={`nombre-${id}`}
-            disabled={modalState.disabled}
+            onchange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={3}>
@@ -24,7 +33,7 @@ function Modal({ id, modalState, setModalState }) {
             name="cantidad"
             label="Cantidad"
             id={`cantidad-${id}`}
-            disabled={modalState.disabled}
+            onchange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={3}>
@@ -32,12 +41,12 @@ function Modal({ id, modalState, setModalState }) {
             name="metrosCuadrados"
             label="Metros Cuadrados"
             id={`metrosCuadrados-${id}`}
-            disabled={modalState.disabled}
+            onchange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
       </Grid>
       <ButtonsModal
-        confirm={modalState.confirmAction}
+        confirm={() => { setRowsData(form); setModalState({ ...modalState, open: false }); }}
         cancel={() => setModalState({ ...modalState, open: false })}
         edit={modalState.edit}
       />
@@ -59,6 +68,7 @@ Modal.propTypes = {
     edit: PropTypes.bool,
   }).isRequired,
   setModalState: PropTypes.func.isRequired,
+  setRowsData: PropTypes.func.isRequired,
 };
 
 export default Modal;

@@ -6,12 +6,13 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import EvidenciaFotografica from './EvidenciaFotografica';
 import Columns from './Tables/Columns';
-import rows from './Tables/Columns/MockRows';
+// import rows from './Tables/Columns/MockRows';
 import { inputPlanMaestro } from '../../utils/constants';
 
 export default function PlanMaestro({ type }) {
   const router = useRouter();
   const { planMaestroId, id: idPM } = router.query;
+  const columns = Columns(idPM);
   const [fileURLs, setFileURLs] = useState([]);
   const [form, setForm] = useState({});
   const [typePage, setTypePage] = useState(type);
@@ -19,9 +20,12 @@ export default function PlanMaestro({ type }) {
   const [body, setBody] = useState(null);
   const [reload, setReload] = useState(false);
   const [method, setMethod] = useState('GET');
+  const [rows, setRows] = useState([]);
+  const [path, setPath] = useState(`api/v1/planMaestro/responsables/${planMaestroId || idPM}`);
 
   const { data, error } = useApi({
-    endpoint: `api/v1/planMaestro/responsables/${planMaestroId || idPM}`,
+    endpoint:
+      path || `api/v1/planMaestro/responsables/${planMaestroId || idPM}`,
     method,
     dataBody: body,
     reload,
@@ -40,6 +44,10 @@ export default function PlanMaestro({ type }) {
       [field]: value,
     }));
   };
+
+  useEffect(() => {
+    setPath(`api/v1/planMaestro/responsables/${planMaestroId || idPM}`);
+  }, [idPM]);
 
   const createResponsables = () => {
     setBody({
@@ -66,7 +74,11 @@ export default function PlanMaestro({ type }) {
     if (data === null) {
       setTypePage('crear');
     }
-    if (data && method === 'GET') {
+    if (
+      data
+      && method === 'GET'
+      && Object.prototype.toString.call(data) === '[object Object]'
+    ) {
       setForm({
         nombrePlaneacion: data.responsablePlaneacion.nombre,
         cargoPlaneacion: data.responsablePlaneacion.cargo,
@@ -80,6 +92,10 @@ export default function PlanMaestro({ type }) {
         extensionObra: data.responsableObra.extension,
       });
       setTypePage('editar');
+      setPath(`api/v1/planMaestro/datosDelProyecto/${idPM}`);
+    }
+    if (Array.isArray(data)) {
+      setRows(data);
     }
   }, [data, error]);
 
@@ -113,11 +129,13 @@ export default function PlanMaestro({ type }) {
           buttonText="Agregar datos del proyecto"
           buttonClick={() => {
             router.push({
-              pathname: `/opds/fortalecimiento/planMaestro/DatosProyecto/${planMaestroId || idPM}/crearDatosProyecto`,
+              pathname: `/opds/fortalecimiento/planMaestro/DatosProyecto/${
+                planMaestroId || idPM
+              }/crearDatosProyecto`,
             });
           }}
-          rows={rows}
-          columns={Columns}
+          rows={rows || []}
+          columns={columns}
         />
       </Grid>
       <Grid item xs={12}>
