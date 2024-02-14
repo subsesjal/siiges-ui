@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 export default function getInstituciones(esAutorizado) {
   const [instituciones, setInstituciones] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   let userData = {};
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
@@ -19,13 +19,14 @@ export default function getInstituciones(esAutorizado) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setLoading(true);
+        setLoading(false);
         if (data.data !== undefined) {
           userData = data.data;
         }
         setInstituciones(userData);
       });
-    setLoading(false);
+
+    setLoading(true);
   }, [esAutorizado]);
 
   return {
