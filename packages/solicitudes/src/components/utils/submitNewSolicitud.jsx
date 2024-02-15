@@ -4,20 +4,10 @@ function submitNewSolicitud(validations, setNewSubmit) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
-    errors, form, setNoti, setId, setProgramaId,
+    form, setNoti, setId, setProgramaId,
   } = validations;
 
   const token = getToken();
-
-  const isValid = Object.keys(errors).every((campo) => errors[campo]());
-  if (!isValid) {
-    setNoti({
-      open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
-      type: 'error',
-    });
-    return;
-  }
 
   fetch(`${url}/api/v1/solicitudes`, {
     method: 'POST',
