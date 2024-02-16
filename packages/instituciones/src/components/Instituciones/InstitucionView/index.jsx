@@ -10,7 +10,7 @@ import {
 } from '@siiges-ui/shared';
 import { DropzoneDialog } from 'mui-file-dropzone';
 
-export default function Institucion({ data }) {
+export default function InstitucionView({ data }) {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
@@ -146,7 +146,7 @@ export default function Institucion({ data }) {
   );
 }
 
-Institucion.propTypes = {
+InstitucionView.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.number,
     nombre: PropTypes.string,
