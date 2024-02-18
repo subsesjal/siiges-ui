@@ -56,7 +56,7 @@ export default function GenerarFDA02(solicitud) {
 
   const doc = new jsPDF();
 
-  function generarSeccionyTabla(doc, titulo, tablaData, tableOptions = {}) {
+  function generarSeccionyTabla(titulo, tablaData, tableOptions = {}) {
     const pageHeight = doc.internal.pageSize.height;
     const margin = 5;
     const availableSpace = pageHeight - margin;
@@ -86,7 +86,7 @@ export default function GenerarFDA02(solicitud) {
     const previousY = currentPositionY; // Guardar la posición antes de crear la tabla
 
     doc.autoTable({
-      startY: startY,
+      startY,
       head: [tablaData.headers], // Encabezados de la tabla
       body: tablaData.body, // Datos de la tabla
       theme: 'grid',
@@ -108,7 +108,6 @@ export default function GenerarFDA02(solicitud) {
   }
 
   function generateTable(
-    doc,
     headers,
     tableData,
     startY,
@@ -118,14 +117,14 @@ export default function GenerarFDA02(solicitud) {
     doc.autoTable({
       head: [headers],
       body: tableData,
-      startY: startY,
+      startY,
       theme: 'grid',
       styles: {
         lineColor: [0, 0, 0],
         lineWidth: 0.3,
       },
-      headStyles: headStyles,
-      showHead: showHead,
+      headStyles,
+      showHead,
     });
   }
 
@@ -138,7 +137,7 @@ export default function GenerarFDA02(solicitud) {
     ];
     const dataColumn1 = [
       solicitud.programa.plantel.institucion.nombre,
-      nombreNivel + '   ' + solicitud.programa.nombre,
+      `${nombreNivel} + ${solicitud.programa.nombre}`,
       solicitud.programa.duracionPeriodos,
       solicitud.programa.plantel.institucion.razonSocial,
     ];
@@ -188,17 +187,17 @@ export default function GenerarFDA02(solicitud) {
     currentPositionY = doc.previousAutoTable.finalY + 10; // Espacio después de la tabla
   }
 
-  var fechaCreacion = solicitud.createdAt;
+  const fechaCreacion = solicitud.createdAt;
   // Convierte la cadena de texto en un objeto de fecha
-  var fecha = new Date(fechaCreacion);
+  const fecha = new Date(fechaCreacion);
   // Obtiene el día, mes y año de la fecha
-  var dia = fecha.getDate();
-  var mes = fecha.getMonth() + 1; // Los meses son indexados desde 0, por lo que se suma 1
-  var año = fecha.getFullYear();
+  const dia = fecha.getDate();
+  const mes = fecha.getMonth() + 1; // Los meses son indexados desde 0, por lo que se suma 1
+  const año = fecha.getFullYear();
   // Formatea la fecha en el formato 'día/mes/año'
-  var fechaFormateada = dia + '/' + mes + '/' + año;
+  const fechaFormateada = `${dia}/${mes}/${año}`;
 
-  var tipoSolicitud = ''; // Esta variable almacenará el nombre de la solicitud.
+  let tipoSolicitud = ''; // Esta variable almacenará el nombre de la solicitud.
   if (solicitud.tipoSolicitudId === 1) {
     tipoSolicitud = 'NUEVA SOLICITUD';
   } else if (solicitud.tipoSolicitudId === 2) {
@@ -207,7 +206,7 @@ export default function GenerarFDA02(solicitud) {
     tipoSolicitud = 'CAMBIO DE DOMICILIO';
   }
 
-  var nombreNivel = '';
+  let nombreNivel = '';
   if (solicitud.programa.nivelId === 1) {
     nombreNivel = 'Bachillerato';
   } else if (solicitud.programa.nivelId === 2) {
@@ -222,7 +221,7 @@ export default function GenerarFDA02(solicitud) {
     nombreNivel = 'Doctorado';
   }
 
-  var modalidadTipo = '';
+  let modalidadTipo = '';
   if (solicitud.programa.modalidadId === 1) {
     modalidadTipo = 'Escolarizada';
   } else if (solicitud.programa.modalidadId === 2) {
@@ -233,7 +232,7 @@ export default function GenerarFDA02(solicitud) {
     modalidadTipo = 'Dual';
   }
 
-  var ciclosTipo = '';
+  let ciclosTipo = '';
   if (solicitud.programa.modalidadId === 1) {
     ciclosTipo = 'Semestral';
   } else if (solicitud.programa.modalidadId === 2) {
@@ -246,10 +245,9 @@ export default function GenerarFDA02(solicitud) {
     ciclosTipo = 'Cuatrimestral curriculum flexible';
   }
 
-  var programaTurnos = solicitud.programa.programaTurnos;
-  var tiposDeTurno = [];
-  programaTurnos.forEach(function (turno) {
-    // Verifica el valor de turnoId y agrega el tipo de turno correspondiente al arreglo tiposDeTurno
+  const { programaTurnos } = solicitud.programa;
+  const tiposDeTurno = [];
+  programaTurnos.forEach((turno) => {
     if (turno.turnoId === 1) {
       tiposDeTurno.push('Matutino');
     } else if (turno.turnoId === 2) {
@@ -262,7 +260,7 @@ export default function GenerarFDA02(solicitud) {
   });
 
   // Convierte el arreglo de tipos de turno en un texto separado por comas
-  var turnoTipo = tiposDeTurno.join(', ');
+  const turnoTipo = tiposDeTurno.join(', ');
 
   doc.addImage(img1, 'JPEG', 0, 15, 70, 19);
   doc.addImage(img2, 'JPEG', 145, 15, 50, 16);
@@ -300,9 +298,9 @@ export default function GenerarFDA02(solicitud) {
     headers: ['CALLE Y NÚMERO', 'COLONIA'],
     body: [
       [
-        solicitud.programa.plantel.domicilio.calle +
-          '  ' +
-          solicitud.programa.plantel.domicilio.numeroExterior,
+        `${solicitud.programa.plantel.domicilio.calle
+        }  ${
+          solicitud.programa.plantel.domicilio.numeroExterior}`,
         solicitud.programa.plantel.domicilio.colonia,
       ],
     ],
@@ -388,9 +386,9 @@ export default function GenerarFDA02(solicitud) {
   const headers6 = ['CALLE Y NÚMERO', 'COLONIA'];
   const tableData6 = [
     [
-      solicitud.programa.plantel.domicilio.calle +
-        '  ' +
-        solicitud.programa.plantel.domicilio.numeroExterior,
+      `${solicitud.programa.plantel.domicilio.calle
+      }  ${
+        solicitud.programa.plantel.domicilio.numeroExterior}`,
       solicitud.programa.plantel.domicilio.estado.nombre,
     ],
   ];
@@ -467,7 +465,7 @@ export default function GenerarFDA02(solicitud) {
   currentPositionY = doc.previousAutoTable.finalY + 10;
   // const directoresData = directores[0];
 
-  const directores = solicitud.programa.plantel.directores;
+  const { directores } = solicitud.programa.plantel;
 
   const tablaDirectores = {
     headers: ['NOMBRE (S)', 'APELLIDO PATERNO', 'APELLIDO MATERNO'],
@@ -499,7 +497,7 @@ export default function GenerarFDA02(solicitud) {
     fontSize: 12,
     textColor: [20, 20, 20],
   });
-  currentPositionY = doc.previousAutoTable.finalY ; // Espacio después de la celda
+  currentPositionY = doc.previousAutoTable.finalY; // Espacio después de la celda
 
   const formacionDirector = {
     headers: ['GRADO EDUCATIVO', 'NOMBRE DE LOS ESTUDIOS'],
@@ -514,7 +512,7 @@ export default function GenerarFDA02(solicitud) {
 
   currentPositionY = doc.previousAutoTable.finalY + 5; // Espacio después de la celda
 
-  const diligencias = solicitud.programa.diligencias;
+  const { diligencias } = solicitud.programa;
 
   if (diligencias && diligencias.length) {
     diligencias.forEach((diligente, index) => {
@@ -606,8 +604,7 @@ export default function GenerarFDA02(solicitud) {
 
     const pageNumberText = `Página ${i} de ${totalPages}`;
     const pageNumberTextWidth = (doc.getStringUnitWidth(pageNumberText)
-    * doc.internal.getFontSize())
-    / doc.internal.scaleFactor;
+    * doc.internal.getFontSize()) / doc.internal.scaleFactor;
     const pageNumberTextX = pageWidth - 20 - pageNumberTextWidth;
     const pageNumberTextY = pageHeight - 10;
 

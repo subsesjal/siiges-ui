@@ -39,9 +39,10 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
   }
 
   // Calcular la posición X según la alineación
-  const textX = alineacion === 'right'
-    ? doc.internal.pageSize.width - margenIzquierdo
-    : margenIzquierdo;
+  const textX =
+    alineacion === 'right'
+      ? doc.internal.pageSize.width - margenIzquierdo
+      : margenIzquierdo;
 
   doc.text(textX, currentPositionY, contenido, {
     maxWidth: 175,
@@ -78,7 +79,7 @@ export default function GenerarFDA02(solicitud) {
       currentPositionY, // cellY
       182, // cellWidth
       7, // cellHeight
-      titulo,
+      titulo
     );
 
     const startY = currentPositionY + (tableOptions.spaceBeforeTable || 5);
@@ -118,14 +119,14 @@ export default function GenerarFDA02(solicitud) {
     doc.autoTable({
       head: [headers],
       body: tableData,
-      startY: startY,
+      startY,
       theme: 'grid',
       styles: {
         lineColor: [0, 0, 0],
         lineWidth: 0.3,
       },
-      headStyles: headStyles,
-      showHead: showHead,
+      headStyles,
+      showHead,
     });
   }
 
@@ -138,7 +139,7 @@ export default function GenerarFDA02(solicitud) {
     ];
     const dataColumn1 = [
       solicitud.programa.plantel.institucion.nombre,
-      nombreNivel + '   ' + solicitud.programa.nombre,
+      `${nombreNivel}   ${solicitud.programa.nombre}`,
       solicitud.programa.duracionPeriodos,
       solicitud.programa.plantel.institucion.razonSocial,
     ];
@@ -188,17 +189,17 @@ export default function GenerarFDA02(solicitud) {
     currentPositionY = doc.previousAutoTable.finalY + 10; // Espacio después de la tabla
   }
 
-  var fechaCreacion = solicitud.createdAt;
+  const fechaCreacion = solicitud.createdAt;
   // Convierte la cadena de texto en un objeto de fecha
-  var fecha = new Date(fechaCreacion);
+  const fecha = new Date(fechaCreacion);
   // Obtiene el día, mes y año de la fecha
-  var dia = fecha.getDate();
-  var mes = fecha.getMonth() + 1; // Los meses son indexados desde 0, por lo que se suma 1
-  var año = fecha.getFullYear();
+  const dia = fecha.getDate();
+  const mes = fecha.getMonth() + 1; // Los meses son indexados desde 0, por lo que se suma 1
+  const año = fecha.getFullYear();
   // Formatea la fecha en el formato 'día/mes/año'
-  var fechaFormateada = dia + '/' + mes + '/' + año;
+  const fechaFormateada = `${dia}/${mes}/${año}`;
 
-  var tipoSolicitud = ''; // Esta variable almacenará el nombre de la solicitud.
+  let tipoSolicitud = ''; // Esta variable almacenará el nombre de la solicitud.
   if (solicitud.tipoSolicitudId === 1) {
     tipoSolicitud = 'NUEVA SOLICITUD';
   } else if (solicitud.tipoSolicitudId === 2) {
@@ -207,7 +208,7 @@ export default function GenerarFDA02(solicitud) {
     tipoSolicitud = 'CAMBIO DE DOMICILIO';
   }
 
-  var nombreNivel = '';
+  let nombreNivel = '';
   if (solicitud.programa.nivelId === 1) {
     nombreNivel = 'Bachillerato';
   } else if (solicitud.programa.nivelId === 2) {
@@ -222,7 +223,7 @@ export default function GenerarFDA02(solicitud) {
     nombreNivel = 'Doctorado';
   }
 
-  var modalidadTipo = '';
+  let modalidadTipo = '';
   if (solicitud.programa.modalidadId === 1) {
     modalidadTipo = 'Escolarizada';
   } else if (solicitud.programa.modalidadId === 2) {
@@ -233,7 +234,7 @@ export default function GenerarFDA02(solicitud) {
     modalidadTipo = 'Dual';
   }
 
-  var ciclosTipo = '';
+  let ciclosTipo = '';
   if (solicitud.programa.cicloId === 1) {
     ciclosTipo = 'Semestral';
   } else if (solicitud.programa.cicloId === 2) {
@@ -246,10 +247,9 @@ export default function GenerarFDA02(solicitud) {
     ciclosTipo = 'Cuatrimestral curriculum flexible';
   }
 
-  var programaTurnos = solicitud.programa.programaTurnos;
-  var tiposDeTurno = [];
-  programaTurnos.forEach(function (turno) {
-    // Verifica el valor de turnoId y agrega el tipo de turno correspondiente al arreglo tiposDeTurno
+  const { programaTurnos } = solicitud.programa;
+  const tiposDeTurno = [];
+  programaTurnos.forEach((turno) => {
     if (turno.turnoId === 1) {
       tiposDeTurno.push('Matutino');
     } else if (turno.turnoId === 2) {
@@ -262,12 +262,11 @@ export default function GenerarFDA02(solicitud) {
   });
 
   // Convierte el arreglo de tipos de turno en un texto separado por comas
-  var turnoTipo = tiposDeTurno.join(', ');
 
   doc.addImage(img1, 'JPEG', 0, 15, 70, 19);
   doc.addImage(img2, 'JPEG', 145, 15, 50, 16);
 
-  doc.setFont("helvetica", "bold");
+  doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
   doc.setFillColor(6, 98, 211);
   crearCelda(doc, 150, 40, 45, 7, 'FDA06');
@@ -276,7 +275,6 @@ export default function GenerarFDA02(solicitud) {
   doc.setFontSize(12);
   doc.setTextColor(69, 133, 244);
   doc.text('OFICIO DE ENTREGA DE DOCUMENTACIÓN', 20, 50);
-
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
   doc.setTextColor(0, 0, 0);
@@ -473,8 +471,7 @@ verifique el cumplimiento de esta obligación.`,
 
     const pageNumberText = `Página ${i} de ${totalPages}`;
     const pageNumberTextWidth = (doc.getStringUnitWidth(pageNumberText)
-    * doc.internal.getFontSize())
-     / doc.internal.scaleFactor;
+    * doc.internal.getFontSize()) / doc.internal.scaleFactor;
     const pageNumberTextX = pageWidth - 20 - pageNumberTextWidth;
     const pageNumberTextY = pageHeight - 10;
 

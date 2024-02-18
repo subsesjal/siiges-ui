@@ -16,15 +16,15 @@ function crearCelda(doc, x, y, width, height, texto) {
   doc.setTextColor(0, 0, 0);
 
   const textoWidth = (doc.getStringUnitWidth(texto) * doc.internal.getFontSize())
-  / doc.internal.scaleFactor;
+   / doc.internal.scaleFactor;
   const textoX = x + (width - textoWidth) / 2; // Calcula la posición X centrada
 
   doc.text(texto, textoX, y + 5); // Usar la posición X centrada
 }
 
 function crearSeccion(doc, contenido, alineacion = 'justify') {
-  const margenSuperior = currentPositionY;
   const margenIzquierdo = 20;
+  const margenSuperior = currentPositionY;
 
   // Contenido de la sección
   doc.setFont('helvetica');
@@ -42,8 +42,8 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
   const textX = alineacion === 'right'
     ? doc.internal.pageSize.width - margenIzquierdo
     : margenIzquierdo;
-    
-   doc.text(textX, currentPositionY, contenido, {
+
+  doc.text(textX, currentPositionY, contenido, {
     maxWidth: 175,
     align: alineacion,
   });
@@ -52,25 +52,20 @@ function crearSeccion(doc, contenido, alineacion = 'justify') {
 }
 
 export default function GenerarFDA01(solicitud) {
-  console.log(solicitud);
-
-  const doc = new jsPDF();
-
-  var fechaCreacion = solicitud.createdAt;
+  const fechaCreacion = solicitud.createdAt;
 
   // Convierte la cadena de texto en un objeto de fecha
-  var fecha = new Date(fechaCreacion);
+  const fecha = new Date(fechaCreacion);
 
   // Obtiene el día, mes y año de la fecha
-  var dia = fecha.getDate();
-  var mes = fecha.getMonth() + 1; // Los meses son indexados desde 0, por lo que se suma 1
-  var año = fecha.getFullYear();
+  const dia = fecha.getDate();
+  const mes = fecha.getMonth() + 1; // Los meses son indexados desde 0, por lo que se suma 1
+  const año = fecha.getFullYear();
 
   // Formatea la fecha en el formato "día/mes/año"
-  var fechaFormateada = dia + '/' + mes + '/' + año;
+  const fechaFormateada = `${dia}/${mes}/${año}`;
 
-  // Esta variable almacenará el nombre de la solicitud.
-  var tipoSolicitud = ''
+  let tipoSolicitud = ''; // Esta variable almacenará el nombre de la solicitud.
   if (solicitud.tipoSolicitudId === 1) {
     tipoSolicitud = 'NUEVA SOLICITUD';
   } else if (solicitud.tipoSolicitudId === 2) {
@@ -78,9 +73,8 @@ export default function GenerarFDA01(solicitud) {
   } else if (solicitud.tipoSolicitudId === 3) {
     tipoSolicitud = 'CAMBIO DE DOMICILIO';
   }
-}
-  
-  var nombreNivel = '';
+
+  let nombreNivel = '';
   if (solicitud.programa.nivelId === 1) {
     nombreNivel = 'Bachillerato';
   } else if (solicitud.programa.nivelId === 2) {
@@ -95,9 +89,9 @@ export default function GenerarFDA01(solicitud) {
     nombreNivel = 'Doctorado';
   }
 
-  var modalidadTipo = ''; 
+  let modalidadTipo = '';
   if (solicitud.programa.modalidadId === 1) {
-  modalidadTipo = "Escolarizada";
+    modalidadTipo = 'Escolarizada';
   } else if (solicitud.programa.modalidadId === 2) {
     modalidadTipo = 'No escolarizada';
   } else if (solicitud.programa.modalidadId === 3) {
@@ -106,7 +100,7 @@ export default function GenerarFDA01(solicitud) {
     modalidadTipo = 'Dual';
   }
 
-  var ciclosTipo = ''; 
+  let ciclosTipo = '';
   if (solicitud.programa.modalidadId === 1) {
     ciclosTipo = 'Semestral';
   } else if (solicitud.programa.modalidadId === 2) {
@@ -119,10 +113,10 @@ export default function GenerarFDA01(solicitud) {
     ciclosTipo = 'Cuatrimestral curriculum flexible';
   }
 
-  var programaTurnos = solicitud.programa.programaTurnos;
-  var tiposDeTurno = [];
-  programaTurnos.forEach(function(turno) {
-    // Verifica el valor de turnoId y agrega el tipo de turno correspondiente al arreglo tiposDeTurno
+  const { programaTurnos } = solicitud.programa;
+  const tiposDeTurno = [];
+  programaTurnos.forEach((turno) => {
+  // Verifica el valor de turnoId y agrega el tipo de turno correspondiente al arreglo tiposDeTurno
     if (turno.turnoId === 1) {
       tiposDeTurno.push('Matutino');
     } else if (turno.turnoId === 2) {
@@ -135,7 +129,9 @@ export default function GenerarFDA01(solicitud) {
   });
 
   // Convierte el arreglo de tipos de turno en un texto separado por comas
-  var turnoTipo = tiposDeTurno.join(", ");
+  const doc = new jsPDF();
+
+  const turnoTipo = tiposDeTurno.join(', ');
 
   doc.addImage(img1, 'JPEG', 0, 15, 70, 19);
   doc.addImage(img2, 'JPEG', 145, 15, 50, 16);
@@ -171,7 +167,7 @@ export default function GenerarFDA01(solicitud) {
 
   crearSeccion(
     doc,
-    `Por este conducto manifiesto que estoy en condiciones para iniciar el trámite de SOLICITUD DE ${tipoSolicitud} del programa ${nombreNivel} en ${solicitud.programa.nombre}, modalidad ${modalidadTipo}, en periodos ${ciclosTipo}, turno ${turnoTipo}, de la Institución ${solicitud.programa.plantel.institucion.nombre}. Así mismo declaro Bajo Protesta de Decir la Verdad que la información y los documentos anexos en la presente solicitud son verídicos y fueron elaborados siguiendo principios éticos profesionales, que son de mi conocimiento las penas en que incurren quienes se conducen con falsedad ante autoridad distinta de la judicial, y señalo como domicilio para recibir notificaciones:`
+    `Por este conducto manifiesto que estoy en condiciones para iniciar el trámite de SOLICITUD DE ${tipoSolicitud} del programa ${nombreNivel} en ${solicitud.programa.nombre}, modalidad ${modalidadTipo}, en periodos ${ciclosTipo}, turno ${turnoTipo}, de la Institución ${solicitud.programa.plantel.institucion.nombre}. Así mismo declaro Bajo Protesta de Decir la Verdad que la información y los documentos anexos en la presente solicitud son verídicos y fueron elaborados siguiendo principios éticos profesionales, que son de mi conocimiento las penas en que incurren quienes se conducen con falsedad ante autoridad distinta de la judicial, y señalo como domicilio para recibir notificaciones:`,
   );
 
   crearSeccion(
@@ -209,8 +205,7 @@ Número telefónico celular: ${solicitud.programa.plantel.telefono2}`,
 
     const pageNumberText = `Página ${i} de ${totalPages}`;
     const pageNumberTextWidth = (doc.getStringUnitWidth(pageNumberText)
-    * doc.internal.getFontSize())
-    / doc.internal.scaleFactor;
+    * doc.internal.getFontSize()) / doc.internal.scaleFactor;
     const pageNumberTextX = pageWidth - 20 - pageNumberTextWidth;
     const pageNumberTextY = pageHeight - 10;
 
@@ -236,6 +231,5 @@ Número telefónico celular: ${solicitud.programa.plantel.telefono2}`,
     // Abrir el PDF en una nueva pestaña
     window.open(pdfDataUri, '_blank');
   }
-
-  return ;
-
+}
+s
