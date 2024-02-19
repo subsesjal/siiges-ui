@@ -1,6 +1,12 @@
-import { Grid, TextField, Typography } from '@mui/material';
 import {
-  ButtonSimple, LabelData, Layout, Select,
+  Divider, Grid, TextField, Typography,
+} from '@mui/material';
+import {
+  Button,
+  ButtonSimple,
+  LabelData,
+  Layout,
+  Select,
 } from '@siiges-ui/shared';
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -21,7 +27,7 @@ export default function presupuesto() {
     <Layout title="Presupuesto">
       <Grid container spacing={2}>
         <Grid item xs={3}>
-          <Select title="Institucion" options={[]} name="institucion" />
+          <Select title="Institución" options={[]} name="institucion" />
         </Grid>
         <Grid item xs={3}>
           <Select title="Periodo" options={[]} name="periodo" />
@@ -33,11 +39,17 @@ export default function presupuesto() {
           <Select title="Año" options={[]} name="ano" />
         </Grid>
         <Grid item xs={12}>
-          <Typography>
+          <Divider />
+        </Grid>
+        <Grid item xs={10}>
+          <Typography variant="h6">
             Convenio
             {' '}
             {year}
           </Typography>
+        </Grid>
+        <Grid item xs={2}>
+          <Button text="Guardar" onClick={() => {}} type="add" align="right" />
         </Grid>
         <Grid item xs={4}>
           <LabelData title="Estatal" subtitle="$ 56,458,815.00" />
