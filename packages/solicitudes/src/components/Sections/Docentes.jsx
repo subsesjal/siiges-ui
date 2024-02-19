@@ -1,10 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import columns from './Mocks/Docentes';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
+import SolicitudContext from '../utils/Context/solicitudContext';
+import useDocentes from '../utils/getDocentes';
 import DocentesCreateModal from '../utils/Components/DocentesModales/DocentesCreateModal';
 
 export const transformDataForTable = (data) => data.map((item) => ({
@@ -17,24 +21,38 @@ export const transformDataForTable = (data) => data.map((item) => ({
   tipoContratacion: `${item.tipoContratacion} - ${item.antiguedad} años`,
 }));
 
-export default function Docentes({ disabled }) {
+export default function Docentes({ disabled, type }) {
   const [modal, setModal] = useState(false);
+  const { programaId } = useContext(SolicitudContext);
+  const { docentesList, setDocentesList, setFormDocentes } = useContext(
+    TablesPlanEstudiosContext,
+  );
+  const { docentes, loading } = type === 'editar'
+    ? useDocentes(programaId)
+    : { docentes: [], loading: false };
+  const tableColumns = useMemo(
+    () => columns(setDocentesList, docentesList),
+    [setDocentesList, docentes],
+  );
+
+  useEffect(() => {
+    if (type === 'editar' && !loading) {
+      const transformedData = transformDataForTable(docentes);
+      setDocentesList(transformedData);
+    }
+  }, [docentes, loading]);
+
   const showModal = () => {
     setModal(true);
   };
 
   const hideModal = () => {
     setModal(false);
+    setFormDocentes({
+      esAceptado: true,
+      asignaturasDocentes: [],
+    });
   };
-
-  const {
-    docentesList,
-    setDocentesList,
-  } = useContext(TablesPlanEstudiosContext);
-
-  const transformedData = transformDataForTable(docentesList);
-
-  const tableColumns = columns(setDocentesList, docentesList);
 
   return (
     <Grid container spacing={2}>
@@ -42,12 +60,12 @@ export default function Docentes({ disabled }) {
         <Typography variant="h6">Docentes</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <Button onClick={showModal} text="agregar" />}
+        {!disabled && <Button onClick={showModal} text="Agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
-            rows={transformedData}
+            rows={docentesList}
             columns={tableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}
@@ -64,6 +82,11 @@ export default function Docentes({ disabled }) {
   );
 }
 
+Docentes.defaultProps = {
+  type: null,
+};
+
 Docentes.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  type: PropTypes.string,
 };

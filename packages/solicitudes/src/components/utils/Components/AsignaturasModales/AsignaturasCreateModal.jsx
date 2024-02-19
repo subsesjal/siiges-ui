@@ -17,7 +17,6 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setFormAsignaturas,
     error,
     setError,
-    errors,
     setInitialValues,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
@@ -56,7 +55,6 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         setInitialValues,
         setAsignaturasList,
         hideModal,
-        errors,
         setNoti,
         1,
       );
@@ -83,12 +81,12 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         <Grid item xs={6}>
           <BasicSelect
             title="Area"
-            name="area"
+            name="areaId"
             value=""
             options={area}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.area}
+            errorMessage={error.areaId}
             required
           />
         </Grid>

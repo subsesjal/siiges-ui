@@ -15,6 +15,7 @@ export function TablesPlanEstudiosProvider({ children }) {
   const [formAsignaturas, setFormAsignaturas] = useState({ tipo: 1 });
   const [formAsignaturasFormacion, setFormAsignaturasFormacion] = useState({
     tipo: 2,
+    areaId: 4,
   });
   const [formDocentes, setFormDocentes] = useState({
     esAceptado: true,

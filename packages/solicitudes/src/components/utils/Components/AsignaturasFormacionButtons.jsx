@@ -28,7 +28,7 @@ export default function AsignaturasFormacionButtons({ id }) {
 
   const handleModalClose = () => {
     setModalOpen(false);
-    setFormAsignaturasFormacion(() => ({ programaId, tipo: 1 }));
+    setFormAsignaturasFormacion(() => ({ programaId, tipo: 1, areaId: 4 }));
   };
 
   const handleDeleteDialogOpen = () => {
@@ -37,7 +37,7 @@ export default function AsignaturasFormacionButtons({ id }) {
 
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
-    setFormAsignaturasFormacion(() => ({ programaId, tipo: 1 }));
+    setFormAsignaturasFormacion(() => ({ programaId, tipo: 1, areaId: 4 }));
   };
 
   return (

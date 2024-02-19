@@ -16,13 +16,12 @@ export default function AsignaturasFormacionCreateModal({
   title,
 }) {
   const {
-    asignaturasFormacionList,
     setAsignaturasFormacionList,
     formAsignaturasFormacion,
     setFormAsignaturasFormacion,
+    asignaturasTotalList,
     setError,
     error,
-    errors,
     setErrors,
     initialValues,
     setInitialValues,
@@ -84,7 +83,6 @@ export default function AsignaturasFormacionCreateModal({
       setInitialValues,
       setAsignaturasFormacionList,
       hideModal,
-      errors,
       setNoti,
       2,
     );
@@ -162,7 +160,7 @@ export default function AsignaturasFormacionCreateModal({
             title="Seriacion"
             name="seriacion"
             value=""
-            options={asignaturasFormacionList || []}
+            options={asignaturasTotalList || []}
             onchange={handleOnChange}
             textValue
           />

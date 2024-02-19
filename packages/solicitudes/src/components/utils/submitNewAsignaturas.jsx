@@ -38,7 +38,7 @@ const handleCreate = async (
     const newData = { ...form, id: data.data.id };
 
     setAsignaturasList((prevList) => [...prevList, newData]);
-    setForm({ programaId: data.data.programaId, tipo });
+    setForm({ programaId: data.data.programaId, tipo, areaId: data.data.areaId });
     setInitialValues({});
 
     hideModal();
