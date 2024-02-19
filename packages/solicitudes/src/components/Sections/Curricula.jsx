@@ -8,9 +8,9 @@ import errorCurricula from '../utils/sections/errors/errorCurricula';
 
 export default function Curricula({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
-  const [fileURLs, setFileURLs] = useState([]);
+  const [fileURLs, setFileURLs] = useState([null, null, null, null]);
   const {
-    form, setForm, error, setError, setErrors, id,
+    form, setForm, error, setError, id,
   } = useContext(SolicitudContext);
   const errors = errorCurricula(form, setError, error);
 
@@ -29,23 +29,17 @@ export default function Curricula({ disabled, type }) {
     if (type === 'editar') {
       fileData.forEach((fileInfo, index) => {
         GetFile(fileInfo, (url, err) => {
-          if (err) {
+          if (!err) {
             setFileURLs((currentURLs) => {
               const updatedURLs = [...currentURLs];
-              updatedURLs[index] = 'Error';
+              updatedURLs[index] = url;
               return updatedURLs;
             });
-            return;
           }
-          setFileURLs((currentURLs) => {
-            const updatedURLs = [...currentURLs];
-            updatedURLs[index] = url;
-            return updatedURLs;
-          });
         });
       });
     }
-  }, [type, id]);
+  }, []);
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [
@@ -73,12 +67,6 @@ export default function Curricula({ disabled, type }) {
     const { name, value } = e.target;
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-
-  useEffect(() => {
-    if (errors !== undefined) {
-      setErrors(errors);
-    }
-  }, [errors, setErrors]);
 
   return (
     <Grid container spacing={2}>

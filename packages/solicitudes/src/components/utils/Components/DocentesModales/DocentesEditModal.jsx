@@ -1,5 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { Grid, TextField, Typography } from '@mui/material';
+import {
+  CircularProgress, Grid, TextField, Typography,
+} from '@mui/material';
 import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
@@ -31,6 +33,26 @@ export default function DocentesEditModal({
   const { setNoti } = useContext(Context);
 
   const [currentSection, setCurrentSection] = useState(1);
+  const [asignaturas, setAsignaturas] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchAsignaturas = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getAsignaturas(programaId);
+        setAsignaturas(data);
+      } catch (err) {
+        console.error('Failed to fetch asignaturas', err);
+        setNoti({ message: 'Error fetching asignaturas', type: 'error' });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAsignaturas();
+  }, [programaId, setNoti]);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormDocentes((prevData) => {
@@ -62,7 +84,6 @@ export default function DocentesEditModal({
   };
 
   const errorsDocentes = errorDatosDocentes(formDocentes, setError);
-  const asignaturas = getAsignaturas(programaId);
 
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
@@ -109,6 +130,10 @@ export default function DocentesEditModal({
   const handleModalClose = () => {
     hideModal();
     setCurrentSection(1);
+    setFormDocentes({
+      esAceptado: true,
+      asignaturasDocentes: [],
+    });
   };
 
   const tiposDocentes = [
@@ -135,6 +160,12 @@ export default function DocentesEditModal({
     { id: 5, nombre: 'Doctorado' },
     { id: 6, nombre: 'Profesional Asociado' },
   ];
+
+  if (isLoading) {
+    return (
+      <CircularProgress />
+    );
+  }
 
   return (
     <DefaultModal open={open} setOpen={hideModal} title={edit}>

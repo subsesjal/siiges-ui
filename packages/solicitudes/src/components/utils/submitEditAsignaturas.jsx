@@ -42,7 +42,7 @@ const handleEdit = async (
       return newList;
     });
 
-    setForm({ programaId, tipo });
+    setForm({ programaId, tipo, areaId: data.data.areaId });
     setInitialValues({});
     hideModal();
 

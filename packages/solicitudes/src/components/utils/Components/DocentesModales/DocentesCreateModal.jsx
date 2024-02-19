@@ -1,11 +1,15 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Grid, TextField, Typography } from '@mui/material';
-import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
-import Input from '@siiges-ui/shared/src/components/Input';
+import {
+  DefaultModal,
+  ButtonStyled,
+  validateField,
+  Input,
+  Select,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
 import handleCreate from '../../submitNewDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
@@ -18,15 +22,10 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
     setFormDocentes,
     setError,
     error,
-    errors,
-    setErrors,
-    initialValues,
     setInitialValues,
     programaId,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
-
-  const errorsDocentes = errorDatosDocentes(formDocentes, setError);
   const asignaturas = getAsignaturas(programaId);
 
   const [currentSection, setCurrentSection] = useState(1);
@@ -40,7 +39,8 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
           ...prevData,
           asignaturasDocentes: newValue,
         };
-      } if (
+      }
+      if (
         name === 'nombre'
         || name === 'apellidoPaterno'
         || name === 'apellidoMaterno'
@@ -61,24 +61,14 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
   };
 
   const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (value !== initialValue || value === '') {
-      errorsDocentes[name]();
-    }
+    const { name } = e.target;
+    validateField(formDocentes, name, setError, errorDatosDocentes);
   };
 
   const handleInputFocus = (e) => {
     const { name, value } = e.target;
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-
-  useEffect(() => {
-    if (errorsDocentes !== undefined) {
-      setErrors(errorsDocentes);
-    }
-  }, [errors]);
 
   const handleOnSubmit = () => {
     handleCreate(
@@ -87,7 +77,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
       setInitialValues,
       setDocentesList,
       hideModal,
-      errors,
       setNoti,
       programaId,
       setCurrentSection,
@@ -138,10 +127,10 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
       {currentSection === 1 && (
         <Grid container spacing={2} sx={{ width: '100%' }}>
           <Grid item xs={3}>
-            <BasicSelect
+            <Select
               title="Tipo de docente"
               name="tipoDocente"
-              value={formDocentes.tipoDocente ?? ''}
+              value=""
               options={tiposDocentes}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -155,7 +144,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Nombre(s)"
               name="nombre"
               auto="nombre"
-              value={formDocentes.persona?.nombre}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -169,7 +157,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Apellido paterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
-              value={formDocentes.persona?.apellidoPaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -183,7 +170,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Apellido materno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
-              value={formDocentes.persona?.apellidoMaterno}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -199,10 +185,10 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <Typography variant="h6">Ultimo grado</Typography>
           </Grid>
           <Grid item xs={3}>
-            <BasicSelect
+            <Select
               title="Nivel"
               name="nivelUltimoGrado"
-              value={formDocentes.nivelUltimoGrado ?? ''}
+              value=""
               options={nivel}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -217,7 +203,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Nombre"
               name="nombreUltimoGrado"
               auto="nombreUltimoGrado"
-              value={formDocentes.nombreUltimoGrado ?? ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -226,10 +211,10 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             />
           </Grid>
           <Grid item xs={12}>
-            <BasicSelect
+            <Select
               title="Documento presentado"
               name="documentoPresentadoUltimoGrado"
-              value={formDocentes.documentoPresentadoUltimoGrado ?? ''}
+              value=""
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -246,10 +231,10 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             <Typography variant="h6">Penultimo grado</Typography>
           </Grid>
           <Grid item xs={3}>
-            <BasicSelect
+            <Select
               title="Nivel"
               name="nivelPenultimoGrado"
-              value={formDocentes.nivelPenultimoGrado ?? ''}
+              value=""
               options={nivel}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -264,7 +249,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               label="Nombre"
               name="nombrePenultimoGrado"
               auto="nombrePenultimoGrado"
-              value={formDocentes.nombrePenultimoGrado}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -273,10 +257,10 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             />
           </Grid>
           <Grid item xs={12}>
-            <BasicSelect
+            <Select
               title="Documento presentado"
               name="documentoPresentadoPenultimoGrado"
-              value={formDocentes.documentoPresentadoPenultimoGrado ?? ''}
+              value=""
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -286,12 +270,12 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             />
           </Grid>
           <br />
-          <Grid item xs={12}>
-            <BasicSelect
+          <Grid item xs={6}>
+            <Select
               title="Asignaturas para las que se propone"
               name="asignaturasDocentes"
               multiple
-              value={formDocentes.asignaturasDocentes ?? ''}
+              value={[]}
               options={asignaturas.asignaturas}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -300,10 +284,10 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <BasicSelect
+            <Select
               title="Tipo de contratación"
               name="tipoContratacion"
-              value={formDocentes.tipoContratacion ?? ''}
+              value=""
               options={tipoContratacion}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -311,13 +295,12 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               required
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <Input
               id="antiguedad"
               label="Antiguedad"
               name="antiguedad"
               auto="antiguedad"
-              value={formDocentes.antiguedad}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -325,13 +308,12 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               errorMessage={error.antiguedad}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <Input
               id="totalHorasIndependiente"
               label="Total horas independiente"
               name="totalHorasIndependiente"
               auto="totalHorasIndependiente"
-              value={formDocentes.totalHorasIndependiente}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -347,7 +329,6 @@ export default function DocentesCreateModal({ open, hideModal, title }) {
               rows={4}
               multiline
               sx={{ width: '100%' }}
-              value={formDocentes.experienciaLaboral}
               onChange={handleOnChange}
               onBlur={handleOnBlur}
               onFocus={handleInputFocus}

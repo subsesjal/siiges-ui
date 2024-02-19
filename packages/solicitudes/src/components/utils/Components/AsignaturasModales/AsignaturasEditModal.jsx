@@ -22,7 +22,6 @@ export default function AsignaturasEditModal({
     setFormAsignaturas,
     error,
     setError,
-    errors,
     setInitialValues,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
@@ -64,7 +63,6 @@ export default function AsignaturasEditModal({
       setInitialValues,
       setAsignaturasList,
       hideModal,
-      errors,
       setNoti,
       rowItem.id,
       1,
@@ -92,12 +90,12 @@ export default function AsignaturasEditModal({
         <Grid item xs={6}>
           <BasicSelect
             title="Area"
-            name="area"
-            value={rowItem.area ?? ''}
+            name="areaId"
+            value={rowItem.areaId ?? ''}
             options={area}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.area}
+            errorMessage={error.areaId}
             required
             disabled={edit === 'Consultar Asignatura'}
           />
@@ -227,7 +225,7 @@ AsignaturasEditModal.propTypes = {
   rowItem: PropTypes.shape({
     id: PropTypes.number,
     gradoId: PropTypes.number,
-    area: PropTypes.number,
+    areaId: PropTypes.number,
     nombre: PropTypes.string,
     clave: PropTypes.string,
     creditos: PropTypes.string,

@@ -2,8 +2,8 @@ export const area = [
   { id: 1, nombre: 'Formación General' },
   { id: 2, nombre: 'Formación Basica' },
   { id: 3, nombre: 'Formación Disciplinar' },
-  { id: 4, nombre: 'Formación Tecnica' },
-  { id: 5, nombre: 'Formación Especializante' },
+  { id: 5, nombre: 'Formación Tecnica' },
+  { id: 6, nombre: 'Formación Especializante' },
 ];
 
 export const grados = {
