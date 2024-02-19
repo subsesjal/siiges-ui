@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/system';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material';
 
 const CustomButtonStyled = styled(Button)(({ theme }) => ({
   backgroundColor: 'transparent',
@@ -21,7 +22,9 @@ const CustomButtonStyled = styled(Button)(({ theme }) => ({
   },
 }));
 
-const ButtonIcon = ({ onClick, text, icon, disabled }) => {
+function ButtonIcon({
+  onClick, text, icon, disabled,
+}) {
   return (
     <CustomButtonStyled
       sx={{ marginTop: 1 }}
@@ -33,6 +36,18 @@ const ButtonIcon = ({ onClick, text, icon, disabled }) => {
       {text}
     </CustomButtonStyled>
   );
-};
+}
 
 export default ButtonIcon;
+
+ButtonIcon.defaultProps = {
+  onClick: () => {},
+  disabled: false,
+};
+
+ButtonIcon.propTypes = {
+  text: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  icon: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
