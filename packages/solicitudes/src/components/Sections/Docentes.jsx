@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useMemo, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -24,21 +24,19 @@ export const transformDataForTable = (data) => data.map((item) => ({
 export default function Docentes({ disabled, type }) {
   const [modal, setModal] = useState(false);
   const { programaId } = useContext(SolicitudContext);
-  const { docentesList, setDocentesList, setFormDocentes } = useContext(
+  const [docentesList, setDocentesList] = useState([]);
+  const { setFormDocentes } = useContext(
     TablesPlanEstudiosContext,
   );
   const { docentes, loading } = type === 'editar'
     ? useDocentes(programaId)
     : { docentes: [], loading: false };
-  const tableColumns = useMemo(
-    () => columns(setDocentesList, docentesList),
-    [setDocentesList, docentes],
-  );
 
   useEffect(() => {
     if (type === 'editar' && !loading) {
       const transformedData = transformDataForTable(docentes);
       setDocentesList(transformedData);
+      console.log(docentes);
     }
   }, [docentes, loading]);
 
@@ -66,7 +64,7 @@ export default function Docentes({ disabled, type }) {
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
             rows={docentesList}
-            columns={tableColumns}
+            columns={columns()}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />
