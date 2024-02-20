@@ -8,12 +8,12 @@ import DeleteDocentes from './DocentesModales/DeleteDocentes';
 import DocentesEditModal from './DocentesModales/DocentesEditModal';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
 
-export default function DocentesButtons({ id }) {
+export default function DocentesButtons({ id, docentesList, setDocentesList }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const { docentesList, setFormDocentes } = useContext(TablesPlanEstudiosContext);
+  const { setFormDocentes, programaId } = useContext(TablesPlanEstudiosContext);
   const rowItem = docentesList.find((item) => item.id === id);
 
   useEffect(() => {
@@ -27,6 +27,11 @@ export default function DocentesButtons({ id }) {
 
   const handleModalClose = () => {
     setModalOpen(false);
+    setFormDocentes({
+      esAceptado: true,
+      asignaturasDocentes: [],
+      programaId,
+    });
     setDeleteDialogOpen(false);
   };
 
@@ -57,6 +62,7 @@ export default function DocentesButtons({ id }) {
           open={modalOpen}
           id={id}
           edit={isEdit ? 'Editar Docentes' : 'Consultar Docentes'}
+          setDocentesList={setDocentesList}
         />
       )}
 
@@ -73,6 +79,9 @@ export default function DocentesButtons({ id }) {
 
 DocentesButtons.propTypes = {
   id: PropTypes.number.isRequired,
+  docentesList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string))
+    .isRequired,
+  setDocentesList: PropTypes.func.isRequired,
   rowItem: PropTypes.shape({
     programaID: PropTypes.number,
   }).isRequired,

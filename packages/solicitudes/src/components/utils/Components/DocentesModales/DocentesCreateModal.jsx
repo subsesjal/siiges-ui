@@ -15,9 +15,10 @@ import handleCreate from '../../submitNewDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
 
-export default function DocentesCreateModal({ open, hideModal, title }) {
+export default function DocentesCreateModal({
+  open, hideModal, title, setDocentesList,
+}) {
   const {
-    setDocentesList,
     formDocentes,
     setFormDocentes,
     setError,
@@ -404,4 +405,5 @@ DocentesCreateModal.propTypes = {
   open: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
+  setDocentesList: PropTypes.func.isRequired,
 };

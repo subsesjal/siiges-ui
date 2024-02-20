@@ -13,11 +13,11 @@ import DocentesCreateModal from '../utils/Components/DocentesModales/DocentesCre
 
 export const transformDataForTable = (data) => data.map((item) => ({
   id: item.id,
-  nombre: item.persona.nombre,
+  nombre: `${item.persona.nombre} ${item.persona.apellidoPaterno} ${item.persona.apellidoMaterno}`,
   tipoDocente: item.tipoDocente,
-  formacion: `${item.nombreUltimoGrado} - ${item.nombrePenultimoGrado}`,
-  asignatura: item.asignaturasDocentes.join(', '),
-  experienciaLaboral: item.experienciaLaboral,
+  formacion: 'Not provided in schema',
+  asignatura: item.asignaturasDocentes.map((asig) => asig.asignatura.nombre).join(', '),
+  experiencia: item.experiencias,
   tipoContratacion: `${item.tipoContratacion} - ${item.antiguedad} años`,
 }));
 
@@ -36,7 +36,6 @@ export default function Docentes({ disabled, type }) {
     if (type === 'editar' && !loading) {
       const transformedData = transformDataForTable(docentes);
       setDocentesList(transformedData);
-      console.log(docentes);
     }
   }, [docentes, loading]);
 
@@ -49,6 +48,7 @@ export default function Docentes({ disabled, type }) {
     setFormDocentes({
       esAceptado: true,
       asignaturasDocentes: [],
+      programaId,
     });
   };
 
@@ -64,7 +64,7 @@ export default function Docentes({ disabled, type }) {
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
             rows={docentesList}
-            columns={columns()}
+            columns={columns(docentesList, setDocentesList)}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />
@@ -75,6 +75,7 @@ export default function Docentes({ disabled, type }) {
         hideModal={hideModal}
         type="crear"
         title="Agregar Docente"
+        setDocentesList={setDocentesList}
       />
     </Grid>
   );
