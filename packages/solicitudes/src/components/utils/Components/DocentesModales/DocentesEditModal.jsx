@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import {
   CircularProgress, Grid, TextField, Typography,
 } from '@mui/material';
-import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
+import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -17,20 +17,18 @@ export default function DocentesEditModal({
   open,
   hideModal,
   edit,
+  setDocentesList,
 }) {
   const {
-    setDocentesList,
     formDocentes,
     setFormDocentes,
     setError,
     error,
     errors,
-    setErrors,
-    initialValues,
     setInitialValues,
     programaId,
+    setNoti,
   } = useContext(TablesPlanEstudiosContext);
-  const { setNoti } = useContext(Context);
 
   const [currentSection, setCurrentSection] = useState(1);
   const [asignaturas, setAsignaturas] = useState([]);
@@ -83,27 +81,15 @@ export default function DocentesEditModal({
     });
   };
 
-  const errorsDocentes = errorDatosDocentes(formDocentes, setError);
-
   const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (value !== initialValue || value === '') {
-      errorsDocentes[name]();
-    }
+    const { name } = e.target;
+    validateField(formDocentes, name, setError, errorDatosDocentes);
   };
 
   const handleInputFocus = (e) => {
     const { name, value } = e.target;
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-
-  useEffect(() => {
-    if (errorsDocentes !== undefined) {
-      setErrors(errorsDocentes);
-    }
-  }, [errors]);
 
   const handleOnSubmit = () => {
     handleEdit(
@@ -130,10 +116,6 @@ export default function DocentesEditModal({
   const handleModalClose = () => {
     hideModal();
     setCurrentSection(1);
-    setFormDocentes({
-      esAceptado: true,
-      asignaturasDocentes: [],
-    });
   };
 
   const tiposDocentes = [
@@ -470,6 +452,7 @@ export default function DocentesEditModal({
 DocentesEditModal.propTypes = {
   open: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
+  setDocentesList: PropTypes.func.isRequired,
   edit: PropTypes.string.isRequired,
   rowItem: PropTypes.shape({
     grado: PropTypes.string,
