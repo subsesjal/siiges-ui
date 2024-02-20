@@ -2,7 +2,9 @@ import { Grid, TextField, Typography } from '@mui/material';
 import {
   ButtonSimple, LabelData, Layout, Select, useApi,
 } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+import { filterRows } from '@siiges-ui/opds/src/utils/helpers';
 import { useRouter } from 'next/router';
 import { sessionData, periodData } from '@siiges-ui/opds/src/utils/constants';
 
@@ -10,7 +12,9 @@ export default function presupuesto() {
   const year = new Date().getFullYear();
   const router = useRouter();
   const { id } = router.query;
-
+  const [dataFilter, setDataFilter] = useState(null);
+  const [periodo, setPeriodo] = useState();
+  const [sesion, setSesion] = useState();
   const { data } = useApi({
     endpoint: `api/v1/presupuestos/instituciones/${id}`,
   });
@@ -21,7 +25,21 @@ export default function presupuesto() {
     { id: 4, nombre: 2025 },
   ];
 
-  console.log(data.filter(({ periodoId }) => periodoId === 2));
+  useEffect(() => {
+    setDataFilter(
+      data?.filter(
+        ({ periodoId, sesionId }) => periodoId === periodo && sesionId === sesion,
+      ),
+    );
+  }, [sesion, periodo]);
+
+  useEffect(() => {
+    if (dataFilter?.length) {
+      console.log(dataFilter[0].presupuesto || null);
+      console.log(filterRows(setDataFilter[0]?.presupuesto, 1) || null);
+    }
+  }, [dataFilter]);
+
   const handleEgresos = () => {
     router.push(`/opds/presupuesto/${id}/egresos`);
   };
@@ -33,22 +51,30 @@ export default function presupuesto() {
   return (
     <Layout title="Presupuesto">
       <Grid container spacing={2}>
-        {/* <Grid item xs={3}>
-          <Select title="Institucion" options={[]} name="institucion" />
-        </Grid> */}
         <Grid item xs={4}>
-          <Select title="Periodo" options={periodData} name="periodo" />
+          <Select
+            title="Periodo"
+            options={periodData}
+            value={periodo}
+            onchange={(event) => setPeriodo(event.target.value || '')}
+            name="periodo"
+          />
         </Grid>
         <Grid item xs={4}>
-          <Select title="Sesión" options={sessionData} name="sesion" />
+          <Select
+            title="Sesión"
+            options={sessionData}
+            name="sesion"
+            value={sesion}
+            onchange={(event) => setSesion(event.target.value || '')}
+          />
         </Grid>
         <Grid item xs={4}>
-          <Select title="Año" options={anio} name="ano" />
+          <Select title="Año" options={anio} name="ano" value={3} />
         </Grid>
         <Grid item xs={12}>
           <Typography>
             Convenio
-            {' '}
             {year}
           </Typography>
         </Grid>
@@ -110,6 +136,21 @@ export default function presupuesto() {
             text={`Presupuesto de egresos ${year}`}
             onClick={handleEgresos}
           />
+        </Grid>
+        <Grid container justifyContent="flex-end" spacing={2}>
+          <Grid item>
+            <ButtonUnstyled
+              className="buttonAdd cancel"
+              onClick={() => router.back()}
+            >
+              Cancelar
+            </ButtonUnstyled>
+          </Grid>
+          <Grid item>
+            <ButtonUnstyled className="buttonAdd guardar">
+              Guardar
+            </ButtonUnstyled>
+          </Grid>
         </Grid>
       </Grid>
     </Layout>

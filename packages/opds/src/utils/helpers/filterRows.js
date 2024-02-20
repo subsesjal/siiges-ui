@@ -43,6 +43,8 @@ const calcularTotalesPorTipoPresupuesto = (datos) => {
 };
 
 const filterRows = (data, param) => {
+  if (!data?.length) return null;
+
   const dataArray = data.filter((row) => row.tipoRecursoPresupuestoId === param);
 
   if (dataArray.length) dataArray.push(totalObject(dataArray));
