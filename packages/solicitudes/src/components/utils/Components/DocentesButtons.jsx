@@ -58,7 +58,6 @@ export default function DocentesButtons({ id, docentesList, setDocentesList }) {
       {modalOpen && (
         <DocentesEditModal
           hideModal={handleModalClose}
-          rowItem={rowItem}
           open={modalOpen}
           id={id}
           edit={isEdit ? 'Editar Docentes' : 'Consultar Docentes'}
