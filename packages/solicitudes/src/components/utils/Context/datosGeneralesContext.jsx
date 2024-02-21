@@ -1,13 +1,15 @@
 import React, {
-  createContext, useState, useMemo, useEffect,
+  createContext, useState, useMemo, useEffect, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
+import { Context } from '@siiges-ui/shared';
 
 const DatosGeneralesContext = createContext();
 
 export function DatosGeneralesProvider({ children }) {
-  const { institucion } = getInstitucionUsuario();
+  const { session } = useContext(Context);
+  const [institucion, setInstitucion] = useState();
   const [form, setForm] = useState({
     1: {},
     2: { persona: { domicilio: { estadoId: 14 } } },
@@ -21,6 +23,12 @@ export function DatosGeneralesProvider({ children }) {
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [diligencias, setDiligencias] = useState([]);
   const [initialValues, setInitialValues] = useState({});
+
+  useEffect(() => {
+    if (session) {
+      setInstitucion(getInstitucionUsuario(session));
+    }
+  }, [session]);
 
   useEffect(() => {
     if (institucion) {

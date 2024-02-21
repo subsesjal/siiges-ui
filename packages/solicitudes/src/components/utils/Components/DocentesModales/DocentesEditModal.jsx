@@ -1,6 +1,6 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
-  CircularProgress, Grid, TextField, Typography,
+  Grid, TextField, Typography,
 } from '@mui/material';
 import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -12,11 +12,13 @@ import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
 import handleEdit from '../../submitEditDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
+import useDocente from '../../getDocente';
 
 export default function DocentesEditModal({
   open,
   hideModal,
   edit,
+  id,
   setDocentesList,
 }) {
   const {
@@ -31,25 +33,14 @@ export default function DocentesEditModal({
   } = useContext(TablesPlanEstudiosContext);
 
   const [currentSection, setCurrentSection] = useState(1);
-  const [asignaturas, setAsignaturas] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const asignaturas = getAsignaturas(programaId);
+  const docente = useDocente(id);
 
   useEffect(() => {
-    const fetchAsignaturas = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getAsignaturas(programaId);
-        setAsignaturas(data);
-      } catch (err) {
-        console.error('Failed to fetch asignaturas', err);
-        setNoti({ message: 'Error fetching asignaturas', type: 'error' });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAsignaturas();
-  }, [programaId, setNoti]);
+    if (docente) {
+      setFormDocentes(docente);
+    }
+  }, [docente]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -142,12 +133,6 @@ export default function DocentesEditModal({
     { id: 5, nombre: 'Doctorado' },
     { id: 6, nombre: 'Profesional Asociado' },
   ];
-
-  if (isLoading) {
-    return (
-      <CircularProgress />
-    );
-  }
 
   return (
     <DefaultModal open={open} setOpen={hideModal} title={edit}>
@@ -454,15 +439,5 @@ DocentesEditModal.propTypes = {
   hideModal: PropTypes.func.isRequired,
   setDocentesList: PropTypes.func.isRequired,
   edit: PropTypes.string.isRequired,
-  rowItem: PropTypes.shape({
-    grado: PropTypes.string,
-    area: PropTypes.number,
-    nombre: PropTypes.string,
-    clave: PropTypes.string,
-    creditos: PropTypes.string,
-    formacionEspecializada: PropTypes.string,
-    seriacion: PropTypes.string,
-    horasDocente: PropTypes.number,
-    horasIndependiente: PropTypes.number,
-  }).isRequired,
+  id: PropTypes.number.isRequired,
 };

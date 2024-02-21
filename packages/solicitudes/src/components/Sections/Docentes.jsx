@@ -15,7 +15,7 @@ export const transformDataForTable = (data) => data.map((item) => ({
   id: item.id,
   nombre: `${item.persona.nombre} ${item.persona.apellidoPaterno} ${item.persona.apellidoMaterno}`,
   tipoDocente: item.tipoDocente,
-  formacion: 'Not provided in schema',
+  formacion: '-',
   asignatura: item.asignaturasDocentes.map((asig) => asig.asignatura.nombre).join(', '),
   experiencia: item.experiencias,
   tipoContratacion: `${item.tipoContratacion} - ${item.antiguedad} años`,
