@@ -5,8 +5,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState, useContext, useEffect } from 'react';
 import DeleteDocentes from './DocentesModales/DeleteDocentes';
-import DocentesEditModal from './DocentesModales/DocentesEditModal';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
+import DocentesModal from './DocentesModales/DocentesModal';
 
 export default function DocentesButtons({ id, docentesList, setDocentesList }) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -56,11 +56,11 @@ export default function DocentesButtons({ id, docentesList, setDocentesList }) {
       </IconButton>
 
       {modalOpen && (
-        <DocentesEditModal
+        <DocentesModal
           hideModal={handleModalClose}
           open={modalOpen}
           id={id}
-          edit={isEdit ? 'Editar Docentes' : 'Consultar Docentes'}
+          mode={isEdit ? 'edit' : 'consult'}
           setDocentesList={setDocentesList}
         />
       )}
