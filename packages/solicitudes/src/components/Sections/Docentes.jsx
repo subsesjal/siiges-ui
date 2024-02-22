@@ -9,7 +9,7 @@ import columns from './Mocks/Docentes';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useDocentes from '../utils/getDocentes';
-import DocentesCreateModal from '../utils/Components/DocentesModales/DocentesCreateModal';
+import DocentesModal from '../utils/Components/DocentesModales/DocentesModal';
 
 export const transformDataForTable = (data) => data.map((item) => ({
   id: item.id,
@@ -70,7 +70,7 @@ export default function Docentes({ disabled, type }) {
           />
         </div>
       </Grid>
-      <DocentesCreateModal
+      <DocentesModal
         open={modal}
         hideModal={hideModal}
         type="crear"
