@@ -6,18 +6,20 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/router';
 
-export default function ButtonsDatosProyecto({ id }) {
+export default function ButtonsDatosProyecto({ id, data }) {
   const router = useRouter();
 
   const handleConsult = () => {
-    router.push(
-      `/opds/fortalecimiento/planMaestro/DatosProyecto/${id}/consultDatosProyecto`,
-    );
+    router.push({
+      pathname: `/opds/fortalecimiento/planMaestro/DatosProyecto/${id}/consultDatosProyecto`,
+      query: { planMaestroId: data },
+    });
   };
   const handleEdit = () => {
-    router.push(
-      `/opds/fortalecimiento/planMaestro/DatosProyecto/${id}/editDatosProyecto`,
-    );
+    router.push({
+      pathname: `/opds/fortalecimiento/planMaestro/DatosProyecto/${id}/editDatosProyecto`,
+      query: { planMaestroId: data },
+    });
   };
   const handleDelete = () => {
     console.log('Deleted tu culo');
@@ -40,4 +42,5 @@ export default function ButtonsDatosProyecto({ id }) {
 
 ButtonsDatosProyecto.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  data: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };

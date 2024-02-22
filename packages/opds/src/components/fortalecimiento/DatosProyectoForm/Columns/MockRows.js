@@ -1,33 +1,27 @@
 const rows = [
   {
     id: 1,
-    nombre: 'Proyecto X',
-    cantidad: 42,
-    metrosCuadrados: 123,
+    nombre: 'obraNueva',
   },
   {
     id: 2,
-    nombre: 'Proyecto Y',
-    cantidad: 58,
-    metrosCuadrados: 456,
+    nombre: 'obraDeContinuidad',
   },
   {
     id: 3,
-    nombre: 'Proyecto Z',
-    cantidad: 30,
-    metrosCuadrados: 789,
+    nombre: 'equipamiento',
   },
   {
     id: 4,
-    nombre: 'Proyecto A',
-    cantidad: 62,
-    metrosCuadrados: 101,
+    nombre: 'adecuaciones',
   },
   {
     id: 5,
-    nombre: 'Proyecto B',
-    cantidad: 75,
-    metrosCuadrados: 202,
+    nombre: 'mantenimiento',
+  },
+  {
+    id: 6,
+    nombre: 'proyectoSustentable',
   },
 ];
 
