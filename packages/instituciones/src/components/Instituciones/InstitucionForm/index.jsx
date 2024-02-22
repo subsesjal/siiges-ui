@@ -1,40 +1,26 @@
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
-import { formData } from '@siiges-ui/solicitudes/';
-import errorDatosNewInstitucion from '../../utils/errorDatosNewInstitucion';
+import React, { useState, useEffect, useContext } from 'react';
+import { ButtonsForm, Context } from '@siiges-ui/shared';
 import InstitucionFields from '../InstitucionFields';
+import {
+  submitInstitucion,
+  handleCancel,
+  handleOnChange,
+  handleOnBlur,
+} from '../../../utils/institucionHandler';
 
-export default function InstitutionForm({ form, setForm, setErrors }) {
-  const [initialValues, setInitialValues] = useState({});
-  const [error, setError] = useState({});
-
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    formData(name, value, form, setForm);
-  };
-
-  const errors = errorDatosNewInstitucion(form, setError, error);
-
-  const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-    if (value !== initialValue || value === '') {
-      errors[name]();
-    }
-  };
-
-  const handleInputFocus = (e) => {
-    const { name, value } = e.target;
-    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
-  };
+export default function InstitucionForm({ session, accion, institucion }) {
+  const [form, setForm] = useState({});
+  const [errorFields, setErrorFields] = useState({});
+  const { setLoading, setNoti } = useContext(Context);
 
   useEffect(() => {
-    if (errors !== undefined) {
-      setErrors(errors);
+    if (accion === 'crear' && session.id) {
+      setForm({ usuarioId: session.id, tipoInstitucionId: 1, esNombreAutorizado: false });
     }
-  }, [error]);
+  }, [session]);
 
   return (
     <Grid container>
@@ -55,16 +41,48 @@ export default function InstitutionForm({ form, setForm, setErrors }) {
         <InstitucionFields
           handleOnChange={handleOnChange}
           handleOnBlur={handleOnBlur}
-          handleInputFocus={handleInputFocus}
-          error={error}
+          institucion={institucion}
+          errors={errorFields}
+          setError={setErrorFields}
+          setForm={setForm}
+          form={form}
         />
+        <Grid item xs={11} sx={{ marginTop: 5 }}>
+          <ButtonsForm
+            confirm={() => submitInstitucion({
+              form,
+              setForm,
+              accion,
+              errorFields,
+              setNoti,
+              setLoading,
+            })}
+            cancel={() => handleCancel()}
+          />
+        </Grid>
       </Grid>
     </Grid>
   );
 }
 
-InstitutionForm.propTypes = {
-  setForm: PropTypes.func.isRequired,
-  setErrors: PropTypes.func.isRequired,
-  form: PropTypes.objectOf(PropTypes.string).isRequired,
+InstitucionForm.propTypes = {
+  accion: PropTypes.string.isRequired,
+  institucion: PropTypes.shape({
+    id: PropTypes.number,
+    planteles: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+      }),
+    ),
+  }),
+  session: PropTypes.shape({
+    id: PropTypes.number,
+    nombre: PropTypes.string,
+    rol: PropTypes.string,
+    token: PropTypes.string,
+  }).isRequired,
+};
+
+InstitucionForm.defaultProps = {
+  institucion: null,
 };

@@ -1,15 +1,17 @@
-import { CircularProgress, Grid } from '@mui/material';
-import React from 'react';
+import React, { useContext } from 'react';
+import { Context } from '../../utils/handlers/context';
+import '../../styles/Loading/index.css';
 
-export default function Loading() {
+function LoadingPage() {
+  const { loading } = useContext(Context);
+
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      style={{ minHeight: '100vh' }}
-    >
-      <CircularProgress />
-    </Grid>
+    <div className={`loading-page ${loading ? 'active' : ''}`}>
+      <div className="loading-content">
+        <img src="/LogoJalisco.png" alt="Loading" className="loading-image" />
+      </div>
+    </div>
   );
 }
+
+export default LoadingPage;

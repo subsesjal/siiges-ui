@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import MenuDrawer from '../Drawer/MenuDrawer';
 import MainNavbar from '../Navbar/MainNavbar';
+import Loading from '../Loading';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 import Title from '../Title';
 import { Context } from '../../utils/handlers/context';
@@ -11,7 +12,10 @@ export default function Overlay({
   children, title, subtitle, type,
 }) {
   const [open, setOpen] = useState(false);
-  const { session, section, setSection } = useContext(Context);
+  const {
+    session, section, setSection,
+  } = useContext(Context);
+
   const onClickChange = () => {
     setOpen(!open);
   };
@@ -40,6 +44,7 @@ export default function Overlay({
         width: '100%',
       }}
     >
+      <Loading />
       <MainNavbar
         menuSwitch={() => onClickChange()}
         section={section}
