@@ -20,6 +20,7 @@ export default function Anteproyecto() {
   const [method, setMethod] = useState('GET');
   const [body, setBody] = useState(null);
   const [reload, setReload] = useState(false);
+  const columns = columnsAnteproyecto({ setRowsData, SetCreateRow });
 
   const { data } = useApi({
     endpoint: `api/v1/presupuestos/presupuestoEgresos/${id}`,
@@ -74,9 +75,9 @@ export default function Anteproyecto() {
             <DataTable
               buttonAdd
               buttonText="Agregar datos de presupuesto"
-              columns={columnsAnteproyecto}
+              columns={columns}
               buttonClick={handleCrearEspacio}
-              rows={data ? filterRows(data, recursos) : []}
+              rows={data ? filterRows(data, recursos, 1) : []}
               title="Presupuesto"
             />
           </Grid>
@@ -93,7 +94,7 @@ export default function Anteproyecto() {
         setModalState={setModalState}
         setRowsData={setRowsData}
         SetCreateRow={SetCreateRow}
-        tipoEgresoId={2}
+        tipoEgresoId={1}
       />
     </>
   );

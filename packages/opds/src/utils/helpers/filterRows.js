@@ -42,15 +42,21 @@ const calcularTotalesPorTipoPresupuesto = (datos) => {
   return Object.values(totalesPorTipoPresupuesto);
 };
 
-const filterRows = (data, param) => {
-  if (!data?.length) return null;
+const filterRows = (data, param, tipoEgreso) => {
+  if (!data?.length) return [];
 
-  const dataArray = data.filter((row) => row.tipoRecursoPresupuestoId === param);
+  const dataTotales = data.filter(({ tipoEgresoId }) => tipoEgresoId === tipoEgreso);
+
+  if (!dataTotales?.length) return [];
+
+  const dataArray = data.filter(({
+    tipoEgresoId, tipoRecursoPresupuestoId,
+  }) => tipoRecursoPresupuestoId === param && tipoEgresoId === tipoEgreso);
 
   if (dataArray.length) dataArray.push(totalObject(dataArray));
 
   if (param === 5) {
-    return calcularTotalesPorTipoPresupuesto(data);
+    return calcularTotalesPorTipoPresupuesto(dataTotales);
   }
 
   return dataArray;

@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import {
   ButtonsModal, DefaultModal, Input, Select,
 } from '@siiges-ui/shared';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 function Modal({
@@ -12,12 +12,30 @@ function Modal({
   setRowsData,
   SetCreateRow,
   tipoEgresoId,
+  params,
 }) {
-  const [form, setForm] = useState({ tipoEgresoId });
+  const [form, setForm] = useState({
+    tipoEgresoId,
+    cantidad: params?.cantidad,
+    tipoPresupuestoId: params?.tipoPresupuestoId,
+    tipoRecursoPresupuestoId: params?.tipoRecursoPresupuestoId,
+  });
+  useEffect(() => {
+    if (id) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        id,
+      }));
+    }
+  }, [id]);
+
   const updateForm = (field, value) => {
+    const parsedValue = Number.isNaN(parseInt(value, 10))
+      ? value
+      : parseInt(value, 10);
     setForm((prevForm) => ({
       ...prevForm,
-      [field]: value,
+      [field]: parsedValue,
     }));
   };
 
@@ -90,6 +108,7 @@ function Modal({
             name="tipoPresupuestoId"
             title="Capitulo"
             id={`nombre-${id}`}
+            value={form.tipoPresupuestoId}
             options={capituloRows}
             onchange={(e) => updateForm(e.target.name, e.target.value)}
           />
@@ -99,6 +118,7 @@ function Modal({
             name="tipoRecursoPresupuestoId"
             title="Tipo Recurso Presupuesto"
             options={tipoRecursoRows}
+            value={form.tipoRecursoPresupuestoId}
             id={`metrosCuadrados-${id}`}
             onchange={(e) => updateForm(e.target.name, e.target.value)}
           />
@@ -108,6 +128,7 @@ function Modal({
             name="cantidad"
             label="Cantidad"
             id={`cantidad-${id}`}
+            value={form.cantidad}
             onchange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
@@ -129,7 +150,10 @@ function Modal({
 }
 
 Modal.defaultProps = {
-  id: '',
+  id: 0,
+  params: {},
+  tipoEgresoId: 0,
+  modalState: {},
 };
 
 Modal.propTypes = {
@@ -140,11 +164,16 @@ Modal.propTypes = {
     disabled: PropTypes.bool,
     confirmAction: PropTypes.func,
     edit: PropTypes.bool,
-  }).isRequired,
+  }),
   setModalState: PropTypes.func.isRequired,
   setRowsData: PropTypes.func.isRequired,
   SetCreateRow: PropTypes.func.isRequired,
-  tipoEgresoId: PropTypes.func.isRequired,
+  tipoEgresoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  params: PropTypes.shape({
+    cantidad: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    tipoPresupuestoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    tipoRecursoPresupuestoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }),
 };
 
 export default Modal;
