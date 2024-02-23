@@ -14,6 +14,9 @@ export default function InstitucionesCarousel({ opdType }) {
   if (opdType === 'orgColegiado') {
     url = '/opds/organosColegiados/';
   }
+  if (opdType === 'presupuesto') {
+    url = '/opds/presupuesto/';
+  }
   // Verifica si data está disponible y tiene elementos
   return (
     <Carousel isLoading={loading}>
