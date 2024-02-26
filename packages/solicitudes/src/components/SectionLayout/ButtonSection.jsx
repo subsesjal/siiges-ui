@@ -1,5 +1,5 @@
 import { ButtonStyled, Context } from '@siiges-ui/shared';
-import React, { useState, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -18,6 +18,7 @@ import submitHigienesPlantel from '../utils/submitHigienesPlantel';
 import submitRatificacion from '../utils/submitRatificacion';
 import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularContext';
 import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
+import submitTrayectoriaEducativa from '../utils/submitTrayectoriaeducativa';
 
 export default function ButtonSection({
   type,
@@ -28,72 +29,81 @@ export default function ButtonSection({
   prev,
   sectionTitle,
 }) {
-  const [newSubmit, setNewSubmit] = useState(true);
+  const router = useRouter();
   const { setNoti } = useContext(Context);
   const validations = useContext(SolicitudContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
   const plantelesValidations = useContext(PlantelContext);
   const evaluacionCurricular = useEvaluacionCurricular();
-  const router = useRouter();
-  let submit;
 
-  if (sectionTitle === 'Datos Generales') {
-    if (sections === 1) {
-      submit = () => {
-        submitInstitucion(datosGeneralesValidations, sections, setNoti);
-      };
-    } else if (sections === 2) {
-      submit = () => {
-        submitRepresentante(datosGeneralesValidations, sections, setNoti);
-      };
-    } else if (sections === 3) {
-      submit = () => {
-        console.log(
-          'Performing action for "Datos Generales" with sections === 3',
-        );
-      };
-    }
-  } else if (sectionTitle === 'Plantel') {
-    if (sections === 1) {
-      submit = () => {
-        submitEditPlantel(plantelesValidations, sections, id, setNoti, router);
-      };
-    } else if (sections === 2) {
-      submit = () => {
-        submitDescripcionPlantel(
+  const submitFunctionMap = {
+    'Datos Generales': {
+      1: useCallback(
+        () => submitInstitucion(datosGeneralesValidations, sections, setNoti),
+        [datosGeneralesValidations, sections],
+      ),
+      2: useCallback(
+        () => submitRepresentante(datosGeneralesValidations, sections, setNoti),
+        [datosGeneralesValidations, sections],
+      ),
+      // Placeholder for section 3 action
+    },
+    Plantel: {
+      1: useCallback(
+        () => submitEditPlantel(
+          plantelesValidations,
+          sections,
+          id,
+          setNoti,
+          router,
+        ),
+        [plantelesValidations, sections, id],
+      ),
+      2: useCallback(
+        () => submitDescripcionPlantel(
           plantelesValidations,
           setNoti,
           router.query.plantel,
-        );
-      };
-    } else if (sections === 3) {
-      submit = () => {
-        submitHigienesPlantel(
+        ),
+        [plantelesValidations],
+      ),
+      3: useCallback(
+        () => submitHigienesPlantel(
           plantelesValidations,
           setNoti,
           router.query.plantel,
-        );
-      };
-    } else if (sections === 6) {
-      submit = () => {
-        submitRatificacion(plantelesValidations, setNoti);
-      };
-    }
-  } else if (sectionTitle === 'Evaluación Curricular') {
-    if (sections === 1) {
-      submit = () => {
-        submitEvaluacionCurricular(evaluacionCurricular, setNoti);
-      };
-    }
-  } else if (newSubmit) {
-    if (type !== 'editar') {
-      submit = () => submitNewSolicitud(validations, setNewSubmit);
-    } else {
-      submit = () => submitEditSolicitud(validations, sections, id);
-    }
-  } else {
-    submit = () => submitEditSolicitud(validations, sections, id);
-  }
+        ),
+        [plantelesValidations],
+      ),
+      6: useCallback(
+        () => submitRatificacion(plantelesValidations, setNoti),
+        [plantelesValidations],
+      ),
+    },
+    'Evaluación Curricular': {
+      1: useCallback(
+        () => submitEvaluacionCurricular(evaluacionCurricular, setNoti),
+        [evaluacionCurricular],
+      ),
+    },
+    'Plan de estudios': {
+      9: useCallback(
+        () => submitTrayectoriaEducativa(validations, sections, id),
+        [validations, sections, id],
+      ),
+      default: useCallback(() => {
+        if (type !== 'editar') {
+          submitNewSolicitud(validations);
+        } else {
+          submitEditSolicitud(validations, sections, id);
+        }
+      }, [type, validations, sections, id]),
+    },
+  };
+
+  const submit = submitFunctionMap[sectionTitle]?.[sections]
+    || submitFunctionMap[sectionTitle]?.default
+    || (() => console.warn('No submit function configured for this section'));
 
   return (
     <>

@@ -113,7 +113,7 @@ export default function TrayectoriaEducativa({ disabled }) {
           <TextField
             id="tipoTutoria"
             name="tipoTutoria"
-            label="Tipo de tutoria"
+            label="Tipo de tutoría"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -147,7 +147,7 @@ export default function TrayectoriaEducativa({ disabled }) {
           <TextField
             id="estadisticasTitulacion"
             name="estadisticasTitulacion"
-            label="Estadisticas de titulacion"
+            label="Estadisticas de titulación"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -164,7 +164,7 @@ export default function TrayectoriaEducativa({ disabled }) {
           <TextField
             id="modalidadesTitulacion"
             name="modalidadesTitulacion"
-            label="Modalidades de titulacion"
+            label="Modalidades de titulación"
             rows={4}
             multiline
             sx={{ width: '100%' }}
