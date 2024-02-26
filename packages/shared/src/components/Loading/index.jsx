@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
-import { Context } from '../../utils/handlers/context';
+import React from 'react';
+import PropTypes from 'prop-types';
 import '../../styles/Loading/index.css';
 
-function LoadingPage() {
-  const { loading } = useContext(Context);
-
+function LoadingPage({ loading }) {
   return (
     <div className={`loading-page ${loading ? 'active' : ''}`}>
       <div className="loading-content">
@@ -13,5 +11,13 @@ function LoadingPage() {
     </div>
   );
 }
+
+LoadingPage.defaultProps = {
+  loading: false,
+};
+
+LoadingPage.propTypes = {
+  loading: PropTypes.bool,
+};
 
 export default LoadingPage;

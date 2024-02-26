@@ -1,9 +1,8 @@
-import React, { useContext, useEffect } from 'react';
-import { HomePage, Layout, Context } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
+import { HomePage, Layout } from '@siiges-ui/shared';
 
 export default function HomeView() {
-  const { setLoading } = useContext(Context);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading(false);
@@ -12,7 +11,7 @@ export default function HomeView() {
   }, []);
 
   return (
-    <Layout title="Bienvenido">
+    <Layout title="Bienvenido" loading={loading}>
       <HomePage />
     </Layout>
   );

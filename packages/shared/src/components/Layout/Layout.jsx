@@ -9,7 +9,7 @@ import Title from '../Title';
 import { Context } from '../../utils/handlers/context';
 
 export default function Overlay({
-  children, title, subtitle, type,
+  children, title, subtitle, type, loading,
 }) {
   const [open, setOpen] = useState(false);
   const {
@@ -32,6 +32,7 @@ export default function Overlay({
   if (useCheckMobileScreen()) {
     localtype = false;
   }
+
   return (
     <div
       style={{
@@ -44,7 +45,7 @@ export default function Overlay({
         width: '100%',
       }}
     >
-      <Loading />
+      <Loading loading={loading} />
       <MainNavbar
         menuSwitch={() => onClickChange()}
         section={section}
@@ -91,6 +92,7 @@ Overlay.defaultProps = {
   type: true,
   title: '',
   subtitle: '',
+  loading: false,
 };
 
 Overlay.propTypes = {
@@ -98,4 +100,5 @@ Overlay.propTypes = {
   title: PropTypes.string,
   type: PropTypes.bool,
   subtitle: PropTypes.string,
+  loading: PropTypes.bool,
 };

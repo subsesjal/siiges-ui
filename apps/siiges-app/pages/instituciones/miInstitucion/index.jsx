@@ -1,20 +1,78 @@
 import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Context, Layout } from '@siiges-ui/shared';
 import { InstitucionBox, InstitucionForm, getInstitucionHook } from '@siiges-ui/instituciones';
 
-export default function ConsultarInstitucion() {
-  const { session, setLoading, setNoti } = useContext(Context);
+function InstitucionWrapper({
+  institucion, session, setLoading, setTitle,
+}) {
+  return (
+    <div>
+      {institucion.id
+        ? (
+          <InstitucionBox
+            institucion={institucion}
+            setLoading={setLoading}
+            setTitle={setTitle}
+          />
+        )
+        : (
+          <InstitucionForm
+            session={session}
+            accion="crear"
+            setLoading={setLoading}
+            setTitle={setTitle}
+          />
+        )}
+    </div>
+  );
+}
+
+export default function MiInstitucion() {
+  const { session, setNoti } = useContext(Context);
   const [institucion, setInstitucion] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState('');
 
   getInstitucionHook({
-    setInstitucion, session, setLoading, setNoti,
+    setInstitucion,
+    session,
+    setNoti,
+    institucion,
+    setLoading,
+    loading,
   });
 
   return (
-    <Layout title={institucion ? 'Institución' : 'Registrar Institución'}>
-      {institucion
-        ? <InstitucionBox institucion={institucion} />
-        : <InstitucionForm session={session} accion="crear" />}
+    <Layout title={title} loading={loading}>
+      {institucion !== null
+        ? (
+          <InstitucionWrapper
+            session={session}
+            institucion={institucion}
+            setLoading={setLoading}
+            setTitle={setTitle}
+          />
+        )
+        : <div />}
     </Layout>
   );
 }
+
+InstitucionWrapper.defaultProps = {
+  institucion: {} || null,
+};
+
+InstitucionWrapper.propTypes = {
+  setLoading: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  institucion: PropTypes.shape({
+    id: PropTypes.number,
+  }),
+  session: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    nombre: PropTypes.string.isRequired,
+    rol: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
+  }).isRequired,
+};

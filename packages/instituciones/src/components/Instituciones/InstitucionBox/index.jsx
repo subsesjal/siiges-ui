@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Box, Grid, Tab, Tabs,
@@ -6,7 +6,17 @@ import {
 import InstitucionView from '../InstitucionView';
 import PlantelesTable from '../../Planteles/PlantelesTable';
 
-export default function InstitucionBox({ institucion }) {
+export default function InstitucionBox({ institucion, setLoading, setTitle }) {
+  useEffect(() => {
+    setTitle('Institución');
+
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
   const [value, setValue] = useState(0);
 
   const handleChange = (_, newValue) => {
@@ -35,6 +45,8 @@ export default function InstitucionBox({ institucion }) {
 }
 
 InstitucionBox.propTypes = {
+  setLoading: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
   institucion: PropTypes.shape({
     id: PropTypes.number,
     planteles: PropTypes.arrayOf(
@@ -42,11 +54,5 @@ InstitucionBox.propTypes = {
         id: PropTypes.number.isRequired,
       }),
     ),
-  }).isRequired,
-  session: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    nombre: PropTypes.string.isRequired,
-    rol: PropTypes.string.isRequired,
-    token: PropTypes.string.isRequired,
   }).isRequired,
 };

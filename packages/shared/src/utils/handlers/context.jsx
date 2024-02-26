@@ -13,7 +13,6 @@ function Provider({ children }) {
   const [session, setSession] = useState({});
   const [auth, setAuth] = useState(false);
   const [noti, setNoti] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [section, setSection] = useState(1);
 
@@ -62,10 +61,8 @@ function Provider({ children }) {
         router.push('../home');
       },
       removeAuth,
-      loading,
-      setLoading,
     }),
-    [session, auth, noti, router, section, loading],
+    [session, auth, noti, router, section],
   );
 
   return (

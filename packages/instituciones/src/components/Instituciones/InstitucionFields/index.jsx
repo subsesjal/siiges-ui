@@ -8,11 +8,14 @@ import React from 'react';
 export default function InstitucionFields({
   handleOnChange,
   handleOnBlur,
+  institucion,
+  setLoading,
   setForm,
   setError,
   errors,
   form,
 }) {
+  setLoading(false);
   const handleFileLoaded = (index, url) => {
     setForm((prevForm) => {
       const updatedForm = [...prevForm];
@@ -36,6 +39,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.nombreInstitucion}
+            value={institucion?.nombre}
           />
         </Grid>
         <Grid item xs={11}>
@@ -47,6 +51,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.razonSocial}
+            value={institucion?.razonSocial}
           />
         </Grid>
         <Grid item xs={11}>
@@ -61,6 +66,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.historia}
+            value={institucion?.historia}
           />
         </Grid>
         <Grid item xs={11}>
@@ -75,6 +81,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.vision}
+            value={institucion?.vision}
           />
         </Grid>
         <Grid item xs={11}>
@@ -89,6 +96,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.mision}
+            value={institucion?.mision}
           />
         </Grid>
         <Grid item xs={11}>
@@ -103,6 +111,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.valoresInstitucionales}
+            value={institucion?.valoresInstitucionales}
           />
         </Grid>
       </Grid>
@@ -111,7 +120,7 @@ export default function InstitucionFields({
       </Typography>
       <Divider sx={{ mt: 1 }} />
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Input
             label="Nombre(s)"
             id="nombreRector"
@@ -120,9 +129,10 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.nombreRector}
+            value={institucion?.rector?.persona?.nombre}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Input
             label="Primer Apellido"
             id="apellidoPaterno"
@@ -132,9 +142,10 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.apellidoPaterno}
+            value={institucion?.rector?.persona?.apellidoPaterno}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Input
             label="Segundo Apellido"
             id="apellidoMaterno"
@@ -144,6 +155,31 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.apellidoMaterno}
+            value={institucion?.rector?.persona?.apellidoMaterno}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <Input
+            label="CURP"
+            id="curp"
+            name="curp"
+            auto="curp"
+            onchange={(e) => handleOnChange(e, { form, setForm })}
+            onblur={(e) => handleOnBlur(e, { form, setError })}
+            errorMessage={errors.curp}
+            value={institucion?.rector?.persona?.curp}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <Input
+            label="Correo electrónico"
+            id="correo"
+            name="correo"
+            auto="correo"
+            onchange={(e) => handleOnChange(e, { form, setForm })}
+            onblur={(e) => handleOnBlur(e, { form, setError })}
+            errorMessage={errors.correo}
+            value={institucion?.rector?.persona?.correo}
           />
         </Grid>
       </Grid>
@@ -161,6 +197,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.nombrePropuesto1}
+            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto1}
           />
         </Grid>
         <Grid item xs={11}>
@@ -172,6 +209,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.nombrePropuesto2}
+            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto2}
           />
         </Grid>
         <Grid item xs={11}>
@@ -183,6 +221,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.nombrePropuesto3}
+            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto3}
           />
         </Grid>
         <Grid item xs={11}>
@@ -212,11 +251,16 @@ export default function InstitucionFields({
   );
 }
 
+InstitucionFields.defaultProps = {
+  institucion: {} || null,
+};
+
 InstitucionFields.propTypes = {
   handleOnChange: PropTypes.func.isRequired,
   handleOnBlur: PropTypes.func.isRequired,
   setForm: PropTypes.func.isRequired,
   setError: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
   form: PropTypes.shape({
     nombreInstitucion: PropTypes.string,
     razonSocial: PropTypes.string,
@@ -237,9 +281,33 @@ InstitucionFields.propTypes = {
     valoresInstitucionales: PropTypes.string,
     apellidoPaterno: PropTypes.string,
     apellidoMaterno: PropTypes.string,
+    curp: PropTypes.string,
+    correo: PropTypes.string,
     nombreRector: PropTypes.string,
     nombrePropuesto1: PropTypes.string,
     nombrePropuesto2: PropTypes.string,
     nombrePropuesto3: PropTypes.string,
   }).isRequired,
+  institucion: PropTypes.shape({
+    nombre: PropTypes.string,
+    razonSocial: PropTypes.string,
+    historia: PropTypes.string,
+    vision: PropTypes.string,
+    mision: PropTypes.string,
+    valoresInstitucionales: PropTypes.string,
+    rector: PropTypes.shape({
+      persona: PropTypes.shape({
+        nombre: PropTypes.string,
+        apellidoPaterno: PropTypes.string,
+        apellidoMaterno: PropTypes.string,
+        curp: PropTypes.string,
+        correo: PropTypes.string,
+      }),
+    }),
+    ratificacionesNombre: PropTypes.shape([{
+      nombrePropuesto1: PropTypes.string,
+      nombrePropuesto2: PropTypes.string,
+      nombrePropuesto3: PropTypes.string,
+    }]),
+  }),
 };

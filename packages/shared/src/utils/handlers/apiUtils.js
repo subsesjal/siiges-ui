@@ -27,10 +27,10 @@ const makeCall = async ({
     });
 
     if (!response.ok) {
-      const errorData = ERROR_MAPPING[response.status] || { statusCode: response.status, errorMessage: 'Network response was not ok' };
+      const errorData = ERROR_MAPPING[response.status] || { statusCode: response.status, errorMessage: 'Internal Server Error' };
       return {
         ...errorData,
-        data: [], // Set data to empty array for consistency
+        data: [],
       };
     }
 
@@ -60,7 +60,6 @@ const getData = ({ endpoint, query }) => {
 };
 
 const createRecord = ({ data, endpoint }) => {
-  console.log(data);
   if (!endpoint) {
     const errorData = ERROR_MAPPING[400];
     return {
@@ -69,6 +68,17 @@ const createRecord = ({ data, endpoint }) => {
     };
   }
   return makeCall({ data, method: 'POST', endpoint });
+};
+
+const updateRecord = ({ data, endpoint }) => {
+  if (!endpoint) {
+    const errorData = ERROR_MAPPING[400];
+    return {
+      ...errorData,
+      data: [],
+    };
+  }
+  return makeCall({ data, method: 'PATCH', endpoint });
 };
 
 const deleteRecord = ({ endpoint }) => {
@@ -86,4 +96,5 @@ export {
   getData,
   deleteRecord,
   createRecord,
+  updateRecord,
 };
