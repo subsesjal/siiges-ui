@@ -1,6 +1,8 @@
 import {
   Box, Divider, Grid, List, ListItem, ListItemText, Typography,
 } from '@mui/material';
+import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
@@ -111,13 +113,14 @@ export default function InstitucionView({ data }) {
             <Typography variant="p">{data.mision}</Typography>
           </div>
           <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
-            <ButtonStyled
-              text="Editar institución"
-              alt="Editar institución"
-              onclick={() => {
-                router.push(`/institucion/${data.id}/editarInstitucion`);
+            <ButtonUnstyled
+              className="buttonAdd guardar"
+              onClick={() => {
+                router.push(`/instituciones/editar/${data.id}`);
               }}
-            />
+            >
+              <Typography variant="body1">Editar</Typography>
+            </ButtonUnstyled>
           </Grid>
         </Grid>
       </Grid>

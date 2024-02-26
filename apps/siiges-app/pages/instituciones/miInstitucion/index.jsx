@@ -1,51 +1,78 @@
-import React, { useContext } from 'react';
-import { Context, Layout, useApi } from '@siiges-ui/shared';
-import { InstitucionLayout } from '@siiges-ui/instituciones';
-import { CircularProgress } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Context, Layout } from '@siiges-ui/shared';
+import { InstitucionBox, InstitucionForm, getInstitucionHook } from '@siiges-ui/instituciones';
 
-const getInstitucion = (session) => {
-  const { id, rol } = session;
-
-  if (id && rol === 'representante') {
-    const { data, loading } = useApi({
-      endpoint: `api/v1/instituciones/usuarios/${id}`,
-      method: 'GET',
-    });
-
-    return { institucion: data, loading };
-  }
-
-  /* if (id && rol === 'gestor') {
-    const { data, loading } = useApi({ endpoint, method });
-    return { ...data, loading };
-  } */
-
-  return { institucion: {}, loading: true };
-};
-
-export default function ConsultarInstitucion() {
-  const { session } = useContext(Context);
-
-  const { institucion, loading } = getInstitucion(session);
-
+function InstitucionWrapper({
+  institucion, session, setLoading, setTitle,
+}) {
   return (
     <div>
-      {!loading ? (
-        <InstitucionLayout institucion={institucion} />
-      ) : (
-        <Layout>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '300px',
-            }}
-          >
-            <CircularProgress />
-          </div>
-        </Layout>
-      )}
+      {institucion.id
+        ? (
+          <InstitucionBox
+            institucion={institucion}
+            setLoading={setLoading}
+            setTitle={setTitle}
+          />
+        )
+        : (
+          <InstitucionForm
+            session={session}
+            accion="crear"
+            setLoading={setLoading}
+            setTitle={setTitle}
+          />
+        )}
     </div>
   );
 }
+
+export default function MiInstitucion() {
+  const { session, setNoti } = useContext(Context);
+  const [institucion, setInstitucion] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState('');
+
+  getInstitucionHook({
+    setInstitucion,
+    session,
+    setNoti,
+    institucion,
+    setLoading,
+    loading,
+  });
+
+  return (
+    <Layout title={title} loading={loading}>
+      {institucion !== null
+        ? (
+          <InstitucionWrapper
+            session={session}
+            institucion={institucion}
+            setLoading={setLoading}
+            setTitle={setTitle}
+          />
+        )
+        : <div />}
+    </Layout>
+  );
+}
+
+InstitucionWrapper.defaultProps = {
+  institucion: {} || null,
+};
+
+InstitucionWrapper.propTypes = {
+  setLoading: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  institucion: PropTypes.shape({
+    id: PropTypes.number,
+  }),
+  session: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    nombre: PropTypes.string.isRequired,
+    rol: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
+  }).isRequired,
+};

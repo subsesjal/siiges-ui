@@ -1,15 +1,23 @@
-import { CircularProgress, Grid } from '@mui/material';
 import React from 'react';
+import PropTypes from 'prop-types';
+import '../../styles/Loading/index.css';
 
-export default function Loading() {
+function LoadingPage({ loading }) {
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      style={{ minHeight: '100vh' }}
-    >
-      <CircularProgress />
-    </Grid>
+    <div className={`loading-page ${loading ? 'active' : ''}`}>
+      <div className="loading-content">
+        <img src="/LogoJalisco.png" alt="Loading" className="loading-image" />
+      </div>
+    </div>
   );
 }
+
+LoadingPage.defaultProps = {
+  loading: false,
+};
+
+LoadingPage.propTypes = {
+  loading: PropTypes.bool,
+};
+
+export default LoadingPage;

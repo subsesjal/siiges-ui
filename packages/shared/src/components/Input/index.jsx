@@ -82,7 +82,7 @@ function Input({
       className="data-form"
       multiline={multiline}
       rows={multiline ? rows : undefined}
-      maxRows={multiline ? maxRows : undefined}
+      maxRows={multiline && !rows ? maxRows : undefined}
       InputLabelProps={
         type === 'date' || type === 'time' || type === 'datetime'
           ? { shrink: true }
@@ -97,6 +97,7 @@ Input.defaultProps = {
   size: 'small',
   errorMessage: '',
   value: '',
+  auto: '',
   required: false,
   disabled: false,
   variant: 'outlined',
@@ -126,7 +127,7 @@ Input.propTypes = {
   errorMessage: PropTypes.string,
   type: PropTypes.string,
   size: PropTypes.string,
-  auto: PropTypes.string.isRequired,
+  auto: PropTypes.string,
   multiline: PropTypes.bool,
   rows: PropTypes.number,
   maxRows: PropTypes.number,

@@ -51,7 +51,7 @@ export default function EditInstitutionForm({
               class="data"
               onchange={handleOnChange}
               errorMessage={error.nombre}
-              value={data.nombre}
+              value={data?.nombre}
             />
           </Grid>
           <Grid item xs={8}>
@@ -64,7 +64,7 @@ export default function EditInstitutionForm({
               class="data"
               onchange={handleOnChange}
               errorMessage={error.razonSocial}
-              value={data.razonSocial}
+              value={data?.razonSocial}
             />
           </Grid>
           <Grid item xs={12}>
@@ -76,7 +76,7 @@ export default function EditInstitutionForm({
               multiline
               sx={{ width: '100%' }}
               onChange={handleOnChange}
-              value={data.historia}
+              value={data?.historia}
             />
           </Grid>
           <Grid item xs={12}>
@@ -87,7 +87,7 @@ export default function EditInstitutionForm({
               multiline
               sx={{ width: '100%' }}
               onChange={handleOnChange}
-              value={data.vision}
+              value={data?.vision}
             />
           </Grid>
           <Grid item xs={12}>
@@ -98,7 +98,7 @@ export default function EditInstitutionForm({
               multiline
               sx={{ width: '100%' }}
               onChange={handleOnChange}
-              value={data.mision}
+              value={data?.mision}
             />
           </Grid>
           <Grid item xs={12}>
@@ -109,7 +109,7 @@ export default function EditInstitutionForm({
               multiline
               sx={{ width: '100%' }}
               onChange={handleOnChange}
-              value={data.valoresInstitucional}
+              value={data?.valoresInstitucional}
             />
           </Grid>
           <Grid item xs={8}>
