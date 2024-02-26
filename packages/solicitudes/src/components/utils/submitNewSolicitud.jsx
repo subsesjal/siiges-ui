@@ -1,6 +1,6 @@
 import { getToken } from '@siiges-ui/shared';
 
-function submitNewSolicitud(validations, setNewSubmit) {
+function submitNewSolicitud(validations) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
@@ -29,7 +29,6 @@ function submitNewSolicitud(validations, setNewSubmit) {
       setProgramaId(data.data.programa.id);
     })
     .then(
-      setNewSubmit(false),
       setNoti({
         open: true,
         message: 'Exito, no hubo problemas en esta sección',
