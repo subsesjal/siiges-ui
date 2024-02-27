@@ -38,6 +38,34 @@ export default function userRol(session, setUsers, section) {
       },
     ]);
   }
+  if (session.rol === 'capturista_opd') {
+    setUsers([
+      {
+        text: 'Instituciones',
+        icon: <BusinessIcon />,
+        route: '/opds/instituciones',
+        key: 'intitutions',
+      },
+      {
+        text: 'Órganos colegiados',
+        icon: <GroupsIcon />,
+        route: '/opds/organosColegiados',
+        key: 'organosColegiados',
+      },
+      {
+        text: 'Fortalecimiento',
+        icon: <ArticleIcon />,
+        route: '/opds/fortalecimiento',
+        key: 'fortalecimeiento',
+      },
+      {
+        text: 'Presupuesto',
+        icon: <RequestQuoteIcon />,
+        route: '/opds/presupuesto',
+        key: 'presupuesto',
+      },
+    ]);
+  }
 
   if (session.rol === 'admin') {
     if (section === 1) {
