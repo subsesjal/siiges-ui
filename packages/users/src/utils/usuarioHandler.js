@@ -190,7 +190,7 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
         },
         {
           id: '15',
-          nombre: 'Jefe Vigilante',
+          nombre: 'Jefe de Vigilantes',
         },
         {
           id: '16',
