@@ -188,6 +188,18 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
           id: '14',
           nombre: 'Equivalencia SICYT',
         },
+        {
+          id: '15',
+          nombre: 'Jefe_vigilante',
+        },
+        {
+          id: '16',
+          nombre: 'Vigilante',
+        },
+        {
+          id: '17',
+          nombre: 'Capturista_opd',
+        },
       ]);
     }
   }, []);
