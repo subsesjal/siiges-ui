@@ -190,7 +190,7 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
         },
         {
           id: '15',
-          nombre: 'Jefe_vigilante',
+          nombre: 'Jefe Vigilante',
         },
         {
           id: '16',
@@ -198,7 +198,7 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
         },
         {
           id: '17',
-          nombre: 'Capturista_opd',
+          nombre: 'Capturista OPD',
         },
       ]);
     }
