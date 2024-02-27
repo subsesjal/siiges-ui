@@ -112,17 +112,6 @@ export default function PlanEstudios({
             conveniosVinculacion: solicitudes.programa.conveniosVinculacion,
           },
         },
-        9: {
-          ...prevForm[9],
-          programa: {
-            mapaCurricular: solicitudes.programa.mapaCurricular,
-            flexibilidadCurricular: solicitudes.programa.flexibilidadCurricular,
-            lineasGeneracionAplicacionConocimiento:
-              solicitudes.programa.lineasGeneracionAplicacionConocimiento,
-            actualizacion: solicitudes.programa.actualizacion,
-            conveniosVinculacion: solicitudes.programa.conveniosVinculacion,
-          },
-        },
       }));
     } else if (query.modalidad && query.plantel) {
       setForm((prevForm) => ({
