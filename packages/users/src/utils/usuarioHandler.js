@@ -190,14 +190,6 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
         },
         {
           id: '15',
-          nombre: 'Jefe de Vigilantes',
-        },
-        {
-          id: '16',
-          nombre: 'Vigilante',
-        },
-        {
-          id: '17',
           nombre: 'Capturista OPD',
         },
       ]);
