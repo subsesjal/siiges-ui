@@ -27,6 +27,7 @@ export default function EditarInstitucion() {
             accion="editar"
             setLoading={setLoading}
             setTitle={setTitle}
+            setNoti={setNoti}
           />
         )
         : <div />}

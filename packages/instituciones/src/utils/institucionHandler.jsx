@@ -26,12 +26,14 @@ const buildInstitucionData = (form) => ({
   historia: form.historia,
   mision: form.mision,
   vision: form.vision,
-  valoresInstitucionales: form.valoresInstitucionles,
+  valoresInstitucionales: form.valoresInstitucionales,
   rector: {
     persona: {
       nombre: form.nombreRector,
       apellidoPaterno: form.apellidoPaterno,
       apellidoMaterno: form.apellidoMaterno,
+      curp: form.curp,
+      correoPrimario: form.correoPrimario,
     },
 
   },
@@ -39,7 +41,7 @@ const buildInstitucionData = (form) => ({
     nombrePropuesto1: form.nombrePropuesto1,
     nombrePropuesto2: form.nombrePropuesto2,
     nombrePropuesto3: form.nombrePropuesto3,
-    esNombreAutorizado: false,
+    esNombreAutorizado: form.esNombreAutorizado,
   },
 });
 
@@ -51,7 +53,7 @@ const submitInstitucion = async ({
   setLoading,
 }) => {
   setLoading(true);
-  if (accion === 'crear' && !validateErrorFields(errorFields)) {
+  if (!validateErrorFields(errorFields)) {
     setNoti({
       open: true,
       message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
@@ -87,15 +89,22 @@ const submitInstitucion = async ({
 
   const response = await processor({ data, endpoint });
 
-  if (response.statusCode === 201) {
+  if (response.statusCode === 201 || response.statusCode === 200) {
     setLoading(false);
     setNoti({
       open: true,
       message: 'Registro exitoso',
       type: 'success',
     });
-    router.reload();
+    router.back();
+    return true;
   }
+
+  setNoti({
+    open: true,
+    message: response.errorMessage,
+    type: 'error',
+  });
 
   return response;
 };
@@ -180,6 +189,22 @@ const errors = {
       : '',
     setError,
   ),
+  curp: (form, setError) => {
+    const { curp } = form;
+    let errorMessage = '';
+    if (curp && curp.length !== 18) {
+      errorMessage = 'La CURP debe contener 18 caracteres';
+    }
+    setErrorState('curp', errorMessage, setError);
+  },
+  correoPrimario: (form, setError) => {
+    const { correoPrimario } = form;
+    let errorMessage = '';
+    if (correoPrimario && !correoPrimario.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
+      errorMessage = 'El correo electrónico no es válido';
+    }
+    setErrorState('correoPrimario', errorMessage, setError);
+  },
   nombrePropuesto1: (form, setError) => {
     setErrorState(
       'nombrePropuesto1',
@@ -211,7 +236,8 @@ const errors = {
 
 const handleOnBlur = (e, { form, setError, isRequired }) => {
   const { name, required } = e.target;
-  if (required || isRequired) {
+  if (required || isRequired
+    || name === 'correoPrimario' || name === 'curp') {
     errors[name](form, setError);
   }
 };

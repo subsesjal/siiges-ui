@@ -173,13 +173,13 @@ export default function InstitucionFields({
         <Grid item xs={4}>
           <Input
             label="Correo electrónico"
-            id="correo"
-            name="correo"
-            auto="correo"
+            id="correoPrimario"
+            name="correoPrimario"
+            auto="correoPrimario"
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
-            errorMessage={errors.correo}
-            value={institucion?.rector?.persona?.correo}
+            errorMessage={errors.correoPrimario}
+            value={institucion?.rector?.persona?.correoPrimario}
           />
         </Grid>
       </Grid>
@@ -267,7 +267,7 @@ InstitucionFields.propTypes = {
     historia: PropTypes.string,
     vision: PropTypes.string,
     mision: PropTypes.string,
-    valoresInstitucionles: PropTypes.string,
+    valoresInstitucionales: PropTypes.string,
     nombrePropuesto1: PropTypes.string,
     nombrePropuesto2: PropTypes.string,
     nombrePropuesto3: PropTypes.string,
@@ -282,7 +282,7 @@ InstitucionFields.propTypes = {
     apellidoPaterno: PropTypes.string,
     apellidoMaterno: PropTypes.string,
     curp: PropTypes.string,
-    correo: PropTypes.string,
+    correoPrimario: PropTypes.string,
     nombreRector: PropTypes.string,
     nombrePropuesto1: PropTypes.string,
     nombrePropuesto2: PropTypes.string,
@@ -301,7 +301,7 @@ InstitucionFields.propTypes = {
         apellidoPaterno: PropTypes.string,
         apellidoMaterno: PropTypes.string,
         curp: PropTypes.string,
-        correo: PropTypes.string,
+        correoPrimario: PropTypes.string,
       }),
     }),
     ratificacionesNombre: PropTypes.shape([{
