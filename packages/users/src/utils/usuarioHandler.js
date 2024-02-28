@@ -189,7 +189,7 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
           nombre: 'Equivalencia SICYT',
         },
         {
-          id: '15',
+          id: '17',
           nombre: 'Capturista OPD',
         },
       ]);
