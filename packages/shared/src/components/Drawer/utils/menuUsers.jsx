@@ -7,6 +7,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import GroupsIcon from '@mui/icons-material/Groups';
 import ArticleIcon from '@mui/icons-material/Article';
+import SearchIcon from '@mui/icons-material/Search';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
@@ -138,8 +139,65 @@ const usersMenu = [
   },
 ];
 
-const optionsMenuFilter = options.map(({ id }) => usersMenu.filter(({ userId }) => userId === id));
-optionsMenuFilter.unshift(null);
+const optionsMenuFilter = {
+  jefe_inspector: [
+    {
+      text: 'Inspeccion',
+      icon: <SearchIcon />,
+      route: '/inspecciones',
+      key: 'inspecciones',
+    },
+  ],
+  capturista_opd: [
+    {
+      text: 'Instituciones',
+      icon: <BusinessIcon />,
+      route: '/opds/instituciones',
+      key: 'intitutions',
+    },
+    {
+      text: 'Órganos colegiados',
+      icon: <GroupsIcon />,
+      route: '/opds/organosColegiados',
+      key: 'organosColegiados',
+    },
+    {
+      text: 'Fortalecimiento',
+      icon: <ArticleIcon />,
+      route: '/opds/fortalecimiento',
+      key: 'fortalecimeiento',
+    },
+    {
+      text: 'Presupuesto',
+      icon: <RequestQuoteIcon />,
+      route: '/opds/presupuesto',
+      key: 'presupuesto',
+    },
+  ],
+  representante: [
+    {
+      text: 'Mis usuarios',
+      icon: <GroupIcon />,
+      route: '/usuarios',
+      key: 'users',
+    },
+    {
+      text: 'Mi institución',
+      icon: <BusinessIcon />,
+      route: '/instituciones/miInstitucion',
+      key: 'intitutions',
+    },
+    {
+      text: 'Mis solicitudes',
+      icon: <DescriptionIcon />,
+      route: '/solicitudes',
+      key: 'solicitudes',
+    },
+  ],
+};
+
+const optionsAdminMenuFilter = options.map(({ id }) => usersMenu
+  .filter(({ userId }) => userId === id));
 
 /**
  * Finds the userId associated with a given path.
@@ -155,4 +213,6 @@ const findRoute = (path) => {
   return userId;
 };
 
-export { findRoute, optionsMenuFilter, usersMenu };
+export {
+  findRoute, optionsMenuFilter, optionsAdminMenuFilter, usersMenu,
+};
