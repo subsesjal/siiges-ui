@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import getTokenLocalStorage from './getToken';
 import SnackAlert from '../../components/Alert';
+import { findRoute } from '../../components/Drawer/utils/menuUsers';
 
 export const Context = createContext();
 
@@ -32,6 +33,9 @@ function Provider({ children }) {
       setAuth(true);
     } else {
       setShouldRedirect(true);
+    }
+    if (findRoute(router.route)) {
+      setSection(findRoute(router.route));
     }
   }, [router]);
 
