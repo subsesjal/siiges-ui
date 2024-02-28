@@ -13,7 +13,7 @@ import {
 } from '../../../utils/institucionHandler';
 
 export default function InstitucionForm({
-  session, accion, institucion, setLoading, setTitle,
+  session, accion, institucion, setLoading, setTitle, setNoti,
 }) {
   const [errorFields, setErrorFields] = useState({});
   const [form, setForm] = useState({});
@@ -65,9 +65,10 @@ export default function InstitucionForm({
           <ButtonsForm
             confirm={() => submitInstitucion({
               form,
-              setForm,
               accion,
               errorFields,
+              setNoti,
+              setLoading,
             })}
             cancel={() => handleCancel()}
           />
@@ -80,6 +81,7 @@ export default function InstitucionForm({
 InstitucionForm.propTypes = {
   setLoading: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
+  setNoti: PropTypes.func.isRequired,
   accion: PropTypes.string.isRequired,
   institucion: PropTypes.shape({
     id: PropTypes.number,

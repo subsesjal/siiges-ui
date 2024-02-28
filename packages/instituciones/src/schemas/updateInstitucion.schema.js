@@ -16,7 +16,7 @@ const updateInstitucionSchema = {
         nombrePropuesto1: { type: 'string' },
         nombrePropuesto2: { type: 'string' },
         nombrePropuesto3: { type: 'string' },
-        esNombreAutorizado: { type: 'string' },
+        esNombreAutorizado: { type: 'boolean' },
       },
     },
     rector: {
@@ -29,7 +29,7 @@ const updateInstitucionSchema = {
             apellidoPaterno: { type: 'string' },
             apellidoMaterno: { type: 'string' },
             curp: { type: 'string' },
-            correo: { type: 'string' },
+            correoPrimario: { type: 'string' },
           },
         },
       },

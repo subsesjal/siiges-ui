@@ -4,7 +4,7 @@ import { Context, Layout } from '@siiges-ui/shared';
 import { InstitucionBox, InstitucionForm, getInstitucionHook } from '@siiges-ui/instituciones';
 
 function InstitucionWrapper({
-  institucion, session, setLoading, setTitle,
+  institucion, session, setLoading, setTitle, setNoti,
 }) {
   return (
     <div>
@@ -22,6 +22,7 @@ function InstitucionWrapper({
             accion="crear"
             setLoading={setLoading}
             setTitle={setTitle}
+            setNoti={setNoti}
           />
         )}
     </div>
@@ -52,6 +53,7 @@ export default function MiInstitucion() {
             institucion={institucion}
             setLoading={setLoading}
             setTitle={setTitle}
+            setNoti={setNoti}
           />
         )
         : <div />}
@@ -66,6 +68,7 @@ InstitucionWrapper.defaultProps = {
 InstitucionWrapper.propTypes = {
   setLoading: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
+  setNoti: PropTypes.func.isRequired,
   institucion: PropTypes.shape({
     id: PropTypes.number,
   }),
