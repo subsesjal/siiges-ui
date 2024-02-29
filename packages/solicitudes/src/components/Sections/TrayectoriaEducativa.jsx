@@ -10,7 +10,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
   const [fileURLs, setFileURLs] = useState([null, null, null, null]);
   const {
-    form, setForm, error, setError, id,
+    form, setForm, error, setError, id, programaId,
   } = useContext(SolicitudContext);
   const errors = errorTrayectoriaEducativa(form, setError, error);
 
@@ -37,8 +37,16 @@ export default function TrayectoriaEducativa({ disabled, type }) {
           }
         });
       });
+    } else if (programaId) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        9: {
+          ...prevForm[9],
+          programaId,
+        },
+      }));
     }
-  }, []);
+  }, [programaId]);
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [
@@ -88,6 +96,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             helperText={error.programaSeguimiento}
             error={!!error.programaSeguimiento}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -105,6 +114,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             helperText={error.funcionTutorial}
             error={!!error.funcionTutorial}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -122,12 +132,13 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             helperText={error.tipoTutoria}
             error={!!error.tipoTutoria}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="tipoEgreso"
-            name="tipoEgreso"
+            id="tasaEgreso"
+            name="tasaEgreso"
             label="Tasa de egreso"
             rows={4}
             multiline
@@ -139,6 +150,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             helperText={error.tipoEgreso}
             error={!!error.tipoEgreso}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -156,6 +168,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             helperText={error.estadisticasTitulacion}
             error={!!error.estadisticasTitulacion}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -173,6 +186,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             helperText={error.modalidadesTitulacion}
             error={!!error.modalidadesTitulacion}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>

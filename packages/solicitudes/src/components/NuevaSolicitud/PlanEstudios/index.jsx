@@ -19,6 +19,7 @@ import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 import SolicitudContext from '../../utils/Context/solicitudContext';
 import getSolicitudesById from '../../utils/getSolicitudesById';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
+import useTrayectoriasEducativas from '../../utils/getTrayectoriasEducativas';
 
 export default function PlanEstudios({
   nextModule,
@@ -48,6 +49,7 @@ export default function PlanEstudios({
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [modalidad, setModalidad] = useState();
   const { solicitudes, loading } = getSolicitudesById(id);
+  const { trayectoria, loadingTrayectoria } = useTrayectoriasEducativas(programaId);
 
   useEffect(() => {
     setDisabled(id !== undefined && type !== 'editar');
@@ -111,6 +113,14 @@ export default function PlanEstudios({
             actualizacion: solicitudes.programa.actualizacion,
             conveniosVinculacion: solicitudes.programa.conveniosVinculacion,
           },
+        },
+      }));
+    } else if (!loadingTrayectoria && type === 'editar') {
+      setForm((prevForm) => ({
+        ...prevForm,
+        9: {
+          ...prevForm[9],
+          trayectoria,
         },
       }));
     } else if (query.modalidad && query.plantel) {
@@ -192,7 +202,9 @@ export default function PlanEstudios({
                 <AsignaturasFormacionElectiva disabled={disabled} type={type} />
               )}
               {section === 8 && <Docentes disabled={disabled} type={type} />}
-              {section === 9 && <TrayectoriaEducativa disabled={disabled} type={type} />}
+              {section === 9 && (
+                <TrayectoriaEducativa disabled={disabled} type={type} />
+              )}
             </SectionLayout>
           </CardContent>
         </Card>
@@ -215,13 +227,9 @@ PlanEstudios.defaultProps = {
 
 PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
-  programaId: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([undefined]),
-  ]).isRequired,
+  id: PropTypes.number.isRequired,
   setId: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
   type: PropTypes.string,
+  programaId: PropTypes.number.isRequired,
 };
