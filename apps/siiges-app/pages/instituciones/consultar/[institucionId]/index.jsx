@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Context, Layout } from '@siiges-ui/shared';
 import { InstitucionBox, getInstitucionHook } from '@siiges-ui/instituciones';
 
-export default function MiInstitucion() {
+export default function ConsultarInstitucion() {
   const { session, setNoti } = useContext(Context);
   const [institucion, setInstitucion] = useState(null);
   const [loading, setLoading] = useState(true);
