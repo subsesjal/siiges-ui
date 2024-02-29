@@ -111,7 +111,7 @@ export default function ButtonSection({
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={9}>
             <ButtonStyled
-              text="Terminar"
+              text="Terminar sección"
               alt="Terminar solicitud"
               type="success"
               onclick={submit}
@@ -129,7 +129,7 @@ export default function ButtonSection({
       )}
       {position === 'middle' && (
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={5}>
+          <Grid item xs={3}>
             <ButtonStyled
               text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
@@ -137,15 +137,15 @@ export default function ButtonSection({
               onclick={prev}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <ButtonStyled
-              text="Terminar"
+              text="Terminar sección"
               alt="Terminar solicitud"
               type="success"
               onclick={submit}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <ButtonStyled
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
@@ -157,7 +157,7 @@ export default function ButtonSection({
       )}
       {position === 'last' && (
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <ButtonStyled
               text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
@@ -165,9 +165,9 @@ export default function ButtonSection({
               onclick={prev}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <ButtonStyled
-              text="Terminar"
+              text="Terminar sección"
               alt="Terminar solicitud"
               type="success"
               onclick={submit}
@@ -179,7 +179,7 @@ export default function ButtonSection({
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={12}>
             <ButtonStyled
-              text="Terminar"
+              text="Terminar sección"
               alt="Terminar solicitud"
               type="success"
               onclick={submit}
