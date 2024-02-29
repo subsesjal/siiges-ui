@@ -12,8 +12,8 @@ const columns = (showModal) => [
     renderCell: (params) => (
       <ActionButtons
         id={params.id}
-        consultar={`/institucion/${params.id}/consultarInstitucion`}
-        editar={`/institucion/${params.id}/editarInstitucion`}
+        consultar={`/instituciones/consultar/${params.id}`}
+        editar={`/instituciones/editar/${params.id}`}
         eliminar={showModal}
       />
     ),

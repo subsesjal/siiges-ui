@@ -6,9 +6,10 @@ import { InstitucionesTable, getInstituciones } from '@siiges-ui/instituciones';
 
 export default function Instituciones() {
   const { session } = useContext(Context);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
-  const { instituciones, loading } = getInstituciones();
+  const { instituciones } = getInstituciones({ setLoading, tipoInstitucionId: 1 });
 
   useEffect(() => {
     const { id, rol } = session;
@@ -22,7 +23,7 @@ export default function Instituciones() {
   }, [data, instituciones]);
 
   return (
-    <Layout title="Instituciones">
+    <Layout title="Instituciones" loading={loading}>
       <Divider sx={{ marginTop: 2 }} />
       {(data && !loading) && (
       <InstitucionesTable instituciones={data} session={session} />
