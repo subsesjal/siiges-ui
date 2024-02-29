@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Context, Layout } from '@siiges-ui/shared';
-import { InstitucionForm, getInstitucionHook } from '@siiges-ui/instituciones';
+import { InstitucionBox, getInstitucionHook } from '@siiges-ui/instituciones';
 
-export default function EditarInstitucion() {
+export default function ConsultarInstitucion() {
   const { session, setNoti } = useContext(Context);
   const [institucion, setInstitucion] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,19 +14,17 @@ export default function EditarInstitucion() {
     setNoti,
     institucion,
     setLoading,
+    loading,
   });
 
   return (
     <Layout title={title} loading={loading}>
-      {institucion && session
+      {(institucion && institucion.id)
         ? (
-          <InstitucionForm
-            session={session}
+          <InstitucionBox
             institucion={institucion}
-            accion="editar"
             setLoading={setLoading}
             setTitle={setTitle}
-            setNoti={setNoti}
           />
         )
         : <div />}

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getData } from '@siiges-ui/shared';
+import { useRouter } from 'next/router';
 
 const NOT_FOUND = {};
 
 const getInstitucionHook = ({
-  setInstitucion, setNoti, institucion, session, setLoading, router,
+  setInstitucion, setNoti, institucion, session, setLoading,
 }) => {
+  const router = useRouter();
   const [responseReceived, setResponseReceived] = useState(false);
 
   useEffect(() => {
