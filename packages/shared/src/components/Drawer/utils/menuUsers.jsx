@@ -207,10 +207,10 @@ const optionsAdminMenuFilter = options.map(({ id }) => usersMenu
  */
 const findRoute = (path) => {
   const wordSearch = path.split('/')[1];
-  const { userId } = usersMenu.find(
+  const foundItem = usersMenu.find(
     ({ route }) => route && route.startsWith(`/${wordSearch}`),
   );
-  return userId;
+  return foundItem?.userId;
 };
 
 export {
