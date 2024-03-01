@@ -22,7 +22,7 @@ function DataTable({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (rows.length > 0) {
+    if (rows.length >= 0) {
       setLoading(false);
     }
     setFilteredRows(rows);
@@ -80,6 +80,7 @@ function DataTable({
       </Grid>
       <div style={{ height: 400, width: '100%', marginTop: 15 }}>
         <DataGrid
+          localeText={{ noRowsLabel: 'No hay registros' }}
           loading={loading}
           rows={filteredRows}
           columns={columns}

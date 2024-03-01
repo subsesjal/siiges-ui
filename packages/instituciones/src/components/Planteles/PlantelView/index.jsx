@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
 import React from 'react';
 
-export default function ConsultPlantelesForm({ data }) {
+export default function PlantelViewForm({ data }) {
   const { directores, domicilio } = data;
   const director = directores[0]?.persona;
   return (
@@ -22,8 +22,8 @@ export default function ConsultPlantelesForm({ data }) {
         <Grid item xs>
           <List>
             <ListTitle text="Calle" />
-            <ListTitle text="Número Interior" />
-            <ListTitle text="Número Exterior" />
+            <ListTitle text="Número interior" />
+            <ListTitle text="Número exterior" />
             <ListTitle text="Colonia" />
           </List>
         </Grid>
@@ -38,9 +38,9 @@ export default function ConsultPlantelesForm({ data }) {
         </Grid>
         <Grid item xs>
           <List>
-            <ListTitle text="Codigo Postal" />
+            <ListTitle text="Código Postal" />
             <ListTitle text="Municipio" />
-            <ListTitle text="Clave del centro de trabajo" />
+            <ListTitle text="Clave de centro de trabajo" />
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -93,7 +93,7 @@ export default function ConsultPlantelesForm({ data }) {
         </Grid>
         <Grid item xs>
           <List>
-            <ListTitle text="Pagina web" />
+            <ListTitle text="Página web" />
             <ListTitle text="Redes sociales" />
           </List>
         </Grid>
@@ -117,9 +117,9 @@ export default function ConsultPlantelesForm({ data }) {
         <Grid item xs>
           <List>
             <ListTitle text="Nombre(s)" />
-            <ListTitle text="Apellido Paterno" />
-            <ListTitle text="Apellido Materno" />
-            <ListTitle text="Genero" />
+            <ListTitle text="Primer Apellido" />
+            <ListTitle text="Segundo Apellido" />
+            <ListTitle text="Género" />
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -134,7 +134,7 @@ export default function ConsultPlantelesForm({ data }) {
         <Grid item xs>
           <List>
             <ListTitle text="Nacionalidad" />
-            <ListTitle text="Correo electronico" />
+            <ListTitle text="Correo electrónico" />
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -149,7 +149,7 @@ export default function ConsultPlantelesForm({ data }) {
   );
 }
 
-ConsultPlantelesForm.propTypes = {
+PlantelViewForm.propTypes = {
   data: PropTypes.shape({
     domicilio: PropTypes.shape({
       id: PropTypes.number,

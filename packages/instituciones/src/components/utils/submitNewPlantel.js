@@ -1,11 +1,14 @@
 import { getToken } from '@siiges-ui/shared';
 import router from 'next/router';
 
-export default function submitNewPlantel(plantelErrors, form, setNoti) {
+export default function submitNewPlantel({
+  errors, form, setNoti, setLoading,
+}) {
+  setLoading(true);
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const isValid = Object.keys(plantelErrors).every((campo) => plantelErrors[campo]());
+  const isValid = Object.keys(errors).every((campo) => errors[campo]());
 
   if (!isValid) {
     setNoti({
@@ -42,13 +45,14 @@ export default function submitNewPlantel(plantelErrors, form, setNoti) {
         type: 'success',
       }),
       setTimeout(() => {
+        setLoading(false);
         router.back();
       }, 3000),
     )
     .catch(() => {
       setNoti({
         open: true,
-        message: 'Algo salio mal, revisa que los campos esten correctos',
+        message: 'Algo salió mal, revisa que los campos esten correctos',
         type: 'error',
       });
     });

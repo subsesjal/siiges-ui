@@ -36,8 +36,8 @@ export default function InstitucionBox({ institucion, setLoading, setTitle }) {
       {value === 0 && <InstitucionView data={institucion} />}
       {value === 1 && (
       <PlantelesTable
-        institucion={institucion.id}
-        data={institucion.planteles}
+        institucionId={institucion.id}
+        planteles={institucion.planteles}
       />
       )}
     </Grid>
