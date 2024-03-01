@@ -15,7 +15,6 @@ export default function InstitucionLayout({ institucion }) {
   const router = useRouter();
   const [institucionForm, setInstitucionForm] = useState({
     usuarioId: session.id,
-    tipoInstitucionId: 1,
   });
   const [errors, setErrors] = useState({});
 
