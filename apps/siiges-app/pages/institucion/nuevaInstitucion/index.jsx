@@ -10,7 +10,6 @@ export default function NuevaInstitucion() {
   const router = useRouter();
   const [institucionForm, setInstitucionForm] = useState({
     usuarioId: session.id,
-    tipoInstitucionId: 1,
   });
   const [errors, setErrors] = useState({});
 
