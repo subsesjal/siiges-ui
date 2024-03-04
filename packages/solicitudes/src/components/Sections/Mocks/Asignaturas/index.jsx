@@ -4,7 +4,7 @@ import AsignaturasButtons from '../../../utils/Components/AsignaturasButtons';
 const columns = () => [
   { field: 'grado', headerName: 'Grado', width: 230 },
   { field: 'nombre', headerName: 'Nombre', width: 320 },
-  { field: 'clave', headerName: 'Clave', width: 140 },
+  { field: 'clave', headerName: 'Clave', width: 100 },
   { field: 'seriacion', headerName: 'Seriacion', width: 170 },
   { field: 'creditos', headerName: 'Creditos' },
   {

@@ -17,7 +17,9 @@ import AsignaturasFormacionElectiva from '../../Sections/AsignaturasFormacionEle
 import Docentes from '../../Sections/Docentes';
 import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 import SolicitudContext from '../../utils/Context/solicitudContext';
+import getSolicitudesById from '../../utils/getSolicitudesById';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
+import useTrayectoriasEducativas from '../../utils/getTrayectoriasEducativas';
 
 export default function PlanEstudios({
   nextModule,
@@ -26,21 +28,12 @@ export default function PlanEstudios({
   programaId,
   setProgramaId,
   type,
-  data,
 }) {
   const { session } = useContext(Context);
   const router = useRouter();
   const { query } = router;
   const [form, setForm] = useState({
-    1: {
-      tipoSolicitudId: 1,
-      usuarioId: parseInt(session.id, 10),
-      estatusSolicitudId: 1,
-      programa: {
-        plantelId: parseInt(query.plantel, 10),
-        modalidadId: parseInt(query.modalidad, 10),
-      },
-    },
+    1: {},
     2: {},
     3: {},
     4: {},
@@ -54,15 +47,113 @@ export default function PlanEstudios({
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
+  const [modalidad, setModalidad] = useState();
+  const { solicitudes, loading } = getSolicitudesById(id);
+  const { trayectoria, loadingTrayectoria } = useTrayectoriasEducativas(programaId);
 
   useEffect(() => {
-    if (id !== undefined) {
-      setDisabled(false);
+    setDisabled(id !== undefined && type !== 'editar');
+    if (query.modalidad) {
+      setModalidad(query.modalidad);
     }
-  }, [id]);
+    if (!loading && solicitudes.programa && type === 'editar') {
+      setProgramaId(solicitudes.programa.id);
+      setModalidad(solicitudes.programa.modalidadId);
+      const programaTurnosIds = solicitudes.programa.programaTurnos.map(
+        (turno) => turno.turnoId,
+      );
+      setForm((prevForm) => ({
+        ...prevForm,
+        1: {
+          ...prevForm[1],
+          programa: {
+            ...prevForm[1].programa,
+            nivelId: solicitudes.programa.nivelId,
+            nombre: solicitudes.programa.nombre,
+            modalidadId: solicitudes.programa.modalidadId,
+            cicloId: solicitudes.programa.cicloId,
+            programaTurnos: programaTurnosIds,
+            duracionPeriodos: solicitudes.programa.duracionPeriodos,
+            creditos: solicitudes.programa.creditos,
+            antecedenteAcademico: solicitudes.programa.antecedenteAcademico,
+            objetivoGeneral: solicitudes.programa.objetivoGeneral,
+            objetivosParticulares: solicitudes.programa.objetivosParticulares,
+          },
+        },
+        3: {
+          ...prevForm[3],
+          programa: {
+            metodosInduccion: '',
+            perfilIngresoConocimientos:
+              solicitudes.programa.perfilIngresoConocimientos,
+            perfilIngresoHabilidades:
+              solicitudes.programa.perfilIngresoHabilidades,
+            perfilIngresoActitudes: solicitudes.programa.perfilIngresoActitudes,
+            procesoSeleccion: solicitudes.programa.procesoSeleccion,
+          },
+        },
+        4: {
+          ...prevForm[4],
+          programa: {
+            perfilEgresoConocimientos:
+              solicitudes.programa.perfilEgresoConocimientos,
+            perfilEgresoHabilidades:
+              solicitudes.programa.perfilEgresoHabilidades,
+            perfilEgresoActitudes: solicitudes.programa.perfilEgresoActitudes,
+            seguimientoEgresados: solicitudes.programa.seguimientoEgresados,
+          },
+        },
+        5: {
+          ...prevForm[5],
+          programa: {
+            mapaCurricular: solicitudes.programa.mapaCurricular,
+            flexibilidadCurricular: solicitudes.programa.flexibilidadCurricular,
+            lineasGeneracionAplicacionConocimiento:
+              solicitudes.programa.lineasGeneracionAplicacionConocimiento,
+            actualizacion: solicitudes.programa.actualizacion,
+            conveniosVinculacion: solicitudes.programa.conveniosVinculacion,
+          },
+        },
+      }));
+    } else if (!loadingTrayectoria && type === 'editar') {
+      setForm((prevForm) => ({
+        ...prevForm,
+        9: {
+          ...prevForm[9],
+          trayectoria,
+        },
+      }));
+    } else if (query.modalidad && query.plantel) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        1: {
+          ...prevForm[1],
+          tipoSolicitudId: 1,
+          usuarioId: parseInt(session.id, 10),
+          estatusSolicitudId: 1,
+          programa: {
+            ...prevForm[1].programa,
+            plantelId: query.plantel ? parseInt(query.plantel, 10) : undefined,
+            modalidadId: query.modalidad
+              ? parseInt(query.modalidad, 10)
+              : undefined,
+          },
+        },
+      }));
+    }
+  }, [
+    id,
+    type,
+    solicitudes,
+    loading,
+    session.id,
+    query.plantel,
+    query.modalidad,
+  ]);
 
   const value = useMemo(
     () => ({
+      modalidad,
       form,
       setForm,
       error,
@@ -76,7 +167,7 @@ export default function PlanEstudios({
       programaId,
       setProgramaId,
     }),
-    [form, error, errors, noti, id, programaId],
+    [form, error, errors, noti, id, programaId, modalidad],
   );
   const {
     next, prev, section, position, porcentaje,
@@ -99,23 +190,21 @@ export default function PlanEstudios({
               next={next}
               prev={prev}
             >
-              {section === 1 && <DatosPlanEstudios type={type} data={data} />}
+              {section === 1 && <DatosPlanEstudios type={type} />}
               {section === 2 && (
-                <FundamentosPlanEstudios
-                  disabled={disabled}
-                  type={type}
-                  data={data}
-                />
+                <FundamentosPlanEstudios disabled={disabled} type={type} />
               )}
-              {section === 3 && <Ingreso disabled={disabled} />}
-              {section === 4 && <Egreso disabled={disabled} />}
-              {section === 5 && <Curricula disabled={disabled} />}
-              {section === 6 && <Asignaturas disabled={disabled} />}
+              {section === 3 && <Ingreso disabled={disabled} type={type} />}
+              {section === 4 && <Egreso disabled={disabled} type={type} />}
+              {section === 5 && <Curricula disabled={disabled} type={type} />}
+              {section === 6 && <Asignaturas disabled={disabled} type={type} />}
               {section === 7 && (
-                <AsignaturasFormacionElectiva disabled={disabled} />
+                <AsignaturasFormacionElectiva disabled={disabled} type={type} />
               )}
-              {section === 8 && <Docentes disabled={disabled} />}
-              {section === 9 && <TrayectoriaEducativa disabled={disabled} />}
+              {section === 8 && <Docentes disabled={disabled} type={type} />}
+              {section === 9 && (
+                <TrayectoriaEducativa disabled={disabled} type={type} />
+              )}
             </SectionLayout>
           </CardContent>
         </Card>
@@ -132,16 +221,15 @@ export default function PlanEstudios({
   );
 }
 
+PlanEstudios.defaultProps = {
+  type: null,
+};
+
 PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
-  programaId: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([undefined]),
-  ]).isRequired,
+  id: PropTypes.number.isRequired,
   setId: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
-  data: PropTypes.objectOf(PropTypes.string).isRequired,
+  type: PropTypes.string,
+  programaId: PropTypes.number.isRequired,
 };

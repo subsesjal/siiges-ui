@@ -1,23 +1,19 @@
 import React, {
   useContext, useEffect, useMemo, useState,
 } from 'react';
-import { useRouter } from 'next/router';
 import { Grid, Typography, TextField } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
-import PropTypes from 'prop-types';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 
-export default function DatosPlanEstudios({ type, data }) {
-  const router = useRouter();
-  const { query } = router;
+export default function DatosPlanEstudios() {
   const [initialValues, setInitialValues] = useState({});
 
   const {
-    form, setForm, error, setError, setErrors,
+    form, setForm, error, setError, setErrors, modalidad,
   } = useContext(SolicitudContext);
 
   const handleOnChange = (e) => {
@@ -50,26 +46,10 @@ export default function DatosPlanEstudios({ type, data }) {
   };
 
   useEffect(() => {
-    if (type === 'editar' && data?.programa) {
-      // eslint-disable-next-line react/prop-types
-      const programaTurnosIds = data.programa.programaTurnos?.map((turno) => turno.turnoId) || [];
-
-      setForm((currentForm) => ({
-        ...currentForm,
-        1: {
-          programa: {
-            ...currentForm[1].programa,
-            ...data.programa,
-            programaTurnos: programaTurnosIds,
-          },
-        },
-      }));
-    }
-
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
     }
-  }, [type, data, setForm, setErrors]);
+  }, [setErrors]);
 
   const antecedenteAcademico = [
     { id: 1, nombre: 'Bachillerato' },
@@ -143,7 +123,7 @@ export default function DatosPlanEstudios({ type, data }) {
           <BasicSelect
             title="Modalidad"
             name="modalidadId"
-            value={form[1].programa?.modalidadId || query.modalidad}
+            value={modalidad || ''}
             onfocus={handleInputFocus}
             options={modalidades}
             disabled
@@ -261,23 +241,3 @@ export default function DatosPlanEstudios({ type, data }) {
     </Grid>
   );
 }
-
-DatosPlanEstudios.propTypes = {
-  type: PropTypes.string.isRequired,
-  data: PropTypes.shape({
-    programa: PropTypes.shape({
-      nivelId: PropTypes.number,
-      nombre: PropTypes.string,
-      modalidadId: PropTypes.number,
-      cicloId: PropTypes.number,
-      modalidad: PropTypes.string,
-      duracionPrograma: PropTypes.string,
-      creditos: PropTypes.string,
-      objetivoGeneral: PropTypes.string,
-      objetivoParticular: PropTypes.string,
-      programaTurnos: PropTypes.shape({
-        id: PropTypes.number,
-      }),
-    }),
-  }).isRequired,
-};

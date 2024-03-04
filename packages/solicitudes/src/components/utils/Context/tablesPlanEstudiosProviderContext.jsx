@@ -15,6 +15,7 @@ export function TablesPlanEstudiosProvider({ children }) {
   const [formAsignaturas, setFormAsignaturas] = useState({ tipo: 1 });
   const [formAsignaturasFormacion, setFormAsignaturasFormacion] = useState({
     tipo: 2,
+    areaId: 4,
   });
   const [formDocentes, setFormDocentes] = useState({
     esAceptado: true,
@@ -22,6 +23,7 @@ export function TablesPlanEstudiosProvider({ children }) {
   });
   const [asignaturasList, setAsignaturasList] = useState([]);
   const [asignaturasFormacionList, setAsignaturasFormacionList] = useState([]);
+  const [asignaturasTotalList, setAsignaturasTotalList] = useState([]);
   const [docentesList, setDocentesList] = useState([]);
   const [initialValues, setInitialValues] = useState({});
   const [error, setError] = useState({});
@@ -48,6 +50,8 @@ export function TablesPlanEstudiosProvider({ children }) {
     () => ({
       asignaturasList,
       setAsignaturasList,
+      asignaturasTotalList,
+      setAsignaturasTotalList,
       docentesList,
       setDocentesList,
       asignaturasFormacionList,

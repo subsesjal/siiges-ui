@@ -85,7 +85,7 @@ export default function InputFile({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button disabled={disabled} variant="text">
+                <Button variant="text">
                   <FileOpenIcon />
                 </Button>
               </a>
@@ -116,7 +116,10 @@ InputFile.defaultProps = {
 
 InputFile.propTypes = {
   label: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   tipoDocumento: PropTypes.string.isRequired,
   tipoEntidad: PropTypes.string.isRequired,
   url: PropTypes.string,

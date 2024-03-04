@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
+import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
@@ -15,26 +15,12 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setAsignaturasList,
     formAsignaturas,
     setFormAsignaturas,
-    setError,
     error,
-    errors,
-    setErrors,
-    initialValues,
+    setError,
     setInitialValues,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
-
   const selectedGrade = grados.semestral;
-  const errorsAsignatura = errorDatosAsignaturas(
-    formAsignaturas,
-    setError,
-    error,
-  );
-  useEffect(() => {
-    if (errorsAsignatura !== undefined) {
-      setErrors(errorsAsignatura);
-    }
-  }, [errorsAsignatura, error]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -45,14 +31,8 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
   };
 
   const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (errorsAsignatura[name] && typeof errorsAsignatura[name] === 'function') {
-      if (value !== initialValue || value === '') {
-        errorsAsignatura[name]();
-      }
-    }
+    const { name } = e.target;
+    validateField(formAsignaturas, name, setError, errorDatosAsignaturas);
   };
 
   const handleInputFocus = (e) => {
@@ -60,22 +40,27 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const handleOnSubmit = () => {
-    const matchingGrade = selectedGrade.find((grade) => grade.id === formAsignaturas.gradoId);
+  const handleOnSubmit = async () => {
+    const matchingGrade = selectedGrade.find(
+      (grade) => grade.id === formAsignaturas.gradoId,
+    );
     const updatedFormAsignaturas = matchingGrade
       ? { ...formAsignaturas, grado: matchingGrade.nombre }
       : { ...formAsignaturas };
 
-    handleCreate(
-      updatedFormAsignaturas,
-      setFormAsignaturas,
-      setInitialValues,
-      setAsignaturasList,
-      hideModal,
-      errors,
-      setNoti,
-      1,
-    );
+    try {
+      await handleCreate(
+        updatedFormAsignaturas,
+        setFormAsignaturas,
+        setInitialValues,
+        setAsignaturasList,
+        hideModal,
+        setNoti,
+        1,
+      );
+    } catch (err) {
+      console.error('Submission failed:', err);
+    }
   };
 
   return (
@@ -96,12 +81,12 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         <Grid item xs={6}>
           <BasicSelect
             title="Area"
-            name="area"
+            name="areaId"
             value=""
             options={area}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.area}
+            errorMessage={error.areaId}
             required
           />
         </Grid>
@@ -146,15 +131,15 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         </Grid>
         <Grid item xs={12}>
           <Input
-            id="formacionEspecializada"
-            label="Formacion especializada"
-            name="formacionEspecializada"
-            auto="formacionEspecializada"
+            id="academia"
+            label="Academia"
+            name="academia"
+            auto="academia"
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
-            errorMessage={error.formacionEspecializada}
+            errorMessage={error.academia}
           />
         </Grid>
         <Grid item xs={12}>

@@ -1,33 +1,52 @@
 import { Grid, TextField, Typography } from '@mui/material';
-import { InputFile } from '@siiges-ui/shared';
+import { GetFile, InputFile } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import errorTrayectoriaEducativa from '../utils/sections/errors/errorTrayectoriaEducativa';
 import formtrayectoria from '../utils/sections/forms/formTrayectoria';
 
-export default function TrayectoriaEducativa({ disabled }) {
+export default function TrayectoriaEducativa({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
-  const [fileURLs, setFileURLs] = useState(Array(3).fill(''));
-  const [areFilesLoaded, setAreFilesLoaded] = useState([false, false, false]);
-
+  const [fileURLs, setFileURLs] = useState([null, null, null, null]);
   const {
-    form, setForm, error, setError, setErrors, id,
+    form, setForm, error, setError, id, programaId,
   } = useContext(SolicitudContext);
+  const errors = errorTrayectoriaEducativa(form, setError, error);
+
+  const fileData = [
+    'INFORME_RESULTADOS_TRAYECTORIA_EDUCATIVA',
+    'INSTRUMENTOS_TRAYECTORIA_EDUCATIVA',
+    'TRAYECTORIA_EDUCATIVA',
+  ].map((tipoDocumento) => ({
+    entidadId: id,
+    tipoEntidad: 'TRAYECTORIA',
+    tipoDocumento,
+  }));
 
   useEffect(() => {
-    const allFilesLoaded = areFilesLoaded.every((fileLoaded) => fileLoaded);
-    setForm((prevForm) => ({
-      ...prevForm,
-      10: { ...prevForm[10], filesLoaded: allFilesLoaded },
-    }));
-  }, [areFilesLoaded]);
-
-  useEffect(() => {
-    if (fileURLs > 0) {
-      setForm({ ...form, 9: { ...form['9'], urls: fileURLs } });
+    if (type === 'editar') {
+      fileData.forEach((fileInfo, index) => {
+        GetFile(fileInfo, (url, err) => {
+          if (!err) {
+            setFileURLs((currentURLs) => {
+              const updatedURLs = [...currentURLs];
+              updatedURLs[index] = url;
+              return updatedURLs;
+            });
+          }
+        });
+      });
+    } else if (programaId) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        9: {
+          ...prevForm[9],
+          programaId,
+        },
+      }));
     }
-  }, [fileURLs]);
+  }, [programaId]);
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [
@@ -35,19 +54,12 @@ export default function TrayectoriaEducativa({ disabled }) {
       url,
       ...prevURLs.slice(index + 1),
     ]);
-    setAreFilesLoaded((prevLoaded) => [
-      ...prevLoaded.slice(0, index),
-      true,
-      ...prevLoaded.slice(index + 1),
-    ]);
   };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formtrayectoria(name, value, setForm, 9);
   };
-
-  const errors = errorTrayectoriaEducativa(form, setError, error);
 
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
@@ -62,12 +74,6 @@ export default function TrayectoriaEducativa({ disabled }) {
     const { name, value } = e.target;
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-
-  useEffect(() => {
-    if (errors !== undefined) {
-      setErrors(errors);
-    }
-  }, [error]);
 
   return (
     <Grid container spacing={2}>
@@ -90,6 +96,7 @@ export default function TrayectoriaEducativa({ disabled }) {
             helperText={error.programaSeguimiento}
             error={!!error.programaSeguimiento}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -107,13 +114,14 @@ export default function TrayectoriaEducativa({ disabled }) {
             helperText={error.funcionTutorial}
             error={!!error.funcionTutorial}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             id="tipoTutoria"
             name="tipoTutoria"
-            label="Tipo de tutoria"
+            label="Tipo de tutoría"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -124,12 +132,13 @@ export default function TrayectoriaEducativa({ disabled }) {
             helperText={error.tipoTutoria}
             error={!!error.tipoTutoria}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="tipoEgreso"
-            name="tipoEgreso"
+            id="tasaEgreso"
+            name="tasaEgreso"
             label="Tasa de egreso"
             rows={4}
             multiline
@@ -141,13 +150,14 @@ export default function TrayectoriaEducativa({ disabled }) {
             helperText={error.tipoEgreso}
             error={!!error.tipoEgreso}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             id="estadisticasTitulacion"
             name="estadisticasTitulacion"
-            label="Estadisticas de titulacion"
+            label="Estadisticas de titulación"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -158,13 +168,14 @@ export default function TrayectoriaEducativa({ disabled }) {
             helperText={error.estadisticasTitulacion}
             error={!!error.estadisticasTitulacion}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             id="modalidadesTitulacion"
             name="modalidadesTitulacion"
-            label="Modalidades de titulacion"
+            label="Modalidades de titulación"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -175,6 +186,7 @@ export default function TrayectoriaEducativa({ disabled }) {
             helperText={error.modalidadesTitulacion}
             error={!!error.modalidadesTitulacion}
             disabled={disabled}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -226,6 +238,11 @@ export default function TrayectoriaEducativa({ disabled }) {
   );
 }
 
+TrayectoriaEducativa.defaultProps = {
+  type: null,
+};
+
 TrayectoriaEducativa.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  type: PropTypes.string,
 };

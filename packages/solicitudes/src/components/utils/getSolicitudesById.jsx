@@ -56,34 +56,36 @@ export default function getSolicitudesById(id) {
           return response.json();
         })
         .then((data) => {
-          setSolicitudes(data.data);
-          const { data: solicitud } = data;
-          setSolicitudesInspecciones({
-            id: solicitud.id,
-            nombre: solicitud.programa.nombre,
-            modalidad: modalidad[solicitud.programa.modalidadId],
-            nivel: niveles[solicitud.programa.nivelId],
-            domicilio: `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`,
-            institucion: `${solicitud.programa.plantel.institucion.nombre}`,
-            periodo: ciclos[solicitud.programa.cicloId],
-            programaId: solicitud.programa.id,
-            folio: solicitud.folio,
-          });
-          setSolicitudesProgramas({
-            id: solicitud.id,
-            acuerdoRvoe: solicitud.programa.acuerdoRvoe,
-            nivel: niveles[solicitud.programa.nivelId],
-            nombre: solicitud.programa.nombre,
-            modalidad: modalidad[solicitud.programa.modalidadId],
-            periodo: ciclos[solicitud.programa.cicloId],
-            turno: turnos[solicitud.programa.programaTurnos[0].turnoId],
-            creditos: solicitud.programa.creditos,
-            objetivoGeneral: solicitud.programa.objetivoGeneral,
-            objetivosParticulares: solicitud.programa.objetivosParticulares,
-            fechaSurteEfecto: solicitud.programa.fechaSurteEfecto,
-            duracionPeriodos: solicitud.programa.duracionPeriodos,
-          });
-          setLoading(false);
+          if (data) {
+            setSolicitudes(data.data);
+            const { data: solicitud } = data;
+            setSolicitudesInspecciones({
+              id: solicitud.id,
+              nombre: solicitud.programa?.nombre,
+              modalidad: modalidad[solicitud.programa?.modalidadId],
+              nivel: niveles[solicitud.programa?.nivelId],
+              domicilio: `${solicitud.programa?.plantel.domicilio.calle} ${solicitud.programa?.plantel.domicilio.numeroExterior}`,
+              institucion: `${solicitud.programa?.plantel.institucion.nombre}`,
+              periodo: ciclos[solicitud.programa?.cicloId],
+              programaId: solicitud.programa?.id,
+              folio: solicitud.folio,
+            });
+            setSolicitudesProgramas({
+              id: solicitud.id,
+              acuerdoRvoe: solicitud.programa?.acuerdoRvoe,
+              nivel: niveles[solicitud.programa?.nivelId],
+              nombre: solicitud.programa?.nombre,
+              modalidad: modalidad[solicitud.programa?.modalidadId],
+              periodo: ciclos[solicitud.programa?.cicloId],
+              turno: turnos[solicitud.programa?.programaTurnos[0].turnoId],
+              creditos: solicitud.programa?.creditos,
+              objetivoGeneral: solicitud.programa?.objetivoGeneral,
+              objetivosParticulares: solicitud.programa?.objetivosParticulares,
+              fechaSurteEfecto: solicitud.programa?.fechaSurteEfecto,
+              duracionPeriodos: solicitud.programa?.duracionPeriodos,
+            });
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.error('Error:', error);

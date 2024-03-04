@@ -6,7 +6,6 @@ const handleEdit = async (
   setInitialValues,
   setAsignaturasList,
   hideModal,
-  errors,
   setNoti,
   programaId,
   tipo,
@@ -16,17 +15,6 @@ const handleEdit = async (
   const token = getToken();
 
   try {
-    const isValid = Object.keys(errors).every((campo) => errors[campo]());
-
-    if (!isValid) {
-      setNoti({
-        open: true,
-        message: 'Algo salió mal, revisa que los campos estén correctos',
-        type: 'error',
-      });
-      return;
-    }
-
     const response = await fetch(`${url}/api/v1/asignaturas/${form.id}`, {
       method: 'PATCH',
       headers: {
@@ -54,7 +42,7 @@ const handleEdit = async (
       return newList;
     });
 
-    setForm({ programaId, tipo });
+    setForm({ programaId, tipo, areaId: data.data.areaId });
     setInitialValues({});
     hideModal();
 

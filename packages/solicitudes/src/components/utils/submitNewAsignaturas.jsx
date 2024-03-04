@@ -6,7 +6,6 @@ const handleCreate = async (
   setInitialValues,
   setAsignaturasList,
   hideModal,
-  errors,
   setNoti,
   tipo,
 ) => {
@@ -15,18 +14,6 @@ const handleCreate = async (
   const token = getToken();
 
   try {
-    const isValid = Object.keys(errors).every((campo) => errors[campo]());
-
-    if (!isValid) {
-      const validationError = new Error('Validation failed');
-      setNoti({
-        open: true,
-        message: 'Algo salió mal, revisa que los campos estén correctos',
-        type: 'error',
-      });
-      throw validationError;
-    }
-
     const response = await fetch(`${url}/api/v1/asignaturas`, {
       method: 'POST',
       headers: {
@@ -38,23 +25,22 @@ const handleCreate = async (
     });
 
     if (!response.ok) {
-      const networkError = new Error('Network error');
       setNoti({
         open: true,
         message:
           'Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo.',
         type: 'error',
       });
-      throw networkError;
+      throw new Error('Network error');
     }
 
     const data = await response.json();
     const newData = { ...form, id: data.data.id };
 
     setAsignaturasList((prevList) => [...prevList, newData]);
-
-    setForm({ programaId: data.data.programaId, tipo });
+    setForm({ programaId: data.data.programaId, tipo, areaId: data.data.areaId });
     setInitialValues({});
+
     hideModal();
 
     setNoti({
