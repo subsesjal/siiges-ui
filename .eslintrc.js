@@ -1,38 +1,35 @@
-const path = require('path');
-
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
-    node: true,
-    jest: true,
-  },
-  extends: ['plugin:react/recommended', 'airbnb'],
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
+    "env": {
+        "browser": true,
+        "es2021": true
     },
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-  },
-  plugins: ['react'],
-  rules: {
-    'linebreak-style': 0,
-    'import/no-extraneous-dependencies': [
-      'error',
-      {
-        packageDir: [
-          __dirname,
-          path.join(__dirname, 'packages/authentication'),
-          path.join(__dirname, 'packages/inspecciones'),
-          path.join(__dirname, 'packages/instituciones'),
-          path.join(__dirname, 'packages/serviciosescolares'),
-          path.join(__dirname, 'packages/shared'),
-          path.join(__dirname, 'packages/solicitudes'),
-          path.join(__dirname, 'packages/users'),
-          path.join(__dirname, 'apps/siiges-app'),
-        ],
-      },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended"
     ],
-  },
-};
+    "overrides": [
+        {
+            "env": {
+                "node": true
+            },
+            "files": [
+                ".eslintrc.{js,cjs}"
+            ],
+            "parserOptions": {
+                "sourceType": "script"
+            }
+        }
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "react"
+    ],
+    "rules": {
+    }
+}
