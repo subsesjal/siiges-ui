@@ -46,31 +46,33 @@ export default function DocentesModal({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+
     setFormDocentes((prevData) => {
+      const newData = JSON.parse(JSON.stringify(prevData));
+
       if (name === 'asignaturasDocentes') {
         const newValue = Array.isArray(value) ? value : [value];
-        return {
-          ...prevData,
-          asignaturasDocentes: newValue,
-        };
-      }
-      if (
-        name === 'nombre'
-        || name === 'apellidoPaterno'
-        || name === 'apellidoMaterno'
+        newData.asignaturasDocentes = newValue;
+      } else if (
+        ['nombre', 'apellidoPaterno', 'apellidoMaterno'].includes(name)
       ) {
-        return {
-          ...prevData,
-          persona: {
-            ...prevData.persona,
-            [name]: value,
-          },
-        };
+        newData.persona = { ...newData.persona, [name]: value };
+      } else if (name.endsWith('2')) {
+        const baseName = name.slice(0, -1);
+        newData.formacionesDocente = newData.formacionesDocente || [];
+        newData.formacionesDocente[1] = newData.formacionesDocente[1] || {};
+        newData.formacionesDocente[1][baseName] = value;
+      } else if (name.startsWith('formacion')) {
+        const [index, field] = name.split('_');
+        const idx = parseInt(index, 10);
+        newData.formacionesDocente = newData.formacionesDocente || [];
+        newData.formacionesDocente[idx] = newData.formacionesDocente[idx] || {};
+        newData.formacionesDocente[idx][field] = value;
+      } else {
+        newData[name] = value;
       }
-      return {
-        ...prevData,
-        [name]: value,
-      };
+
+      return newData;
     });
   };
 
@@ -307,7 +309,7 @@ export default function DocentesModal({
           <Grid item xs={3}>
             <Select
               title="Nivel"
-              name="nivel"
+              name="formacion_nivel"
               value={formDocentes.nivel}
               options={nivel}
               onchange={handleOnChange}
@@ -320,10 +322,9 @@ export default function DocentesModal({
           </Grid>
           <Grid item xs={8}>
             <Input
-              id="nombreGrado"
+              id="formacion_nombre"
               label="Nombre del grado"
-              name="nombreGrado"
-              auto="nombreGrado"
+              name="formacion_nombre"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -336,7 +337,7 @@ export default function DocentesModal({
           <Grid item xs={5}>
             <Select
               title="Documento presentado"
-              name="documentoPresentado"
+              name="formacion_documentoPresentado"
               value={formDocentes.documentoPresentado}
               options={documentosPresentados}
               onchange={handleOnChange}
@@ -349,10 +350,9 @@ export default function DocentesModal({
           </Grid>
           <Grid item xs={6}>
             <Input
-              id="fechaGraduado"
+              id="formacion_fechaGraduado"
               label="Fecha de Graduado"
               name="fechaGraduado"
-              auto="fechaGraduado"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -371,7 +371,7 @@ export default function DocentesModal({
           <Grid item xs={3}>
             <Select
               title="Nivel"
-              name="nivel2"
+              name="formacion_nivel2"
               value={formDocentes.nivel2}
               options={nivel}
               onchange={handleOnChange}
@@ -384,10 +384,9 @@ export default function DocentesModal({
           </Grid>
           <Grid item xs={8}>
             <Input
-              id="nombreGrado2"
+              id="formacion_nombre2"
               label="Nombre del grado"
-              name="nombreGrado2"
-              auto="nombreGrado2"
+              name="formacion_nombre2"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -400,7 +399,7 @@ export default function DocentesModal({
           <Grid item xs={5}>
             <Select
               title="Documento presentado"
-              name="documentoPresentado2"
+              name="formacion_documentoPresentado2"
               value={formDocentes.documentoPresentado2}
               options={documentosPresentados}
               onchange={handleOnChange}
@@ -413,10 +412,9 @@ export default function DocentesModal({
           </Grid>
           <Grid item xs={6}>
             <Input
-              id="fechaGraduado2"
+              id="formacion_fechaGraduado2"
               label="Fecha de Graduado"
-              name="fechaGraduado2"
-              auto="fechaGraduado2"
+              name="formacion_fechaGraduado2"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}

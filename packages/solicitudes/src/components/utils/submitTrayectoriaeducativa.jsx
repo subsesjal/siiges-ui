@@ -39,7 +39,7 @@ async function submitTrayectoriaEducativa(validations) {
       const responseData = await response.json();
       setTrayectoriaStatus('edit');
       setForm((prevForm) => {
-        const updatedForm = [...prevForm];
+        const updatedForm = { ...prevForm };
         updatedForm[9] = responseData;
         return updatedForm;
       });

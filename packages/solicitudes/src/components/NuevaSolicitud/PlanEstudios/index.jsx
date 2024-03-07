@@ -137,8 +137,7 @@ export default function PlanEstudios({
       }));
     }
 
-    if (trayectorias && trayectoriaStatus) {
-      setTrayectoriaStatus('edit');
+    if (trayectorias.id !== undefined) {
       setForm((prevForm) => ({
         ...prevForm,
         9: {
@@ -151,6 +150,14 @@ export default function PlanEstudios({
           tasaEgreso: trayectorias.tasaEgreso,
           estadisticasTitulacion: trayectorias.estadisticasTitulacion,
           modalidadesTitulacion: trayectorias.modalidadesTitulacion,
+        },
+      }));
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        9: {
+          ...prevForm[9],
+          programaId,
         },
       }));
     }
@@ -175,6 +182,7 @@ export default function PlanEstudios({
       programaId,
       setProgramaId,
       trayectoriaStatus,
+      setTrayectoriaStatus,
     }),
     [form, error, errors, noti, id, programaId, modalidad, trayectoriaStatus],
   );
