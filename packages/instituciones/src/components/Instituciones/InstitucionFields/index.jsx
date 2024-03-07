@@ -304,10 +304,13 @@ InstitucionFields.propTypes = {
         correoPrimario: PropTypes.string,
       }),
     }),
-    ratificacionesNombre: PropTypes.shape([{
-      nombrePropuesto1: PropTypes.string,
-      nombrePropuesto2: PropTypes.string,
-      nombrePropuesto3: PropTypes.string,
-    }]),
+    ratificacionesNombre: PropTypes.arrayOf(
+      PropTypes.shape({
+        nombrePropuesto1: PropTypes.string,
+        nombrePropuesto2: PropTypes.string,
+        nombrePropuesto3: PropTypes.string,
+        esNombreAutorizado: PropTypes.bool,
+      }),
+    ),
   }),
 };

@@ -6,9 +6,16 @@ import {
 import InstitucionView from '../InstitucionView';
 import PlantelesTable from '../../Planteles/PlantelesTable';
 
-export default function InstitucionBox({ institucion, setLoading, setTitle }) {
+export default function InstitucionBox({
+  institucion, setLoading, setTitle, session,
+}) {
   useEffect(() => {
-    setTitle('Institución');
+    if (institucion.ratificacionesNombre.length
+      && institucion.ratificacionesNombre[0].esNombreAutorizado) {
+      setTitle(institucion.ratificacionesNombre[0].nombreAutorizado);
+    } else {
+      setTitle('Institución');
+    }
 
     setLoading(true);
 
@@ -33,7 +40,7 @@ export default function InstitucionBox({ institucion, setLoading, setTitle }) {
           </Tabs>
         </Box>
       </Grid>
-      {value === 0 && <InstitucionView data={institucion} />}
+      {value === 0 && <InstitucionView institucion={institucion} session={session} />}
       {value === 1 && (
       <PlantelesTable
         institucionId={institucion.id}
@@ -54,5 +61,20 @@ InstitucionBox.propTypes = {
         id: PropTypes.number.isRequired,
       }),
     ),
+    ratificacionesNombre: PropTypes.arrayOf(
+      PropTypes.shape({
+        nombrePropuesto1: PropTypes.string,
+        nombrePropuesto2: PropTypes.string,
+        nombrePropuesto3: PropTypes.string,
+        nombreAutorizado: PropTypes.string,
+        esNombreAutorizado: PropTypes.bool,
+      }),
+    ),
+  }).isRequired,
+  session: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    nombre: PropTypes.string.isRequired,
+    rol: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
   }).isRequired,
 };
