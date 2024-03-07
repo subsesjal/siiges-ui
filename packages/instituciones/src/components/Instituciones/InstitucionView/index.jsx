@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
-  ButtonStyled, SnackAlert, SubmitDocument, fileToFormData, ListSubtitle, ListTitle,
+  ButtonStyled, SnackAlert, SubmitDocument, fileToFormData, ListSubtitle, ListTitle, formattedDate,
 } from '@siiges-ui/shared';
 import { DropzoneDialog } from 'mui-file-dropzone';
 
@@ -198,7 +198,7 @@ export default function InstitucionView({ institucion, session }) {
                           }
                         />
                         <ListSubtitle text={
-                          institucion?.ratificacionesNombre[0]?.fechaAutorizacion
+                          formattedDate(institucion?.ratificacionesNombre[0]?.fechaAutorizacion)
                           }
                         />
                       </List>
