@@ -14,6 +14,7 @@ function InstitucionWrapper({
             institucion={institucion}
             setLoading={setLoading}
             setTitle={setTitle}
+            session={session}
           />
         )
         : (

@@ -30,15 +30,15 @@ function ModalState() {
   };
 }
 
-export default function Planteles({ data, institucion }) {
+export default function Planteles({ planteles, institucionId }) {
   const router = useRouter();
   const {
     modal, showModal, hideModal, modalId,
   } = ModalState();
 
   const [rows, setRows] = useState(
-    data.map((value) => ({
-      institucion,
+    planteles.map((value) => ({
+      institucionId,
       id: value.id,
       domicilio: `${value.domicilio.calle} #${value.domicilio.numeroExterior}`,
       colonia: value.domicilio.colonia,
@@ -71,13 +71,13 @@ export default function Planteles({ data, institucion }) {
           {params.row.claveCentroTrabajo ? (
             <ActionButtons
               id={params.id}
-              consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
+              consultar={`/instituciones/${institucionId}/planteles/consultar/${params.id}`}
             />
           ) : (
             <ActionButtons
               id={params.id}
-              consultar={`/institucion/${params.row.institucion}/consultarPlantel/${params.id}`}
-              editar={`/institucion/${params.row.institucion}/editarPlantel/${params.id}`}
+              consultar={`/instituciones/${institucionId}/planteles/consultar/${params.id}`}
+              editar={`/instituciones/${institucionId}/planteles/editar/${params.id}`}
               eliminar={() => showModal(params.id)}
             />
           )}
@@ -127,9 +127,9 @@ export default function Planteles({ data, institucion }) {
         title="Planteles"
         buttonAdd
         buttonText="Agregar Plantel"
-        buttonType="Add"
+        buttonType="add"
         buttonClick={() => {
-          router.push(`/institucion/${institucion}/nuevoPlantel`);
+          router.push(`/instituciones/${institucionId}/planteles/crear`);
         }}
       />
     </Grid>
@@ -137,8 +137,8 @@ export default function Planteles({ data, institucion }) {
 }
 
 Planteles.propTypes = {
-  institucion: PropTypes.number.isRequired,
-  data: PropTypes.arrayOf(
+  institucionId: PropTypes.number.isRequired,
+  planteles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
       claveCentroTrabajo: PropTypes.string,

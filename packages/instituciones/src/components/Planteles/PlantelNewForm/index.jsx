@@ -6,13 +6,13 @@ import {
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
-import getMunicipios from '../utils/getMunicipios';
-import submitNewPlantel from '../utils/submitNewPlantel';
-import plantelErrors from '../utils/plantelErrors';
-import formPlantel from '../utils/formPlantel';
-import submitEditPlantel from '../utils/submitEditPlantel';
+import getMunicipios from '../../utils/getMunicipios';
+import submitNewPlantel from '../../utils/submitNewPlantel';
+import plantelErrors from '../../utils/plantelErrors';
+import formPlantel from '../../utils/formPlantel';
+import submitEditPlantel from '../../utils/submitEditPlantel';
 
-export default function PlantelForm({ plantel }) {
+export default function PlantelNewForm({ plantel, setLoading }) {
   const router = useRouter();
   const [form, setForm] = useState({
     domicilio: { estadoId: 14 },
@@ -69,7 +69,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={3}>
             <Input
-              label="Numero exterior"
+              label="Número exterior"
               id="numeroExterior"
               name="numeroExterior"
               auto="numeroExterior"
@@ -84,7 +84,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={3}>
             <Input
-              label="Numero interior"
+              label="Número interior"
               id="numeroInterior"
               name="numeroInterior"
               auto="numeroInterior"
@@ -113,7 +113,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={3}>
             <Input
-              label="Codigo Postal"
+              label="Código Postal"
               id="codigoPostal"
               name="codigoPostal"
               auto="codigoPostal"
@@ -142,7 +142,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={3}>
             <BasicSelect
-              title="Tipo Inmueble"
+              title="Tipo de inmueble"
               name="tipoInmuebleId"
               value={plantel
                 ? plantel.tipoInmuebleId
@@ -156,7 +156,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
         </Grid>
       </Grid>
-      <Typography variant="h6">Datos generales</Typography>
+      <Typography variant="h6">Datos Generales</Typography>
       <Grid item sx={{ ml: 15 }}>
         <Grid container spacing={2}>
           <Grid item xs={3}>
@@ -207,7 +207,7 @@ export default function PlantelForm({ plantel }) {
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Input
-              label="Telefono 1"
+              label="Teléfono 1"
               id="telefono1"
               name="telefono1"
               auto="telefono1"
@@ -222,7 +222,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={3}>
             <Input
-              label="Telefono 2"
+              label="Teléfono 2"
               id="telefono2"
               name="telefono2"
               auto="telefono2"
@@ -237,7 +237,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={3}>
             <Input
-              label="Telefono 3"
+              label="Teléfono 3"
               id="telefono3"
               name="telefono3"
               auto="telefono3"
@@ -301,7 +301,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Apellido Paterno"
+              label="Primer apellido"
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
@@ -316,7 +316,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Apellido Materno"
+              label="Segudo apellido"
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
@@ -346,7 +346,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={3}>
             <Input
-              label="Curp"
+              label="CURP"
               id="curp"
               name="curp"
               auto="curp"
@@ -361,7 +361,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={3}>
             <BasicSelect
-              title="Genero"
+              title="Género"
               name="sexo"
               value={plantel
                 ? plantel.directores[0]?.persona.sexo
@@ -375,7 +375,7 @@ export default function PlantelForm({ plantel }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Correo electronico"
+              label="Correo electrónico"
               id="correoPrimario"
               name="correoPrimario"
               auto="correoPrimario"
@@ -393,7 +393,9 @@ export default function PlantelForm({ plantel }) {
           cancel={router.back}
           confirm={plantel
             ? () => submitEditPlantel(form, setNoti)
-            : () => submitNewPlantel(errors, form, setNoti)}
+            : () => submitNewPlantel({
+              errors, form, setNoti, setLoading,
+            })}
         />
       </Grid>
       <SnackAlert
@@ -408,11 +410,12 @@ export default function PlantelForm({ plantel }) {
   );
 }
 
-PlantelForm.defaultProps = {
+PlantelNewForm.defaultProps = {
   plantel: null,
 };
 
-PlantelForm.propTypes = {
+PlantelNewForm.propTypes = {
+  setLoading: PropTypes.func.isRequired,
   plantel: PropTypes.shape({
     domicilio: PropTypes.shape({
       id: PropTypes.number,
