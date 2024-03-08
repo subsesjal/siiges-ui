@@ -371,7 +371,7 @@ export default function DocentesModal({
           <Grid item xs={3}>
             <Select
               title="Nivel"
-              name="formacion_nivel2"
+              name="formacion_nivel_2"
               value={formDocentes.nivel2}
               options={nivel}
               onchange={handleOnChange}
@@ -384,9 +384,9 @@ export default function DocentesModal({
           </Grid>
           <Grid item xs={8}>
             <Input
-              id="formacion_nombre2"
+              id="formacion_nombre_2"
               label="Nombre del grado"
-              name="formacion_nombre2"
+              name="formacion_nombre_2"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -399,7 +399,7 @@ export default function DocentesModal({
           <Grid item xs={5}>
             <Select
               title="Documento presentado"
-              name="formacion_documentoPresentado2"
+              name="formacion_documentoPresentado_2"
               value={formDocentes.documentoPresentado2}
               options={documentosPresentados}
               onchange={handleOnChange}
@@ -412,9 +412,9 @@ export default function DocentesModal({
           </Grid>
           <Grid item xs={6}>
             <Input
-              id="formacion_fechaGraduado2"
+              id="formacion_fechaGraduado_2"
               label="Fecha de Graduado"
-              name="formacion_fechaGraduado2"
+              name="formacion_fechaGraduado_2"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
