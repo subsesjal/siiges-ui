@@ -17,6 +17,7 @@ import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
 import submitHigienesPlantel from '../utils/submitHigienesPlantel';
 import submitRatificacion from '../utils/submitRatificacion';
 import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularContext';
+import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
 
 export default function ButtonSection({
@@ -29,61 +30,55 @@ export default function ButtonSection({
   sectionTitle,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
-  const { setNoti } = useContext(Context);
+  const { setNoti, session } = useContext(Context);
   const validations = useContext(SolicitudContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
   const plantelesValidations = useContext(PlantelContext);
   const evaluacionCurricular = useEvaluacionCurricular();
   const router = useRouter();
+  const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
   let submit;
 
-  if (sectionTitle === 'Datos Generales') {
-    if (sections === 1) {
-      submit = () => {
-        submitInstitucion(datosGeneralesValidations, sections, setNoti);
-      };
-    } else if (sections === 2) {
-      submit = () => {
-        submitRepresentante(datosGeneralesValidations, sections, setNoti);
-      };
-    } else if (sections === 3) {
-      submit = () => {
-        console.log(
-          'Performing action for "Datos Generales" with sections === 3',
-        );
-      };
-    }
-  } else if (sectionTitle === 'Plantel') {
-    if (sections === 1) {
-      submit = () => {
-        submitEditPlantel(plantelesValidations, sections, id, setNoti, router);
-      };
-    } else if (sections === 2) {
-      submit = () => {
-        submitDescripcionPlantel(
-          plantelesValidations,
-          setNoti,
-          router.query.plantel,
-        );
-      };
-    } else if (sections === 3) {
-      submit = () => {
-        submitHigienesPlantel(
-          plantelesValidations,
-          setNoti,
-          router.query.plantel,
-        );
-      };
-    } else if (sections === 6) {
-      submit = () => {
-        submitRatificacion(plantelesValidations, setNoti);
-      };
-    }
-  } else if (sectionTitle === 'Evaluación Curricular') {
-    if (sections === 1) {
-      submit = () => {
-        submitEvaluacionCurricular(evaluacionCurricular, setNoti);
-      };
+  const buttonText = session.rol === 'control_documental'
+    ? 'Guardar observaciones'
+    : 'Terminar Sección';
+  const buttonTextEnd = session.rol === 'control_documental'
+    ? 'Guardar observaciones'
+    : 'Terminar Solicitud';
+
+  const sectionFunctions = {
+    'Datos Generales': {
+      1: () => submitInstitucion(datosGeneralesValidations, sections, setNoti),
+      2: () => submitRepresentante(datosGeneralesValidations, sections, setNoti),
+      3: () => console.log(
+        'Performing action for "Datos Generales" with sections === 3',
+      ),
+    },
+    Plantel: {
+      1: () => submitEditPlantel(plantelesValidations, sections, id, setNoti, router),
+      2: () => submitDescripcionPlantel(
+        plantelesValidations,
+        setNoti,
+        router.query.plantel,
+      ),
+      3: () => submitHigienesPlantel(
+        plantelesValidations,
+        setNoti,
+        router.query.plantel,
+      ),
+      6: () => submitRatificacion(plantelesValidations, setNoti),
+    },
+    'Evaluación Curricular': {
+      1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti),
+    },
+    'Plan de estudios': () => setCreateObservaciones(true),
+  };
+
+  if (sectionFunctions[sectionTitle]) {
+    if (typeof sectionFunctions[sectionTitle] === 'function') {
+      submit = sectionFunctions[sectionTitle];
+    } else if (sectionFunctions[sectionTitle][sections]) {
+      submit = sectionFunctions[sectionTitle][sections];
     }
   } else if (newSubmit) {
     if (type !== 'editar') {
@@ -101,8 +96,8 @@ export default function ButtonSection({
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={9}>
             <ButtonStyled
-              text="Terminar"
-              alt="Terminar solicitud"
+              text={buttonText}
+              alt={buttonText}
               type="success"
               onclick={submit}
             />
@@ -129,8 +124,8 @@ export default function ButtonSection({
           </Grid>
           <Grid item xs={4}>
             <ButtonStyled
-              text="Terminar"
-              alt="Terminar solicitud"
+              text={buttonText}
+              alt={buttonText}
               type="success"
               onclick={submit}
             />
@@ -157,8 +152,8 @@ export default function ButtonSection({
           </Grid>
           <Grid item xs={3}>
             <ButtonStyled
-              text="Terminar"
-              alt="Terminar solicitud"
+              text={buttonTextEnd}
+              alt={buttonTextEnd}
               type="success"
               onclick={submit}
             />
@@ -169,7 +164,7 @@ export default function ButtonSection({
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={12}>
             <ButtonStyled
-              text="Terminar"
+              text="Terminar solicitud"
               alt="Terminar solicitud"
               type="success"
               onclick={submit}

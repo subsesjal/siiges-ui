@@ -26,6 +26,7 @@ export function TablesPlanEstudiosProvider({ children }) {
   const [initialValues, setInitialValues] = useState({});
   const [error, setError] = useState({});
   const [errors, setErrors] = useState({});
+  const [createObservaciones, setCreateObservaciones] = useState(false);
 
   useEffect(() => {
     if (programaId) {
@@ -67,6 +68,8 @@ export function TablesPlanEstudiosProvider({ children }) {
       id,
       setNoti,
       programaId,
+      createObservaciones,
+      setCreateObservaciones,
     }),
     [
       asignaturasList,
@@ -88,6 +91,8 @@ export function TablesPlanEstudiosProvider({ children }) {
       id,
       setNoti,
       programaId,
+      createObservaciones,
+      setCreateObservaciones,
     ],
   );
 
