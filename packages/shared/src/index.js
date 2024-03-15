@@ -1,5 +1,6 @@
 import Title from './components/Title';
 import Input from './components/Input';
+import InputDate from './components/Input/InputDate';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Select from './components/Select';
@@ -72,6 +73,7 @@ export {
   DataTable,
   LogoWhite,
   ListTitle,
+  InputDate,
   PaperHome,
   SnackAlert,
   Background,

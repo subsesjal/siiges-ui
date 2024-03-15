@@ -3,7 +3,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import DeleteDocentes from './DocentesModales/DeleteDocentes';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
 import DocentesModal from './DocentesModales/DocentesModal';
@@ -16,10 +16,6 @@ export default function DocentesButtons({ id, docentesList, setDocentesList }) {
   const { setFormDocentes, programaId } = useContext(TablesPlanEstudiosContext);
   const rowItem = docentesList.find((item) => item.id === id);
 
-  useEffect(() => {
-    setFormDocentes(rowItem);
-  }, [rowItem]);
-
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);
     setModalOpen(true);
@@ -29,8 +25,9 @@ export default function DocentesButtons({ id, docentesList, setDocentesList }) {
     setModalOpen(false);
     setFormDocentes({
       esAceptado: true,
-      asignaturasDocentes: [],
       programaId,
+      asignaturasDocentes: [],
+      formacionesDocente: [],
     });
     setDeleteDialogOpen(false);
   };
@@ -61,6 +58,7 @@ export default function DocentesButtons({ id, docentesList, setDocentesList }) {
           open={modalOpen}
           id={id}
           mode={isEdit ? 'edit' : 'consult'}
+          rowItem={rowItem}
           setDocentesList={setDocentesList}
         />
       )}

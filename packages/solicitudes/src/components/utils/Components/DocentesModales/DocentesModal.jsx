@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   ButtonSimple,
+  InputDate,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -24,7 +25,7 @@ export default function DocentesModal({
   title: propTitle,
   setDocentesList,
   mode,
-  initialValues,
+  rowItem,
 }) {
   const {
     formDocentes,
@@ -39,35 +40,44 @@ export default function DocentesModal({
   const [currentSection, setCurrentSection] = useState(1);
 
   useEffect(() => {
-    if (mode !== 'create' && initialValues) {
-      setFormDocentes(initialValues);
+    if (mode !== 'create') {
+      setFormDocentes(rowItem);
     }
-  }, [mode, initialValues, setFormDocentes]);
+  }, [mode]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
 
     setFormDocentes((prevData) => {
-      const newData = JSON.parse(JSON.stringify(prevData));
+      const newData = { ...prevData };
+      const personaFields = ['nombre', 'apellidoPaterno', 'apellidoMaterno'];
 
       if (name === 'asignaturasDocentes') {
         const newValue = Array.isArray(value) ? value : [value];
         newData.asignaturasDocentes = newValue;
-      } else if (
-        ['nombre', 'apellidoPaterno', 'apellidoMaterno'].includes(name)
-      ) {
-        newData.persona = { ...newData.persona, [name]: value };
-      } else if (name.endsWith('2')) {
-        const baseName = name.slice(0, -1);
-        newData.formacionesDocente = newData.formacionesDocente || [];
-        newData.formacionesDocente[1] = newData.formacionesDocente[1] || {};
-        newData.formacionesDocente[1][baseName] = value;
-      } else if (name.startsWith('formacion')) {
-        const [index, field] = name.split('_');
-        const idx = parseInt(index, 10);
-        newData.formacionesDocente = newData.formacionesDocente || [];
-        newData.formacionesDocente[idx] = newData.formacionesDocente[idx] || {};
-        newData.formacionesDocente[idx][field] = value;
+      } else if (name.includes('formacion')) {
+        const parts = name.split('_');
+        const index = parseInt(parts[1], 10) - 1;
+        const fieldName = parts.slice(2).join('_');
+
+        if (!Array.isArray(newData.formacionesDocente)) {
+          newData.formacionesDocente = [];
+        }
+
+        while (newData.formacionesDocente.length <= index) {
+          newData.formacionesDocente.push({});
+        }
+
+        const updatedFormacion = {
+          ...newData.formacionesDocente[index],
+          [fieldName]: value,
+        };
+        newData.formacionesDocente[index] = updatedFormacion;
+      } else if (personaFields.includes(name)) {
+        if (!newData.persona) {
+          newData.persona = {};
+        }
+        newData.persona[name] = value;
       } else {
         newData[name] = value;
       }
@@ -230,7 +240,7 @@ export default function DocentesModal({
               title="Asignaturas para las que se propone"
               name="asignaturasDocentes"
               multiple
-              value={[]}
+              value={formDocentes.asignaturasDocentes || []}
               options={asignaturas.asignaturas}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -309,27 +319,26 @@ export default function DocentesModal({
           <Grid item xs={3}>
             <Select
               title="Nivel"
-              name="formacion_nivel"
-              value={formDocentes.nivel}
+              name="formacion_1_nivelId"
+              value=""
               options={nivel}
               onchange={handleOnChange}
               onblur={handleOnBlur}
-              errorMessage={error.nivel}
-              textValue
+              errorMessage={error.formacion_1_nivelId}
               required
               disabled={isConsultMode}
             />
           </Grid>
           <Grid item xs={8}>
             <Input
-              id="formacion_nombre"
+              id="formacion_1_nombre"
               label="Nombre del grado"
-              name="formacion_nombre"
+              name="formacion_1_nombre"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
-              errorMessage={error.nombreGrado}
+              errorMessage={error.formacion_1_nombre}
               disabled={isConsultMode}
             />
           </Grid>
@@ -337,28 +346,41 @@ export default function DocentesModal({
           <Grid item xs={5}>
             <Select
               title="Documento presentado"
-              name="formacion_documentoPresentado"
-              value={formDocentes.documentoPresentado}
+              name="formacion_1_documentoPresentado"
+              value=""
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
-              errorMessage={error.documentoPresentado}
+              errorMessage={error.formacion_1_documentoPresentado}
               textValue
               required
               disabled={isConsultMode}
             />
           </Grid>
           <Grid item xs={6}>
-            <Input
-              id="formacion_fechaGraduado"
+            <InputDate
+              id="formacion_1_fechaGraduado"
               label="Fecha de Graduado"
-              name="fechaGraduado"
+              name="formacion_1_fechaGraduado"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
-              type="date"
               required
-              errorMessage={error.fechaGraduado}
+              errorMessage={error.formacion_1_fechaGraduado}
+              disabled={isConsultMode}
+            />
+          </Grid>
+          <Grid item xs={1} />
+          <Grid item xs={11}>
+            <Input
+              id="formacion_1_institucion"
+              label="Nombre de la Institución"
+              name="formacion_1_institucion"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.formacion_1_institucion}
               disabled={isConsultMode}
             />
           </Grid>
@@ -371,27 +393,26 @@ export default function DocentesModal({
           <Grid item xs={3}>
             <Select
               title="Nivel"
-              name="formacion_nivel_2"
-              value={formDocentes.nivel2}
+              name="formacion_2_nivelId"
+              value=""
               options={nivel}
               onchange={handleOnChange}
               onblur={handleOnBlur}
-              errorMessage={error.nivel2}
-              textValue
+              errorMessage={error.formacion_2_nivelId}
               required
               disabled={isConsultMode}
             />
           </Grid>
           <Grid item xs={8}>
             <Input
-              id="formacion_nombre_2"
+              id="formacion_2_nombre"
               label="Nombre del grado"
-              name="formacion_nombre_2"
+              name="formacion_2_nombre"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
-              errorMessage={error.nombreGrado2}
+              errorMessage={error.formacion_2_nombre}
               disabled={isConsultMode}
             />
           </Grid>
@@ -399,28 +420,41 @@ export default function DocentesModal({
           <Grid item xs={5}>
             <Select
               title="Documento presentado"
-              name="formacion_documentoPresentado_2"
-              value={formDocentes.documentoPresentado2}
+              name="formacion_2_documentoPresentado"
+              value=""
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
-              errorMessage={error.documentoPresentado2}
+              errorMessage={error.formacion_2_documentoPresentado}
               textValue
               required
               disabled={isConsultMode}
             />
           </Grid>
           <Grid item xs={6}>
-            <Input
-              id="formacion_fechaGraduado_2"
+            <InputDate
+              id="formacion_2_fechaGraduado"
               label="Fecha de Graduado"
-              name="formacion_fechaGraduado_2"
+              name="formacion_2_fechaGraduado"
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
-              type="date"
               required
-              errorMessage={error.fechaGraduado2}
+              errorMessage={error.formacion_2_fechaGraduado}
+              disabled={isConsultMode}
+            />
+          </Grid>
+          <Grid item xs={1} />
+          <Grid item xs={11}>
+            <Input
+              id="formacion_2_institucion"
+              label="Nombre de la Institución"
+              name="formacion_2_institucion"
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              required
+              errorMessage={error.formacion_2_institucion}
               disabled={isConsultMode}
             />
           </Grid>
@@ -472,11 +506,15 @@ export default function DocentesModal({
   );
 }
 
+DocentesModal.defaultProps = {
+  rowItem: null,
+};
+
 DocentesModal.propTypes = {
   open: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
   setDocentesList: PropTypes.func.isRequired,
   mode: PropTypes.oneOf(['create', 'edit', 'consult']).isRequired,
-  initialValues: PropTypes.objectOf(PropTypes.string).isRequired,
+  rowItem: PropTypes.objectOf(PropTypes.string),
 };
