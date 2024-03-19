@@ -10,7 +10,7 @@ function SolicitudesActions({ id }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
-        <Link href={`/solicitudes/detallesSolicitudes/${id}`}>
+        <Link href={`/solicitudes/detalles/${id}`}>
           <IconButton aria-label="consultar">
             <ListAltIcon />
           </IconButton>
