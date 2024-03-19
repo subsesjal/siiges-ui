@@ -25,6 +25,7 @@ export default function ConsultarInstitucion() {
             institucion={institucion}
             setLoading={setLoading}
             setTitle={setTitle}
+            session={session}
           />
         )
         : <div />}

@@ -82,12 +82,15 @@ export default function ModuleHeader({
   );
 }
 
+ModuleHeader.defaultProps = {
+  id: null,
+};
+
 ModuleHeader.propTypes = {
   type: PropTypes.string.isRequired,
   steps: PropTypes.arrayOf(PropTypes.string).isRequired,
   date: PropTypes.string.isRequired,
   nextModule: PropTypes.func.isRequired,
   module: PropTypes.number.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]),
 };

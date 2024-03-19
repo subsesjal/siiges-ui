@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import { useRouter } from 'next/router';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
+import { Context } from '@siiges-ui/shared';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import DatosPlantel from '../../Sections/DatosPlantel';
@@ -16,8 +17,9 @@ import { PlantelProvider } from '../../utils/Context/plantelContext';
 
 export default function Plantel({ nextModule, id, programaId }) {
   const [disabled, setDisabled] = useState(true);
+  const { session } = useContext(Context);
   const { query } = useRouter();
-  const { institucion, loading } = getInstitucionUsuario();
+  const { institucion, loading } = getInstitucionUsuario(session);
   const [ratificacion, setRatificacion] = useState(<RatificacionNombre />);
   const [plantelesData, setPlantelesData] = useState({
     plantelId: query.plantel,
@@ -43,7 +45,7 @@ export default function Plantel({ nextModule, id, programaId }) {
   const renderSection6 = () => (section === 6 ? ratificacion : null);
 
   if (loading) {
-    return null; // Or return a loading spinner or placeholder
+    return null;
   }
 
   return (

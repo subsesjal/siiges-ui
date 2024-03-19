@@ -10,12 +10,19 @@ export default function ButtonStyled({
   design,
   onclick,
   icon,
+  align,
 }) {
+  const justifyContent = {
+    left: 'flex-start',
+    center: 'center',
+    right: 'flex-end',
+  }[align];
   return (
     <ButtonUnstyled
       className={`buttonaction button${design}`}
       onClick={() => onclick()}
       type={type}
+      justifyContent={justifyContent}
     >
       <div
         style={{
@@ -41,6 +48,7 @@ ButtonStyled.defaultProps = {
   onclick: () => {},
   design: 'normal',
   type: 'button',
+  align: 'left',
   icon: null,
 };
 
@@ -48,6 +56,7 @@ ButtonStyled.propTypes = {
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   alt: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   type: PropTypes.string,
+  align: PropTypes.string,
   design: PropTypes.string,
   onclick: PropTypes.func,
   icon: PropTypes.element,

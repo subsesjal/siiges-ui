@@ -1,8 +1,8 @@
-export default function GetFile(fileData, setFile) {
+export default function GetFile(fileData, callback) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const baseUrl = process.env.NEXT_PUBLIC_URL;
 
-  const url = `${baseUrl}?tipoEntidad=${fileData.tipoEntidad}&entidadId=${fileData.entidadId}&tipoDocumento=${fileData.tipoDocumento}`;
+  const url = `${baseUrl}/api/v1/files/?tipoEntidad=${fileData.tipoEntidad}&entidadId=${fileData.entidadId}&tipoDocumento=${fileData.tipoDocumento}`;
 
   fetch(url, {
     method: 'GET',
@@ -17,11 +17,11 @@ export default function GetFile(fileData, setFile) {
       return response.json();
     })
     .then((data) => {
-      if (data.data) {
-        setFile(data.data.url);
-      }
+      callback(data.data ? data.data.url : null, null);
     })
     .catch((error) => {
       console.error('There was a problem with the fetch operation:', error);
+      // Call the callback with null and the error
+      callback(null, error);
     });
 }

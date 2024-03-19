@@ -3,9 +3,9 @@ import InstitucionView from './Components/Instituciones/InstitucionView';
 import InstitucionesTable from './Components/Instituciones/InstitucionesTable';
 import InstitucionForm from './Components/Instituciones/InstitucionForm';
 import EditInstitutionForm from './Components/Instituciones/editInstitutionForm';
-import NewPlantelForm from './Components/Planteles/newPlantelForm';
-import EditPlantelForm from './Components/Planteles/editPlantelForm';
-import ConsultPlantelesForm from './Components/Planteles/consultPlantelesForm';
+import PlantelNewForm from './Components/Planteles/PlantelNewForm';
+import PlantelEditForm from './Components/Planteles/PlantelEditForm';
+import PlantelView from './Components/Planteles/PlantelView';
 import PlantelesTable from './Components/Planteles/PlantelesTable';
 import getInstitucionUsuario from './Components/utils/getInstitucionUsuario';
 import getPlanteles from './Components/utils/getPlanteles';
@@ -27,9 +27,9 @@ export {
   InstitucionesTable,
   InstitucionForm,
   EditInstitutionForm,
-  NewPlantelForm,
-  EditPlantelForm,
-  ConsultPlantelesForm,
+  PlantelNewForm,
+  PlantelEditForm,
+  PlantelView,
   PlantelesTable,
   getInstitucionUsuario,
   getPlanteles,

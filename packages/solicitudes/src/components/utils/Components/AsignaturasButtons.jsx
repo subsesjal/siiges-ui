@@ -13,7 +13,12 @@ export default function AsignaturasButtons({ id }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const { asignaturasList } = useContext(TablesPlanEstudiosContext);
+  const {
+    setFormAsignaturas,
+    setAsignaturasList,
+    asignaturasList,
+    programaId,
+  } = useContext(TablesPlanEstudiosContext);
   const rowItem = asignaturasList.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
@@ -23,7 +28,7 @@ export default function AsignaturasButtons({ id }) {
 
   const handleModalClose = () => {
     setModalOpen(false);
-    setDeleteDialogOpen(false);
+    setFormAsignaturas(() => ({ programaId, tipo: 1 }));
   };
 
   const handleDeleteDialogOpen = () => {
@@ -32,6 +37,7 @@ export default function AsignaturasButtons({ id }) {
 
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
+    setFormAsignaturas(() => ({ programaId, tipo: 1 }));
   };
 
   return (
@@ -59,7 +65,8 @@ export default function AsignaturasButtons({ id }) {
         <DeleteAsignatura
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
-          rowItem={rowItem}
+          id={rowItem.id}
+          setAsignaturasList={setAsignaturasList}
         />
       )}
     </Stack>

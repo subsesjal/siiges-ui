@@ -31,15 +31,15 @@ export default function errorTrayectoriaEducativa(form, setError, error) {
       setError({ ...error, tipoTutoria: '' });
       return true;
     },
-    tipoEgreso: () => {
-      if (formData.tipoEgreso === undefined || formData.tipoEgreso === '') {
+    tasaEgreso: () => {
+      if (formData.tasaEgreso === undefined || formData.tasaEgreso === '') {
         setError({
           ...error,
-          tipoEgreso: 'Proceso de selección invalida',
+          tasaEgreso: 'Proceso de selección invalida',
         });
         return false;
       }
-      setError({ ...error, tipoEgreso: '' });
+      setError({ ...error, tasaEgreso: '' });
       return true;
     },
     estadisticasTitulacion: () => {

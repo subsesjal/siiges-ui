@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import {
   ModuleHeader,
   DatosGenerales,
@@ -9,7 +10,6 @@ import {
   EvaluacionCurricular,
   PlataformaEducativa,
 } from '@siiges-ui/solicitudes';
-import PropTypes from 'prop-types';
 
 const steps = {
   escolarizada: [
@@ -29,25 +29,23 @@ const steps = {
   ],
 };
 
-// eslint-disable-next-line react/prop-types
-export default function NuevaSolicitud({ type, data, solicitudId }) {
+export default function NuevaSolicitud({ type, solicitudId }) {
   const router = useRouter();
   const [modalidad, setModalidad] = useState('escolarizada');
   const [module, setModule] = useState(0);
-  const [id, setId] = useState('');
+  const [id, setId] = useState(solicitudId || '');
   const [programaId, setProgramaId] = useState('');
 
   useEffect(() => {
     if (router.query.modalidad) {
       setModalidad(router.query.modalidad);
     }
+  }, [router.query.modalidad]);
 
-    if (solicitudId) {
-      setId(solicitudId);
-    }
-  }, [router.query.modalidad, solicitudId]);
-
-  const nextModule = () => setModule((prevModule) => prevModule + 1);
+  const nextModule = () => {
+    const currentSteps = modalidad === 'escolarizada' ? steps.escolarizada : steps.noEscolarizada;
+    setModule((prevModule) => (prevModule < currentSteps.length - 1 ? prevModule + 1 : prevModule));
+  };
 
   const renderModule = () => {
     const componentsMap = {
@@ -59,7 +57,6 @@ export default function NuevaSolicitud({ type, data, solicitudId }) {
           programaId={programaId}
           setProgramaId={setProgramaId}
           type={type}
-          data={data}
         />
       ),
       1: <DatosGenerales nextModule={nextModule} id={id} />,
@@ -91,6 +88,7 @@ export default function NuevaSolicitud({ type, data, solicitudId }) {
 
     return componentsMap[module] || null;
   };
+
   return (
     <>
       <ModuleHeader
@@ -111,10 +109,11 @@ export default function NuevaSolicitud({ type, data, solicitudId }) {
 }
 
 NuevaSolicitud.defaultProps = {
-  solicitudId: null,
+  solicitudId: '',
+  type: null,
 };
 
 NuevaSolicitud.propTypes = {
-  type: PropTypes.string.isRequired,
-  solicitudId: PropTypes.number,
+  type: PropTypes.string,
+  solicitudId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

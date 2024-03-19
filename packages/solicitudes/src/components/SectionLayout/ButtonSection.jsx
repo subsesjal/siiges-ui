@@ -1,5 +1,5 @@
 import { ButtonStyled, Context } from '@siiges-ui/shared';
-import React, { useState, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -19,6 +19,7 @@ import submitRatificacion from '../utils/submitRatificacion';
 import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularContext';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
+import submitTrayectoriaEducativa from '../utils/submitTrayectoriaeducativa';
 
 export default function ButtonSection({
   type,
@@ -114,7 +115,7 @@ export default function ButtonSection({
       )}
       {position === 'middle' && (
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={5}>
+          <Grid item xs={3}>
             <ButtonStyled
               text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
@@ -122,7 +123,7 @@ export default function ButtonSection({
               onclick={prev}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <ButtonStyled
               text={buttonText}
               alt={buttonText}
@@ -130,7 +131,7 @@ export default function ButtonSection({
               onclick={submit}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <ButtonStyled
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
@@ -142,7 +143,7 @@ export default function ButtonSection({
       )}
       {position === 'last' && (
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <ButtonStyled
               text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
@@ -150,7 +151,7 @@ export default function ButtonSection({
               onclick={prev}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <ButtonStyled
               text={buttonTextEnd}
               alt={buttonTextEnd}

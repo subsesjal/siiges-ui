@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
-  ButtonStyled, SnackAlert, SubmitDocument, fileToFormData,
+  ButtonStyled, SnackAlert, SubmitDocument, fileToFormData, ListSubtitle, ListTitle, formattedDate,
 } from '@siiges-ui/shared';
 import { DropzoneDialog } from 'mui-file-dropzone';
 
-export default function InstitucionView({ data }) {
+export default function InstitucionView({ institucion, session }) {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
@@ -65,6 +65,10 @@ export default function InstitucionView({ data }) {
           </Box>
         </Grid>
         <Grid item xs={8} sx={{ marginTop: 3 }}>
+          <Typography variant="h5" gutterBottom component="div">
+            Información general
+          </Typography>
+          <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
           <Grid container>
             <Grid item xs={4}>
               <List>
@@ -80,48 +84,172 @@ export default function InstitucionView({ data }) {
             <Grid item xs={2}>
               <List>
                 <ListItem disablePadding>
-                  <ListItemText secondary={data.nombre} sx={{ mt: 1 }} />
+                  <ListItemText secondary={institucion.nombre} sx={{ mt: 1 }} />
                 </ListItem>
                 <ListItem disablePadding>
-                  <ListItemText secondary={data.razonSocial} sx={{ mt: 1 }} />
+                  <ListItemText secondary={institucion.razonSocial} sx={{ mt: 1 }} />
                 </ListItem>
               </List>
             </Grid>
           </Grid>
           <Divider sx={{ mt: 5, mb: 2 }} />
           <Typography variant="p" sx={{ fontWeight: 'medium' }}>
-            Historia de la institución
+            Historia
           </Typography>
           <br />
-          <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 15 }}>
-            <Typography variant="p">{data.historia}</Typography>
+          <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 10 }}>
+            <Typography variant="p">{institucion.historia}</Typography>
           </div>
-          <Divider />
+          <Divider sx={{ mt: 5, mb: 2 }} />
           <Typography variant="p" sx={{ fontWeight: 'medium' }}>
             Visión
           </Typography>
           <br />
-          <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 15 }}>
-            <Typography variant="p">{data.vision}</Typography>
+          <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 10 }}>
+            <Typography variant="p">{institucion.vision}</Typography>
           </div>
-          <Divider />
+          <Divider sx={{ mt: 5, mb: 2 }} />
           <Typography variant="p" sx={{ fontWeight: 'medium' }}>
             Misión
           </Typography>
           <br />
-          <div style={{ marginLeft: 100, marginTop: 15 }}>
-            <Typography variant="p">{data.mision}</Typography>
+          <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 10 }}>
+            <Typography variant="p">{institucion.mision}</Typography>
           </div>
+          <Divider sx={{ mt: 5, mb: 2 }} />
+          <Typography variant="p" sx={{ fontWeight: 'medium' }}>
+            Valores institucionales
+          </Typography>
+          <br />
+          <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 20 }}>
+            <Typography variant="p">{institucion.valoresInstitucionales}</Typography>
+          </div>
+
+          <Typography variant="h5" gutterBottom component="div" sx={{ mt: 5 }}>
+            Información del rector
+          </Typography>
+          <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid container xs={6}>
+              <Grid item xs>
+                <List>
+                  <ListTitle text="Nombre(s)" />
+                  <ListTitle text="Apellidos" />
+                  <ListTitle text="Celular" />
+                  <ListTitle text="Teléfono" />
+                </List>
+              </Grid>
+              <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+              <Grid item xs>
+                <List>
+                  <ListSubtitle text={institucion?.rector?.persona?.nombre} />
+                  <ListSubtitle text={`
+                  ${institucion?.rector?.persona?.apellidoPaterno}
+                  ${institucion?.rector?.persona?.apellidoMaterno}
+                  `}
+                  />
+                  <ListSubtitle text="" />
+                  <ListSubtitle text="" />
+                </List>
+              </Grid>
+            </Grid>
+            <Grid container xs={6}>
+              <Grid item xs>
+                <List>
+                  <ListTitle text="Correo electrónico" />
+                  <ListTitle text="CURP" />
+                </List>
+              </Grid>
+              <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+              <Grid item xs>
+                <List>
+                  <ListSubtitle text={institucion?.rector?.persona?.correoPrimario} />
+                  <ListSubtitle text={institucion?.rector?.persona?.curp} />
+                </List>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Typography variant="h5" gutterBottom component="div" sx={{ mt: 5 }}>
+            Ratificación de nombre
+          </Typography>
+          <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            {
+              institucion.ratificacionesNombre[0].esNombreAutorizado
+                ? (
+                  <Grid container xs={10}>
+                    <Grid item xs>
+                      <List>
+                        <ListTitle text="Nombre autorizado" />
+                        <ListTitle text="Autoridad que autoriza" />
+                        <ListTitle text="Fecha de autorización" />
+                      </List>
+                    </Grid>
+                    <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+                    <Grid item xs>
+                      <List>
+                        <ListSubtitle text={
+                          institucion?.ratificacionesNombre[0]?.nombreAutorizado
+                          }
+                        />
+                        <ListSubtitle text={
+                          institucion?.ratificacionesNombre[0]?.autoridad
+                          }
+                        />
+                        <ListSubtitle text={
+                          formattedDate(institucion?.ratificacionesNombre[0]?.fechaAutorizacion)
+                          }
+                        />
+                      </List>
+                    </Grid>
+                  </Grid>
+                )
+                : (
+                  <Grid container xs={10}>
+                    <Grid item xs>
+                      <List>
+                        <ListTitle text="Nombre propuesto 1" />
+                        <ListTitle text="Nombre propuesto 2" />
+                        <ListTitle text="Nombre propuesto 3" />
+                      </List>
+                    </Grid>
+                    <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+                    <Grid item xs>
+                      <List>
+                        <ListSubtitle text={
+                          institucion?.ratificacionesNombre[0]?.nombrePropuesto1
+                          }
+                        />
+                        <ListSubtitle text={
+                          institucion?.ratificacionesNombre[0]?.nombrePropuesto2
+                          }
+                        />
+                        <ListSubtitle text={
+                          institucion?.ratificacionesNombre[0]?.nombrePropuesto2
+                          }
+                        />
+                      </List>
+                    </Grid>
+                  </Grid>
+                )
+            }
+          </Grid>
+          {
+              session.rol === 'representante' && !institucion.ratificacionesNombre[0].esNombreAutorizado
+          && (
           <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
             <ButtonUnstyled
               className="buttonAdd guardar"
               onClick={() => {
-                router.push(`/instituciones/editar/${data.id}`);
+                router.push(`/instituciones/editar/${institucion.id}`);
               }}
             >
               <Typography variant="body1">Editar</Typography>
             </ButtonUnstyled>
           </Grid>
+          )
+            }
         </Grid>
       </Grid>
       <DropzoneDialog
@@ -150,12 +278,39 @@ export default function InstitucionView({ data }) {
 }
 
 InstitucionView.propTypes = {
-  data: PropTypes.shape({
+  institucion: PropTypes.shape({
     id: PropTypes.number,
     nombre: PropTypes.string,
     razonSocial: PropTypes.string,
     historia: PropTypes.string,
     vision: PropTypes.string,
     mision: PropTypes.string,
+    valoresInstitucionales: PropTypes.string,
+    rector: PropTypes.shape({
+      persona: PropTypes.shape({
+        nombre: PropTypes.string,
+        apellidoPaterno: PropTypes.string,
+        apellidoMaterno: PropTypes.string,
+        curp: PropTypes.string,
+        correoPrimario: PropTypes.string,
+      }),
+    }),
+    ratificacionesNombre: PropTypes.arrayOf(
+      PropTypes.shape({
+        nombrePropuesto1: PropTypes.string,
+        nombrePropuesto2: PropTypes.string,
+        nombrePropuesto3: PropTypes.string,
+        nombreAutorizado: PropTypes.string,
+        fechaAutorizacion: PropTypes.string,
+        autoridad: PropTypes.string,
+        esNombreAutorizado: PropTypes.bool,
+      }),
+    ),
+  }).isRequired,
+  session: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    nombre: PropTypes.string.isRequired,
+    rol: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
   }).isRequired,
 };

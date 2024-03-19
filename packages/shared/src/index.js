@@ -48,9 +48,7 @@ import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import formattedDate from './utils/handlers/formattedDate';
 import useApi from './utils/hooks/useApi';
 import { validateFormData } from './utils/handlers/validateFormData';
-import {
-  getData, deleteRecord, createRecord, updateRecord,
-} from './utils/handlers/apiUtils';
+import validateField from './utils/handlers/validateField';
 
 export {
   Logo,
@@ -104,8 +102,5 @@ export {
   formattedDate,
   useApi,
   validateFormData,
-  getData,
-  deleteRecord,
-  createRecord,
-  updateRecord,
+  validateField,
 };

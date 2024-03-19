@@ -1,6 +1,8 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { Grid, TextField, Typography } from '@mui/material';
-import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  Grid, TextField, Typography,
+} from '@mui/material';
+import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -10,27 +12,36 @@ import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
 import handleEdit from '../../submitEditDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
+import useDocente from '../../getDocente';
 
 export default function DocentesEditModal({
   open,
   hideModal,
   edit,
+  id,
+  setDocentesList,
 }) {
   const {
-    setDocentesList,
     formDocentes,
     setFormDocentes,
     setError,
     error,
     errors,
-    setErrors,
-    initialValues,
     setInitialValues,
     programaId,
+    setNoti,
   } = useContext(TablesPlanEstudiosContext);
-  const { setNoti } = useContext(Context);
 
   const [currentSection, setCurrentSection] = useState(1);
+  const asignaturas = getAsignaturas(programaId);
+  const docente = useDocente(id);
+
+  useEffect(() => {
+    if (docente) {
+      setFormDocentes(docente);
+    }
+  }, [docente]);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormDocentes((prevData) => {
@@ -61,28 +72,15 @@ export default function DocentesEditModal({
     });
   };
 
-  const errorsDocentes = errorDatosDocentes(formDocentes, setError);
-  const asignaturas = getAsignaturas(programaId);
-
   const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (value !== initialValue || value === '') {
-      errorsDocentes[name]();
-    }
+    const { name } = e.target;
+    validateField(formDocentes, name, setError, errorDatosDocentes);
   };
 
   const handleInputFocus = (e) => {
     const { name, value } = e.target;
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-
-  useEffect(() => {
-    if (errorsDocentes !== undefined) {
-      setErrors(errorsDocentes);
-    }
-  }, [errors]);
 
   const handleOnSubmit = () => {
     handleEdit(
@@ -439,16 +437,7 @@ export default function DocentesEditModal({
 DocentesEditModal.propTypes = {
   open: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
+  setDocentesList: PropTypes.func.isRequired,
   edit: PropTypes.string.isRequired,
-  rowItem: PropTypes.shape({
-    grado: PropTypes.string,
-    area: PropTypes.number,
-    nombre: PropTypes.string,
-    clave: PropTypes.string,
-    creditos: PropTypes.string,
-    formacionEspecializada: PropTypes.string,
-    seriacion: PropTypes.string,
-    horasDocente: PropTypes.number,
-    horasIndependiente: PropTypes.number,
-  }).isRequired,
+  id: PropTypes.number.isRequired,
 };

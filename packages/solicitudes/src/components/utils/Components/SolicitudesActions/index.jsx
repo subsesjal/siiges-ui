@@ -33,7 +33,7 @@ function SolicitudesActions({ id }) {
 }
 
 SolicitudesActions.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default SolicitudesActions;

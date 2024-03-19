@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled } from '@siiges-ui/shared';
+import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleEdit from '../../submitEditAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
-import { area, grados } from '../../Mocks/mockAsignaturas';
+import { grados } from '../../Mocks/mockAsignaturas';
 
 export default function AsignaturasFormacionEditModal({
   open,
@@ -16,25 +16,16 @@ export default function AsignaturasFormacionEditModal({
   rowItem,
 }) {
   const {
-    initialValues,
     error,
     setError,
-    errors,
     formAsignaturasFormacion,
     setFormAsignaturasFormacion,
     setInitialValues,
-    asignaturasFormacionList,
+    asignaturasTotalList,
     setAsignaturasFormacionList,
-    programaId,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
-
-  useEffect(() => {
-    setFormAsignaturasFormacion(rowItem);
-  }, [rowItem]);
-
   const selectedGrade = grados.semestral;
-  const errorsAsignatura = errorDatosAsignaturas(formAsignaturasFormacion, setError, error);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -45,36 +36,36 @@ export default function AsignaturasFormacionEditModal({
   };
 
   const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (value !== initialValue || value === '') {
-      errorsAsignatura[name]();
-    }
+    const { name } = e.target;
+    validateField(formAsignaturasFormacion, name, setError, errorDatosAsignaturas);
   };
 
-  const handleInputFocus = (e) => {
-    const { name, value } = e.target;
-    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
-  };
+  useEffect(() => {
+    setFormAsignaturasFormacion(rowItem);
+  }, [rowItem]);
 
   const handleOnSubmit = () => {
+    const {
+      createdAt, deletedAt, updatedAt, ...submissionData
+    } = formAsignaturasFormacion;
+
     const matchingGrade = selectedGrade.find(
-      (grade) => grade.id === formAsignaturasFormacion.gradoId,
+      (grade) => grade.id === submissionData.gradoId,
     );
+
     const updatedFormAsignaturas = matchingGrade
-      ? { ...formAsignaturasFormacion, grado: matchingGrade.nombre }
-      : { ...formAsignaturasFormacion };
+      ? { ...submissionData, grado: matchingGrade.nombre }
+      : submissionData;
+
     handleEdit(
       updatedFormAsignaturas,
       setFormAsignaturasFormacion,
       setInitialValues,
       setAsignaturasFormacionList,
       hideModal,
-      errors,
       setNoti,
-      programaId,
-      2,
+      rowItem.id,
+      1,
     );
   };
 
@@ -97,19 +88,6 @@ export default function AsignaturasFormacionEditModal({
           />
         </Grid>
         <Grid item xs={6}>
-          <BasicSelect
-            title="Area"
-            name="area"
-            value={rowItem.area ?? ''}
-            options={area}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.area}
-            required
-            disabled={edit === 'Consultar Asignatura'}
-          />
-        </Grid>
-        <Grid item xs={6}>
           <Input
             id="nombre"
             label="Nombre(s)"
@@ -118,13 +96,12 @@ export default function AsignaturasFormacionEditModal({
             value={rowItem.nombre}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.nombre}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <Input
             id="clave"
             label="Clave"
@@ -133,13 +110,12 @@ export default function AsignaturasFormacionEditModal({
             value={rowItem.clave}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.clave}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <Input
             id="creditos"
             label="Creditos"
@@ -148,7 +124,6 @@ export default function AsignaturasFormacionEditModal({
             value={rowItem.creditos}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.creditos}
@@ -156,17 +131,16 @@ export default function AsignaturasFormacionEditModal({
         </Grid>
         <Grid item xs={12}>
           <Input
-            id="formacionEspecializada"
-            label="Formacion especializada"
-            name="formacionEspecializada"
-            auto="formacionEspecializada"
-            value={rowItem.formacionEspecializada}
+            id="academia"
+            label="Academia"
+            name="academia"
+            auto="academia"
+            value={rowItem.academia}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             disabled={edit === 'Consultar Asignatura'}
-            errorMessage={error.formacionEspecializada}
+            errorMessage={error.academia}
           />
         </Grid>
         <Grid item xs={12}>
@@ -174,7 +148,7 @@ export default function AsignaturasFormacionEditModal({
             title="Seriacion"
             name="seriacion"
             value={rowItem.seriacion}
-            options={asignaturasFormacionList || []}
+            options={asignaturasTotalList || []}
             onchange={handleOnChange}
             disabled={edit === 'Consultar Asignatura'}
             textValue
@@ -189,7 +163,6 @@ export default function AsignaturasFormacionEditModal({
             value={rowItem.horasDocente}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.horasDocente}
@@ -204,7 +177,6 @@ export default function AsignaturasFormacionEditModal({
             value={rowItem.horasIndependiente}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             disabled={edit === 'Consultar Asignatura'}
             errorMessage={error.horasIndependiente}
@@ -239,12 +211,13 @@ AsignaturasFormacionEditModal.propTypes = {
   edit: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
   rowItem: PropTypes.shape({
+    id: PropTypes.number,
     gradoId: PropTypes.number,
     area: PropTypes.number,
     nombre: PropTypes.string,
     clave: PropTypes.string,
     creditos: PropTypes.string,
-    formacionEspecializada: PropTypes.string,
+    academia: PropTypes.string,
     seriacion: PropTypes.string,
     horasDocente: PropTypes.number,
     horasIndependiente: PropTypes.number,

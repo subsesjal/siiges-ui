@@ -18,6 +18,7 @@ import modalidades from './components/utils/Mocks/mockModalidades';
 import formData from './components/utils/sections/forms/formData';
 import getSolicitudDetalles from './components/utils/getSolicitudDetalles';
 import columnsSolicitudes from './components/utils/Tables/solicitudesColumns';
+import DocentesCreateModal from './components/utils/Components/DocentesModales/DocentesModal';
 
 export {
   getSolicitudDetalles,
@@ -40,4 +41,5 @@ export {
   SolicitudContext,
   modalidades,
   formData,
+  DocentesCreateModal,
 };
