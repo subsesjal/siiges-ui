@@ -9,7 +9,6 @@ import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { getOptionsRoles } from '@siiges-ui/shared/src/components/Drawer/utils/menuUsers';
 import LogoWhite from '../Images/LogoWhite';
 import MenuNavbar from './MenuNavbar';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
@@ -17,8 +16,11 @@ import { Context } from '../../utils/handlers/context';
 
 export default function MainNavbar({ menuSwitch, section, setSection }) {
   const { session } = useContext(Context);
-  const options = getOptionsRoles(session.rol);
-  const menuDown = options.some(({ roles }) => roles.includes(session.rol));
+  const options = [
+    { id: 1, nombre: 'Incorporación' },
+    { id: 2, nombre: 'Servicios escolares' },
+    { id: 3, nombre: "OPD'S" },
+  ];
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -69,7 +71,7 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
           >
             <b>SIIGES</b>
           </Typography>
-          {menuDown && (
+          {session.rol === 'admin' && (
             <div style={{ position: 'relative' }}>
               <IconButton color="inherit" onClick={handleClick}>
                 <Typography variant="subtitle1">

@@ -13,8 +13,6 @@ const useApi = ({
   const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
-    setData(null);
-    setError(null);
     if (!endpoint) return;
 
     const fetchData = async () => {
@@ -32,8 +30,7 @@ const useApi = ({
         });
 
         if (!response.ok) {
-          const { message } = await response.json();
-          throw new Error(message);
+          throw new Error('Network response was not ok');
         }
 
         const result = await response.json();

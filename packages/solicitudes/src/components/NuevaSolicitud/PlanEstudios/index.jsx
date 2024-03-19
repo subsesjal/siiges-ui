@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
-import { Context, SnackAlert, Loading } from '@siiges-ui/shared';
+import { Context, SnackAlert } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import pagination from '../../../events/pagination';
 import SectionLayout from '../../SectionLayout';
@@ -19,7 +19,6 @@ import TrayectoriaEducativa from '../../Sections/TrayectoriaEducativa';
 import SolicitudContext from '../../utils/Context/solicitudContext';
 import getSolicitudesById from '../../utils/getSolicitudesById';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
-import Observaciones from '../../Sections/Observaciones';
 import useTrayectoriasEducativas from '../../utils/getTrayectoriasEducativas';
 
 export default function PlanEstudios({
@@ -30,7 +29,7 @@ export default function PlanEstudios({
   setProgramaId,
   type,
 }) {
-  const { session, loading } = useContext(Context);
+  const { session } = useContext(Context);
   const router = useRouter();
   const { query } = router;
   const [form, setForm] = useState({
@@ -191,8 +190,7 @@ export default function PlanEstudios({
               next={next}
               prev={prev}
             >
-              <Loading loading={loading} />
-              {section === 1 && <DatosPlanEstudios type={type} data={data} />}
+              {section === 1 && <DatosPlanEstudios type={type} />}
               {section === 2 && (
                 <FundamentosPlanEstudios disabled={disabled} type={type} />
               )}
@@ -206,13 +204,6 @@ export default function PlanEstudios({
               {section === 8 && <Docentes disabled={disabled} type={type} />}
               {section === 9 && (
                 <TrayectoriaEducativa disabled={disabled} type={type} />
-              )}
-              {type === 'editar' && (
-                <Observaciones
-                  id={id}
-                  section={section === 1 ? section : section + 1}
-                  rol={session?.rol}
-                />
               )}
             </SectionLayout>
           </CardContent>

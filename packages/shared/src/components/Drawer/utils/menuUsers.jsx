@@ -16,9 +16,9 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 
 const options = [
-  { id: 1, nombre: 'Incorporación', roles: ['admin', 'representante'] },
-  { id: 2, nombre: 'Servicios escolares', roles: ['admin', 'representante'] },
-  { id: 3, nombre: "OPD'S", roles: ['admin'] },
+  { id: 1, nombre: 'Incorporación' },
+  { id: 2, nombre: 'Servicios escolares' },
+  { id: 3, nombre: "OPD'S" },
 ];
 
 const usersMenu = [
@@ -174,7 +174,19 @@ const optionsMenuFilter = {
       key: 'presupuesto',
     },
   ],
-  control_documental: [
+  representante: [
+    {
+      text: 'Mis usuarios',
+      icon: <GroupIcon />,
+      route: '/usuarios',
+      key: 'users',
+    },
+    {
+      text: 'Mi institución',
+      icon: <BusinessIcon />,
+      route: '/instituciones/miInstitucion',
+      key: 'intitutions',
+    },
     {
       text: 'Mis solicitudes',
       icon: <DescriptionIcon />,
@@ -184,14 +196,8 @@ const optionsMenuFilter = {
   ],
 };
 
-const getOptionsRoles = (rol) => options.filter(({ roles }) => roles.includes(rol));
-
-const optionsAdminMenuFilterRol = (rol) => {
-  const user = getOptionsRoles(rol);
-  const optionsMultiplerMenuFilter = user
-    .map(({ id }) => usersMenu.filter(({ userId }) => userId === id));
-  return optionsMultiplerMenuFilter;
-};
+const optionsAdminMenuFilter = options.map(({ id }) => usersMenu
+  .filter(({ userId }) => userId === id));
 
 /**
  * Finds the userId associated with a given path.
@@ -208,9 +214,5 @@ const findRoute = (path) => {
 };
 
 export {
-  findRoute,
-  optionsMenuFilter,
-  optionsAdminMenuFilterRol,
-  usersMenu,
-  getOptionsRoles,
+  findRoute, optionsMenuFilter, optionsAdminMenuFilter, usersMenu,
 };

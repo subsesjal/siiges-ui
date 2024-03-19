@@ -12,9 +12,7 @@ function LabelData({ title, subtitle }) {
       </Grid>
       <Divider orientation="vertical" flexItem style={{ marginTop: '7px' }} />
       <Grid item>
-        <Typography style={{ whiteSpace: 'pre-line' }} variant="body1">
-          {subtitle}
-        </Typography>
+        <Typography variant="body1">{subtitle}</Typography>
       </Grid>
     </Grid>
   );

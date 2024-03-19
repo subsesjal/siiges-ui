@@ -17,7 +17,6 @@ import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
 import submitHigienesPlantel from '../utils/submitHigienesPlantel';
 import submitRatificacion from '../utils/submitRatificacion';
 import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularContext';
-import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
 import submitTrayectoriaEducativa from '../utils/submitTrayectoriaeducativa';
 
@@ -30,66 +29,81 @@ export default function ButtonSection({
   prev,
   sectionTitle,
 }) {
-  const [newSubmit, setNewSubmit] = useState(true);
-  const { setNoti, session } = useContext(Context);
+  const router = useRouter();
+  const { setNoti } = useContext(Context);
   const validations = useContext(SolicitudContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
   const plantelesValidations = useContext(PlantelContext);
   const evaluacionCurricular = useEvaluacionCurricular();
-  const router = useRouter();
-  const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
-  let submit;
 
-  const buttonText = session.rol === 'control_documental'
-    ? 'Guardar observaciones'
-    : 'Terminar Sección';
-  const buttonTextEnd = session.rol === 'control_documental'
-    ? 'Guardar observaciones'
-    : 'Terminar Solicitud';
-
-  const sectionFunctions = {
+  const submitFunctionMap = {
     'Datos Generales': {
-      1: () => submitInstitucion(datosGeneralesValidations, sections, setNoti),
-      2: () => submitRepresentante(datosGeneralesValidations, sections, setNoti),
-      3: () => console.log(
-        'Performing action for "Datos Generales" with sections === 3',
+      1: useCallback(
+        () => submitInstitucion(datosGeneralesValidations, sections, setNoti),
+        [datosGeneralesValidations, sections],
       ),
+      2: useCallback(
+        () => submitRepresentante(datosGeneralesValidations, sections, setNoti),
+        [datosGeneralesValidations, sections],
+      ),
+      // Placeholder for section 3 action
     },
     Plantel: {
-      1: () => submitEditPlantel(plantelesValidations, sections, id, setNoti, router),
-      2: () => submitDescripcionPlantel(
-        plantelesValidations,
-        setNoti,
-        router.query.plantel,
+      1: useCallback(
+        () => submitEditPlantel(
+          plantelesValidations,
+          sections,
+          id,
+          setNoti,
+          router,
+        ),
+        [plantelesValidations, sections, id],
       ),
-      3: () => submitHigienesPlantel(
-        plantelesValidations,
-        setNoti,
-        router.query.plantel,
+      2: useCallback(
+        () => submitDescripcionPlantel(
+          plantelesValidations,
+          setNoti,
+          router.query.plantel,
+        ),
+        [plantelesValidations],
       ),
-      6: () => submitRatificacion(plantelesValidations, setNoti),
+      3: useCallback(
+        () => submitHigienesPlantel(
+          plantelesValidations,
+          setNoti,
+          router.query.plantel,
+        ),
+        [plantelesValidations],
+      ),
+      6: useCallback(
+        () => submitRatificacion(plantelesValidations, setNoti),
+        [plantelesValidations],
+      ),
     },
     'Evaluación Curricular': {
-      1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti),
+      1: useCallback(
+        () => submitEvaluacionCurricular(evaluacionCurricular, setNoti),
+        [evaluacionCurricular],
+      ),
     },
-    'Plan de estudios': () => setCreateObservaciones(true),
+    'Plan de estudios': {
+      9: useCallback(
+        () => submitTrayectoriaEducativa(validations, sections, id),
+        [validations, sections, id],
+      ),
+      default: useCallback(() => {
+        if (type !== 'editar') {
+          submitNewSolicitud(validations);
+        } else {
+          submitEditSolicitud(validations, sections, id);
+        }
+      }, [type, validations, sections, id]),
+    },
   };
 
-  if (sectionFunctions[sectionTitle]) {
-    if (typeof sectionFunctions[sectionTitle] === 'function') {
-      submit = sectionFunctions[sectionTitle];
-    } else if (sectionFunctions[sectionTitle][sections]) {
-      submit = sectionFunctions[sectionTitle][sections];
-    }
-  } else if (newSubmit) {
-    if (type !== 'editar') {
-      submit = () => submitNewSolicitud(validations, setNewSubmit);
-    } else {
-      submit = () => submitEditSolicitud(validations, sections, id);
-    }
-  } else {
-    submit = () => submitEditSolicitud(validations, sections, id);
-  }
+  const submit = submitFunctionMap[sectionTitle]?.[sections]
+    || submitFunctionMap[sectionTitle]?.default
+    || (() => console.warn('No submit function configured for this section'));
 
   return (
     <>
@@ -97,8 +111,8 @@ export default function ButtonSection({
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={9}>
             <ButtonStyled
-              text={buttonText}
-              alt={buttonText}
+              text="Terminar sección"
+              alt="Terminar solicitud"
               type="success"
               onclick={submit}
             />
@@ -125,8 +139,8 @@ export default function ButtonSection({
           </Grid>
           <Grid item xs={6}>
             <ButtonStyled
-              text={buttonText}
-              alt={buttonText}
+              text="Terminar sección"
+              alt="Terminar solicitud"
               type="success"
               onclick={submit}
             />
@@ -153,8 +167,8 @@ export default function ButtonSection({
           </Grid>
           <Grid item xs={6}>
             <ButtonStyled
-              text={buttonTextEnd}
-              alt={buttonTextEnd}
+              text="Terminar sección"
+              alt="Terminar solicitud"
               type="success"
               onclick={submit}
             />
@@ -165,7 +179,7 @@ export default function ButtonSection({
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={12}>
             <ButtonStyled
-              text="Terminar solicitud"
+              text="Terminar sección"
               alt="Terminar solicitud"
               type="success"
               onclick={submit}
