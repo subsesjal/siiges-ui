@@ -1,5 +1,5 @@
 import { ButtonStyled, Context } from '@siiges-ui/shared';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -60,10 +60,13 @@ export default function ButtonSection({
 
   const sectionFunctions = {
     'Datos Generales': {
-      1: () => submitInstitucion(datosGeneralesValidations, sections, setNoti),
-      2: () => submitRepresentante(datosGeneralesValidations, sections, setNoti),
-      3: () => console.log(
-        'Performing action for "Datos Generales" with sections === 3',
+      1: useCallback(
+        () => submitInstitucion(datosGeneralesValidations, sections, setNoti),
+        [datosGeneralesValidations, sections],
+      ),
+      2: useCallback(
+        () => submitRepresentante(datosGeneralesValidations, sections, setNoti),
+        [datosGeneralesValidations, sections],
       ),
     },
     Plantel: {

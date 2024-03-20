@@ -19,7 +19,9 @@ export function TablesPlanEstudiosProvider({ children }) {
   });
   const [formDocentes, setFormDocentes] = useState({
     esAceptado: true,
+    programaId,
     asignaturasDocentes: [],
+    formacionesDocente: [],
   });
   const [asignaturasList, setAsignaturasList] = useState([]);
   const [asignaturasFormacionList, setAsignaturasFormacionList] = useState([]);
