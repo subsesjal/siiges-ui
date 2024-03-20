@@ -49,11 +49,13 @@ export default function PlanEstudios({
   const [errors, setErrors] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [modalidad, setModalidad] = useState();
-  const { solicitudes, loading: loadingSolicitud } = getSolicitudesById(id);
-  const { trayectoria, loadingTrayectoria } = useTrayectoriasEducativas(programaId);
+  const { solicitudes, loading } = getSolicitudesById(id);
+  const { trayectorias } = useTrayectoriasEducativas(programaId);
+  const [trayectoriaStatus, setTrayectoriaStatus] = useState('new');
 
   useEffect(() => {
-    setDisabled(id !== undefined && type !== 'editar');
+    let isMounted = true;
+    setDisabled(id !== undefined && type !== 'editar' && isMounted);
     if (query.modalidad) {
       setModalidad(query.modalidad);
     }
@@ -116,14 +118,6 @@ export default function PlanEstudios({
           },
         },
       }));
-    } else if (!loadingTrayectoria && type === 'editar') {
-      setForm((prevForm) => ({
-        ...prevForm,
-        9: {
-          ...prevForm[9],
-          trayectoria,
-        },
-      }));
     } else if (query.modalidad && query.plantel) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -142,15 +136,28 @@ export default function PlanEstudios({
         },
       }));
     }
-  }, [
-    id,
-    type,
-    solicitudes,
-    loading,
-    session.id,
-    query.plantel,
-    query.modalidad,
-  ]);
+
+    if (trayectorias && trayectoriaStatus) {
+      setTrayectoriaStatus('edit');
+      setForm((prevForm) => ({
+        ...prevForm,
+        9: {
+          ...prevForm[9],
+          id: trayectorias.id,
+          programaId: trayectorias.programaId,
+          programaSeguimiento: trayectorias.programaSeguimiento,
+          funcionTutorial: trayectorias.funcionTutorial,
+          tipoTutoria: trayectorias.tipoTutoria,
+          tasaEgreso: trayectorias.tasaEgreso,
+          estadisticasTitulacion: trayectorias.estadisticasTitulacion,
+          modalidadesTitulacion: trayectorias.modalidadesTitulacion,
+        },
+      }));
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [id, type, loading, solicitudes, query.modalidad, trayectorias]);
 
   const value = useMemo(
     () => ({
@@ -167,8 +174,9 @@ export default function PlanEstudios({
       setId,
       programaId,
       setProgramaId,
+      trayectoriaStatus,
     }),
-    [form, error, errors, noti, id, programaId, modalidad],
+    [form, error, errors, noti, id, programaId, modalidad, trayectoriaStatus],
   );
   const {
     next, prev, section, position, porcentaje,
@@ -220,7 +228,7 @@ export default function PlanEstudios({
         <SnackAlert
           open={noti.open}
           close={() => {
-            setNoti(false);
+            setNoti({ open: false, message: '', type: '' });
           }}
           type={noti.type}
           mensaje={noti.message}

@@ -3,7 +3,7 @@ import { Context, getToken } from '@siiges-ui/shared';
 
 export default function useTrayectoriasEducativas(programaId) {
   const { session, setNoti } = useContext(Context);
-  const [trayectorias, setTrayectorias] = useState([]);
+  const [trayectorias, setTrayectorias] = useState({});
   const [loadingTrayectoria, setLoading] = useState(true);
 
   useEffect(() => {
