@@ -1,5 +1,5 @@
 import { ButtonStyled, Context } from '@siiges-ui/shared';
-import React, { useCallback, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -40,12 +40,23 @@ export default function ButtonSection({
   const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
   let submit;
 
-  const buttonText = session.rol === 'control_documental'
+  const isControlDocumental = session.rol === 'control_documental';
+  const buttonText = isControlDocumental
     ? 'Guardar observaciones'
     : 'Terminar Sección';
-  const buttonTextEnd = session.rol === 'control_documental'
+  const buttonTextEnd = isControlDocumental
     ? 'Guardar observaciones'
     : 'Terminar Solicitud';
+
+  function PlanEstudios() {
+    if (isControlDocumental) {
+      return setCreateObservaciones(true);
+    }
+    if (sectionTitle === 9) {
+      return submitTrayectoriaEducativa(validations, sections, id);
+    }
+    return null;
+  }
 
   const sectionFunctions = {
     'Datos Generales': {
@@ -72,7 +83,7 @@ export default function ButtonSection({
     'Evaluación Curricular': {
       1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti),
     },
-    'Plan de estudios': () => setCreateObservaciones(true),
+    'Plan de estudios': () => PlanEstudios(),
   };
 
   if (sectionFunctions[sectionTitle]) {
