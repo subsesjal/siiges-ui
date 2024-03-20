@@ -19,6 +19,7 @@ import formData from './components/utils/sections/forms/formData';
 import getSolicitudDetalles from './components/utils/getSolicitudDetalles';
 import columnsSolicitudes from './components/utils/Tables/solicitudesColumns';
 import DocentesCreateModal from './components/utils/Components/DocentesModales/DocentesModal';
+import generarFDA01 from './utils/PDF/generarFDA01';
 
 export {
   getSolicitudDetalles,
@@ -42,4 +43,5 @@ export {
   modalidades,
   formData,
   DocentesCreateModal,
+  generarFDA01,
 };

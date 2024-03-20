@@ -50,6 +50,10 @@ import formattedDate from './utils/handlers/formattedDate';
 import useApi from './utils/hooks/useApi';
 import { validateFormData } from './utils/handlers/validateFormData';
 import validateField from './utils/handlers/validateField';
+import { createCell, createSection } from './utils/handlers/pdfHandler';
+import {
+  getData, deleteRecord, createRecord, updateRecord,
+} from './utils/handlers/apiUtils';
 
 export {
   Logo,
@@ -105,4 +109,10 @@ export {
   useApi,
   validateFormData,
   validateField,
+  createCell,
+  createSection,
+  getData,
+  deleteRecord,
+  createRecord,
+  updateRecord,
 };
