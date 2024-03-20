@@ -49,7 +49,7 @@ export default function PlanEstudios({
   const [errors, setErrors] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [modalidad, setModalidad] = useState();
-  const { solicitudes, loading } = getSolicitudesById(id);
+  const { solicitudes, loading: loadingSolicitud } = getSolicitudesById(id);
   const { trayectorias } = useTrayectoriasEducativas(programaId);
   const [trayectoriaStatus, setTrayectoriaStatus] = useState('new');
 
