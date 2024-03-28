@@ -3,7 +3,7 @@ import { Context, getToken } from '@siiges-ui/shared';
 
 export default function useDocentes(programaId) {
   const { session } = useContext(Context);
-  const [docentes, setDocentes] = useState([]);
+  const [docentesTable, setDocentesTable] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,7 +24,7 @@ export default function useDocentes(programaId) {
         .then((response) => response.json())
         .then((data) => {
           if (isMounted && data && data.data) {
-            setDocentes(data.data);
+            setDocentesTable(data.data);
           }
         })
 
@@ -44,7 +44,7 @@ export default function useDocentes(programaId) {
   }, [programaId, session]);
 
   return {
-    docentes,
+    docentesTable,
     loading,
     error,
   };

@@ -1,6 +1,4 @@
-import React, {
-  useContext, useEffect, useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@siiges-ui/shared';
@@ -16,7 +14,9 @@ export const transformDataForTable = (data) => data.map((item) => ({
   nombre: `${item.persona.nombre} ${item.persona.apellidoPaterno} ${item.persona.apellidoMaterno}`,
   tipoDocente: item.tipoDocente,
   formacion: '-',
-  asignatura: item.asignaturasDocentes.map((asig) => asig.asignatura.nombre).join(', '),
+  asignatura: item.asignaturasDocentes
+    .map((asig) => asig.asignatura.nombre)
+    .join(', '),
   experiencia: item.experiencias,
   tipoContratacion: `${item.tipoContratacion} - ${item.antiguedad} años`,
 }));
@@ -25,19 +25,17 @@ export default function Docentes({ disabled, type }) {
   const [modal, setModal] = useState(false);
   const { programaId } = useContext(SolicitudContext);
   const [docentesList, setDocentesList] = useState([]);
-  const { setFormDocentes } = useContext(
-    TablesPlanEstudiosContext,
-  );
-  const { docentes, loading } = type === 'editar'
+  const { setFormDocentes } = useContext(TablesPlanEstudiosContext);
+  const { docentesTable, loading } = type === 'editar'
     ? useDocentes(programaId)
-    : { docentes: [], loading: false };
+    : { docentesTable: [], loading: false };
 
   useEffect(() => {
     if (type === 'editar' && !loading) {
-      const transformedData = transformDataForTable(docentes);
+      const transformedData = transformDataForTable(docentesTable);
       setDocentesList(transformedData);
     }
-  }, [docentes, loading]);
+  }, [docentesTable, loading]);
 
   const showModal = () => {
     setModal(true);
@@ -47,8 +45,9 @@ export default function Docentes({ disabled, type }) {
     setModal(false);
     setFormDocentes({
       esAceptado: true,
-      asignaturasDocentes: [],
       programaId,
+      asignaturasDocentes: [],
+      formacionesDocente: [],
     });
   };
 
@@ -73,9 +72,9 @@ export default function Docentes({ disabled, type }) {
       <DocentesModal
         open={modal}
         hideModal={hideModal}
-        type="crear"
         title="Agregar Docente"
         setDocentesList={setDocentesList}
+        mode="create"
       />
     </Grid>
   );

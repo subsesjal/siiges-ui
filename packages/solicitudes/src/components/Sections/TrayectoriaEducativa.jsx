@@ -37,14 +37,6 @@ export default function TrayectoriaEducativa({ disabled, type }) {
           }
         });
       });
-    } else if (programaId) {
-      setForm((prevForm) => ({
-        ...prevForm,
-        9: {
-          ...prevForm[9],
-          programaId,
-        },
-      }));
     }
   }, [programaId]);
 
@@ -143,12 +135,12 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[9].tipoEgreso}
+            value={form[9].tasaEgreso}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
-            helperText={error.tipoEgreso}
-            error={!!error.tipoEgreso}
+            helperText={error.tasaEgreso}
+            error={!!error.tasaEgreso}
             disabled={disabled}
             required
           />
