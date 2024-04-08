@@ -138,6 +138,7 @@ export default function PlanEstudios({
     }
 
     if (trayectorias.id !== undefined) {
+      setTrayectoriaStatus('edit');
       setForm((prevForm) => ({
         ...prevForm,
         9: {

@@ -1,5 +1,5 @@
 import { ButtonStyled, Context } from '@siiges-ui/shared';
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -30,7 +30,6 @@ export default function ButtonSection({
   prev,
   sectionTitle,
 }) {
-  const [newSubmit, setNewSubmit] = useState(true);
   const { setNoti, session } = useContext(Context);
   const validations = useContext(SolicitudContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
@@ -48,14 +47,16 @@ export default function ButtonSection({
     ? 'Guardar observaciones'
     : 'Terminar Solicitud';
 
-  function PlanEstudios() {
-    if (isControlDocumental) {
-      return setCreateObservaciones(true);
+  function observaciones() {
+    return setCreateObservaciones(true);
+  }
+
+  function validateNewSolicitud() {
+    if (type !== 'editar') {
+      submitNewSolicitud(validations);
+    } else {
+      submitEditSolicitud(validations, sections, id);
     }
-    if (sectionTitle === 9) {
-      return submitTrayectoriaEducativa(validations, sections, id);
-    }
-    return null;
   }
 
   const sectionFunctions = {
@@ -86,23 +87,23 @@ export default function ButtonSection({
     'Evaluación Curricular': {
       1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti),
     },
-    'Plan de estudios': () => PlanEstudios(),
+    'Plan de estudios': {
+      1: () => validateNewSolicitud(),
+      9: () => submitTrayectoriaEducativa(validations, sections, id),
+    },
   };
-
-  if (sectionFunctions[sectionTitle]) {
+  if (
+    sectionTitle === 'Plan de estudios'
+    && type === 'editar'
+    && isControlDocumental
+  ) {
+    observaciones();
+  } else if (sectionFunctions[sectionTitle]) {
     if (typeof sectionFunctions[sectionTitle] === 'function') {
       submit = sectionFunctions[sectionTitle];
     } else if (sectionFunctions[sectionTitle][sections]) {
       submit = sectionFunctions[sectionTitle][sections];
     }
-  } else if (newSubmit) {
-    if (type !== 'editar') {
-      submit = () => submitNewSolicitud(validations, setNewSubmit);
-    } else {
-      submit = () => submitEditSolicitud(validations, sections, id);
-    }
-  } else {
-    submit = () => submitEditSolicitud(validations, sections, id);
   }
 
   return (

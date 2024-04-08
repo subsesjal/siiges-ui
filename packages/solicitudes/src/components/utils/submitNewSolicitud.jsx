@@ -6,6 +6,7 @@ function submitNewSolicitud(validations) {
   const {
     form, setNoti, setId, setProgramaId,
   } = validations;
+  console.log('new solicitud');
 
   const token = getToken();
 

@@ -7,6 +7,32 @@ async function submitTrayectoriaEducativa(validations) {
     form, setForm, setNoti, trayectoriaStatus, setTrayectoriaStatus,
   } = validations;
 
+  const requiredFields = [
+    'programaSeguimiento',
+    'tipoTutoria',
+    'estadisticasTitulacion',
+    'funcionTutorial',
+    'modalidadesTitulacion',
+    'tasaEgreso',
+  ];
+
+  const isValid = requiredFields.some(
+    (field) => form[9][field] !== undefined && form[9][field] !== '',
+  );
+
+  if (!isValid) {
+    console.error(
+      'Submission criteria not met. At least one required field must be present.',
+    );
+    setNoti({
+      open: true,
+      message:
+        'No es posible continuar, falta completar información obligatoria en la sección de Trayectoria Educativa.',
+      type: 'error',
+    });
+    return;
+  }
+
   const token = getToken();
   const method = trayectoriaStatus === 'edit' ? 'PATCH' : 'POST';
   const endpoint = trayectoriaStatus === 'edit'
