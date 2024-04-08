@@ -10,7 +10,6 @@ export default function getInscripcionesAlumnos(grupoId, callback) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       callback(null, { inscripciones: data.data, loading: false });
     })
     .catch((error) => {
