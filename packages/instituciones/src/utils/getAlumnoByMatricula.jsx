@@ -10,7 +10,6 @@ export default function getAlumnoByMatricula(matricula, programaId, callback) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       callback(null, { alumnos: data.data, loading: false });
     })
     .catch((error) => {

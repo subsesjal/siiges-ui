@@ -10,7 +10,6 @@ export default function getAsignaturas(gradoId, programaId, callback) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       callback(null, { asignaturas: data.data, loading: false });
     })
     .catch((error) => {

@@ -38,7 +38,6 @@ export default function updateInstitucion(
       throw new Error('Error submitting the request');
     })
     .then((data) => {
-      console.log(data.data.id);
       router.push(`/institucion/${data.data.id}/consultarInstitucion`);
     })
     .then(() => {
