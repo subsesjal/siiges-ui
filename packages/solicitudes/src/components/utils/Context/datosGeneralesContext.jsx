@@ -1,5 +1,9 @@
 import React, {
-  createContext, useState, useMemo, useEffect, useContext,
+  createContext,
+  useState,
+  useMemo,
+  useEffect,
+  useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
@@ -9,7 +13,7 @@ const DatosGeneralesContext = createContext();
 
 export function DatosGeneralesProvider({ children }) {
   const { session } = useContext(Context);
-  const [institucion, setInstitucion] = useState();
+  const institucion = getInstitucionUsuario(session);
   const [form, setForm] = useState({
     1: {},
     2: { persona: { domicilio: { estadoId: 14 } } },
@@ -19,16 +23,13 @@ export function DatosGeneralesProvider({ children }) {
   const [disabled, setDisabled] = useState(true);
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
-  const [formDiligencias, setFormDiligencias] = useState({ });
+  const [formDiligencias, setFormDiligencias] = useState({
+    persona: {},
+  });
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [diligencias, setDiligencias] = useState([]);
+  const [diligenciasRows, setDiligenciasRows] = useState([]);
   const [initialValues, setInitialValues] = useState({});
-
-  useEffect(() => {
-    if (session) {
-      setInstitucion(getInstitucionUsuario(session));
-    }
-  }, [session]);
 
   useEffect(() => {
     if (institucion) {
@@ -61,6 +62,8 @@ export function DatosGeneralesProvider({ children }) {
       setInitialValues,
       formDiligencias,
       setFormDiligencias,
+      diligenciasRows,
+      setDiligenciasRows,
     }),
     [
       form,
@@ -72,6 +75,7 @@ export function DatosGeneralesProvider({ children }) {
       institucion,
       initialValues,
       formDiligencias,
+      diligenciasRows,
     ],
   );
 

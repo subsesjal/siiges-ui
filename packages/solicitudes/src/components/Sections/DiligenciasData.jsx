@@ -1,66 +1,84 @@
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@siiges-ui/shared';
+import { Button, getData } from '@siiges-ui/shared';
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import columns from './Mocks/Diligencias';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
-import DiligenciasCreateModal from '../utils/Components/DiligenciasModales/DiligenciasCreateModal';
+import DiligenciasFormModal from '../utils/Components/DiligenciasModales/DiligenciasFormModal';
+import DiligenciasToRows from '../utils/Components/DiligenciasToRows';
 
 function DiligenciasData({ disabled, id }) {
   const [modal, setModal] = useState(false);
-  const [rows, setRows] = useState([]);
-
-  const showModal = () => {
-    setModal(true);
-  };
-
-  const hideModal = () => {
-    setModal(false);
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const {
     diligencias,
     setDiligencias,
+    setFormDiligencias,
+    diligenciasRows,
+    setDiligenciasRows,
   } = useContext(DatosGeneralesContext);
 
+  const showModal = () => {
+    setModal(true);
+    setFormDiligencias({ persona: {}, solicitudId: id });
+  };
+
+  const hideModal = () => setModal(false);
+
   useEffect(() => {
-    const diligenciasRows = diligencias.map((item) => ({
-      id: item.id,
-      nombre: item.persona.nombre,
-      tituloCargo: item.persona.tituloCargo,
-      telefono: item.persona.telefono,
-      celular: item.persona.celular,
-      correo_primario: item.persona.correo_primario,
-      schedule: `${item.horaInicio.toLocaleTimeString()} - ${item.horaFin.toLocaleTimeString()}`,
-    }));
-    setRows(diligenciasRows);
-  }, [diligencias]);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData({
+          endpoint: `/solicitudes/${id}/diligencias/`,
+          query: '',
+        });
+        if (response && response.data) {
+          setDiligencias(response.data);
+          const rows = response.data.map(DiligenciasToRows);
+          setDiligenciasRows(rows);
+        }
+      } catch (err) {
+        setError('Failed to fetch diligencias.');
+        console.error('Error fetching data:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const tableColumns = columns(setDiligencias, diligencias);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">Diligencias</Typography>
+        {isLoading && <Typography>Loading...</Typography>}
+        {error && <Typography color="error">{error}</Typography>}
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <Button onClick={showModal} text="agregar" />}
+        {!disabled && <Button onClick={showModal} text="Agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
-            rows={rows}
+            rows={diligenciasRows}
             columns={tableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}
+            loading={isLoading}
           />
         </div>
       </Grid>
-      <DiligenciasCreateModal
+      <DiligenciasFormModal
         open={modal}
         hideModal={hideModal}
-        type="crear"
         title="Crear Diligencia"
+        mode="create"
         id={id}
       />
     </Grid>

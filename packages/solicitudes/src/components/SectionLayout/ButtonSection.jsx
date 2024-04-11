@@ -36,7 +36,6 @@ export default function ButtonSection({
   const plantelesValidations = useContext(PlantelContext);
   const evaluacionCurricular = useEvaluacionCurricular();
   const router = useRouter();
-  const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
   let submit;
 
   const isControlDocumental = session.rol === 'control_documental';
@@ -48,6 +47,7 @@ export default function ButtonSection({
     : 'Terminar Solicitud';
 
   function observaciones() {
+    const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
     return setCreateObservaciones(true);
   }
 

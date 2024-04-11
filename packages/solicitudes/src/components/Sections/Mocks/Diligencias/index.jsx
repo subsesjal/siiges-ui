@@ -6,7 +6,7 @@ const columns = () => [
   { field: 'tituloCargo', headerName: 'Cargo', width: 100 },
   { field: 'telefono', headerName: 'Telefono', width: 130 },
   { field: 'celular', headerName: 'Celular', width: 130 },
-  { field: 'correo_primario', headerName: 'Correo', width: 230 },
+  { field: 'correoPrimario', headerName: 'Correo', width: 230 },
   { field: 'schedule', headerName: 'Horario', width: 150 },
   {
     field: 'actions',

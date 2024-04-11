@@ -1,7 +1,9 @@
 import { Grid, Typography } from '@mui/material';
-import { Input, InputFile, getCurrentUser } from '@siiges-ui/shared';
+import {
+  GetFile, Input, InputFile, getCurrentUser,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import getMunicipios from '@siiges-ui/instituciones/src/components/utils/getMunicipios';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
@@ -10,6 +12,16 @@ import formDatosRepresentante from '../utils/sections/forms/formDatosRepresentan
 function RepresentanteLegalData({ id }) {
   const { municipios } = getMunicipios();
   const { user } = getCurrentUser();
+  const [fileUrl, setFileUrl] = useState();
+  const fileData = {
+    entidadId: id,
+    tipoEntidad: 'REPRESENTANTE',
+    tipoDocumento: 'FIRMA_REPRESENTANTE',
+  };
+
+  useEffect(() => {
+    GetFile(fileData, setFileUrl);
+  }, []);
 
   const {
     disabled, setDisabled, form, setForm,
@@ -27,6 +39,24 @@ function RepresentanteLegalData({ id }) {
         2: {
           ...prevForm[2],
           id: user.id,
+          nombre: user.nombre,
+          correo: user.correo,
+          persona: {
+            telefono: user.persona.telefono,
+            celular: user.persona.celular,
+            apellidoPaterno: user.persona.apellidoPaterno,
+            apellidoMaterno: user.persona.apellidoMaterno,
+            nacionalidad: user.persona.nacionalidad,
+            domicilio: {
+              calle: user.persona.domicilio.calle,
+              numeroExterior: user.persona.domicilio.numeroExterior,
+              numeroInterior: user.persona.domicilio.numeroInterior,
+              colonia: user.persona.domicilio.colonia,
+              codigoPostal: user.persona.domicilio.codigoPostal,
+              municipioId: user.persona.domicilio.municipioId,
+              estadoId: user.persona.domicilio.estadoId,
+            },
+          },
         },
       }));
     }
@@ -35,16 +65,6 @@ function RepresentanteLegalData({ id }) {
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formDatosRepresentante(name, value, form, setForm, 2);
-  };
-
-  const handleFileUrl = (url) => {
-    setForm((prevForm) => ({
-      ...prevForm,
-      2: {
-        ...prevForm[2],
-        fileUrl: url,
-      },
-    }));
   };
 
   if (!user) {
@@ -204,8 +224,8 @@ function RepresentanteLegalData({ id }) {
             tipoDocumento="FIRMA_REPRESENTANTE"
             id={id}
             label="Subir firma"
-            url={form[2]?.fileUrl}
-            setUrl={handleFileUrl}
+            url={fileUrl}
+            setUrl={setFileUrl}
             disabled={disabled}
           />
         </Grid>
