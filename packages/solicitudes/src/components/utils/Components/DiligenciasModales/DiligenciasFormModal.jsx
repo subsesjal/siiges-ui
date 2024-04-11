@@ -1,33 +1,61 @@
-import React, { useEffect, useContext } from 'react';
-import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
-import Input from '@siiges-ui/shared/src/components/Input';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import errorDatosDiligencias from '../../sections/errors/errorDatosDiligencias';
+import { Grid } from '@mui/material';
+import {
+  DefaultModal,
+  Context,
+  Input,
+  validateField,
+  ButtonSimple,
+} from '@siiges-ui/shared';
+import handleEdit from '../../submitEditDiligencias';
 import handleCreate from '../../submitNewDiligencias';
 import DatosGeneralesContext from '../../Context/datosGeneralesContext';
+import errorDatosDiligencias from '../../sections/errors/errorDatosDiligencias';
 
-export default function DiligenciasCreateModal({
-  open, hideModal, title, id,
+export default function DiligenciasFormModal({
+  open,
+  hideModal,
+  mode,
+  title,
+  id,
 }) {
   const {
+    diligencias,
     setDiligencias,
+    setDiligenciasRows,
     formDiligencias,
     setFormDiligencias,
     setError,
     error,
-    errors,
-    setErrors,
-    initialValues,
-    setInitialValues,
   } = useContext(DatosGeneralesContext);
   const { setNoti } = useContext(Context);
+  const [disabled, setDisabled] = useState(false);
 
-  const errorsDiligencias = errorDatosDiligencias(
-    formDiligencias,
-    setError,
-    error,
-  );
+  useEffect(() => {
+    if (mode !== 'create') {
+      const rowItem = diligencias.find((item) => item.id === id);
+      const rowItemValues = {
+        solicitudId: rowItem.solicitudId,
+        personaId: rowItem.personaId,
+        horaInicio: rowItem.horaInicio,
+        horaFin: rowItem.horaFin,
+        persona: {
+          nombre: rowItem.persona.nombre,
+          apellidoPaterno: rowItem.persona.apellidoPaterno,
+          apellidoMaterno: rowItem.persona.apellidoMaterno,
+          cargo: rowItem.persona.cargo,
+          correoPrimario: rowItem.persona.correoPrimario,
+          telefono: rowItem.persona.telefono,
+          celular: rowItem.persona.celular,
+        },
+      };
+      setFormDiligencias(rowItemValues);
+      if (mode === 'consult') {
+        setDisabled(true);
+      }
+    }
+  }, []);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -49,7 +77,8 @@ export default function DiligenciasCreateModal({
             [name]: value,
           },
         };
-      } if (name === 'horaInicio' || name === 'horaFin') {
+      }
+      if (name === 'horaInicio' || name === 'horaFin') {
         const timeArray = value.split(':');
         const date = new Date();
         date.setHours(parseInt(timeArray[0], 10));
@@ -68,38 +97,44 @@ export default function DiligenciasCreateModal({
   };
 
   const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (value !== initialValue || value === '') {
-      errorsDiligencias[name]();
+    const { name } = e.target;
+    const combinedFields = {
+      ...formDiligencias.persona,
+      horaInicio: formDiligencias.horaInicio,
+      horaFin: formDiligencias.horaFin,
+    };
+    if (formDiligencias && formDiligencias.persona) {
+      validateField(combinedFields, name, setError, errorDatosDiligencias);
     }
   };
-
-  const handleInputFocus = (e) => {
-    const { name, value } = e.target;
-    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
-  };
-
-  useEffect(() => {
-    if (errorsDiligencias !== undefined) {
-      setErrors(errorsDiligencias);
-    }
-    if (id) {
-      setFormDiligencias({ ...formDiligencias, solicitudId: id });
-    }
-  }, [error, id]);
 
   const handleOnSubmit = () => {
-    handleCreate(
-      formDiligencias,
-      setFormDiligencias,
-      setInitialValues,
-      setDiligencias,
-      hideModal,
-      errors,
-      setNoti,
-    );
+    const allFieldsValid = Object.keys(error).every((key) => !error[key]);
+    if (allFieldsValid) {
+      if (mode === 'edit') {
+        handleEdit(
+          formDiligencias,
+          setDiligencias,
+          setDiligenciasRows,
+          hideModal,
+          setNoti,
+          id,
+        );
+      } else {
+        handleCreate(
+          formDiligencias,
+          setDiligencias,
+          setDiligenciasRows,
+          hideModal,
+          setNoti,
+        );
+      }
+    } else {
+      setNoti({
+        message: 'Please correct the errors before submitting.',
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -113,9 +148,10 @@ export default function DiligenciasCreateModal({
             auto="nombre"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             errorMessage={error.nombre}
+            value={formDiligencias?.persona?.nombre ?? ''}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -126,9 +162,10 @@ export default function DiligenciasCreateModal({
             auto="apellidoPaterno"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             errorMessage={error.apellidoPaterno}
+            value={formDiligencias?.persona?.apellidoPaterno ?? ''}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -139,9 +176,10 @@ export default function DiligenciasCreateModal({
             auto="apellidoMaterno"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             errorMessage={error.apellidoMaterno}
+            value={formDiligencias?.persona?.apellidoMaterno ?? ''}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -152,9 +190,10 @@ export default function DiligenciasCreateModal({
             auto="tituloCargo"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             errorMessage={error.tituloCargo}
+            value={formDiligencias?.persona?.tituloCargo ?? ''}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -165,9 +204,10 @@ export default function DiligenciasCreateModal({
             auto="correoPrimario"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             errorMessage={error.correoPrimario}
+            value={formDiligencias?.persona?.correoPrimario ?? ''}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -178,9 +218,10 @@ export default function DiligenciasCreateModal({
             auto="telefono"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             errorMessage={error.telefono}
+            value={formDiligencias?.persona?.telefono ?? ''}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -190,7 +231,8 @@ export default function DiligenciasCreateModal({
             name="celular"
             auto="celular"
             onchange={handleOnChange}
-            onfocus={handleInputFocus}
+            value={formDiligencias?.persona?.celular ?? ''}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -202,9 +244,10 @@ export default function DiligenciasCreateModal({
             type="time"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             errorMessage={error.horaInicio}
+            value={formDiligencias?.horaInicio ?? ''}
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -216,37 +259,37 @@ export default function DiligenciasCreateModal({
             type="time"
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            onfocus={handleInputFocus}
             required
             errorMessage={error.horaFin}
+            value={formDiligencias?.horaFin ?? ''}
+            disabled={disabled}
           />
         </Grid>
-        <Grid item>
-          <ButtonStyled
+        <Grid item xs={9.7}>
+          <ButtonSimple
             text="Cancelar"
             alt="Cancelar"
-            design="error"
-            onclick={hideModal}
-          >
-            Cancelar
-          </ButtonStyled>
+            design="cancel"
+            onClick={hideModal}
+            align="right"
+          />
         </Grid>
-        <Grid item>
-          <ButtonStyled
+        <Grid item xs={2}>
+          <ButtonSimple
             text="Confirmar"
             alt="Confirmar"
-            onclick={handleOnSubmit}
-          >
-            Confirmar
-          </ButtonStyled>
+            onClick={handleOnSubmit}
+            disabled={disabled}
+          />
         </Grid>
       </Grid>
     </DefaultModal>
   );
 }
 
-DiligenciasCreateModal.propTypes = {
+DiligenciasFormModal.propTypes = {
   open: PropTypes.bool.isRequired,
+  mode: PropTypes.oneOf(['create', 'edit', 'view']).isRequired,
   title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,

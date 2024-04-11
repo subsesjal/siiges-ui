@@ -3,7 +3,6 @@ import { Grid } from '@mui/material';
 import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
-import errorDatosDiligencias from '../../sections/errors/errorDatosDiligencias';
 import handleEdit from '../../submitEditDiligencias';
 import DatosGeneralesContext from '../../Context/datosGeneralesContext';
 
@@ -14,9 +13,6 @@ export default function DiligenciasEditModal({
   rowItem,
 }) {
   const {
-    initialValues,
-    error,
-    setError,
     formDiligencias,
     setFormDiligencias,
     setInitialValues,
@@ -24,12 +20,6 @@ export default function DiligenciasEditModal({
   } = useContext(DatosGeneralesContext);
 
   const { setNoti } = useContext(Context);
-
-  const errorsAsignatura = errorDatosDiligencias(
-    formDiligencias,
-    setError,
-    error,
-  );
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +41,8 @@ export default function DiligenciasEditModal({
             [name]: value,
           },
         };
-      } if (name === 'horaInicio' || name === 'horaFin') {
+      }
+      if (name === 'horaInicio' || name === 'horaFin') {
         const timeArray = value.split(':');
         const date = new Date();
         date.setHours(parseInt(timeArray[0], 10));
@@ -67,15 +58,6 @@ export default function DiligenciasEditModal({
         [name]: value,
       };
     });
-  };
-
-  const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    const initialValue = initialValues[name];
-
-    if (value !== initialValue || value === '') {
-      errorsAsignatura[name]();
-    }
   };
 
   const handleInputFocus = (e) => {
@@ -104,12 +86,10 @@ export default function DiligenciasEditModal({
             name="nombre"
             auto="nombre"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
             value={rowItem.persona.nombre ?? ''}
             disabled={edit === 'Consultar Diligencia'}
-            errorMessage={error.nombre}
           />
         </Grid>
         <Grid item xs={6}>
@@ -119,12 +99,10 @@ export default function DiligenciasEditModal({
             name="apellidoPaterno"
             auto="apellidoPaterno"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
             value={rowItem.persona.apellidoPaterno ?? ''}
             disabled={edit === 'Consultar Diligencia'}
-            errorMessage={error.apellidoPaterno}
           />
         </Grid>
         <Grid item xs={6}>
@@ -134,12 +112,10 @@ export default function DiligenciasEditModal({
             name="apellidoMaterno"
             auto="apellidoMaterno"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
             value={rowItem.persona.apellidoMaterno ?? ''}
             disabled={edit === 'Consultar Diligencia'}
-            errorMessage={error.apellidoMaterno}
           />
         </Grid>
         <Grid item xs={6}>
@@ -149,12 +125,10 @@ export default function DiligenciasEditModal({
             name="tituloCargo"
             auto="tituloCargo"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
             value={rowItem.persona.tituloCargo ?? ''}
             disabled={edit === 'Consultar Diligencia'}
-            errorMessage={error.tituloCargo}
           />
         </Grid>
         <Grid item xs={6}>
@@ -164,12 +138,10 @@ export default function DiligenciasEditModal({
             name="correo_primario"
             auto="correo_primario"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
             value={rowItem.persona.correo_primario ?? ''}
             disabled={edit === 'Consultar Diligencia'}
-            errorMessage={error.correo_primario}
           />
         </Grid>
         <Grid item xs={6}>
@@ -179,12 +151,10 @@ export default function DiligenciasEditModal({
             name="telefono"
             auto="telefono"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
             value={rowItem.persona.telefono ?? ''}
             disabled={edit === 'Consultar Diligencia'}
-            errorMessage={error.telefono}
           />
         </Grid>
         <Grid item xs={6}>
@@ -208,12 +178,10 @@ export default function DiligenciasEditModal({
             auto="horaInicio"
             type="time"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
             value={rowItem.horaInicio ?? ''}
             disabled={edit === 'Consultar Diligencia'}
-            errorMessage={error.horaInicio}
           />
         </Grid>
         <Grid item xs={3}>
@@ -224,12 +192,10 @@ export default function DiligenciasEditModal({
             auto="horaFin"
             type="time"
             onchange={handleOnChange}
-            onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
             value={rowItem.horaFin ?? ''}
             disabled={edit === 'Consultar Diligencia'}
-            errorMessage={error.horaFin}
           />
         </Grid>
         <Grid container justifyContent="flex-end" marginTop={2}>

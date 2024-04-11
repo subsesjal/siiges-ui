@@ -1,27 +1,10 @@
 import { getToken } from '@siiges-ui/shared';
+import DiligenciasToRows from './Components/DiligenciasToRows';
 
-const handleCreate = (
-  form,
-  setForm,
-  setInitialValues,
-  setDiligencias,
-  hideModal,
-  errors,
-  setNoti,
-) => {
+const handleCreate = (form, setDiligencias, setDiligenciasRows, hideModal, setNoti) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const isValid = Object.keys(errors).every((campo) => errors[campo]());
   const token = getToken();
-
-  if (!isValid) {
-    setNoti({
-      open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
-      type: 'error',
-    });
-    return;
-  }
 
   fetch(`${url}/api/v1/diligencias`, {
     method: 'POST',
@@ -34,9 +17,9 @@ const handleCreate = (
   })
     .then((response) => response.json())
     .then((data) => {
-      const newData = { ...form, id: data.data.id };
-      setDiligencias((prevList) => [...prevList, newData]);
-      setInitialValues({});
+      setDiligencias((prevList) => [...prevList, data.data]);
+      const newRow = DiligenciasToRows(data.data);
+      setDiligenciasRows((prevRows) => [...prevRows, newRow]);
       hideModal();
       setNoti({
         open: true,

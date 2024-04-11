@@ -3,18 +3,14 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import DeleteDiligencia from './DiligenciasModales/DeleteDiligencia';
-import DiligenciasEditModal from './DiligenciasModales/DiligenciasEditModal';
-import DatosGeneralesContext from '../Context/datosGeneralesContext';
+import DiligenciasFormModal from './DiligenciasModales/DiligenciasFormModal';
 
 export default function DiligenciasButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
-  const { diligencias } = useContext(DatosGeneralesContext);
-  const rowItem = diligencias.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);
@@ -47,11 +43,12 @@ export default function DiligenciasButtons({ id }) {
       </IconButton>
 
       {modalOpen && (
-        <DiligenciasEditModal
-          hideModal={handleModalClose}
-          rowItem={rowItem}
+        <DiligenciasFormModal
           open={modalOpen}
-          edit={isEdit ? 'Editar Diligencia' : 'Consultar Diligencia'}
+          hideModal={handleModalClose}
+          mode={isEdit ? 'edit' : 'view'}
+          title={isEdit ? 'Editar Diligencia' : 'Consultar Diligencia'}
+          id={id}
         />
       )}
 
@@ -59,7 +56,7 @@ export default function DiligenciasButtons({ id }) {
         <DeleteDiligencia
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
-          rowItem={rowItem}
+          id={id}
         />
       )}
     </Stack>
@@ -68,7 +65,4 @@ export default function DiligenciasButtons({ id }) {
 
 DiligenciasButtons.propTypes = {
   id: PropTypes.number.isRequired,
-  rowItem: PropTypes.shape({
-    programaID: PropTypes.number,
-  }).isRequired,
 };

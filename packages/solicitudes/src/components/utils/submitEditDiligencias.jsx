@@ -1,9 +1,10 @@
 import { getToken } from '@siiges-ui/shared';
+import DiligenciasToRows from './Components/DiligenciasToRows';
 
 const handleEdit = (
   form,
-  setInitialValues,
   setDiligencias,
+  setDiligenciasRows,
   hideModal,
   setNoti,
   id,
@@ -23,15 +24,21 @@ const handleEdit = (
   })
     .then((response) => response.json())
     .then((data) => {
-      const updatedData = { ...form, id: data.data.id };
-      setDiligencias((prevList) => prevList.map(
-        (item) => (item.id === updatedData.id ? updatedData : item),
-      ));
-      setInitialValues({});
+      const updatedDiligencia = data.data;
+
+      setDiligencias(
+        (prevList) => prevList.map(
+          (item) => (item.id === updatedDiligencia.id ? updatedDiligencia : item),
+        ),
+      );
+      setDiligenciasRows((prevRows) => prevRows.map((row) => (row.id === updatedDiligencia.id
+        ? DiligenciasToRows(updatedDiligencia)
+        : row)));
+
       hideModal();
       setNoti({
         open: true,
-        message: 'Exito, no hubo problemas en esta sección',
+        message: 'Éxito, no hubo problemas en esta sección',
         type: 'success',
       });
     })

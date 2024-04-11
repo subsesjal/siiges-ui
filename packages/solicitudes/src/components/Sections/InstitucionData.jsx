@@ -1,6 +1,6 @@
-import { Grid, TextField, Typography } from '@mui/material';
-import { Input, InputFile } from '@siiges-ui/shared';
-import React, { useContext, useEffect } from 'react';
+import { Grid, Typography } from '@mui/material';
+import { GetFile, Input, InputFile } from '@siiges-ui/shared';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
@@ -8,27 +8,26 @@ import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
 function InstitucionData({ id }) {
   const {
     disabled, setDisabled, form, setForm, institucion,
-  } = useContext(DatosGeneralesContext);
+  } = useContext(
+    DatosGeneralesContext,
+  );
+  const [fileUrl, setFileUrl] = useState();
+  const fileData = {
+    entidadId: id,
+    tipoEntidad: 'INSTITUCION',
+    tipoDocumento: 'LOGOTIPO',
+  };
 
   useEffect(() => {
     if (id !== undefined) {
       setDisabled(false);
     }
+    GetFile(fileData, setFileUrl);
   }, [id]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formDatosSolicitud(name, value, form, setForm, 1);
-  };
-
-  const handleFileUrl = (url) => {
-    setForm((prevForm) => ({
-      ...prevForm,
-      1: {
-        ...prevForm[1],
-        fileUrl: url,
-      },
-    }));
   };
 
   if (!institucion) {
@@ -64,7 +63,7 @@ function InstitucionData({ id }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="historia"
             name="historia"
             label="Historia"
@@ -73,11 +72,11 @@ function InstitucionData({ id }) {
             sx={{ width: '100%' }}
             value={institucion.historia}
             disabled={disabled}
-            onChange={handleOnChange}
+            onchange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="vision"
             label="Vision"
             rows={4}
@@ -85,11 +84,11 @@ function InstitucionData({ id }) {
             sx={{ width: '100%' }}
             value={institucion?.vision}
             disabled={disabled}
-            onChange={handleOnChange}
+            onchange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="mision"
             label="Mision"
             rows={4}
@@ -97,11 +96,11 @@ function InstitucionData({ id }) {
             sx={{ width: '100%' }}
             value={institucion?.mision}
             disabled={disabled}
-            onChange={handleOnChange}
+            onchange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="valoresInstitucionales"
             label="Valores institucionales"
             rows={4}
@@ -109,7 +108,7 @@ function InstitucionData({ id }) {
             sx={{ width: '100%' }}
             value={institucion?.valoresInstitucionales}
             disabled={disabled}
-            onChange={handleOnChange}
+            onchange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -118,8 +117,8 @@ function InstitucionData({ id }) {
             tipoDocumento="LOGOTIPO"
             id={id}
             label="Logo de institución"
-            url={form[1]?.fileUrl}
-            setUrl={handleFileUrl}
+            url={fileUrl}
+            setUrl={setFileUrl}
             disabled={disabled}
           />
         </Grid>
