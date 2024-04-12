@@ -21,24 +21,38 @@ const options = [
   { id: 3, nombre: "OPD'S", roles: ['admin'] },
 ];
 
-const usersMenu = [
+const isAdminRolValidate = (rol) => rol === 'admin';
+
+const routeInstitucionesRol = (rol) => (isAdminRolValidate(rol) ? '/instituciones' : '/instituciones/miInstitucion');
+
+const textPanelMenuOptions = (rol) => {
+  const isAdmin = isAdminRolValidate(rol);
+  const textMenu = {
+    usuarios: isAdmin ? 'Usuarios' : 'Mis usuarios',
+    instituciones: isAdmin ? 'Instituciones' : 'Mi institución',
+    solicitudes: isAdmin ? 'Solicitudes' : 'Mis solicitudes',
+  };
+  return textMenu;
+};
+
+const panelMenuOptions = (rol) => [
   {
     userId: 1,
-    text: 'Usuarios',
+    text: textPanelMenuOptions(rol).usuarios,
     icon: <GroupIcon />,
     route: '/usuarios',
     key: 'users',
   },
   {
     userId: 1,
-    text: 'Instituciones',
+    text: textPanelMenuOptions(rol).instituciones,
     icon: <BusinessIcon />,
-    route: '/instituciones',
+    route: routeInstitucionesRol(rol),
     key: 'intitutions',
   },
   {
     userId: 1,
-    text: 'Solicitudes',
+    text: textPanelMenuOptions(rol).solicitudes,
     icon: <DescriptionIcon />,
     route: '/solicitudes',
     key: 'solicitudes',
@@ -188,6 +202,7 @@ const getOptionsRoles = (rol) => options.filter(({ roles }) => roles.includes(ro
 
 const optionsAdminMenuFilterRol = (rol) => {
   const user = getOptionsRoles(rol);
+  const usersMenu = panelMenuOptions(rol);
   const optionsMultiplerMenuFilter = user
     .map(({ id }) => usersMenu.filter(({ userId }) => userId === id));
   return optionsMultiplerMenuFilter;
@@ -199,8 +214,9 @@ const optionsAdminMenuFilterRol = (rol) => {
  * @param {string} path - The path to search for.
  * @returns {number} - The userId associated with the path.
  */
-const findRoute = (path) => {
+const findRoute = (path, rol) => {
   const wordSearch = path.split('/')[1];
+  const usersMenu = panelMenuOptions(rol);
   const foundItem = usersMenu.find(
     ({ route }) => route && route.startsWith(`/${wordSearch}`),
   );
@@ -211,6 +227,5 @@ export {
   findRoute,
   optionsMenuFilter,
   optionsAdminMenuFilterRol,
-  usersMenu,
   getOptionsRoles,
 };
