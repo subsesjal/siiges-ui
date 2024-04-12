@@ -46,8 +46,14 @@ export default function Anexos({ nextModule, id }) {
   );
 }
 
+Anexos.defaultProps = {
+  id: null,
+};
+
 Anexos.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
 };

@@ -87,10 +87,18 @@ export default function SectionLayout({
   );
 }
 
+SectionLayout.defaultProps = {
+  type: null,
+  id: null,
+};
+
 SectionLayout.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
   sections: PropTypes.number.isRequired,
-  id: PropTypes.number.isRequired,
   sectionTitle: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   position: PropTypes.string.isRequired,

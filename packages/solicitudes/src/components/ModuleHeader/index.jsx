@@ -92,5 +92,8 @@ ModuleHeader.propTypes = {
   date: PropTypes.string.isRequired,
   nextModule: PropTypes.func.isRequired,
   module: PropTypes.number.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]),
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
 };

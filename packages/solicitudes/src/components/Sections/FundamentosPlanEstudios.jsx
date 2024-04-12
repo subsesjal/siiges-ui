@@ -59,7 +59,11 @@ export default function FundamentosPlanEstudios({ disabled, type }) {
   );
 }
 
+FundamentosPlanEstudios.defaultProps = {
+  type: null,
+};
+
 FundamentosPlanEstudios.propTypes = {
   disabled: PropTypes.bool.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
 };

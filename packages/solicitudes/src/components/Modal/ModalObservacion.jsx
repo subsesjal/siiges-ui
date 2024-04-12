@@ -114,14 +114,20 @@ Modal.defaultProps = {
 };
 
 Modal.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  modalState: PropTypes.shape({
-    title: PropTypes.string,
-    open: PropTypes.bool,
-    disabled: PropTypes.bool,
-    confirmAction: PropTypes.func,
-    edit: PropTypes.bool,
-  }),
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
+  modalState: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.shape({
+      title: PropTypes.string,
+      open: PropTypes.bool.isRequired,
+      disabled: PropTypes.bool,
+      confirmAction: PropTypes.func,
+      edit: PropTypes.bool,
+    }),
+  ]),
   setModalState: PropTypes.func.isRequired,
 };
 

@@ -12,7 +12,7 @@ export default function useTrayectoriasEducativas(programaId) {
       const url = process.env.NEXT_PUBLIC_URL;
       const token = getToken();
 
-      if (session && programaId !== undefined) {
+      if (session && Number.isInteger(programaId)) {
         setLoading(true);
         try {
           const response = await fetch(

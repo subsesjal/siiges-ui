@@ -1,5 +1,5 @@
 import { ButtonStyled, Context } from '@siiges-ui/shared';
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -30,6 +30,7 @@ export default function ButtonSection({
   prev,
   sectionTitle,
 }) {
+  const [newSubmit, setNewSubmit] = useState(true);
   const { setNoti, session } = useContext(Context);
   const validations = useContext(SolicitudContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
@@ -52,8 +53,12 @@ export default function ButtonSection({
   }
 
   function validateNewSolicitud() {
-    if (type !== 'editar') {
-      submitNewSolicitud(validations);
+    if (newSubmit) {
+      if (type !== 'editar') {
+        submitNewSolicitud(validations, setNewSubmit);
+      } else {
+        submitEditSolicitud(validations, sections, id);
+      }
     } else {
       submitEditSolicitud(validations, sections, id);
     }
@@ -89,6 +94,9 @@ export default function ButtonSection({
     },
     'Plan de estudios': {
       1: () => validateNewSolicitud(),
+      3: () => submitEditSolicitud(validations, sections, id),
+      4: () => submitEditSolicitud(validations, sections, id),
+      5: () => submitEditSolicitud(validations, sections, id),
       9: () => submitTrayectoriaEducativa(validations, sections, id),
     },
   };
@@ -194,6 +202,7 @@ export default function ButtonSection({
 
 ButtonSection.defaultProps = {
   type: null,
+  id: null,
 };
 
 ButtonSection.propTypes = {
@@ -202,6 +211,9 @@ ButtonSection.propTypes = {
   prev: PropTypes.func.isRequired,
   position: PropTypes.string.isRequired,
   sections: PropTypes.number.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
   sectionTitle: PropTypes.string.isRequired,
 };

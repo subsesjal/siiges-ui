@@ -37,8 +37,14 @@ export default function DatosGenerales({ nextModule, id }) {
   );
 }
 
+DatosGenerales.defaultProps = {
+  id: null,
+};
+
 DatosGenerales.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
 };

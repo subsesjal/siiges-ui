@@ -12,7 +12,7 @@ export default function ButtonStyled({
   icon,
   align,
 }) {
-  const justifyContent = {
+  const justifycontent = {
     left: 'flex-start',
     center: 'center',
     right: 'flex-end',
@@ -22,7 +22,7 @@ export default function ButtonStyled({
       className={`buttonaction button${design}`}
       onClick={() => onclick()}
       type={type}
-      justifyContent={justifyContent}
+      justifycontent={justifycontent}
     >
       <div
         style={{

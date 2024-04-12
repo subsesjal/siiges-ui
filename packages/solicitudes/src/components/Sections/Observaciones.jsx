@@ -100,9 +100,15 @@ function Observaciones({ id, section, rol }) {
 
 export default Observaciones;
 
+Observaciones.defaultProps = {
+  id: null,
+};
+
 Observaciones.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
-  section: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
+  section: PropTypes.number.isRequired,
   rol: PropTypes.string.isRequired,
 };

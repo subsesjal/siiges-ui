@@ -55,7 +55,9 @@ export default function PlanEstudios({
 
   useEffect(() => {
     let isMounted = true;
-    setDisabled(id !== undefined && type !== 'editar' && isMounted);
+    if (id !== undefined && isMounted) {
+      setDisabled(false);
+    }
     if (query.modalidad) {
       setModalidad(query.modalidad);
     }
@@ -249,13 +251,21 @@ export default function PlanEstudios({
 
 PlanEstudios.defaultProps = {
   type: null,
+  id: null,
+  programaId: null,
 };
 
 PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
   setId: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
   type: PropTypes.string,
-  programaId: PropTypes.number.isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
+  programaId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
 };

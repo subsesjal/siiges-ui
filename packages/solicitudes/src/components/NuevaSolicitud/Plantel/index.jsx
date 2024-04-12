@@ -90,12 +90,19 @@ export default function Plantel({ nextModule, id, programaId }) {
   );
 }
 
+Plantel.defaultProps = {
+  id: null,
+  programaId: null,
+};
+
 Plantel.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
   programaId: PropTypes.oneOfType([
     PropTypes.number,
-    PropTypes.oneOf([undefined]),
-  ]).isRequired,
+    PropTypes.string,
+  ]),
 };
