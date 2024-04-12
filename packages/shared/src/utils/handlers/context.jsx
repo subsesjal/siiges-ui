@@ -35,8 +35,8 @@ function Provider({ children }) {
     } else {
       setShouldRedirect(true);
     }
-    if (findRoute(router.route)) {
-      setSection(findRoute(router.route));
+    if (findRoute(router.route, session.rol)) {
+      setSection(findRoute(router.route, session.rol));
     }
   }, [router]);
 
