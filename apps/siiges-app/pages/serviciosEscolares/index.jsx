@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout, DataTable } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
-import getInstituciones from '@siiges-ui/instituciones/src/utils/getInstituciones';
+import { getInstituciones } from '@siiges-ui/instituciones';
 import columns from '@siiges-ui/serviciosescolares/src/Tables/institucionesAutorizadas';
 
 export default function serviciosEscolares() {
-  const { instituciones, loading } = getInstituciones();
+  const [loading, setLoading] = useState(true);
+
+  const { instituciones } = getInstituciones({
+    esNombreAutorizado: true,
+    setLoading,
+    tipoInstitucionId: 1,
+  });
   let rows = {};
 
   if (instituciones !== undefined) {
@@ -16,6 +22,7 @@ export default function serviciosEscolares() {
     <Layout
       title="Instituciones"
       subtitle="Consulta todas las instituciones registradas"
+      loading={loading}
     >
       <Grid container>
         {loading ? (

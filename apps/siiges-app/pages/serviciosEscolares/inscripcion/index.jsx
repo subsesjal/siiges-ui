@@ -9,13 +9,15 @@ export default function Inscripcion() {
   const [asignaturas, setAsignaturas] = useState();
   const [programaId, setProgramaId] = useState();
   const [grupoId, setGrupoId] = useState();
+  const [loading, setLoading] = useState(true);
 
   return (
-    <Layout title="Inscripción">
+    <Layout title="Inscripción" loading={loading}>
       <InscripcionForm
         setAsignaturas={setAsignaturas}
         setProgramaId={setProgramaId}
         setGrupoId={setGrupoId}
+        setLoading={setLoading}
       />
       {grupoId && (
         <InscripcionesTable
