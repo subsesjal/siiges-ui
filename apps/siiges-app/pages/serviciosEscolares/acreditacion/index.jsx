@@ -9,13 +9,15 @@ export default function Acreditacion() {
   const [asignaturas, setAsignaturas] = useState();
   const [programaId, setProgramaId] = useState();
   const [grupoId, setGrupoId] = useState();
+  const [loading, setLoading] = useState(true);
 
   return (
-    <Layout title="Acreditación">
+    <Layout title="Acreditación" loading={loading}>
       <InscripcionForm
         setAsignaturas={setAsignaturas}
         setProgramaId={setProgramaId}
         setGrupoId={setGrupoId}
+        setLoading={setLoading}
       />
       {grupoId && (
         <AcreditacionAsignaturas

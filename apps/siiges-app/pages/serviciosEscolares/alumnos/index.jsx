@@ -6,10 +6,11 @@ import React, { useState } from 'react';
 export default function Alumnos() {
   const [alumnos, setAlumnos] = useState();
   const [programa, setPrograma] = useState();
+  const [loading, setLoading] = useState(true);
 
   return (
-    <Layout title="Alumnos">
-      <AlumnosForm setAlumnos={setAlumnos} setPrograma={setPrograma} />
+    <Layout title="Alumnos" loading={loading}>
+      <AlumnosForm setAlumnos={setAlumnos} setPrograma={setPrograma} setLoading={setLoading} />
       <Divider sx={{ marginTop: 2 }} />
       {alumnos && <AlumnosTable alumnos={alumnos} programa={programa} />}
     </Layout>

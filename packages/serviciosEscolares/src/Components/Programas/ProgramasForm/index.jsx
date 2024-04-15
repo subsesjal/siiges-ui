@@ -1,27 +1,32 @@
 import { Grid } from '@mui/material';
+import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
 import { Select } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
 
-export default function ProgramasForm({ setProgramas }) {
+export default function ProgramasForm({ setProgramas, setLoading }) {
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [selectedPlantel, setSelectedPlantel] = useState('');
   const [planteles, setPlanteles] = useState([]);
   const [isPlantelesDisabled, setIsPlantelesDisabled] = useState(true);
 
-  const { instituciones } = getInstituciones();
+  const { instituciones } = getInstituciones({
+    esNombreAutorizado: true,
+    tipoInstitucionId: 1,
+    setLoading,
+  });
 
   useEffect(() => {
     if (selectedInstitucion) {
       getPlantelesByInstitucion(selectedInstitucion, (error, data) => {
         if (error) {
-          console.error("Failed to fetch planteles:", error);
+          console.error('Failed to fetch planteles:', error);
           setPlanteles([]);
           setIsPlantelesDisabled(true);
         } else {
-          const transformedPlanteles = data.planteles.map(plantel => ({
+          const transformedPlanteles = data.planteles.map((plantel) => ({
             id: plantel.id,
-            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
           }));
           setPlanteles(transformedPlanteles);
           setIsPlantelesDisabled(false);
@@ -34,7 +39,7 @@ export default function ProgramasForm({ setProgramas }) {
     if (selectedPlantel) {
       getProgramas(selectedPlantel, (error, data) => {
         if (error) {
-          console.error("Failed to fetch programas:", error);
+          console.error('Failed to fetch programas:', error);
           setProgramas([]);
         } else {
           setProgramas(data.programas);
@@ -42,7 +47,6 @@ export default function ProgramasForm({ setProgramas }) {
       });
     }
   }, [selectedInstitucion, selectedPlantel]);
-
 
   return (
     <Grid container spacing={2} alignItems="center">
@@ -68,3 +72,8 @@ export default function ProgramasForm({ setProgramas }) {
     </Grid>
   );
 }
+
+ProgramasForm.propTypes = {
+  setProgramas: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
+};

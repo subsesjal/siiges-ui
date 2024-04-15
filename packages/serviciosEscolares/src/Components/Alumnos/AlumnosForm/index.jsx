@@ -9,8 +9,12 @@ import {
 } from '@siiges-ui/instituciones';
 import getAlumnosByPrograma from '@siiges-ui/instituciones/src/utils/getAlumnosByPrograma';
 
-export default function AlumnosForm({ setAlumnos, setPrograma }) {
-  const { instituciones = [] } = getInstituciones();
+export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
+  const { instituciones } = getInstituciones({
+    esNombreAutorizado: true,
+    tipoInstitucionId: 1,
+    setLoading,
+  });
 
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [planteles, setPlanteles] = useState([]);
@@ -134,4 +138,6 @@ export default function AlumnosForm({ setAlumnos, setPrograma }) {
 
 AlumnosForm.propTypes = {
   setAlumnos: PropTypes.func.isRequired,
+  setPrograma: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };

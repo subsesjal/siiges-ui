@@ -1,7 +1,11 @@
 import { getToken } from '@siiges-ui/shared';
 import { useEffect, useState } from 'react';
 
-export default function getInstituciones({ esNombreAutorizado, tipoInstitucionId, setLoading }) {
+export default function getInstituciones({
+  esNombreAutorizado,
+  tipoInstitucionId,
+  setLoading,
+}) {
   const [instituciones, setInstituciones] = useState();
   let userData = {};
   const token = getToken();
