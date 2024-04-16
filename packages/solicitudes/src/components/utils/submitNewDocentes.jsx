@@ -1,4 +1,5 @@
 import { getToken } from '@siiges-ui/shared';
+import { transformDataForTable } from '../Sections/Mocks/Docentes/utils';
 
 const handleCreate = (
   form,
@@ -6,24 +7,13 @@ const handleCreate = (
   setInitialValues,
   setDocentesList,
   hideModal,
-  errors,
   setNoti,
   programaId,
   setCurrentSection,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const isValid = Object.keys(errors).every((campo) => errors[campo]());
   const token = getToken();
-
-  if (!isValid) {
-    setNoti({
-      open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
-      type: 'error',
-    });
-    return;
-  }
 
   fetch(`${url}/api/v1/docentes`, {
     method: 'POST',
@@ -36,15 +26,25 @@ const handleCreate = (
   })
     .then((response) => response.json())
     .then((data) => {
-      const newData = { ...form, id: data.data.id };
-      setDocentesList((prevList) => [...prevList, newData]);
+      const transformedData = transformDataForTable([data.data]);
+      setDocentesList((prevList) => [...prevList, ...transformedData]);
       setForm({ programaId, esAceptado: true, asignaturasDocentes: [] });
       setInitialValues({});
       setCurrentSection(1);
       hideModal();
+      setNoti({
+        open: true,
+        message: 'Éxito, no hubo problemas en esta sección',
+        type: 'success',
+      });
     })
     .catch((error) => {
       console.error('Error:', error);
+      setNoti({
+        open: true,
+        message: 'Algo salio mal, revisa que los campos esten correctos',
+        type: 'error',
+      });
     });
 };
 

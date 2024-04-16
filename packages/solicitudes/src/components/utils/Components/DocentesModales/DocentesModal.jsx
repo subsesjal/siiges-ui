@@ -40,14 +40,28 @@ export default function DocentesModal({
     programaId,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
-  const asignaturas = getAsignaturas(programaId);
+  const { asignaturasTotal } = getAsignaturas(programaId);
   const [currentSection, setCurrentSection] = useState(1);
 
   useEffect(() => {
-    if (mode !== 'create') {
-      setFormDocentes(rowItem);
+    if (mode !== 'create' && rowItem) {
+      const rowItemValues = {
+        id: rowItem.id,
+        programaId: rowItem.programaId,
+        tipoDocente: rowItem.tipoDocente,
+        tipoContratacion: rowItem.tipoContratacion,
+        antiguedad: rowItem.antiguedad,
+        experiencias: rowItem.experiencias,
+        asignaturasDocentes: rowItem.asignaturasDocentes?.map((asig) => asig.asignaturaId) || [],
+        persona: {
+          nombre: rowItem.persona?.nombre,
+          apellidoPaterno: rowItem.persona?.apellidoPaterno,
+          apellidoMaterno: rowItem.persona?.apellidoMaterno,
+        },
+      };
+      setFormDocentes(rowItemValues);
     }
-  }, [mode]);
+  }, [mode, rowItem]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -223,7 +237,7 @@ export default function DocentesModal({
               name="asignaturasDocentes"
               multiple
               value={formDocentes.asignaturasDocentes || []}
-              options={asignaturas.asignaturas}
+              options={asignaturasTotal}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.asignaturasDocentes}
@@ -231,7 +245,7 @@ export default function DocentesModal({
               disabled={isConsultMode}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <Select
               title="Tipo de contratación"
               name="tipoContratacion"
@@ -244,7 +258,7 @@ export default function DocentesModal({
               disabled={isConsultMode}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <Input
               id="antiguedad"
               label="Antiguedad"
