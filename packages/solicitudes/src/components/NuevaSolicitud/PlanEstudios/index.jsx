@@ -88,7 +88,7 @@ export default function PlanEstudios({
         3: {
           ...prevForm[3],
           programa: {
-            metodosInduccion: '',
+            metodosInduccion: solicitudes.programa.metodosInduccion,
             perfilIngresoConocimientos:
               solicitudes.programa.perfilIngresoConocimientos,
             perfilIngresoHabilidades:

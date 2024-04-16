@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  Divider, Grid, TextField, Typography,
-} from '@mui/material';
+import { Divider, Grid, Typography } from '@mui/material';
 import {
   DefaultModal,
   validateField,
@@ -18,6 +16,12 @@ import handleCreate from '../../submitNewDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
 import handleEdit from '../../submitEditDocentes';
+import {
+  documentosPresentados,
+  nivel,
+  tipoContratacion,
+  tiposDocentes,
+} from '../../../Sections/Mocks/Docentes/utils';
 
 export default function DocentesModal({
   open,
@@ -138,39 +142,14 @@ export default function DocentesModal({
     setCurrentSection(1);
   };
 
-  const tiposDocentes = [
-    { id: 1, nombre: 'Docente de asignatura' },
-    { id: 2, nombre: 'Docente de tiempo completo' },
-  ];
-
-  const documentosPresentados = [
-    { id: 1, nombre: 'Titulo' },
-    { id: 2, nombre: 'Cédula' },
-  ];
-
-  const tipoContratacion = [
-    { id: 1, nombre: 'Contratación' },
-    { id: 2, nombre: 'Tiempo indefinido' },
-    { id: 3, nombre: 'Otro' },
-  ];
-
-  const nivel = [
-    { id: 1, nombre: 'Licenciatura' },
-    { id: 2, nombre: 'Técnico Superior Universitario' },
-    { id: 3, nombre: 'Especialidad' },
-    { id: 4, nombre: 'Maestria' },
-    { id: 5, nombre: 'Doctorado' },
-    { id: 6, nombre: 'Profesional Asociado' },
-  ];
-
   const isConsultMode = mode === 'consult';
 
   const getTitleByMode = () => {
     switch (mode) {
       case 'edit':
-        return `Editar ${propTitle}`;
+        return 'Editar Docente';
       case 'consult':
-        return `Consultar ${propTitle}`;
+        return 'Consultar Docente';
       default:
         return propTitle;
     }
@@ -180,11 +159,11 @@ export default function DocentesModal({
     <DefaultModal open={open} setOpen={hideModal} title={getTitleByMode()}>
       {currentSection === 1 && (
         <Grid container spacing={2} sx={{ width: '100%' }}>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <Select
               title="Tipo de docente"
               name="tipoDocente"
-              value=""
+              value={formDocentes?.tipoDocente || ''}
               options={tiposDocentes}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -193,12 +172,13 @@ export default function DocentesModal({
               disabled={isConsultMode}
             />
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={6}>
             <Input
               id="nombre"
               label="Nombre(s)"
               name="nombre"
               auto="nombre"
+              value={formDocentes?.persona?.nombre || ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -213,6 +193,7 @@ export default function DocentesModal({
               label="Apellido paterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
+              value={formDocentes?.persona?.apellidoPaterno || ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -227,6 +208,7 @@ export default function DocentesModal({
               label="Apellido materno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
+              value={formDocentes?.persona?.apellidoMaterno || ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -253,7 +235,7 @@ export default function DocentesModal({
             <Select
               title="Tipo de contratación"
               name="tipoContratacion"
-              value=""
+              value={formDocentes?.tipoContratacion || ''}
               options={tipoContratacion}
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -268,6 +250,7 @@ export default function DocentesModal({
               label="Antiguedad"
               name="antiguedad"
               auto="antiguedad"
+              value={formDocentes?.antiguedad || ''}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
@@ -276,33 +259,20 @@ export default function DocentesModal({
               disabled={isConsultMode}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Input
-              id="totalHorasIndependiente"
-              label="Total horas independiente"
-              name="totalHorasIndependiente"
-              auto="totalHorasIndependiente"
+              id="experiencias"
+              name="experiencias"
+              label="Experiencia laboral"
+              value={formDocentes?.experiencias || ''}
+              rows={4}
+              multiline
+              sx={{ width: '100%' }}
               onchange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
-              errorMessage={error.totalHorasIndependiente}
-              disabled={isConsultMode}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id="experienciaLaboral"
-              name="experienciaLaboral"
-              label="Experiencia laboral"
-              rows={4}
-              multiline
-              sx={{ width: '100%' }}
-              onChange={handleOnChange}
-              onBlur={handleOnBlur}
-              onFocus={handleInputFocus}
-              required
-              error={error.experienciaLaboral}
+              error={error.experiencias}
               disabled={isConsultMode}
             />
           </Grid>

@@ -56,7 +56,7 @@ export default function Egreso({ disabled }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[4].perfilEgresoConocimientos}
+            value={form[4].programa?.perfilEgresoConocimientos}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -77,7 +77,7 @@ export default function Egreso({ disabled }) {
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
-            value={form[4].perfilEgresoHabilidades}
+            value={form[4].programa?.perfilEgresoHabilidades}
             helperText={error.perfilEgresoHabilidades}
             error={!!error.perfilEgresoHabilidades}
             disabled={disabled}
@@ -95,7 +95,7 @@ export default function Egreso({ disabled }) {
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
-            value={form[4].perfilEgresoActitudes}
+            value={form[4].programa?.perfilEgresoActitudes}
             helperText={error.perfilEgresoActitudes}
             error={!!error.perfilEgresoActitudes}
             disabled={disabled}
@@ -113,7 +113,7 @@ export default function Egreso({ disabled }) {
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
-            value={form[4].seguimientoEgresados}
+            value={form[4].programa?.seguimientoEgresados}
             helperText={error.seguimientoEgresados}
             error={!!error.seguimientoEgresados}
             disabled={disabled}
