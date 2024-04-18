@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -16,24 +17,21 @@ function InputDate({
   required,
 }) {
   const handleDateChange = (newDate) => {
-    const formattedDate = newDate ? newDate.toISOString() : '';
-    const event = {
-      target: {
-        name,
-        value: formattedDate,
-      },
-    };
+    const isValidDate = newDate && dayjs(newDate).isValid();
+    const formattedDate = isValidDate ? newDate.toISOString() : '';
 
-    onchange(event);
+    onchange({ target: { name, value: formattedDate } });
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         label={label}
-        value={value}
+        value={value ? dayjs(value) : null}
         name={name}
         onChange={handleDateChange}
+        onFocus={onfocus}
+        onBlur={onblur}
         disabled={disabled}
         format="DD/MM/YYYY"
         sx={{ width: '100%', mt: 2 }}
@@ -41,13 +39,9 @@ function InputDate({
           textField: {
             disabled,
             required,
-            name,
-            onChange: handleDateChange,
             helperText: errorMessage,
             error: !!errorMessage,
             size: 'small',
-            onFocus: onfocus,
-            onBlur: onblur,
           },
         }}
       />

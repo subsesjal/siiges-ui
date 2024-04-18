@@ -35,7 +35,7 @@ export default function Docentes({ disabled, type }) {
       esAceptado: true,
       programaId,
       asignaturasDocentes: [],
-      formacionesDocente: [],
+      formacionesDocentes: [],
     });
   };
 
@@ -51,7 +51,7 @@ export default function Docentes({ disabled, type }) {
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
             rows={docentesList}
-            columns={columns(docentesTable, setDocentesList)}
+            columns={columns(setDocentesList)}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />

@@ -1,7 +1,7 @@
 import React from 'react';
 import DocentesButtons from '../../../utils/Components/DocentesButtons';
 
-const columns = (docentesTable, setDocentesList) => [
+const columns = (setDocentesList) => [
   { field: 'nombre', headerName: 'Nombre', width: 350 },
   { field: 'tipoDocente', headerName: 'Tipo de docente', width: 230 },
   { field: 'formacion', headerName: 'Formación profesional', width: 180 },
@@ -24,7 +24,6 @@ const columns = (docentesTable, setDocentesList) => [
     renderCell: (params) => (
       <DocentesButtons
         id={params.id}
-        docentesList={docentesTable}
         setDocentesList={setDocentesList}
       />
     ),
