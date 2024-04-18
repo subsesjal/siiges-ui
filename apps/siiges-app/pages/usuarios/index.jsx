@@ -7,6 +7,7 @@ import { Divider } from '@mui/material';
 const ENDPOINT_MAPPING = {
   representante: (usuarioId) => `api/v1/usuarios/${usuarioId}/usuarios`,
   admin: () => 'api/v1/usuarios',
+  sicyt_editar: () => 'api/v1/usuarios',
 };
 
 function Usuarios() {

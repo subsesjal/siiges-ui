@@ -45,6 +45,7 @@ export default function InstitucionBox({
       <PlantelesTable
         institucionId={institucion.id}
         planteles={institucion.planteles}
+        session={session}
       />
       )}
     </Grid>

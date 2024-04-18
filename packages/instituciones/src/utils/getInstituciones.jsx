@@ -13,13 +13,15 @@ export default function getInstituciones({
   const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
-    const finalURL = `${url}/api/v1/instituciones${esNombreAutorizado
-      ? '?esNombreAutorizado=true'
-      : ''}${tipoInstitucionId
-      ? `${esNombreAutorizado
-        ? '&'
-        : '?'}tipoInstitucionId=${tipoInstitucionId}`
-      : ''}`;
+    const finalURL = `${url}/api/v1/instituciones${
+      esNombreAutorizado ? '?esNombreAutorizado=true' : ''
+    }${
+      tipoInstitucionId
+        ? `${
+          esNombreAutorizado ? '&' : '?'
+        }tipoInstitucionId=${tipoInstitucionId}`
+        : ''
+    }`;
 
     fetch(finalURL, {
       headers: { api_key: apikey, Authorization: `Bearer ${token}` },
@@ -33,8 +35,11 @@ export default function getInstituciones({
         setTimeout(() => {
           setLoading(false);
         }, 2000);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
       });
-  }, [esNombreAutorizado]);
+  }, [esNombreAutorizado, tipoInstitucionId]);
 
   return {
     instituciones,

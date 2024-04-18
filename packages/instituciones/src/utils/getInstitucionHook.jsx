@@ -38,10 +38,10 @@ const getInstitucionHook = ({
       }
     };
 
-    if (session.rol === 'representante' && !responseReceived) {
+    if ((session.rol === 'representante' || session.rol === 'gestor') && !responseReceived) {
       const endpoint = `/instituciones/usuarios/${session.id}`;
       fetchData(endpoint);
-    } else if ((session.rol === 'admin' || session.rol === 'gestor') && !responseReceived) {
+    } else if ((session.rol === 'admin') && !responseReceived) {
       if (router.isReady) {
         const { institucionId } = router.query;
         const endpoint = `/instituciones/${institucionId}`;
