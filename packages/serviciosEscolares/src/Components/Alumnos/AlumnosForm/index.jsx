@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Select } from '@siiges-ui/shared';
+import { Select, Context } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import {
   getInstituciones,
@@ -16,16 +16,23 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
     setLoading,
   });
 
+  const { setNoti, session } = useContext(Context);
+
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [planteles, setPlanteles] = useState([]);
   const [selectedPlantel, setSelectedPlantel] = useState('');
   const [programas, setProgramas] = useState([]);
   const [selectedPrograma, setSelectedPrograma] = useState('');
+  const isRepresentante = session.rol === 'representante';
 
   const fetchAlumnos = (programaId) => {
     getAlumnosByPrograma(programaId, (error, data) => {
       if (error) {
-        console.error('Failed to fetch alumnos:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener alumnos: ${error.message}`,
+          type: 'error',
+        });
         setAlumnos([]);
       } else {
         const transformedAlumnos = data.alumnos.map((alumno) => ({
@@ -41,6 +48,15 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
     });
   };
 
+  useEffect(() => {
+    if (isRepresentante && instituciones?.length) {
+      const findIndexIntitucion = instituciones.findIndex(
+        ({ usuarioId }) => usuarioId === session.id,
+      );
+      setSelectedInstitucion(instituciones[findIndexIntitucion].id);
+    }
+  }, [isRepresentante, instituciones]);
+
   const handleProgramaChange = (event) => {
     const programaId = event.target.value;
     setPrograma(programaId);
@@ -55,7 +71,11 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
   const fetchProgramas = (plantelId) => {
     getProgramas(plantelId, (error, data) => {
       if (error) {
-        console.error('Failed to fetch programas:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener programas: ${error.message}`,
+          type: 'error',
+        });
         setProgramas([]);
       } else {
         const transformedProgramas = data.programas.map((programa) => ({
@@ -80,7 +100,11 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
       if (error) {
-        console.error('Failed to fetch planteles:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener planteles: ${error.message}`,
+          type: 'error',
+        });
         setPlanteles([]);
       } else {
         const transformedPlanteles = data.planteles.map((plantel) => ({
@@ -92,15 +116,11 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
     });
   };
 
-  const handleInstitucionChange = (event) => {
-    const institucionId = event.target.value;
-    setSelectedInstitucion(institucionId);
-    if (institucionId) {
-      fetchPlanteles(institucionId);
-    } else {
-      setPlanteles([]);
-    }
-  };
+  useEffect(() => {
+    if (selectedInstitucion) {
+      fetchPlanteles(selectedInstitucion);
+    } else setPlanteles([]);
+  }, [selectedInstitucion]);
 
   return (
     <Grid container spacing={2} alignItems="center">
@@ -110,7 +130,8 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
           name="instituciones"
           value={selectedInstitucion}
           options={instituciones || []}
-          onchange={handleInstitucionChange}
+          onchange={(event) => setSelectedInstitucion(event.target.value)}
+          disabled={isRepresentante}
         />
       </Grid>
       <Grid item xs={4}>

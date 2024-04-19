@@ -30,7 +30,7 @@ function ModalState() {
   };
 }
 
-export default function Planteles({ planteles, institucionId }) {
+export default function Planteles({ planteles, institucionId, session }) {
   const router = useRouter();
   const {
     modal, showModal, hideModal, modalId,
@@ -66,54 +66,66 @@ export default function Planteles({ planteles, institucionId }) {
       field: 'actions',
       headerName: 'Acciones',
       width: 150,
-      renderCell: (params) => (
-        <>
-          {params.row.claveCentroTrabajo ? (
-            <ActionButtons
-              id={params.id}
-              consultar={`/instituciones/${institucionId}/planteles/consultar/${params.id}`}
-            />
-          ) : (
-            <ActionButtons
-              id={params.id}
-              consultar={`/instituciones/${institucionId}/planteles/consultar/${params.id}`}
-              editar={`/instituciones/${institucionId}/planteles/editar/${params.id}`}
-              eliminar={() => showModal(params.id)}
-            />
-          )}
-          <DefaultModal open={modal} setOpen={hideModal} id={modalId}>
-            <Typography>Desea eliminar este plantel?</Typography>
-            <Grid container spacing={2} justifyContent="flex-end">
-              <Grid item>
-                <ButtonStyled
-                  text="Cancelar"
-                  alt="Cancelar"
-                  onclick={hideModal}
-                >
-                  Cancelar
-                </ButtonStyled>
+      renderCell: (params) => {
+        const actionButtonsProps = {
+          id: params.id,
+          consultar: `/instituciones/${institucionId}/planteles/consultar/${params.id}`,
+        };
+
+        if (!params.row.claveCentroTrabajo && session.rol !== 'gestor') {
+          actionButtonsProps.editar = `/instituciones/${institucionId}/planteles/editar/${params.id}`;
+          actionButtonsProps.eliminar = () => showModal(params.id);
+        }
+
+        return (
+          <>
+            {params.row.claveCentroTrabajo ? (
+              <ActionButtons
+                id={actionButtonsProps.id}
+                consultar={actionButtonsProps.consultar}
+              />
+            ) : (
+              <ActionButtons
+                id={actionButtonsProps.id}
+                consultar={actionButtonsProps.consultar}
+                editar={actionButtonsProps.editar}
+                eliminar={actionButtonsProps.eliminar}
+              />
+            )}
+            <DefaultModal open={modal} setOpen={hideModal} id={modalId}>
+              <Typography>Desea eliminar este plantel?</Typography>
+              <Grid container spacing={2} justifyContent="flex-end">
+                <Grid item>
+                  <ButtonStyled
+                    text="Cancelar"
+                    alt="Cancelar"
+                    onclick={hideModal}
+                  >
+                    Cancelar
+                  </ButtonStyled>
+                </Grid>
+                <Grid item>
+                  <ButtonStyled
+                    text="Confirmar"
+                    alt="Confirmar"
+                    design="error"
+                    onclick={() => {
+                      hideModal();
+                      deletePlantel(
+                        params.row.institucion,
+                        modalId,
+                        handleDeleteClick,
+                      );
+                    }}
+                  >
+                    Confirmar
+                  </ButtonStyled>
+                </Grid>
               </Grid>
-              <Grid item>
-                <ButtonStyled
-                  text="Confirmar"
-                  alt="Confirmar"
-                  design="error"
-                  onclick={() => {
-                    hideModal();
-                    deletePlantel(
-                      params.row.institucion,
-                      modalId,
-                      handleDeleteClick,
-                    );
-                  }}
-                >
-                  Confirmar
-                </ButtonStyled>
-              </Grid>
-            </Grid>
-          </DefaultModal>
-        </>
-      ),
+            </DefaultModal>
+          </>
+        );
+      },
       sortable: false,
       filterable: false,
     },
@@ -155,4 +167,10 @@ Planteles.propTypes = {
       }),
     }),
   ).isRequired,
+  session: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    nombre: PropTypes.string.isRequired,
+    rol: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
+  }).isRequired,
 };

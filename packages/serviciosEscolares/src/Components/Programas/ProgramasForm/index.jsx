@@ -1,10 +1,11 @@
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
-import { Select } from '@siiges-ui/shared';
-import React, { useState, useEffect } from 'react';
+import { Context, Select } from '@siiges-ui/shared';
+import React, { useState, useEffect, useContext } from 'react';
 
 export default function ProgramasForm({ setProgramas, setLoading }) {
+  const { setNoti, session } = useContext(Context);
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [selectedPlantel, setSelectedPlantel] = useState('');
   const [planteles, setPlanteles] = useState([]);
@@ -16,11 +17,18 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
     setLoading,
   });
 
+  const roles = ['representante', 'ce_ies'];
+  const isRepresentante = roles.includes(session.rol);
+
   useEffect(() => {
     if (selectedInstitucion) {
       getPlantelesByInstitucion(selectedInstitucion, (error, data) => {
         if (error) {
-          console.error('Failed to fetch planteles:', error);
+          setNoti({
+            open: true,
+            message: `Error al obtener planteles: ${error.message}`,
+            type: 'error',
+          });
           setPlanteles([]);
           setIsPlantelesDisabled(true);
         } else {
@@ -39,7 +47,11 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
     if (selectedPlantel) {
       getProgramas(selectedPlantel, (error, data) => {
         if (error) {
-          console.error('Failed to fetch programas:', error);
+          setNoti({
+            open: true,
+            message: `Error al obtener programas: ${error.message}`,
+            type: 'error',
+          });
           setProgramas([]);
         } else {
           setProgramas(data.programas);
@@ -48,6 +60,13 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
     }
   }, [selectedInstitucion, selectedPlantel]);
 
+  useEffect(() => {
+    if (isRepresentante && instituciones?.length) {
+      const findIndexIntitucion = instituciones
+        .findIndex(({ usuarioId }) => usuarioId === session.id);
+      setSelectedInstitucion(instituciones[findIndexIntitucion]?.id);
+    }
+  }, [isRepresentante, instituciones]);
   return (
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={6}>
@@ -57,6 +76,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           value={selectedInstitucion}
           options={instituciones}
           onchange={(event) => setSelectedInstitucion(event.target.value)}
+          disabled={isRepresentante}
         />
       </Grid>
       <Grid item xs={6}>

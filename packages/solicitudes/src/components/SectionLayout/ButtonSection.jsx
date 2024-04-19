@@ -45,9 +45,9 @@ export default function ButtonSection({
   const buttonTextEnd = isControlDocumental
     ? 'Guardar observaciones'
     : 'Terminar Solicitud';
+  const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
 
   function observaciones() {
-    const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
     return setCreateObservaciones(true);
   }
 
@@ -58,6 +58,16 @@ export default function ButtonSection({
       submitEditSolicitud(validations, sections, id);
     }
   }
+
+  const PlanDeEstudios = () => {
+    if (isControlDocumental) {
+      return () => observaciones();
+    }
+    return {
+      1: () => validateNewSolicitud(),
+      9: () => submitTrayectoriaEducativa(validations, sections, id),
+    };
+  };
 
   const sectionFunctions = {
     'Datos Generales': {
@@ -87,18 +97,9 @@ export default function ButtonSection({
     'Evaluación Curricular': {
       1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti),
     },
-    'Plan de estudios': {
-      1: () => validateNewSolicitud(),
-      9: () => submitTrayectoriaEducativa(validations, sections, id),
-    },
+    'Plan de estudios': PlanDeEstudios(),
   };
-  if (
-    sectionTitle === 'Plan de estudios'
-    && type === 'editar'
-    && isControlDocumental
-  ) {
-    observaciones();
-  } else if (sectionFunctions[sectionTitle]) {
+  if (sectionFunctions[sectionTitle]) {
     if (typeof sectionFunctions[sectionTitle] === 'function') {
       submit = sectionFunctions[sectionTitle];
     } else if (sectionFunctions[sectionTitle][sections]) {

@@ -11,14 +11,13 @@ import { findRoute } from '../../components/Drawer/utils/menuUsers';
 export const Context = createContext();
 
 function Provider({ children }) {
+  const router = useRouter();
   const [session, setSession] = useState({});
   const [auth, setAuth] = useState(false);
   const [noti, setNoti] = useState(false);
   const [loading, setLoading] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
-  const [section, setSection] = useState(1);
-
-  const router = useRouter();
+  const [section, setSection] = useState(findRoute(router.route, session.rol));
 
   const removeAuth = () => {
     router.push('/');
