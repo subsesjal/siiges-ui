@@ -5,20 +5,14 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { InputNumber } from '@siiges-ui/shared';
+import { InputNumber, getData } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import formPrograma from '../utils/sections/forms/formPrograma';
 import PlantelContext from '../utils/Context/plantelContext';
 
 export default function DescripcionPlantel({ plantelesData, disabled }) {
-  const options = [
-    { id: 1, nombre: 'Construido para escuela' },
-    { id: 2, nombre: 'Adaptado' },
-    { id: 3, nombre: 'Mixto' },
-  ];
-
   const {
     form,
     setForm,
@@ -27,6 +21,34 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
     seguridad,
     setSeguridad,
   } = useContext(PlantelContext);
+  useEffect(() => {
+    if (plantelesData?.id) {
+      const fetchData = async () => {
+        try {
+          const response = await getData({
+            endpoint: `/planteles/${plantelesData.id}/niveles`,
+            query: '',
+          });
+          if (response && response.data) {
+            const nivelIds = response.data.map((nivel) => nivel.id);
+            setSelectedCheckboxes(
+              nivelIds.map((id) => ({ edificioNivelId: id })),
+            );
+          }
+        } catch (err) {
+          console.error('Error fetching data:', err);
+        }
+      };
+      fetchData();
+    }
+  }, [plantelesData]);
+
+  const options = [
+    { id: 1, nombre: 'Construido para escuela' },
+    { id: 2, nombre: 'Adaptado' },
+    { id: 3, nombre: 'Mixto' },
+  ];
+
   const handleCheckboxChange = (id) => {
     setSelectedCheckboxes((prevSelectedCheckboxes) => {
       if (
@@ -205,5 +227,8 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
 
 DescripcionPlantel.propTypes = {
   disabled: PropTypes.bool.isRequired,
-  plantelesData: PropTypes.objectOf(PropTypes.string).isRequired,
+  plantelesData: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    tipoInmuebleId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }).isRequired,
 };

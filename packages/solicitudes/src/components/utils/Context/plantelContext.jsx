@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const PlantelContext = createContext();
 
-export function PlantelProvider({ children, plantelId, institucionId }) {
+export function PlantelProvider({ children, selectedPlantel, institucionId }) {
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
   const [disabled, setDisabled] = useState(true);
@@ -13,8 +13,9 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
   const [formDiligencias, setFormDiligencias] = useState({});
   const [infraestructuras, setInfraestructuras] = useState([]);
   const [institucionesAledanas, setInstitucionesAledanas] = useState([]);
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const [formInfraestructuras, setFormInfraestructuras] = useState({});
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+  const [plantelId, setPlantelId] = useState(selectedPlantel);
   const [formInstitucionesAledanas, setFormInstitucionesAledanas] = useState({ plantelId });
   const [form, setForm] = useState({
     1: {},
@@ -49,10 +50,12 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
       disabled,
       seguridad,
       setErrors,
+      plantelId,
       diligencias,
       setDisabled,
       setSeguridad,
       validNombres,
+      setPlantelId,
       initialValues,
       setDiligencias,
       setValidNombres,
@@ -76,6 +79,7 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
       errors,
       disabled,
       seguridad,
+      plantelId,
       diligencias,
       validNombres,
       initialValues,
@@ -95,7 +99,7 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
 
 PlantelProvider.propTypes = {
   children: PropTypes.node.isRequired,
-  plantelId: PropTypes.number.isRequired,
+  selectedPlantel: PropTypes.number.isRequired,
   institucionId: PropTypes.number.isRequired,
 };
 

@@ -43,7 +43,7 @@ export default function Infraestructura({ disabled, programaId }) {
       </Grid>
       <Grid item xs={12}>
         <DataTable
-          buttonAdd={disabled}
+          buttonAdd={!disabled}
           buttonText="Agregar"
           buttonClick={showModal}
           rows={rows}

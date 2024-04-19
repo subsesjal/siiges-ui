@@ -112,13 +112,11 @@ export default function ButtonSection({
       2: () => submitDescripcionPlantel(
         plantelesValidations,
         setNoti,
-        router.query.plantel,
         setLoading,
       ),
       3: () => submitHigienesPlantel(
         plantelesValidations,
         setNoti,
-        router.query.plantel,
         setLoading,
       ),
       6: () => submitRatificacion(plantelesValidations, setNoti, setLoading),

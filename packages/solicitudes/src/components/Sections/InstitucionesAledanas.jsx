@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@mui/material';
-import { Button, DataTable } from '@siiges-ui/shared';
+import { Grid, Typography } from '@mui/material';
+import { DataTable } from '@siiges-ui/shared';
 import columns from './Mocks/InstitucionesAledanas';
 import PlantelContext from '../utils/Context/plantelContext';
 import InstitucionesAledanasCreateModal from '../utils/Components/InstitucionesAledanas/InstitucionesAledanasCreateModal';
@@ -31,12 +31,14 @@ export default function InstitucionesAledanas({ disabled, programaId }) {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={3}>
-        {!disabled && <Button text="agregar" onClick={showModal} />}
+      <Grid item xs={12}>
+        <Typography variant="h6">Infraestructura</Typography>
       </Grid>
       <Grid item xs={12}>
         <DataTable
-          title="Instituciones Aledañas"
+          buttonAdd={!disabled}
+          buttonText="Agregar"
+          buttonClick={showModal}
           rows={rows}
           columns={tableColumns}
           pageSize={5}

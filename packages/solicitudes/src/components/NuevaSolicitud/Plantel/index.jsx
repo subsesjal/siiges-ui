@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Card, CardContent } from '@mui/material';
-import { useRouter } from 'next/router';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
 import { Context } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
@@ -14,16 +13,21 @@ import Infraestructura from '../../Sections/Infraestructura';
 import RatificacionNombre from '../../Sections/RatificacionNombre';
 import NombresPropuestos from '../../Sections/NombresPropuestos';
 import { PlantelProvider } from '../../utils/Context/plantelContext';
+import getSolicitudesById from '../../utils/getSolicitudesById';
 
 export default function Plantel({
-  nextModule, id, programaId, isLoading, setIsLoading,
+  nextModule,
+  id,
+  programaId,
+  isLoading,
+  setIsLoading,
 }) {
   const [disabled, setDisabled] = useState(true);
   const { session } = useContext(Context);
-  const { query } = useRouter();
   const institucion = getInstitucionUsuario(session);
   const [ratificacion, setRatificacion] = useState(<RatificacionNombre />);
   const [plantelesData, setPlantelesData] = useState({});
+  const { solicitudes } = getSolicitudesById(id);
 
   useEffect(() => {
     setDisabled(!id);
@@ -31,9 +35,13 @@ export default function Plantel({
       if (
         !institucion.ratificacionNombre
         || (Array.isArray(institucion.ratificacionNombre)
-          && institucion.ratificacionNombre.some((item) => !item.esNombreAutorizado))
+          && institucion.ratificacionNombre.some(
+            (item) => !item.esNombreAutorizado,
+          ))
       ) {
-        setRatificacion(<NombresPropuestos disabled={disabled} id={institucion.id} />);
+        setRatificacion(
+          <NombresPropuestos disabled={disabled} id={institucion.id} />,
+        );
       }
     }
   }, [id, disabled, institucion]);
@@ -51,7 +59,10 @@ export default function Plantel({
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
-        <PlantelProvider plantelId={query.plantel} institucionId={institucion?.id}>
+        <PlantelProvider
+          selectedPlantel={solicitudes?.programa?.plantelId}
+          institucionId={institucion?.id}
+        >
           <SectionLayout
             sectionTitle="Plantel"
             sections={section}
@@ -99,14 +110,8 @@ Plantel.defaultProps = {
 
 Plantel.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
-  programaId: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   setIsLoading: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };

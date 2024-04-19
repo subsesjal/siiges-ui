@@ -3,12 +3,11 @@ import { getToken } from '@siiges-ui/shared';
 export default function submitDescripcionPlantel(
   validations,
   setNoti,
-  plantelId,
   setLoading,
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const { selectedCheckboxes } = validations;
+  const { plantelId, selectedCheckboxes } = validations;
   const token = getToken();
 
   fetch(`${url}/api/v1/planteles/${plantelId}/niveles`, {

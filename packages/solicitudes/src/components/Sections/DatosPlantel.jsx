@@ -13,7 +13,7 @@ export default function DatosPlantel({
   setPlantelesData,
 }) {
   const { planteles } = getPlantelesUsuario();
-  const { setForm } = useContext(PlantelContext);
+  const { setForm, plantelId } = useContext(PlantelContext);
   const [plantelesSelect, setPlantelesSelect] = useState([]);
 
   useEffect(() => {
@@ -26,17 +26,34 @@ export default function DatosPlantel({
     }
   }, [planteles]);
 
+  useEffect(() => {
+    if (plantelId !== null && planteles) {
+      const selectedPlantel = planteles.find(
+        (plantel) => plantel.id === plantelId,
+      );
+      if (selectedPlantel) {
+        setPlantelesData((prevData) => ({
+          ...prevData,
+          ...selectedPlantel,
+          plantelId: plantelId.toString(),
+        }));
+      }
+    }
+  }, [plantelId, planteles]);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formPrograma(name, value, setForm, 1);
-    const selectedPlantel = planteles.find(
-      (plantel) => plantel.id === Number(value),
-    );
-    setPlantelesData((prevData) => ({
-      ...prevData,
-      plantelId: value,
-      ...selectedPlantel,
-    }));
+    if (value) {
+      const selectedPlantel = planteles.find(
+        (plantel) => plantel.id === Number(value),
+      );
+      setPlantelesData((prevData) => ({
+        ...prevData,
+        plantelId: value,
+        ...selectedPlantel,
+      }));
+    }
   };
 
   return (
@@ -50,7 +67,7 @@ export default function DatosPlantel({
             title="Plantel"
             name="plantelId"
             options={plantelesSelect}
-            value={plantelesData.plantelId}
+            value={plantelId || ''}
             onchange={handleOnChange}
             disabled={disabled}
           />
@@ -238,6 +255,28 @@ export default function DatosPlantel({
 
 DatosPlantel.propTypes = {
   disabled: PropTypes.bool.isRequired,
-  plantelesData: PropTypes.objectOf(PropTypes.string).isRequired,
+  plantelesData: PropTypes.shape({
+    claveCentroTrebajo: PropTypes.string,
+    telefono1: PropTypes.string,
+    telefono2: PropTypes.string,
+    telefono3: PropTypes.string,
+    correo1: PropTypes.string,
+    paginaWeb: PropTypes.string,
+    correo2: PropTypes.string,
+    redesSociales: PropTypes.string,
+    correo3: PropTypes.string,
+    domicilio: PropTypes.shape({
+      calle: PropTypes.string,
+      numeroExterior: PropTypes.string,
+      numeroInterior: PropTypes.string,
+      colonia: PropTypes.string,
+      codigoPostal: PropTypes.string,
+      municipio: PropTypes.shape({
+        nombre: PropTypes.string,
+      }),
+      latitud: PropTypes.string,
+      longitud: PropTypes.string,
+    }),
+  }).isRequired,
   setPlantelesData: PropTypes.func.isRequired,
 };
