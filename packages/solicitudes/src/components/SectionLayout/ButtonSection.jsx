@@ -17,7 +17,7 @@ import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
 import submitHigienesPlantel from '../utils/submitHigienesPlantel';
 import submitRatificacion from '../utils/submitRatificacion';
 import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularContext';
-import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
+import { ObservacionesContext } from '../utils/Context/observacionesContext';
 import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
 import submitTrayectoriaEducativa from '../utils/submitTrayectoriaeducativa';
 
@@ -35,9 +35,10 @@ export default function ButtonSection({
   const [newSubmit, setNewSubmit] = useState(true);
   const { setNoti, session } = useContext(Context);
   const validations = useContext(SolicitudContext);
-  const datosGeneralesValidations = useContext(DatosGeneralesContext);
-  const plantelesValidations = useContext(PlantelContext);
   const evaluacionCurricular = useEvaluacionCurricular();
+  const plantelesValidations = useContext(PlantelContext);
+  const datosGeneralesValidations = useContext(DatosGeneralesContext);
+  const { setCreateObservaciones } = useContext(ObservacionesContext);
   const router = useRouter();
   let submit;
 
@@ -48,7 +49,6 @@ export default function ButtonSection({
   const buttonTextEnd = isControlDocumental
     ? 'Guardar observaciones'
     : 'Terminar Solicitud';
-  const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
 
   function observaciones() {
     return setCreateObservaciones(true);
