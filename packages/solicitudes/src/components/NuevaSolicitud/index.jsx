@@ -10,6 +10,7 @@ import {
   EvaluacionCurricular,
   PlataformaEducativa,
 } from '@siiges-ui/solicitudes';
+import { ObservacionesProvider } from '../utils/Context/observacionesContext';
 
 const steps = {
   escolarizada: [
@@ -131,7 +132,7 @@ export default function NuevaSolicitud({
   };
 
   return (
-    <>
+    <ObservacionesProvider>
       <ModuleHeader
         steps={
           modalidad === 'escolarizada'
@@ -145,7 +146,7 @@ export default function NuevaSolicitud({
         id={id}
       />
       {renderModule()}
-    </>
+    </ObservacionesProvider>
   );
 }
 
