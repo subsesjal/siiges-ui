@@ -13,10 +13,10 @@ export default function getSolicitudes() {
 
   useEffect(() => {
     if (session !== undefined) {
-      if (session.rol === 'representante') {
-        varUrl = `${url}/api/v1/solicitudes/usuarios/${session.id}`;
-      } else {
+      if (session.rol === 'admin' || session.rol === 'sicyt_editar') {
         varUrl = `${url}/api/v1/solicitudes/`;
+      } else {
+        varUrl = `${url}/api/v1/solicitudes/usuarios/${session.id}`;
       }
       fetch(varUrl, {
         headers: {

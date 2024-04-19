@@ -16,12 +16,21 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 
 const options = [
-  { id: 1, nombre: 'Incorporación', roles: ['admin', 'representante'] },
-  { id: 2, nombre: 'Servicios escolares', roles: ['admin', 'representante'] },
-  { id: 3, nombre: "OPD'S", roles: ['admin'] },
+  {
+    id: 1,
+    nombre: 'Incorporación',
+    roles: ['admin', 'representante', 'sicyt_editar'],
+  },
+  {
+    id: 2,
+    nombre: 'Servicios escolares',
+    roles: ['admin', 'representante', 'sicyt_editar', 'ce_ies', 'ce_sicyt'],
+  },
+  { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
 ];
 
-const isAdminRolValidate = (rol) => rol === 'admin';
+const usersAdmin = ['admin', 'sicyt_editar'];
+const isAdminRolValidate = (rol) => usersAdmin.includes(rol);
 
 const routeInstitucionesRol = (rol) => (isAdminRolValidate(rol) ? '/instituciones' : '/instituciones/miInstitucion');
 
@@ -34,6 +43,14 @@ const textPanelMenuOptions = (rol) => {
   };
   return textMenu;
 };
+
+const solicitudesMenu = (rol) => ({
+  userId: 1,
+  text: textPanelMenuOptions(rol).solicitudes,
+  icon: <DescriptionIcon />,
+  route: '/solicitudes',
+  key: 'solicitudes',
+});
 
 const panelMenuOptions = (rol) => [
   {
@@ -50,13 +67,7 @@ const panelMenuOptions = (rol) => [
     route: routeInstitucionesRol(rol),
     key: 'intitutions',
   },
-  {
-    userId: 1,
-    text: textPanelMenuOptions(rol).solicitudes,
-    icon: <DescriptionIcon />,
-    route: '/solicitudes',
-    key: 'solicitudes',
-  },
+  solicitudesMenu(rol),
   {
     userId: 2,
     text: 'Programas',
@@ -162,6 +173,16 @@ const optionsMenuFilter = {
       key: 'inspecciones',
     },
   ],
+  gestor: [
+    solicitudesMenu('gestor'),
+    {
+      userId: 1,
+      text: textPanelMenuOptions('gestor').instituciones,
+      icon: <BusinessIcon />,
+      route: routeInstitucionesRol('gestor'),
+      key: 'intitutions',
+    },
+  ],
   capturista_opd: [
     {
       text: 'Instituciones',
@@ -217,10 +238,16 @@ const optionsAdminMenuFilterRol = (rol) => {
 const findRoute = (path, rol) => {
   const wordSearch = path.split('/')[1];
   const usersMenu = panelMenuOptions(rol);
-  const foundItem = usersMenu.find(
+  let foundItem = usersMenu.find(
     ({ route }) => route && route.startsWith(`/${wordSearch}`),
   );
-  return foundItem?.userId;
+  if (!foundItem && usersMenu.length) {
+    foundItem = optionsAdminMenuFilterRol(rol).flat()[0]?.userId;
+  }
+  if (foundItem?.userId) {
+    foundItem = foundItem?.userId;
+  }
+  return foundItem;
 };
 
 export {

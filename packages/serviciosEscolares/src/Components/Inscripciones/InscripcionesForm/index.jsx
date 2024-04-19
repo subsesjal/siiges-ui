@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Divider, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { LabelData, Select, getTurnoById } from '@siiges-ui/shared';
+import {
+  LabelData, Select, Context, getTurnoById,
+} from '@siiges-ui/shared';
 import {
   getCiclosEscolares,
   getGrados,
@@ -20,6 +22,9 @@ export default function InscripcionForm({
     tipoInstitucionId: 1,
     setLoading,
   });
+
+  const { setNoti, session } = useContext(Context);
+
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [selectedPlantel, setSelectedPlantel] = useState('');
   const [selectedPrograma, setSelectedPrograma] = useState('');
@@ -36,11 +41,16 @@ export default function InscripcionForm({
   const [labelGrupo, setLabelGrupo] = useState('');
   const [labelTurno, setLabelTurno] = useState('');
   const [labelCicloEscolar, setLabelCicloEscolar] = useState('');
+  const isRepresentante = session.rol === 'representante';
 
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
       if (error) {
-        console.error('Failed to fetch planteles:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener planteles: ${error.message}`,
+          type: 'error',
+        });
         setPlanteles([]);
       } else {
         const transformedPlanteles = data.planteles.map((plantel) => ({
@@ -55,7 +65,11 @@ export default function InscripcionForm({
   const fetchProgramas = (plantelId) => {
     getProgramas(plantelId, (error, data) => {
       if (error) {
-        console.error('Failed to fetch programas:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener programas: ${error.message}`,
+          type: 'error',
+        });
         setProgramas([]);
       } else {
         const transformedProgramas = data.programas.map((programa) => ({
@@ -71,7 +85,11 @@ export default function InscripcionForm({
   const fetchCiclosEscolares = (programaId) => {
     getCiclosEscolares(programaId, (error, data) => {
       if (error) {
-        console.error('Failed to fetch ciclosEscolares:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener ciclosEscolares: ${error.message}`,
+          type: 'error',
+        });
         setCiclosEscolares([]);
       } else {
         setCiclosEscolares(data.ciclosEscolares);
@@ -82,7 +100,11 @@ export default function InscripcionForm({
   const fetchGrados = () => {
     getGrados(selectedPrograma, (error, data) => {
       if (error) {
-        console.error('Failed to fetch Grados:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener grados: ${error.message}`,
+          type: 'error',
+        });
         setGrados([]);
       } else {
         setGrados(data.grados);
@@ -93,7 +115,11 @@ export default function InscripcionForm({
   const fetchGrupos = (gradoId) => {
     getGrupos(gradoId, selectedCicloEscolar, (error, data) => {
       if (error) {
-        console.error('Failed to fetch grupos:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener grupos: ${error.message}`,
+          type: 'error',
+        });
         setGrupos([]);
       } else {
         const transformedGrupos = data.grupos.map((programa) => ({
@@ -109,7 +135,11 @@ export default function InscripcionForm({
   const fetchAsignaturas = (gradoId) => {
     getAsignaturas(gradoId, selectedPrograma, (error, data) => {
       if (error) {
-        console.error('Failed to fetch Grados:', error);
+        setNoti({
+          open: true,
+          message: `Error al obtener asignaturas: ${error.message}`,
+          type: 'error',
+        });
         setAsignaturas([]);
       } else {
         setAsignaturas(data.asignaturas);
@@ -118,7 +148,7 @@ export default function InscripcionForm({
   };
 
   const handleInstitucionChange = (event) => {
-    const institucionId = event.target.value;
+    const institucionId = event;
     setSelectedInstitucion(institucionId);
 
     setSelectedPlantel('');
@@ -137,6 +167,15 @@ export default function InscripcionForm({
       setPlanteles([]);
     }
   };
+
+  useEffect(() => {
+    if (isRepresentante && instituciones?.length) {
+      const findIndexIntitucion = instituciones.findIndex(
+        ({ usuarioId }) => usuarioId === session.id,
+      );
+      handleInstitucionChange(instituciones[findIndexIntitucion].id);
+    }
+  }, [isRepresentante, instituciones]);
 
   const handlePlantelChange = (event) => {
     const plantelId = event.target.value;
@@ -241,7 +280,8 @@ export default function InscripcionForm({
             name="instituciones"
             value={selectedInstitucion}
             options={instituciones || []}
-            onchange={handleInstitucionChange}
+            onchange={(event) => handleInstitucionChange(event.target.value)}
+            disabled={isRepresentante}
           />
         </Grid>
         <Grid item xs={4}>

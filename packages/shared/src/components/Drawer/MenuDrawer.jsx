@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
@@ -60,16 +60,14 @@ function MenuDrawer({
 }) {
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    userRol(session, setUsers, section);
-  }, [session, section]);
+  userRol(session, setUsers, section);
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Drawer variant="permanent" open={open}>
         <List onMouseOver={openFunction} onMouseLeave={closeFunction}>
-          {users.map((item) => (
+          {users?.map((item) => (
             <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
               {item.type === 'dropdown' ? (
                 <DropdownButton

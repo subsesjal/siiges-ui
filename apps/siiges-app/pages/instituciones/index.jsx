@@ -11,9 +11,10 @@ export default function Instituciones() {
 
   const { instituciones } = getInstituciones({ setLoading, tipoInstitucionId: 1 });
 
+  const usersAuth = ['admin', 'sicyt_editar'];
   useEffect(() => {
     const { id, rol } = session;
-    if (session && id && rol === 'admin') {
+    if (session && id && usersAuth.includes(rol)) {
       if (instituciones && instituciones.length) {
         setData(instituciones);
       }

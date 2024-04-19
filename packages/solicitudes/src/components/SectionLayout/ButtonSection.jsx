@@ -48,9 +48,9 @@ export default function ButtonSection({
   const buttonTextEnd = isControlDocumental
     ? 'Guardar observaciones'
     : 'Terminar Solicitud';
+  const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
 
   function observaciones() {
-    const { setCreateObservaciones } = useContext(TablesPlanEstudiosContext);
     return setCreateObservaciones(true);
   }
 
@@ -65,6 +65,19 @@ export default function ButtonSection({
       submitEditSolicitud(validations, sections, id, setLoading);
     }
   }
+
+  const PlanDeEstudios = () => {
+    if (isControlDocumental) {
+      return () => observaciones();
+    }
+    return {
+      1: () => validateNewSolicitud(),
+      3: () => submitEditSolicitud(validations, sections, id, setLoading),
+      4: () => submitEditSolicitud(validations, sections, id, setLoading),
+      5: () => submitEditSolicitud(validations, sections, id, setLoading),
+      9: () => submitTrayectoriaEducativa(validations, setLoading),
+    };
+  };
 
   const sectionFunctions = {
     'Datos Generales': {
@@ -113,21 +126,9 @@ export default function ButtonSection({
     'Evaluación Curricular': {
       1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti, setLoading),
     },
-    'Plan de estudios': {
-      1: () => validateNewSolicitud(),
-      3: () => submitEditSolicitud(validations, sections, id, setLoading),
-      4: () => submitEditSolicitud(validations, sections, id, setLoading),
-      5: () => submitEditSolicitud(validations, sections, id, setLoading),
-      9: () => submitTrayectoriaEducativa(validations, setLoading),
-    },
+    'Plan de estudios': PlanDeEstudios(),
   };
-  if (
-    sectionTitle === 'Plan de estudios'
-    && type === 'editar'
-    && isControlDocumental
-  ) {
-    observaciones();
-  } else if (sectionFunctions[sectionTitle]) {
+  if (sectionFunctions[sectionTitle]) {
     if (typeof sectionFunctions[sectionTitle] === 'function') {
       submit = () => {
         setLoading(true);
