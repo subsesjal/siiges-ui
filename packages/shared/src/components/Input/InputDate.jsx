@@ -33,6 +33,8 @@ function InputDate({
         onFocus={onfocus}
         onBlur={onblur}
         disabled={disabled}
+        maxDate={dayjs()}
+        minDate={dayjs('1900-01-01')}
         format="DD/MM/YYYY"
         sx={{ width: '100%', mt: 2 }}
         slotProps={{

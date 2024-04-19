@@ -6,7 +6,13 @@ import pagination from '../../../events/pagination';
 import DatosGeneralesEvaluacion from '../../Sections/DatosGeneralesEvaluacion';
 import { EvaluacionCurricularProvider } from '../../utils/Context/evaluacionCurricularContext';
 
-export default function EvaluacionCurricular({ nextModule, id, programaId }) {
+export default function EvaluacionCurricular({
+  nextModule,
+  id,
+  programaId,
+  isLoading,
+  setIsLoading,
+}) {
   const [disabled, setDisabled] = useState(true);
 
   const {
@@ -32,6 +38,8 @@ export default function EvaluacionCurricular({ nextModule, id, programaId }) {
             nextModule={nextModule}
             next={next}
             prev={prev}
+            loading={isLoading}
+            setLoading={setIsLoading}
           >
             {section === 1 && <DatosGeneralesEvaluacion disabled={disabled} />}
           </SectionLayout>
@@ -48,12 +56,8 @@ EvaluacionCurricular.defaultProps = {
 
 EvaluacionCurricular.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
-  programaId: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  setIsLoading: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };

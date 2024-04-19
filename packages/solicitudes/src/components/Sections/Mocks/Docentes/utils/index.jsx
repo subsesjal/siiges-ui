@@ -38,7 +38,7 @@ const transformDataForTable = (data) => data.map((item) => {
     tipoDocente: tipoDocenteObj ? tipoDocenteObj.nombre : 'Desconocido',
     formacion: '-',
     asignatura: item.asignaturasDocentes
-      .map((asig) => asig.asignatura.nombre)
+      .map((asig) => asig.asignatura?.nombre)
       .join(', '),
     experiencia: item.experiencias,
     tipoContratacion: tipoContratacionObj

@@ -22,7 +22,7 @@ const handleSubmit = (
 
   console.log(form);
 
-  /* fetch(endpoint, {
+  fetch(endpoint, {
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const handleSubmit = (
         message: `Error al enviar Docente: ${error.message}`,
         type: 'error',
       });
-    }); */
+    });
 };
 
 export default handleSubmit;

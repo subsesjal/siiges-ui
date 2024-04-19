@@ -20,7 +20,6 @@ import SolicitudContext from '../../utils/Context/solicitudContext';
 import getSolicitudesById from '../../utils/getSolicitudesById';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
 import Observaciones from '../../Sections/Observaciones';
-import useTrayectoriasEducativas from '../../utils/getTrayectoriasEducativas';
 
 export default function PlanEstudios({
   nextModule,
@@ -29,6 +28,8 @@ export default function PlanEstudios({
   programaId,
   setProgramaId,
   type,
+  isLoading,
+  setIsLoading,
 }) {
   const { session, loading } = useContext(Context);
   const router = useRouter();
@@ -50,7 +51,6 @@ export default function PlanEstudios({
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [modalidad, setModalidad] = useState();
   const { solicitudes, loading: loadingSolicitud } = getSolicitudesById(id);
-  const { trayectorias } = useTrayectoriasEducativas(programaId);
   const [trayectoriaStatus, setTrayectoriaStatus] = useState('new');
 
   useEffect(() => {
@@ -138,36 +138,10 @@ export default function PlanEstudios({
         },
       }));
     }
-
-    if (trayectorias.id !== undefined) {
-      setTrayectoriaStatus('edit');
-      setForm((prevForm) => ({
-        ...prevForm,
-        9: {
-          ...prevForm[9],
-          id: trayectorias.id,
-          programaId: trayectorias.programaId,
-          programaSeguimiento: trayectorias.programaSeguimiento,
-          funcionTutorial: trayectorias.funcionTutorial,
-          tipoTutoria: trayectorias.tipoTutoria,
-          tasaEgreso: trayectorias.tasaEgreso,
-          estadisticasTitulacion: trayectorias.estadisticasTitulacion,
-          modalidadesTitulacion: trayectorias.modalidadesTitulacion,
-        },
-      }));
-    } else {
-      setForm((prevForm) => ({
-        ...prevForm,
-        9: {
-          ...prevForm[9],
-          programaId,
-        },
-      }));
-    }
     return () => {
       isMounted = false;
     };
-  }, [id, type, loading, solicitudes, query.modalidad, trayectorias]);
+  }, [id, type, loading, solicitudes, query.modalidad]);
 
   const value = useMemo(
     () => ({
@@ -209,6 +183,8 @@ export default function PlanEstudios({
               nextModule={nextModule}
               next={next}
               prev={prev}
+              loading={isLoading}
+              setLoading={setIsLoading}
             >
               <Loading loading={loading} />
               {section === 1 && <DatosPlanEstudios type={type} />}
@@ -268,4 +244,6 @@ PlanEstudios.propTypes = {
     PropTypes.number,
     PropTypes.string,
   ]),
+  isLoading: PropTypes.bool.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
 };

@@ -15,6 +15,8 @@ export default function SectionLayout({
   sectionTitle,
   next,
   prev,
+  loading,
+  setLoading,
 }) {
   return (
     <>
@@ -67,6 +69,8 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             sectionTitle={sectionTitle}
+            loading={loading}
+            setLoading={setLoading}
           />
         </Grid>
         {children}
@@ -80,6 +84,8 @@ export default function SectionLayout({
             next={next}
             prev={prev}
             sectionTitle={sectionTitle}
+            loading={loading}
+            setLoading={setLoading}
           />
         </Grid>
       </Grid>
@@ -106,4 +112,6 @@ SectionLayout.propTypes = {
   porcentage: PropTypes.number.isRequired,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };

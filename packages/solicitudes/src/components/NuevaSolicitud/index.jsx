@@ -29,7 +29,12 @@ const steps = {
   ],
 };
 
-export default function NuevaSolicitud({ type, solicitudId }) {
+export default function NuevaSolicitud({
+  type,
+  solicitudId,
+  isLoading,
+  setIsLoading,
+}) {
   const router = useRouter();
   const [modalidad, setModalidad] = useState('escolarizada');
   const [module, setModule] = useState(0);
@@ -57,24 +62,58 @@ export default function NuevaSolicitud({ type, solicitudId }) {
           programaId={programaId}
           setProgramaId={setProgramaId}
           type={type}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
         />
       ),
-      1: <DatosGenerales nextModule={nextModule} id={id} />,
-      2: <Plantel nextModule={nextModule} id={id} programaId={programaId} />,
+      1: (
+        <DatosGenerales
+          nextModule={nextModule}
+          id={id}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+        />
+      ),
+      2: (
+        <Plantel
+          nextModule={nextModule}
+          id={id}
+          programaId={programaId}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+        />
+      ),
       3:
         modalidad === 'noEscolarizada' ? (
-          <PlataformaEducativa nextModule={nextModule} id={id} />
+          <PlataformaEducativa
+            nextModule={nextModule}
+            id={id}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
         ) : (
-          <Anexos nextModule={nextModule} id={id} />
+          <Anexos
+            nextModule={nextModule}
+            id={id}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
         ),
       4:
         modalidad === 'escolarizada' ? (
-          <Anexos nextModule={nextModule} id={id} />
+          <Anexos
+            nextModule={nextModule}
+            id={id}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
         ) : (
           <EvaluacionCurricular
             nextModule={nextModule}
             id={id}
             programaId={programaId}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
           />
         ),
       5: modalidad === 'noEscolarizada' && (
@@ -82,6 +121,8 @@ export default function NuevaSolicitud({ type, solicitudId }) {
           nextModule={nextModule}
           id={id}
           programaId={programaId}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
         />
       ),
     };
@@ -116,4 +157,6 @@ NuevaSolicitud.defaultProps = {
 NuevaSolicitud.propTypes = {
   type: PropTypes.string,
   solicitudId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isLoading: PropTypes.bool.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
 };

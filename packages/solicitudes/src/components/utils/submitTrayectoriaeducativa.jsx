@@ -1,6 +1,6 @@
 import { getToken } from '@siiges-ui/shared';
 
-async function submitTrayectoriaEducativa(validations) {
+async function submitTrayectoriaEducativa(validations, setLoading) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
@@ -56,11 +56,14 @@ async function submitTrayectoriaEducativa(validations) {
       );
     }
 
-    setNoti({
-      open: true,
-      message: 'Exito, no hubo problemas en esta sección',
-      type: 'success',
-    });
+    setTimeout(() => {
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: 'Exito, no hubo problemas en esta sección',
+        type: 'success',
+      });
+    }, 1000);
     if (method === 'POST') {
       const responseData = await response.json();
       setTrayectoriaStatus('edit');
@@ -72,6 +75,14 @@ async function submitTrayectoriaEducativa(validations) {
     }
   } catch (err) {
     console.error('Error:', err);
+    setTimeout(() => {
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: 'Hubo un problema, revise que los campos esten correctos',
+        type: 'error',
+      });
+    }, 1000);
   }
 }
 

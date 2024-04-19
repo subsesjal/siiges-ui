@@ -63,7 +63,7 @@ export default function DocentesModal({
           id: formacion.id,
           nivelId: formacion.formacion.nivelId,
           nombre: formacion.formacion.nombre,
-          documentoPresentado: formacion.formacion.documentoPresentado,
+          descripcion: formacion.formacion.descripcion,
           fechaGraduado: formacion.formacion.fechaGraduado,
           institucion: formacion.formacion.institucion,
         })) || [{}, {}],
@@ -327,12 +327,12 @@ export default function DocentesModal({
           <Grid item xs={5}>
             <Select
               title="Documento presentado"
-              name="formacion_1_documentoPresentado"
-              value={formDocentes?.formacionesDocentes[0]?.documentoPresentado || ''}
+              name="formacion_1_descripcion"
+              value={formDocentes?.formacionesDocentes[0]?.descripcion || ''}
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
-              errorMessage={error.formacion_1_documentoPresentado}
+              errorMessage={error.formacion_1_descripcion}
               textValue
               required
               disabled={isConsultMode}
@@ -404,12 +404,12 @@ export default function DocentesModal({
           <Grid item xs={5}>
             <Select
               title="Documento presentado"
-              name="formacion_2_documentoPresentado"
-              value={formDocentes?.formacionesDocentes[1]?.documentoPresentado || ''}
+              name="formacion_2_descripcion"
+              value={formDocentes?.formacionesDocentes[1]?.descripcion || ''}
               options={documentosPresentados}
               onchange={handleOnChange}
               onblur={handleOnBlur}
-              errorMessage={error.formacion_2_documentoPresentado}
+              errorMessage={error.formacion_2_descripcion}
               textValue
               required
               disabled={isConsultMode}

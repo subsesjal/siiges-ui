@@ -32,11 +32,6 @@ export default function useTrayectoriasEducativas(programaId) {
           setTrayectorias(data.data);
         } catch (error) {
           console.error('Error:', error);
-          setNoti({
-            open: true,
-            message: 'Algo salió mal al cargar la información',
-            type: 'error',
-          });
         } finally {
           setLoading(false);
         }
