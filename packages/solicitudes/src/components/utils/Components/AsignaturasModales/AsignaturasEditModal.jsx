@@ -27,6 +27,22 @@ export default function AsignaturasEditModal({
   } = useContext(TablesPlanEstudiosContext);
   const selectedGrade = grados.semestral;
 
+  useEffect(() => {
+    const rowItemValues = {
+      id: rowItem.id,
+      gradoId: rowItem.gradoId,
+      areaId: rowItem.areaId,
+      nombre: rowItem.nombre,
+      clave: rowItem.clave,
+      creditos: rowItem.creditos,
+      academia: rowItem.academia,
+      seriacion: rowItem.seriacion,
+      horasDocente: rowItem.horasDocente,
+      horasIndependiente: rowItem.horasIndependiente,
+    };
+    setFormAsignaturas(rowItemValues);
+  }, [rowItem]);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormAsignaturas((prevData) => ({
@@ -39,10 +55,6 @@ export default function AsignaturasEditModal({
     const { name } = e.target;
     validateField(formAsignaturas, name, setError, errorDatosAsignaturas);
   };
-
-  useEffect(() => {
-    setFormAsignaturas(rowItem);
-  }, [rowItem]);
 
   const handleOnSubmit = () => {
     const {
@@ -228,7 +240,7 @@ AsignaturasEditModal.propTypes = {
     areaId: PropTypes.number,
     nombre: PropTypes.string,
     clave: PropTypes.string,
-    creditos: PropTypes.string,
+    creditos: PropTypes.number,
     academia: PropTypes.string,
     seriacion: PropTypes.string,
     horasDocente: PropTypes.number,

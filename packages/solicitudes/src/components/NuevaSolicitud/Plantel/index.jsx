@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import { useRouter } from 'next/router';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
 import { Context } from '@siiges-ui/shared';
+import PropTypes from 'prop-types';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import DatosPlantel from '../../Sections/DatosPlantel';
@@ -15,19 +15,19 @@ import RatificacionNombre from '../../Sections/RatificacionNombre';
 import NombresPropuestos from '../../Sections/NombresPropuestos';
 import { PlantelProvider } from '../../utils/Context/plantelContext';
 
-export default function Plantel({ nextModule, id, programaId }) {
+export default function Plantel({
+  nextModule, id, programaId, isLoading, setIsLoading,
+}) {
   const [disabled, setDisabled] = useState(true);
   const { session } = useContext(Context);
   const { query } = useRouter();
-  const { institucion, loading } = getInstitucionUsuario(session);
+  const institucion = getInstitucionUsuario(session);
   const [ratificacion, setRatificacion] = useState(<RatificacionNombre />);
-  const [plantelesData, setPlantelesData] = useState({
-    plantelId: query.plantel,
-  });
+  const [plantelesData, setPlantelesData] = useState({});
 
   useEffect(() => {
     setDisabled(!id);
-    if (!loading && institucion) {
+    if (institucion) {
       if (
         !institucion.ratificacionNombre
         || (Array.isArray(institucion.ratificacionNombre)
@@ -36,7 +36,7 @@ export default function Plantel({ nextModule, id, programaId }) {
         setRatificacion(<NombresPropuestos disabled={disabled} id={institucion.id} />);
       }
     }
-  }, [id, loading, disabled, institucion]);
+  }, [id, disabled, institucion]);
 
   const {
     next, prev, section, position, porcentaje,
@@ -44,7 +44,7 @@ export default function Plantel({ nextModule, id, programaId }) {
 
   const renderSection6 = () => (section === 6 ? ratificacion : null);
 
-  if (loading) {
+  if (!institucion) {
     return null;
   }
 
@@ -62,6 +62,8 @@ export default function Plantel({ nextModule, id, programaId }) {
             next={next}
             prev={prev}
             id={id}
+            loading={isLoading}
+            setLoading={setIsLoading}
           >
             {section === 1 && (
               <DatosPlantel
@@ -90,12 +92,21 @@ export default function Plantel({ nextModule, id, programaId }) {
   );
 }
 
+Plantel.defaultProps = {
+  id: null,
+  programaId: null,
+};
+
 Plantel.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
   programaId: PropTypes.oneOfType([
     PropTypes.number,
-    PropTypes.oneOf([undefined]),
-  ]).isRequired,
+    PropTypes.string,
+  ]),
+  setIsLoading: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };

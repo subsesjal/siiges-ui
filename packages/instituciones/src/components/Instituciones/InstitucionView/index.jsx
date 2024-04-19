@@ -176,7 +176,7 @@ export default function InstitucionView({ institucion, session }) {
           <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             {
-              institucion.ratificacionesNombre[0].esNombreAutorizado
+              institucion.ratificacionesNombre[0]?.esNombreAutorizado
                 ? (
                   <Grid container xs={10}>
                     <Grid item xs>
@@ -236,7 +236,7 @@ export default function InstitucionView({ institucion, session }) {
             }
           </Grid>
           {
-              session.rol === 'representante' && !institucion.ratificacionesNombre[0].esNombreAutorizado
+              session.rol === 'representante' && !institucion.ratificacionesNombre[0]?.esNombreAutorizado
           && (
           <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
             <ButtonUnstyled

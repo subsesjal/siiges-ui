@@ -75,7 +75,4 @@ export default function AsignaturasFormacionButtons({ id }) {
 
 AsignaturasFormacionButtons.propTypes = {
   id: PropTypes.number.isRequired,
-  rowItem: PropTypes.shape({
-    programaID: PropTypes.number,
-  }).isRequired,
 };

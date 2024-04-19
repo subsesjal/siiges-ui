@@ -1,6 +1,6 @@
 import { getToken } from '@siiges-ui/shared';
 
-function submitNewSolicitud(validations) {
+function submitNewSolicitud(validations, setNewSubmit, setLoading) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
@@ -19,24 +19,34 @@ function submitNewSolicitud(validations) {
     body: JSON.stringify(form[1]),
   })
     .then((response) => {
-      if (response.ok) {
-        return response.json();
+      if (!response.ok) {
+        throw new Error('Error submitting the request');
       }
-      throw new Error('Error submitting the request');
+      return response.json();
     })
     .then((data) => {
       setId(data.data.id);
       setProgramaId(data.data.programa.id);
+      setNewSubmit(false);
+      setTimeout(() => {
+        setLoading(false);
+        setNoti({
+          open: true,
+          message: 'Exito, no hubo problemas en esta sección',
+          type: 'success',
+        });
+      }, 1000);
     })
-    .then(
-      setNoti({
-        open: true,
-        message: 'Exito, no hubo problemas en esta sección',
-        type: 'success',
-      }),
-    )
     .catch((err) => {
       console.error('Error:', err);
+      setTimeout(() => {
+        setLoading(false);
+        setNoti({
+          open: true,
+          message: 'Hubo un problema, revise que los campos esten correctos',
+          type: 'error',
+        });
+      }, 1000);
     });
 }
 

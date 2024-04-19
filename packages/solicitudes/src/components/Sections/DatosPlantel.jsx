@@ -23,15 +23,8 @@ export default function DatosPlantel({
         nombre: `${domicilio.calle} ${domicilio.numeroExterior}`,
       }));
       setPlantelesSelect(mappedPlanteles);
-      const selectedPlantel = planteles.find(
-        (plantel) => plantel.id === Number(plantelesData.plantelId),
-      );
-      setPlantelesData((prevData) => ({
-        ...prevData,
-        ...selectedPlantel,
-      }));
     }
-  }, [planteles, plantelesData.plantelId]);
+  }, [planteles]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;

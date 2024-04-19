@@ -1,5 +1,5 @@
 import { ButtonStyled, Context } from '@siiges-ui/shared';
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -29,7 +29,10 @@ export default function ButtonSection({
   next,
   prev,
   sectionTitle,
+  loading,
+  setLoading,
 }) {
+  const [newSubmit, setNewSubmit] = useState(true);
   const { setNoti, session } = useContext(Context);
   const validations = useContext(SolicitudContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
@@ -52,10 +55,14 @@ export default function ButtonSection({
   }
 
   function validateNewSolicitud() {
-    if (type !== 'editar') {
-      submitNewSolicitud(validations);
+    if (newSubmit) {
+      if (type !== 'editar') {
+        submitNewSolicitud(validations, setNewSubmit, setLoading);
+      } else {
+        submitEditSolicitud(validations, sections, id, setLoading);
+      }
     } else {
-      submitEditSolicitud(validations, sections, id);
+      submitEditSolicitud(validations, sections, id, setLoading);
     }
   }
 
@@ -65,45 +72,73 @@ export default function ButtonSection({
     }
     return {
       1: () => validateNewSolicitud(),
-      9: () => submitTrayectoriaEducativa(validations, sections, id),
+      3: () => submitEditSolicitud(validations, sections, id, setLoading),
+      4: () => submitEditSolicitud(validations, sections, id, setLoading),
+      5: () => submitEditSolicitud(validations, sections, id, setLoading),
+      9: () => submitTrayectoriaEducativa(validations, setLoading),
     };
   };
 
   const sectionFunctions = {
     'Datos Generales': {
       1: useCallback(
-        () => submitInstitucion(datosGeneralesValidations, sections, setNoti),
+        () => submitInstitucion(
+          datosGeneralesValidations,
+          sections,
+          setNoti,
+          setLoading,
+        ),
         [datosGeneralesValidations, sections],
       ),
       2: useCallback(
-        () => submitRepresentante(datosGeneralesValidations, sections, setNoti),
+        () => submitRepresentante(
+          datosGeneralesValidations,
+          sections,
+          setNoti,
+          setLoading,
+        ),
         [datosGeneralesValidations, sections],
       ),
     },
     Plantel: {
-      1: () => submitEditPlantel(plantelesValidations, sections, id, setNoti, router),
+      1: () => submitEditPlantel(
+        plantelesValidations,
+        sections,
+        id,
+        setNoti,
+        router,
+        setLoading,
+      ),
       2: () => submitDescripcionPlantel(
         plantelesValidations,
         setNoti,
         router.query.plantel,
+        setLoading,
       ),
       3: () => submitHigienesPlantel(
         plantelesValidations,
         setNoti,
         router.query.plantel,
+        setLoading,
       ),
-      6: () => submitRatificacion(plantelesValidations, setNoti),
+      6: () => submitRatificacion(plantelesValidations, setNoti, setLoading),
     },
     'Evaluación Curricular': {
-      1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti),
+      1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti, setLoading),
     },
     'Plan de estudios': PlanDeEstudios(),
   };
   if (sectionFunctions[sectionTitle]) {
     if (typeof sectionFunctions[sectionTitle] === 'function') {
-      submit = sectionFunctions[sectionTitle];
+      submit = () => {
+        setLoading(true);
+        sectionFunctions[sectionTitle]();
+      };
     } else if (sectionFunctions[sectionTitle][sections]) {
-      submit = sectionFunctions[sectionTitle][sections];
+      submit = () => {
+        setLoading(true);
+        sectionFunctions[sectionTitle][sections]();
+      };
     }
   }
 
@@ -116,7 +151,7 @@ export default function ButtonSection({
               text={buttonText}
               alt={buttonText}
               type="success"
-              onclick={submit}
+              onclick={!loading ? submit : null}
             />
           </Grid>
           <Grid item xs={3}>
@@ -144,7 +179,7 @@ export default function ButtonSection({
               text={buttonText}
               alt={buttonText}
               type="success"
-              onclick={submit}
+              onclick={!loading ? submit : null}
             />
           </Grid>
           <Grid item xs={3}>
@@ -172,7 +207,7 @@ export default function ButtonSection({
               text={buttonTextEnd}
               alt={buttonTextEnd}
               type="success"
-              onclick={submit}
+              onclick={!loading ? submit : null}
             />
           </Grid>
         </Grid>
@@ -184,7 +219,7 @@ export default function ButtonSection({
               text="Terminar solicitud"
               alt="Terminar solicitud"
               type="success"
-              onclick={submit}
+              onclick={!loading ? submit : null}
             />
           </Grid>
         </Grid>
@@ -195,6 +230,7 @@ export default function ButtonSection({
 
 ButtonSection.defaultProps = {
   type: null,
+  id: null,
 };
 
 ButtonSection.propTypes = {
@@ -203,6 +239,8 @@ ButtonSection.propTypes = {
   prev: PropTypes.func.isRequired,
   position: PropTypes.string.isRequired,
   sections: PropTypes.number.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sectionTitle: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };

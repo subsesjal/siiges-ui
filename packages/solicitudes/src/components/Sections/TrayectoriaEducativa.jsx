@@ -5,13 +5,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import errorTrayectoriaEducativa from '../utils/sections/errors/errorTrayectoriaEducativa';
 import formtrayectoria from '../utils/sections/forms/formTrayectoria';
+import useTrayectoriasEducativas from '../utils/getTrayectoriasEducativas';
 
 export default function TrayectoriaEducativa({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
   const [fileURLs, setFileURLs] = useState([null, null, null, null]);
   const {
-    form, setForm, error, setError, id, programaId,
+    form, setForm, error, setError, id, programaId, setTrayectoriaStatus,
   } = useContext(SolicitudContext);
+  const { trayectorias } = useTrayectoriasEducativas(programaId);
   const errors = errorTrayectoriaEducativa(form, setError, error);
 
   const fileData = [
@@ -38,7 +40,33 @@ export default function TrayectoriaEducativa({ disabled, type }) {
         });
       });
     }
-  }, [programaId]);
+
+    if (trayectorias.id !== undefined) {
+      setTrayectoriaStatus('edit');
+      setForm((prevForm) => ({
+        ...prevForm,
+        9: {
+          ...prevForm[9],
+          id: trayectorias.id,
+          programaId: trayectorias.programaId,
+          programaSeguimiento: trayectorias.programaSeguimiento,
+          funcionTutorial: trayectorias.funcionTutorial,
+          tipoTutoria: trayectorias.tipoTutoria,
+          tasaEgreso: trayectorias.tasaEgreso,
+          estadisticasTitulacion: trayectorias.estadisticasTitulacion,
+          modalidadesTitulacion: trayectorias.modalidadesTitulacion,
+        },
+      }));
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        9: {
+          ...prevForm[9],
+          programaId,
+        },
+      }));
+    }
+  }, [programaId, trayectorias]);
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [
@@ -81,7 +109,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[9].programaSeguimiento}
+            value={form[9].programaSeguimiento || ''}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -99,7 +127,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[9].funcionTutorial}
+            value={form[9].funcionTutorial || ''}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -117,7 +145,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[9].tipoTutoria}
+            value={form[9].tipoTutoria || ''}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -135,7 +163,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[9].tasaEgreso}
+            value={form[9].tasaEgreso || ''}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -153,7 +181,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[9].estadisticasTitulacion}
+            value={form[9].estadisticasTitulacion || ''}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -171,7 +199,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            value={form[9].modalidadesTitulacion}
+            value={form[9].modalidadesTitulacion || ''}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}

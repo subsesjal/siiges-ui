@@ -1,6 +1,11 @@
 import { getToken } from '@siiges-ui/shared';
 
-export default function submitHigienesPlantel(validations, setNoti, plantelId) {
+export default function submitHigienesPlantel(
+  validations,
+  setNoti,
+  plantelId,
+  setLoading,
+) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { form } = validations;
@@ -22,13 +27,24 @@ export default function submitHigienesPlantel(validations, setNoti, plantelId) {
       throw new Error('Error submitting the request');
     })
     .then(() => {
-      setNoti({
-        open: true,
-        message: 'Exito, no hubo problemas en esta sección',
-        type: 'success',
-      });
+      setTimeout(() => {
+        setLoading(false);
+        setNoti({
+          open: true,
+          message: 'Exito, no hubo problemas en esta sección',
+          type: 'success',
+        });
+      }, 1000);
     })
     .catch((err) => {
       console.error('Error:', err);
+      setTimeout(() => {
+        setLoading(false);
+        setNoti({
+          open: true,
+          message: 'Hubo un problema, revise que los campos esten correctos',
+          type: 'error',
+        });
+      }, 1000);
     });
 }

@@ -6,8 +6,13 @@ import pagination from '../../../events/pagination';
 import DatosGeneralesEvaluacion from '../../Sections/DatosGeneralesEvaluacion';
 import { EvaluacionCurricularProvider } from '../../utils/Context/evaluacionCurricularContext';
 
-export default function EvaluacionCurricular({ nextModule, id, programaId }) {
-  console.log(programaId);
+export default function EvaluacionCurricular({
+  nextModule,
+  id,
+  programaId,
+  isLoading,
+  setIsLoading,
+}) {
   const [disabled, setDisabled] = useState(true);
 
   const {
@@ -33,24 +38,26 @@ export default function EvaluacionCurricular({ nextModule, id, programaId }) {
             nextModule={nextModule}
             next={next}
             prev={prev}
+            loading={isLoading}
+            setLoading={setIsLoading}
           >
-            {section === 1 && (
-              <DatosGeneralesEvaluacion
-                disabled={disabled}
-              />
-            )}
+            {section === 1 && <DatosGeneralesEvaluacion disabled={disabled} />}
           </SectionLayout>
         </EvaluacionCurricularProvider>
       </CardContent>
     </Card>
   );
 }
+
+EvaluacionCurricular.defaultProps = {
+  id: null,
+  programaId: null,
+};
+
 EvaluacionCurricular.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
-  programaId: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([undefined]),
-  ]).isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  setIsLoading: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };

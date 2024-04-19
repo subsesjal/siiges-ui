@@ -41,9 +41,14 @@ export default function DefaultModal({
   );
 }
 
+DefaultModal.defaultProps = {
+  open: false,
+  title: null,
+};
+
 DefaultModal.propTypes = {
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool,
   setOpen: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
 };

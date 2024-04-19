@@ -1,5 +1,5 @@
-import { Grid, TextField, Typography } from '@mui/material';
-import { GetFile, InputFile } from '@siiges-ui/shared';
+import { Grid, Typography } from '@mui/material';
+import { GetFile, Input, InputFile } from '@siiges-ui/shared';
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SolicitudContext from '../utils/Context/solicitudContext';
@@ -75,7 +75,7 @@ export default function Curricula({ disabled, type }) {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="mapaCurricular"
             name="mapaCurricular"
             label="Mapa curricular"
@@ -83,16 +83,16 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.mapaCurricular}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             helperText={error.mapaCurricular}
             error={!!error.mapaCurricular}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="flexibilidadCurricular"
             name="flexibilidadCurricular"
             label="Flexibilidad curriular"
@@ -100,16 +100,16 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.flexibilidadCurricular}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             helperText={error.flexibilidadCurricular}
             error={!!error.flexibilidadCurricular}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="lineasGeneracionAplicacionConocimiento"
             name="lineasGeneracionAplicacionConocimiento"
             label="lineas de generacion del conocimiento"
@@ -117,16 +117,16 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.lineasGeneracionAplicacionConocimiento}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             helperText={error.lineasGeneracionAplicacionConocimiento}
             error={!!error.lineasGeneracionAplicacionConocimiento}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="actualizacion"
             name="actualizacion"
             label="Actualizacion del plan de estudios"
@@ -134,16 +134,16 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.actualizacion}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             helperText={error.actualizacion}
             error={!!error.actualizacion}
             disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="conveniosVinculacion"
             name="conveniosVinculacion"
             label="Vinculacion con colegios de profesionista, academias profesionales entre otras"
@@ -151,9 +151,9 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.conveniosVinculacion}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             helperText={error.conveniosVinculacion}
             error={!!error.conveniosVinculacion}
             disabled={disabled}

@@ -11,7 +11,6 @@ import DiligenciasToRows from '../utils/Components/DiligenciasToRows';
 function DiligenciasData({ disabled, id }) {
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const {
     diligencias,
@@ -42,7 +41,6 @@ function DiligenciasData({ disabled, id }) {
           setDiligenciasRows(rows);
         }
       } catch (err) {
-        setError('Failed to fetch diligencias.');
         console.error('Error fetching data:', err);
       } finally {
         setIsLoading(false);
@@ -57,8 +55,6 @@ function DiligenciasData({ disabled, id }) {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">Diligencias</Typography>
-        {isLoading && <Typography>Loading...</Typography>}
-        {error && <Typography color="error">{error}</Typography>}
       </Grid>
       <Grid item xs={3}>
         {!disabled && <Button onClick={showModal} text="Agregar" />}

@@ -92,7 +92,11 @@ BasicSelect.propTypes = {
       nombre: PropTypes.string,
     }),
   ).isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+  ]),
   name: PropTypes.string.isRequired,
   required: PropTypes.bool,
   multiple: PropTypes.bool,

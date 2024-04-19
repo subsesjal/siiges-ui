@@ -1,10 +1,18 @@
 import { getToken } from '@siiges-ui/shared';
 import DiligenciasToRows from './Components/DiligenciasToRows';
 
-const handleCreate = (form, setDiligencias, setDiligenciasRows, hideModal, setNoti) => {
+const handleCreate = (
+  form,
+  setDiligencias,
+  setDiligenciasRows,
+  hideModal,
+  setNoti,
+) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const token = getToken();
+
+  console.log(form);
 
   fetch(`${url}/api/v1/diligencias`, {
     method: 'POST',

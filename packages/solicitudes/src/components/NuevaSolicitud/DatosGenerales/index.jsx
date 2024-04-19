@@ -8,7 +8,9 @@ import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import { DatosGeneralesProvider } from '../../utils/Context/datosGeneralesContext';
 
-export default function DatosGenerales({ nextModule, id }) {
+export default function DatosGenerales({
+  nextModule, id, isLoading, setIsLoading,
+}) {
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 3);
@@ -26,6 +28,8 @@ export default function DatosGenerales({ nextModule, id }) {
             nextModule={nextModule}
             next={next}
             prev={prev}
+            loading={isLoading}
+            setLoading={setIsLoading}
           >
             {section === 1 && <InstitucionData id={id} />}
             {section === 2 && <RepresentanteLegalData id={id} />}
@@ -37,8 +41,16 @@ export default function DatosGenerales({ nextModule, id }) {
   );
 }
 
+DatosGenerales.defaultProps = {
+  id: null,
+};
+
 DatosGenerales.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  setIsLoading: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
 };

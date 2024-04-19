@@ -8,34 +8,22 @@ import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosPr
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useDocentes from '../utils/getDocentes';
 import DocentesModal from '../utils/Components/DocentesModales/DocentesModal';
-
-export const transformDataForTable = (data) => data.map((item) => ({
-  id: item.id,
-  nombre: `${item.persona.nombre} ${item.persona.apellidoPaterno} ${item.persona.apellidoMaterno}`,
-  tipoDocente: item.tipoDocente,
-  formacion: '-',
-  asignatura: item.asignaturasDocentes
-    .map((asig) => asig.asignatura.nombre)
-    .join(', '),
-  experiencia: item.experiencias,
-  tipoContratacion: `${item.tipoContratacion} - ${item.antiguedad} años`,
-}));
+import { transformDataForTable } from './Mocks/Docentes/utils';
 
 export default function Docentes({ disabled, type }) {
   const [modal, setModal] = useState(false);
   const { programaId } = useContext(SolicitudContext);
   const [docentesList, setDocentesList] = useState([]);
   const { setFormDocentes } = useContext(TablesPlanEstudiosContext);
-  const { docentesTable, loading } = type === 'editar'
-    ? useDocentes(programaId)
-    : { docentesTable: [], loading: false };
+  const docentesData = useDocentes(programaId);
+  const { docentesTable, loading } = type === 'editar' ? docentesData : { docentesTable: [], loading: false };
 
   useEffect(() => {
     if (type === 'editar' && !loading) {
       const transformedData = transformDataForTable(docentesTable);
       setDocentesList(transformedData);
     }
-  }, [docentesTable, loading]);
+  }, [docentesTable, loading, type]);
 
   const showModal = () => {
     setModal(true);
@@ -47,7 +35,7 @@ export default function Docentes({ disabled, type }) {
       esAceptado: true,
       programaId,
       asignaturasDocentes: [],
-      formacionesDocente: [],
+      formacionesDocentes: [],
     });
   };
 
@@ -63,7 +51,7 @@ export default function Docentes({ disabled, type }) {
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
             rows={docentesList}
-            columns={columns(docentesList, setDocentesList)}
+            columns={columns(setDocentesList)}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />
