@@ -36,7 +36,7 @@
 		"prop-types": "^15.8.1"
 	},
 	"scripts": {
-		"bootstrap": "npx lerna bootstrap",
+		"bootstrap": "lerna bootstrap",
 		"start:app": "npx lerna run dev --scope siiges-app",
 		"build": "npx lerna run build --scope siiges-app",
 		"start": "npx lerna run start --scope siiges-app",
