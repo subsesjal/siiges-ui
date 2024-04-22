@@ -6,9 +6,9 @@ import React, { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getSolicitudDetalles } from '@siiges-ui/solicitudes';
-import GenerarFDA01 from '../FDA/FDA01';
-import GenerarFDA02 from '../FDA/FDA02';
-import GenerarFDA06 from '../FDA/FDA06';
+// import { GenerarFDA01 } from '../FDA/FDA01';
+// import { GenerarFDA02 } from '../FDA/FDA02';
+// import { GenerarFDA06 } from '../FDA/FDA06';
 
 export default function detallesSolicitudes() {
   const { session, setNoti } = useContext(Context);
@@ -41,10 +41,10 @@ export default function detallesSolicitudes() {
             Formatos Administrativos
           </Typography>
           <List component="nav">
-            <ListItem button onClick={() => GenerarFDA01(solicitud.data)}>
+            <ListItem button onClick={() => {}}>
               <ListItemText primary="FDA 01" />
             </ListItem>
-            <ListItem button onClick={() => GenerarFDA02(solicitud.data)}>
+            <ListItem button onClick={() => {}}>
               <ListItemText primary="FDA 02" />
             </ListItem>
             <Link href="/destino-url">
@@ -62,7 +62,7 @@ export default function detallesSolicitudes() {
                 <ListItemText primary="FDA 05" />
               </ListItem>
             </Link>
-            <ListItem button onClick={() => GenerarFDA06(solicitud.data)}>
+            <ListItem button onClick={() => {}}>
               <ListItemText primary="FDA 06" />
             </ListItem>
           </List>

@@ -38,6 +38,8 @@
 	"scripts": {
 		"bootstrap": "npx lerna bootstrap",
 		"start:app": "npx lerna run dev --scope siiges-app",
+		"build": "npx lerna run build --scope siiges-app",
+		"start": "npx lerna run start --scope siiges-app",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix .",
 		"test": "jest",
