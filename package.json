@@ -44,7 +44,7 @@
 		"lint:fix": "eslint --fix .",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"postinstall": "npx lerna bootstrap",
+		"postinstall": "npx lerna run install --scope siiges-app",
 		"dev": "cd apps/siiges-app && yarn dev"
 	},
 	"dependencies": {
