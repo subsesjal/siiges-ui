@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "projects": {
+    "siiges-app": {
+      "root": "apps/siiges-app",
+      "sourceRoot": "apps/siiges-app/src",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/next:build",
+          "options": {
+            "root": "apps/siiges-app",
+            "outputPath": "dist/apps/siiges-app"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "siiges-app:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "siiges-app:build:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "siiges-app"
+}
