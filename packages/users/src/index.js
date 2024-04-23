@@ -1,9 +1,9 @@
-import UsuarioAvatar from './Components/Usuarios/UsuarioAvatar';
-import UsuarioView from './Components/Usuarios/UsuarioView';
-import UsuarioForm from './Components/Usuarios/UsuarioForm';
+import UsuarioAvatar from './components/Usuarios/UsuarioAvatar';
+import UsuarioView from './components/Usuarios/UsuarioView';
+import UsuarioForm from './components/Usuarios/UsuarioForm';
 import deleteUser from './utils/deleteUser';
 import columns from './Mocks/usuarios';
-import UsuariosTable from './Components/Usuarios/UsuariosTable';
+import UsuariosTable from './components/Usuarios/UsuariosTable';
 
 export {
   UsuarioForm,
