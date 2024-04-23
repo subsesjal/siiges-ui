@@ -8,10 +8,10 @@ import {
   ButtonSimple,
   InputDate,
 } from '@siiges-ui/shared';
+import errorDatosDocentes from '@siiges-ui/solicitudes/src/components/utils/sections/errors/errorDatosDocentes';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
 import handleCreate from '../../submitDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
