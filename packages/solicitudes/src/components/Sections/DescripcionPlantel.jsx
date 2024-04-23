@@ -9,7 +9,6 @@ import { InputNumber, getData } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import formPrograma from '../utils/sections/forms/formPrograma';
 import PlantelContext from '../utils/Context/plantelContext';
 
 export default function DescripcionPlantel({ plantelesData, disabled }) {
@@ -21,6 +20,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
     seguridad,
     setSeguridad,
   } = useContext(PlantelContext);
+
   useEffect(() => {
     if (plantelesData?.id) {
       const fetchData = async () => {
@@ -30,9 +30,9 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             query: '',
           });
           if (response && response.data) {
-            const nivelIds = response.data.map((nivel) => nivel.id);
+            const nivelIds = response.data.map((nivel) => nivel.edificioNivelId);
             setSelectedCheckboxes(
-              nivelIds.map((id) => ({ edificioNivelId: id })),
+              nivelIds.map((edificioNivelId) => ({ edificioNivelId })),
             );
           }
         } catch (err) {
@@ -66,7 +66,13 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formPrograma(name, value, setForm, 2);
+    setForm((prevForm) => ({
+      ...prevForm,
+      2: {
+        ...prevForm[2],
+        [name]: value,
+      },
+    }));
   };
 
   const handleOnChangeSeguridad = (e, index) => {
@@ -90,7 +96,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
         <Grid item xs={6}>
           <BasicSelect
             title="Caracteristicas del inmueble"
-            name="caracteristicas"
+            name="tipoInmuebleId"
             options={options}
             value={plantelesData?.tipoInmuebleId || ''}
             onchange={handleOnChange}
@@ -100,11 +106,11 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
         </Grid>
         <Grid item xs={6}>
           <InputNumber
-            id="dimencionesPlantel"
+            id="dimensiones"
             label="Dimenciones del Plantel"
-            name="dimencionesPlantel"
-            auto="dimencionesPlantel"
-            value={form[2].dimencionesPlantel || ''}
+            name="dimensiones"
+            auto="dimensiones"
+            value={form[2].dimensiones || ''}
             onchange={handleOnChange}
             required
             disabled={disabled}

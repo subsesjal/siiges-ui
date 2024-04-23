@@ -1,4 +1,6 @@
-import React, { createContext, useState, useMemo } from 'react';
+import React, {
+  createContext, useState, useMemo, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 
 const PlantelContext = createContext();
@@ -15,8 +17,10 @@ export function PlantelProvider({ children, selectedPlantel, institucionId }) {
   const [institucionesAledanas, setInstitucionesAledanas] = useState([]);
   const [formInfraestructuras, setFormInfraestructuras] = useState({});
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  const [plantelId, setPlantelId] = useState(selectedPlantel);
-  const [formInstitucionesAledanas, setFormInstitucionesAledanas] = useState({ plantelId });
+  const [plantelId, setPlantelId] = useState();
+  const [formInstitucionesAledanas, setFormInstitucionesAledanas] = useState(
+    {},
+  );
   const [form, setForm] = useState({
     1: {},
     2: {},
@@ -31,7 +35,7 @@ export function PlantelProvider({ children, selectedPlantel, institucionId }) {
     6: { institucionId, esNombreAutorizado: false },
   });
   const [seguridad, setSeguridad] = useState(
-    Array(11)
+    Array(8)
       .fill(0)
       .map((_, index) => ({
         plantelId,
@@ -39,6 +43,22 @@ export function PlantelProvider({ children, selectedPlantel, institucionId }) {
         cantidad: 0,
       })),
   );
+
+  useEffect(() => {
+    if (selectedPlantel) {
+      setPlantelId(selectedPlantel);
+      setFormInstitucionesAledanas({ selectedPlantel });
+      setSeguridad(
+        Array(8)
+          .fill(0)
+          .map((_, index) => ({
+            plantelId: selectedPlantel,
+            seguridadSistemaId: index + 1,
+            cantidad: 0,
+          })),
+      );
+    }
+  }, [selectedPlantel]);
 
   const value = useMemo(
     () => ({

@@ -1,9 +1,9 @@
 import { getToken } from '@siiges-ui/shared';
 
 // Function to build the API URL
-const buildApiUrl = (id) => {
+const buildApiUrl = (id, plantelId) => {
   const baseUrl = process.env.NEXT_PUBLIC_URL;
-  return `${baseUrl}/api/v1/planteles/institucionesSalud/${id}`;
+  return `${baseUrl}/api/v1/planteles/${plantelId}/saludInstituciones/${id}`;
 };
 
 const handleEdit = async (
@@ -14,10 +14,10 @@ const handleEdit = async (
   hideModal,
   errors,
   setNoti,
-  id,
+  plantelId,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  const url = buildApiUrl(form.id);
+  const url = buildApiUrl(form.id, plantelId);
   const token = getToken();
 
   try {
@@ -53,7 +53,7 @@ const handleEdit = async (
       return newList;
     });
 
-    setForm({ programaId: id });
+    setForm({ plantelId });
     setInitialValues({});
     hideModal();
     setNoti({

@@ -1,11 +1,40 @@
 import { Grid, Typography } from '@mui/material';
-import { InputNumber } from '@siiges-ui/shared';
-import React, { useContext } from 'react';
+import { InputNumber, getData } from '@siiges-ui/shared';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import CircularProgress from '@mui/material/CircularProgress';
 import PlantelContext from '../utils/Context/plantelContext';
 
 export default function HigienePlantel({ disabled }) {
-  const { form, setForm } = useContext(PlantelContext);
+  const { form, setForm, plantelId } = useContext(PlantelContext);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (plantelId) {
+      getData({ endpoint: `/planteles/${plantelId}/higienes` })
+        .then((data) => {
+          if (data && data.data.length > 0) {
+            const sortedData = data.data.sort((a, b) => a.higieneId - b.higieneId);
+            setForm((prevForm) => ({
+              ...prevForm,
+              3: sortedData.map((item, index) => ({
+                higieneId: item.higieneId || index + 1,
+                cantidad: item.cantidad || 0,
+              })),
+            }));
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error('Error fetching higiene data:', error);
+          setLoading(false);
+        });
+    }
+  }, [plantelId]);
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   const handleOnChange = (e, index) => {
     const { value } = e.target;

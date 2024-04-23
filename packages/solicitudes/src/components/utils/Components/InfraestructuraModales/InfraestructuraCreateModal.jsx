@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from 'react';
 import { Grid, TextField } from '@mui/material';
-import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
+import {
+  DefaultModal, ButtonStyled, Context, Select,
+} from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
 import handleCreate from '../../submitNewInfraestructuras';
@@ -11,7 +12,10 @@ import PlantelContext from '../../Context/plantelContext';
 import getAsignaturas from '../../getAsignaturas';
 
 export default function InfraestructuraCreateModal({
-  open, hideModal, title, programaId,
+  open,
+  hideModal,
+  title,
+  programaId,
 }) {
   const {
     setInfraestructuras,
@@ -23,10 +27,10 @@ export default function InfraestructuraCreateModal({
     setErrors,
     initialValues,
     setInitialValues,
+    plantelId,
   } = useContext(PlantelContext);
   const { setNoti } = useContext(Context);
-  const { query } = useRouter();
-  const asignaturas = getAsignaturas(programaId);
+  const { asignaturasTotal } = getAsignaturas(programaId);
 
   const errorsInfraestructura = errorDatosInfraestructuras(
     formInfraestructuras,
@@ -52,10 +56,18 @@ export default function InfraestructuraCreateModal({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFormInfraestructuras((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormInfraestructuras((prevData) => {
+      const newData = { ...prevData };
+
+      if (name === 'asignaturaInfraestructura') {
+        const newValue = Array.isArray(value) ? value : [value];
+        newData.asignaturaInfraestructura = newValue;
+      } else {
+        newData[name] = value;
+      }
+
+      return newData;
+    });
   };
 
   const handleOnBlur = (e) => {
@@ -87,7 +99,7 @@ export default function InfraestructuraCreateModal({
       hideModal,
       errors,
       setNoti,
-      query.plantel,
+      plantelId,
     );
   };
 
@@ -172,12 +184,11 @@ export default function InfraestructuraCreateModal({
           />
         </Grid>
         <Grid item xs={12}>
-          <BasicSelect
+          <Select
             title="Asignatura que atiende"
             name="asignaturaInfraestructura"
             multiple
-            value={[]}
-            options={asignaturas.asignaturas}
+            options={asignaturasTotal}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.asignaturaInfraestructura}
@@ -208,6 +219,8 @@ InfraestructuraCreateModal.propTypes = {
   open: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
-  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  programaId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([undefined]),
+  ]).isRequired,
 };

@@ -27,6 +27,7 @@ export default function Plantel({
   const institucion = getInstitucionUsuario(session);
   const [ratificacion, setRatificacion] = useState(<RatificacionNombre />);
   const [plantelesData, setPlantelesData] = useState({});
+  const [selectedPlantel, setSelectedPlantel] = useState();
   const { solicitudes } = getSolicitudesById(id);
 
   useEffect(() => {
@@ -46,6 +47,12 @@ export default function Plantel({
     }
   }, [id, disabled, institucion]);
 
+  useEffect(() => {
+    if (solicitudes.programa) {
+      setSelectedPlantel(solicitudes.programa.plantelId);
+    }
+  }, [solicitudes, id]);
+
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 6);
@@ -60,7 +67,7 @@ export default function Plantel({
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <PlantelProvider
-          selectedPlantel={solicitudes?.programa?.plantelId}
+          selectedPlantel={selectedPlantel}
           institucionId={institucion?.id}
         >
           <SectionLayout
@@ -90,7 +97,12 @@ export default function Plantel({
                 setPlantelesData={setPlantelesData}
               />
             )}
-            {section === 3 && <HigienePlantel disabled={disabled} />}
+            {section === 3 && (
+              <HigienePlantel
+                disabled={disabled}
+                plantelId={plantelesData?.id}
+              />
+            )}
             {section === 4 && <InstitucionesAledanas disabled={disabled} />}
             {section === 5 && (
               <Infraestructura disabled={disabled} programaId={programaId} />

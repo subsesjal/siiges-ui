@@ -4,7 +4,6 @@ import {
   DefaultModal, ButtonStyled, Context, Input,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import errorDatosInstitucionAledanas from '../../sections/errors/errorDatosInstitucionAledanas';
 import handleCreate from '../../submitNewInstitucionAledanas';
 import PlantelContext from '../../Context/plantelContext';
@@ -24,9 +23,9 @@ export default function InstitucionesAledanasCreateModal({
     setErrors,
     initialValues,
     setInitialValues,
+    plantelId,
   } = useContext(PlantelContext);
   const { setNoti } = useContext(Context);
-  const { query } = useRouter();
 
   const errorsInstitucionesAledanas = errorDatosInstitucionAledanas(
     formInstitucionesAledanas,
@@ -78,7 +77,7 @@ export default function InstitucionesAledanasCreateModal({
       hideModal,
       errors,
       setNoti,
-      query.plantel,
+      plantelId,
     );
   };
 

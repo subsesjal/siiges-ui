@@ -12,8 +12,6 @@ const handleCreate = (
   const url = process.env.NEXT_PUBLIC_URL;
   const token = getToken();
 
-  console.log(form);
-
   fetch(`${url}/api/v1/diligencias`, {
     method: 'POST',
     headers: {

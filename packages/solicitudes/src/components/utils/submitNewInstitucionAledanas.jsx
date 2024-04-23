@@ -25,7 +25,7 @@ const handleCreate = (
     return;
   }
 
-  fetch(`${url}/api/v1/planteles/institucionesSalud`, {
+  fetch(`${url}/api/v1/planteles/${plantelId}/saludInstituciones`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

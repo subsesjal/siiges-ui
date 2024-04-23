@@ -5,6 +5,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
+import { getInstitucionUsuario } from '@siiges-ui/instituciones';
 import submitEditPlantel from '../utils/submitEditPlantel';
 import submitNewSolicitud from '../utils/submitNewSolicitud';
 import submitEditSolicitud from '../utils/submitEditSolicitud';
@@ -34,6 +35,7 @@ export default function ButtonSection({
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
   const { setNoti, session } = useContext(Context);
+  const institucion = getInstitucionUsuario(session);
   const validations = useContext(SolicitudContext);
   const evaluacionCurricular = useEvaluacionCurricular();
   const plantelesValidations = useContext(PlantelContext);
@@ -113,6 +115,7 @@ export default function ButtonSection({
         plantelesValidations,
         setNoti,
         setLoading,
+        institucion.id,
       ),
       3: () => submitHigienesPlantel(
         plantelesValidations,

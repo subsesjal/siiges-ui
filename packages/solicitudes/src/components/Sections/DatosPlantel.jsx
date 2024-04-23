@@ -270,7 +270,7 @@ DatosPlantel.propTypes = {
       numeroExterior: PropTypes.string,
       numeroInterior: PropTypes.string,
       colonia: PropTypes.string,
-      codigoPostal: PropTypes.string,
+      codigoPostal: PropTypes.number,
       municipio: PropTypes.shape({
         nombre: PropTypes.string,
       }),
