@@ -44,7 +44,7 @@
 		"lint:fix": "eslint --fix .",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"postinstall": "lerna bootstrap && yarn install -W",
+		"postinstall": "npx lerna bootstrap",
 		"dev": "cd apps/siiges-app && yarn dev"
 	},
 	"dependencies": {
