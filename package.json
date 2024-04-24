@@ -36,13 +36,15 @@
 		"prop-types": "^15.8.1"
 	},
 	"scripts": {
-		"bootstrap": "npx lerna bootstrap",
+		"bootstrap": "lerna bootstrap",
 		"start:app": "npx lerna run dev --scope siiges-app",
+		"build": "npx lerna run build --scope siiges-app",
+		"start": "npx lerna run start --scope siiges-app",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix .",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"postinstall": "husky install",
+		"postinstall": "",
 		"dev": "cd apps/siiges-app && yarn dev"
 	},
 	"dependencies": {

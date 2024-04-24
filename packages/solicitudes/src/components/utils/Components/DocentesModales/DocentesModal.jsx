@@ -11,7 +11,6 @@ import {
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import errorDatosDocentes from '../../sections/errors/errorDatosDocentes';
 import handleCreate from '../../submitDocentes';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import getAsignaturas from '../../getAsignaturas';
@@ -22,6 +21,31 @@ import {
   tiposDocentes,
 } from '../../../Sections/Mocks/Docentes/utils';
 import useDocente from '../../getDocente';
+
+const errorDatosDocentes = {
+  tipodocente: 'Nombre invalido',
+  nombre: 'Nombre invalido',
+  apellidoPaterno: 'Apellido Paterno invalido',
+  apellidoMaterno: 'Apellido Materno invalido',
+  tipoDocente: 'Seleccione un nivel',
+  'persona.nombre': 'Nombre invalido',
+  'persona.apellidoPaterno': 'Apellido paterno invalido',
+  'persona.apellidoMaterno': 'Apellido materno invalido',
+  asignaturasDocentes: 'Seleccione una asignatura',
+  tipoContratacion: 'Seleccione un tipo de contratación',
+  antiguedad: 'Antigüedad invalida',
+  experiencias: 'Experiencia laboral invalida',
+  formacion_1_nivelId: 'Seleccione un Nivel',
+  formacion_1_nombre: 'Nombre invalido',
+  formacion_1_descripcion: 'Seleccione un documento',
+  formacion_1_fechaGraduado: 'Seleccione una fecha',
+  formacion_1_institucion: 'Institución no invalida',
+  formacion_2_nivelId: 'Seleccione un Nivel',
+  formacion_2_nombre: 'Nombre invalido',
+  formacion_2_descripcion: 'Seleccione un documento',
+  formacion_2_fechaGraduado: 'Seleccione una fecha',
+  formacion_2_institucion: 'Institución no invalida',
+};
 
 export default function DocentesModal({
   open,

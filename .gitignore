@@ -4,9 +4,6 @@
 ### Linux ###
 *~
 
-# ignore files in public folder
-public/
-
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
