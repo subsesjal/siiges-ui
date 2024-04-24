@@ -4,20 +4,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function AnexosSeccion({ disabled, id, type }) {
-  const [fileURLs, setFileURLs] = useState([
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ]);
+  const [fileURLs, setFileURLs] = useState([]);
   const fileData = [
     'IDENTIFICACION_REPRESENTANTE',
     'COMPROBANTE_PAGO_RVOE',
