@@ -3,7 +3,6 @@ import { Grid } from '@mui/material';
 import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import handleEdit from '../../submitEditInstitucionAledana';
 import PlantelContext from '../../Context/plantelContext';
 import errorDatosInstitucionAledanas from '../../sections/errors/errorDatosInstitucionAledanas';
@@ -24,10 +23,10 @@ export default function InstitucionAledanaEditModal({
     setErrors,
     initialValues,
     setInitialValues,
+    plantelId,
   } = useContext(PlantelContext);
 
   const { setNoti } = useContext(Context);
-  const { query } = useRouter();
 
   useEffect(() => {
     setFormInstitucionesAledanas(rowItem);
@@ -76,7 +75,7 @@ export default function InstitucionAledanaEditModal({
       hideModal,
       errors,
       setNoti,
-      query.plantel,
+      plantelId,
     );
   };
 

@@ -1,9 +1,11 @@
-import React, { createContext, useState, useMemo } from 'react';
+import React, {
+  createContext, useState, useMemo, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 
 const PlantelContext = createContext();
 
-export function PlantelProvider({ children, plantelId, institucionId }) {
+export function PlantelProvider({ children, selectedPlantel, institucionId }) {
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
   const [disabled, setDisabled] = useState(true);
@@ -13,9 +15,12 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
   const [formDiligencias, setFormDiligencias] = useState({});
   const [infraestructuras, setInfraestructuras] = useState([]);
   const [institucionesAledanas, setInstitucionesAledanas] = useState([]);
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const [formInfraestructuras, setFormInfraestructuras] = useState({});
-  const [formInstitucionesAledanas, setFormInstitucionesAledanas] = useState({ plantelId });
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+  const [plantelId, setPlantelId] = useState();
+  const [formInstitucionesAledanas, setFormInstitucionesAledanas] = useState(
+    {},
+  );
   const [form, setForm] = useState({
     1: {},
     2: {},
@@ -30,7 +35,7 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
     6: { institucionId, esNombreAutorizado: false },
   });
   const [seguridad, setSeguridad] = useState(
-    Array(11)
+    Array(8)
       .fill(0)
       .map((_, index) => ({
         plantelId,
@@ -38,6 +43,22 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
         cantidad: 0,
       })),
   );
+
+  useEffect(() => {
+    if (selectedPlantel) {
+      setPlantelId(selectedPlantel);
+      setFormInstitucionesAledanas({ selectedPlantel });
+      setSeguridad(
+        Array(8)
+          .fill(0)
+          .map((_, index) => ({
+            plantelId: selectedPlantel,
+            seguridadSistemaId: index + 1,
+            cantidad: 0,
+          })),
+      );
+    }
+  }, [selectedPlantel]);
 
   const value = useMemo(
     () => ({
@@ -49,10 +70,12 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
       disabled,
       seguridad,
       setErrors,
+      plantelId,
       diligencias,
       setDisabled,
       setSeguridad,
       validNombres,
+      setPlantelId,
       initialValues,
       setDiligencias,
       setValidNombres,
@@ -76,6 +99,7 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
       errors,
       disabled,
       seguridad,
+      plantelId,
       diligencias,
       validNombres,
       initialValues,
@@ -95,7 +119,7 @@ export function PlantelProvider({ children, plantelId, institucionId }) {
 
 PlantelProvider.propTypes = {
   children: PropTypes.node.isRequired,
-  plantelId: PropTypes.number.isRequired,
+  selectedPlantel: PropTypes.number.isRequired,
   institucionId: PropTypes.number.isRequired,
 };
 

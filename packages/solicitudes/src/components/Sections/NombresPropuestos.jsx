@@ -7,14 +7,12 @@ import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
 
 export default function NombresPropuestos({ disabled, id }) {
   const { form, setForm, setValidNombres } = useContext(PlantelContext);
-  const [fileURLs, setFileURLs] = useState([]);
+  const [fileURLs, setFileURLs] = useState([null, null]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formDatosSolicitud(name, value, form, setForm, 6);
   };
-
-  console.log(form[6]);
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [

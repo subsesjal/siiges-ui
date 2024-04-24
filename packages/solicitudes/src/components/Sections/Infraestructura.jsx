@@ -1,41 +1,64 @@
 import { Grid, Typography } from '@mui/material';
-import { DataTable } from '@siiges-ui/shared';
+import { DataTable, getData } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import columns from './Mocks/Infraestructura';
 import PlantelContext from '../utils/Context/plantelContext';
 import InfraestructuraCreateModal from '../utils/Components/InfraestructuraModales/InfraestructuraCreateModal';
 
 export default function Infraestructura({ disabled, programaId }) {
-  const [modal, setModal] = useState(false);
-  const [rows, setRows] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const { infraestructuras, setInfraestructuras, plantelId } = useContext(PlantelContext);
 
-  const showModal = () => {
-    setModal(true);
-  };
-
-  const hideModal = () => {
-    setModal(false);
-  };
-
-  const { infraestructuras, setInfraestructuras } = useContext(PlantelContext);
+  const showModal = useCallback(() => setModalOpen(true), []);
+  const hideModal = useCallback(() => setModalOpen(false), []);
 
   useEffect(() => {
-    const infraestructurasRows = infraestructuras.map((item) => ({
+    if (plantelId) {
+      const fetchData = async () => {
+        try {
+          const response = await getData({
+            endpoint: `/planteles/${plantelId}/infraestructuras`,
+            query: '',
+          });
+          if (response && response.data) {
+            console.log(response.data);
+            setInfraestructuras(response.data);
+          }
+        } catch (err) {
+          console.error('Error fetching data:', err);
+        }
+      };
+      fetchData();
+    }
+  }, [plantelId]);
+
+  const rows = useMemo(
+    () => infraestructuras.map((item) => ({
       id: item.id,
       tipoInstalacion: item.nombre,
       capacidad: item.capacidad,
       metros: item.metros,
       recursos: item.recursos,
       ubicacion: item.ubicacion,
-      asignaturas: item.asignaturaInfraestructura.map(
+      asignaturas: item.asignaturaInfraestructura?.map(
         (asignaturaId) => asignaturaId,
       ),
-    }));
-    setRows(infraestructurasRows);
-  }, [infraestructuras]);
+    })),
+    [infraestructuras],
+  );
 
-  const tableColumns = columns(setInfraestructuras, infraestructuras);
+  const tableColumns = useMemo(
+    () => columns(setInfraestructuras, infraestructuras),
+    [setInfraestructuras, infraestructuras],
+  );
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -43,7 +66,7 @@ export default function Infraestructura({ disabled, programaId }) {
       </Grid>
       <Grid item xs={12}>
         <DataTable
-          buttonAdd={disabled}
+          buttonAdd={!disabled}
           buttonText="Agregar"
           buttonClick={showModal}
           rows={rows}
@@ -53,7 +76,7 @@ export default function Infraestructura({ disabled, programaId }) {
         />
       </Grid>
       <InfraestructuraCreateModal
-        open={modal}
+        open={modalOpen}
         hideModal={hideModal}
         type="crear"
         title="Crear Infraestructura"
@@ -65,8 +88,5 @@ export default function Infraestructura({ disabled, programaId }) {
 
 Infraestructura.propTypes = {
   disabled: PropTypes.bool.isRequired,
-  programaId: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([undefined]),
-  ]).isRequired,
+  programaId: PropTypes.number.isRequired,
 };

@@ -33,7 +33,7 @@ export default function DiligenciasFormModal({
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    if (mode !== 'create') {
+    if (mode !== 'create' && diligencias) {
       const rowItem = diligencias.find((item) => item.id === id);
       const rowItemValues = {
         solicitudId: rowItem.solicitudId,
@@ -44,7 +44,7 @@ export default function DiligenciasFormModal({
           nombre: rowItem.persona.nombre,
           apellidoPaterno: rowItem.persona.apellidoPaterno,
           apellidoMaterno: rowItem.persona.apellidoMaterno,
-          cargo: rowItem.persona.cargo,
+          tituloCargo: rowItem.persona.tituloCargo,
           correoPrimario: rowItem.persona.correoPrimario,
           telefono: rowItem.persona.telefono,
           celular: rowItem.persona.celular,
@@ -55,7 +55,7 @@ export default function DiligenciasFormModal({
         setDisabled(true);
       }
     }
-  }, []);
+  }, [diligencias]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -289,7 +289,7 @@ export default function DiligenciasFormModal({
 
 DiligenciasFormModal.propTypes = {
   open: PropTypes.bool.isRequired,
-  mode: PropTypes.oneOf(['create', 'edit', 'view']).isRequired,
+  mode: PropTypes.oneOf(['create', 'edit', 'consult']).isRequired,
   title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,

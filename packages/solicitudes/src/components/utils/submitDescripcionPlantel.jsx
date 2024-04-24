@@ -1,50 +1,77 @@
 import { getToken } from '@siiges-ui/shared';
 
+async function sendRequest(
+  url,
+  endpoint,
+  headers,
+  body,
+  method,
+) {
+  const response = await fetch(`${url}/api/v1/${endpoint}`, {
+    method,
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    throw new Error(`HTTP error! status: ${response.status}, message: ${errorResponse.message}`);
+  }
+
+  return response.json();
+}
+
 export default function submitDescripcionPlantel(
   validations,
   setNoti,
-  plantelId,
   setLoading,
+  institucionId,
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const { selectedCheckboxes } = validations;
+  const {
+    plantelId, selectedCheckboxes, seguridad, form,
+  } = validations;
   const token = getToken();
 
-  fetch(`${url}/api/v1/planteles/${plantelId}/niveles`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      api_key: apikey,
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(selectedCheckboxes),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Error submitting the request');
-    })
-    .then(() => {
-      setTimeout(() => {
-        setLoading(false);
+  const headers = {
+    'Content-Type': 'application/json',
+    api_key: apikey,
+    Authorization: `Bearer ${token}`,
+  };
+
+  setLoading(true);
+
+  const requests = [
+    sendRequest(url, `planteles/${plantelId}/niveles`, headers, selectedCheckboxes, 'POST'),
+    sendRequest(url, `planteles/${plantelId}/seguridad`, headers, seguridad, 'POST'),
+  ];
+
+  if (institucionId) {
+    requests.push(sendRequest(url, `instituciones/${institucionId}/planteles/${plantelId}`, headers, form[2], 'PATCH'));
+  }
+
+  Promise.allSettled(requests)
+    .then((results) => {
+      const errors = results.filter((result) => result.status === 'rejected');
+      if (errors.length > 0) {
         setNoti({
           open: true,
-          message: 'Exito, no hubo problemas en esta sección',
-          type: 'success',
-        });
-      }, 1000);
-    })
-    .catch((err) => {
-      console.error('Error:', err);
-      setTimeout(() => {
-        setLoading(false);
-        setNoti({
-          open: true,
-          message: 'Hubo un problema, revise que los campos esten correctos',
+          message: `Error al cargar los datos: ${errors[0].reason.message}`,
           type: 'error',
         });
-      }, 1000);
+      } else {
+        setNoti({
+          open: true,
+          message: 'Se cargaron los datos exitosamente!',
+          type: 'success',
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Unexpected error:', error);
+    })
+    .finally(() => {
+      setLoading(false);
     });
 }

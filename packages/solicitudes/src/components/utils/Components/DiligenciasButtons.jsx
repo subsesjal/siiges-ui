@@ -46,7 +46,7 @@ export default function DiligenciasButtons({ id }) {
         <DiligenciasFormModal
           open={modalOpen}
           hideModal={handleModalClose}
-          mode={isEdit ? 'edit' : 'view'}
+          mode={isEdit ? 'edit' : 'consult'}
           title={isEdit ? 'Editar Diligencia' : 'Consultar Diligencia'}
           id={id}
         />

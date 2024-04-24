@@ -36,15 +36,23 @@ const handleCreate = (
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const newData = { ...form, id: data.data.id };
       setInfraestructuras((prevList) => [...prevList, newData]);
       setForm({ plantelId });
       setInitialValues({});
       hideModal();
+      setNoti({
+        open: true,
+        message: 'Se creo la infraestructura exitosamente',
+        type: 'success',
+      });
     })
     .catch((error) => {
-      console.error('Error:', error);
+      setNoti({
+        open: true,
+        message: `Ocurrio un error al cargar los datos: ${error}`,
+        type: 'error',
+      });
     });
 };
 
