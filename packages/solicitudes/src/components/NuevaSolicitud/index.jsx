@@ -98,6 +98,7 @@ export default function NuevaSolicitud({
             id={id}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
+            type={type}
           />
         ),
       4:
@@ -107,6 +108,7 @@ export default function NuevaSolicitud({
             id={id}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
+            type={type}
           />
         ) : (
           <EvaluacionCurricular

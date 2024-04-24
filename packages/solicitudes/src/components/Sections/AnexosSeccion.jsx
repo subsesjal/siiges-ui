@@ -1,17 +1,64 @@
 import { Grid, Typography } from '@mui/material';
-import { InputFile } from '@siiges-ui/shared';
-import React from 'react';
+import { GetFile, InputFile } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-export default function AnexosSeccion({
-  disabled, form, setForm, id,
-}) {
+export default function AnexosSeccion({ disabled, id, type }) {
+  const [fileURLs, setFileURLs] = useState([
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
+  const fileData = [
+    'IDENTIFICACION_REPRESENTANTE',
+    'COMPROBANTE_PAGO_RVOE',
+    'FOTOGRAFIA_INMUEBLE',
+    'CONSTANCIA_INFEJAL',
+    'LICENCIA_MUNICIPAL',
+    'DICTAMEN_IMPI',
+    'SECRETARIA_SALUD',
+    'COMPROBANTE_TELEFONO',
+    'PROYECTO_VINCULACION',
+    'PLAN_MEJORA',
+    'FORMA_MIGRATORIA',
+    'PROGRAMA_SUPERACION',
+  ].map((tipoDocumento) => ({
+    entidadId: id,
+    tipoEntidad: 'SOLICITUD',
+    tipoDocumento,
+  }));
+
+  useEffect(() => {
+    if (type === 'editar' && id) {
+      fileData.forEach((fileInfo, index) => {
+        GetFile(fileInfo, (url, err) => {
+          if (!err) {
+            setFileURLs((currentURLs) => {
+              const updatedURLs = [...currentURLs];
+              updatedURLs[index] = url;
+              return updatedURLs;
+            });
+          }
+        });
+      });
+    }
+  }, [type, id]);
+
   const handleFileLoaded = (index, url) => {
-    setForm((prevForm) => {
-      const updatedForm = [...prevForm];
-      updatedForm[index] = url;
-      return updatedForm;
-    });
+    setFileURLs((prevURLs) => [
+      ...prevURLs.slice(0, index),
+      url,
+      ...prevURLs.slice(index + 1),
+    ]);
   };
 
   return (
@@ -22,13 +69,13 @@ export default function AnexosSeccion({
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={12}>
           <InputFile
-            label="Identificación oficial con fotografía de la persona física, o acta constitutiva de la persona moral y poder de su Representante Legal"
             tipoEntidad="SOLICITUD"
             tipoDocumento="IDENTIFICACION_REPRESENTANTE"
             id={id}
-            url={form[0] || ''}
+            url={fileURLs[0] || ''}
             setUrl={(url) => handleFileLoaded(0, url)}
             disabled={disabled}
+            label="Identificación oficial con fotografía de la persona física, o acta constitutiva de la persona moral y poder de su Representante Legal"
           />
         </Grid>
         <Grid item xs={12}>
@@ -36,7 +83,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="COMPROBANTE_PAGO_RVOE"
             id={id}
-            url={form[1] || ''}
+            url={fileURLs[1] || ''}
             setUrl={(url) => handleFileLoaded(1, url)}
             disabled={disabled}
             label="Comprobante de pago"
@@ -47,7 +94,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="FOTOGRAFIA_INMUEBLE"
             id={id}
-            url={form[2] || ''}
+            url={fileURLs[2] || ''}
             setUrl={(url) => handleFileLoaded(2, url)}
             disabled={disabled}
             label="Fotografías inmuebles"
@@ -58,7 +105,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="CONSTANCIA_INFEJAL"
             id={id}
-            url={form[3] || ''}
+            url={fileURLs[3] || ''}
             setUrl={(url) => handleFileLoaded(3, url)}
             disabled={disabled}
             label="Constancia INFEJAL"
@@ -69,7 +116,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="LICENCIA_MUNICIPAL"
             id={id}
-            url={form[4] || ''}
+            url={fileURLs[4] || ''}
             setUrl={(url) => handleFileLoaded(4, url)}
             disabled={disabled}
             label="Licencia municipal"
@@ -80,7 +127,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="DICTAMEN_IMPI"
             id={id}
-            url={form[5] || ''}
+            url={fileURLs[5] || ''}
             setUrl={(url) => handleFileLoaded(5, url)}
             disabled={disabled}
             label="Dictamen del Instituto Mexicano de Propiedad Intelectual (IMPI)"
@@ -91,7 +138,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="SECRETARIA_SALUD"
             id={id}
-            url={form[6] || ''}
+            url={fileURLs[6] || ''}
             setUrl={(url) => handleFileLoaded(6, url)}
             disabled={disabled}
             label="Aviso funcionamiento de Secretaría de Salud ó Carta bajo protesta de decir verdad de NO venta de alimentos."
@@ -102,7 +149,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="COMPROBANTE_TELEFONO"
             id={id}
-            url={form[7] || ''}
+            url={fileURLs[7] || ''}
             setUrl={(url) => handleFileLoaded(7, url)}
             disabled={disabled}
             label="Comprobante de línea telefónica"
@@ -113,7 +160,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="PROYECTO_VINCULACION"
             id={id}
-            url={form[8] || ''}
+            url={fileURLs[8] || ''}
             setUrl={(url) => handleFileLoaded(8, url)}
             disabled={disabled}
             label="Proyecto de vinculación y movilidad"
@@ -124,7 +171,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="PLAN_MEJORA"
             id={id}
-            url={form[9] || ''}
+            url={fileURLs[9] || ''}
             setUrl={(url) => handleFileLoaded(9, url)}
             disabled={disabled}
             label="Plan de mejora"
@@ -135,7 +182,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="FORMA_MIGRATORIA"
             id={id}
-            url={form[10] || ''}
+            url={fileURLs[10] || ''}
             setUrl={(url) => handleFileLoaded(10, url)}
             disabled={disabled}
             label="Formas de migratorias de los profesores"
@@ -146,7 +193,7 @@ export default function AnexosSeccion({
             tipoEntidad="SOLICITUD"
             tipoDocumento="PROGRAMA_SUPERACION"
             id={id}
-            url={form[11] || ''}
+            url={fileURLs[11] || ''}
             setUrl={(url) => handleFileLoaded(11, url)}
             disabled={disabled}
             label="Programa de superación"
@@ -158,12 +205,12 @@ export default function AnexosSeccion({
 }
 
 AnexosSeccion.defaultProps = {
-  form: [],
+  id: null,
+  type: null,
 };
 
 AnexosSeccion.propTypes = {
   disabled: PropTypes.bool.isRequired,
-  setForm: PropTypes.func.isRequired,
-  form: PropTypes.arrayOf(PropTypes.string),
-  id: PropTypes.number.isRequired,
+  id: PropTypes.number,
+  type: PropTypes.string,
 };

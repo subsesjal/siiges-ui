@@ -6,7 +6,7 @@ import pagination from '../../../events/pagination';
 import AnexosSeccion from '../../Sections/AnexosSeccion';
 
 export default function Anexos({
-  nextModule, id, isLoading, setIsLoading,
+  nextModule, id, isLoading, setIsLoading, type,
 }) {
   const [form, setForm] = useState([]);
   const [disabled, setDisabled] = useState(true);
@@ -42,6 +42,7 @@ export default function Anexos({
               setForm={setForm}
               disabled={disabled}
               id={id}
+              type={type}
             />
           )}
         </SectionLayout>
@@ -52,6 +53,7 @@ export default function Anexos({
 
 Anexos.defaultProps = {
   id: null,
+  type: null,
 };
 
 Anexos.propTypes = {
@@ -62,4 +64,5 @@ Anexos.propTypes = {
   ]),
   setIsLoading: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  type: PropTypes.string,
 };
