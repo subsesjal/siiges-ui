@@ -1,6 +1,5 @@
 import Title from './components/Title';
 import Input from './components/Input';
-import InputDate from './components/Input/InputDate';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Select from './components/Select';
@@ -20,6 +19,7 @@ import { Context } from './utils/handlers/context';
 import getTurnoById from './utils/handlers/turnos';
 import StepperComponent from './components/Stepper';
 import InputFile from './components/Input/InputFile';
+import InputDate from './components/Input/InputDate';
 import Overlay from './components/Resources/Overlay';
 import PaperHome from './components/Paper/PaperHome';
 import LogoWhite from './components/Images/LogoWhite';
@@ -34,6 +34,7 @@ import ButtonsForm from './components/Buttons/ButtonsForm';
 import ButtonLogin from './components/Buttons/ButtonLogin';
 import Background from './components/Resources/Background';
 import LoadCircle from './components/Resources/LoadCircle';
+import InputDateTime from './components/Input/InputDateTime';
 import InputPassword from './components/Input/InputPassword';
 import ButtonStyled from './components/Buttons/ButtonStyled';
 import ButtonsModal from './components/Buttons/ButtonsModal';
@@ -98,6 +99,7 @@ export {
   getTurnoById,
   InputPassword,
   ActionButtons,
+  InputDateTime,
   SubmitDocument,
   fileToFormData,
   getCurrentUser,

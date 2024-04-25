@@ -12,135 +12,100 @@ import {
 } from '@siiges-ui/solicitudes';
 import { ObservacionesProvider } from '../utils/Context/observacionesContext';
 
+const commonSteps = [
+  PlanEstudios,
+  DatosGenerales,
+  Plantel,
+  Anexos,
+  EvaluacionCurricular,
+];
+
 const steps = {
-  escolarizada: [
-    'Plan de estudios',
-    'Datos generales',
-    'Plantel',
-    'Anexos',
-    'Evaluacion curricular',
-  ],
+  escolarizada: [...commonSteps],
+  mixta: [...commonSteps],
+  dual: [...commonSteps],
   noEscolarizada: [
-    'Plan de estudios',
-    'Datos generales',
-    'Plantel',
-    'Plataforma educativa',
-    'Anexos',
-    'Evaluacion curricular',
+    ...commonSteps.slice(0, 3),
+    PlataformaEducativa,
+    ...commonSteps.slice(3),
   ],
+};
+
+const getStepName = (component) => {
+  switch (component.name) {
+    case 'DatosGenerales':
+      return 'Datos Generales';
+    case 'Plantel':
+      return 'Plantel';
+    case 'PlanEstudios':
+      return 'Plan de Estudios';
+    case 'Anexos':
+      return 'Anexos';
+    case 'EvaluacionCurricular':
+      return 'Evaluación Curricular';
+    case 'PlataformaEducativa':
+      return 'Plataforma Educativa';
+    default:
+      return component.name;
+  }
 };
 
 export default function NuevaSolicitud({
   type,
-  solicitudId,
+  solicitudId = '',
   isLoading,
   setIsLoading,
 }) {
   const router = useRouter();
   const [modalidad, setModalidad] = useState('escolarizada');
   const [module, setModule] = useState(0);
-  const [id, setId] = useState(solicitudId || '');
+  const [id, setId] = useState(solicitudId);
   const [programaId, setProgramaId] = useState('');
 
   useEffect(() => {
+    setId(solicitudId);
+  }, [solicitudId]);
+
+  useEffect(() => {
+    const modalidadMap = {
+      1: 'escolarizada',
+      2: 'noEscolarizada',
+      3: 'mixta',
+      4: 'dual',
+    };
+
     if (router.query.modalidad) {
-      setModalidad(router.query.modalidad);
+      setModalidad(modalidadMap[router.query.modalidad]);
     }
   }, [router.query.modalidad]);
 
   const nextModule = () => {
-    const currentSteps = modalidad === 'escolarizada' ? steps.escolarizada : steps.noEscolarizada;
-    setModule((prevModule) => (prevModule < currentSteps.length - 1 ? prevModule + 1 : prevModule));
+    const stepList = steps[modalidad];
+    if (module < stepList.length - 1) {
+      setModule((prevModule) => prevModule + 1);
+    }
   };
 
   const renderModule = () => {
-    const componentsMap = {
-      0: (
-        <PlanEstudios
-          nextModule={nextModule}
-          id={id}
-          setId={setId}
-          programaId={programaId}
-          setProgramaId={setProgramaId}
-          type={type}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
-      ),
-      1: (
-        <DatosGenerales
-          nextModule={nextModule}
-          id={id}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
-      ),
-      2: (
-        <Plantel
-          nextModule={nextModule}
-          id={id}
-          programaId={programaId}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
-      ),
-      3:
-        modalidad === 'noEscolarizada' ? (
-          <PlataformaEducativa
-            nextModule={nextModule}
-            id={id}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-          />
-        ) : (
-          <Anexos
-            nextModule={nextModule}
-            id={id}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            type={type}
-          />
-        ),
-      4:
-        modalidad === 'escolarizada' ? (
-          <Anexos
-            nextModule={nextModule}
-            id={id}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            type={type}
-          />
-        ) : (
-          <EvaluacionCurricular
-            nextModule={nextModule}
-            id={id}
-            programaId={programaId}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-          />
-        ),
-      5: modalidad === 'noEscolarizada' && (
-        <EvaluacionCurricular
-          nextModule={nextModule}
-          id={id}
-          programaId={programaId}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
-      ),
-    };
-
-    return componentsMap[module] || null;
+    const Component = steps[modalidad][module];
+    return Component ? (
+      <Component
+        nextModule={nextModule}
+        id={id}
+        setId={setId}
+        programaId={programaId}
+        setProgramaId={setProgramaId}
+        type={type}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+      />
+    ) : null;
   };
 
   return (
     <ObservacionesProvider>
       <ModuleHeader
-        steps={
-          modalidad === 'escolarizada'
-            ? steps.escolarizada
-            : steps.noEscolarizada
-        }
+        steps={steps[modalidad].map((component) => getStepName(component))}
         type="Nueva solicitud"
         date="22 de Agosto 2022"
         nextModule={nextModule}
@@ -152,14 +117,10 @@ export default function NuevaSolicitud({
   );
 }
 
-NuevaSolicitud.defaultProps = {
-  solicitudId: '',
-  type: null,
-};
-
 NuevaSolicitud.propTypes = {
-  type: PropTypes.string,
-  solicitudId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  type: PropTypes.string.isRequired,
+  solicitudId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   isLoading: PropTypes.bool.isRequired,
   setIsLoading: PropTypes.func.isRequired,
 };

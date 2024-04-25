@@ -28,7 +28,6 @@ export default function Infraestructura({ disabled, programaId }) {
             query: '',
           });
           if (response && response.data) {
-            console.log(response.data);
             setInfraestructuras(response.data);
           }
         } catch (err) {

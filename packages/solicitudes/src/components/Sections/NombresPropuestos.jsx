@@ -1,13 +1,33 @@
 import { Grid, Typography } from '@mui/material';
-import { Input, InputFile } from '@siiges-ui/shared';
+import { GetFile, Input, InputFile } from '@siiges-ui/shared';
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import PlantelContext from '../utils/Context/plantelContext';
 import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
 
-export default function NombresPropuestos({ disabled, id }) {
+export default function NombresPropuestos({ disabled, id, institucion }) {
   const { form, setForm, setValidNombres } = useContext(PlantelContext);
   const [fileURLs, setFileURLs] = useState([null, null]);
+
+  const fileData = ['BIOGRAFIA', 'BIBLIOGRAFIA'].map((tipoDocumento) => ({
+    entidadId: id,
+    tipoEntidad: 'INSTITUCION',
+    tipoDocumento,
+  }));
+
+  useEffect(() => {
+    fileData.forEach((fileInfo, index) => {
+      GetFile(fileInfo, (url, err) => {
+        if (!err) {
+          setFileURLs((currentURLs) => {
+            const updatedURLs = [...currentURLs];
+            updatedURLs[index] = url;
+            return updatedURLs;
+          });
+        }
+      });
+    });
+  }, [institucion]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +71,7 @@ export default function NombresPropuestos({ disabled, id }) {
             label="Nombre propuesto"
             name="nombrePropuesto1"
             auto="nombrePropuesto1"
-            value={form[6].nombrePropuesto1}
+            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto1}
             onchange={handleOnChange}
             required
             disabled={disabled}
@@ -63,7 +83,7 @@ export default function NombresPropuestos({ disabled, id }) {
             label="Nombre propuesto"
             name="nombrePropuesto2"
             auto="nombrePropuesto2"
-            value={form[6].nombrePropuesto2}
+            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto2}
             onchange={handleOnChange}
             disabled={disabled}
           />
@@ -74,7 +94,7 @@ export default function NombresPropuestos({ disabled, id }) {
             label="Nombre propuesto"
             name="nombrePropuesto3"
             auto="nombrePropuesto3"
-            value={form[6].nombrePropuesto3}
+            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto3}
             onchange={handleOnChange}
             disabled={disabled}
           />
@@ -114,7 +134,28 @@ export default function NombresPropuestos({ disabled, id }) {
   );
 }
 
+NombresPropuestos.defaultProps = {
+  institucion: {
+    ratificacionesNombre: [
+      {
+        nombrePropuesto1: '',
+        nombrePropuesto2: '',
+        nombrePropuesto3: '',
+      },
+    ],
+  },
+};
+
 NombresPropuestos.propTypes = {
   id: PropTypes.number.isRequired,
   disabled: PropTypes.bool.isRequired,
+  institucion: PropTypes.shape({
+    ratificacionesNombre: PropTypes.arrayOf(
+      PropTypes.shape({
+        nombrePropuesto1: PropTypes.string,
+        nombrePropuesto2: PropTypes.string,
+        nombrePropuesto3: PropTypes.string,
+      }),
+    ),
+  }),
 };

@@ -1,6 +1,10 @@
 import { getToken } from '@siiges-ui/shared';
 
-export default function submitEvaluacionCurricular(validations, setNoti, setLoading) {
+export default function submitEvaluacionCurricular(
+  validations,
+  setNoti,
+  setLoading,
+) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const { form, errors } = validations;
@@ -26,8 +30,13 @@ export default function submitEvaluacionCurricular(validations, setNoti, setLoad
     return;
   }
 
-  fetch(`${url}/api/v1/evaluaciones`, {
-    method: 'POST',
+  const method = form.id ? 'PATCH' : 'POST';
+  const endpoint = form.id
+    ? `${url}/api/v1/evaluaciones/${form.id}`
+    : `${url}/api/v1/evaluaciones`;
+
+  fetch(endpoint, {
+    method,
     headers: {
       'Content-Type': 'application/json',
       api_key: apikey,
@@ -57,7 +66,7 @@ export default function submitEvaluacionCurricular(validations, setNoti, setLoad
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Hubo un problema, revise que los campos esten correctos',
+          message: 'Hubo un problema, revise que los campos estén correctos',
           type: 'error',
         });
       }, 1000);

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const PlantelContext = createContext();
 
-export function PlantelProvider({ children, selectedPlantel, institucionId }) {
+export function PlantelProvider({ children, selectedPlantel, institucion }) {
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
   const [disabled, setDisabled] = useState(true);
@@ -32,7 +32,12 @@ export function PlantelProvider({ children, selectedPlantel, institucionId }) {
       })),
     4: {},
     5: {},
-    6: { institucionId, esNombreAutorizado: false },
+    6: {
+      institucionId: institucion?.id,
+      esNombreAutorizado:
+        institucion?.ratificacionesNombre?.[0]?.esNombreAutorizado,
+      ratificacionId: institucion?.ratificacionesNombre?.[0]?.id,
+    },
   });
   const [seguridad, setSeguridad] = useState(
     Array(8)
@@ -120,7 +125,15 @@ export function PlantelProvider({ children, selectedPlantel, institucionId }) {
 PlantelProvider.propTypes = {
   children: PropTypes.node.isRequired,
   selectedPlantel: PropTypes.number.isRequired,
-  institucionId: PropTypes.number.isRequired,
+  institucion: PropTypes.shape({
+    id: PropTypes.number,
+    ratificacionesNombre: PropTypes.arrayOf(
+      PropTypes.shape({
+        esNombreAutorizado: PropTypes.bool,
+        id: PropTypes.number,
+      }),
+    ),
+  }).isRequired,
 };
 
 export default PlantelContext;
