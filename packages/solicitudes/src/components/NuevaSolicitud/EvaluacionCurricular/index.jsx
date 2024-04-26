@@ -12,6 +12,7 @@ export default function EvaluacionCurricular({
   programaId,
   isLoading,
   setIsLoading,
+  type,
 }) {
   const [disabled, setDisabled] = useState(true);
 
@@ -41,7 +42,9 @@ export default function EvaluacionCurricular({
             loading={isLoading}
             setLoading={setIsLoading}
           >
-            {section === 1 && <DatosGeneralesEvaluacion disabled={disabled} />}
+            {section === 1 && (
+              <DatosGeneralesEvaluacion disabled={disabled} id={id} type={type} />
+            )}
           </SectionLayout>
         </EvaluacionCurricularProvider>
       </CardContent>
@@ -60,4 +63,5 @@ EvaluacionCurricular.propTypes = {
   programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   setIsLoading: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };

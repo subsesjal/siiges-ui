@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 function InputNumber({
@@ -21,6 +21,10 @@ function InputNumber({
 }) {
   const [input, setInput] = useState(value);
   const [rangeError, setRangeError] = useState(null);
+
+  useEffect(() => {
+    setInput(value);
+  }, [value]);
 
   const handleOnChange = (e) => {
     const newValue = e.target.value;

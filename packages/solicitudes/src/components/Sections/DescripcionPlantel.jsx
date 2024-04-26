@@ -13,7 +13,6 @@ import PlantelContext from '../utils/Context/plantelContext';
 
 export default function DescripcionPlantel({ plantelesData, disabled }) {
   const {
-    form,
     setForm,
     selectedCheckboxes,
     setSelectedCheckboxes,
@@ -22,25 +21,31 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
   } = useContext(PlantelContext);
 
   useEffect(() => {
-    if (plantelesData?.id) {
-      const fetchData = async () => {
+    const fetchData = async () => {
+      if (plantelesData?.id) {
         try {
-          const response = await getData({
-            endpoint: `/planteles/${plantelesData.id}/niveles`,
-            query: '',
-          });
-          if (response && response.data) {
-            const nivelIds = response.data.map((nivel) => nivel.edificioNivelId);
-            setSelectedCheckboxes(
-              nivelIds.map((edificioNivelId) => ({ edificioNivelId })),
-            );
+          const [nivelesResponse, seguridadResponse] = await Promise.all([
+            getData({ endpoint: `/planteles/${plantelesData.id}/niveles`, query: '' }),
+            getData({ endpoint: `/planteles/${plantelesData.id}/seguridad`, query: '' }),
+          ]);
+          if (nivelesResponse && nivelesResponse.data) {
+            const nivelIds = nivelesResponse.data.map((nivel) => nivel.edificioNivelId);
+            setSelectedCheckboxes(nivelIds.map((edificioNivelId) => ({ edificioNivelId })));
+          }
+          if (seguridadResponse && seguridadResponse.data) {
+            const seguridadData = seguridadResponse.data.map((sec, index) => ({
+              plantelId: plantelesData.id,
+              seguridadSistemaId: index + 1,
+              cantidad: sec.cantidad || 0,
+            }));
+            setSeguridad(seguridadData);
           }
         } catch (err) {
           console.error('Error fetching data:', err);
         }
-      };
-      fetchData();
-    }
+      }
+    };
+    fetchData();
   }, [plantelesData]);
 
   const options = [
@@ -98,7 +103,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             title="Caracteristicas del inmueble"
             name="tipoInmuebleId"
             options={options}
-            value={plantelesData?.tipoInmuebleId || ''}
+            value={plantelesData?.tipoInmuebleId}
             onchange={handleOnChange}
             required
             disabled={disabled}
@@ -110,7 +115,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Dimenciones del Plantel"
             name="dimensiones"
             auto="dimensiones"
-            value={form[2].dimensiones || ''}
+            value={plantelesData?.dimensiones}
             onchange={handleOnChange}
             required
             disabled={disabled}
@@ -150,7 +155,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Recubrimientos plasticos en pisos y escalones"
             name="recubrimientosPlasticos"
             auto="recubrimientosPlasticos"
-            value={seguridad[0].cantidad || ''}
+            value={seguridad[0]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 0)}
             required
             disabled={disabled}
@@ -160,7 +165,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Alarma contra incendios y/o terremotos"
             name="alarmaIncendiosTerremotos"
             auto="alarmaIncendiosTerremotos"
-            value={seguridad[1].cantidad || ''}
+            value={seguridad[1]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 1)}
             required
             disabled={disabled}
@@ -170,7 +175,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Señalamientos de evacuacion"
             name="senalamientosEvacuacion"
             auto="senalamientosEvacuacion"
-            value={seguridad[2].cantidad || ''}
+            value={seguridad[2]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 2)}
             required
             disabled={disabled}
@@ -180,7 +185,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Botiquin"
             name="botiquin"
             auto="botiquin"
-            value={seguridad[3].cantidad || ''}
+            value={seguridad[3]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 3)}
             required
             disabled={disabled}
@@ -190,7 +195,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Escaleras de emergencia"
             name="escalerasEmergencia"
             auto="escalerasEmergencia"
-            value={seguridad[4].cantidad || ''}
+            value={seguridad[4]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 4)}
             required
             disabled={disabled}
@@ -200,7 +205,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Area de seguridad"
             name="areaSeguridad"
             auto="areaSeguridad"
-            value={seguridad[5].cantidad || ''}
+            value={seguridad[5]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 5)}
             required
             disabled={disabled}
@@ -210,7 +215,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Extintores"
             name="extintores"
             auto="extintores"
-            value={seguridad[6].cantidad || ''}
+            value={seguridad[6]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 6)}
             required
             disabled={disabled}
@@ -220,7 +225,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             label="Puntos de reunion para evacuacion"
             name="puntosReunionEvacuacion"
             auto="puntosReunionEvacuacion"
-            value={seguridad[7].cantidad || ''}
+            value={seguridad[7]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 7)}
             required
             disabled={disabled}
@@ -236,5 +241,6 @@ DescripcionPlantel.propTypes = {
   plantelesData: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     tipoInmuebleId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    dimensiones: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,
 };

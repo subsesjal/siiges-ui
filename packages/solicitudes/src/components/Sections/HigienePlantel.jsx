@@ -71,7 +71,7 @@ export default function HigienePlantel({ disabled }) {
             label="Hombres"
             name="hombresAlumnos"
             auto="hombresAlumnos"
-            value={form[3][0].cantidad || ''}
+            value={form[3][0]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 0)}
             disabled={disabled}
           />
@@ -82,7 +82,7 @@ export default function HigienePlantel({ disabled }) {
             label="Mujeres"
             name="mujeresAlumnos"
             auto="mujeresAlumnos"
-            value={form[3][1].cantidad || ''}
+            value={form[3][1]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 1)}
             disabled={disabled}
           />
@@ -100,7 +100,7 @@ export default function HigienePlantel({ disabled }) {
             label="Hombres"
             name="hombresDocentes"
             auto="hombresDocentes"
-            value={form[3][2].cantidad || ''}
+            value={form[3][2]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 2)}
             disabled={disabled}
           />
@@ -111,7 +111,7 @@ export default function HigienePlantel({ disabled }) {
             label="Mujeres"
             name="mujeresDocentes"
             auto="mujeresDocentes"
-            value={form[3][3].cantidad || ''}
+            value={form[3][3]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 3)}
             disabled={disabled}
           />
@@ -127,7 +127,7 @@ export default function HigienePlantel({ disabled }) {
             label="Personas encargadas de la limpieza"
             name="personasLimpieza"
             auto="personasLimpieza"
-            value={form[3][4].cantidad || ''}
+            value={form[3][4]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 4)}
             disabled={disabled}
           />
@@ -138,7 +138,7 @@ export default function HigienePlantel({ disabled }) {
             label="Cestos de basura"
             name="cestosBasura"
             auto="cestosBasura"
-            value={form[3][5].cantidad || ''}
+            value={form[3][5]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 5)}
             disabled={disabled}
           />
@@ -154,7 +154,7 @@ export default function HigienePlantel({ disabled }) {
             label="Numero de aulas"
             name="numeroAulas"
             auto="numeroAulas"
-            value={form[3][6].cantidad || ''}
+            value={form[3][6]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 6)}
             disabled={disabled}
           />
@@ -165,7 +165,7 @@ export default function HigienePlantel({ disabled }) {
             label="Butacas por aula"
             name="butacasAula"
             auto="butacasAula"
-            value={form[3][7].cantidad || ''}
+            value={form[3][7]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 7)}
             disabled={disabled}
           />
@@ -181,7 +181,7 @@ export default function HigienePlantel({ disabled }) {
             label="Ventanas que pueden abrirse por aula"
             name="ventanasAbrenPorAula"
             auto="ventanasAbrenPorAula"
-            value={form[3][8].cantidad || ''}
+            value={form[3][8]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 8)}
             disabled={disabled}
           />
@@ -192,7 +192,7 @@ export default function HigienePlantel({ disabled }) {
             label="Ventiladores"
             name="ventiladores"
             auto="ventiladores"
-            value={form[3][9].cantidad || ''}
+            value={form[3][9]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 9)}
             disabled={disabled}
           />
@@ -203,7 +203,7 @@ export default function HigienePlantel({ disabled }) {
             label="Aire acondicionado"
             name="aireAcondicionado"
             auto="aireAcondicionado"
-            value={form[3][10].cantidad || ''}
+            value={form[3][10]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 10)}
             disabled={disabled}
           />

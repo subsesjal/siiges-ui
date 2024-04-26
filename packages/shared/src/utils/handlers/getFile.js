@@ -20,8 +20,6 @@ export default function GetFile(fileData, callback) {
       callback(data.data ? data.data.url : null, null);
     })
     .catch((error) => {
-      console.error('There was a problem with the fetch operation:', error);
-      // Call the callback with null and the error
       callback(null, error);
     });
 }

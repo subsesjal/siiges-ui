@@ -41,7 +41,11 @@ export default function Plantel({
           ))
       ) {
         setRatificacion(
-          <NombresPropuestos disabled={disabled} id={institucion.id} />,
+          <NombresPropuestos
+            disabled={disabled}
+            id={institucion.id}
+            institucion={institucion}
+          />,
         );
       }
     }
@@ -68,7 +72,7 @@ export default function Plantel({
       <CardContent>
         <PlantelProvider
           selectedPlantel={selectedPlantel}
-          institucionId={institucion?.id}
+          institucion={institucion}
         >
           <SectionLayout
             sectionTitle="Plantel"

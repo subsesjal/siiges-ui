@@ -1,23 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, TextField, Typography } from '@mui/material';
-import { Input, InputFile, InputNumber } from '@siiges-ui/shared';
+import {
+  Input,
+  InputDateTime,
+  InputFile,
+  InputNumber,
+} from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
 import errorDatosGeneralesEvaluacion from '../utils/sections/errors/errorDatosGeneralesEvaluacion';
 import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularContext';
 import getEvaluadores from '../utils/getEvaluadores';
 import useCumplimiento from '../utils/getCumplimiento';
+import getSolicitudesById from '../utils/getSolicitudesById';
 
-export default function DatosGeneralesEvaluacion({ disabled }) {
+export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
   const {
     form, setForm, error, setError, setErrors,
   } = useEvaluacionCurricular();
   const [initialValues, setInitialValues] = useState({});
   const [fetchCumplimiento, setFetchCumplimiento] = useState(false);
+  const { solicitudes } = getSolicitudesById(id);
   const router = useRouter();
   const { query } = router;
-  const { modalidad } = query;
+
+  useEffect(() => {
+    const modalidadSource = type === 'editar' ? solicitudes?.programa?.modalidadId : query.modalidad;
+    if (type === 'editar' && solicitudes?.programa?.evaluacion?.id) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        modalidad: modalidadSource,
+        id: solicitudes.programa.evaluacion.id,
+        evaluadorId: solicitudes.programa.evaluacion.evaluadorId,
+        numero: solicitudes.programa.evaluacion.numero,
+        valoracion: solicitudes.programa.evaluacion.valoracion,
+        fecha: solicitudes.programa.evaluacion.fecha,
+      }));
+      setFetchCumplimiento((prev) => !prev);
+    }
+  }, [solicitudes]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -33,7 +55,7 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
     const { name, value } = e.target;
     const initialValue = initialValues[name];
 
-    if (name === 'cumplimientoNumerico') {
+    if (name === 'numero') {
       setFetchCumplimiento((prev) => !prev);
     }
 
@@ -43,8 +65,8 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
   };
 
   const { cumplimiento } = useCumplimiento(
-    modalidad,
-    form.cumplimientoNumerico,
+    form.modalidad,
+    form.numero,
     fetchCumplimiento,
   );
 
@@ -87,7 +109,7 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={3}>
-          <Input
+          <InputDateTime
             id="fecha"
             label="Fecha de dictamen"
             name="fecha"
@@ -105,7 +127,7 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
           <BasicSelect
             title="Evaluador"
             name="evaluadorId"
-            value={form ? form.evaluadorId : ''}
+            value={form.evaluadorId || ''}
             options={evaluadoresData}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -115,22 +137,22 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
             required
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <InputNumber
-            id="cumplimientoNumerico"
+            id="numero"
             label="Cumplimiento numerico"
-            name="cumplimientoNumerico"
-            value={form.cumplimientoNumerico}
+            name="numero"
+            value={form.numero}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            errorMessage={error.cumplimientoNumerico}
+            errorMessage={error.numero}
             min={50}
             max={250}
             required
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Input
             id="porcentaje"
             label="Porcentaje"
@@ -139,7 +161,7 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
             disabled
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <Input
             id="calificacion"
             label="Calificacion"
@@ -150,10 +172,10 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="valoracionCualitativa"
+            id="valoracion"
             label="Valoración cualitativa"
-            name="valoracionCualitativa"
-            value={form.valoracionCualitativa}
+            name="valoracion"
+            value={form.valoracion}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleInputFocus}
@@ -161,8 +183,8 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
             rows={4}
             sx={{ width: '100%' }}
             disabled={disabled}
-            helperText={error.valoracionCualitativa}
-            error={!!error.valoracionCualitativa}
+            helperText={error.valoracion}
+            error={!!error.valoracion}
             required
           />
         </Grid>
@@ -184,6 +206,12 @@ export default function DatosGeneralesEvaluacion({ disabled }) {
   );
 }
 
+DatosGeneralesEvaluacion.defaultProps = {
+  id: null,
+};
+
 DatosGeneralesEvaluacion.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  id: PropTypes.number,
+  type: PropTypes.string.isRequired,
 };

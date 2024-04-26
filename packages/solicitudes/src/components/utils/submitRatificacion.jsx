@@ -2,7 +2,7 @@ import { getToken } from '@siiges-ui/shared';
 
 export default function submitRatificacion(validations, setNoti, setLoading) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  const url = process.env.NEXT_PUBLIC_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_URL;
   const { form, validNombres } = validations;
   const token = getToken();
 
@@ -16,8 +16,14 @@ export default function submitRatificacion(validations, setNoti, setLoading) {
     return;
   }
 
-  fetch(`${url}/api/v1/instituciones/${form[6].institucionId}/ratificaciones`, {
-    method: 'POST',
+  const { ratificacionId } = form[6];
+  const method = ratificacionId ? 'PATCH' : 'POST';
+  const endpoint = ratificacionId
+    ? `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones/${ratificacionId}`
+    : `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones`;
+
+  fetch(endpoint, {
+    method,
     headers: {
       'Content-Type': 'application/json',
       api_key: apikey,
