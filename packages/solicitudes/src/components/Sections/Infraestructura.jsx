@@ -24,7 +24,7 @@ export default function Infraestructura({ disabled, programaId }) {
       const fetchData = async () => {
         try {
           const response = await getData({
-            endpoint: `/planteles/${plantelId}/infraestructuras`,
+            endpoint: `/planteles/${plantelId}/programas/${programaId}/infraestructuras`,
             query: '',
           });
           if (response && response.data) {
@@ -46,16 +46,11 @@ export default function Infraestructura({ disabled, programaId }) {
       metros: item.metros,
       recursos: item.recursos,
       ubicacion: item.ubicacion,
-      asignaturas: item.asignaturaInfraestructura?.map(
+      asignaturas: item.asignaturasInfraestructura?.map(
         (asignaturaId) => asignaturaId,
       ),
     })),
     [infraestructuras],
-  );
-
-  const tableColumns = useMemo(
-    () => columns(setInfraestructuras, infraestructuras),
-    [setInfraestructuras, infraestructuras],
   );
 
   return (
@@ -69,7 +64,7 @@ export default function Infraestructura({ disabled, programaId }) {
           buttonText="Agregar"
           buttonClick={showModal}
           rows={rows}
-          columns={tableColumns}
+          columns={columns(programaId)}
           pageSize={5}
           rowsPerPageOptions={[5]}
         />

@@ -63,12 +63,12 @@ export default function errorDatosInfraestructuras(form, setError, error) {
       setError({ ...error, recursos: '' });
       return true;
     },
-    asignaturaInfraestructura: () => {
-      if (form.asignaturaInfraestructura === undefined || form.asignaturaInfraestructura === '') {
-        setError({ ...error, asignaturaInfraestructura: 'Asignaturas invalidas' });
+    asignaturasInfraestructuras: () => {
+      if (form.asignaturasInfraestructuras === undefined || form.asignaturasInfraestructuras === '') {
+        setError({ ...error, asignaturasInfraestructuras: 'Asignaturas invalidas' });
         return false;
       }
-      setError({ ...error, asignaturaInfraestructura: '' });
+      setError({ ...error, asignaturasInfraestructuras: '' });
       return true;
     },
   };

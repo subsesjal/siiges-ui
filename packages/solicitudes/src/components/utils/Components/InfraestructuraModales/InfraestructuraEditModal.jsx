@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { Grid, TextField } from '@mui/material';
-import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
-import BasicSelect from '@siiges-ui/shared/src/components/Select';
+import { Grid } from '@mui/material';
+import {
+  DefaultModal, ButtonStyled, Context, Select,
+  getData,
+} from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import handleEdit from '../../submitEditAsignaturas';
 import PlantelContext from '../../Context/plantelContext';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
@@ -14,7 +15,7 @@ export default function InfraestructuraEditModal({
   open,
   hideModal,
   edit,
-  rowItem,
+  id,
   programaId,
 }) {
   const {
@@ -28,10 +29,25 @@ export default function InfraestructuraEditModal({
     initialValues,
     setInitialValues,
   } = useContext(PlantelContext);
-
+  const disabled = edit === 'Consultar Infraestructura';
   const { setNoti } = useContext(Context);
-  const { query } = useRouter();
-  const asignaturas = getAsignaturas(programaId);
+  const { plantelId } = useContext(PlantelContext);
+  const { asignaturasTotal } = getAsignaturas(programaId);
+
+  useEffect(() => {
+    if (plantelId && id && programaId) {
+      const endpoint = `/planteles/${plantelId}/infraestructuras/${id}`;
+
+      const fetchData = async () => {
+        const data = await getData({ endpoint, query: '' });
+        if (data && data.data) {
+          setFormInfraestructuras(data.data);
+        }
+      };
+
+      fetchData().catch(console.error);
+    }
+  }, [plantelId, programaId, id]);
 
   const instalacion = [
     { id: 1, nombre: 'Aula' },
@@ -48,10 +64,6 @@ export default function InfraestructuraEditModal({
     { id: 12, nombre: 'Area administrativa' },
     { id: 13, nombre: 'Archivo muerto' },
   ];
-
-  useEffect(() => {
-    setFormInfraestructuras(rowItem);
-  }, [rowItem]);
 
   const errorsInfraestructura = errorDatosInfraestructuras(
     formInfraestructuras,
@@ -96,7 +108,7 @@ export default function InfraestructuraEditModal({
       hideModal,
       errors,
       setNoti,
-      query.plantel,
+      plantelId,
     );
   };
 
@@ -104,15 +116,16 @@ export default function InfraestructuraEditModal({
     <DefaultModal open={open} setOpen={hideModal} title={edit}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <BasicSelect
+          <Select
             title="Instalación"
             name="tipoInstalacionId"
-            value=""
+            value={formInfraestructuras.tipoInstalacionId}
             options={instalacion}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.tipoInstalacionId}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -121,11 +134,13 @@ export default function InfraestructuraEditModal({
             label="Nombre"
             name="nombre"
             auto="nombre"
+            value={formInfraestructuras.nombre}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.nombre}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -134,11 +149,13 @@ export default function InfraestructuraEditModal({
             label="Capacidad"
             name="capacidad"
             auto="capacidad"
+            value={formInfraestructuras.capacidad}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.capacidad}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -147,11 +164,13 @@ export default function InfraestructuraEditModal({
             label="Metros cuadrados"
             name="metros"
             auto="metros"
+            value={formInfraestructuras.metros}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.metros}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -160,37 +179,43 @@ export default function InfraestructuraEditModal({
             label="Ubicacion"
             name="ubicacion"
             auto="ubicacion"
+            value={formInfraestructuras.ubicacion}
             onchange={handleOnChange}
             errorMessage={error.ubicacion}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="recursos"
             name="recursos"
             label="Recursos materiales"
             rows={4}
+            multiline
             sx={{ width: '100%' }}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            value={formInfraestructuras.recursos}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             helperText={error.recursos}
             error={!!error.recursos}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
-          <BasicSelect
+          <Select
             title="Asignatura que atiende"
-            name="asignaturaInfraestructura"
+            name="asignaturasInfraestructuras"
             multiple
-            value={[]}
-            options={asignaturas.asignaturas}
+            value={formInfraestructuras.asignaturasInfraestructura || []}
+            options={asignaturasTotal}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.asignaturaInfraestructura}
+            errorMessage={error.asignaturasInfraestructuras}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item>
@@ -217,19 +242,6 @@ InfraestructuraEditModal.propTypes = {
   open: PropTypes.bool.isRequired,
   edit: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
-  rowItem: PropTypes.shape({
-    grado: PropTypes.string,
-    area: PropTypes.number,
-    nombre: PropTypes.string,
-    clave: PropTypes.string,
-    creditos: PropTypes.string,
-    formacionEspecializada: PropTypes.string,
-    seriacion: PropTypes.string,
-    horasDocente: PropTypes.number,
-    horasIndependiente: PropTypes.number,
-  }).isRequired,
-  programaId: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([undefined]),
-  ]).isRequired,
+  id: PropTypes.number.isRequired,
+  programaId: PropTypes.number.isRequired,
 };
