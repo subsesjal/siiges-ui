@@ -9,11 +9,11 @@ import Title from '../Title';
 import { Context } from '../../utils/handlers/context';
 
 export default function Overlay({
-  children, title, subtitle, type, loading,
+  children, title, subtitle, type,
 }) {
   const [open, setOpen] = useState(false);
   const {
-    session, section, setSection,
+    session, section, setSection, loading,
   } = useContext(Context);
 
   const onClickChange = () => {
@@ -92,7 +92,6 @@ Overlay.defaultProps = {
   type: true,
   title: '',
   subtitle: '',
-  loading: false,
 };
 
 Overlay.propTypes = {
@@ -100,5 +99,4 @@ Overlay.propTypes = {
   title: PropTypes.string,
   type: PropTypes.bool,
   subtitle: PropTypes.string,
-  loading: PropTypes.bool,
 };

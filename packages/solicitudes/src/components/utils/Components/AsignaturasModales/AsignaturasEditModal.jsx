@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
+import {
+  DefaultModal, ButtonStyled, validateField, Context,
+} from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
@@ -24,7 +26,9 @@ export default function AsignaturasEditModal({
     setError,
     setInitialValues,
     setNoti,
+    programaId,
   } = useContext(TablesPlanEstudiosContext);
+  const { setLoading } = useContext(Context);
   const selectedGrade = grados.semestral;
 
   useEffect(() => {
@@ -76,8 +80,9 @@ export default function AsignaturasEditModal({
       setAsignaturasList,
       hideModal,
       setNoti,
-      rowItem.id,
+      programaId,
       1,
+      setLoading,
     );
   };
 

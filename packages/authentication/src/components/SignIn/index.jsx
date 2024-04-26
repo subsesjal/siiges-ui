@@ -9,7 +9,7 @@ import Link from 'next/link';
 import submitNewLogin from '../../utils/submitNewLogin';
 
 export default function SignIn() {
-  const { activateAuth } = useContext(Context);
+  const { activateAuth, setLoading } = useContext(Context);
   const [errorMessages, setErrorMessages] = useState({});
   const [form, setForm] = useState({ usuario: '', contrasena: '' });
 
@@ -24,7 +24,7 @@ export default function SignIn() {
   };
 
   const handleSubmit = () => {
-    submitNewLogin(form, errors, setErrorMessages, activateAuth);
+    submitNewLogin(form, errors, setErrorMessages, activateAuth, setLoading);
   };
 
   return (

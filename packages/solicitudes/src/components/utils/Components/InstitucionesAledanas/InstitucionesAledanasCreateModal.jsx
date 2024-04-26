@@ -25,7 +25,7 @@ export default function InstitucionesAledanasCreateModal({
     setInitialValues,
     plantelId,
   } = useContext(PlantelContext);
-  const { setNoti } = useContext(Context);
+  const { setNoti, setLoading } = useContext(Context);
 
   const errorsInstitucionesAledanas = errorDatosInstitucionAledanas(
     formInstitucionesAledanas,
@@ -78,6 +78,7 @@ export default function InstitucionesAledanasCreateModal({
       errors,
       setNoti,
       plantelId,
+      setLoading,
     );
   };
 

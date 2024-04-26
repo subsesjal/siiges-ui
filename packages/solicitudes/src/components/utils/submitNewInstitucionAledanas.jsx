@@ -9,6 +9,7 @@ const handleCreate = (
   errors,
   setNoti,
   plantelId,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -25,6 +26,9 @@ const handleCreate = (
     return;
   }
 
+  hideModal();
+  setLoading(true);
+
   fetch(`${url}/api/v1/planteles/${plantelId}/saludInstituciones`, {
     method: 'POST',
     headers: {
@@ -36,15 +40,24 @@ const handleCreate = (
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const newData = { ...form, id: data.data.id };
       setInstitucionesAledanas((prevList) => [...prevList, newData]);
       setForm({ plantelId });
       setInitialValues({});
-      hideModal();
+      setNoti({
+        open: true,
+        message: 'Se añadio institución aledaña con exito',
+        type: 'success',
+      });
+      setLoading(false);
     })
     .catch((error) => {
-      console.error('Error:', error);
+      setNoti({
+        open: true,
+        message: `Algo salio mal: ${error}`,
+        type: 'error',
+      });
+      setLoading(false);
     });
 };
 
