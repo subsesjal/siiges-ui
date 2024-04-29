@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { Grid, TextField } from '@mui/material';
+import { Grid } from '@mui/material';
 import {
   DefaultModal, ButtonStyled, Context, Select,
 } from '@siiges-ui/shared';
@@ -30,7 +30,11 @@ export default function InfraestructuraCreateModal({
     plantelId,
   } = useContext(PlantelContext);
 
-  const { setNoti } = useContext(Context);
+  useEffect(() => {
+    setFormInfraestructuras({});
+  }, []);
+
+  const { setNoti, setLoading } = useContext(Context);
   const { asignaturasTotal } = getAsignaturas(programaId);
 
   const errorsInfraestructura = errorDatosInfraestructuras(
@@ -59,6 +63,9 @@ export default function InfraestructuraCreateModal({
     const { name, value } = e.target;
     setFormInfraestructuras((prevData) => {
       const newData = { ...prevData };
+      if (name === 'tipoInstalacionId' && value === 1) {
+        newData.programaId = programaId;
+      }
 
       if (name === 'asignaturasInfraestructuras') {
         const newValue = Array.isArray(value) ? value : [value];
@@ -101,6 +108,7 @@ export default function InfraestructuraCreateModal({
       errors,
       setNoti,
       plantelId,
+      setLoading,
     );
   };
 
@@ -170,15 +178,16 @@ export default function InfraestructuraCreateModal({
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="recursos"
             name="recursos"
             label="Recursos materiales"
             rows={4}
+            multiline
             sx={{ width: '100%' }}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             helperText={error.recursos}
             error={!!error.recursos}
             required

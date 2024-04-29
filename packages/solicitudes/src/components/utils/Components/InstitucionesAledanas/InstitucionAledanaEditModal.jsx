@@ -26,11 +26,13 @@ export default function InstitucionAledanaEditModal({
     plantelId,
   } = useContext(PlantelContext);
 
-  const { setNoti } = useContext(Context);
+  const { setNoti, setLoading } = useContext(Context);
 
   useEffect(() => {
-    setFormInstitucionesAledanas(rowItem);
-  }, [rowItem]);
+    if (rowItem) {
+      setFormInstitucionesAledanas(rowItem);
+    }
+  }, []);
 
   const errorsInstitucionAledana = errorDatosInstitucionAledanas(
     formInstitucionesAledanas,
@@ -45,6 +47,7 @@ export default function InstitucionAledanaEditModal({
   }, [error]);
 
   const handleOnChange = (e) => {
+    console.log(formInstitucionesAledanas);
     const { name, value } = e.target;
     setFormInstitucionesAledanas((prevData) => ({
       ...prevData,
@@ -76,6 +79,7 @@ export default function InstitucionAledanaEditModal({
       errors,
       setNoti,
       plantelId,
+      setLoading,
     );
   };
 
@@ -88,7 +92,7 @@ export default function InstitucionAledanaEditModal({
             label="Nombre(s)"
             name="nombre"
             auto="nombre"
-            value={rowItem?.nombre}
+            value={formInstitucionesAledanas.nombre || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -103,7 +107,7 @@ export default function InstitucionAledanaEditModal({
             name="tiempo"
             auto="tiempo"
             type="time"
-            value={rowItem?.tiempo}
+            value={formInstitucionesAledanas.tiempo || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
