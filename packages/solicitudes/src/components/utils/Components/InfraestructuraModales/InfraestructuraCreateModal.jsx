@@ -67,9 +67,9 @@ export default function InfraestructuraCreateModal({
         newData.programaId = programaId;
       }
 
-      if (name === 'asignaturasInfraestructuras') {
+      if (name === 'asignaturasInfraestructura') {
         const newValue = Array.isArray(value) ? value : [value];
-        newData.asignaturasInfraestructuras = newValue;
+        newData.asignaturasInfraestructura = newValue;
       } else {
         newData[name] = value;
       }
@@ -196,12 +196,12 @@ export default function InfraestructuraCreateModal({
         <Grid item xs={12}>
           <Select
             title="Asignatura que atiende"
-            name="asignaturasInfraestructuras"
+            name="asignaturasInfraestructura"
             multiple
             options={asignaturasTotal}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.asignaturasInfraestructuras}
+            errorMessage={error.asignaturasInfraestructura}
             required
           />
         </Grid>
