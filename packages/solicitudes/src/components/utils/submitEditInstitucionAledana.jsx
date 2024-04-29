@@ -15,10 +15,14 @@ const handleEdit = async (
   errors,
   setNoti,
   plantelId,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = buildApiUrl(form.id, plantelId);
   const token = getToken();
+
+  hideModal();
+  setLoading(true);
 
   try {
     const isFormValid = Object.keys(errors).every((campo) => errors[campo]());
@@ -55,20 +59,19 @@ const handleEdit = async (
 
     setForm({ plantelId });
     setInitialValues({});
-    hideModal();
     setNoti({
       open: true,
       message: 'Exito, no hubo problemas en esta sección',
       type: 'success',
     });
+    setLoading(false);
   } catch (error) {
-    console.error('Error:', error);
     setNoti({
       open: true,
-      message:
-        'Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo más tarde.',
+      message: `Ocurrió un error al guardar los datos: ${error}`,
       type: 'error',
     });
+    setLoading(false);
   }
 };
 

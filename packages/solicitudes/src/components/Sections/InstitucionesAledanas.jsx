@@ -18,7 +18,7 @@ export default function InstitucionesAledanas({ disabled, programaId }) {
       getData({ endpoint: `/planteles/${plantelId}/saludInstituciones` })
         .then((data) => {
           if (data && data.data.length > 0) {
-            setRows(data.data);
+            setInstitucionesAledanas(data.data);
           }
           setLoading(false);
         })

@@ -12,7 +12,13 @@ export default function InstitucionesAledanasButtons({ id }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const { institucionesAledanas } = useContext(PlantelContext);
-  const rowItem = institucionesAledanas.find((item) => item.id === id);
+  const rowItem = institucionesAledanas.find((item) => item.id === id)
+    ? {
+      id: institucionesAledanas.find((item) => item.id === id).id,
+      nombre: institucionesAledanas.find((item) => item.id === id).nombre,
+      tiempo: institucionesAledanas.find((item) => item.id === id).tiempo,
+    }
+    : null;
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);

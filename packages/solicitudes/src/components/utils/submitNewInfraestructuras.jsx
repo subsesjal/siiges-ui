@@ -9,6 +9,7 @@ const handleCreate = (
   errors,
   setNoti,
   plantelId,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -25,6 +26,9 @@ const handleCreate = (
     return;
   }
 
+  hideModal();
+  setLoading(true);
+
   fetch(`${url}/api/v1/planteles/${plantelId}/infraestructuras`, {
     method: 'POST',
     headers: {
@@ -40,12 +44,12 @@ const handleCreate = (
       setInfraestructuras((prevList) => [...prevList, newData]);
       setForm({ plantelId });
       setInitialValues({});
-      hideModal();
       setNoti({
         open: true,
         message: 'Se creo la infraestructura exitosamente',
         type: 'success',
       });
+      setLoading(false);
     })
     .catch((error) => {
       setNoti({
@@ -53,6 +57,7 @@ const handleCreate = (
         message: `Ocurrio un error al cargar los datos: ${error}`,
         type: 'error',
       });
+      setLoading(false);
     });
 };
 
