@@ -14,12 +14,26 @@ export default function HigienePlantel({ disabled }) {
       getData({ endpoint: `/planteles/${plantelId}/higienes` })
         .then((data) => {
           if (data && data.data.length > 0) {
-            const sortedData = data.data.sort((a, b) => a.higieneId - b.higieneId);
+            const sortedData = data.data.sort(
+              (a, b) => a.higieneId - b.higieneId,
+            );
+            const filledData = new Array(11).fill(null).map((_, index) => {
+              const item = sortedData[index];
+              return {
+                higieneId: item ? item.higieneId : index + 1,
+                cantidad: item ? item.cantidad : 0,
+              };
+            });
             setForm((prevForm) => ({
               ...prevForm,
-              3: sortedData.map((item, index) => ({
-                higieneId: item.higieneId || index + 1,
-                cantidad: item.cantidad || 0,
+              3: filledData,
+            }));
+          } else {
+            setForm((prevForm) => ({
+              ...prevForm,
+              3: new Array(11).fill(null).map((_, index) => ({
+                higieneId: index + 1,
+                cantidad: 0,
               })),
             }));
           }

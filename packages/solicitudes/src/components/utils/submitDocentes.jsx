@@ -11,6 +11,7 @@ const handleSubmit = (
   programaId,
   setCurrentSection,
   mode,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -20,7 +21,8 @@ const handleSubmit = (
   const method = isEditMode ? 'PATCH' : 'POST';
   const endpoint = isEditMode ? `${url}/api/v1/docentes/${form.id}` : `${url}/api/v1/docentes`;
 
-  console.log(form);
+  setLoading(true);
+  hideModal();
 
   fetch(endpoint, {
     method,
@@ -56,9 +58,16 @@ const handleSubmit = (
         });
       }
       setCurrentSection(1);
-      hideModal();
+      setForm({
+        esAceptado: true,
+        programaId,
+        asignaturasDocentes: [],
+        formacionesDocentes: [],
+      });
+      setLoading(false);
     })
     .catch((error) => {
+      setLoading(false);
       setNoti({
         open: true,
         message: `Error al enviar Docente: ${error.message}`,

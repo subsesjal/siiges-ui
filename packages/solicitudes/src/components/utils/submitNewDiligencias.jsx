@@ -7,10 +7,12 @@ const handleCreate = (
   setDiligenciasRows,
   hideModal,
   setNoti,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const token = getToken();
+  hideModal();
 
   fetch(`${url}/api/v1/diligencias`, {
     method: 'POST',
@@ -26,20 +28,20 @@ const handleCreate = (
       setDiligencias((prevList) => [...prevList, data.data]);
       const newRow = DiligenciasToRows(data.data);
       setDiligenciasRows((prevRows) => [...prevRows, newRow]);
-      hideModal();
       setNoti({
         open: true,
         message: 'Exito, no hubo problemas en esta sección',
         type: 'success',
       });
+      setLoading(false);
     })
     .catch((error) => {
-      console.error('Error:', error);
       setNoti({
         open: true,
-        message: 'Algo salio mal, revisa que los campos esten correctos',
+        message: `Algo salio mal, revisa que los campos esten correctos: ${error}`,
         type: 'error',
       });
+      setLoading(false);
     });
 };
 

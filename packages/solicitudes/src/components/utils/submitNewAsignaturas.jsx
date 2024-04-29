@@ -8,10 +8,15 @@ const handleCreate = async (
   hideModal,
   setNoti,
   tipo,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const token = getToken();
+
+  hideModal();
+
+  setLoading(true);
 
   try {
     const response = await fetch(`${url}/api/v1/asignaturas`, {
@@ -31,6 +36,7 @@ const handleCreate = async (
           'Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo.',
         type: 'error',
       });
+      setLoading(false);
       throw new Error('Network error');
     }
 
@@ -41,13 +47,13 @@ const handleCreate = async (
     setForm({ programaId: data.data.programaId, tipo, areaId: data.data.areaId });
     setInitialValues({});
 
-    hideModal();
-
     setNoti({
       open: true,
       message: 'Guardado de datos exitoso!',
       type: 'success',
     });
+
+    setLoading(false);
 
     return newData;
   } catch (error) {

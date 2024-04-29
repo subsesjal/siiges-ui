@@ -29,33 +29,42 @@ export default function DiligenciasFormModal({
     setError,
     error,
   } = useContext(DatosGeneralesContext);
-  const { setNoti } = useContext(Context);
+  const { setNoti, setLoading } = useContext(Context);
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     if (mode !== 'create' && diligencias) {
       const rowItem = diligencias.find((item) => item.id === id);
-      const rowItemValues = {
-        solicitudId: rowItem.solicitudId,
-        personaId: rowItem.personaId,
-        horaInicio: rowItem.horaInicio,
-        horaFin: rowItem.horaFin,
-        persona: {
-          nombre: rowItem.persona.nombre,
-          apellidoPaterno: rowItem.persona.apellidoPaterno,
-          apellidoMaterno: rowItem.persona.apellidoMaterno,
-          tituloCargo: rowItem.persona.tituloCargo,
-          correoPrimario: rowItem.persona.correoPrimario,
-          telefono: rowItem.persona.telefono,
-          celular: rowItem.persona.celular,
-        },
-      };
-      setFormDiligencias(rowItemValues);
-      if (mode === 'consult') {
-        setDisabled(true);
+
+      if (rowItem) {
+        const rowItemValues = {
+          solicitudId: rowItem.solicitudId,
+          personaId: rowItem.personaId,
+          horaInicio: rowItem.horaInicio,
+          horaFin: rowItem.horaFin,
+          persona: {
+            nombre: rowItem.persona.nombre,
+            apellidoPaterno: rowItem.persona.apellidoPaterno,
+            apellidoMaterno: rowItem.persona.apellidoMaterno,
+            tituloCargo: rowItem.persona.tituloCargo,
+            correoPrimario: rowItem.persona.correoPrimario,
+            telefono: rowItem.persona.telefono,
+            celular: rowItem.persona.celular,
+          },
+        };
+        setFormDiligencias(rowItemValues);
+        if (mode === 'consult') {
+          setDisabled(true);
+        }
+      } else {
+        setNoti({
+          open: true,
+          message: 'No se encontro esta diligencia',
+          type: 'error',
+        });
       }
     }
-  }, [diligencias]);
+  }, [diligencias, mode, id]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -111,6 +120,7 @@ export default function DiligenciasFormModal({
   const handleOnSubmit = () => {
     const allFieldsValid = Object.keys(error).every((key) => !error[key]);
     if (allFieldsValid) {
+      setLoading(true);
       if (mode === 'edit') {
         handleEdit(
           formDiligencias,
@@ -119,6 +129,7 @@ export default function DiligenciasFormModal({
           hideModal,
           setNoti,
           id,
+          setLoading,
         );
       } else {
         handleCreate(
@@ -127,6 +138,7 @@ export default function DiligenciasFormModal({
           setDiligenciasRows,
           hideModal,
           setNoti,
+          setLoading,
         );
       }
     } else {

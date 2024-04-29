@@ -1,6 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
+import {
+  DefaultModal,
+  ButtonStyled,
+  validateField,
+  Context,
+} from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
@@ -18,6 +23,7 @@ export default function AsignaturasFormacionEditModal({
   const {
     error,
     setError,
+    programaId,
     formAsignaturasFormacion,
     setFormAsignaturasFormacion,
     setInitialValues,
@@ -26,6 +32,7 @@ export default function AsignaturasFormacionEditModal({
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
   const selectedGrade = grados.semestral;
+  const { setLoading } = useContext(Context);
 
   useEffect(() => {
     const rowItemValues = {
@@ -52,7 +59,12 @@ export default function AsignaturasFormacionEditModal({
 
   const handleOnBlur = (e) => {
     const { name } = e.target;
-    validateField(formAsignaturasFormacion, name, setError, errorDatosAsignaturas);
+    validateField(
+      formAsignaturasFormacion,
+      name,
+      setError,
+      errorDatosAsignaturas,
+    );
   };
 
   const handleOnSubmit = () => {
@@ -75,8 +87,9 @@ export default function AsignaturasFormacionEditModal({
       setAsignaturasFormacionList,
       hideModal,
       setNoti,
-      rowItem.id,
+      programaId,
       1,
+      setLoading,
     );
   };
 

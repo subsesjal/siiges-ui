@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
+import {
+  DefaultModal, ButtonStyled, validateField, Context,
+} from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
@@ -21,6 +23,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
   const selectedGrade = grados.semestral;
+  const { setLoading } = useContext(Context);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -57,6 +60,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         hideModal,
         setNoti,
         1,
+        setLoading,
       );
     } catch (err) {
       console.error('Submission failed:', err);

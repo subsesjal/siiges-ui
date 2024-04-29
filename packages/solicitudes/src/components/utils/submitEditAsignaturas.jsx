@@ -9,10 +9,14 @@ const handleEdit = async (
   setNoti,
   programaId,
   tipo,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const token = getToken();
+
+  setLoading(true);
+  hideModal();
 
   try {
     const response = await fetch(`${url}/api/v1/asignaturas/${form.id}`, {
@@ -44,7 +48,7 @@ const handleEdit = async (
 
     setForm({ programaId, tipo, areaId: data.data.areaId });
     setInitialValues({});
-    hideModal();
+    setLoading(false);
 
     setNoti({
       open: true,
@@ -53,7 +57,7 @@ const handleEdit = async (
     });
   } catch (error) {
     console.error('Error:', error);
-
+    setLoading(false);
     setNoti({
       open: true,
       message:

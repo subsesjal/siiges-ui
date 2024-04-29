@@ -29,6 +29,7 @@ export default function InfraestructuraCreateModal({
     setInitialValues,
     plantelId,
   } = useContext(PlantelContext);
+
   const { setNoti } = useContext(Context);
   const { asignaturasTotal } = getAsignaturas(programaId);
 
@@ -59,9 +60,9 @@ export default function InfraestructuraCreateModal({
     setFormInfraestructuras((prevData) => {
       const newData = { ...prevData };
 
-      if (name === 'asignaturaInfraestructura') {
+      if (name === 'asignaturasInfraestructuras') {
         const newValue = Array.isArray(value) ? value : [value];
-        newData.asignaturaInfraestructura = newValue;
+        newData.asignaturasInfraestructuras = newValue;
       } else {
         newData[name] = value;
       }
@@ -186,12 +187,12 @@ export default function InfraestructuraCreateModal({
         <Grid item xs={12}>
           <Select
             title="Asignatura que atiende"
-            name="asignaturaInfraestructura"
+            name="asignaturasInfraestructuras"
             multiple
             options={asignaturasTotal}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.asignaturaInfraestructura}
+            errorMessage={error.asignaturasInfraestructuras}
             required
           />
         </Grid>

@@ -8,10 +8,12 @@ const handleEdit = (
   hideModal,
   setNoti,
   id,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const token = getToken();
+  hideModal();
 
   fetch(`${url}/api/v1/diligencias/${id}`, {
     method: 'PATCH',
@@ -34,21 +36,20 @@ const handleEdit = (
       setDiligenciasRows((prevRows) => prevRows.map((row) => (row.id === updatedDiligencia.id
         ? DiligenciasToRows(updatedDiligencia)
         : row)));
-
-      hideModal();
       setNoti({
         open: true,
         message: 'Éxito, no hubo problemas en esta sección',
         type: 'success',
       });
+      setLoading(false);
     })
     .catch((error) => {
-      console.error('Error:', error);
       setNoti({
         open: true,
-        message: 'Algo salió mal, revisa que los campos estén correctos',
+        message: `Algo salió mal, revisa que los campos estén correctos: ${error}`,
         type: 'error',
       });
+      setLoading(false);
     });
 };
 

@@ -1,7 +1,8 @@
-function submitNewLogin(form, errors, setErrorMessages, activateAuth) {
+function submitNewLogin(form, errors, setErrorMessages, activateAuth, setLoading) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   if (form.usuario !== '' && form.contrasena !== '') {
+    setLoading(true);
     fetch(`${url}/api/v1/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', api_key: apikey },
@@ -26,6 +27,11 @@ function submitNewLogin(form, errors, setErrorMessages, activateAuth) {
       })
       .catch((err) => {
         console.error('Error:', err);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
       });
   }
 }

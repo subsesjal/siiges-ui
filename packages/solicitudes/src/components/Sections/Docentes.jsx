@@ -4,7 +4,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import columns from './Mocks/Docentes';
-import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useDocentes from '../utils/getDocentes';
 import DocentesModal from '../utils/Components/DocentesModales/DocentesModal';
@@ -14,7 +13,6 @@ export default function Docentes({ disabled, type }) {
   const [modal, setModal] = useState(false);
   const { programaId } = useContext(SolicitudContext);
   const [docentesList, setDocentesList] = useState([]);
-  const { setFormDocentes } = useContext(TablesPlanEstudiosContext);
   const docentesData = useDocentes(programaId);
   const { docentesTable, loading } = type === 'editar' ? docentesData : { docentesTable: [], loading: false };
 
@@ -31,12 +29,6 @@ export default function Docentes({ disabled, type }) {
 
   const hideModal = () => {
     setModal(false);
-    setFormDocentes({
-      esAceptado: true,
-      programaId,
-      asignaturasDocentes: [],
-      formacionesDocentes: [],
-    });
   };
 
   return (

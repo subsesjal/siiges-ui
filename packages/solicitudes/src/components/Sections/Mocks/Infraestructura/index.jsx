@@ -1,7 +1,7 @@
 import React from 'react';
 import InfraestructurasButtons from '../../../utils/Components/InfraestructurasButtons';
 
-const columns = () => [
+const columns = (programaId) => [
   { field: 'tipoInstalacion', headerName: 'Instalacion', width: 200 },
   { field: 'capacidad', headerName: 'Capacidad (alumnos)', width: 200 },
   { field: 'metros', headerName: 'Mts2' },
@@ -12,7 +12,9 @@ const columns = () => [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => <InfraestructurasButtons id={params.id} />,
+    renderCell: (params) => (
+      <InfraestructurasButtons id={params.id} programaId={programaId} />
+    ),
     sortable: false,
     filterable: false,
   },

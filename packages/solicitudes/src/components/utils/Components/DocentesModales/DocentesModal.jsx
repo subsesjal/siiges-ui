@@ -7,6 +7,7 @@ import {
   Select,
   ButtonSimple,
   InputDate,
+  Context,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -64,6 +65,7 @@ export default function DocentesModal({
     programaId,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
+  const { setLoading } = useContext(Context);
   const { asignaturasTotal } = getAsignaturas(programaId);
   const [currentSection, setCurrentSection] = useState(1);
   const docente = useDocente(id);
@@ -77,7 +79,8 @@ export default function DocentesModal({
         tipoContratacion: docente.tipoContratacion,
         antiguedad: docente.antiguedad,
         experiencias: docente.experiencias,
-        asignaturasDocentes: docente.asignaturasDocentes?.map((asig) => asig.asignaturaId) || [],
+        asignaturasDocentes:
+          docente.asignaturasDocentes?.map((asig) => asig.asignaturaId) || [],
         persona: {
           nombre: docente.persona?.nombre,
           apellidoPaterno: docente.persona?.apellidoPaterno,
@@ -158,8 +161,8 @@ export default function DocentesModal({
       programaId,
       setCurrentSection,
       mode,
+      setLoading,
     );
-    hideModal();
     setCurrentSection(1);
   };
 

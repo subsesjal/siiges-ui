@@ -3,18 +3,14 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState, useContext } from 'react';
-import PlantelContext from '../Context/plantelContext';
+import React, { useState } from 'react';
 import DeleteInfraestructura from './InfraestructuraModales/DeleteInfraestructura';
 import InfraestructuraEditModal from './InfraestructuraModales/InfraestructuraEditModal';
 
-export default function InfraestructurasButtons({ id }) {
+export default function InfraestructurasButtons({ id, programaId }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
-  const { infraestructuras } = useContext(PlantelContext);
-  const rowItem = infraestructuras.find((item) => item.id === id);
 
   const handleModalOpen = (editMode) => {
     setIsEdit(editMode);
@@ -49,9 +45,10 @@ export default function InfraestructurasButtons({ id }) {
       {modalOpen && (
         <InfraestructuraEditModal
           hideModal={handleModalClose}
-          rowItem={rowItem}
+          id={id}
           open={modalOpen}
           edit={isEdit ? 'Editar Infraestructura' : 'Consultar Infraestructura'}
+          programaId={programaId}
         />
       )}
 
@@ -59,7 +56,7 @@ export default function InfraestructurasButtons({ id }) {
         <DeleteInfraestructura
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
-          rowItem={rowItem}
+          id={id}
         />
       )}
     </Stack>
@@ -68,7 +65,5 @@ export default function InfraestructurasButtons({ id }) {
 
 InfraestructurasButtons.propTypes = {
   id: PropTypes.number.isRequired,
-  rowItem: PropTypes.shape({
-    programaID: PropTypes.number,
-  }).isRequired,
+  programaId: PropTypes.number.isRequired,
 };
