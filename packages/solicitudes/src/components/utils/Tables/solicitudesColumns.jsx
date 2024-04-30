@@ -2,6 +2,9 @@ import React from 'react';
 import SolicitudesActions from '../Components/SolicitudesActions';
 
 const columnsSolicitudes = [
+  {
+    field: 'id', headerName: 'ID', width: 80, hide: true,
+  },
   { field: 'folio', headerName: 'Folio', width: 125 },
   { field: 'studyPlan', headerName: 'Plan de estudios', width: 180 },
   { field: 'estatusSolicitudId', headerName: 'Estatus', width: 200 },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import {
   Input,
   InputDateTime,
@@ -20,10 +20,13 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
     form, setForm, error, setError, setErrors,
   } = useEvaluacionCurricular();
   const [initialValues, setInitialValues] = useState({});
-  const [fetchCumplimiento, setFetchCumplimiento] = useState(false);
   const { solicitudes } = getSolicitudesById(id);
   const router = useRouter();
   const { query } = router;
+  const { cumplimiento } = useCumplimiento(
+    form.modalidad,
+    form.numero,
+  );
 
   useEffect(() => {
     const modalidadSource = type === 'editar' ? solicitudes?.programa?.modalidadId : query.modalidad;
@@ -37,7 +40,11 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         valoracion: solicitudes.programa.evaluacion.valoracion,
         fecha: solicitudes.programa.evaluacion.fecha,
       }));
-      setFetchCumplimiento((prev) => !prev);
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        modalidad: modalidadSource,
+      }));
     }
   }, [solicitudes]);
 
@@ -54,21 +61,10 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
     const initialValue = initialValues[name];
-
-    if (name === 'numero') {
-      setFetchCumplimiento((prev) => !prev);
-    }
-
     if (value !== initialValue || value === '') {
       validation[name]();
     }
   };
-
-  const { cumplimiento } = useCumplimiento(
-    form.modalidad,
-    form.numero,
-    fetchCumplimiento,
-  );
 
   const handleInputFocus = (e) => {
     const { name, value } = e.target;
@@ -171,14 +167,14 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Input
             id="valoracion"
             label="Valoración cualitativa"
             name="valoracion"
             value={form.valoracion}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             multiline
             rows={4}
             sx={{ width: '100%' }}

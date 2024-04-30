@@ -20,6 +20,9 @@ function DataTable({
   const [searchText, setSearchText] = useState('');
   const [filteredRows, setFilteredRows] = useState(rows);
   const [loading, setLoading] = useState(true);
+  const [sortModel] = useState([
+    { field: 'id', sort: 'desc' },
+  ]);
 
   useEffect(() => {
     if (rows.length >= 0) {
@@ -86,6 +89,7 @@ function DataTable({
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
+          sortModel={sortModel}
         />
       </div>
     </>

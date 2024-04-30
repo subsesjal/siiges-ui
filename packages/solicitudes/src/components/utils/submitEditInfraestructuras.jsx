@@ -9,6 +9,7 @@ const handleEdit = (
   errors,
   setNoti,
   plantelId,
+  setLoading,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -24,7 +25,10 @@ const handleEdit = (
     return;
   }
 
-  fetch(`${url}/api/v1/asignaturas/${form.id}`, {
+  setLoading(true);
+  hideModal();
+
+  fetch(`${url}/api/v1/planteles/${plantelId}/infraestructuras/${form.id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -46,10 +50,11 @@ const handleEdit = (
       });
       setForm({ plantelId });
       setInitialValues({});
-      hideModal();
+      setLoading(false);
     })
     .catch((error) => {
       console.error('Error:', error);
+      setLoading(false);
     });
 };
 
