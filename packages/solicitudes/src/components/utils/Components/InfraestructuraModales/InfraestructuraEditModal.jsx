@@ -6,7 +6,7 @@ import {
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
-import handleEdit from '../../submitEditAsignaturas';
+import handleEdit from '../../submitEditInfraestructuras';
 import PlantelContext from '../../Context/plantelContext';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
 import getAsignaturas from '../../getAsignaturas';
@@ -30,7 +30,7 @@ export default function InfraestructuraEditModal({
     setInitialValues,
   } = useContext(PlantelContext);
   const disabled = edit === 'Consultar Infraestructura';
-  const { setNoti } = useContext(Context);
+  const { setNoti, setLoading } = useContext(Context);
   const { plantelId } = useContext(PlantelContext);
   const { asignaturasTotal } = getAsignaturas(programaId);
 
@@ -39,15 +39,32 @@ export default function InfraestructuraEditModal({
       const endpoint = `/planteles/${plantelId}/infraestructuras/${id}`;
 
       const fetchData = async () => {
-        const data = await getData({ endpoint, query: '' });
-        if (data && data.data) {
-          setFormInfraestructuras(data.data);
+        try {
+          const data = await getData({ endpoint, query: '' });
+          if (data && data.data) {
+            const infraestructuraValues = {
+              id: data.data.id,
+              plantelId: data.data.plantelId,
+              programaId: data.data.programaId,
+              tipoInstalacionId: data.data.tipoInstalacionId,
+              nombre: data.data.nombre,
+              ubicacion: data.data.ubicacion,
+              capacidad: data.data.capacidad,
+              metros: data.data.metros,
+              recursos: data.data.recursos,
+              asignaturasInfraestructura: data.data.asignaturasInfraestructura?.map(
+                (asignatura) => asignatura.asignaturaId,
+              ),
+            };
+            setFormInfraestructuras(infraestructuraValues);
+          }
+        } catch (err) {
+          console.error(err);
         }
       };
-
-      fetchData().catch(console.error);
+      fetchData();
     }
-  }, [plantelId, programaId, id]);
+  }, [plantelId, programaId, id, setFormInfraestructuras]);
 
   const instalacion = [
     { id: 1, nombre: 'Aula' },
@@ -109,6 +126,7 @@ export default function InfraestructuraEditModal({
       errors,
       setNoti,
       plantelId,
+      setLoading,
     );
   };
 
@@ -207,13 +225,13 @@ export default function InfraestructuraEditModal({
         <Grid item xs={12}>
           <Select
             title="Asignatura que atiende"
-            name="asignaturasInfraestructuras"
+            name="asignaturasInfraestructura"
             multiple
             value={formInfraestructuras.asignaturasInfraestructura || []}
             options={asignaturasTotal}
             onchange={handleOnChange}
             onblur={handleOnBlur}
-            errorMessage={error.asignaturasInfraestructuras}
+            errorMessage={error.asignaturasInfraestructura}
             required
             disabled={disabled}
           />
