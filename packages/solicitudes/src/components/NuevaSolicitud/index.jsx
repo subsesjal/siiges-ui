@@ -20,6 +20,15 @@ const commonSteps = [
   EvaluacionCurricular,
 ];
 
+const componentSteps = [
+  { name: DatosGenerales, stepName: 'Datos Generales' },
+  { name: Plantel, stepName: 'Plantel' },
+  { name: PlanEstudios, stepName: 'Plan de Estudios' },
+  { name: Anexos, stepName: 'Anexos' },
+  { name: EvaluacionCurricular, stepName: 'Evaluación Curricular' },
+  { name: PlataformaEducativa, stepName: 'Plataforma Educativa' },
+];
+
 const steps = {
   escolarizada: [...commonSteps],
   mixta: [...commonSteps],
@@ -31,24 +40,8 @@ const steps = {
   ],
 };
 
-const getStepName = (component) => {
-  switch (component.name) {
-    case 'DatosGenerales':
-      return 'Datos Generales';
-    case 'Plantel':
-      return 'Plantel';
-    case 'PlanEstudios':
-      return 'Plan de Estudios';
-    case 'Anexos':
-      return 'Anexos';
-    case 'EvaluacionCurricular':
-      return 'Evaluación Curricular';
-    case 'PlataformaEducativa':
-      return 'Plataforma Educativa';
-    default:
-      return component.name;
-  }
-};
+const getStepName = (component) => componentSteps
+  .find(({ name: step }) => step.name === component.name).stepName;
 
 export default function NuevaSolicitud({
   type,
