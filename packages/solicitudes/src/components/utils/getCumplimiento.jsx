@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Context, getToken } from '@siiges-ui/shared';
 
-export default function useCumplimiento(modalidad, puntuacion, fetchCumplimiento) {
+export default function useCumplimiento(modalidad, puntuacion) {
   const { session, setNoti } = useContext(Context);
   const token = getToken();
 
@@ -11,7 +11,7 @@ export default function useCumplimiento(modalidad, puntuacion, fetchCumplimiento
   const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
-    if (session && fetchCumplimiento && modalidad && puntuacion !== undefined) {
+    if (session && modalidad && typeof puntuacion !== 'undefined' && puntuacion > 50 && puntuacion < 250) {
       setLoading(true);
 
       fetch(
@@ -44,8 +44,10 @@ export default function useCumplimiento(modalidad, puntuacion, fetchCumplimiento
         .finally(() => {
           setLoading(false);
         });
+    } else {
+      setCumplimiento({});
     }
-  }, [session, fetchCumplimiento, modalidad, puntuacion]);
+  }, [session, modalidad, puntuacion]);
 
   return {
     cumplimiento,

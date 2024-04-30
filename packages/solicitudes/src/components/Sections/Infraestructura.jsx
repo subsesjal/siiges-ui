@@ -47,7 +47,7 @@ export default function Infraestructura({ disabled, programaId }) {
       recursos: item.recursos,
       ubicacion: item.ubicacion,
       asignaturas: item.asignaturasInfraestructura?.map(
-        (asignaturaId) => asignaturaId,
+        (asignaturaInfra) => asignaturaInfra.asignatura.nombre,
       ),
     })),
     [infraestructuras],
