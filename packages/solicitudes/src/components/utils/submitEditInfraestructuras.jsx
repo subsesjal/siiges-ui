@@ -50,10 +50,19 @@ const handleEdit = (
       });
       setForm({ plantelId });
       setInitialValues({});
+      setNoti({
+        open: true,
+        message: 'Exito al cargar los datos de infraestructura',
+        type: 'success',
+      });
       setLoading(false);
     })
     .catch((error) => {
-      console.error('Error:', error);
+      setNoti({
+        open: true,
+        message: `Error al cargar los datos de infraestructura: ${error}`,
+        type: 'error',
+      });
       setLoading(false);
     });
 };
