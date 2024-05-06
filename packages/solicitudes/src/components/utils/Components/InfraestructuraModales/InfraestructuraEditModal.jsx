@@ -96,10 +96,21 @@ export default function InfraestructuraEditModal({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFormInfraestructuras((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormInfraestructuras((prevData) => {
+      const newData = { ...prevData };
+      if (name === 'tipoInstalacionId' && value === 1) {
+        newData.programaId = programaId;
+      }
+
+      if (name === 'asignaturasInfraestructura') {
+        const newValue = Array.isArray(value) ? value : [value];
+        newData.asignaturasInfraestructura = newValue;
+      } else {
+        newData[name] = value;
+      }
+
+      return newData;
+    });
   };
 
   const handleOnBlur = (e) => {
