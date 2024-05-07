@@ -30,6 +30,9 @@ export default async function alumnosService({ id, dataBody, method }) {
   const result = await response.text();
   const { data } = JSON.parse(result);
   const dataForm = {
+    id: data?.id,
+    personaId: data?.personaId,
+    programaId: data?.programaId,
     nombre: data?.persona?.nombre,
     apellidoPaterno: data?.persona?.apellidoPaterno,
     apellidoMaterno: data?.persona?.apellidoMaterno,

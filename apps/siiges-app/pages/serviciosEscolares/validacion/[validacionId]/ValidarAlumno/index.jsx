@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-
 import { Grid, Tab, Tabs } from '@mui/material';
-import { DocumentosAlumno, FormAlumno } from '@siiges-ui/serviciosescolares';
+import { DatosAlumno, DatosInstitucion } from '@siiges-ui/serviciosescolares';
 import { Layout } from '@siiges-ui/shared';
 import alumnosService from '@siiges-ui/serviciosescolares/src/Components/utils/alumnosService';
 
-export default function EditarAlumno() {
+export default function ValidarAlumno() {
   const router = useRouter();
   const { query } = router;
   const [alumno, setAlumno] = useState(null);
@@ -14,20 +13,21 @@ export default function EditarAlumno() {
 
   useEffect(() => {
     async function fetchAlumno() {
-      const { dataForm } = await alumnosService({ id: query.alumnoId, method: 'GET' });
+      const { dataForm } = await alumnosService({ id: query.validacionId, method: 'GET' });
       setAlumno(dataForm);
     }
 
-    if (query.alumnoId) {
+    if (query.validacionId) {
       fetchAlumno();
     }
-  }, [query.alumnoId]);
+  }, [query.validacionId]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
-    <Layout title="Editar Alumno">
+    <Layout title="Validar Alumno">
       <Grid container>
         <Grid
           item
@@ -38,12 +38,12 @@ export default function EditarAlumno() {
           }}
         >
           <Tabs value={value} onChange={handleChange}>
-            <Tab label="Información Personal" />
-            <Tab label="Documentos" />
+            <Tab label="Datos del Alumno" />
+            <Tab label="Datos de Institucuión de Procedencia" />
           </Tabs>
         </Grid>
-        {value === 0 && <FormAlumno type="edit" alumno={alumno} />}
-        {value === 1 && <DocumentosAlumno />}
+        {value === 0 && <DatosAlumno alumno={alumno} />}
+        {value === 1 && <DatosInstitucion alumno={alumno} />}
       </Grid>
     </Layout>
   );

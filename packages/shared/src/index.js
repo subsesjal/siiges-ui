@@ -54,8 +54,10 @@ import validateField from './utils/handlers/validateField';
 import {
   getData, createRecord, updateRecord, deleteRecord,
 } from './utils/handlers/apiUtils';
+import estadosMexico from './utils/mocks/estadosMexico';
 
 export {
+  estadosMexico,
   Logo,
   Input,
   Title,
