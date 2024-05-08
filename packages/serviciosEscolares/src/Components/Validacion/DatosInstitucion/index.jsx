@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 
 export default function DatosInstitucion({ alumno }) {
-  const { setNoti, session } = useContext(Context);
+  const { setNoti, session, setLoading } = useContext(Context);
   const [url, setUrl] = useState();
   const [formSent, setFormSent] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -26,6 +26,7 @@ export default function DatosInstitucion({ alumno }) {
     folio: '',
     estatus: 0,
     estadoId: '',
+    alumnoId: alumno.id,
     nivelId: '',
     fechaInicioAntecedente: '',
     fechaFinAntecedente: '',
@@ -121,6 +122,7 @@ export default function DatosInstitucion({ alumno }) {
 
   const handleConfirm = async () => {
     if (validateForm()) {
+      setLoading(true);
       try {
         let response;
         const endpoint = `/alumnos/${alumno.id}/validaciones`;
@@ -136,8 +138,9 @@ export default function DatosInstitucion({ alumno }) {
           response = await updateRecord({ data, endpoint });
         }
 
-        if (response && response.success) {
+        if (response && response.statusCode === 201) {
           setFormSent(true); // Set formSent to true after a successful creation
+          setLoading(false);
           setNoti({
             open: true,
             message: 'Datos guardados correctamente',
@@ -148,6 +151,7 @@ export default function DatosInstitucion({ alumno }) {
         }
       } catch (error) {
         console.error('API call failed:', error);
+        setLoading(false);
         setNoti({
           open: true,
           message: 'Error: No se pudo guardar la información',
