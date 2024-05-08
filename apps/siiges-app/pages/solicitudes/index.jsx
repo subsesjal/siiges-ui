@@ -25,6 +25,7 @@ export default function Solicitudes() {
     if (solicitudes !== undefined && solicitudes !== null) {
       const formattedRows = solicitudes.map((solicitud) => ({
         id: solicitud.id,
+        estatus: solicitud.estatusSolicitudId,
         folio: solicitud.folio,
         studyPlan: solicitud.programa.nombre,
         estatusSolicitudId: solicitud.estatusSolicitud.nombre,

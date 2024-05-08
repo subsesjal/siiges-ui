@@ -7,26 +7,31 @@ import {
   InputDate,
   InputFile,
   Select,
+  createRecord,
   estadosMexico,
+  updateRecord,
 } from '@siiges-ui/shared';
+import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 
 export default function DatosInstitucion({ alumno }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti, session } = useContext(Context);
   const [url, setUrl] = useState();
+  const [formSent, setFormSent] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [form, setForm] = useState({
     nombreInstitucionEmisora: '',
-    estadoId: '',
     claveCentroTrabajoEmisor: '',
+    folio: '',
+    estatus: 0,
+    estadoId: '',
     nivelId: '',
     fechaInicioAntecedente: '',
     fechaFinAntecedente: '',
-    folio: '',
     fechaExpedicion: '',
     situacionValidacionId: 1,
-    tipoValidacionId: '',
-    fechaValidacion: '',
+    fechaValidacion: dayjs(),
   });
   const [errors, setErrors] = useState({});
 
@@ -41,6 +46,11 @@ export default function DatosInstitucion({ alumno }) {
       GetFile(fileData, setUrl);
     }
   }, [alumno]);
+  useEffect(() => {
+    if (session.rol === 'admin' || session.rol === 'ce_sicyt') {
+      setDisabled(false);
+    }
+  }, [session]);
 
   const situacionDocumento = [
     { id: 1, nombre: 'Auténtico' },
@@ -65,6 +75,9 @@ export default function DatosInstitucion({ alumno }) {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
+    if (name === 'situacionValidacionId') {
+      setForm((prevForm) => ({ ...prevForm, estatus: 1 }));
+    }
   };
 
   const handleSelectChange = (name) => (event) => {
@@ -108,9 +121,41 @@ export default function DatosInstitucion({ alumno }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (validateForm()) {
-      console.log('Form data:', form);
+      try {
+        let response;
+        const endpoint = `/alumnos/${alumno.id}/validaciones`;
+        const data = {
+          ...form,
+          archivoValidacion: url,
+        };
+
+        // If formSent is false, it means this is a new record; otherwise, it's an update.
+        if (!formSent) {
+          response = await createRecord({ data, endpoint });
+        } else {
+          response = await updateRecord({ data, endpoint });
+        }
+
+        if (response && response.success) {
+          setFormSent(true); // Set formSent to true after a successful creation
+          setNoti({
+            open: true,
+            message: 'Datos guardados correctamente',
+            type: 'success',
+          });
+        } else {
+          throw new Error('API did not return success');
+        }
+      } catch (error) {
+        console.error('API call failed:', error);
+        setNoti({
+          open: true,
+          message: 'Error: No se pudo guardar la información',
+          type: 'error',
+        });
+      }
     } else {
       setNoti({
         open: true,
@@ -127,7 +172,7 @@ export default function DatosInstitucion({ alumno }) {
           Archivo Certificado de Bachillerato o equivalente (PDF)
         </Typography>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={8}>
         <Input
           label="Institución de procedencia"
           name="nombreInstitucionEmisora"
@@ -233,6 +278,7 @@ export default function DatosInstitucion({ alumno }) {
           onblur={() => handleBlur('situacionValidacionId')}
           errorMessage={errors.situacionValidacionId}
           required
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={4}>
@@ -247,40 +293,44 @@ export default function DatosInstitucion({ alumno }) {
           required
         />
       </Grid>
-      <Grid item xs={12}>
-        <Divider sx={{ mt: 1 }} />
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant="h6">Validación de Documentos</Typography>
-      </Grid>
-      <Grid item xs={8}>
-        <InputFile
-          label="Archivo de validación"
-          id={1}
-          tipoDocumento="VALIDACION_ALUMNO"
-          tipoEntidad="PERSONA"
-          url={url}
-          setUrl={setUrl}
-          disabled={false}
-          required
-        />
-      </Grid>
-      <Grid item xs={4} sx={{ marginTop: '-15px' }}>
+      <Grid item xs={4}>
         <InputDate
-          label="Fecha de archivo de validación"
+          label="Fecha de validación"
           name="fechaValidacion"
           id="fechaValidacion"
           value={form.fechaValidacion}
           onchange={handleChange}
-          size="normal"
-          onblur={() => handleBlur('fechaValidacion')}
+          onblur={handleBlur}
           errorMessage={errors.fechaValidacion}
           required
         />
       </Grid>
-      <Grid item xs={12}>
-        <ButtonsForm confirm={handleConfirm} cancel={() => {}} />
-      </Grid>
+      {formSent ? (
+        <>
+          <Grid item xs={12}>
+            <Divider sx={{ mt: 1 }} />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6">Validación de Documentos</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <InputFile
+              label="Archivo de validación"
+              id={1}
+              tipoDocumento="VALIDACION_ALUMNO"
+              tipoEntidad="PERSONA"
+              url={url}
+              setUrl={setUrl}
+              disabled={false}
+              required
+            />
+          </Grid>
+        </>
+      ) : (
+        <Grid item xs={12}>
+          <ButtonsForm confirm={handleConfirm} cancel={() => {}} />
+        </Grid>
+      )}
     </Grid>
   );
 }

@@ -39,7 +39,7 @@ export default function ValidarAlumno() {
         >
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Datos del Alumno" />
-            <Tab label="Datos de Institucuión de Procedencia" />
+            <Tab label="Datos de Institución de Procedencia" />
           </Tabs>
         </Grid>
         {value === 0 && <DatosAlumno alumno={alumno} />}
