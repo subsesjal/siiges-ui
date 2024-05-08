@@ -22,6 +22,7 @@ function InputDate({
     const formattedDate = isValidDate ? newDate.toISOString() : '';
 
     onchange({ target: { name, value: formattedDate } });
+    // Trigger onblur with an artificial event object
     onblur({ target: { name, value: formattedDate } });
   };
 
@@ -33,9 +34,8 @@ function InputDate({
         name={name}
         onChange={handleDateChange}
         onFocus={onfocus}
-        onBlur={onblur}
         disabled={disabled}
-        maxDate={dayjs()}
+        maxDate={dayjs('2100-01-01')}
         minDate={dayjs('1900-01-01')}
         format="DD/MM/YYYY"
         sx={{ width: '100%', mt: 2 }}

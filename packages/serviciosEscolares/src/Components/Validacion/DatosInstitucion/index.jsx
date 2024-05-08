@@ -7,26 +7,30 @@ import {
   InputDate,
   InputFile,
   Select,
+  createRecord,
   estadosMexico,
+  updateRecord,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 
 export default function DatosInstitucion({ alumno }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti, session } = useContext(Context);
   const [url, setUrl] = useState();
+  const [formSent, setFormSent] = useState(false);
   const [form, setForm] = useState({
     nombreInstitucionEmisora: '',
-    estadoId: '',
     claveCentroTrabajoEmisor: '',
-    nivelId: '',
-    fechaInicioAntecedente: '',
-    fechaFinAntecedente: '',
     folio: '',
-    fechaExpedicion: '',
-    situacionValidacionId: 1,
+    estadoId: '',
+    usuarioId: session?.id,
+    nivelId: '',
     tipoValidacionId: '',
-    fechaValidacion: '',
+    situacionValidacionId: 1,
+    fechaFinAntecedente: null,
+    fechaExpedicion: null,
+    fechaInicioAntecedente: null,
+    fechaValidacion: null,
   });
   const [errors, setErrors] = useState({});
 
@@ -71,10 +75,11 @@ export default function DatosInstitucion({ alumno }) {
     setForm((prevForm) => ({ ...prevForm, [name]: event.target.value }));
   };
 
-  const handleBlur = (field) => {
+  const handleBlur = (event) => {
+    const { name, value } = event.target;
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [field]: !form[field] ? 'Este campo es obligatorio' : '',
+      [name]: !value ? 'Este campo es obligatorio' : '',
     }));
   };
 
@@ -91,7 +96,6 @@ export default function DatosInstitucion({ alumno }) {
       'fechaExpedicion',
       'situacionValidacionId',
       'tipoValidacionId',
-      'fechaValidacion',
     ];
 
     requiredFields.forEach((field) => {
@@ -100,17 +104,56 @@ export default function DatosInstitucion({ alumno }) {
       }
     });
 
-    if (!url) {
-      newErrors.archivoValidacion = 'El archivo de validación es obligatorio';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (validateForm()) {
-      console.log('Form data:', form);
+      try {
+        let response;
+        const endpoint = `/alumnos/${alumno.id}/validaciones`;
+        const data = {
+          nombreInstitucionEmisora: form.nombreInstitucionEmisora,
+          claveCentroTrabajoEmisor: form.claveCentroTrabajoEmisor,
+          folio: form.folio,
+          estadoId: form.estadoId,
+          usuarioId: form.usuarioId,
+          nivelId: form.nivelId,
+          tipoValidacionId: form.tipoValidacionId,
+          situacionValidacionId: form.situacionValidacionId,
+          fechaFinAntecedente: form.fechaFinAntecedente,
+          fechaExpedicion: form.fechaExpedicion,
+          fechaInicioAntecedente: form.fechaInicioAntecedente,
+          archivoValidacion: url,
+          ...(formSent && { fechaValidacion: form.fechaValidacion }),
+        };
+
+        // If formSent is false, it means this is a new record; otherwise, it's an update.
+        if (!formSent) {
+          response = await createRecord({ data, endpoint });
+        } else {
+          response = await updateRecord({ data, endpoint });
+        }
+
+        if (response && response.success) {
+          setFormSent(true); // Set formSent to true after a successful creation
+          setNoti({
+            open: true,
+            message: 'Datos guardados correctamente',
+            type: 'success',
+          });
+        } else {
+          throw new Error('API did not return success');
+        }
+      } catch (error) {
+        console.error('API call failed:', error);
+        setNoti({
+          open: true,
+          message: 'Error: No se pudo guardar la información',
+          type: 'error',
+        });
+      }
     } else {
       setNoti({
         open: true,
@@ -134,7 +177,7 @@ export default function DatosInstitucion({ alumno }) {
           id="nombreInstitucionEmisora"
           value={form.nombreInstitucionEmisora}
           onchange={handleChange}
-          onblur={() => handleBlur('nombreInstitucionEmisora')}
+          onblur={handleBlur}
           errorMessage={errors.nombreInstitucionEmisora}
           required
         />
@@ -146,7 +189,7 @@ export default function DatosInstitucion({ alumno }) {
           options={estadosMexico}
           value={form.estadoId}
           onchange={handleSelectChange('estadoId')}
-          onblur={() => handleBlur('estadoId')}
+          onblur={handleBlur}
           errorMessage={errors.estadoId}
           required
         />
@@ -158,7 +201,7 @@ export default function DatosInstitucion({ alumno }) {
           id="claveCentroTrabajoEmisor"
           value={form.claveCentroTrabajoEmisor}
           onchange={handleChange}
-          onblur={() => handleBlur('claveCentroTrabajoEmisor')}
+          onblur={handleBlur}
           errorMessage={errors.claveCentroTrabajoEmisor}
           required
         />
@@ -170,7 +213,7 @@ export default function DatosInstitucion({ alumno }) {
           options={nivelEstudios}
           value={form.nivelId}
           onchange={handleSelectChange('nivelId')}
-          onblur={() => handleBlur('nivelId')}
+          onblur={handleBlur}
           errorMessage={errors.nivelId}
           required
         />
@@ -182,7 +225,7 @@ export default function DatosInstitucion({ alumno }) {
           id="fechaInicioAntecedente"
           value={form.fechaInicioAntecedente}
           onchange={handleChange}
-          onblur={() => handleBlur('fechaInicioAntecedente')}
+          onblur={handleBlur}
           errorMessage={errors.fechaInicioAntecedente}
           required
         />
@@ -194,7 +237,7 @@ export default function DatosInstitucion({ alumno }) {
           id="fechaFinAntecedente"
           value={form.fechaFinAntecedente}
           onchange={handleChange}
-          onblur={() => handleBlur('fechaFinAntecedente')}
+          onblur={handleBlur}
           errorMessage={errors.fechaFinAntecedente}
           required
         />
@@ -206,7 +249,7 @@ export default function DatosInstitucion({ alumno }) {
           id="folio"
           value={form.folio}
           onchange={handleChange}
-          onblur={() => handleBlur('folio')}
+          onblur={handleBlur}
           errorMessage={errors.folio}
           required
         />
@@ -218,7 +261,7 @@ export default function DatosInstitucion({ alumno }) {
           id="fechaExpedicion"
           value={form.fechaExpedicion}
           onchange={handleChange}
-          onblur={() => handleBlur('fechaExpedicion')}
+          onblur={handleBlur}
           errorMessage={errors.fechaExpedicion}
           required
         />
@@ -230,7 +273,7 @@ export default function DatosInstitucion({ alumno }) {
           options={situacionDocumento}
           value={form.situacionValidacionId}
           onchange={handleSelectChange('situacionValidacionId')}
-          onblur={() => handleBlur('situacionValidacionId')}
+          onblur={handleBlur}
           errorMessage={errors.situacionValidacionId}
           required
         />
@@ -242,44 +285,48 @@ export default function DatosInstitucion({ alumno }) {
           options={tipoValidacion}
           value={form.tipoValidacionId}
           onchange={handleSelectChange('tipoValidacionId')}
-          onblur={() => handleBlur('tipoValidacionId')}
+          onblur={handleBlur}
           errorMessage={errors.tipoValidacionId}
           required
         />
       </Grid>
+      {formSent && (
+        <>
+          <Grid item xs={12}>
+            <Divider sx={{ mt: 1 }} />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6">Validación de Documentos</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <InputFile
+              label="Archivo de validación"
+              id={1}
+              tipoDocumento="VALIDACION_ALUMNO"
+              tipoEntidad="PERSONA"
+              url={url}
+              setUrl={setUrl}
+              disabled={false}
+              required
+            />
+          </Grid>
+          <Grid item xs={4} sx={{ marginTop: '-15px' }}>
+            <InputDate
+              label="Fecha de archivo de validación"
+              name="fechaValidacion"
+              id="fechaValidacion"
+              value={form.fechaValidacion}
+              onchange={handleChange}
+              size="normal"
+              onblur={handleBlur}
+              errorMessage={errors.fechaValidacion}
+              required
+            />
+          </Grid>
+        </>
+      )}
       <Grid item xs={12}>
-        <Divider sx={{ mt: 1 }} />
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant="h6">Validación de Documentos</Typography>
-      </Grid>
-      <Grid item xs={8}>
-        <InputFile
-          label="Archivo de validación"
-          id={1}
-          tipoDocumento="VALIDACION_ALUMNO"
-          tipoEntidad="PERSONA"
-          url={url}
-          setUrl={setUrl}
-          disabled={false}
-          required
-        />
-      </Grid>
-      <Grid item xs={4} sx={{ marginTop: '-15px' }}>
-        <InputDate
-          label="Fecha de archivo de validación"
-          name="fechaValidacion"
-          id="fechaValidacion"
-          value={form.fechaValidacion}
-          onchange={handleChange}
-          size="normal"
-          onblur={() => handleBlur('fechaValidacion')}
-          errorMessage={errors.fechaValidacion}
-          required
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <ButtonsForm confirm={handleConfirm} cancel={() => {}} />
+        <ButtonsForm confirm={handleConfirm} cancel={() => { }} />
       </Grid>
     </Grid>
   );
