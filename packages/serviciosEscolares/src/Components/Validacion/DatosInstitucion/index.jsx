@@ -32,6 +32,8 @@ export default function DatosInstitucion({ alumno }) {
     fechaExpedicion: '',
     situacionValidacionId: 1,
     fechaValidacion: dayjs(),
+    usuarioId: session?.id,
+    tipoValidacionId: '',
   });
   const [errors, setErrors] = useState({});
 
@@ -84,10 +86,11 @@ export default function DatosInstitucion({ alumno }) {
     setForm((prevForm) => ({ ...prevForm, [name]: event.target.value }));
   };
 
-  const handleBlur = (field) => {
+  const handleBlur = (event) => {
+    const { name, value } = event.target;
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [field]: !form[field] ? 'Este campo es obligatorio' : '',
+      [name]: !value ? 'Este campo es obligatorio' : '',
     }));
   };
 
@@ -104,7 +107,6 @@ export default function DatosInstitucion({ alumno }) {
       'fechaExpedicion',
       'situacionValidacionId',
       'tipoValidacionId',
-      'fechaValidacion',
     ];
 
     requiredFields.forEach((field) => {
@@ -112,10 +114,6 @@ export default function DatosInstitucion({ alumno }) {
         newErrors[field] = 'Este campo es obligatorio';
       }
     });
-
-    if (!url) {
-      newErrors.archivoValidacion = 'El archivo de validación es obligatorio';
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -179,7 +177,7 @@ export default function DatosInstitucion({ alumno }) {
           id="nombreInstitucionEmisora"
           value={form.nombreInstitucionEmisora}
           onchange={handleChange}
-          onblur={() => handleBlur('nombreInstitucionEmisora')}
+          onblur={handleBlur}
           errorMessage={errors.nombreInstitucionEmisora}
           required
         />
@@ -191,7 +189,7 @@ export default function DatosInstitucion({ alumno }) {
           options={estadosMexico}
           value={form.estadoId}
           onchange={handleSelectChange('estadoId')}
-          onblur={() => handleBlur('estadoId')}
+          onblur={handleBlur}
           errorMessage={errors.estadoId}
           required
         />
@@ -203,7 +201,7 @@ export default function DatosInstitucion({ alumno }) {
           id="claveCentroTrabajoEmisor"
           value={form.claveCentroTrabajoEmisor}
           onchange={handleChange}
-          onblur={() => handleBlur('claveCentroTrabajoEmisor')}
+          onblur={handleBlur}
           errorMessage={errors.claveCentroTrabajoEmisor}
           required
         />
@@ -215,7 +213,7 @@ export default function DatosInstitucion({ alumno }) {
           options={nivelEstudios}
           value={form.nivelId}
           onchange={handleSelectChange('nivelId')}
-          onblur={() => handleBlur('nivelId')}
+          onblur={handleBlur}
           errorMessage={errors.nivelId}
           required
         />
@@ -227,7 +225,7 @@ export default function DatosInstitucion({ alumno }) {
           id="fechaInicioAntecedente"
           value={form.fechaInicioAntecedente}
           onchange={handleChange}
-          onblur={() => handleBlur('fechaInicioAntecedente')}
+          onblur={handleBlur}
           errorMessage={errors.fechaInicioAntecedente}
           required
         />
@@ -239,7 +237,7 @@ export default function DatosInstitucion({ alumno }) {
           id="fechaFinAntecedente"
           value={form.fechaFinAntecedente}
           onchange={handleChange}
-          onblur={() => handleBlur('fechaFinAntecedente')}
+          onblur={handleBlur}
           errorMessage={errors.fechaFinAntecedente}
           required
         />
@@ -251,7 +249,7 @@ export default function DatosInstitucion({ alumno }) {
           id="folio"
           value={form.folio}
           onchange={handleChange}
-          onblur={() => handleBlur('folio')}
+          onblur={handleBlur}
           errorMessage={errors.folio}
           required
         />
@@ -263,7 +261,7 @@ export default function DatosInstitucion({ alumno }) {
           id="fechaExpedicion"
           value={form.fechaExpedicion}
           onchange={handleChange}
-          onblur={() => handleBlur('fechaExpedicion')}
+          onblur={handleBlur}
           errorMessage={errors.fechaExpedicion}
           required
         />
@@ -275,7 +273,7 @@ export default function DatosInstitucion({ alumno }) {
           options={situacionDocumento}
           value={form.situacionValidacionId}
           onchange={handleSelectChange('situacionValidacionId')}
-          onblur={() => handleBlur('situacionValidacionId')}
+          onblur={handleBlur}
           errorMessage={errors.situacionValidacionId}
           required
           disabled={disabled}
@@ -288,7 +286,7 @@ export default function DatosInstitucion({ alumno }) {
           options={tipoValidacion}
           value={form.tipoValidacionId}
           onchange={handleSelectChange('tipoValidacionId')}
-          onblur={() => handleBlur('tipoValidacionId')}
+          onblur={handleBlur}
           errorMessage={errors.tipoValidacionId}
           required
         />
