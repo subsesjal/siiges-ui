@@ -9,6 +9,7 @@ import {
   Select,
   createRecord,
   estadosMexico,
+  getData,
   updateRecord,
 } from '@siiges-ui/shared';
 import dayjs from 'dayjs';
@@ -46,9 +47,44 @@ export default function DatosInstitucion({ alumno }) {
 
   useEffect(() => {
     if (alumno) {
+      const fetchValidationData = async () => {
+        const endpoint = `/alumnos/${alumno.id}/validaciones`;
+        const response = await getData({ endpoint });
+
+        if (response && response.data) {
+          const validation = response.data;
+          setFormSent(true);
+          setForm((prevForm) => ({
+            ...prevForm,
+            nombreInstitucionEmisora: validation.nombreInstitucionEmisora || '',
+            claveCentroTrabajoEmisor: validation.claveCentroTrabajoEmisor || '',
+            folio: validation.folio || '',
+            estatus: validation.estatus || 0,
+            estadoId: validation.estadoId || '',
+            nivelId: validation.nivelId || '',
+            fechaInicioAntecedente: validation.fechaInicioAntecedente
+              ? dayjs(validation.fechaInicioAntecedente).format('YYYY-MM-DDTHH:mm:ss')
+              : '',
+            fechaFinAntecedente: validation.fechaFinAntecedente
+              ? dayjs(validation.fechaFinAntecedente).format('YYYY-MM-DDTHH:mm:ss')
+              : '',
+            fechaExpedicion: validation.fechaExpedicion
+              ? dayjs(validation.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ss')
+              : '',
+            situacionValidacionId: validation.situacionValidacionId || 1,
+            fechaValidacion: validation.fechaValidacion
+              ? dayjs(validation.fechaValidacion).format('YYYY-MM-DDTHH:mm:ss')
+              : dayjs().format('YYYY-MM-DDTHH:mm:ss'),
+            tipoValidacionId: validation.tipoValidacionId || '',
+          }));
+        }
+      };
+
+      fetchValidationData();
       GetFile(fileData, setUrl);
     }
   }, [alumno]);
+
   useEffect(() => {
     if (session.rol === 'admin' || session.rol === 'ce_sicyt') {
       setDisabled(false);
@@ -138,7 +174,7 @@ export default function DatosInstitucion({ alumno }) {
           response = await updateRecord({ data, endpoint });
         }
 
-        if (response && response.statusCode === 201) {
+        if (response && (response.statusCode === 200 || response.statusCode === 201)) {
           setFormSent(true); // Set formSent to true after a successful creation
           setLoading(false);
           setNoti({
@@ -307,7 +343,7 @@ export default function DatosInstitucion({ alumno }) {
           required
         />
       </Grid>
-      {formSent ? (
+      {formSent && (
         <>
           <Grid item xs={12}>
             <Divider sx={{ mt: 1 }} />
@@ -315,7 +351,7 @@ export default function DatosInstitucion({ alumno }) {
           <Grid item xs={12}>
             <Typography variant="h6">Validación de Documentos</Typography>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <InputFile
               label="Archivo de validación"
               id={1}
@@ -328,11 +364,10 @@ export default function DatosInstitucion({ alumno }) {
             />
           </Grid>
         </>
-      ) : (
-        <Grid item xs={12}>
-          <ButtonsForm confirm={handleConfirm} cancel={() => {}} />
-        </Grid>
       )}
+      <Grid item xs={12}>
+        <ButtonsForm confirm={handleConfirm} cancel={() => {}} />
+      </Grid>
     </Grid>
   );
 }
