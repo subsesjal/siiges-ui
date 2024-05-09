@@ -15,12 +15,15 @@ function InputDate({
   errorMessage,
   disabled,
   required,
+  size,
 }) {
   const handleDateChange = (newDate) => {
     const isValidDate = newDate && dayjs(newDate).isValid();
     const formattedDate = isValidDate ? newDate.toISOString() : '';
 
     onchange({ target: { name, value: formattedDate } });
+    // Trigger onblur with an artificial event object
+    onblur({ target: { name, value: formattedDate } });
   };
 
   return (
@@ -31,9 +34,8 @@ function InputDate({
         name={name}
         onChange={handleDateChange}
         onFocus={onfocus}
-        onBlur={onblur}
         disabled={disabled}
-        maxDate={dayjs()}
+        maxDate={dayjs('2100-01-01')}
         minDate={dayjs('1900-01-01')}
         format="DD/MM/YYYY"
         sx={{ width: '100%', mt: 2 }}
@@ -41,9 +43,10 @@ function InputDate({
           textField: {
             disabled,
             required,
+            onBlur: onblur,
             helperText: errorMessage,
             error: !!errorMessage,
-            size: 'small',
+            size,
           },
         }}
       />
@@ -56,6 +59,7 @@ InputDate.propTypes = {
     .isRequired,
   label: PropTypes.string,
   name: PropTypes.string,
+  size: PropTypes.string,
   onchange: PropTypes.func.isRequired,
   onfocus: PropTypes.func,
   onblur: PropTypes.func,
@@ -72,6 +76,7 @@ InputDate.defaultProps = {
   errorMessage: '',
   disabled: false,
   required: false,
+  size: 'small',
 };
 
 export default InputDate;

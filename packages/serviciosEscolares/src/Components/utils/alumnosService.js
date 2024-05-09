@@ -6,7 +6,9 @@ export default async function alumnosService({ id, dataBody, method }) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
 
-  const endpoint = id ? `${url}/api/v1/alumnos/${id}` : `${url}/api/v1/alumnos/`;
+  const endpoint = id
+    ? `${url}/api/v1/alumnos/${id}`
+    : `${url}/api/v1/alumnos/`;
   if (method === 'PATCH') {
     delete dataBody.programaId;
     delete dataBody.estatus;
@@ -24,16 +26,29 @@ export default async function alumnosService({ id, dataBody, method }) {
 
   if (!response.ok) {
     const { message } = await response.json();
-    throw new Error(`Error: ${response.status} ${response.statusText} ${message}`);
+    throw new Error(
+      `Error: ${response.status} ${response.statusText} ${message}`,
+    );
   }
 
   const result = await response.text();
   const { data } = JSON.parse(result);
   const dataForm = {
+    id: data?.id,
+    personaId: data?.personaId,
+    programaId: data?.programaId,
+    programa: data?.programa?.nombre,
+    claveCentroTrabajo: data?.programa?.plantel?.claveCentroTrabajo,
+    institucion: data?.programa?.plantel?.institucion?.nombre,
+    plantel: `${data?.programa?.plantel?.domicilio?.calle} ${
+      data?.programa?.plantel?.domicilio?.numeroExterior
+    }`.trim(),
     nombre: data?.persona?.nombre,
     apellidoPaterno: data?.persona?.apellidoPaterno,
     apellidoMaterno: data?.persona?.apellidoMaterno,
-    fechaNacimiento: new Date(data?.persona?.fechaNacimiento).toLocaleDateString('en-CA'),
+    fechaNacimiento: new Date(
+      data?.persona?.fechaNacimiento,
+    ).toLocaleDateString('en-CA'),
     sexo: data?.persona?.sexo,
     nacionalidad: data?.persona?.nacionalidad,
     telefono: data?.persona?.telefono,

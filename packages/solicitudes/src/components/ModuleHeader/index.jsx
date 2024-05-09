@@ -1,7 +1,14 @@
 import {
   Card, CardContent, Grid, Typography,
 } from '@mui/material';
-import { ButtonStyled, StepperComponent, Context } from '@siiges-ui/shared';
+import {
+  ButtonStyled,
+  StepperComponent,
+  Context,
+  updateRecord,
+  DefaultModal,
+  ButtonsForm,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
@@ -17,26 +24,80 @@ export default function ModuleHeader({
 }) {
   const [disabled, setDisabled] = useState(false);
   const [modalState, setModalState] = useState(false);
-  const { session } = useContext(Context);
+  const [modalRepresentante, setModalRepresentante] = useState(false);
+  const [lastStepReached, setLastStepReached] = useState(false);
+  const { session, setNoti, setLoading } = useContext(Context);
   const { rol } = session;
+  const router = useRouter();
 
   const isControlDocumental = rol === 'control_documental';
-  const textRol = isControlDocumental ? 'Terminar revisión' : 'Terminar solicitud';
+  const textRol = isControlDocumental
+    ? 'Terminar revisión'
+    : 'Terminar solicitud';
+
+  const handleLastStepAction = async () => {
+    setModalRepresentante(false);
+    setLoading(true);
+    const endpoint = `/solicitudes/${id}`;
+    const data = {
+      estatusSolicitudId: 2,
+    };
+    try {
+      const result = await updateRecord({ data, endpoint });
+      if (result?.statusCode === 200) {
+        setNoti({
+          open: true,
+          message: 'Se completó la solicitud exitosamente',
+          type: 'success',
+        });
+        router.back();
+        setLoading(false);
+      } else {
+        throw new Error('Error al completar la solicitud');
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: error.message || 'Hubo un error al completar la solicitud',
+        type: 'error',
+      });
+      setLoading(false);
+    }
+  };
 
   const submitButton = () => {
-    if (isControlDocumental) {
+    if (lastStepReached && rol === 'representante') {
+      if (id) {
+        setModalRepresentante(true);
+      } else {
+        setNoti({
+          open: true,
+          message: 'Favor de llenar la solicitud',
+          type: 'error',
+        });
+      }
+    } else if (isControlDocumental) {
       setModalState({ open: true, title: 'Enviar Observaciones' });
     } else {
       nextModule();
     }
   };
+
   useEffect(() => {
     if (id !== undefined) {
       setDisabled(true);
     }
   }, [id]);
 
-  const router = useRouter();
+  useEffect(() => {
+    // Check if the current module is the last step
+    if (module === steps.length - 1) {
+      setLastStepReached(true);
+    } else {
+      setLastStepReached(false);
+    }
+  }, [module, steps]);
+
   return (
     <>
       <Card sx={{ width: '100%', mt: 5 }}>
@@ -78,6 +139,25 @@ export default function ModuleHeader({
         </CardContent>
       </Card>
       <Modal id={id} setModalState={setModalState} modalState={modalState} />
+      <DefaultModal
+        title="Completar solicitud"
+        open={modalRepresentante}
+        setOpen={setModalRepresentante}
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography>
+              ¿Esta seguro que desea terminar la solicitud?
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <ButtonsForm
+              cancel={() => setModalRepresentante(false)}
+              confirm={handleLastStepAction}
+            />
+          </Grid>
+        </Grid>
+      </DefaultModal>
     </>
   );
 }
@@ -92,8 +172,5 @@ ModuleHeader.propTypes = {
   date: PropTypes.string.isRequired,
   nextModule: PropTypes.func.isRequired,
   module: PropTypes.number.isRequired,
-  id: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
