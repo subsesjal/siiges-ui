@@ -13,7 +13,7 @@ export default function getSolicitudes() {
 
   useEffect(() => {
     if (session !== undefined) {
-      if (session.rol === 'admin' || session.rol === 'sicyt_editar') {
+      if (session.rol === 'admin' || session.rol === 'sicyt_editar' || session.rol === 'control_documental') {
         varUrl = `${url}/api/v1/solicitudes/`;
       } else {
         varUrl = `${url}/api/v1/solicitudes/usuarios/${session.id}`;
