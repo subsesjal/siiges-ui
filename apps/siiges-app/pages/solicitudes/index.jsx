@@ -23,7 +23,11 @@ export default function Solicitudes() {
 
   useEffect(() => {
     if (solicitudes !== undefined && solicitudes !== null) {
-      const formattedRows = solicitudes.map((solicitud) => ({
+      const filteredSolicitudes = session.rol === 'control_documental'
+        ? solicitudes.filter((solicitud) => [2, 3].includes(solicitud.estatusSolicitudId))
+        : solicitudes;
+
+      const formattedRows = filteredSolicitudes.map((solicitud) => ({
         id: solicitud.id,
         estatus: solicitud.estatusSolicitudId,
         folio: solicitud.folio,
@@ -86,7 +90,11 @@ export default function Solicitudes() {
       {NewRequestContentVisible && <NewRequest />}
       {ChangeAddressContentVisible && <ChangeAddress />}
       {RefrendoContentVisible && <Refrendo />}
-      <DataTable title="Tipo de solicitud" rows={rows} columns={columnsSolicitudes} />
+      <DataTable
+        title="Tipo de solicitud"
+        rows={rows}
+        columns={columnsSolicitudes}
+      />
     </Layout>
   );
 }
