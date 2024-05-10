@@ -6,7 +6,7 @@ import pagination from '../../../events/pagination';
 import AnexosSeccion from '../../Sections/AnexosSeccion';
 
 export default function Anexos({
-  nextModule, id, isLoading, setIsLoading, type,
+  nextModule, id, type,
 }) {
   const [form, setForm] = useState([]);
   const [disabled, setDisabled] = useState(true);
@@ -33,8 +33,6 @@ export default function Anexos({
           nextModule={nextModule}
           next={next}
           prev={prev}
-          loading={isLoading}
-          setLoading={setIsLoading}
         >
           {section === 1 && (
             <AnexosSeccion
@@ -62,7 +60,5 @@ Anexos.propTypes = {
     PropTypes.number,
     PropTypes.string,
   ]),
-  setIsLoading: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
   type: PropTypes.string,
 };

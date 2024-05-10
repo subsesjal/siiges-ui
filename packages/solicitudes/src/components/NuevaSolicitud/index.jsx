@@ -46,8 +46,6 @@ const getStepName = (component) => componentSteps
 export default function NuevaSolicitud({
   type,
   solicitudId = '',
-  isLoading,
-  setIsLoading,
 }) {
   const router = useRouter();
   const [modalidad, setModalidad] = useState('escolarizada');
@@ -89,8 +87,6 @@ export default function NuevaSolicitud({
         programaId={programaId}
         setProgramaId={setProgramaId}
         type={type}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
       />
     ) : null;
   };
@@ -114,6 +110,4 @@ NuevaSolicitud.propTypes = {
   type: PropTypes.string.isRequired,
   solicitudId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  setIsLoading: PropTypes.func.isRequired,
 };

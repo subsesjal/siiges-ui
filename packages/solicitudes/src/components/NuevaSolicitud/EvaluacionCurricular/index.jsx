@@ -10,8 +10,6 @@ export default function EvaluacionCurricular({
   nextModule,
   id,
   programaId,
-  isLoading,
-  setIsLoading,
   type,
 }) {
   const [disabled, setDisabled] = useState(true);
@@ -39,8 +37,6 @@ export default function EvaluacionCurricular({
             nextModule={nextModule}
             next={next}
             prev={prev}
-            loading={isLoading}
-            setLoading={setIsLoading}
           >
             {section === 1 && (
               <DatosGeneralesEvaluacion disabled={disabled} id={id} type={type} />
@@ -61,7 +57,5 @@ EvaluacionCurricular.propTypes = {
   nextModule: PropTypes.func.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  setIsLoading: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
   type: PropTypes.string.isRequired,
 };

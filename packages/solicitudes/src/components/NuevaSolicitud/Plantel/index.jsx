@@ -19,8 +19,6 @@ export default function Plantel({
   nextModule,
   id,
   programaId,
-  isLoading,
-  setIsLoading,
 }) {
   const [disabled, setDisabled] = useState(true);
   const { session } = useContext(Context);
@@ -84,8 +82,6 @@ export default function Plantel({
             next={next}
             prev={prev}
             id={id}
-            loading={isLoading}
-            setLoading={setIsLoading}
           >
             {section === 1 && (
               <DatosPlantel
@@ -128,6 +124,4 @@ Plantel.propTypes = {
   nextModule: PropTypes.func.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  setIsLoading: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
 };
