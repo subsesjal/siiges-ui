@@ -1,9 +1,10 @@
-import { getToken } from "@siiges-ui/shared";
+/* eslint-disable consistent-return */
+import { getToken } from '@siiges-ui/shared';
 
 export default async function getSolicitudDetalles(id, session, setNoti) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const token  = getToken();
+  const token = getToken();
 
   if (session && id !== undefined) {
     try {
