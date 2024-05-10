@@ -9,7 +9,7 @@ import RolesUsuarios from '../../Sections/RolesUsuarios';
 import SeguridadPlataformaEducativa from '../../Sections/SeguridadPlataformaEducativa';
 import LicenciasPlataformaEducativa from '../../Sections/LicenciasPlataformaEducativa';
 
-export default function PlataformaEducativa({ nextModule, isLoading, setIsLoading }) {
+export default function PlataformaEducativa({ nextModule }) {
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 5);
@@ -25,8 +25,6 @@ export default function PlataformaEducativa({ nextModule, isLoading, setIsLoadin
           nextModule={nextModule}
           next={next}
           prev={prev}
-          loading={isLoading}
-          setLoading={setIsLoading}
         >
           {section === 1 && <DescripcionPlataformaEducativa />}
           {section === 2 && <CaracteristicasHardwareSoftware />}
@@ -41,6 +39,4 @@ export default function PlataformaEducativa({ nextModule, isLoading, setIsLoadin
 
 PlataformaEducativa.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  setIsLoading: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
 };

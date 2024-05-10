@@ -30,11 +30,11 @@ export default function ButtonSection({
   next,
   prev,
   sectionTitle,
-  loading,
-  setLoading,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
-  const { setNoti, session } = useContext(Context);
+  const {
+    setNoti, session, loading, setLoading,
+  } = useContext(Context);
   const institucion = getInstitucionUsuario(session);
   const validations = useContext(SolicitudContext);
   const evaluacionCurricular = useEvaluacionCurricular();
@@ -242,6 +242,4 @@ ButtonSection.propTypes = {
   sections: PropTypes.number.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sectionTitle: PropTypes.string.isRequired,
-  loading: PropTypes.bool.isRequired,
-  setLoading: PropTypes.func.isRequired,
 };

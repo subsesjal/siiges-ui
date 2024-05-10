@@ -28,8 +28,6 @@ export default function PlanEstudios({
   programaId,
   setProgramaId,
   type,
-  isLoading,
-  setIsLoading,
 }) {
   const { session, loading } = useContext(Context);
   const router = useRouter();
@@ -141,7 +139,7 @@ export default function PlanEstudios({
     return () => {
       isMounted = false;
     };
-  }, [id, type, loading, solicitudes, query.modalidad]);
+  }, [id, type, solicitudes, query.modalidad]);
 
   const value = useMemo(
     () => ({
@@ -183,8 +181,6 @@ export default function PlanEstudios({
               nextModule={nextModule}
               next={next}
               prev={prev}
-              loading={isLoading}
-              setLoading={setIsLoading}
             >
               <Loading loading={loading} />
               {section === 1 && <DatosPlanEstudios type={type} />}
@@ -244,6 +240,4 @@ PlanEstudios.propTypes = {
     PropTypes.number,
     PropTypes.string,
   ]),
-  isLoading: PropTypes.bool.isRequired,
-  setIsLoading: PropTypes.func.isRequired,
 };

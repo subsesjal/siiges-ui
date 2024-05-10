@@ -9,7 +9,7 @@ import pagination from '../../../events/pagination';
 import { DatosGeneralesProvider } from '../../utils/Context/datosGeneralesContext';
 
 export default function DatosGenerales({
-  nextModule, id, isLoading, setIsLoading,
+  nextModule, id,
 }) {
   const {
     next, prev, section, position, porcentaje,
@@ -28,8 +28,6 @@ export default function DatosGenerales({
             nextModule={nextModule}
             next={next}
             prev={prev}
-            loading={isLoading}
-            setLoading={setIsLoading}
           >
             {section === 1 && <InstitucionData id={id} />}
             {section === 2 && <RepresentanteLegalData id={id} />}
@@ -47,8 +45,6 @@ DatosGenerales.defaultProps = {
 
 DatosGenerales.propTypes = {
   nextModule: PropTypes.func.isRequired,
-  setIsLoading: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
   id: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
