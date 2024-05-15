@@ -10,15 +10,33 @@ import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
 function SolicitudesActions({ id, estatus }) {
   const { session, setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
-  const [showButtons, setShowButtons] = useState(false);
+  const [consultLink, setConsultLink] = useState(`/solicitudes/detallesSolicitudes/${id}`);
+  const [showButtons, setShowButtons] = useState({
+    consultar: true,
+    editar: false,
+    eliminar: false,
+  });
 
   useEffect(() => {
-    if (session.rol === 'representante') {
-      if (estatus === 1 || estatus === 200) {
-        setShowButtons(true);
-      }
-    } else {
-      setShowButtons(true);
+    switch (session.rol) {
+      case 'representante':
+        setShowButtons({
+          consultar: true,
+          editar: estatus === 1 || estatus === 200,
+          eliminar: estatus === 1 || estatus === 200,
+        });
+        break;
+      case 'control_documental':
+        setConsultLink(`/solicitudes/detallesSolicitudes/${id}/recepcionFormatos`);
+        setShowButtons({
+          consultar: true,
+          editar: true,
+          eliminar: false,
+        });
+        break;
+      default:
+        setShowButtons({ consultar: true, editar: false, eliminar: false });
+        break;
     }
   }, [session.rol]);
 
@@ -34,47 +52,40 @@ function SolicitudesActions({ id, estatus }) {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Link href={`/solicitudes/detallesSolicitudes/${id}`}>
-            <IconButton aria-label="consultar">
-              <ListAltIcon />
-            </IconButton>
-          </Link>
-        </Grid>
-        {showButtons && (
-          <>
-            <Grid item xs={4}>
-              <Link
-                href={`/solicitudes/detallesSolicitudes/${id}/editarSolicitud`}
-              >
-                <IconButton aria-label="editar">
-                  <EditIcon />
-                </IconButton>
-              </Link>
-            </Grid>
-            <Grid item xs={4}>
-              <IconButton
-                aria-label="eliminar"
-                onClick={() => {
-                  setOpen(true);
-                }}
-              >
-                <DeleteIcon />
+        {showButtons.consultar && (
+          <Grid item xs={4}>
+            <Link href={consultLink} passHref>
+              <IconButton aria-label="consultar">
+                <ListAltIcon />
               </IconButton>
-            </Grid>
-          </>
+            </Link>
+          </Grid>
+        )}
+        {showButtons.editar && (
+          <Grid item xs={4}>
+            <Link
+              href={`/solicitudes/detallesSolicitudes/${id}/editarSolicitud`}
+              passHref
+            >
+              <IconButton aria-label="editar">
+                <EditIcon />
+              </IconButton>
+            </Link>
+          </Grid>
+        )}
+        {showButtons.eliminar && (
+          <Grid item xs={4}>
+            <IconButton aria-label="eliminar" onClick={() => setOpen(true)}>
+              <DeleteIcon />
+            </IconButton>
+          </Grid>
         )}
       </Grid>
       <DefaultModal title="Eliminar solicitud" open={open} setOpen={setOpen}>
         <Typography>
-          ¿Esta seguro que quiere eliminar esta solicitud?
+          ¿Está seguro que quiere eliminar esta solicitud?
         </Typography>
-        <ButtonsForm
-          cancel={() => {
-            setOpen(false);
-          }}
-          confirm={handleDelete}
-        />
+        <ButtonsForm cancel={() => setOpen(false)} confirm={handleDelete} />
       </DefaultModal>
     </>
   );
