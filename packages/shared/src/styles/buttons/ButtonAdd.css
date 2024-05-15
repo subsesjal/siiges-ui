@@ -58,6 +58,13 @@
   background-color: #0072ce;
 }
 
+.buttonAdd.guardar:disabled {
+  pointer-events: none;
+  border-color: gray;
+  background-color: gray;
+  color: white;
+}
+
 .buttonAdd.enviar {
   border-color: #11ce00;
 }

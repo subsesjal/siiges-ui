@@ -9,9 +9,12 @@ import {
 import {
   ButtonsForm,
   Context,
+  DefaultModal,
   Input,
+  InputDate,
   LabelData,
   Layout,
+  updateRecord,
 } from '@siiges-ui/shared';
 import { getSolicitudDetalles } from '@siiges-ui/solicitudes';
 import { useRouter } from 'next/router';
@@ -27,11 +30,14 @@ const initialCheckboxes = {
 };
 
 export default function RecepcionFormatos() {
-  const { session, setNoti } = useContext(Context);
+  const { session, setNoti, setLoading } = useContext(Context);
   const router = useRouter();
   const { query } = router;
+  const [form, setForm] = useState({ estatusSolicitudId: 6 });
+  const [errors, setErrors] = useState({});
   const [solicitud, setSolicitud] = useState({});
-  const [form, setForm] = useState({ ...initialCheckboxes, comentarios: '' });
+  const [openModal, setOpenModal] = useState(false);
+  const [checkboxes, setCheckboxes] = useState({ ...initialCheckboxes });
 
   useEffect(() => {
     const fetchSolicitud = async () => {
@@ -52,14 +58,6 @@ export default function RecepcionFormatos() {
     fetchSolicitud();
   }, [query, session]);
 
-  const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-    setForm((prevForm) => ({
-      ...prevForm,
-      [name]: checked,
-    }));
-  };
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setForm((prevForm) => ({
@@ -68,8 +66,75 @@ export default function RecepcionFormatos() {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log('Form data:', form);
+  const handleOnBlur = (event) => {
+    const { name, value } = event.target;
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: value ? '' : 'Este campo es obligatorio',
+    }));
+  };
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setCheckboxes((prevForm) => ({
+      ...prevForm,
+      [name]: checked,
+    }));
+  };
+
+  const allChecked = Object.values(checkboxes).every((value) => value);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    // Validate required fields
+    const newErrors = {};
+    if (!form.fechaRecepcion) {
+      newErrors.fechaRecepcion = 'Este campo es obligatorio';
+    }
+    if (!form.oficioAdmisorio) {
+      newErrors.oficioAdmisorio = 'Este campo es obligatorio';
+    }
+
+    if (Object.keys(newErrors).length === 0) {
+      setOpenModal(false);
+      try {
+        const result = await updateRecord({
+          data: form,
+          endpoint: `/solicitudes/${query.id}`,
+        });
+        if (result.statusCode === 200) {
+          setLoading(false);
+          setNoti({
+            open: true,
+            message: 'Exito al actualizar la solicitud',
+            type: 'success',
+          });
+          router.back();
+        } else {
+          setLoading(false);
+          setNoti({
+            open: true,
+            message: `Error al actualizar la solicitud: ${result.message}`,
+            type: 'error',
+          });
+        }
+      } catch (error) {
+        setLoading(false);
+        setNoti({
+          open: true,
+          message: `Error al actualizar la solicitud: ${error.message}`,
+          type: 'error',
+        });
+      }
+    } else {
+      setErrors(newErrors);
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: 'Algo salió mal, revise que los campos esten correctos',
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -84,9 +149,21 @@ export default function RecepcionFormatos() {
         <Grid item xs={3}>
           <LabelData
             title="Fecha de recepción"
-            subtitle={solicitud.fechaRecepcion || ''}
+            subtitle={
+              solicitud.fechaRecepcion
+                ? new Date(solicitud.fechaRecepcion).toLocaleDateString(
+                  'es-MX',
+                  {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  },
+                )
+                : ''
+            }
           />
         </Grid>
+
         <Grid item xs={3}>
           <LabelData title="Folio" subtitle={solicitud.folio || ''} />
         </Grid>
@@ -218,21 +295,21 @@ export default function RecepcionFormatos() {
           <FormGroup>
             <FormControlLabel
               control={<Checkbox />}
-              checked={form.fda01}
+              checked={checkboxes.fda01}
               onChange={handleCheckboxChange}
               name="fda01"
               label="FDA 01"
             />
             <FormControlLabel
               control={<Checkbox />}
-              checked={form.fda03}
+              checked={checkboxes.fda03}
               onChange={handleCheckboxChange}
               name="fda03"
               label="FDA 03"
             />
             <FormControlLabel
               control={<Checkbox />}
-              checked={form.fda05}
+              checked={checkboxes.fda05}
               onChange={handleCheckboxChange}
               name="fda05"
               label="FDA 05"
@@ -243,21 +320,21 @@ export default function RecepcionFormatos() {
           <FormGroup>
             <FormControlLabel
               control={<Checkbox />}
-              checked={form.fda02}
+              checked={checkboxes.fda02}
               onChange={handleCheckboxChange}
               name="fda02"
               label="FDA 02"
             />
             <FormControlLabel
               control={<Checkbox />}
-              checked={form.fda04}
+              checked={checkboxes.fda04}
               onChange={handleCheckboxChange}
               name="fda04"
               label="FDA 04"
             />
             <FormControlLabel
               control={<Checkbox />}
-              checked={form.fda06}
+              checked={checkboxes.fda06}
               onChange={handleCheckboxChange}
               name="fda06"
               label="FDA 06"
@@ -265,25 +342,56 @@ export default function RecepcionFormatos() {
           </FormGroup>
         </Grid>
         <Grid item xs={12}>
-          <Input
-            id="comentarios"
-            label="Comentarios"
-            name="comentarios"
-            value={form.comentarios}
-            onchange={handleInputChange}
-            multiline
-            rows={4}
-          />
-        </Grid>
-        <Grid item xs={12}>
           <ButtonsForm
             cancel={() => {
               router.back();
             }}
-            confirm={handleSubmit}
+            confirm={() => {
+              setOpenModal(true);
+            }}
+            confirmDisabled={!allChecked}
           />
         </Grid>
       </Grid>
+      <DefaultModal
+        open={openModal}
+        setOpen={setOpenModal}
+        title="Recepción de documentos"
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <InputDate
+              name="fechaRecepcion"
+              label="Fecha de recepción de la solicitud"
+              value=""
+              onchange={handleInputChange}
+              onblur={handleOnBlur}
+              errorMessage={errors.fechaRecepcion}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Input
+              name="oficioAdmisorio"
+              id="oficioAdmisorio"
+              label="Numero de oficio admisorio"
+              value=""
+              onchange={handleInputChange}
+              onblur={handleOnBlur}
+              errorMessage={errors.oficioAdmisorio}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <ButtonsForm
+              cancel={() => {
+                setOpenModal(false);
+              }}
+              confirm={handleSubmit}
+            />
+          </Grid>
+        </Grid>
+      </DefaultModal>
     </Layout>
   );
 }
