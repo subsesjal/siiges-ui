@@ -7,9 +7,11 @@ import {
   Typography,
 } from '@mui/material';
 import {
+  ButtonFile,
   ButtonsForm,
   Context,
   DefaultModal,
+  GetFile,
   Input,
   InputDate,
   LabelData,
@@ -38,6 +40,39 @@ export default function RecepcionFormatos() {
   const [solicitud, setSolicitud] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [checkboxes, setCheckboxes] = useState({ ...initialCheckboxes });
+  const [url, setUrl] = useState([null, null, null, null, null, null]);
+  const fileData = [
+    {
+      entidadId: query.id,
+      tipoEntidad: 'SOLICITUD',
+      tipoDocumento: 'FDA01',
+    },
+    {
+      entidadId: query.id,
+      tipoEntidad: 'SOLICITUD',
+      tipoDocumento: 'FDA02',
+    },
+    {
+      entidadId: query.id,
+      tipoEntidad: 'SOLICITUD',
+      tipoDocumento: 'FDA03',
+    },
+    {
+      entidadId: query.id,
+      tipoEntidad: 'SOLICITUD',
+      tipoDocumento: 'FDA04',
+    },
+    {
+      entidadId: query.id,
+      tipoEntidad: 'SOLICITUD',
+      tipoDocumento: 'FDA05',
+    },
+    {
+      entidadId: query.id,
+      tipoEntidad: 'SOLICITUD',
+      tipoDocumento: 'FDA06',
+    },
+  ];
 
   useEffect(() => {
     const fetchSolicitud = async () => {
@@ -49,6 +84,21 @@ export default function RecepcionFormatos() {
             setNoti,
           );
           setSolicitud(solicitudData.data);
+
+          // Handle each file data entry individually using GetFile
+          fileData.forEach((data, index) => {
+            GetFile(data, (fileUrl, error) => {
+              if (error) {
+                console.error('Error fetching file:', error);
+                return;
+              }
+              setUrl((prevUrls) => {
+                const newUrls = [...prevUrls];
+                newUrls[index] = fileUrl; // Update the URL at the correct index
+                return newUrls;
+              });
+            });
+          });
         } catch (error) {
           console.error('Error fetching solicitud:', error);
         }
@@ -293,52 +343,112 @@ export default function RecepcionFormatos() {
         </Grid>
         <Grid item xs={3}>
           <FormGroup>
-            <FormControlLabel
-              control={<Checkbox />}
-              checked={checkboxes.fda01}
-              onChange={handleCheckboxChange}
-              name="fda01"
-              label="FDA 01"
-            />
-            <FormControlLabel
-              control={<Checkbox />}
-              checked={checkboxes.fda03}
-              onChange={handleCheckboxChange}
-              name="fda03"
-              label="FDA 03"
-            />
-            <FormControlLabel
-              control={<Checkbox />}
-              checked={checkboxes.fda05}
-              onChange={handleCheckboxChange}
-              name="fda05"
-              label="FDA 05"
-            />
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item xs={7}>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      checked={checkboxes.fda01}
+                      onChange={handleCheckboxChange}
+                      name="fda01"
+                    />
+                  )}
+                  label="FDA 01"
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <ButtonFile url={url[0]}>FDA 01</ButtonFile>
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item xs={7}>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      checked={checkboxes.fda03}
+                      onChange={handleCheckboxChange}
+                      name="fda03"
+                    />
+                  )}
+                  label="FDA 03"
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <ButtonFile url={url[2]}>FDA 03</ButtonFile>
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item xs={7}>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      checked={checkboxes.fda05}
+                      onChange={handleCheckboxChange}
+                      name="fda05"
+                    />
+                  )}
+                  label="FDA 05"
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <ButtonFile url={url[4]}>FDA 05</ButtonFile>
+              </Grid>
+            </Grid>
           </FormGroup>
         </Grid>
         <Grid item xs={3}>
           <FormGroup>
-            <FormControlLabel
-              control={<Checkbox />}
-              checked={checkboxes.fda02}
-              onChange={handleCheckboxChange}
-              name="fda02"
-              label="FDA 02"
-            />
-            <FormControlLabel
-              control={<Checkbox />}
-              checked={checkboxes.fda04}
-              onChange={handleCheckboxChange}
-              name="fda04"
-              label="FDA 04"
-            />
-            <FormControlLabel
-              control={<Checkbox />}
-              checked={checkboxes.fda06}
-              onChange={handleCheckboxChange}
-              name="fda06"
-              label="FDA 06"
-            />
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item xs={7}>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      checked={checkboxes.fda02}
+                      onChange={handleCheckboxChange}
+                      name="fda02"
+                    />
+                  )}
+                  label="FDA 02"
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <ButtonFile url={url[1]}>FDA 02</ButtonFile>
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item xs={7}>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      checked={checkboxes.fda04}
+                      onChange={handleCheckboxChange}
+                      name="fda04"
+                    />
+                  )}
+                  label="FDA 04"
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <ButtonFile url={url[3]}>FDA 04</ButtonFile>
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item xs={7}>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      checked={checkboxes.fda06}
+                      onChange={handleCheckboxChange}
+                      name="fda06"
+                    />
+                  )}
+                  label="FDA 06"
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <ButtonFile url={url[5]}>FDA 06</ButtonFile>
+              </Grid>
+            </Grid>
           </FormGroup>
         </Grid>
         <Grid item xs={12}>
