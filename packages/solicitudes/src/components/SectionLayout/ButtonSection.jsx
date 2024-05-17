@@ -68,19 +68,6 @@ export default function ButtonSection({
     }
   }
 
-  const PlanDeEstudios = () => {
-    if (isControlDocumental) {
-      return () => observaciones();
-    }
-    return {
-      1: () => validateNewSolicitud(),
-      3: () => submitEditSolicitud(validations, sections, id, setLoading),
-      4: () => submitEditSolicitud(validations, sections, id, setLoading),
-      5: () => submitEditSolicitud(validations, sections, id, setLoading),
-      9: () => submitTrayectoriaEducativa(validations, setLoading),
-    };
-  };
-
   const sectionFunctions = {
     'Datos Generales': {
       1: useCallback(
@@ -127,9 +114,20 @@ export default function ButtonSection({
     'Evaluación Curricular': {
       1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti, setLoading),
     },
-    'Plan de estudios': PlanDeEstudios(),
+    'Plan de estudios': {
+      1: () => validateNewSolicitud(),
+      3: () => submitEditSolicitud(validations, sections, id, setLoading),
+      4: () => submitEditSolicitud(validations, sections, id, setLoading),
+      5: () => submitEditSolicitud(validations, sections, id, setLoading),
+      9: () => submitTrayectoriaEducativa(validations, setLoading),
+    },
   };
-  if (sectionFunctions[sectionTitle]) {
+  if (isControlDocumental) {
+    submit = () => {
+      observaciones();
+    };
+  }
+  if (sectionFunctions[sectionTitle] && !isControlDocumental) {
     if (typeof sectionFunctions[sectionTitle] === 'function') {
       submit = () => {
         setLoading(true);
@@ -217,8 +215,8 @@ export default function ButtonSection({
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={12}>
             <ButtonStyled
-              text="Terminar solicitud"
-              alt="Terminar solicitud"
+              text={buttonTextEnd}
+              alt={buttonTextEnd}
               type="success"
               onclick={!loading ? submit : null}
             />
