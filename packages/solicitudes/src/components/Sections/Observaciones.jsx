@@ -2,20 +2,21 @@ import { Grid, TextField, Typography } from '@mui/material';
 import { useApi, LabelData, Context } from '@siiges-ui/shared';
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
+import { ObservacionesContext } from '../utils/Context/observacionesContext';
 
-function Observaciones({ id, section, rol }) {
+function Observaciones({ id, section }) {
   const {
     createObservaciones,
     setCreateObservaciones,
-  } = useContext(TablesPlanEstudiosContext);
-  const { setNoti } = useContext(Context);
+  } = useContext(ObservacionesContext);
+  const { setNoti, session, setLoading } = useContext(Context);
+  const { rol } = session;
   const [path, setPath] = useState('');
   const [body, setBody] = useState(null);
   const [method, setMethod] = useState('GET');
   const [observaciones, setObservaciones] = useState('');
 
-  const { data, error } = useApi({
+  const { data, error, loading } = useApi({
     endpoint: path,
     dataBody: body,
     method,
@@ -43,16 +44,15 @@ function Observaciones({ id, section, rol }) {
   }, [section, id, method]);
 
   useEffect(() => {
-    if (method === 'POST') {
-      setMethod('GET');
-      setCreateObservaciones(false);
-    }
+    setLoading(loading);
     if (method === 'POST' && error) {
       setNoti({
         open: true,
         message: 'Error al guardar observaciones',
         type: 'error',
       });
+      setMethod('GET');
+      setCreateObservaciones(false);
     }
     if (method === 'POST' && data) {
       setNoti({
@@ -60,8 +60,10 @@ function Observaciones({ id, section, rol }) {
         message: 'Observaciones guardadas',
         type: 'success',
       });
+      setMethod('GET');
+      setCreateObservaciones(false);
     }
-  }, [method]);
+  }, [loading]);
 
   useEffect(() => {
     if (method === 'GET' && data) {
@@ -110,5 +112,4 @@ Observaciones.propTypes = {
     PropTypes.string,
   ]),
   section: PropTypes.number.isRequired,
-  rol: PropTypes.string.isRequired,
 };
