@@ -31,9 +31,12 @@ export default function ModuleHeader({
   const router = useRouter();
 
   const isControlDocumental = rol === 'control_documental';
+  const isFinalModule = module === steps.length - 1;
+  const textIsControlDocumental = isFinalModule ? 'Terminar revisión' : 'Siguiente modulo';
+  const textNormal = isFinalModule ? 'Terminar solicitud' : 'Siguiente modulo';
   const textRol = isControlDocumental
-    ? 'Terminar revisión'
-    : 'Terminar solicitud';
+    ? textIsControlDocumental
+    : textNormal;
 
   const handleLastStepAction = async () => {
     setModalRepresentante(false);
@@ -77,7 +80,11 @@ export default function ModuleHeader({
         });
       }
     } else if (isControlDocumental) {
-      setModalState({ open: true, title: 'Enviar Observaciones' });
+      if (isFinalModule) {
+        setModalState({ open: true, title: 'Enviar Observaciones' });
+      } else {
+        nextModule();
+      }
     } else {
       nextModule();
     }
