@@ -66,10 +66,10 @@
 }
 
 .buttonAdd.enviar {
-  border-color: #11ce00;
+  border-color: orange;
 }
 
 .buttonAdd.enviar:hover {
-  background-color: #11ce00;
+  background-color: orange;
 }
 

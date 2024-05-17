@@ -202,7 +202,6 @@ export default function PlanEstudios({
                 <Observaciones
                   id={id}
                   section={section === 1 ? section : section + 1}
-                  rol={session?.rol}
                 />
               )}
             </SectionLayout>

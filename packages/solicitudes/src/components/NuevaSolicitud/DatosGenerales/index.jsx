@@ -7,6 +7,7 @@ import DiligenciasData from '../../Sections/DiligenciasData';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import { DatosGeneralesProvider } from '../../utils/Context/datosGeneralesContext';
+import Observaciones from '../../Sections/Observaciones';
 
 export default function DatosGenerales({
   nextModule, id,
@@ -32,6 +33,10 @@ export default function DatosGenerales({
             {section === 1 && <InstitucionData id={id} />}
             {section === 2 && <RepresentanteLegalData id={id} />}
             {section === 3 && <DiligenciasData id={id} />}
+            <Observaciones
+              id={id}
+              section={section + 9}
+            />
           </SectionLayout>
         </DatosGeneralesProvider>
       </CardContent>

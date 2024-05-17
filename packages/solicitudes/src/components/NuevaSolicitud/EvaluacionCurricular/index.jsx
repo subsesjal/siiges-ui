@@ -5,6 +5,7 @@ import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import DatosGeneralesEvaluacion from '../../Sections/DatosGeneralesEvaluacion';
 import { EvaluacionCurricularProvider } from '../../utils/Context/evaluacionCurricularContext';
+import Observaciones from '../../Sections/Observaciones';
 
 export default function EvaluacionCurricular({
   nextModule,
@@ -41,6 +42,10 @@ export default function EvaluacionCurricular({
             {section === 1 && (
               <DatosGeneralesEvaluacion disabled={disabled} id={id} type={type} />
             )}
+            <Observaciones
+              id={id}
+              section={section + 19}
+            />
           </SectionLayout>
         </EvaluacionCurricularProvider>
       </CardContent>

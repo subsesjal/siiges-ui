@@ -14,6 +14,7 @@ import RatificacionNombre from '../../Sections/RatificacionNombre';
 import NombresPropuestos from '../../Sections/NombresPropuestos';
 import { PlantelProvider } from '../../utils/Context/plantelContext';
 import getSolicitudesById from '../../utils/getSolicitudesById';
+import Observaciones from '../../Sections/Observaciones';
 
 export default function Plantel({
   nextModule,
@@ -108,6 +109,10 @@ export default function Plantel({
               <Infraestructura disabled={disabled} programaId={programaId} />
             )}
             {renderSection6()}
+            <Observaciones
+              id={id}
+              section={section + 12}
+            />
           </SectionLayout>
         </PlantelProvider>
       </CardContent>

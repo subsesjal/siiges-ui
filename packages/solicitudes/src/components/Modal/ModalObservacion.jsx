@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
@@ -55,12 +56,12 @@ function Modal({
 
   const confirmDocument = () => {
     setMethod('POST');
-    setDataBody([]);
+    setDataBody({});
     setEndpoint(`api/v1/solicitudes/${id}/observaciones`);
   };
   const confirmDocumentWithoutObservations = () => {
     setMethod('PATCH');
-    setDataBody({ estatusSolicitudId: 7 });
+    setDataBody({ estatusSolicitudId: 3 });
     setEndpoint(`api/v1/solicitudes/${id}`);
   };
 
@@ -73,8 +74,7 @@ function Modal({
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Typography variant="p" sx={{ fontWeight: 'bold' }}>
-            Desea terminar la revisión de la documentación? La institución sera
-            notificada.
+            ¿Está listo para finalizar la revisión de la solicitud? En caso de que haya observaciones, la institución será notificada.
           </Typography>
         </Grid>
       </Grid>
@@ -90,17 +90,17 @@ function Modal({
         <Grid item>
           <ButtonUnstyled
             className="buttonAdd enviar"
-            onClick={() => confirmDocumentWithoutObservations()}
+            onClick={() => confirmDocument()}
           >
-            Enviar sin observaciones
+            Enviar Observaciones
           </ButtonUnstyled>
         </Grid>
         <Grid item>
           <ButtonUnstyled
             className="buttonAdd guardar"
-            onClick={() => confirmDocument()}
+            onClick={() => confirmDocumentWithoutObservations()}
           >
-            Guardar
+            Aprobar Revisión
           </ButtonUnstyled>
         </Grid>
       </Grid>

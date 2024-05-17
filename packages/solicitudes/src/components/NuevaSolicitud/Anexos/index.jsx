@@ -4,6 +4,7 @@ import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
 import AnexosSeccion from '../../Sections/AnexosSeccion';
+import Observaciones from '../../Sections/Observaciones';
 
 export default function Anexos({
   nextModule, id, type,
@@ -43,6 +44,10 @@ export default function Anexos({
               type={type}
             />
           )}
+          <Observaciones
+            id={id}
+            section={section + 18}
+          />
         </SectionLayout>
       </CardContent>
     </Card>
