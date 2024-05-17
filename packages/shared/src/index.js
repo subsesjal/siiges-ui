@@ -55,9 +55,11 @@ import {
   getData, createRecord, updateRecord, deleteRecord,
 } from './utils/handlers/apiUtils';
 import estadosMexico from './utils/mocks/estadosMexico';
+import ButtonFile from './components/Buttons/ButtonFile';
 
 export {
   estadosMexico,
+  ButtonFile,
   Logo,
   Input,
   Title,
