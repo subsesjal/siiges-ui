@@ -2,7 +2,7 @@ import { Grid, Typography } from '@mui/material';
 import { ButtonStyled, Input, DataTable } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { columns } from '../Mocks/inspectores';
+import columns from '../Mocks/inspectores';
 import getInspectoresProgramas from '../../utils/getInspectoresProgramas';
 
 export default function FormAsignacionInspecciones({ solicitud }) {
@@ -25,7 +25,7 @@ export default function FormAsignacionInspecciones({ solicitud }) {
       setInspecciones(formattedRows);
     }
   }, [loading, inspectoresProgramas, solicitud]);
-  // Solicitud no esta trayendo los datos correctos
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
