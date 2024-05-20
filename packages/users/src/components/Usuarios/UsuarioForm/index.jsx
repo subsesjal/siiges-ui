@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import router from 'next/router';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import {
   ButtonsForm,
   Input,
@@ -83,9 +83,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="nombre"
               name="nombre"
               auto="nombre"
-              value={usuario && usuario.persona
-                ? usuario.persona.nombre
-                : null}
+              value={usuario && usuario.persona ? usuario.persona.nombre : null}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -98,9 +96,11 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
-              value={usuario && usuario.persona
-                ? usuario.persona.apellidoPaterno
-                : null}
+              value={
+                usuario && usuario.persona
+                  ? usuario.persona.apellidoPaterno
+                  : null
+              }
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -113,9 +113,11 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
-              value={usuario && usuario.persona
-                ? usuario.persona.apellidoMaterno
-                : null}
+              value={
+                usuario && usuario.persona
+                  ? usuario.persona.apellidoMaterno
+                  : null
+              }
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -129,12 +131,10 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="rolId"
               name="rolId"
               value={
-                rolOptions.length > 1
-                && usuario
-                && usuario.rol
+                rolOptions.length > 1 && usuario && usuario.rol
                   ? usuario.rol.id
                   : ''
-}
+              }
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError, isRequired: true })}
@@ -149,9 +149,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="tituloCargo"
               name="tituloCargo"
               auto="tituloCargo"
-              value={usuario && usuario.persona
-                ? usuario.persona.tituloCargo
-                : null}
+              value={
+                usuario && usuario.persona ? usuario.persona.tituloCargo : null
+              }
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={errorFields.tituloCargo}
@@ -163,9 +163,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="correo"
               name="correo"
               auto="correo"
-              value={usuario && usuario.correo
-                ? usuario.correo
-                : null}
+              value={usuario && usuario.correo ? usuario.correo : null}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
@@ -181,18 +179,14 @@ export default function UsuarioForm({ session, accion, usuario }) {
               id="usuario"
               name="usuario"
               auto="usuario"
-              value={usuario && usuario.usuario
-                ? usuario.usuario
-                : null}
+              value={usuario && usuario.usuario ? usuario.usuario : null}
               required
               onchange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={errorFields.usuario}
             />
           </Grid>
-          {
-            (accion === 'crear')
-            && (
+          {accion === 'crear' && (
             <>
               <Grid item xs={3}>
                 <InputPassword
@@ -218,9 +212,17 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   errorMessage={errorFields.repeatContrasena}
                 />
               </Grid>
+              <Grid item xs={3} />
+              <Grid item xs={3} />
+              <Grid item xs={8} sx={{ mt: -2 }}>
+                <Typography variant="subtitle">
+                  La contraseña debe contener entre 8 y 25 caracteres, asi como
+                  contener el menos una letra minuscula, una letra mayuscula, un
+                  caracter y un digito.
+                </Typography>
+              </Grid>
             </>
-            )
-          }
+          )}
         </Grid>
         <ButtonsForm
           cancel={() => router.back()}
@@ -260,10 +262,7 @@ UsuarioForm.propTypes = {
   usuario: PropTypes.shape({
     id: PropTypes.number,
     usuario: PropTypes.string,
-    actualizado: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.bool,
-    ]),
+    actualizado: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     correo: PropTypes.string,
     persona: PropTypes.shape({
       nombre: PropTypes.string,
