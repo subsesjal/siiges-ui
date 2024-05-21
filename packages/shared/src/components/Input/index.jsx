@@ -42,6 +42,13 @@ function Input({
   const handleOnChange = (e) => {
     const newValue = e.target.value;
 
+    // Limit the input length based on whether it is multiline or not
+    if (multiline && newValue.length > 600) {
+      return;
+    } if (!multiline && newValue.length > 255) {
+      return;
+    }
+
     let formattedValue;
     if (type === 'datetime') {
       formattedValue = new Date(newValue);
