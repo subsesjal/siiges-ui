@@ -1,35 +1,25 @@
 import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
-import { Context, Layout, Title } from '@siiges-ui/shared';
-import React, { useEffect, useState, useContext } from 'react';
+import { Layout, Title, useApi } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { getSolicitudDetalles } from '@siiges-ui/solicitudes';
 // import { GenerarFDA01 } from '../FDA/FDA01';
 // import { GenerarFDA02 } from '../FDA/FDA02';
 // import { GenerarFDA06 } from '../FDA/FDA06';
 
 export default function detallesSolicitudes() {
-  const { session, setNoti } = useContext(Context);
   const router = useRouter();
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
+  const { data } = useApi({ endpoint: `api/v1/solicitudes/${query.id}/detalles` });
 
   useEffect(() => {
-    const fetchSolicitud = async () => {
-      if (query.id !== undefined) {
-        try {
-          const solicitudData = await getSolicitudDetalles(query.id, session, setNoti);
-          setSolicitud(solicitudData);
-        } catch (error) {
-          console.error('Error fetching solicitud:', error);
-        }
-      }
-    };
-
-    fetchSolicitud();
-  }, [query, session, solicitud]);
+    if (data) {
+      setSolicitud(data);
+    }
+  }, [data, solicitud]);
 
   return (
     <Layout>
