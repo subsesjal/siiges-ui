@@ -65,6 +65,7 @@ export default function DocentesButtons({ id, setDocentesList }) {
         <DeleteDocentes
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
+          setDocentesList={setDocentesList}
           id={id}
         />
       )}
