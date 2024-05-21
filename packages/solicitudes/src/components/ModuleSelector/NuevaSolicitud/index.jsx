@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
-import { ButtonStyled } from '@siiges-ui/shared';
+import { ButtonStyled, Context, useApi } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import formData from '../../utils/sections/forms/formData';
 import errorDatosNuevaSolicitud from '../../utils/sections/errors/errorDatosNuevaSolicitud';
-import getPlantelesUsuario from '../../utils/getPlantelesUsuario';
 import modalidades from '../../utils/Mocks/mockModalidades';
 
 function NewRequest() {
-  const { planteles } = getPlantelesUsuario();
+  const { session, setNoti } = useContext(Context);
+  const { data: planteles } = useApi({
+    endpoint: `api/v1/planteles/usuarios/${session.id}`,
+  });
   const router = useRouter();
   const [form, setForm] = useState({});
   const [error, setError] = useState({});
@@ -17,13 +19,20 @@ function NewRequest() {
   const [validation, setValidation] = useState([]);
 
   useEffect(() => {
-    if (planteles !== undefined) {
+    if (planteles) {
       setPlantelesData(planteles.map((plantel) => ({
         id: plantel.id,
         nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
       })));
     }
-  }, [planteles]);
+    if (error.plantel) {
+      setNoti({
+        open: true,
+        message: 'Error al cargar los planteles',
+        type: 'error',
+      });
+    }
+  }, [planteles, error]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
