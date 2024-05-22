@@ -1,6 +1,8 @@
-import { TextField } from '@mui/material';
+import { TextField, InputAdornment, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 function InputNumber({
   id,
@@ -18,8 +20,9 @@ function InputNumber({
   negative,
   min,
   max,
+  sx,
 }) {
-  const [input, setInput] = useState(value);
+  const [input, setInput] = useState(value || '');
   const [rangeError, setRangeError] = useState(null);
 
   useEffect(() => {
@@ -48,6 +51,32 @@ function InputNumber({
     }
   };
 
+  const increment = () => {
+    const currentValue = parseFloat(input) || 0;
+    const newValue = currentValue + 1;
+    if (max !== null && newValue > max) return;
+    setInput(newValue);
+    onchange({
+      target: {
+        name,
+        value: newValue,
+      },
+    });
+  };
+
+  const decrement = () => {
+    const currentValue = parseFloat(input) || 0;
+    const newValue = currentValue - 1;
+    if (min !== null && newValue < min) return;
+    setInput(newValue);
+    onchange({
+      target: {
+        name,
+        value: newValue,
+      },
+    });
+  };
+
   return (
     <TextField
       margin="normal"
@@ -67,6 +96,19 @@ function InputNumber({
       error={!!rangeError || !!errorMessage}
       className="data-form"
       type="text"
+      sx={sx}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton onClick={decrement} disabled={disabled}>
+              <RemoveIcon />
+            </IconButton>
+            <IconButton onClick={increment} disabled={disabled}>
+              <AddIcon />
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
     />
   );
 }
@@ -75,6 +117,7 @@ InputNumber.defaultProps = {
   size: 'small',
   errorMessage: '',
   value: '',
+  auto: '',
   required: false,
   disabled: false,
   onchange: () => {},
@@ -83,6 +126,7 @@ InputNumber.defaultProps = {
   negative: false,
   min: null,
   max: null,
+  sx: {},
 };
 
 InputNumber.propTypes = {
@@ -94,13 +138,15 @@ InputNumber.propTypes = {
   required: PropTypes.bool,
   onfocus: PropTypes.func,
   disabled: PropTypes.bool,
-  value: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   errorMessage: PropTypes.string,
   size: PropTypes.string,
-  auto: PropTypes.string.isRequired,
+  auto: PropTypes.string,
   negative: PropTypes.bool,
   min: PropTypes.number,
   max: PropTypes.number,
+  // eslint-disable-next-line react/forbid-prop-types
+  sx: PropTypes.object,
 };
 
 export default InputNumber;

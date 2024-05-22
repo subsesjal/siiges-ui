@@ -56,8 +56,10 @@ import {
 } from './utils/handlers/apiUtils';
 import estadosMexico from './utils/mocks/estadosMexico';
 import ButtonFile from './components/Buttons/ButtonFile';
+import ButtonsInspeccionSection from './components/Buttons/ButtonsInspeccionSection';
 
 export {
+  ButtonsInspeccionSection,
   estadosMexico,
   ButtonFile,
   Logo,
