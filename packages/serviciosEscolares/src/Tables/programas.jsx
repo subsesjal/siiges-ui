@@ -1,8 +1,8 @@
 import React from 'react';
-import ButtonsProgramas from '../Components/utils/ButtonProgramas'
+import ButtonsProgramas from '../Components/utils/ButtonProgramas';
 
 const columnsProgramas = [
-  { field: 'id', headerName: 'ID', width: 50 },
+  { field: 'id', headerName: 'ID', width: 80 },
   { field: 'nombre', headerName: 'Programa', width: 900 },
   {
     field: 'actions',

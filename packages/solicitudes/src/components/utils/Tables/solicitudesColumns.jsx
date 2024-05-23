@@ -3,7 +3,7 @@ import SolicitudesActions from '../Components/SolicitudesActions';
 
 const columnsSolicitudes = [
   {
-    field: 'id', headerName: 'ID', width: 80, hide: true,
+    field: 'id', headerName: 'ID', width: 80,
   },
   {
     field: 'estatus', headerName: 'Estatus ID', width: 80, hide: true,

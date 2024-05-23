@@ -27,6 +27,8 @@ export default function Solicitudes() {
         ? solicitudes.filter((solicitud) => [2, 3].includes(solicitud.estatusSolicitudId))
         : solicitudes;
 
+      console.log(solicitudes);
+
       const formattedRows = filteredSolicitudes.map((solicitud) => ({
         id: solicitud.id,
         estatus: solicitud.estatusSolicitudId,
