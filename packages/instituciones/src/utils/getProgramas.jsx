@@ -8,7 +8,15 @@ export default function getProgramas(plantelId, callback) {
   fetch(`${url}/api/v1/programas/planteles/${plantelId}`, {
     headers: { api_key: apikey, Authorization: `Bearer ${token}` },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('404');
+        }
+        throw new Error('Error fetching data');
+      }
+      return response.json();
+    })
     .then((data) => {
       callback(null, { programas: data.data, loading: false });
     })
