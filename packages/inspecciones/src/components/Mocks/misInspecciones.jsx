@@ -1,8 +1,9 @@
 import React from 'react';
-import ActaCierre from '../ActaCierre';
+import BotonesInpeccion from '../ActaCierre';
 
 const columns = [
   { field: 'folio', headerName: 'Folio de captura', width: 200 },
+  { field: 'folioInspeccion', headerName: 'Folio de inspección', width: 200 },
   { field: 'planEstudios', headerName: 'Plan de estudios', width: 270 },
   { field: 'status', headerName: 'Estatus', width: 150 },
   { field: 'inspeccion', headerName: 'Inspección', width: 150 },
@@ -11,7 +12,7 @@ const columns = [
     field: 'actions',
     headerName: 'Acciones',
     renderCell: (params) => (
-      <ActaCierre id={params.id} />
+      <BotonesInpeccion id={params.id} />
     ),
   },
 ];

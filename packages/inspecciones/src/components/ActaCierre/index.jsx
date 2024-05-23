@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, IconButton } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
+import GradingIcon from '@mui/icons-material/Grading';
 import {
   ButtonsForm,
   Context,
@@ -9,8 +10,9 @@ import {
   Input,
   createRecord,
 } from '@siiges-ui/shared';
+import Link from 'next/link';
 
-export default function ActaCierre({ id }) {
+export default function BotonesInpeccion({ id }) {
   const { setLoading, setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
   const [observaciones, setObservaciones] = useState('');
@@ -20,8 +22,7 @@ export default function ActaCierre({ id }) {
     const data = { id, observaciones };
     const endpoint = '/your-endpoint';
     createRecord({ data, endpoint })
-      .then((response) => {
-        console.log('Record created:', response);
+      .then(() => {
         setNoti({
           open: true,
           message: 'Acta generada con exito',
@@ -42,14 +43,25 @@ export default function ActaCierre({ id }) {
 
   return (
     <>
-      <IconButton
-        aria-label="Acta de cierre"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        <PostAddIcon />
-      </IconButton>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <IconButton
+            aria-label="Acta de cierre"
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
+            <PostAddIcon />
+          </IconButton>
+        </Grid>
+        <Grid item xs={6}>
+          <Link href={`/inspecciones/misInspecciones/${id}/nuevaInspeccion`}>
+            <IconButton aria-label="Acta de cierre">
+              <GradingIcon />
+            </IconButton>
+          </Link>
+        </Grid>
+      </Grid>
       <DefaultModal title="Acta de cierre" open={open} setOpen={setOpen}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -77,6 +89,6 @@ export default function ActaCierre({ id }) {
   );
 }
 
-ActaCierre.propTypes = {
+BotonesInpeccion.propTypes = {
   id: PropTypes.number.isRequired,
 };

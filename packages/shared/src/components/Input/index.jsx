@@ -20,6 +20,7 @@ function Input({
   multiline,
   rows,
   maxRows,
+  sx,
 }) {
   const [input, setInput] = useState(value);
 
@@ -45,7 +46,8 @@ function Input({
     // Limit the input length based on whether it is multiline or not
     if (multiline && newValue.length > 600) {
       return;
-    } if (!multiline && newValue.length > 255) {
+    }
+    if (!multiline && newValue.length > 255) {
       return;
     }
 
@@ -95,6 +97,7 @@ function Input({
           ? { shrink: true }
           : {}
       }
+      sx={sx}
     />
   );
 }
@@ -114,6 +117,7 @@ Input.defaultProps = {
   multiline: false,
   rows: 1,
   maxRows: 1,
+  sx: {},
 };
 
 Input.propTypes = {
@@ -138,6 +142,8 @@ Input.propTypes = {
   multiline: PropTypes.bool,
   rows: PropTypes.number,
   maxRows: PropTypes.number,
+  // eslint-disable-next-line react/forbid-prop-types
+  sx: PropTypes.object,
 };
 
 export default Input;
