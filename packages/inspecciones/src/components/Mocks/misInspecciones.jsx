@@ -6,8 +6,7 @@ const columns = [
   { field: 'folioInspeccion', headerName: 'Folio de inspección', width: 200 },
   { field: 'planEstudios', headerName: 'Plan de estudios', width: 270 },
   { field: 'status', headerName: 'Estatus', width: 150 },
-  { field: 'inspeccion', headerName: 'Inspección', width: 150 },
-  { field: 'asignacion', headerName: 'Asignación', width: 150 },
+  { field: 'fechaAsignada', headerName: 'Asignación', width: 150 },
   {
     field: 'actions',
     headerName: 'Acciones',
