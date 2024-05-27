@@ -38,12 +38,11 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading) {
       }, 1000);
     })
     .catch((err) => {
-      console.error('Error:', err);
       setTimeout(() => {
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Hubo un problema, revise que los campos esten correctos',
+          message: `Hubo un problema, revise que los campos esten correctos: ${err}`,
           type: 'error',
         });
       }, 1000);

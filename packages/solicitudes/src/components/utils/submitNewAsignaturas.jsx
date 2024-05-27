@@ -9,6 +9,7 @@ const handleCreate = async (
   setNoti,
   tipo,
   setLoading,
+  setAsignaturasTotalList,
 ) => {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -44,6 +45,9 @@ const handleCreate = async (
     const newData = { ...form, id: data.data.id };
 
     setAsignaturasList((prevList) => [...prevList, newData]);
+    if (setAsignaturasTotalList) {
+      setAsignaturasTotalList((prevList) => [...prevList, newData]);
+    }
     setForm({ programaId: data.data.programaId, tipo, areaId: data.data.areaId });
     setInitialValues({});
 

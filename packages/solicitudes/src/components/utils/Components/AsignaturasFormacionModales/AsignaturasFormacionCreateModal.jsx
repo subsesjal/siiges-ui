@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
@@ -8,6 +8,7 @@ import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import { grados } from '../../Mocks/mockAsignaturas';
 import errorDatosAsignaturasFormacion from '../../sections/errors/errorDatosAsignaturasFormacion';
+import SolicitudContext from '../../Context/solicitudContext';
 
 export default function AsignaturasFormacionCreateModal({
   open,
@@ -16,6 +17,7 @@ export default function AsignaturasFormacionCreateModal({
 }) {
   const {
     setAsignaturasFormacionList,
+    setAsignaturasTotalList,
     formAsignaturasFormacion,
     setFormAsignaturasFormacion,
     asignaturasTotalList,
@@ -27,8 +29,33 @@ export default function AsignaturasFormacionCreateModal({
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
   const { setLoading } = useContext(Context);
+  const { form } = useContext(SolicitudContext);
+  const [selectedGrade, setSelectedGrade] = useState(grados.semestral);
 
-  const selectedGrade = grados.semestral;
+  useEffect(() => {
+    if (form) {
+      switch (form[1].programa.cicloId) {
+        case 1:
+          setSelectedGrade(grados.semestral);
+          break;
+        case 2:
+          setSelectedGrade(grados.cuatrimestral);
+          break;
+        case 3:
+          setSelectedGrade(grados.flexibleSemestral);
+          break;
+        case 4:
+          setSelectedGrade(grados.flexibleCuatrimestral);
+          break;
+        case 5:
+          setSelectedGrade(grados.optativa);
+          break;
+        default:
+          setSelectedGrade(grados.semestral);
+          break;
+      }
+    }
+  }, [form]);
 
   const errorsAsignatura = errorDatosAsignaturasFormacion(
     formAsignaturasFormacion,
@@ -86,6 +113,7 @@ export default function AsignaturasFormacionCreateModal({
       setNoti,
       2,
       setLoading,
+      setAsignaturasTotalList,
     );
   };
 
