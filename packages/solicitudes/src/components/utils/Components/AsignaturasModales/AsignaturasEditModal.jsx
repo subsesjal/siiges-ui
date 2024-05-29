@@ -35,26 +35,16 @@ export default function AsignaturasEditModal({
 
   useEffect(() => {
     if (form) {
-      switch (form[1].programa.cicloId) {
-        case 1:
-          setSelectedGrade(grados.semestral);
-          break;
-        case 2:
-          setSelectedGrade(grados.cuatrimestral);
-          break;
-        case 3:
-          setSelectedGrade(grados.flexibleSemestral);
-          break;
-        case 4:
-          setSelectedGrade(grados.flexibleCuatrimestral);
-          break;
-        case 5:
-          setSelectedGrade(grados.optativa);
-          break;
-        default:
-          setSelectedGrade(grados.semestral);
-          break;
-      }
+      const cicloIdMap = {
+        1: grados.semestral,
+        2: grados.cuatrimestral,
+        3: grados.flexibleSemestral,
+        4: grados.flexibleCuatrimestral,
+        5: grados.optativa,
+      };
+
+      const selectedGradeValue = cicloIdMap[form[1].programa.cicloId] || grados.semestral;
+      setSelectedGrade(selectedGradeValue);
     }
   }, [form]);
 
