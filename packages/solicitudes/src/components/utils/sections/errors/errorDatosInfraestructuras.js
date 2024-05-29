@@ -2,7 +2,10 @@ export default function errorDatosInfraestructuras(form, setError, error) {
   const validNumber = /^-?\d*\.?\d+$/;
   const errors = {
     tipoInstalacionId: () => {
-      if (form.tipoInstalacionId === undefined || form.tipoInstalacionId === '') {
+      if (
+        form.tipoInstalacionId === undefined
+        || form.tipoInstalacionId === ''
+      ) {
         setError({ ...error, tipoInstalacionId: 'Seleccione una instalación' });
         return false;
       }
@@ -50,10 +53,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
       return true;
     },
     recursos: () => {
-      if (
-        form.recursos === undefined
-        || form.recursos === ''
-      ) {
+      if (form.recursos === undefined || form.recursos === '') {
         setError({
           ...error,
           recursos: 'Recursos materiales invalidos',
@@ -64,9 +64,17 @@ export default function errorDatosInfraestructuras(form, setError, error) {
       return true;
     },
     asignaturasInfraestructura: () => {
-      if (form.asignaturasInfraestructura === undefined || form.asignaturasInfraestructura === '') {
-        setError({ ...error, asignaturasInfraestructura: 'Asignaturas invalidas' });
-        return false;
+      if (form.tipoInstalacionId === 1) {
+        if (
+          form.asignaturasInfraestructura === undefined
+          || form.asignaturasInfraestructura === ''
+        ) {
+          setError({
+            ...error,
+            asignaturasInfraestructura: 'Asignaturas invalidas',
+          });
+          return false;
+        }
       }
       setError({ ...error, asignaturasInfraestructura: '' });
       return true;

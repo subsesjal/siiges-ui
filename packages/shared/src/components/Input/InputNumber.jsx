@@ -22,17 +22,17 @@ function InputNumber({
   max,
   sx,
 }) {
-  const [input, setInput] = useState(value || '');
+  const [input, setInput] = useState(value || 0);
   const [rangeError, setRangeError] = useState(null);
 
   useEffect(() => {
-    setInput(value);
+    setInput(value || 0);
   }, [value]);
 
   const handleOnChange = (e) => {
     const newValue = e.target.value;
     const numberRegex = negative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
-    const floatValue = newValue === '' ? null : parseFloat(newValue);
+    const floatValue = newValue === '' ? 0 : parseFloat(newValue);
 
     if (numberRegex.test(newValue)) {
       setInput(newValue);
@@ -43,7 +43,10 @@ function InputNumber({
         },
       });
 
-      if ((min !== null && floatValue < min) || (max !== null && floatValue > max)) {
+      if (
+        (min !== null && floatValue < min)
+        || (max !== null && floatValue > max)
+      ) {
         setRangeError(`Number must be between ${min} and ${max}`);
       } else {
         setRangeError(null);

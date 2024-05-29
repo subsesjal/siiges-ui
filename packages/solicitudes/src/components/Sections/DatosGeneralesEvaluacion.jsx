@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import {
+  GetFile,
   Input,
   InputDateTime,
   InputFile,
@@ -23,10 +24,8 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
   const { solicitudes } = getSolicitudesById(id);
   const router = useRouter();
   const { query } = router;
-  const { cumplimiento } = useCumplimiento(
-    form.modalidad,
-    form.numero,
-  );
+  const { cumplimiento } = useCumplimiento(form.modalidad, form.numero);
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     const modalidadSource = type === 'editar' ? solicitudes?.programa?.modalidadId : query.modalidad;
@@ -46,7 +45,15 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         modalidad: modalidadSource,
       }));
     }
-  }, [solicitudes]);
+    if (type === 'editar' && form.programaId) {
+      const fileData = {
+        entidadId: form.programaId,
+        tipoEntidad: 'PROGRAMA',
+        tipoDocumento: 'DICTAMEN_EVALUACION',
+      };
+      GetFile(fileData, setUrl);
+    }
+  }, [solicitudes, form.programaId]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -69,13 +76,6 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
   const handleInputFocus = (e) => {
     const { name, value } = e.target;
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
-  };
-
-  const handleFileLoaded = (url) => {
-    setForm((prevForm) => ({
-      ...prevForm,
-      url,
-    }));
   };
 
   useEffect(() => {
@@ -190,10 +190,9 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             label="Dictamen de evaluación"
             tipoEntidad="PROGRAMA"
             tipoDocumento="DICTAMEN_EVALUACION"
-            value={form.dictamenEvaluacion}
+            url={url}
+            setUrl={setUrl}
             disabled={disabled}
-            url={form.url || ''}
-            setUrl={(url) => handleFileLoaded(url)}
             required
           />
         </Grid>
