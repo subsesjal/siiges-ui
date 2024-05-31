@@ -32,7 +32,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             const nivelIds = nivelesResponse.data.map((nivel) => nivel.edificioNivelId);
             setSelectedCheckboxes(nivelIds.map((edificioNivelId) => ({ edificioNivelId })));
           }
-          if (seguridadResponse && seguridadResponse.data) {
+          if (seguridadResponse && seguridadResponse.data && seguridadResponse.data.length > 0) {
             const seguridadData = seguridadResponse.data.map((sec, index) => ({
               plantelId: plantelesData.id,
               seguridadSistemaId: index + 1,

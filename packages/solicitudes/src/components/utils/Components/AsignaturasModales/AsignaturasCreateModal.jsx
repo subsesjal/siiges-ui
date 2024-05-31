@@ -1,8 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonStyled, validateField, Context,
+  DefaultModal,
+  ButtonStyled,
+  validateField,
+  Context,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -10,6 +13,7 @@ import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import { area, grados } from '../../Mocks/mockAsignaturas';
+import SolicitudContext from '../../Context/solicitudContext';
 
 export default function AsignaturasCreateModal({ open, hideModal, title }) {
   const {
@@ -22,8 +26,24 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setInitialValues,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
-  const selectedGrade = grados.semestral;
   const { setLoading } = useContext(Context);
+  const { form } = useContext(SolicitudContext);
+  const [selectedGrade, setSelectedGrade] = useState(grados.semestral);
+
+  useEffect(() => {
+    if (form) {
+      const cicloIdMap = {
+        1: grados.semestral,
+        2: grados.cuatrimestral,
+        3: grados.flexibleSemestral,
+        4: grados.flexibleCuatrimestral,
+        5: grados.optativa,
+      };
+
+      const selectedGradeValue = cicloIdMap[form[1].programa.cicloId] || grados.semestral;
+      setSelectedGrade(selectedGradeValue);
+    }
+  }, [form]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;

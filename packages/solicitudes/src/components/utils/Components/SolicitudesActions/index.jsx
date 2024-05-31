@@ -30,7 +30,7 @@ function SolicitudesActions({ id, estatus }) {
         setConsultLink(`/solicitudes/detallesSolicitudes/${id}/recepcionFormatos`);
         setShowButtons({
           consultar: true,
-          editar: true,
+          editar: false,
           eliminar: false,
         });
         break;

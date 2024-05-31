@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import {
   DefaultModal, ButtonStyled, validateField, Context,
@@ -10,6 +10,7 @@ import errorDatosAsignaturas from '../../sections/errors/errorDatosAsignaturas';
 import handleEdit from '../../submitEditAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import { area, grados } from '../../Mocks/mockAsignaturas';
+import SolicitudContext from '../../Context/solicitudContext';
 
 export default function AsignaturasEditModal({
   open,
@@ -29,7 +30,23 @@ export default function AsignaturasEditModal({
     programaId,
   } = useContext(TablesPlanEstudiosContext);
   const { setLoading } = useContext(Context);
-  const selectedGrade = grados.semestral;
+  const { form } = useContext(SolicitudContext);
+  const [selectedGrade, setSelectedGrade] = useState(grados.semestral);
+
+  useEffect(() => {
+    if (form) {
+      const cicloIdMap = {
+        1: grados.semestral,
+        2: grados.cuatrimestral,
+        3: grados.flexibleSemestral,
+        4: grados.flexibleCuatrimestral,
+        5: grados.optativa,
+      };
+
+      const selectedGradeValue = cicloIdMap[form[1].programa.cicloId] || grados.semestral;
+      setSelectedGrade(selectedGradeValue);
+    }
+  }, [form]);
 
   useEffect(() => {
     const rowItemValues = {

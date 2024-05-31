@@ -53,18 +53,23 @@ export default function PlanEstudios({
 
   useEffect(() => {
     let isMounted = true;
-    if (id !== undefined && isMounted) {
+
+    if (id && isMounted) {
       setDisabled(false);
     }
+
     if (query.modalidad) {
       setModalidad(query.modalidad);
     }
+
     if (!loadingSolicitud && solicitudes.programa && type === 'editar') {
       setProgramaId(solicitudes.programa.id);
       setModalidad(solicitudes.programa.modalidadId);
+
       const programaTurnosIds = solicitudes.programa.programaTurnos.map(
         (turno) => turno.turnoId,
       );
+
       setForm((prevForm) => ({
         ...prevForm,
         1: {
@@ -136,10 +141,19 @@ export default function PlanEstudios({
         },
       }));
     }
+
     return () => {
       isMounted = false;
     };
-  }, [id, type, solicitudes, query.modalidad]);
+  }, [
+    id,
+    type,
+    solicitudes,
+    query.modalidad,
+    query.plantel,
+    session.id,
+    loadingSolicitud,
+  ]);
 
   const value = useMemo(
     () => ({
@@ -231,12 +245,6 @@ PlanEstudios.propTypes = {
   setId: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
   type: PropTypes.string,
-  id: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
-  programaId: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
