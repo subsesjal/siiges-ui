@@ -1,29 +1,66 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  ButtonStyled,
+  ButtonsForm,
+  Context,
   DefaultModal,
   Input,
+  InputDate,
   LabelData,
   Select,
 } from '@siiges-ui/shared';
 import grupoService from './gruposService';
 
-const turnos = [{ id: 1, nombre: 'Matutino' }, { id: 2, nombre: 'Vespertino' }, { id: 3, nombre: 'Nocturno' }, { id: 4, nombre: 'Mixto' }];
+const turnos = [
+  { id: 1, nombre: 'Matutino' },
+  { id: 2, nombre: 'Vespertino' },
+  { id: 3, nombre: 'Nocturno' },
+  { id: 4, nombre: 'Mixto' },
+];
 export default function GruposModal({
-  open, setOpen, type, data, params,
+  open,
+  setOpen,
+  type,
+  data,
+  params,
+  fetchGrupos,
 }) {
   const title = type === 'new' ? 'Agregar Grupo' : 'Editar Grupo';
+  const { setNoti, setLoading } = useContext(Context);
   const [form, setForm] = useState();
   const pathGrupo = async (dataform) => {
+    setLoading(true);
     const dataBody = { ...dataform, ...params };
-    if (data?.id) {
-      grupoService({ id: data.id, dataBody });
-    } else {
-      grupoService({ dataBody });
+    try {
+      let result;
+      if (data?.id) {
+        result = await grupoService({ id: data.id, dataBody });
+      } else {
+        result = await grupoService({ dataBody });
+      }
+
+      if (result) {
+        setLoading(false);
+        setNoti({
+          open: true,
+          message: 'Grupo creado con exito',
+          type: 'success',
+        });
+        if (fetchGrupos) {
+          fetchGrupos(params.gradoId);
+        }
+      }
+
+      setOpen(false);
+    } catch (error) {
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: `Error al guardar Grupo: ${error}`,
+        type: 'error',
+      });
     }
-    setOpen(false);
   };
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -32,11 +69,16 @@ export default function GruposModal({
   return (
     <DefaultModal open={open} setOpen={setOpen} title={title}>
       <Grid container spacing={1}>
-        <Grid item xs={2}>
-          <LabelData title="ID" subtitle={data?.id} />
-        </Grid>
+        {data?.id && (
+          <Grid item xs={2}>
+            <LabelData title="ID" subtitle={data?.id} />
+          </Grid>
+        )}
         <Grid item xs={4}>
-          <LabelData title="Ciclo Escolar ID" subtitle={params?.gradoId} />
+          <LabelData
+            title="Ciclo Escolar ID"
+            subtitle={params?.cicloEscolarId}
+          />
         </Grid>
         <Grid item xs={4}>
           <LabelData title="Grado" subtitle={params?.gradoNombre} />
@@ -73,7 +115,7 @@ export default function GruposModal({
           />
         </Grid>
         <Grid item xs={6}>
-          <Input
+          <InputDate
             id="generacionFechaInicio"
             label="Fecha de inicio de generación"
             name="generacionFechaInicio"
@@ -84,7 +126,7 @@ export default function GruposModal({
           />
         </Grid>
         <Grid item xs={6}>
-          <Input
+          <InputDate
             id="generacionFechaFin"
             label="Fecha de fin de generación"
             name="generacionFechaFin"
@@ -94,23 +136,12 @@ export default function GruposModal({
             value={data?.generacionFechaFin}
           />
         </Grid>
-      </Grid>
-      <Grid container justifyContent="flex-end" marginTop={2}>
-        <Grid item xs={2}>
-          <ButtonStyled
-            text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={() => setOpen(false)}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
-            onclick={() => {
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <ButtonsForm
+            confirm={() => {
               pathGrupo(form);
             }}
+            cancel={() => setOpen(false)}
           />
         </Grid>
       </Grid>
@@ -118,11 +149,20 @@ export default function GruposModal({
   );
 }
 
+GruposModal.defaultProps = {
+  fetchGrupos: () => {},
+};
+
 GruposModal.propTypes = {
   type: PropTypes.string.isRequired,
-  params: PropTypes.string.isRequired,
-  setOpen: PropTypes.bool.isRequired,
+  params: PropTypes.shape({
+    cicloEscolarId: PropTypes.number,
+    gradoNombre: PropTypes.string,
+    gradoId: PropTypes.number,
+  }).isRequired,
+  setOpen: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  fetchGrupos: PropTypes.func,
   data: PropTypes.shape({
     id: PropTypes.number,
     cicloEscolarId: PropTypes.number,

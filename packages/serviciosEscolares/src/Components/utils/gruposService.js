@@ -19,7 +19,11 @@ export default async function grupoService({ id, dataBody }) {
     redirect: 'follow',
   });
 
-  const result = await response.text();
-  const { data } = JSON.parse(result);
-  return data;
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Error: ${response.status} ${errorText}`);
+  }
+
+  const result = await response.json();
+  return result.data;
 }
