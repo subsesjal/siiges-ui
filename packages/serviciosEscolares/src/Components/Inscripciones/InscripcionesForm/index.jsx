@@ -2,7 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Divider, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  LabelData, Select, Context, getTurnoById,
+  LabelData,
+  Select,
+  Context,
+  getTurnoById,
+  SelectAdd,
 } from '@siiges-ui/shared';
 import {
   getCiclosEscolares,
@@ -13,9 +17,14 @@ import {
   getProgramas,
 } from '@siiges-ui/instituciones';
 import getAsignaturas from '@siiges-ui/instituciones/src/utils/getAsignaturas';
+import CicloEscolarModal from './Modals/CicloEscolarModal';
+import GruposModal from '../../utils/GruposModal';
 
 export default function InscripcionForm({
-  setAsignaturas, setProgramaId, setGrupoId, setLoading,
+  setAsignaturas,
+  setProgramaId,
+  setGrupoId,
+  setLoading,
 }) {
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -24,7 +33,8 @@ export default function InscripcionForm({
   });
 
   const { setNoti, session } = useContext(Context);
-
+  const [open, setOpen] = useState(false);
+  const [openGrupos, setOpenGrupos] = useState(false);
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [selectedPlantel, setSelectedPlantel] = useState('');
   const [selectedPrograma, setSelectedPrograma] = useState('');
@@ -36,11 +46,17 @@ export default function InscripcionForm({
   const [programas, setProgramas] = useState([]);
   const [grados, setGrados] = useState([]);
   const [grupos, setGrupos] = useState([]);
+  const [params, setParams] = useState({
+    cicloEscolarId: null,
+    gradoNombre: null,
+    gradoId: null,
+  });
   const [labelPrograma, setLabelPrograma] = useState('');
   const [labelGrado, setLabelGrado] = useState('');
   const [labelGrupo, setLabelGrupo] = useState('');
   const [labelTurno, setLabelTurno] = useState('');
   const [labelCicloEscolar, setLabelCicloEscolar] = useState('');
+  const [formCicloEscolar, setFormCicloEscolar] = useState();
   const isRepresentante = session.rol === 'representante';
 
   const fetchPlanteles = (institucionId) => {
@@ -211,6 +227,7 @@ export default function InscripcionForm({
     setSelectedGrado('');
     setGrupos([]);
     setSelectedGrupo('');
+    setFormCicloEscolar({ programaId });
 
     if (programaId) {
       fetchCiclosEscolares(programaId);
@@ -233,6 +250,10 @@ export default function InscripcionForm({
     setSelectedGrado('');
     setGrupos([]);
     setSelectedGrupo('');
+    setParams((prevForm) => ({
+      ...prevForm,
+      cicloEscolarId,
+    }));
 
     if (cicloEscolarId) {
       fetchGrados();
@@ -250,6 +271,11 @@ export default function InscripcionForm({
 
     setGrupos([]);
     setSelectedGrupo('');
+    setParams((prevForm) => ({
+      ...prevForm,
+      gradoNombre: selectedGradoObj ? selectedGradoObj.nombre : '',
+      gradoId,
+    }));
 
     if (gradoId) {
       fetchGrupos(gradoId);
@@ -305,13 +331,16 @@ export default function InscripcionForm({
           />
         </Grid>
         <Grid item xs={4}>
-          <Select
+          <SelectAdd
             title="Ciclos Escolares"
             name="ciclosEscolares"
             value={selectedCicloEscolar}
             options={ciclosEscolares || []}
             onchange={handleCicloEscolarChange}
             disabled={!selectedPrograma}
+            onAddClick={() => {
+              setOpen(true);
+            }}
           />
         </Grid>
         <Grid item xs={4}>
@@ -325,13 +354,16 @@ export default function InscripcionForm({
           />
         </Grid>
         <Grid item xs={4}>
-          <Select
+          <SelectAdd
             title="Grupos"
             name="Grupos"
             value={selectedGrupo}
             options={grupos || []}
             onchange={handleGrupoChange}
             disabled={!selectedGrado}
+            onAddClick={() => {
+              setOpenGrupos(true);
+            }}
           />
         </Grid>
       </Grid>
@@ -355,6 +387,20 @@ export default function InscripcionForm({
           </Grid>
         </Grid>
       )}
+      <CicloEscolarModal
+        open={open}
+        setOpen={setOpen}
+        formCicloEscolar={formCicloEscolar}
+        setFormCicloEscolar={setFormCicloEscolar}
+        fetchCiclosEscolares={fetchCiclosEscolares}
+      />
+      <GruposModal
+        open={openGrupos}
+        setOpen={setOpenGrupos}
+        type="new"
+        params={params}
+        fetchGrupos={fetchGrupos}
+      />
     </>
   );
 }

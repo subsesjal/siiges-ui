@@ -52,13 +52,18 @@ import useApi from './utils/hooks/useApi';
 import { validateFormData } from './utils/handlers/validateFormData';
 import validateField from './utils/handlers/validateField';
 import {
-  getData, createRecord, updateRecord, deleteRecord,
+  getData,
+  createRecord,
+  updateRecord,
+  deleteRecord,
 } from './utils/handlers/apiUtils';
 import estadosMexico from './utils/mocks/estadosMexico';
 import ButtonFile from './components/Buttons/ButtonFile';
 import ButtonsInspeccionSection from './components/Buttons/ButtonsInspeccionSection';
+import SelectAdd from './components/Select/SelectAdd';
 
 export {
+  SelectAdd,
   ButtonsInspeccionSection,
   estadosMexico,
   ButtonFile,

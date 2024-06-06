@@ -19,7 +19,7 @@ function InputDate({
 }) {
   const handleDateChange = (newDate) => {
     const isValidDate = newDate && dayjs(newDate).isValid();
-    const formattedDate = isValidDate ? newDate.toISOString() : '';
+    const formattedDate = isValidDate ? dayjs(newDate).format('YYYY-MM-DD') : '';
 
     onchange({ target: { name, value: formattedDate } });
     // Trigger onblur with an artificial event object
