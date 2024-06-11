@@ -16,10 +16,19 @@ function InputDate({
   disabled,
   required,
   size,
+  type,
 }) {
   const handleDateChange = (newDate) => {
     const isValidDate = newDate && dayjs(newDate).isValid();
-    const formattedDate = isValidDate ? dayjs(newDate).format('YYYY-MM-DD') : '';
+    let formattedDate = '';
+
+    if (isValidDate) {
+      if (type === 'datetime') {
+        formattedDate = dayjs(newDate).format('YYYY-MM-DDTHH:mm:ss');
+      } else {
+        formattedDate = dayjs(newDate).format('YYYY-MM-DD');
+      }
+    }
 
     onchange({ target: { name, value: formattedDate } });
     // Trigger onblur with an artificial event object
@@ -66,9 +75,11 @@ InputDate.propTypes = {
   errorMessage: PropTypes.string,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 InputDate.defaultProps = {
+  type: 'date',
   label: '',
   name: '',
   onfocus: () => {},

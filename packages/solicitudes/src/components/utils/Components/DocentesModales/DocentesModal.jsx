@@ -372,9 +372,9 @@ export default function DocentesModal({
               name="formacion_1_fechaGraduado"
               value={formDocentes?.formacionesDocentes[0]?.fechaGraduado || ''}
               onchange={handleOnChange}
-              onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              type="datetime"
               errorMessage={error.formacion_1_fechaGraduado}
               disabled={isConsultMode}
             />
@@ -449,9 +449,9 @@ export default function DocentesModal({
               name="formacion_2_fechaGraduado"
               value={formDocentes?.formacionesDocentes[1]?.fechaGraduado || ''}
               onchange={handleOnChange}
-              onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
+              type="datetime"
               errorMessage={error.formacion_2_fechaGraduado}
               disabled={isConsultMode}
             />
