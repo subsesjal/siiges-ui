@@ -29,8 +29,8 @@ function SolicitudesActions({ id, estatus }) {
       case 'control_documental':
         setConsultLink(`/solicitudes/detallesSolicitudes/${id}/recepcionFormatos`);
         setShowButtons({
-          consultar: true,
-          editar: false,
+          consultar: estatus === 3,
+          editar: estatus === 2,
           eliminar: false,
         });
         break;
