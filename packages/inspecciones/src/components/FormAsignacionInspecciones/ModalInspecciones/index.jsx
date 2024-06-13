@@ -17,7 +17,9 @@ import dayjs from 'dayjs';
 const apikey = process.env.NEXT_PUBLIC_API_KEY;
 const url = process.env.NEXT_PUBLIC_URL;
 
-const fetchData = async ({ path, dataBody, setNoti }) => {
+const fetchData = async ({
+  path, dataBody, setNoti, setLoading,
+}) => {
   try {
     const token = getToken();
     const response = await fetch(`${url}/api/v1/${path}`, {
@@ -31,11 +33,18 @@ const fetchData = async ({ path, dataBody, setNoti }) => {
     });
     if (!response.ok) throw new Error('Network response was not ok');
     const { data } = await response.json();
-    return data;
-  } catch (error) {
+    setLoading(false);
     setNoti({
       open: true,
-      message: `Error al asignar la inspeccion: ${error}`,
+      message: 'Inspector asignado con éxito',
+      type: 'success',
+    });
+    return data;
+  } catch (error) {
+    setLoading(false);
+    setNoti({
+      open: true,
+      message: `Error al asignar la inspección: ${error.message}`,
       type: 'error',
     });
     return null;
@@ -43,7 +52,7 @@ const fetchData = async ({ path, dataBody, setNoti }) => {
 };
 
 function ModalInspecciones({ params: { row } }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti, setLoading } = useContext(Context);
   const [open, setOpen] = useState(false);
   const [inspector, setInspector] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -77,6 +86,7 @@ function ModalInspecciones({ params: { row } }) {
 
   const createInspection = useCallback(async () => {
     if (validations()) {
+      setLoading(true);
       const dataParams = {
         ...row,
         fechaInspeccion: form.fechaInspeccion,
@@ -96,11 +106,12 @@ function ModalInspecciones({ params: { row } }) {
         path: 'inspecciones/inspectores-programas',
         dataBody: inspeccionData,
         setNoti,
+        setLoading,
       });
       setOpen(false);
       setForm({ fechaInspeccion: '', folio: '' });
     }
-  }, [validations, form, row, setNoti]);
+  }, [validations, form, row, setNoti, setLoading]);
 
   useEffect(() => {
     if (open) {
@@ -145,6 +156,7 @@ function ModalInspecciones({ params: { row } }) {
                 label="Fecha de inspección"
                 name="fechaInspeccion"
                 auto="fechaInspeccion"
+                type="datetime"
                 onchange={handleOnChange}
                 errorMessage={errors.fechaInspeccion}
                 required
