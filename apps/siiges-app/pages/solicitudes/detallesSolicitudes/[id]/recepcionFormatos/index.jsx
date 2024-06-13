@@ -474,6 +474,7 @@ export default function RecepcionFormatos() {
               name="fechaRecepcion"
               label="Fecha de recepción de la solicitud"
               value=""
+              type="datetime"
               onchange={handleInputChange}
               onblur={handleOnBlur}
               errorMessage={errors.fechaRecepcion}
