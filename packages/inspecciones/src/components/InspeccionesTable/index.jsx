@@ -27,9 +27,6 @@ export default function InspeccionesTable() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Inspecciones</Typography>
-      </Grid>
-      <Grid item xs={12}>
         {loading ? (
           <Typography>Loading...</Typography>
         ) : (

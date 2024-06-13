@@ -42,7 +42,7 @@ export default function Solicitudes() {
   }, [solicitudes]);
 
   useEffect(() => {
-    if (session.rol !== 'admin') {
+    if (session.rol === 'representante') {
       setNewSolicitud(true);
     }
   }, [session]);
@@ -79,7 +79,7 @@ export default function Solicitudes() {
     <Layout title="Solicitudes">
       {newSolicitud && (
         <Select
-          title="Seleccione una opcion"
+          title="Seleccione una opción"
           name="options"
           options={options}
           value=""
