@@ -32,7 +32,7 @@ export default function DatosInstitucion({ alumno }) {
     fechaInicioAntecedente: '',
     fechaFinAntecedente: '',
     fechaExpedicion: '',
-    situacionValidacionId: 1,
+    situacionValidacionId: 4,
     fechaValidacion: dayjs(),
     usuarioId: session?.id,
     tipoValidacionId: '',
@@ -51,7 +51,7 @@ export default function DatosInstitucion({ alumno }) {
         const endpoint = `/alumnos/${alumno.id}/validaciones`;
         const response = await getData({ endpoint });
 
-        if (response && response.data) {
+        if (response && response.statusCode === 200) {
           const validation = response.data;
           setFormSent(true);
           setForm((prevForm) => ({
@@ -63,15 +63,19 @@ export default function DatosInstitucion({ alumno }) {
             estadoId: validation.estadoId || '',
             nivelId: validation.nivelId || '',
             fechaInicioAntecedente: validation.fechaInicioAntecedente
-              ? dayjs(validation.fechaInicioAntecedente).format('YYYY-MM-DDTHH:mm:ss')
+              ? dayjs(validation.fechaInicioAntecedente).format(
+                'YYYY-MM-DDTHH:mm:ss',
+              )
               : '',
             fechaFinAntecedente: validation.fechaFinAntecedente
-              ? dayjs(validation.fechaFinAntecedente).format('YYYY-MM-DDTHH:mm:ss')
+              ? dayjs(validation.fechaFinAntecedente).format(
+                'YYYY-MM-DDTHH:mm:ss',
+              )
               : '',
             fechaExpedicion: validation.fechaExpedicion
               ? dayjs(validation.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ss')
               : '',
-            situacionValidacionId: validation.situacionValidacionId || 1,
+            situacionValidacionId: validation.situacionValidacionId || 4,
             fechaValidacion: validation.fechaValidacion
               ? dayjs(validation.fechaValidacion).format('YYYY-MM-DDTHH:mm:ss')
               : dayjs().format('YYYY-MM-DDTHH:mm:ss'),
@@ -142,7 +146,6 @@ export default function DatosInstitucion({ alumno }) {
       'fechaFinAntecedente',
       'folio',
       'fechaExpedicion',
-      'situacionValidacionId',
       'tipoValidacionId',
     ];
 
@@ -167,14 +170,16 @@ export default function DatosInstitucion({ alumno }) {
           archivoValidacion: url,
         };
 
-        // If formSent is false, it means this is a new record; otherwise, it's an update.
         if (!formSent) {
           response = await createRecord({ data, endpoint });
         } else {
           response = await updateRecord({ data, endpoint });
         }
 
-        if (response && (response.statusCode === 200 || response.statusCode === 201)) {
+        if (
+          response
+          && (response.statusCode === 200 || response.statusCode === 201)
+        ) {
           setFormSent(true); // Set formSent to true after a successful creation
           setLoading(false);
           setNoti({
@@ -267,6 +272,7 @@ export default function DatosInstitucion({ alumno }) {
           onchange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.fechaInicioAntecedente}
+          type="datetime"
           required
         />
       </Grid>
@@ -279,6 +285,7 @@ export default function DatosInstitucion({ alumno }) {
           onchange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.fechaFinAntecedente}
+          type="datetime"
           required
         />
       </Grid>
@@ -303,22 +310,25 @@ export default function DatosInstitucion({ alumno }) {
           onchange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.fechaExpedicion}
+          type="datetime"
           required
         />
       </Grid>
-      <Grid item xs={4}>
-        <Select
-          title="Situación de documento"
-          name="situacionValidacionId"
-          options={situacionDocumento}
-          value={form.situacionValidacionId}
-          onchange={handleSelectChange('situacionValidacionId')}
-          onblur={handleBlur}
-          errorMessage={errors.situacionValidacionId}
-          required
-          disabled={disabled}
-        />
-      </Grid>
+      {!disabled && (
+        <Grid item xs={4}>
+          <Select
+            title="Situación de documento"
+            name="situacionValidacionId"
+            options={situacionDocumento}
+            value={form.situacionValidacionId}
+            onchange={handleSelectChange('situacionValidacionId')}
+            onblur={handleBlur}
+            errorMessage={errors.situacionValidacionId}
+            required
+            disabled={disabled}
+          />
+        </Grid>
+      )}
       <Grid item xs={4}>
         <Select
           title="Tipo de validación"
@@ -356,7 +366,7 @@ export default function DatosInstitucion({ alumno }) {
               label="Archivo de validación"
               id={1}
               tipoDocumento="VALIDACION_ALUMNO"
-              tipoEntidad="PERSONA"
+              tipoEntidad="ALUMNO"
               url={url}
               setUrl={setUrl}
               disabled={false}
