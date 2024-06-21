@@ -112,6 +112,7 @@ export default function InputFile({
 
 InputFile.defaultProps = {
   url: '',
+  disabled: false,
 };
 
 InputFile.propTypes = {
@@ -124,5 +125,5 @@ InputFile.propTypes = {
   tipoEntidad: PropTypes.string.isRequired,
   url: PropTypes.string,
   setUrl: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
 };

@@ -43,7 +43,7 @@ export default function EditarAlumno() {
           </Tabs>
         </Grid>
         {value === 0 && <FormAlumno type="edit" alumno={alumno} />}
-        {value === 1 && <DocumentosAlumno />}
+        {value === 1 && <DocumentosAlumno id={alumno.id} type="edit" />}
       </Grid>
     </Layout>
   );

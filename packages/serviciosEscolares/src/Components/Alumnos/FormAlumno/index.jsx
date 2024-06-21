@@ -1,17 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
-import { Select, Input, ButtonsForm } from '@siiges-ui/shared';
+import {
+  Select, Input, ButtonsForm, Context,
+} from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import {
-  campos, setAndValidateFormData, mailValidator, generos, nacionalidad,
+  campos,
+  setAndValidateFormData,
+  mailValidator,
+  generos,
+  nacionalidad,
 } from './dataAlumnos';
 import alumnosService from '../../utils/alumnosService';
 
-export default function FormAlumno({ type, alumno }) {
+export default function FormAlumno({ type, alumno, setId }) {
   const router = useRouter();
   const { query } = router;
   const [form, setForm] = useState();
+  const { session, setLoading, setNoti } = useContext(Context);
   const [formSelect, setFormSelect] = useState({
     situacionId: alumno?.situacionId,
   });
@@ -32,7 +39,14 @@ export default function FormAlumno({ type, alumno }) {
         situacionId: alumno.situacionId ? alumno.situacionId : '',
       }));
     }
-  }, [alumno]);
+    if (session.rol === 'representante') {
+      setForm((prevForm) => ({
+        ...prevForm,
+        situacionId: 2,
+      }));
+    }
+  }, [alumno, session.rol]);
+
   const validator = (name, value) => {
     if (name === 'correoPrimario') {
       if (mailValidator(value)) {
@@ -40,23 +54,49 @@ export default function FormAlumno({ type, alumno }) {
       } else setErrorMail('El campo Correo no es válido.');
     }
   };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     validator(name, value);
     setForm({ ...form, [name]: value.toString().trim() });
     setError('');
   };
+
   const saveButtonAction = async () => {
+    setLoading(true);
     try {
       const dataBody = setAndValidateFormData({ ...form, ...query }).formData;
+      let response;
       if (type === 'edit') {
-        await alumnosService({ id: query.alumnoId, dataBody, method: 'PATCH' });
+        response = await alumnosService({
+          id: query.alumnoId,
+          dataBody,
+          method: 'PATCH',
+        });
+        setNoti({
+          open: true,
+          message: 'Alumno actualizado con exito',
+          type: 'success',
+        });
+        setLoading(false);
       } else {
-        await alumnosService({ dataBody, method: 'POST' });
+        response = await alumnosService({ dataBody, method: 'POST' });
+        setId(response.data.id); // Set ID only when creating a new alumno
+        setNoti({
+          open: true,
+          message: 'Alumno registrado con exito',
+          type: 'success',
+        });
+        setLoading(false);
       }
-      router.back();
     } catch (err) {
       setError(err.message);
+      setNoti({
+        open: true,
+        message: 'Error al registrar alumno',
+        type: 'error',
+      });
+      setLoading(false);
     }
   };
 
@@ -92,9 +132,16 @@ export default function FormAlumno({ type, alumno }) {
               <Select
                 title={campo.label}
                 name={campo.id}
-                value={formSelect?.[campo.id] || ''}
+                value={
+                  campo.id === 'situacionId' && session.rol === 'representante'
+                    ? 2
+                    : formSelect?.[campo.id] || ''
+                }
                 options={campo.options}
-                onchange={handleOnChange}
+                onChange={handleOnChange}
+                disabled={
+                  campo.id === 'situacionId' && session.rol === 'representante'
+                }
               />
             )}
           </Grid>
@@ -131,6 +178,7 @@ export default function FormAlumno({ type, alumno }) {
 
 FormAlumno.propTypes = {
   type: PropTypes.string.isRequired,
+  setId: PropTypes.func.isRequired,
   alumno: PropTypes.shape({
     id: PropTypes.number,
     fechaRegistro: PropTypes.string,
