@@ -135,10 +135,29 @@ module.exports = withPlugins([withTM()], {
 
 
 
-| Nombre                       | Descripcion                                                                                                                         |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `yarn bootstrap`           | Instala las dependiendas e inicia symlinks  |
-| `yarn start `              | run all packages in parallel                |
-| `yarn start:app `          | run server                                  |
-| `yarn build:app`           |                                             |
+| Nombre            | Descripcion                                |
+| ----------------- | ------------------------------------------ |
+| `yarn bootstrap`  | Instala las dependiendas e inicia symlinks |
+| `yarn start `     | run all packages in parallel               |
+| `yarn start:app ` | run server                                 |
+| `yarn build:app`  |                                            |
 
+# Levantar Frontend
+Hacer Fork del proyecto:
+- [Frontend](https://github.com/subsesjal/siiges-ui)
+
+### Clonar el repositorio
+>[!NOTE]
+> Debes estar dentro del proyecto que hiciste **Fork**.
+
+```git clone https://github.com/yourUsername/siiges-ui```
+
+### Instalaciones necesarias dentro del directorio raíz
+```yarn install or yarn```
+```yarn bootstrap```
+
+### Agregar los archivos en el directorio raíz de siiges-ui/apps/siiges-app/
+- .env.local
+
+### Levantar Frontend
+```yarn start:app```
