@@ -124,6 +124,10 @@ const panelMenuOptions = (rol) => [
         text: 'Becas y Servicio Social',
         route: '/serviciosEscolares/becasServicioSocial',
       },
+      {
+        text: 'Solicitud de Folios',
+        route: '/serviciosEscolares/solicitudesFolios',
+      },
     ],
     key: 'otrosTramites',
   },

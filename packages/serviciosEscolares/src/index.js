@@ -1,5 +1,6 @@
 import columnsProgramas from './Tables/programas';
 import FormAlumno from './Components/Alumnos/FormAlumno';
+import FoliosForm from './Components/Folios/FoliosForm/index';
 import AlumnosForm from './Components/Alumnos/AlumnosForm';
 import getGrupoById from './Components/utils/getGrupoById';
 import columnsAsignaturas from './Tables/inscripcionesTable';
@@ -36,6 +37,7 @@ export {
   Grupos,
   Reglas,
   FormAlumno,
+  FoliosForm,
   Asignaturas,
   AlumnosForm,
   DatosAlumno,
