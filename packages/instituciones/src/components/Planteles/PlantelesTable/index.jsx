@@ -93,7 +93,7 @@ export default function Planteles({ planteles, institucionId, session }) {
               />
             )}
             <DefaultModal open={modal} setOpen={hideModal} id={modalId}>
-              <Typography>Desea eliminar este plantel?</Typography>
+              <Typography>¿Desea eliminar este plantel?</Typography>
               <Grid container spacing={2} justifyContent="flex-end">
                 <Grid item>
                   <ButtonStyled

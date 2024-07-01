@@ -76,7 +76,7 @@ export default function UsuariosTable({ usuarios, session }) {
       />
       <DefaultModal open={modal} setOpen={hideModal} id={modalId} title="Eliminar Usuario">
         <Typography>
-          Desea eliminar el usuario
+          ¿Desea eliminar el usuari
           {' '}
           {modalId && modalId.row.usuario}
           ?
