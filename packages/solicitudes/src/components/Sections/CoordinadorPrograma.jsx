@@ -20,7 +20,7 @@ export default function CoordinadorPrograma() {
         <Grid item xs={6}>
           <Input
             id="firstLastName"
-            label="Apellido paterno del coordinador"
+            label="Primer Apellido del coordinador"
             name="firstLastName"
             auto="firstLastName"
           />
@@ -28,7 +28,7 @@ export default function CoordinadorPrograma() {
         <Grid item xs={6}>
           <Input
             id="secondLastName"
-            label="Apellido materno del coordinador"
+            label="Seundo Apellido del coordinador"
             name="secondLastName"
             auto="secondLastName"
           />
@@ -36,7 +36,7 @@ export default function CoordinadorPrograma() {
         <Grid item xs={3}>
           <Input
             id="academicProfile"
-            label="Perfil academico del coordinador"
+            label="Perfil académico del coordinador"
             name="academicProfile"
             auto="academicProfile"
           />

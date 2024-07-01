@@ -31,10 +31,10 @@ export default function DatosAlumno({ alumno }) {
         <LabelData title="Nombre" subtitle={alumno.nombre} />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="Apellido Paterno" subtitle={alumno.apellidoPaterno} />
+        <LabelData title="Primer Apellido" subtitle={alumno.apellidoPaterno} />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="Apellido Materno" subtitle={alumno.apellidoMaterno} />
+        <LabelData title="Segundo Apellido" subtitle={alumno.apellidoMaterno} />
       </Grid>
       <Grid item xs={4}>
         <LabelData title="CURP" subtitle={alumno.curp} />
@@ -52,7 +52,7 @@ export default function DatosAlumno({ alumno }) {
         <Typography variant="h6">Datos de Institución de origen</Typography>
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="Institucion" subtitle={alumno.institucion} />
+        <LabelData title="Institución" subtitle={alumno.institucion} />
       </Grid>
       <Grid item xs={4}>
         <LabelData title="Plantel" subtitle={alumno.plantel} />

@@ -239,7 +239,7 @@ export default function RecepcionFormatos() {
           />
         </Grid>
         <Grid item xs={3}>
-          <LabelData title="Périodo" subtitle="Semestral" />
+          <LabelData title="Periodo" subtitle="Semestral" />
         </Grid>
         <Grid item xs={3}>
           <LabelData
