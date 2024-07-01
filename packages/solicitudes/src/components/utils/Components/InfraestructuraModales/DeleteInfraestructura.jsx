@@ -7,7 +7,7 @@ function DeleteInfraestructura({ modal, hideModal, id }) {
   console.log(id);
   return (
     <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>Desea eliminar esta Infraestructura?</Typography>
+      <Typography>¿Desea eliminar esta Infraestructura?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled

@@ -56,7 +56,7 @@ export default function Planteles({ planteles, institucionId, session }) {
     { field: 'domicilio', headerName: 'Domicilio', width: 240 },
     { field: 'colonia', headerName: 'Colonia', width: 240 },
     { field: 'municipio', headerName: 'Municipio', width: 140 },
-    { field: 'codigoPostal', headerName: 'Codigo Postal', width: 130 },
+    { field: 'codigoPostal', headerName: 'Código Postal', width: 130 },
     {
       field: 'claveCentroTrabajo',
       headerName: 'Clave centro de trabajo',
@@ -93,7 +93,7 @@ export default function Planteles({ planteles, institucionId, session }) {
               />
             )}
             <DefaultModal open={modal} setOpen={hideModal} id={modalId}>
-              <Typography>Desea eliminar este plantel?</Typography>
+              <Typography>¿Desea eliminar este plantel?</Typography>
               <Grid container spacing={2} justifyContent="flex-end">
                 <Grid item>
                   <ButtonStyled

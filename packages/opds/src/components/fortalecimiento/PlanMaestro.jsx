@@ -141,7 +141,7 @@ export default function PlanMaestro({ type }) {
       <Grid item xs={12}>
         <EvidenciaFotografica
           id={1}
-          label="Evidencia Fotografica (.jpg)"
+          label="Evidencia Fotográfica (.jpg)"
           url={fileURLs[0]}
           setUrl={(url) => handleFileLoaded(1, url)}
         />

@@ -31,7 +31,7 @@ function DiligenciasForm() {
         <Input id="email" label="Correo" name="email" auto="email" />
       </Grid>
       <Grid item xs={3}>
-        <Input id="phone" label="Telefono" name="phone" auto="phone" />
+        <Input id="phone" label="Teléfono" name="phone" auto="phone" />
       </Grid>
       <Grid item xs={3}>
         <Input

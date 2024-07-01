@@ -59,7 +59,7 @@ export default function InstitucionesTable({ instituciones, session }) {
       />
       <DefaultModal open={modal} setOpen={hideModal} id={modalId} title="Eliminar Institución">
         <Typography>
-          Desea eliminar la institución
+          ¿Desea eliminar la institución
           {' '}
           ?
         </Typography>

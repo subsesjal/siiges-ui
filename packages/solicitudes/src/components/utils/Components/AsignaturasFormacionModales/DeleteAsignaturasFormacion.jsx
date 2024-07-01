@@ -7,7 +7,7 @@ export default function DeleteAsignaturaFormacion({ modal, hideModal, id }) {
   console.log(id);
   return (
     <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>Desea eliminar esta asignatura de formación electiva?</Typography>
+      <Typography>¿Desea eliminar esta asignatura de formación electiva?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled

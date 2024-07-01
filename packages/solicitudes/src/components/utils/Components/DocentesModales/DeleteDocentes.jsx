@@ -37,7 +37,7 @@ function DeleteDocentes({
 
   return (
     <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>Desea eliminar esta Docente?</Typography>
+      <Typography>¿Desea eliminar esta Docente?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled
