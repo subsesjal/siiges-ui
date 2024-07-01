@@ -28,7 +28,7 @@ export default function CoordinadorPrograma() {
         <Grid item xs={6}>
           <Input
             id="secondLastName"
-            label="Seundo Apellido del coordinador"
+            label="Segundo Apellido del coordinador"
             name="secondLastName"
             auto="secondLastName"
           />
