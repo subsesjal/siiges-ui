@@ -59,7 +59,7 @@ export default function DiligenciasFormModal({
       } else {
         setNoti({
           open: true,
-          message: 'No se encontro esta diligencia',
+          message: 'No se encontró esta diligencia',
           type: 'error',
         });
       }
