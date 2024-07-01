@@ -30,7 +30,7 @@ export default function UbicacionPlantel() {
         <Grid item xs={6}>
           <Input
             id="numExt"
-            label="Numero exterior"
+            label="Número exterior"
             name="numExt"
             auto="numExt"
           />
@@ -38,7 +38,7 @@ export default function UbicacionPlantel() {
         <Grid item xs={6}>
           <Input
             id="numInt"
-            label="Numero interor"
+            label="Número interor"
             name="numInt"
             auto="numInt"
           />
@@ -52,13 +52,13 @@ export default function UbicacionPlantel() {
         <Grid item xs={6}>
           <Input
             id="email2"
-            label="Correo electronico sin dominio 2"
+            label="Correo electrónico sin dominio 2"
             name="email2"
             auto="email2"
           />
         </Grid>
         <Grid item xs={6}>
-          <Input id="CP" label="Codigo Postal" name="CP" auto="CP" />
+          <Input id="CP" label="Código Postal" name="CP" auto="CP" />
         </Grid>
         <Grid item xs={9}>
           <BasicSelect title="Municipio" options={options} />

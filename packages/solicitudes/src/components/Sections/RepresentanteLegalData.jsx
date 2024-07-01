@@ -199,7 +199,7 @@ function RepresentanteLegalData({ id }) {
         <Grid item xs={3}>
           <Input
             id="telefono"
-            label="Telefono"
+            label="Teléfono"
             name="telefono"
             auto="telefono"
             value={user?.persona?.telefono}
