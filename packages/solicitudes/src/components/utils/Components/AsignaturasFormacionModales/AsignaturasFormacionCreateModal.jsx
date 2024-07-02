@@ -151,7 +151,7 @@ export default function AsignaturasFormacionCreateModal({
         <Grid item xs={6}>
           <Input
             id="creditos"
-            label="Creditos"
+            label="Créditos"
             name="creditos"
             auto="creditos"
             onchange={handleOnChange}

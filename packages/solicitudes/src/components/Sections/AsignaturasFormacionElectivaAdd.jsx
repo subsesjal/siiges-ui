@@ -21,7 +21,7 @@ export default function AsignaturasFormacionElectivaAdd() {
         <Grid item xs={3}>
           <Input
             id="creditos"
-            label="Creditos"
+            label="Créditos"
             name="creditos"
             auto="creditos"
           />

@@ -104,7 +104,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         </Grid>
         <Grid item xs={6}>
           <BasicSelect
-            title="Area"
+            title="Área"
             name="areaId"
             value=""
             options={area}
@@ -143,7 +143,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         <Grid item xs={3}>
           <Input
             id="creditos"
-            label="Creditos"
+            label="Créditos"
             name="creditos"
             auto="creditos"
             onchange={handleOnChange}
@@ -168,7 +168,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         </Grid>
         <Grid item xs={12}>
           <BasicSelect
-            title="Seriacion"
+            title="Seriación"
             name="seriacion"
             value=""
             options={asignaturasList || []}
