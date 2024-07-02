@@ -123,7 +123,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
           <TextField
             id="funcionTutorial"
             name="funcionTutorial"
-            label="Funcion tutorial"
+            label="Función tutorial"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -177,7 +177,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
           <TextField
             id="estadisticasTitulacion"
             name="estadisticasTitulacion"
-            label="Estadisticas de titulación"
+            label="Estadísticas de titulación"
             rows={4}
             multiline
             sx={{ width: '100%' }}
