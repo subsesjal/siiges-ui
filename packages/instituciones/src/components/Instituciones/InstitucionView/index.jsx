@@ -37,7 +37,7 @@ export default function InstitucionView({ institucion, session }) {
     } else {
       setNoti({
         open: true,
-        message: 'Algo salio mal, ingrese un documento',
+        message: 'Algo salió mal, ingrese un documento',
         type: 'error',
       });
     }
