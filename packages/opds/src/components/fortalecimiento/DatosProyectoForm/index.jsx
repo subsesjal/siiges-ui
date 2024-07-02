@@ -262,7 +262,7 @@ export default function DatosProyectoForm({ type }) {
           <Input
             name="numeroDeContrato"
             value={form.numeroDeContrato}
-            label="Numero de Contrato"
+            label="Número de Contrato"
             id="numeroDeContrato"
             auto="numeroDeContrato"
             onchange={(e) => updateForm(e.target.name, e.target.value)}

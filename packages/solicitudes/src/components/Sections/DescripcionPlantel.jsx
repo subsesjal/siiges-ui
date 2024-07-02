@@ -100,7 +100,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={6}>
           <BasicSelect
-            title="Caracteristicas del inmueble"
+            title="Características del inmueble"
             name="tipoInmuebleId"
             options={options}
             value={plantelesData?.tipoInmuebleId}
@@ -112,7 +112,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
         <Grid item xs={6}>
           <InputNumber
             id="dimensiones"
-            label="Dimenciones del Plantel"
+            label="Dimensiones del Plantel"
             name="dimensiones"
             auto="dimensiones"
             value={plantelesData?.dimensiones}
@@ -152,7 +152,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
           <Typography variant="h6">Sistemas de seguridad</Typography>
           <InputNumber
             id="recubrimientosPlasticos"
-            label="Recubrimientos plasticos en pisos y escalones"
+            label="Recubrimientos plásticos en pisos y escalones"
             name="recubrimientosPlasticos"
             auto="recubrimientosPlasticos"
             value={seguridad[0]?.cantidad}
@@ -172,7 +172,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
           />
           <InputNumber
             id="senalamientosEvacuacion"
-            label="Señalamientos de evacuacion"
+            label="Señalamientos de evacuación"
             name="senalamientosEvacuacion"
             auto="senalamientosEvacuacion"
             value={seguridad[2]?.cantidad}
@@ -182,7 +182,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
           />
           <InputNumber
             id="botiquin"
-            label="Botiquin"
+            label="Botiquín"
             name="botiquin"
             auto="botiquin"
             value={seguridad[3]?.cantidad}
@@ -202,7 +202,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
           />
           <InputNumber
             id="areaSeguridad"
-            label="Area de seguridad"
+            label="Área de seguridad"
             name="areaSeguridad"
             auto="areaSeguridad"
             value={seguridad[5]?.cantidad}
@@ -222,7 +222,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
           />
           <InputNumber
             id="puntosReunionEvacuacion"
-            label="Puntos de reunion para evacuacion"
+            label="Puntos de reunión para evacuación"
             name="puntosReunionEvacuacion"
             auto="puntosReunionEvacuacion"
             value={seguridad[7]?.cantidad}

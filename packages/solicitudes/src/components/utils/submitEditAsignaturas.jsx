@@ -52,7 +52,7 @@ const handleEdit = async (
 
     setNoti({
       open: true,
-      message: 'Edición de datos exitoso!',
+      message: '¡Edición de datos exitoso!',
       type: 'success',
     });
   } catch (error) {
