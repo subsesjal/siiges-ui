@@ -26,12 +26,12 @@ import useDocente from '../../getDocente';
 const errorDatosDocentes = {
   tipodocente: 'Nombre invalido',
   nombre: 'Nombre invalido',
-  apellidoPaterno: 'Apellido Paterno invalido',
-  apellidoMaterno: 'Apellido Materno invalido',
+  apellidoPaterno: 'Primer Apellido invalido',
+  apellidoMaterno: 'Segundo Apellido invalido',
   tipoDocente: 'Seleccione un nivel',
   'persona.nombre': 'Nombre invalido',
-  'persona.apellidoPaterno': 'Apellido paterno invalido',
-  'persona.apellidoMaterno': 'Apellido materno invalido',
+  'persona.apellidoPaterno': 'Primer Apellido invalido',
+  'persona.apellidoMaterno': 'Segundo Apellido invalido',
   asignaturasDocentes: 'Seleccione una asignatura',
   tipoContratacion: 'Seleccione un tipo de contratación',
   antiguedad: 'Antigüedad invalida',
@@ -227,7 +227,7 @@ export default function DocentesModal({
           <Grid item xs={6}>
             <Input
               id="apellidoPaterno"
-              label="Apellido paterno"
+              label="Primer Apellido"
               name="apellidoPaterno"
               auto="apellidoPaterno"
               value={formDocentes?.persona?.apellidoPaterno || ''}
@@ -242,7 +242,7 @@ export default function DocentesModal({
           <Grid item xs={6}>
             <Input
               id="apellidoMaterno"
-              label="Apellido materno"
+              label="Segundo Apellido"
               name="apellidoMaterno"
               auto="apellidoMaterno"
               value={formDocentes?.persona?.apellidoMaterno || ''}
@@ -284,7 +284,7 @@ export default function DocentesModal({
           <Grid item xs={3}>
             <Input
               id="antiguedad"
-              label="Antiguedad"
+              label="Antigüedad"
               name="antiguedad"
               auto="antiguedad"
               value={formDocentes?.antiguedad || ''}

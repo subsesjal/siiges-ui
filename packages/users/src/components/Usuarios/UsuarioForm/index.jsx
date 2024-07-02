@@ -159,7 +159,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Correo Electronico"
+              label="Correo Electrónico"
               id="correo"
               name="correo"
               auto="correo"
