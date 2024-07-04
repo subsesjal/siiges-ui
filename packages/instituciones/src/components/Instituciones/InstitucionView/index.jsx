@@ -30,7 +30,7 @@ export default function InstitucionView({ institucion, session }) {
       } catch (error) {
         setNoti({
           open: true,
-          message: 'Algo salio mal, revise su documento',
+          message: 'Algo salió mal, revise su documento',
           type: 'error',
         });
       }
@@ -76,7 +76,7 @@ export default function InstitucionView({ institucion, session }) {
                   <ListItemText primary="Nombre de institución" />
                 </ListItem>
                 <ListItem disablePadding>
-                  <ListItemText primary="Razon social" />
+                  <ListItemText primary="Razón social" />
                 </ListItem>
               </List>
             </Grid>
