@@ -7,7 +7,7 @@ export default function UserProfile() {
   const { session } = useContext(Context);
   const { user, loading } = getCurrentUser(session.id);
   return (
-    <Layout>
+    <Layout title="Consultar Usuarios">
       {loading ? (
         <Grid container spacing={2}>
           <Grid item xs={4} sx={{ marginTop: 7 }}>
