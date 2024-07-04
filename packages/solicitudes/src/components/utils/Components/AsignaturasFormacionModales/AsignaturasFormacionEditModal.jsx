@@ -106,7 +106,7 @@ export default function AsignaturasFormacionEditModal({
       hideModal,
       setNoti,
       programaId,
-      1,
+      2,
       setLoading,
     );
   };
@@ -116,20 +116,7 @@ export default function AsignaturasFormacionEditModal({
   return (
     <DefaultModal open={open} setOpen={hideModal} title={edit}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <BasicSelect
-            title="Grado"
-            name="gradoId"
-            value={rowItem.gradoId ?? ''}
-            options={selectedGrade}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.grado}
-            required
-            disabled={edit === 'Consultar Asignatura'}
-          />
-        </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Input
             id="nombre"
             label="Nombre(s)"

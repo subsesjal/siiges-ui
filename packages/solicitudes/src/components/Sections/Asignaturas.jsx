@@ -10,6 +10,7 @@ import AsignaturasModal from '../utils/Components/AsignaturasModales/Asignaturas
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useAsignaturas from '../utils/getAsignaturas';
+import { grados } from '../utils/Mocks/mockAsignaturas';
 
 export default function Asignaturas({ disabled, type }) {
   const { programaId } = useContext(SolicitudContext);
@@ -23,7 +24,7 @@ export default function Asignaturas({ disabled, type }) {
     ? useAsignaturas(programaId)
     : { asignaturas: [], loading: false };
   const tableColumns = useMemo(
-    () => columns(setAsignaturasList, asignaturasList),
+    () => columns(grados, setAsignaturasList, asignaturasList),
     [setAsignaturasList, asignaturas],
   );
 
