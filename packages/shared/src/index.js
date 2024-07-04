@@ -46,6 +46,7 @@ import ListSubtitle from './components/ListItems/ListSubtitle';
 import SubmitDocument from './components/Submit/SubmitDocument';
 import fileToFormData from './components/Submit/FileToFormData';
 import PaperInstitucion from './components/Paper/PaperInstitucion';
+import ButtonsSections from './components/Buttons/ButtonsSections';
 import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
 import formattedDate from './utils/handlers/formattedDate';
 import useApi from './utils/hooks/useApi';
@@ -65,6 +66,7 @@ import SelectAdd from './components/Select/SelectAdd';
 export {
   SelectAdd,
   ButtonsInspeccionSection,
+  ButtonsSections,
   estadosMexico,
   ButtonFile,
   Logo,

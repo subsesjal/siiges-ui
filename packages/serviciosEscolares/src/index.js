@@ -1,5 +1,7 @@
 import columnsProgramas from './Tables/programas';
 import FormAlumno from './Components/Alumnos/FormAlumno';
+import FoliosData from './Components/Folios/FoliosData/index';
+import FoliosForm from './Components/Folios/FoliosForm/index';
 import AlumnosForm from './Components/Alumnos/AlumnosForm';
 import getGrupoById from './Components/utils/getGrupoById';
 import columnsAsignaturas from './Tables/inscripcionesTable';
@@ -36,6 +38,8 @@ export {
   Grupos,
   Reglas,
   FormAlumno,
+  FoliosData,
+  FoliosForm,
   Asignaturas,
   AlumnosForm,
   DatosAlumno,
