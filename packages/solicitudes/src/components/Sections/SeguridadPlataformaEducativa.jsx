@@ -14,8 +14,8 @@ export default function SeguridadPlataformaEducativa() {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">
-          Caracteristicas de soporte tecnico para garantizar la continuidad en
-          la prestacion del servicio educativo
+          Características de soporte técnico para garantizar la continuidad en
+          la prestación del servicio educativo
         </Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
@@ -30,17 +30,17 @@ export default function SeguridadPlataformaEducativa() {
               <FormControlLabel
                 value="basico"
                 control={<Radio />}
-                label="Resolucion de problemas basicos"
+                label="Resolución de problemas básicos"
               />
               <FormControlLabel
                 value="especializado"
                 control={<Radio />}
-                label="Resolucion de problemas por personal especializado"
+                label="Resolución de problemas por personal especializado"
               />
               <FormControlLabel
                 value="experto"
                 control={<Radio />}
-                label="Resolucion de problemas a nivel experto"
+                label="Resolución de problemas a nivel experto"
               />
             </RadioGroup>
           </FormControl>
@@ -48,7 +48,7 @@ export default function SeguridadPlataformaEducativa() {
         <Grid item xs={12}>
           <TextField
             id="medidasSeguridad"
-            label="Descripcion de las medidas de seguridad"
+            label="Descripción de las medidas de seguridad"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -57,7 +57,7 @@ export default function SeguridadPlataformaEducativa() {
         <Grid item xs={12}>
           <TextField
             id="incidenciasContingencia"
-            label="Descripcion de los pasos a seguir durante una incidencia o contingencia "
+            label="Descripción de los pasos a seguir durante una incidencia o contingencia "
             rows={4}
             multiline
             sx={{ width: '100%' }}

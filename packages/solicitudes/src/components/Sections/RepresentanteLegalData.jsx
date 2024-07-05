@@ -134,7 +134,7 @@ function RepresentanteLegalData({ id }) {
         <Grid item xs={3}>
           <Input
             id="numeroExterior"
-            label="Numero exterior"
+            label="Número exterior"
             name="numeroExterior"
             auto="numeroExterior"
             value={user?.persona?.domicilio?.numeroExterior}
@@ -145,7 +145,7 @@ function RepresentanteLegalData({ id }) {
         <Grid item xs={3}>
           <Input
             id="numeroInterior"
-            label="Numero interior"
+            label="Número interior"
             name="numeroInterior"
             auto="numeroInterior"
             value={user?.persona?.domicilio?.numeroInterior}
@@ -167,7 +167,7 @@ function RepresentanteLegalData({ id }) {
         <Grid item xs={3}>
           <Input
             id="codigoPostal"
-            label="Codigo Postal"
+            label="Código Postal"
             name="codigoPostal"
             auto="codigoPostal"
             value={user?.persona?.domicilio?.codigoPostal}
@@ -199,7 +199,7 @@ function RepresentanteLegalData({ id }) {
         <Grid item xs={3}>
           <Input
             id="telefono"
-            label="Telefono"
+            label="Teléfono"
             name="telefono"
             auto="telefono"
             value={user?.persona?.telefono}

@@ -68,7 +68,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
         <Grid item xs={12}>
           <Input
             id="nombrePropuesto1"
-            label="Nombre propuesto"
+            label="Nombre propuesto 1"
             name="nombrePropuesto1"
             auto="nombrePropuesto1"
             value={institucion?.ratificacionesNombre[0]?.nombrePropuesto1}
@@ -80,7 +80,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
         <Grid item xs={12}>
           <Input
             id="nombrePropuesto2"
-            label="Nombre propuesto"
+            label="Nombre propuesto 2"
             name="nombrePropuesto2"
             auto="nombrePropuesto2"
             value={institucion?.ratificacionesNombre[0]?.nombrePropuesto2}
@@ -91,7 +91,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
         <Grid item xs={12}>
           <Input
             id="nombrePropuesto3"
-            label="Nombre propuesto"
+            label="Nombre propuesto 3"
             name="nombrePropuesto3"
             auto="nombrePropuesto3"
             value={institucion?.ratificacionesNombre[0]?.nombrePropuesto3}
@@ -123,7 +123,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
         </Grid>
         <Grid item xs={12}>
           <Typography>
-            *Nombre de personas físicas: Se debera anexar la bigrafía o
+            *Nombre de personas físicas: Se debera anexar la biografía o
             fundamento por el que se hace la propuesta de nombre. En su caso, se
             anexará la biografía que sirva de fuente de consulta (autor, título
             de la obra, lugar y fecha de edición).

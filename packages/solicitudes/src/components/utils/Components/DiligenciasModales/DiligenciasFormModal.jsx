@@ -59,7 +59,7 @@ export default function DiligenciasFormModal({
       } else {
         setNoti({
           open: true,
-          message: 'No se encontro esta diligencia',
+          message: 'No se encontró esta diligencia',
           type: 'error',
         });
       }
@@ -169,7 +169,7 @@ export default function DiligenciasFormModal({
         <Grid item xs={6}>
           <Input
             id="apellidoPaterno"
-            label="Apellido Paterno"
+            label="Primer Apellido"
             name="apellidoPaterno"
             auto="apellidoPaterno"
             onchange={handleOnChange}
@@ -183,7 +183,7 @@ export default function DiligenciasFormModal({
         <Grid item xs={6}>
           <Input
             id="apellidoMaterno"
-            label="Apellido Materno"
+            label="Segundo Apellido"
             name="apellidoMaterno"
             auto="apellidoMaterno"
             onchange={handleOnChange}
@@ -225,7 +225,7 @@ export default function DiligenciasFormModal({
         <Grid item xs={6}>
           <Input
             id="telefono"
-            label="Telefono"
+            label="Teléfono"
             name="telefono"
             auto="telefono"
             onchange={handleOnChange}

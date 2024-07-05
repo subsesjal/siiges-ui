@@ -17,8 +17,8 @@ export const situaciones = [
 
 export const campos = [
   { id: 'nombre', label: 'Nombre', type: 'text' },
-  { id: 'apellidoPaterno', label: 'Apellido Paterno', type: 'text' },
-  { id: 'apellidoMaterno', label: 'Apellido Materno', type: 'text' },
+  { id: 'apellidoPaterno', label: 'Primer Apellido', type: 'text' },
+  { id: 'apellidoMaterno', label: 'Segundo Apellido', type: 'text' },
   { id: 'fechaNacimiento', label: 'Fecha de nacimiento', type: 'date' },
   {
     id: 'sexo',
@@ -33,10 +33,10 @@ export const campos = [
     options: nacionalidad,
   },
   { id: 'correoPrimario', label: 'Correo', type: 'text' },
-  { id: 'telefono', label: 'Telefono', type: 'text' },
+  { id: 'telefono', label: 'Teléfono', type: 'text' },
   { id: 'celular', label: 'Celular', type: 'text' },
   { id: 'curp', label: 'CURP', type: 'text' },
-  { id: 'matricula', label: 'Matricula', type: 'text' },
+  { id: 'matricula', label: 'Matrícula', type: 'text' },
   {
     id: 'situacionId',
     label: 'Situación',

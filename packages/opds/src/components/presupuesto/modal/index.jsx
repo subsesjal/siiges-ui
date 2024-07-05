@@ -106,7 +106,7 @@ function Modal({
         <Grid item xs={6}>
           <Select
             name="tipoPresupuestoId"
-            title="Capitulo"
+            title="Capítulo"
             id={`nombre-${id}`}
             value={form.tipoPresupuestoId}
             options={capituloRows}

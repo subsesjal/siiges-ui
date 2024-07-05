@@ -23,7 +23,7 @@ export default function DocentesAdd() {
         <Grid item xs={3}>
           <Input
             id="firstLastName1"
-            label="Apellido paterno"
+            label="Primer Apellido"
             name="firstLastName1"
             auto="firstLastName1"
           />
@@ -31,7 +31,7 @@ export default function DocentesAdd() {
         <Grid item xs={3}>
           <Input
             id="firstLastName2"
-            label="Apellido materno"
+            label="Segundo Apellido"
             name="firstLastName2"
             auto="firstLastName2"
           />
@@ -39,7 +39,7 @@ export default function DocentesAdd() {
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h6">Ultimo grado</Typography>
+          <Typography variant="h6">Último grado</Typography>
         </Grid>
         <Grid item xs={3}>
           <Input
@@ -68,7 +68,7 @@ export default function DocentesAdd() {
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h6">Penultimo grado</Typography>
+          <Typography variant="h6">Penúltimo grado</Typography>
         </Grid>
         <Grid item xs={3}>
           <Input
@@ -106,7 +106,7 @@ export default function DocentesAdd() {
         <Grid item xs={6}>
           <Input
             id="tipoContratacion"
-            label="Tipo de contratacion"
+            label="Tipo de contratación"
             name="tipoContratacion"
             auto="tipoContratacion"
           />
@@ -114,7 +114,7 @@ export default function DocentesAdd() {
         <Grid item xs={6}>
           <Input
             id="antiguedad"
-            label="Antiguedad"
+            label="Antigüedad"
             name="antiguedad"
             auto="antiguedad"
           />

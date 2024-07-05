@@ -7,7 +7,7 @@ function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
   console.log(id);
   return (
     <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>Desea eliminar esta Instituciones Aledaña?</Typography>
+      <Typography>¿Desea eliminar esta Instituciones Aledaña?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled

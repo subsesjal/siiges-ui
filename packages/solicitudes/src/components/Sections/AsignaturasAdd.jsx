@@ -21,7 +21,7 @@ export default function AsignaturasAdd() {
         <Grid item xs={3}>
           <Input
             id="creditos"
-            label="Creditos"
+            label="Créditos"
             name="creditos"
             auto="creditos"
           />
@@ -29,7 +29,7 @@ export default function AsignaturasAdd() {
         <Grid item xs={12}>
           <Input
             id="formacionEspecializada"
-            label="Formacion especializada"
+            label="Formación especializada"
             name="formacionEspecializada"
             auto="formacionEspecializada"
           />
@@ -37,7 +37,7 @@ export default function AsignaturasAdd() {
         <Grid item xs={12}>
           <Input
             id="seriacion"
-            label="Seriacion"
+            label="Seriación"
             name="seriacion"
             auto="seriacion"
           />

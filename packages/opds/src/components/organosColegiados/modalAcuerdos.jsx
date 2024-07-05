@@ -106,7 +106,7 @@ export default function ModalAcuerdos({
         <Grid item xs={6}>
           <TextField
             id="numero"
-            label="Numero de folio"
+            label="Número de folio"
             size="small"
             margin="normal"
             value={form?.numero}

@@ -123,7 +123,7 @@ export default function AsignaturasEditModal({
         </Grid>
         <Grid item xs={6}>
           <BasicSelect
-            title="Area"
+            title="Área"
             name="areaId"
             value={rowItem.areaId ?? ''}
             options={area}
@@ -165,7 +165,7 @@ export default function AsignaturasEditModal({
         <Grid item xs={3}>
           <Input
             id="creditos"
-            label="Creditos"
+            label="Créditos"
             name="creditos"
             auto="creditos"
             value={rowItem.creditos}
@@ -192,7 +192,7 @@ export default function AsignaturasEditModal({
         </Grid>
         <Grid item xs={12}>
           <BasicSelect
-            title="Seriacion"
+            title="Seriación"
             name="seriacion"
             value={rowItem.seriacion}
             options={asignaturasList || []}

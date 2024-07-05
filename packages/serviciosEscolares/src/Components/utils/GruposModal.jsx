@@ -87,7 +87,7 @@ export default function GruposModal({
         <Grid item xs={4}>
           <Input
             id="descripcion"
-            label="Descripcion"
+            label="Descripción"
             name="descripcion"
             auto="descripcion"
             onchange={handleOnChange}

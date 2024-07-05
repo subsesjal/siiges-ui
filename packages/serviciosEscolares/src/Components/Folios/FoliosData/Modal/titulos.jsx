@@ -65,13 +65,13 @@ export default function ModalTitulo({
   };
 
   return (
-    <DefaultModal title="Folios titulo" open={open} setOpen={setOpen}>
+    <DefaultModal title="Folios título" open={open} setOpen={setOpen}>
       <Grid container spacing={2}>
         {position === 'first' && (
           <>
             <Grid item xs={6}>
               <Input
-                label="Numero de folio de acta de titulación"
+                label="Número de folio de acta de titulación"
                 id="numeroFolio"
                 name="numeroFolio"
                 value={form.numeroFolio || ''}
@@ -198,7 +198,7 @@ export default function ModalTitulo({
           <>
             <Grid item xs={6}>
               <InputDate
-                label="Fecha de expedición de titulo"
+                label="Fecha de expedición de título"
                 id="fechaExpedicion"
                 name="fechaExpedicion"
                 value={form.fechaExpedicion || ''}

@@ -5,7 +5,7 @@ import ActionCell from '../../../components/presupuesto/modal/ActionCell';
 const columnsAnteproyecto = ({ setRowsData, SetCreateRow }) => [
   {
     field: 'capitulo',
-    headerName: 'Capitulo',
+    headerName: 'Capítulo',
     width: 300,
     renderCell: (params) => params.row.tipoPresupuesto?.descripcion,
   },
