@@ -301,7 +301,7 @@ export default function PlantelNewForm({ plantel, setLoading }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Primer apellido"
+              label="Primer Apellido"
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
@@ -316,7 +316,7 @@ export default function PlantelNewForm({ plantel, setLoading }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Segundo apellido"
+              label="Segundo Apellido"
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"

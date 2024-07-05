@@ -35,14 +35,14 @@ const errors = {
   apellidoPaterno: (form, setError) => setErrorState(
     'apellidoPaterno',
     !form.persona.apellidoPaterno
-      ? 'Apellido paterno inválido'
+      ? 'Primer Apellido inválido'
       : '',
     setError,
   ),
   apellidoMaterno: (form, setError) => setErrorState(
     'apellidoMaterno',
     !form.persona.apellidoMaterno
-      ? 'Apellido materno inválido'
+      ? 'Segundo Apellido inválido'
       : '',
     setError,
   ),

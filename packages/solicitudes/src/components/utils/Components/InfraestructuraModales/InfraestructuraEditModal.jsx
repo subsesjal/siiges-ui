@@ -68,17 +68,17 @@ export default function InfraestructuraEditModal({
 
   const instalacion = [
     { id: 1, nombre: 'Aula' },
-    { id: 2, nombre: 'Cubiculo' },
+    { id: 2, nombre: 'Cubículo' },
     { id: 3, nombre: 'Auditorio' },
-    { id: 4, nombre: 'Laboratorio fisico' },
+    { id: 4, nombre: 'Laboratorio físico' },
     { id: 5, nombre: 'Laboratorio virtual' },
-    { id: 6, nombre: 'Taller fisico' },
+    { id: 6, nombre: 'Taller físico' },
     { id: 7, nombre: 'Taller virtual' },
-    { id: 8, nombre: 'Laboratorio de computo' },
-    { id: 9, nombre: 'Biblioteca fisica' },
+    { id: 8, nombre: 'Laboratorio de cómputo' },
+    { id: 9, nombre: 'Biblioteca física' },
     { id: 10, nombre: 'Biblioteca virtual' },
     { id: 11, nombre: 'Otros' },
-    { id: 12, nombre: 'Area administrativa' },
+    { id: 12, nombre: 'Área administrativa' },
     { id: 13, nombre: 'Archivo muerto' },
   ];
 

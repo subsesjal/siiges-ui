@@ -2,17 +2,17 @@ import React from 'react';
 import ButtonsAlumnosInscritos from '../Components/utils/ButtonsAlumnosInscritos';
 
 const columnsAlumnosInscritos = (asignaturas, grupoId) => [
-  { field: 'matricula', headerName: 'Matricula', width: 170 },
+  { field: 'matricula', headerName: 'Matrícula', width: 170 },
   {
     field: 'apellidoPaterno',
-    headerName: 'Apellido Paterno',
+    headerName: 'Primer Apellido',
     width: 260,
     valueGetter: (params) => params.row.persona.apellidoPaterno,
   },
 
   {
     field: 'apellidoMaterno',
-    headerName: 'Apellido Materno',
+    headerName: 'Segundo Apellido',
     width: 260,
     valueGetter: (params) => params.row.persona.apellidoMaterno,
   },

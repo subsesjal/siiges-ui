@@ -115,7 +115,7 @@ export default function DocentesEditModal({
   ];
 
   const documentosPresentados = [
-    { id: 1, nombre: 'Titulo' },
+    { id: 1, nombre: 'Título' },
     { id: 2, nombre: 'Cédula' },
   ];
 
@@ -169,7 +169,7 @@ export default function DocentesEditModal({
           <Grid item xs={6}>
             <Input
               id="apellidoPaterno"
-              label="Apellido paterno"
+              label="Primer Apellido"
               name="apellidoPaterno"
               auto="apellidoPaterno"
               value={formDocentes.persona?.apellidoPaterno}
@@ -184,7 +184,7 @@ export default function DocentesEditModal({
           <Grid item xs={6}>
             <Input
               id="apellidoMaterno"
-              label="Apellido materno"
+              label="Segundo Apellido"
               name="apellidoMaterno"
               auto="apellidoMaterno"
               value={formDocentes.persona?.apellidoMaterno}
@@ -201,7 +201,7 @@ export default function DocentesEditModal({
       {currentSection === 2 && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h6">Ultimo grado</Typography>
+            <Typography variant="h6">Último grado</Typography>
           </Grid>
           <Grid item xs={3}>
             <BasicSelect
@@ -251,7 +251,7 @@ export default function DocentesEditModal({
       {currentSection === 3 && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h6">Penultimo grado</Typography>
+            <Typography variant="h6">Penúltimo grado</Typography>
           </Grid>
           <Grid item xs={3}>
             <BasicSelect
