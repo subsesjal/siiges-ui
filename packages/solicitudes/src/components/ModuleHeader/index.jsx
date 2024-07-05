@@ -18,6 +18,7 @@ export default function ModuleHeader({
   steps,
   type,
   date,
+  prevModule,
   nextModule,
   module,
   id,
@@ -32,8 +33,8 @@ export default function ModuleHeader({
 
   const isControlDocumental = rol === 'control_documental';
   const isFinalModule = module === steps.length - 1;
-  const textIsControlDocumental = isFinalModule ? 'Terminar revisión' : 'Siguiente módulo';
-  const textNormal = isFinalModule ? 'Terminar solicitud' : 'Siguiente módulo';
+  const textIsControlDocumental = isFinalModule ? 'Terminar revisión' : 'Siguiente modulo';
+  const textNormal = isFinalModule ? 'Terminar solicitud' : 'Siguiente modulo';
   const textRol = isControlDocumental
     ? textIsControlDocumental
     : textNormal;
@@ -90,6 +91,10 @@ export default function ModuleHeader({
     }
   };
 
+  const prevButton = () => {
+    prevModule();
+  };
+
   useEffect(() => {
     if (id !== undefined) {
       setDisabled(true);
@@ -127,6 +132,16 @@ export default function ModuleHeader({
               <Typography variant="p">{date}</Typography>
             </Grid>
             <Grid item xs={6} sx={{ textAlign: 'right', alignItems: 'end' }}>
+              {module >= 1 && (
+                <ButtonStyled
+                  text="Modulo anterior"
+                  alt="Modulo anterior"
+                  type="success"
+                  onclick={() => prevButton()}
+                  disabled={disabled}
+                />
+              )}
+              <span>&nbsp;&nbsp;</span>
               <ButtonStyled
                 text={textRol}
                 alt={textRol}
@@ -178,6 +193,7 @@ ModuleHeader.propTypes = {
   steps: PropTypes.arrayOf(PropTypes.string).isRequired,
   date: PropTypes.string.isRequired,
   nextModule: PropTypes.func.isRequired,
+  prevModule: PropTypes.func.isRequired,
   module: PropTypes.number.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };

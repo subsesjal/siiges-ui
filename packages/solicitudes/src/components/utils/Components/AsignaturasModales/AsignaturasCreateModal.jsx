@@ -40,7 +40,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         5: grados.optativa,
       };
 
-      const selectedGradeValue = cicloIdMap[form[1].programa.cicloId] || grados.semestral;
+      const selectedGradeValue = cicloIdMap[form[1].programa?.cicloId] || grados.semestral;
       setSelectedGrade(selectedGradeValue);
     }
   }, [form]);
