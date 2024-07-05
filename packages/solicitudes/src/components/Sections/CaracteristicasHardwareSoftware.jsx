@@ -62,7 +62,7 @@ export default function CaracteristicasHardwareSoftware() {
         <Grid item xs={12}>
           <TextField
             id="ubicacionServidor"
-            label="Interconección y ubicación del servidor central"
+            label="Interconexión y ubicación del servidor central"
             rows={4}
             multiline
             sx={{ width: '100%' }}
