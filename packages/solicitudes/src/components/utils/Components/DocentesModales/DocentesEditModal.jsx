@@ -326,7 +326,7 @@ export default function DocentesEditModal({
           <Grid item xs={3}>
             <Input
               id="antiguedad"
-              label="Antiguedad"
+              label="Antigüedad"
               name="antiguedad"
               auto="antiguedad"
               value={formDocentes.antiguedad}

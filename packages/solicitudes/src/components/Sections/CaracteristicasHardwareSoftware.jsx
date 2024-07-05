@@ -54,7 +54,7 @@ export default function CaracteristicasHardwareSoftware() {
         <Grid item xs={6}>
           <Input
             id="memoriaFisica"
-            label="Memoria Fisica (RAM)"
+            label="Memoria Física (RAM)"
             name="memoriaFisica"
             auto="memoriaFisica"
           />
@@ -62,7 +62,7 @@ export default function CaracteristicasHardwareSoftware() {
         <Grid item xs={12}>
           <TextField
             id="ubicacionServidor"
-            label="Interconeccion y ubicacion del servidor central"
+            label="Interconección y ubicación del servidor central"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -76,7 +76,7 @@ export default function CaracteristicasHardwareSoftware() {
         <Grid item xs={12}>
           <Input
             id="vercionPlataforma"
-            label="Vercion de la plataforma tecnologica"
+            label="Versión de la plataforma tecnológica"
             name="vercionPlataforma"
             auto="vercionPlataforma"
           />

@@ -74,7 +74,7 @@ export default function FormAsignacionInspecciones({ solicitud }) {
       <Grid item xs={6}>
         <Input
           id="institucion"
-          label="Institucion"
+          label="Institución"
           name="institucion"
           auto="institucion"
           value={solicitud.institucion}

@@ -48,7 +48,7 @@ function DeleteAsignatura({
   };
   return (
     <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>Desea eliminar esta asignatura?</Typography>
+      <Typography>¿Desea eliminar esta asignatura?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled

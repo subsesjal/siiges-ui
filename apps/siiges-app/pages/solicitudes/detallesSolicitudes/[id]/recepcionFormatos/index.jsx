@@ -265,7 +265,7 @@ export default function RecepcionFormatos() {
         </Grid>
         <Grid item xs={3}>
           <LabelData
-            title="Numero"
+            title="Número"
             subtitle={
               solicitud.programa?.plantel?.domicilio?.numeroExterior || ''
             }
@@ -485,7 +485,7 @@ export default function RecepcionFormatos() {
             <Input
               name="oficioAdmisorio"
               id="oficioAdmisorio"
-              label="Numero de oficio admisorio"
+              label="Número de oficio admisorio"
               value=""
               onchange={handleInputChange}
               onblur={handleOnBlur}

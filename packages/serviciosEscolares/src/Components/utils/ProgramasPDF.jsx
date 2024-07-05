@@ -7,7 +7,7 @@ const placeholderPdfFiles = [
   { title: 'Mapa Curricular' },
   { title: 'Reglas de operación' },
   { title: 'Asignaturas a detalle' },
-  { title: 'Propuesta hemerobiologica' },
+  { title: 'Propuesta hemerobibliografíca' },
   { title: 'Informe de resultados' },
   { title: 'Instrumentos o formatos utilizados' },
   { title: 'Trayectoria Educativa' },

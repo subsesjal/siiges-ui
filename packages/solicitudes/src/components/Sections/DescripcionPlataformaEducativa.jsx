@@ -27,7 +27,7 @@ export default function DescripcionPlataformaEducativa() {
         <Grid item xs={12}>
           <TextField
             id="modeloTeoricoPedagogico"
-            label="Descripcion del modelo teorico-pedagogico"
+            label="Descripción del modelo teorico-pedagógico"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -36,7 +36,7 @@ export default function DescripcionPlataformaEducativa() {
         <Grid item xs={12}>
           <TextField
             id="descripcionInfraestructura"
-            label="Descripcion de la infraestructura tecnologica de la plataforma tecnologica educativa"
+            label="Descripción de la infraestructura tecnologica de la plataforma tecnológica educativa"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -59,7 +59,7 @@ export default function DescripcionPlataformaEducativa() {
         <Grid item xs={6}>
           <Input
             id="concurrenciaMaxima"
-            label="Concurrencia maxima de usuarios"
+            label="Concurrencia máxima de usuarios"
             name="concurrenciaMaxima"
             auto="concurrenciaMaxima"
           />
@@ -67,7 +67,7 @@ export default function DescripcionPlataformaEducativa() {
         <Grid item xs={12}>
           <TextField
             id="planCrecimiento"
-            label="Plan de crecimiento para un eventual aumento de numero de usuarios"
+            label="Plan de crecimiento para un eventual aumento de número de usuarios"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -76,7 +76,7 @@ export default function DescripcionPlataformaEducativa() {
         <Grid item xs={12}>
           <TextField
             id="ventajasPlataforma"
-            label="Ventajas de la plataforma educativa frente a otros modelos tecnologicos"
+            label="Ventajas de la plataforma educativa frente a otros modelos tecnológicos"
             rows={4}
             multiline
             sx={{ width: '100%' }}

@@ -205,7 +205,7 @@ export default function InfraestructuraEditModal({
         <Grid item xs={6}>
           <Input
             id="ubicacion"
-            label="Ubicacion"
+            label="Ubicación"
             name="ubicacion"
             auto="ubicacion"
             value={formInfraestructuras.ubicacion}

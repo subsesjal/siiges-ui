@@ -169,7 +169,7 @@ export default function InfraestructuraCreateModal({
         <Grid item xs={6}>
           <Input
             id="ubicacion"
-            label="Ubicacion"
+            label="Ubicación"
             name="ubicacion"
             auto="ubicacion"
             onchange={handleOnChange}

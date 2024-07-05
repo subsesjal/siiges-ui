@@ -227,7 +227,7 @@ export default function DocentesModal({
           <Grid item xs={6}>
             <Input
               id="apellidoPaterno"
-              label="Apellido paterno"
+              label="Primer Apellido"
               name="apellidoPaterno"
               auto="apellidoPaterno"
               value={formDocentes?.persona?.apellidoPaterno || ''}
@@ -242,7 +242,7 @@ export default function DocentesModal({
           <Grid item xs={6}>
             <Input
               id="apellidoMaterno"
-              label="Apellido materno"
+              label="Segundo Apellido"
               name="apellidoMaterno"
               auto="apellidoMaterno"
               value={formDocentes?.persona?.apellidoMaterno || ''}
@@ -284,7 +284,7 @@ export default function DocentesModal({
           <Grid item xs={3}>
             <Input
               id="antiguedad"
-              label="Antiguedad"
+              label="Antigüedad"
               name="antiguedad"
               auto="antiguedad"
               value={formDocentes?.antiguedad || ''}
@@ -318,7 +318,7 @@ export default function DocentesModal({
       {currentSection === 2 && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h6">Formacionés Docentes</Typography>
+            <Typography variant="h6">Formaciones Docentes</Typography>
           </Grid>
           <Grid item xs={1} sx={{ mt: 3 }}>
             <Typography variant="subtitle">1.</Typography>

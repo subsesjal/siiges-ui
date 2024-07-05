@@ -19,7 +19,7 @@ const columns = (handleEdit) => [
     width: 70,
     hidden: true,
   },
-  { field: 'matricula', headerName: 'Matricula', width: 150 },
+  { field: 'matricula', headerName: 'Matrícula', width: 150 },
   { field: 'name', headerName: 'Nombre', width: 450 },
   { field: 'folio', headerName: 'Folio', width: 150 },
   { field: 'date', headerName: 'Fecha', width: 150 },
@@ -106,7 +106,7 @@ export default function FoliosData({ solicitudType }) {
           <LabelData title="RVOE" subtitle="ABCD1234567" />
         </Grid>
         <Grid item xs={8}>
-          <LabelData title="Grado Academico" subtitle="ABCD1234567" />
+          <LabelData title="Grado Académico" subtitle="ABCD1234567" />
         </Grid>
         <Grid item xs={4}>
           <LabelData title="Plan de Estudios" subtitle="no c jaja salu2" />
@@ -116,7 +116,7 @@ export default function FoliosData({ solicitudType }) {
         </Grid>
         <Grid item xs={4}>
           <Input
-            label="Numero de recibo de pago oficial"
+            label="Número de recibo de pago oficial"
             id="numeroRecibo"
             name="numeroRecibo"
           />

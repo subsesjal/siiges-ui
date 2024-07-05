@@ -159,7 +159,7 @@ export default function DatosPlanEstudios() {
         <Grid item xs={3}>
           <Input
             id="duracionPeriodos"
-            label="Duracion del programa"
+            label="Duración del programa"
             name="duracionPeriodos"
             auto="duracionPeriodos"
             onchange={handleOnChange}
@@ -176,7 +176,7 @@ export default function DatosPlanEstudios() {
         <Grid item xs={6}>
           <Input
             id="creditos"
-            label="Creditos necesarios para concluir el programa"
+            label="Créditos necesarios para concluir el programa"
             name="creditos"
             auto="creditos"
             value={form[1].programa?.creditos}

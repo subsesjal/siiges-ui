@@ -165,7 +165,7 @@ export default function HigienePlantel({ disabled }) {
         <Grid item xs={12}>
           <InputNumber
             id="numeroAulas"
-            label="Numero de aulas"
+            label="Número de aulas"
             name="numeroAulas"
             auto="numeroAulas"
             value={form[3][6]?.cantidad || ''}
@@ -186,7 +186,7 @@ export default function HigienePlantel({ disabled }) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Typography variant="h6">Ventilacion</Typography>
+        <Typography variant="h6">Ventilación</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={12}>

@@ -131,7 +131,7 @@ export default function EditInstitutionForm({
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Apellido Paterno"
+              label="Primer Apellido"
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
@@ -142,7 +142,7 @@ export default function EditInstitutionForm({
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Apellido Materno"
+              label="Segundo Apellido"
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
@@ -175,7 +175,7 @@ export default function EditInstitutionForm({
           </Grid>
           <Grid item xs={3}>
             <Input
-              label="Genero"
+              label="Género"
               id="genero"
               name="genero"
               auto="genero"
@@ -186,7 +186,7 @@ export default function EditInstitutionForm({
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Correo electronico"
+              label="Correo electrónico"
               id="correo"
               name="correo"
               auto="correo"

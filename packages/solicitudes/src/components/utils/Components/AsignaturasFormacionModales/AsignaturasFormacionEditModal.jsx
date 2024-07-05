@@ -147,7 +147,7 @@ export default function AsignaturasFormacionEditModal({
         <Grid item xs={6}>
           <Input
             id="creditos"
-            label="Creditos"
+            label="Créditos"
             name="creditos"
             auto="creditos"
             value={rowItem.creditos}
@@ -174,7 +174,7 @@ export default function AsignaturasFormacionEditModal({
         </Grid>
         <Grid item xs={12}>
           <BasicSelect
-            title="Seriacion"
+            title="Seriación"
             name="seriacion"
             value={rowItem.seriacion}
             options={asignaturasTotalList || []}
