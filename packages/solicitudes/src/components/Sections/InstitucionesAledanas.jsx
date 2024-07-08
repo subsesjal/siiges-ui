@@ -67,7 +67,7 @@ export default function InstitucionesAledanas({ disabled, programaId }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-        title="Crear Instituciones Aledañas"
+        title="Agregar Instituciones Aledañas"
         programaId={programaId}
       />
     </Grid>
