@@ -6,8 +6,8 @@ const errorDatosDiligencias = {
   correoPrimario: { message: 'Correo inválido', isNumber: false },
   telefono: { message: 'Teléfono inválido', isNumber: true },
   celular: { message: 'Celular inválido', isNumber: true },
-  horaInicio: { message: 'Hora de inicio inválida', isNumber: false, isDate: true },
-  horaFin: { message: 'Hora de fin inválida', isNumber: false, isDate: true },
+  horaInicio: { message: 'Hora de inicio inválida', isNumber: false },
+  horaFin: { message: 'Hora de fin inválida', isNumber: false },
 };
 
 export default errorDatosDiligencias;
