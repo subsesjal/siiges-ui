@@ -47,7 +47,7 @@ export default function DiligenciasButtons({ id }) {
           open={modalOpen}
           hideModal={handleModalClose}
           mode={isEdit ? 'edit' : 'consult'}
-          title={isEdit ? 'Editar Diligencia' : 'Consultar Diligencia'}
+          title={isEdit ? 'Agregar Diligencia' : 'Consultar Diligencia'}
           id={id}
         />
       )}

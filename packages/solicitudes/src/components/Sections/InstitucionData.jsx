@@ -37,7 +37,7 @@ function InstitucionData({ id }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Datos de institución</Typography>
+        <Typography variant="h6">Datos de la institución</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={3}>
@@ -116,7 +116,7 @@ function InstitucionData({ id }) {
             tipoEntidad="INSTITUCION"
             tipoDocumento="LOGOTIPO"
             id={id}
-            label="Logo de institución"
+            label="Logo de la institución"
             url={fileUrl}
             setUrl={setFileUrl}
             disabled={disabled}

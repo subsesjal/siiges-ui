@@ -57,7 +57,7 @@ export default function Asignaturas({ disabled, type }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-        title="Crear Asignatura"
+        title="Agregar Asignatura"
       />
     </Grid>
   );

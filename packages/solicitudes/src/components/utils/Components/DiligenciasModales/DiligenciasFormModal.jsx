@@ -288,8 +288,8 @@ export default function DiligenciasFormModal({
         </Grid>
         <Grid item xs={2}>
           <ButtonSimple
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onClick={handleOnSubmit}
             disabled={disabled}
           />
