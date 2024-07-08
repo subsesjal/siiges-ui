@@ -62,8 +62,10 @@ import estadosMexico from './utils/mocks/estadosMexico';
 import ButtonFile from './components/Buttons/ButtonFile';
 import ButtonsInspeccionSection from './components/Buttons/ButtonsInspeccionSection';
 import SelectAdd from './components/Select/SelectAdd';
+import InputTime from './components/Input/InputTime';
 
 export {
+  InputTime,
   SelectAdd,
   ButtonsInspeccionSection,
   ButtonsSections,
