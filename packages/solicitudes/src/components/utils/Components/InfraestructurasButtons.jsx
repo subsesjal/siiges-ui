@@ -47,7 +47,7 @@ export default function InfraestructurasButtons({ id, programaId }) {
           hideModal={handleModalClose}
           id={id}
           open={modalOpen}
-          edit={isEdit ? 'Editar Infraestructura' : 'Consultar Infraestructura'}
+          edit={isEdit ? 'Modificar Infraestructura' : 'Consultar Infraestructura'}
           programaId={programaId}
         />
       )}
