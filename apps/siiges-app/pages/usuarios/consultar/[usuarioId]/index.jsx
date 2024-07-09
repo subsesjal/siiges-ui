@@ -28,7 +28,7 @@ export default function ConsultarUsuario() {
   });
 
   return (
-    <Layout>
+    <Layout title="Consultar Usuarios">
       {data ? (
         <Grid container spacing={2}>
           <Grid item xs={4} sx={{ marginTop: 7 }}>

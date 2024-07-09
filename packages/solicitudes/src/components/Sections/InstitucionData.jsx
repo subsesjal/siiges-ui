@@ -43,7 +43,7 @@ function InstitucionData({ id }) {
         <Grid item xs={3}>
           <Input
             id="razonSocial"
-            label="Razon social"
+            label="Razón social"
             name="razonSocial"
             auto="razonSocial"
             onchange={handleOnChange}
@@ -54,7 +54,7 @@ function InstitucionData({ id }) {
         <Grid item xs={9}>
           <Input
             id="nombre"
-            label="Nombre de la institucion"
+            label="Nombre de la institución"
             name="nombre"
             auto="nombre"
             onchange={handleOnChange}
@@ -78,7 +78,7 @@ function InstitucionData({ id }) {
         <Grid item xs={12}>
           <Input
             id="vision"
-            label="Vision"
+            label="Visión"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -90,7 +90,7 @@ function InstitucionData({ id }) {
         <Grid item xs={12}>
           <Input
             id="mision"
-            label="Mision"
+            label="Misión"
             rows={4}
             multiline
             sx={{ width: '100%' }}
