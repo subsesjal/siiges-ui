@@ -7,6 +7,7 @@ import {
   Input,
   validateField,
   ButtonSimple,
+  InputTime,
 } from '@siiges-ui/shared';
 import handleEdit from '../../submitEditDiligencias';
 import handleCreate from '../../submitNewDiligencias';
@@ -85,17 +86,6 @@ export default function DiligenciasFormModal({
             ...prevData.persona,
             [name]: value,
           },
-        };
-      }
-      if (name === 'horaInicio' || name === 'horaFin') {
-        const timeArray = value.split(':');
-        const date = new Date();
-        date.setHours(parseInt(timeArray[0], 10));
-        date.setMinutes(parseInt(timeArray[1], 10));
-
-        return {
-          ...prevData,
-          [name]: date,
         };
       }
       return {
@@ -248,7 +238,7 @@ export default function DiligenciasFormModal({
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputTime
             id="horaInicio"
             label="Hora Inicio"
             name="horaInicio"
@@ -263,7 +253,7 @@ export default function DiligenciasFormModal({
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputTime
             id="horaFin"
             label="Hora Fin"
             name="horaFin"

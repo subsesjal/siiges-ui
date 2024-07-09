@@ -73,7 +73,13 @@ export default function NuevaSolicitud({
   const nextModule = () => {
     const stepList = steps[modalidad];
     if (module < stepList.length - 1) {
-      setModule((prevModule) => prevModule + 1);
+      setModule((position) => position + 1);
+    }
+  };
+
+  const prevModule = () => {
+    if (module >= 1) {
+      setModule((position) => position - 1);
     }
   };
 
@@ -98,6 +104,7 @@ export default function NuevaSolicitud({
         type="Nueva solicitud"
         date="22 de Agosto 2022"
         nextModule={nextModule}
+        prevModule={prevModule}
         module={module}
         id={id}
       />
