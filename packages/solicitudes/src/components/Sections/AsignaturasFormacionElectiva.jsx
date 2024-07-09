@@ -60,7 +60,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-        title="Crear Asignatura"
+        title="Agregar Asignatura"
       />
     </Grid>
   );
