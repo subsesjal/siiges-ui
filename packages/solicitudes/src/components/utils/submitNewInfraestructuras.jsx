@@ -20,7 +20,7 @@ const handleCreate = (
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
+      message: 'Algo salió mal, revisa que los campos esten correctos',
       type: 'error',
     });
     return;

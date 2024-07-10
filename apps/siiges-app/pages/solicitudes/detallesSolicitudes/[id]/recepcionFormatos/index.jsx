@@ -181,7 +181,7 @@ export default function RecepcionFormatos() {
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Algo salió mal, revise que los campos esten correctos',
+        message: 'Algo salió mal, revise que los campos estén correctos',
         type: 'error',
       });
     }
