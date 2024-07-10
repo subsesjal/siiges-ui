@@ -6,7 +6,7 @@ import React from 'react';
 function DeleteInfraestructura({ modal, hideModal, id }) {
   console.log(id);
   return (
-    <DefaultModal open={modal} setOpen={hideModal}>
+    <DefaultModal open={modal} setOpen={hideModal} title="Eliminar Infraestructura">
       <Typography>¿Desea eliminar esta Infraestructura?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>

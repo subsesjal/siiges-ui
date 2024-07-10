@@ -6,8 +6,8 @@ import React from 'react';
 function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
   console.log(id);
   return (
-    <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>¿Desea eliminar esta Instituciones Aledaña?</Typography>
+    <DefaultModal open={modal} setOpen={hideModal} title="Eliminar Institución Aledaña">
+      <Typography>¿Desea eliminar esta institución aledaña?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled

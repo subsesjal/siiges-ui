@@ -505,8 +505,8 @@ export default function DocentesModal({
             {!isConsultMode && (
               <Grid item xs={2.3}>
                 <ButtonSimple
-                  text="Confirmar"
-                  alt="Confirmar"
+                  text="Guardar"
+                  alt="Guardar"
                   onClick={handleOnSubmit}
                   align="right"
                 />

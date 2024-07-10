@@ -9,7 +9,7 @@ const columns = (setDocentesList) => [
   { field: 'experiencia', headerName: 'Experiencia', width: 680 },
   {
     field: 'tipoContratacion',
-    headerName: 'Contratacion',
+    headerName: 'Contratación',
     width: 150,
   },
   {
