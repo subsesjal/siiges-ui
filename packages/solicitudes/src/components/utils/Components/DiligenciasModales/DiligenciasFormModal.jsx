@@ -6,8 +6,8 @@ import {
   Context,
   Input,
   validateField,
-  ButtonSimple,
   InputTime,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import handleEdit from '../../submitEditDiligencias';
 import handleCreate from '../../submitNewDiligencias';
@@ -267,22 +267,8 @@ export default function DiligenciasFormModal({
             disabled={disabled}
           />
         </Grid>
-        <Grid item xs={9.7}>
-          <ButtonSimple
-            text="Cancelar"
-            alt="Cancelar"
-            design="cancel"
-            onClick={hideModal}
-            align="right"
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text="Confirmar"
-            alt="Confirmar"
-            onClick={handleOnSubmit}
-            disabled={disabled}
-          />
+        <Grid item xs={12}>
+          <ButtonsForm cancel={hideModal} confirm={handleOnSubmit} confirmDisabled={disabled} />
         </Grid>
       </Grid>
     </DefaultModal>

@@ -47,7 +47,6 @@ export default function InstitucionAledanaEditModal({
   }, [error]);
 
   const handleOnChange = (e) => {
-    console.log(formInstitucionesAledanas);
     const { name, value } = e.target;
     setFormInstitucionesAledanas((prevData) => ({
       ...prevData,
