@@ -38,7 +38,7 @@ const handleCreate = (
     .catch((error) => {
       setNoti({
         open: true,
-        message: `Algo salió mal, revisa que los campos esten correctos: ${error}`,
+        message: `Algo salió mal, revisa que los campos estén correctos: ${error}`,
         type: 'error',
       });
       setLoading(false);

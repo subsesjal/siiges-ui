@@ -42,7 +42,7 @@ export default function submitRatificacion(validations, setNoti, setLoading) {
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Exito, no hubo problemas en esta sección',
+          message: 'Éxito, no hubo problemas en esta sección',
           type: 'success',
         });
       }, 1000);
@@ -53,7 +53,7 @@ export default function submitRatificacion(validations, setNoti, setLoading) {
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Hubo un problema, revise que los campos esten correctos',
+          message: 'Hubo un problema, revise que los campos estén correctos',
           type: 'error',
         });
       }, 1000);
