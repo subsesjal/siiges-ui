@@ -37,7 +37,7 @@ function DeleteDiligencia({ modal, hideModal, id }) {
   };
 
   return (
-    <DefaultModal open={modal} setOpen={hideModal}>
+    <DefaultModal open={modal} setOpen={hideModal} title="Eliminar Diligente">
       <Typography>¿Desea eliminar esta diligencia?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>

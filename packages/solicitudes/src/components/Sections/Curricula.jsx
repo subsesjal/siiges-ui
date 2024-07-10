@@ -71,7 +71,7 @@ export default function Curricula({ disabled, type }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Curricula</Typography>
+        <Typography variant="h6">Currícula</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={12}>
@@ -95,7 +95,7 @@ export default function Curricula({ disabled, type }) {
           <Input
             id="flexibilidadCurricular"
             name="flexibilidadCurricular"
-            label="Flexibilidad curriular"
+            label="Flexibilidad curricular"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -112,7 +112,7 @@ export default function Curricula({ disabled, type }) {
           <Input
             id="lineasGeneracionAplicacionConocimiento"
             name="lineasGeneracionAplicacionConocimiento"
-            label="lineas de generación del conocimiento"
+            label="Líneas de generación del conocimiento"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -146,7 +146,7 @@ export default function Curricula({ disabled, type }) {
           <Input
             id="conveniosVinculacion"
             name="conveniosVinculacion"
-            label="Vinculación con colegios de profesionista, academias profesionales entre otras"
+            label="Vinculación con colegios de profesionistas, academias profesionales, entre otras"
             rows={4}
             multiline
             sx={{ width: '100%' }}
@@ -197,7 +197,7 @@ export default function Curricula({ disabled, type }) {
             tipoEntidad="PROGRAMA"
             tipoDocumento="PROPUESTA_HEMEROGRAFICA"
             id={id}
-            label="Propuesta hemerobibliografíca"
+            label="Propuesta hemerobibliográfica"
             url={fileURLs[3]}
             setUrl={(url) => handleFileLoaded(3, url)}
             disabled={disabled}
@@ -214,10 +214,10 @@ export default function Curricula({ disabled, type }) {
             2. Reglamento de academias o documento que contenga las reglas de
             operación de dichos cuerpos colegiados
             <br />
-            3. Documento que describa a detalla cada asignatura (Descargar
+            3. Documento que describa a detalle cada asignatura (Descargar
             plantilla).
             <br />
-            4. Documento en donde se especifique la hemerobibliografía por
+            4. Documento en el que se especifique la hemerobibliografía por
             asignatura (Descargar plantilla).
           </Typography>
         </Grid>

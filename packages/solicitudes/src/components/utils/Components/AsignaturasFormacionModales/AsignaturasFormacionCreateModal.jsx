@@ -206,8 +206,8 @@ export default function AsignaturasFormacionCreateModal({
         </Grid>
         <Grid item xs={2}>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           >
             Confirmar

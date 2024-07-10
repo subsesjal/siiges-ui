@@ -54,7 +54,7 @@ export default function InstitucionesAledanasButtons({ id }) {
           open={modalOpen}
           edit={
             isEdit
-              ? 'Editar Instituciones Aledañas'
+              ? 'Modificar Instituciones Aledañas'
               : 'Consultar Instituciones Aledañas'
           }
         />

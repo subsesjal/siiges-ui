@@ -57,7 +57,7 @@ export default function AsignaturasButtons({ id }) {
           hideModal={handleModalClose}
           rowItem={rowItem}
           open={modalOpen}
-          edit={isEdit ? 'Editar Asignatura' : 'Consultar Asignatura'}
+          edit={isEdit ? 'Modificar Asignatura' : 'Consultar Asignatura'}
         />
       )}
 

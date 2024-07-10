@@ -215,8 +215,8 @@ export default function InfraestructuraCreateModal({
         </Grid>
         <Grid item>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           />
         </Grid>
