@@ -18,63 +18,6 @@ export default function detallesSolicitudes() {
     }
   }, [data, solicitud]);
 
-  // const downloadFile = async (type) => {
-  //   try {
-  //     const solicitudId = solicitud?.id;
-
-  //     GetFile({
-  //       tipoEntidad: 'SOLICITUD',
-  //       entidadId: solicitudId,
-  //       tipoDocumento: type,
-  //     }, async (url, error) => {
-  //       if (error) {
-  //         console.error('Error downloading the file', error);
-  //         return;
-  //       }
-
-  //       if (!url) {
-  //         console.error('File URL not provided');
-  //         return;
-  //       }
-
-  //       // Ensure URL starts with 'http'
-  //       if (!url.startsWith('http')) {
-  //         url = `http://${url}`; // Assuming it's HTTP; adjust if HTTPS is required
-  //       }
-
-  //       try {
-  //         const response = await fetch(url, {
-  //           headers: {
-  //             'Content-Type': 'application/pdf', // Adjust content type as necessary
-  //           },
-  //         });
-
-  //         if (!response.ok) {
-  //           throw new Error('Network response was not ok');
-  //         }
-
-  //         const blob = await response.blob();
-  //         const blobUrl = window.URL.createObjectURL(blob);
-
-  //         // Create a temporary link element
-  //         const link = document.createElement('a');
-  //         link.href = blobUrl;
-  //         link.setAttribute('download', `${type}.pdf`);
-  //         document.body.appendChild(link);
-  //         link.click();
-  //         document.body.removeChild(link);
-
-  //         // Clean up by revoking the object URL
-  //         window.URL.revokeObjectURL(blobUrl);
-  //       } catch (error) {
-  //         console.error('Error downloading the file', error);
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.error('Error calling GetFile', error);
-  //   }
-  // };
-
   const downloadFile = async (type) => {
     try {
       const solicitudId = solicitud?.id;
