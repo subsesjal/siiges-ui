@@ -3,7 +3,7 @@ export default function errorIngreso(form, setError, error) {
   const errors = {
     metodosInduccion: () => {
       if (formData.programa?.metodosInduccion === undefined || formData.programa?.metodosInduccion === '') {
-        setError({ ...error, metodosInduccion: 'Metodos de inducción invalidos' });
+        setError({ ...error, metodosInduccion: 'Métodos de inducción inválidos' });
         return false;
       }
       setError({ ...error, metodosInduccion: '' });
@@ -11,7 +11,7 @@ export default function errorIngreso(form, setError, error) {
     },
     perfilIngresoConocimientos: () => {
       if (formData.programa?.perfilIngresoConocimientos === undefined || formData.programa?.perfilIngresoConocimientos === '') {
-        setError({ ...error, perfilIngresoConocimientos: 'Conocimientos invalidos' });
+        setError({ ...error, perfilIngresoConocimientos: 'Conocimientos inválidos' });
         return false;
       }
       setError({ ...error, perfilIngresoConocimientos: '' });
@@ -19,7 +19,7 @@ export default function errorIngreso(form, setError, error) {
     },
     perfilIngresoHabilidades: () => {
       if (formData.programa?.perfilIngresoHabilidades === undefined || formData.programa?.perfilIngresoHabilidades === '') {
-        setError({ ...error, perfilIngresoHabilidades: 'Habilidades invalidas' });
+        setError({ ...error, perfilIngresoHabilidades: 'Habilidades inválidas' });
         return false;
       }
       setError({ ...error, perfilIngresoHabilidades: '' });
@@ -27,7 +27,7 @@ export default function errorIngreso(form, setError, error) {
     },
     perfilIngresoActitudes: () => {
       if (formData.programa?.perfilIngresoActitudes === undefined || formData.programa?.perfilIngresoActitudes === '') {
-        setError({ ...error, perfilIngresoActitudes: 'Turnos invalidos' });
+        setError({ ...error, perfilIngresoActitudes: 'Turnos inválidos' });
         return false;
       }
       setError({ ...error, perfilIngresoActitudes: '' });
@@ -37,7 +37,7 @@ export default function errorIngreso(form, setError, error) {
       if (formData.programa?.procesoSeleccion === undefined || formData.programa?.procesoSeleccion === '') {
         setError({
           ...error,
-          procesoSeleccion: 'Proceso de selección invalida',
+          procesoSeleccion: 'Proceso de selección inválido',
         });
         return false;
       }

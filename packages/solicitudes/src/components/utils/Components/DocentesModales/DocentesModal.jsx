@@ -24,7 +24,7 @@ import {
 import useDocente from '../../getDocente';
 
 const errorDatosDocentes = {
-  tipodocente: 'Nombre invalido',
+  tipodocente: 'Nombre inválido',
   nombre: 'Nombre inválido',
   apellidoPaterno: 'Primer Apellido inválido',
   apellidoMaterno: 'Segundo Apellido inválido',
