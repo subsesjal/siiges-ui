@@ -37,7 +37,7 @@ const fetchData = async ({
     setLoading(false);
     setNoti({
       open: true,
-      message: 'Inspector asignado con éxito',
+      message: '¡Inspector asignado con éxito!',
       type: 'success',
     });
     router.back();
@@ -46,7 +46,7 @@ const fetchData = async ({
     setLoading(false);
     setNoti({
       open: true,
-      message: `Error al asignar la inspección: ${error.message}`,
+      message: `¡Error al asignar la inspección!: ${error.message}`,
       type: 'error',
     });
     return null;

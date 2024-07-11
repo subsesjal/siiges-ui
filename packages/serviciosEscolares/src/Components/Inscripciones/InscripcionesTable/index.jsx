@@ -36,7 +36,7 @@ export default function InscripcionesTable({
         console.error('Error fetching alumno:', error);
         setNoti({
           open: true,
-          message: 'Algo salió mal al cargar al alumno, revisa la matrícula',
+          message: '¡Algo salió mal al cargar al alumno, revisa la matrícula!',
           type: 'error',
         });
         return;
@@ -60,13 +60,13 @@ export default function InscripcionesTable({
           setNoti({
             open: true,
             message:
-              'Algo salió mal al inscribir el alumno, reintente más tarde',
+              '¡Algo salió mal al inscribir el alumno, reintente más tarde!',
             type: 'error',
           });
         } else {
           setNoti({
             open: true,
-            message: 'Éxito al inscribir el alumno!',
+            message: '¡Éxito al inscribir el alumno!',
             type: 'success',
           });
           setAlumnosInscritos((prev) => [...prev, alumnoByMatricula]);

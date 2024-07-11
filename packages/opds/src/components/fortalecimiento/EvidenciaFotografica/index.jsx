@@ -44,7 +44,7 @@ export default function EvidenciaFotografica({
     } catch (error) {
       setNoti({
         open: true,
-        message: error.message || 'Algo salió mal, revise su documento',
+        message: error.message || '¡Algo salió mal, revise su documento!',
         type: 'error',
       });
     } finally {
@@ -92,8 +92,8 @@ export default function EvidenciaFotografica({
       </Grid>
       <DropzoneDialog
         open={open}
-        dropzoneText="Arrastre la evidencia fotografica aquí, o haga click"
-        dialogTitle="Subir evidencia fotografica"
+        dropzoneText="Arrastre la evidencia fotográfica aquí, o haga click"
+        dialogTitle="Subir evidencia fotográfica"
         submitButtonText="Aceptar"
         cancelButtonText="Cancelar"
         filesLimit={5}

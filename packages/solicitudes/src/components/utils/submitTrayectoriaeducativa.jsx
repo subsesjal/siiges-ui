@@ -27,7 +27,7 @@ async function submitTrayectoriaEducativa(validations, setLoading) {
     setNoti({
       open: true,
       message:
-        'No es posible continuar, falta completar información obligatoria en la sección de Trayectoria Educativa.',
+        '¡No es posible continuar, falta completar información obligatoria en la sección de Trayectoria Educativa!.',
       type: 'error',
     });
     return;
@@ -60,7 +60,7 @@ async function submitTrayectoriaEducativa(validations, setLoading) {
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Éxito, no hubo problemas en esta sección',
+        message: '¡Éxito, no hubo problemas en esta sección!',
         type: 'success',
       });
     }, 1000);
@@ -79,7 +79,7 @@ async function submitTrayectoriaEducativa(validations, setLoading) {
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Hubo un problema, revise que los campos estén correctos',
+        message: '¡Hubo un problema, revise que los campos estén correctos!',
         type: 'error',
       });
     }, 1000);

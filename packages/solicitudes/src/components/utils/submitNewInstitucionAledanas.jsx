@@ -20,7 +20,7 @@ const handleCreate = (
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salió mal, revisa que los campos estén correctos',
+      message: '¡Algo salió mal, revisa que los campos estén correctos!',
       type: 'error',
     });
     return;
@@ -46,7 +46,7 @@ const handleCreate = (
       setInitialValues({});
       setNoti({
         open: true,
-        message: 'Se añadio institución aledaña con éxito',
+        message: '¡Se añadio institución aledaña con éxito!',
         type: 'success',
       });
       setLoading(false);
@@ -54,7 +54,7 @@ const handleCreate = (
     .catch((error) => {
       setNoti({
         open: true,
-        message: `Algo salió mal: ${error}`,
+        message: `¡Algo salió mal!: ${error}`,
         type: 'error',
       });
       setLoading(false);
