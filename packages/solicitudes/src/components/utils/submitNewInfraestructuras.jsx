@@ -54,7 +54,7 @@ const handleCreate = (
     .catch((error) => {
       setNoti({
         open: true,
-        message: `Ocurrió un error al cargar los datos: ${error}`,
+        message: `¡Ocurrió un error al cargar los datos!: ${error}`,
         type: 'error',
       });
       setLoading(false);
