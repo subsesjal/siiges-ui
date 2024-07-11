@@ -73,7 +73,12 @@ export default function RecepcionFormatos() {
       tipoDocumento: 'FDA06',
     },
   ];
-
+  const ensureUrlHasHttp = (url) => {
+    if (url && !url.startsWith('http')) {
+      return `http://${url}`;
+    }
+    return url;
+  };
   useEffect(() => {
     const fetchSolicitud = async () => {
       if (query.id !== undefined) {
@@ -92,9 +97,10 @@ export default function RecepcionFormatos() {
                 console.error('Error fetching file:', error);
                 return;
               }
+              const validatedUrl = ensureUrlHasHttp(fileUrl);
               setUrl((prevUrls) => {
                 const newUrls = [...prevUrls];
-                newUrls[index] = fileUrl; // Update the URL at the correct index
+                newUrls[index] = validatedUrl; // Update the URL at the correct index
                 return newUrls;
               });
             });
@@ -131,7 +137,6 @@ export default function RecepcionFormatos() {
       [name]: checked,
     }));
   };
-
   const allChecked = Object.values(checkboxes).every((value) => value);
 
   const handleSubmit = async () => {
