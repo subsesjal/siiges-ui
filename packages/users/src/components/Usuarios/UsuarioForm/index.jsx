@@ -65,7 +65,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
     if (data) {
       setNoti({
         open: true,
-        message: 'Registró exitoso',
+        message: '¡Registró exitoso!',
         type: 'success',
       });
 
