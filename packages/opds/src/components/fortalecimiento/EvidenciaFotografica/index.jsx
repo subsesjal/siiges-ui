@@ -38,7 +38,7 @@ export default function EvidenciaFotografica({
 
       setNoti({
         open: true,
-        message: 'Documento(s) cargado(s) con éxito',
+        message: '¡Documento(s) cargado(s) con éxito!',
         type: 'success',
       });
     } catch (error) {

@@ -42,7 +42,7 @@ export default async function submitCalificaciones(
     console.error('Error:', err);
     setNoti({
       open: true,
-      message: 'Algo salió mal, revise que la información este correcta',
+      message: '¡Algo salió mal, revise que la información esté correcta!',
       type: 'error',
     });
   }
