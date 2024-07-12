@@ -24,7 +24,7 @@ export default function EvidenciaFotografica({
   const handleSave = async () => {
     try {
       if (files.length === 0) {
-        throw new Error('Algo salió mal, ingrese un documento');
+        throw new Error('¡Algo salió mal, ingrese un documento!');
       }
 
       const uploadPromises = files.map((file, index) => fileToFormData(file).then((formData) => {
