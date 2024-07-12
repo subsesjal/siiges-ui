@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -54,16 +55,16 @@ function DropdownButton({ icon, text, options }) {
         onClose={handleClose}
       >
         {options.map((option) => (
-          <MenuItem key={option.text} onClick={handleClose}>
-            {option.text}
-          </MenuItem>
+          <Link href={option.route} passHref key={option.text}>
+            <MenuItem component="a" onClick={handleClose}>
+              {option.text}
+            </MenuItem>
+          </Link>
         ))}
       </Menu>
     </div>
   );
 }
-
-export default DropdownButton;
 
 DropdownButton.propTypes = {
   icon: PropTypes.element.isRequired,
@@ -71,6 +72,9 @@ DropdownButton.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       text: PropTypes.string.isRequired,
+      route: PropTypes.string.isRequired,
     }),
   ).isRequired,
 };
+
+export default DropdownButton;

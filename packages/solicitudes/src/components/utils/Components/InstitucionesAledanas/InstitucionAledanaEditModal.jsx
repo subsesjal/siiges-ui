@@ -47,7 +47,6 @@ export default function InstitucionAledanaEditModal({
   }, [error]);
 
   const handleOnChange = (e) => {
-    console.log(formInstitucionesAledanas);
     const { name, value } = e.target;
     setFormInstitucionesAledanas((prevData) => ({
       ...prevData,
@@ -125,8 +124,8 @@ export default function InstitucionAledanaEditModal({
         </Grid>
         <Grid item>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           />
         </Grid>

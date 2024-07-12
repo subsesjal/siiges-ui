@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
@@ -8,7 +8,6 @@ import handleCreate from '../../submitNewAsignaturas';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
 import { grados } from '../../Mocks/mockAsignaturas';
 import errorDatosAsignaturasFormacion from '../../sections/errors/errorDatosAsignaturasFormacion';
-import SolicitudContext from '../../Context/solicitudContext';
 
 export default function AsignaturasFormacionCreateModal({
   open,
@@ -29,23 +28,6 @@ export default function AsignaturasFormacionCreateModal({
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
   const { setLoading } = useContext(Context);
-  const { form } = useContext(SolicitudContext);
-  const [selectedGrade, setSelectedGrade] = useState(grados.semestral);
-
-  useEffect(() => {
-    if (form) {
-      const cicloIdMap = {
-        1: grados.semestral,
-        2: grados.cuatrimestral,
-        3: grados.flexibleSemestral,
-        4: grados.flexibleCuatrimestral,
-        5: grados.optativa,
-      };
-
-      const selectedGradeValue = cicloIdMap[form[1].programa.cicloId] || grados.semestral;
-      setSelectedGrade(selectedGradeValue);
-    }
-  }, [form]);
 
   const errorsAsignatura = errorDatosAsignaturasFormacion(
     formAsignaturasFormacion,
@@ -57,7 +39,13 @@ export default function AsignaturasFormacionCreateModal({
     if (errorsAsignatura !== undefined) {
       setErrors(errorsAsignatura);
     }
-  }, [error]);
+
+    // Set the default value for gradoId to 25
+    setFormAsignaturasFormacion((prevForm) => ({
+      ...prevForm,
+      gradoId: 25,
+    }));
+  }, [error, setFormAsignaturasFormacion, setErrors]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +75,7 @@ export default function AsignaturasFormacionCreateModal({
   };
 
   const handleOnSubmit = () => {
-    const matchingGrade = selectedGrade.find(
+    const matchingGrade = grados.optativa.find(
       (grade) => grade.id === formAsignaturasFormacion.gradoId,
     );
     const updatedFormAsignaturas = matchingGrade
@@ -110,24 +98,13 @@ export default function AsignaturasFormacionCreateModal({
   return (
     <DefaultModal open={open} setOpen={hideModal} title={title}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <BasicSelect
-            title="Grado"
-            name="gradoId"
-            value=""
-            options={selectedGrade}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            errorMessage={error.gradoId}
-            required
-          />
-        </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Input
             id="nombre"
             label="Nombre(s)"
             name="nombre"
             auto="nombre"
+            value={formAsignaturasFormacion.nombre || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -141,6 +118,7 @@ export default function AsignaturasFormacionCreateModal({
             label="Clave"
             name="clave"
             auto="clave"
+            value={formAsignaturasFormacion.clave || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -151,9 +129,10 @@ export default function AsignaturasFormacionCreateModal({
         <Grid item xs={6}>
           <Input
             id="creditos"
-            label="Creditos"
+            label="Créditos"
             name="creditos"
             auto="creditos"
+            value={formAsignaturasFormacion.creditos || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -167,6 +146,7 @@ export default function AsignaturasFormacionCreateModal({
             label="Academia"
             name="academia"
             auto="academia"
+            value={formAsignaturasFormacion.academia || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -178,7 +158,7 @@ export default function AsignaturasFormacionCreateModal({
           <BasicSelect
             title="Seriacion"
             name="seriacion"
-            value=""
+            value={formAsignaturasFormacion.seriacion || ''}
             options={asignaturasTotalList || []}
             onchange={handleOnChange}
             textValue
@@ -190,6 +170,7 @@ export default function AsignaturasFormacionCreateModal({
             label="Horas docente"
             name="horasDocente"
             auto="horasDocente"
+            value={formAsignaturasFormacion.horasDocente || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -203,6 +184,7 @@ export default function AsignaturasFormacionCreateModal({
             label="Horas independiente"
             name="horasIndependiente"
             auto="horasIndependiente"
+            value={formAsignaturasFormacion.horasIndependiente || ''}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -224,8 +206,8 @@ export default function AsignaturasFormacionCreateModal({
         </Grid>
         <Grid item xs={2}>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           >
             Confirmar

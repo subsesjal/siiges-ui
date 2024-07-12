@@ -36,11 +36,11 @@ export default function ProgramasData() {
     },
     {
       titles: [
-        'Creditos necesarios para concluir el programa',
+        'Créditos necesarios para concluir el programa',
         'Objetivo General',
         'Objetivo Particular',
         'Fecha en que surte efecto',
-        'Duracion del programa',
+        'Duración del programa',
       ],
       subtitles: [
         programa.creditos,

@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, IconButton } from '@mui/material';
+import { useRouter } from 'next/router';
 import AddIcon from '@mui/icons-material/Add';
 import {
   ButtonsForm,
@@ -18,7 +19,7 @@ const apikey = process.env.NEXT_PUBLIC_API_KEY;
 const url = process.env.NEXT_PUBLIC_URL;
 
 const fetchData = async ({
-  path, dataBody, setNoti, setLoading,
+  path, dataBody, setNoti, setLoading, router,
 }) => {
   try {
     const token = getToken();
@@ -39,6 +40,7 @@ const fetchData = async ({
       message: 'Inspector asignado con éxito',
       type: 'success',
     });
+    router.back();
     return data;
   } catch (error) {
     setLoading(false);
@@ -58,6 +60,7 @@ function ModalInspecciones({ params: { row } }) {
   const [isLoading, setIsLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({ fechaInspeccion: '', folio: '' });
+  const router = useRouter();
 
   const openModal = useCallback(() => setOpen(true), []);
   const handleCancel = useCallback(() => {
@@ -107,6 +110,7 @@ function ModalInspecciones({ params: { row } }) {
         dataBody: inspeccionData,
         setNoti,
         setLoading,
+        router,
       });
       setOpen(false);
       setForm({ fechaInspeccion: '', folio: '' });

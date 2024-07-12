@@ -6,7 +6,8 @@ import {
   Context,
   Input,
   validateField,
-  ButtonSimple,
+  InputTime,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import handleEdit from '../../submitEditDiligencias';
 import handleCreate from '../../submitNewDiligencias';
@@ -59,7 +60,7 @@ export default function DiligenciasFormModal({
       } else {
         setNoti({
           open: true,
-          message: 'No se encontro esta diligencia',
+          message: 'No se encontró esta diligencia',
           type: 'error',
         });
       }
@@ -85,17 +86,6 @@ export default function DiligenciasFormModal({
             ...prevData.persona,
             [name]: value,
           },
-        };
-      }
-      if (name === 'horaInicio' || name === 'horaFin') {
-        const timeArray = value.split(':');
-        const date = new Date();
-        date.setHours(parseInt(timeArray[0], 10));
-        date.setMinutes(parseInt(timeArray[1], 10));
-
-        return {
-          ...prevData,
-          [name]: date,
         };
       }
       return {
@@ -169,7 +159,7 @@ export default function DiligenciasFormModal({
         <Grid item xs={6}>
           <Input
             id="apellidoPaterno"
-            label="Apellido Paterno"
+            label="Primer Apellido"
             name="apellidoPaterno"
             auto="apellidoPaterno"
             onchange={handleOnChange}
@@ -183,7 +173,7 @@ export default function DiligenciasFormModal({
         <Grid item xs={6}>
           <Input
             id="apellidoMaterno"
-            label="Apellido Materno"
+            label="Segundo Apellido"
             name="apellidoMaterno"
             auto="apellidoMaterno"
             onchange={handleOnChange}
@@ -225,7 +215,7 @@ export default function DiligenciasFormModal({
         <Grid item xs={6}>
           <Input
             id="telefono"
-            label="Telefono"
+            label="Teléfono"
             name="telefono"
             auto="telefono"
             onchange={handleOnChange}
@@ -248,7 +238,7 @@ export default function DiligenciasFormModal({
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputTime
             id="horaInicio"
             label="Hora Inicio"
             name="horaInicio"
@@ -263,7 +253,7 @@ export default function DiligenciasFormModal({
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputTime
             id="horaFin"
             label="Hora Fin"
             name="horaFin"
@@ -277,22 +267,8 @@ export default function DiligenciasFormModal({
             disabled={disabled}
           />
         </Grid>
-        <Grid item xs={9.7}>
-          <ButtonSimple
-            text="Cancelar"
-            alt="Cancelar"
-            design="cancel"
-            onClick={hideModal}
-            align="right"
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text="Confirmar"
-            alt="Confirmar"
-            onClick={handleOnSubmit}
-            disabled={disabled}
-          />
+        <Grid item xs={12}>
+          <ButtonsForm cancel={hideModal} confirm={handleOnSubmit} confirmDisabled={disabled} />
         </Grid>
       </Grid>
     </DefaultModal>

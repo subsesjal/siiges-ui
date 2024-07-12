@@ -85,7 +85,7 @@ export default function DatosPlantel({
         <Grid item xs={2}>
           <Input
             id="phone1"
-            label="Telefono 1"
+            label="Teléfono 1"
             name="phone1"
             auto="phone1"
             value={plantelesData?.telefono1}
@@ -95,7 +95,7 @@ export default function DatosPlantel({
         <Grid item xs={2}>
           <Input
             id="phone2"
-            label="Telefono 2"
+            label="Teléfono 2"
             name="phone2"
             auto="phone2"
             value={plantelesData?.telefono2}
@@ -105,7 +105,7 @@ export default function DatosPlantel({
         <Grid item xs={2}>
           <Input
             id="phone3"
-            label="Telefono 3"
+            label="Teléfono 3"
             name="phone3"
             auto="phone3"
             value={plantelesData?.telefono3}
@@ -115,7 +115,7 @@ export default function DatosPlantel({
         <Grid item xs={6}>
           <Input
             id="institutionEmail"
-            label="Correo electronico institucional"
+            label="Correo electrónico institucional"
             name="institutionEmail"
             auto="institutionEmail"
             value={plantelesData?.correo1}
@@ -125,7 +125,7 @@ export default function DatosPlantel({
         <Grid item xs={6}>
           <Input
             id="website"
-            label="Pagina web"
+            label="Página web"
             name="website"
             auto="website"
             value={plantelesData?.paginaWeb}
@@ -135,7 +135,7 @@ export default function DatosPlantel({
         <Grid item xs={6}>
           <Input
             id="email1"
-            label="Correo electronico sin dominio 1"
+            label="Correo electrónico sin dominio 1"
             name="email1"
             auto="email1"
             value={plantelesData?.correo2}
@@ -156,7 +156,7 @@ export default function DatosPlantel({
         <Grid item xs={6}>
           <Input
             id="email2"
-            label="Correo electronico sin dominio 2"
+            label="Correo electrónico sin dominio 2"
             name="email2"
             auto="email2"
             value={plantelesData?.correo3}
@@ -181,7 +181,7 @@ export default function DatosPlantel({
         <Grid item xs={3}>
           <Input
             id="numExt"
-            label="Numero exterior"
+            label="Número exterior"
             name="numExt"
             auto="numExt"
             value={plantelesData?.domicilio?.numeroExterior}
@@ -191,7 +191,7 @@ export default function DatosPlantel({
         <Grid item xs={3}>
           <Input
             id="numInt"
-            label="Numero interor"
+            label="Número interor"
             name="numInt"
             auto="numInt"
             value={plantelesData?.domicilio?.numeroInterior}
@@ -211,7 +211,7 @@ export default function DatosPlantel({
         <Grid item xs={3}>
           <Input
             id="CP"
-            label="Codigo Postal"
+            label="Código Postal"
             name="CP"
             auto="CP"
             value={plantelesData?.domicilio?.codigoPostal}

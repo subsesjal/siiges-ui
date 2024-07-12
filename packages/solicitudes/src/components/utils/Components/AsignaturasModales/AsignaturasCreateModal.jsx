@@ -40,7 +40,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         5: grados.optativa,
       };
 
-      const selectedGradeValue = cicloIdMap[form[1].programa.cicloId] || grados.semestral;
+      const selectedGradeValue = cicloIdMap[form[1].programa?.cicloId] || grados.semestral;
       setSelectedGrade(selectedGradeValue);
     }
   }, [form]);
@@ -104,7 +104,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         </Grid>
         <Grid item xs={6}>
           <BasicSelect
-            title="Area"
+            title="Área"
             name="areaId"
             value=""
             options={area}
@@ -143,7 +143,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         <Grid item xs={3}>
           <Input
             id="creditos"
-            label="Creditos"
+            label="Créditos"
             name="creditos"
             auto="creditos"
             onchange={handleOnChange}
@@ -168,7 +168,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         </Grid>
         <Grid item xs={12}>
           <BasicSelect
-            title="Seriacion"
+            title="Seriación"
             name="seriacion"
             value=""
             options={asignaturasList || []}
@@ -214,8 +214,8 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         </Grid>
         <Grid item xs={2}>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           />
         </Grid>

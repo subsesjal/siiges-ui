@@ -78,9 +78,9 @@ export default function PlantelViewForm({ data }) {
         </Grid>
         <Grid item xs>
           <List>
-            <ListTitle text="Telefono 1" />
-            <ListTitle text="Telefono 2" />
-            <ListTitle text="Telefono 3" />
+            <ListTitle text="Teléfono 1" />
+            <ListTitle text="Teléfono 2" />
+            <ListTitle text="Teléfono 3" />
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />

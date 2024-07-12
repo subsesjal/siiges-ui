@@ -73,7 +73,7 @@ function DiligenciasData({ disabled, id }) {
       <DiligenciasFormModal
         open={modal}
         hideModal={hideModal}
-        title="Crear Diligencia"
+        title="Agregar Diligencia"
         mode="create"
         id={id}
       />

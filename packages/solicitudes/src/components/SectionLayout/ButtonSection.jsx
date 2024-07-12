@@ -50,7 +50,7 @@ export default function ButtonSection({
     : 'Terminar Sección';
   const buttonTextEnd = isControlDocumental
     ? 'Guardar observaciones'
-    : 'Terminar Solicitud';
+    : 'Terminar Sección';
 
   function observaciones() {
     return setCreateObservaciones(true);

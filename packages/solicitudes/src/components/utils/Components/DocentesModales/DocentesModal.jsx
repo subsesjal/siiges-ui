@@ -26,26 +26,26 @@ import useDocente from '../../getDocente';
 const errorDatosDocentes = {
   tipodocente: 'Nombre invalido',
   nombre: 'Nombre invalido',
-  apellidoPaterno: 'Apellido Paterno invalido',
-  apellidoMaterno: 'Apellido Materno invalido',
+  apellidoPaterno: 'Primer Apellido inválido',
+  apellidoMaterno: 'Segundo Apellido inválido',
   tipoDocente: 'Seleccione un nivel',
   'persona.nombre': 'Nombre invalido',
-  'persona.apellidoPaterno': 'Apellido paterno invalido',
-  'persona.apellidoMaterno': 'Apellido materno invalido',
+  'persona.apellidoPaterno': 'Primer Apellido inválido',
+  'persona.apellidoMaterno': 'Segundo Apellido inválido',
   asignaturasDocentes: 'Seleccione una asignatura',
   tipoContratacion: 'Seleccione un tipo de contratación',
   antiguedad: 'Antigüedad invalida',
   experiencias: 'Experiencia laboral invalida',
   formacion_1_nivelId: 'Seleccione un Nivel',
-  formacion_1_nombre: 'Nombre invalido',
+  formacion_1_nombre: 'Nombre inválido',
   formacion_1_descripcion: 'Seleccione un documento',
   formacion_1_fechaGraduado: 'Seleccione una fecha',
-  formacion_1_institucion: 'Institución no invalida',
+  formacion_1_institucion: 'Institución no inválida',
   formacion_2_nivelId: 'Seleccione un Nivel',
-  formacion_2_nombre: 'Nombre invalido',
+  formacion_2_nombre: 'Nombre inválido',
   formacion_2_descripcion: 'Seleccione un documento',
   formacion_2_fechaGraduado: 'Seleccione una fecha',
-  formacion_2_institucion: 'Institución no invalida',
+  formacion_2_institucion: 'Institución no inválida',
 };
 
 export default function DocentesModal({
@@ -227,7 +227,7 @@ export default function DocentesModal({
           <Grid item xs={6}>
             <Input
               id="apellidoPaterno"
-              label="Apellido paterno"
+              label="Primer Apellido"
               name="apellidoPaterno"
               auto="apellidoPaterno"
               value={formDocentes?.persona?.apellidoPaterno || ''}
@@ -242,7 +242,7 @@ export default function DocentesModal({
           <Grid item xs={6}>
             <Input
               id="apellidoMaterno"
-              label="Apellido materno"
+              label="Segundo Apellido"
               name="apellidoMaterno"
               auto="apellidoMaterno"
               value={formDocentes?.persona?.apellidoMaterno || ''}
@@ -284,7 +284,7 @@ export default function DocentesModal({
           <Grid item xs={3}>
             <Input
               id="antiguedad"
-              label="Antiguedad"
+              label="Antigüedad"
               name="antiguedad"
               auto="antiguedad"
               value={formDocentes?.antiguedad || ''}
@@ -318,7 +318,7 @@ export default function DocentesModal({
       {currentSection === 2 && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h6">Formacionés Docentes</Typography>
+            <Typography variant="h6">Formaciones Docentes</Typography>
           </Grid>
           <Grid item xs={1} sx={{ mt: 3 }}>
             <Typography variant="subtitle">1.</Typography>
@@ -505,8 +505,8 @@ export default function DocentesModal({
             {!isConsultMode && (
               <Grid item xs={2.3}>
                 <ButtonSimple
-                  text="Confirmar"
-                  alt="Confirmar"
+                  text="Guardar"
+                  alt="Guardar"
                   onClick={handleOnSubmit}
                   align="right"
                 />

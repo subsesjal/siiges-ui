@@ -136,7 +136,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         <Grid item xs={3}>
           <InputNumber
             id="numero"
-            label="Cumplimiento numerico"
+            label="Cumplimiento numérico"
             name="numero"
             value={form.numero}
             onchange={handleOnChange}
@@ -160,7 +160,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         <Grid item xs={6}>
           <Input
             id="calificacion"
-            label="Calificacion"
+            label="Calificación"
             name="calificacion"
             value={cumplimiento?.nombre}
             disabled

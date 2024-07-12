@@ -252,7 +252,7 @@ export default function PlantelEditForm({ plantel }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Primer apellido"
+              label="Primer Apellido"
               id="directorLastName1"
               name="directorLastName1"
               auto="directorLastName1"
@@ -266,7 +266,7 @@ export default function PlantelEditForm({ plantel }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              label="Segundo apellido"
+              label="Segundo Apellido"
               id="directorLastName2"
               name="directorLastName2"
               auto="directorLastName2"

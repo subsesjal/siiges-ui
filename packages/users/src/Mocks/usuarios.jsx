@@ -46,7 +46,7 @@ const columns = [
             eliminar={showModal}
           />
           <DefaultModal open={modal} setOpen={hideModal}>
-            <Typography>Desea eliminar este usuario?</Typography>
+            <Typography>¿Desea eliminar este usuario?</Typography>
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
                 <ButtonStyled

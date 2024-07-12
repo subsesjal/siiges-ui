@@ -1,8 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonStyled, Context, Select,
+  DefaultModal, Context, Select,
   getData,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
@@ -68,17 +69,17 @@ export default function InfraestructuraEditModal({
 
   const instalacion = [
     { id: 1, nombre: 'Aula' },
-    { id: 2, nombre: 'Cubiculo' },
+    { id: 2, nombre: 'Cubículo' },
     { id: 3, nombre: 'Auditorio' },
-    { id: 4, nombre: 'Laboratorio fisico' },
+    { id: 4, nombre: 'Laboratorio físico' },
     { id: 5, nombre: 'Laboratorio virtual' },
-    { id: 6, nombre: 'Taller fisico' },
+    { id: 6, nombre: 'Taller físico' },
     { id: 7, nombre: 'Taller virtual' },
-    { id: 8, nombre: 'Laboratorio de computo' },
-    { id: 9, nombre: 'Biblioteca fisica' },
+    { id: 8, nombre: 'Laboratorio de cómputo' },
+    { id: 9, nombre: 'Biblioteca física' },
     { id: 10, nombre: 'Biblioteca virtual' },
     { id: 11, nombre: 'Otros' },
-    { id: 12, nombre: 'Area administrativa' },
+    { id: 12, nombre: 'Área administrativa' },
     { id: 13, nombre: 'Archivo muerto' },
   ];
 
@@ -205,7 +206,7 @@ export default function InfraestructuraEditModal({
         <Grid item xs={6}>
           <Input
             id="ubicacion"
-            label="Ubicacion"
+            label="Ubicación"
             name="ubicacion"
             auto="ubicacion"
             value={formInfraestructuras.ubicacion}
@@ -247,20 +248,8 @@ export default function InfraestructuraEditModal({
             disabled={disabled}
           />
         </Grid>
-        <Grid item>
-          <ButtonStyled
-            text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
-          />
-        </Grid>
-        <Grid item>
-          <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
-            onclick={handleOnSubmit}
-          />
+        <Grid item xs={12}>
+          <ButtonsForm cancel={hideModal} confirm={handleOnSubmit} confirmDisabled={disabled} />
         </Grid>
       </Grid>
     </DefaultModal>

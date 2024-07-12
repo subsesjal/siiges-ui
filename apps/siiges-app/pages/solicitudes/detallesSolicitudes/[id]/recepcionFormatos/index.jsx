@@ -161,7 +161,7 @@ export default function RecepcionFormatos() {
           setLoading(false);
           setNoti({
             open: true,
-            message: 'Exito al actualizar la solicitud',
+            message: 'Éxito al actualizar la solicitud',
             type: 'success',
           });
           router.back();
@@ -199,7 +199,7 @@ export default function RecepcionFormatos() {
           <Typography variant="h6">Información de la solicitud</Typography>
         </Grid>
         <Grid item xs={3}>
-          <LabelData title="Tipo de tramite" subtitle="Nueva solicitud" />
+          <LabelData title="Tipo de trámite" subtitle="Nueva solicitud" />
         </Grid>
         <Grid item xs={3}>
           <LabelData
@@ -270,7 +270,7 @@ export default function RecepcionFormatos() {
         </Grid>
         <Grid item xs={3}>
           <LabelData
-            title="Numero"
+            title="Número"
             subtitle={
               solicitud.programa?.plantel?.domicilio?.numeroExterior || ''
             }
@@ -490,7 +490,7 @@ export default function RecepcionFormatos() {
             <Input
               name="oficioAdmisorio"
               id="oficioAdmisorio"
-              label="Numero de oficio admisorio"
+              label="Número de oficio admisorio"
               value=""
               onchange={handleInputChange}
               onblur={handleOnBlur}

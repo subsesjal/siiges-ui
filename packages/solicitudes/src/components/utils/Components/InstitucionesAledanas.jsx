@@ -54,7 +54,7 @@ export default function InstitucionesAledanasButtons({ id }) {
           open={modalOpen}
           edit={
             isEdit
-              ? 'Editar Instituciones Aledañas'
+              ? 'Modificar Instituciones Aledañas'
               : 'Consultar Instituciones Aledañas'
           }
         />
@@ -64,7 +64,7 @@ export default function InstitucionesAledanasButtons({ id }) {
         <DeleteInstitucionesAledanas
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
-          rowItem={rowItem}
+          id={rowItem.id}
         />
       )}
     </Stack>
