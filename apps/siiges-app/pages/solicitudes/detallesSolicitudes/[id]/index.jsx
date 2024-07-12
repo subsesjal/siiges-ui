@@ -3,11 +3,8 @@ import {
 } from '@mui/material';
 import { Layout, Title, useApi } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-// import { GenerarFDA01 } from '../FDA/FDA01';
-// import { GenerarFDA02 } from '../FDA/FDA02';
-// import { GenerarFDA06 } from '../FDA/FDA06';
+import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
 
 export default function detallesSolicitudes() {
   const router = useRouter();
@@ -21,6 +18,28 @@ export default function detallesSolicitudes() {
     }
   }, [data, solicitud]);
 
+  const downloadFile = async (type) => {
+    try {
+      const solicitudId = solicitud?.id;
+
+      GetFile({
+        tipoEntidad: 'SOLICITUD',
+        entidadId: solicitudId,
+        tipoDocumento: type,
+      }, async (url) => {
+        // Ensure URL starts with 'http'
+        if (!url.startsWith('http')) {
+          // eslint-disable-next-line no-param-reassign
+          url = `http://${url}`; // Assuming it's HTTP; adjust if HTTPS is required
+        }
+        // Open the URL in a new tab
+        window.open(url, '_blank');
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error calling GetFile', error);
+    }
+  };
   return (
     <Layout>
       <Title title="Detalles de la solicitud" />
@@ -31,28 +50,22 @@ export default function detallesSolicitudes() {
             Formatos Administrativos
           </Typography>
           <List component="nav">
-            <ListItem button onClick={() => {}}>
+            <ListItem button onClick={() => downloadFile('FDA01')}>
               <ListItemText primary="FDA 01" />
             </ListItem>
-            <ListItem button onClick={() => {}}>
+            <ListItem button onClick={() => downloadFile('FDA02')}>
               <ListItemText primary="FDA 02" />
             </ListItem>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDA 03" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDA 04" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDA 05" />
-              </ListItem>
-            </Link>
-            <ListItem button onClick={() => {}}>
+            <ListItem button onClick={() => downloadFile('FDA03')}>
+              <ListItemText primary="FDA 03" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('FDA04')}>
+              <ListItemText primary="FDA 04" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('FDA05')}>
+              <ListItemText primary="FDA 05" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('FDA06')}>
               <ListItemText primary="FDA 06" />
             </ListItem>
           </List>
@@ -62,36 +75,24 @@ export default function detallesSolicitudes() {
             Formatos Pedagógicos
           </Typography>
           <List component="nav">
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDP 01" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDP 02" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDP 03" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDP 04" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDP 05" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="FDP 06" />
-              </ListItem>
-            </Link>
+            <ListItem button onClick={() => downloadFile('FDP01')}>
+              <ListItemText primary="FDP 01" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('FDP02')}>
+              <ListItemText primary="FDP 02" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('FDP03')}>
+              <ListItemText primary="FDP 03" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('FDP04')}>
+              <ListItemText primary="FDP 04" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('FDP05')}>
+              <ListItemText primary="FDP 05" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('FDP06')}>
+              <ListItemText primary="FDP 06" />
+            </ListItem>
           </List>
         </Grid>
         <Grid item xs={4}>
@@ -99,11 +100,9 @@ export default function detallesSolicitudes() {
             RVOE
           </Typography>
           <List component="nav">
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Acuerdo RVOE" />
-              </ListItem>
-            </Link>
+            <ListItem button onClick={() => downloadFile('RVOE')}>
+              <ListItemText primary="Acuerdo RVOE" />
+            </ListItem>
           </List>
         </Grid>
         <Grid item xs={4}>
@@ -111,21 +110,15 @@ export default function detallesSolicitudes() {
             Evaluación
           </Typography>
           <List component="nav">
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Carta de Aceptación" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Carta de Asignación" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Carta de Imparcialidad y confidencialidad" />
-              </ListItem>
-            </Link>
+            <ListItem button onClick={() => downloadFile('CartaAceptacion')}>
+              <ListItemText primary="Carta de Aceptación" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('CartaAsignacion')}>
+              <ListItemText primary="Carta de Asignación" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('CartaImparcialidad')}>
+              <ListItemText primary="Carta de Imparcialidad y confidencialidad" />
+            </ListItem>
           </List>
         </Grid>
         <Grid item xs={4}>
@@ -133,21 +126,15 @@ export default function detallesSolicitudes() {
             Inspección
           </Typography>
           <List component="nav">
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Orden de Inspección" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Acta de Inspección" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Acta de Cierre" />
-              </ListItem>
-            </Link>
+            <ListItem button onClick={() => downloadFile('OrdenInspeccion')}>
+              <ListItemText primary="Orden de Inspección" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('ActaInspeccion')}>
+              <ListItemText primary="Acta de Inspección" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('ActaCierre')}>
+              <ListItemText primary="Acta de Cierre" />
+            </ListItem>
           </List>
         </Grid>
         <Grid item xs={4}>
@@ -155,16 +142,12 @@ export default function detallesSolicitudes() {
             Otros
           </Typography>
           <List component="nav">
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Oficio Admisorio" />
-              </ListItem>
-            </Link>
-            <Link href="/destino-url">
-              <ListItem button>
-                <ListItemText primary="Desistimiento" />
-              </ListItem>
-            </Link>
+            <ListItem button onClick={() => downloadFile('OficioAdmisorio')}>
+              <ListItemText primary="Oficio Admisorio" />
+            </ListItem>
+            <ListItem button onClick={() => downloadFile('Desistimiento')}>
+              <ListItemText primary="Desistimiento" />
+            </ListItem>
           </List>
         </Grid>
       </Grid>
