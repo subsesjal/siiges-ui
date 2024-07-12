@@ -1,10 +1,37 @@
 import { Grid, Typography } from '@mui/material';
-import { ButtonStyled, DefaultModal } from '@siiges-ui/shared';
+import {
+  ButtonStyled,
+  Context,
+  DefaultModal,
+  deleteRecord,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useContext } from 'react';
+import PlantelContext from '../../Context/plantelContext';
 
 function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
-  console.log(id);
+  const { setNoti, setLoading } = useContext(Context);
+  const { plantelId } = useContext(PlantelContext);
+  const handleDelete = async () => {
+    setLoading(true);
+    const endpoint = `/planteles/${plantelId}/saludInstituciones/${id}`;
+    const response = await deleteRecord({ endpoint });
+
+    if (response.status === 200) {
+      // Handle success (e.g., show a success message, refresh data)
+      setLoading(false);
+      hideModal();
+    } else {
+      // Handle error (e.g., show an error message)
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: `Ocurrio un error al borrar esta institución: ${response.message}`,
+        type: 'error',
+      });
+    }
+  };
+
   return (
     <DefaultModal open={modal} setOpen={hideModal} title="Eliminar Institución Aledaña">
       <Typography>¿Desea eliminar esta institución aledaña?</Typography>
@@ -15,14 +42,10 @@ function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
             alt="Cancelar"
             design="error"
             onclick={hideModal}
-          >
-            Cancelar
-          </ButtonStyled>
+          />
         </Grid>
         <Grid item>
-          <ButtonStyled text="Confirmar" alt="Confirmar" onclick={() => {}}>
-            Confirmar
-          </ButtonStyled>
+          <ButtonStyled text="Confirmar" alt="Confirmar" onclick={handleDelete} />
         </Grid>
       </Grid>
     </DefaultModal>

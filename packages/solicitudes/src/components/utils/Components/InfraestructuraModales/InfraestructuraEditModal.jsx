@@ -1,8 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonStyled, Context, Select,
+  DefaultModal, Context, Select,
   getData,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
@@ -247,20 +248,8 @@ export default function InfraestructuraEditModal({
             disabled={disabled}
           />
         </Grid>
-        <Grid item>
-          <ButtonStyled
-            text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
-          />
-        </Grid>
-        <Grid item>
-          <ButtonStyled
-            text="Guardar"
-            alt="Guardar"
-            onclick={handleOnSubmit}
-          />
+        <Grid item xs={12}>
+          <ButtonsForm cancel={hideModal} confirm={handleOnSubmit} confirmDisabled={disabled} />
         </Grid>
       </Grid>
     </DefaultModal>

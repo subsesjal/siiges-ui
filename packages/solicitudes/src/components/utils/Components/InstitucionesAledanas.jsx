@@ -64,7 +64,7 @@ export default function InstitucionesAledanasButtons({ id }) {
         <DeleteInstitucionesAledanas
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
-          rowItem={rowItem}
+          id={rowItem.id}
         />
       )}
     </Stack>
