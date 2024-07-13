@@ -107,22 +107,6 @@ export default function detallesSolicitudes() {
         </Grid>
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
-            Evaluación
-          </Typography>
-          <List component="nav">
-            <ListItem button onClick={() => downloadFile('CartaAceptacion')}>
-              <ListItemText primary="Carta de Aceptación" />
-            </ListItem>
-            <ListItem button onClick={() => downloadFile('CartaAsignacion')}>
-              <ListItemText primary="Carta de Asignación" />
-            </ListItem>
-            <ListItem button onClick={() => downloadFile('CartaImparcialidad')}>
-              <ListItemText primary="Carta de Imparcialidad y confidencialidad" />
-            </ListItem>
-          </List>
-        </Grid>
-        <Grid item xs={4}>
-          <Typography variant="subtitle1" color="textSecondary">
             Inspección
           </Typography>
           <List component="nav">
