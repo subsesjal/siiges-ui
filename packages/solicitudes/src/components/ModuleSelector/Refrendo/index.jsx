@@ -6,7 +6,7 @@ import {
 } from '@siiges-ui/shared';
 
 function Refrendo() {
-  const { setNoti } = useContext(Context);
+  const { setNoti, session: { id } } = useContext(Context);
   const router = useRouter();
   const [options, setOptions] = useState([]);
   const [option, setOption] = useState('');
@@ -15,7 +15,7 @@ function Refrendo() {
   const [method, setMethod] = useState('GET');
 
   const { data } = useApi({
-    endpoint: url || 'api/v1/solicitudes/?estatus=11',
+    endpoint: url || `api/v1/solicitudes/?estatus=11&usuarioId=${id}`,
     dataBody,
     method,
   });
@@ -34,7 +34,6 @@ function Refrendo() {
         message: 'Refrendo creado correctamente',
         type: 'success',
       });
-      console.log(data);
       router.push({
         pathname: `/solicitudes/detallesSolicitudes/${data.id}/editarSolicitud`,
       });
