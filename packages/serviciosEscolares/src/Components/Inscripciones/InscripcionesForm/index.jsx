@@ -123,7 +123,10 @@ export default function InscripcionForm({
         });
         setGrados([]);
       } else {
-        const gradosFiltrados = data.grados.filter((grado) => grado.nombre.toLowerCase() !== 'optativa');
+        const gradosFiltrados = data.grados.filter((grado) => {
+          const nombre = grado.nombre.toLowerCase();
+          return nombre !== 'optativa' && nombre !== 'optativas';
+        });
         setGrados(gradosFiltrados);
       }
     });
