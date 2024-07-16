@@ -123,7 +123,11 @@ export default function InscripcionForm({
         });
         setGrados([]);
       } else {
-        setGrados(data.grados);
+        const gradosFiltrados = data.grados.filter((grado) => {
+          const nombre = grado.nombre.toLowerCase();
+          return nombre !== 'optativa' && nombre !== 'optativas';
+        });
+        setGrados(gradosFiltrados);
       }
     });
   };
@@ -131,11 +135,6 @@ export default function InscripcionForm({
   const fetchGrupos = (gradoId) => {
     getGrupos(gradoId, selectedCicloEscolar, (error, data) => {
       if (error) {
-        setNoti({
-          open: true,
-          message: `Error al obtener grupos: ${error.message}`,
-          type: 'error',
-        });
         setGrupos([]);
       } else {
         const transformedGrupos = data.grupos.map((programa) => ({
