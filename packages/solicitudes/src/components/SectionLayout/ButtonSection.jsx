@@ -40,7 +40,7 @@ export default function ButtonSection({
   const evaluacionCurricular = useEvaluacionCurricular();
   const plantelesValidations = useContext(PlantelContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
-  const { setCreateObservaciones } = useContext(ObservacionesContext);
+  const { setCreateObservaciones, setSections } = useContext(ObservacionesContext);
   const router = useRouter();
   let submit;
 
@@ -59,12 +59,12 @@ export default function ButtonSection({
   function validateNewSolicitud() {
     if (newSubmit) {
       if (type !== 'editar') {
-        submitNewSolicitud(validations, setNewSubmit, setLoading);
+        submitNewSolicitud(validations, setNewSubmit, setLoading, setSections);
       } else {
-        submitEditSolicitud(validations, sections, id, setLoading);
+        submitEditSolicitud(validations, sections, id, setLoading, setSections);
       }
     } else {
-      submitEditSolicitud(validations, sections, id, setLoading);
+      submitEditSolicitud(validations, sections, id, setLoading, setSections);
     }
   }
 
