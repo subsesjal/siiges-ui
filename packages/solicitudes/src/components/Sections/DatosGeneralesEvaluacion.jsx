@@ -29,6 +29,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
 
   useEffect(() => {
     const modalidadSource = type === 'editar' ? solicitudes?.programa?.modalidadId : query.modalidad;
+
     if (type === 'editar' && solicitudes?.programa?.evaluacion?.id) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -45,6 +46,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         modalidad: modalidadSource,
       }));
     }
+
     if (type === 'editar' && form.programaId) {
       const fileData = {
         entidadId: form.programaId,
@@ -53,7 +55,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
       };
       GetFile(fileData, setUrl);
     }
-  }, [solicitudes, form.programaId]);
+  }, [type, solicitudes, form.programaId, query.modalidad]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -89,7 +91,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         porcentajeCumplimiento: cumplimiento.porcentajeCumplimiento,
       }));
     }
-  }, [error, cumplimiento]);
+  }, [error, cumplimiento, validation]);
 
   const { evaluadores } = getEvaluadores();
 
@@ -111,9 +113,9 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             name="fecha"
             type="datetime"
             value={form.fecha}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
             disabled={disabled}
             errorMessage={error.fecha}
             required
@@ -125,9 +127,9 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             name="evaluadorId"
             value={form.evaluadorId || ''}
             options={evaluadoresData}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
             errorMessage={error.evaluadorId}
             disabled={disabled}
             required
@@ -139,12 +141,13 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             label="Cumplimiento numérico"
             name="numero"
             value={form.numero}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
             errorMessage={error.numero}
             min={50}
             max={250}
+            disabled={disabled}
             required
           />
         </Grid>
@@ -172,9 +175,9 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             label="Valoración cualitativa"
             name="valoracion"
             value={form.valoracion}
-            onchange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
+            onChange={handleOnChange}
+            onBlur={handleOnBlur}
+            onFocus={handleInputFocus}
             multiline
             rows={4}
             sx={{ width: '100%' }}

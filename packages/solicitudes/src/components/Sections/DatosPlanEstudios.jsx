@@ -9,7 +9,8 @@ import SolicitudContext from '../utils/Context/solicitudContext';
 import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 
-export default function DatosPlanEstudios() {
+// eslint-disable-next-line react/prop-types
+export default function DatosPlanEstudios({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
 
   const {
@@ -103,6 +104,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.nivelId}
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
         <Grid item xs={9}>
@@ -117,6 +119,7 @@ export default function DatosPlanEstudios() {
             value={form[1].programa?.nombre || ''}
             errorMessage={error.nombre}
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
         <Grid item xs={3}>
@@ -126,7 +129,7 @@ export default function DatosPlanEstudios() {
             value={modalidad || ''}
             onfocus={handleInputFocus}
             options={modalidades}
-            disabled
+            disabled // Siempre deshabilitado en este ejemplo, pero puedes condicionar
           />
         </Grid>
         <Grid item xs={3}>
@@ -140,6 +143,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.cicloId}
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
         <Grid item xs={6}>
@@ -154,6 +158,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
         <Grid item xs={3}>
@@ -168,6 +173,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.duracionPeriodos}
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
         <Grid item xs={3} sx={{ mt: 3 }}>
@@ -185,6 +191,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.creditos}
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
         <Grid item xs={12}>
@@ -199,6 +206,7 @@ export default function DatosPlanEstudios() {
             errorMessage={error.antecedenteAcademico}
             textValue
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
         <Grid item xs={12}>
@@ -217,6 +225,7 @@ export default function DatosPlanEstudios() {
             helperText={error.objetivoGeneral}
             error={!!error.objetivoGeneral}
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
         <Grid item xs={12}>
@@ -235,6 +244,7 @@ export default function DatosPlanEstudios() {
             helperText={error.objetivosParticulares}
             error={!!error.objetivosParticulares}
             required
+            disabled={disabled} // Añadido
           />
         </Grid>
       </Grid>

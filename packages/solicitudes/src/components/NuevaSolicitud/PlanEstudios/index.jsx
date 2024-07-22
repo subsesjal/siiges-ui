@@ -179,6 +179,8 @@ export default function PlanEstudios({
     next, prev, section, position, porcentaje,
   } = pagination(useState, 9);
 
+  const isDisabled = type === 'consultar' || disabled;
+
   return (
     <SolicitudContext.Provider value={value}>
       <TablesPlanEstudiosProvider>
@@ -197,21 +199,15 @@ export default function PlanEstudios({
               prev={prev}
             >
               <Loading loading={loading} />
-              {section === 1 && <DatosPlanEstudios type={type} />}
-              {section === 2 && (
-                <FundamentosPlanEstudios disabled={disabled} type={type} />
-              )}
-              {section === 3 && <Ingreso disabled={disabled} type={type} />}
-              {section === 4 && <Egreso disabled={disabled} type={type} />}
-              {section === 5 && <Curricula disabled={disabled} type={type} />}
-              {section === 6 && <Asignaturas disabled={disabled} type={type} />}
-              {section === 7 && (
-                <AsignaturasFormacionElectiva disabled={disabled} type={type} />
-              )}
-              {section === 8 && <Docentes disabled={disabled} type={type} />}
-              {section === 9 && (
-                <TrayectoriaEducativa disabled={disabled} type={type} />
-              )}
+              {section === 1 && <DatosPlanEstudios disabled={isDisabled} type={type} />}
+              {section === 2 && <FundamentosPlanEstudios disabled={isDisabled} type={type} />}
+              {section === 3 && <Ingreso disabled={isDisabled} type={type} />}
+              {section === 4 && <Egreso disabled={isDisabled} type={type} />}
+              {section === 5 && <Curricula disabled={isDisabled} type={type} />}
+              {section === 6 && <Asignaturas disabled={isDisabled} type={type} />}
+              {section === 7 && <AsignaturasFormacionElectiva disabled={isDisabled} type={type} />}
+              {section === 8 && <Docentes disabled={isDisabled} type={type} />}
+              {section === 9 && <TrayectoriaEducativa disabled={isDisabled} type={type} />}
               {type === 'editar' && (
                 <Observaciones
                   id={id}

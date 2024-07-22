@@ -43,7 +43,7 @@ export default function ButtonSection({
   const { setCreateObservaciones } = useContext(ObservacionesContext);
   const router = useRouter();
   let submit;
-
+  console.log('Current type:', type);
   const isControlDocumental = session.rol === 'control_documental';
   const buttonText = isControlDocumental
     ? 'Guardar observaciones'
@@ -146,12 +146,14 @@ export default function ButtonSection({
       {position === 'first' && (
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={9}>
-            <ButtonStyled
-              text={buttonText}
-              alt={buttonText}
-              type="success"
-              onclick={!loading ? submit : null}
-            />
+            {type !== 'consultar' && (
+              <ButtonStyled
+                text={buttonText}
+                alt={buttonText}
+                type="success"
+                onclick={!loading ? submit : null}
+              />
+            )}
           </Grid>
           <Grid item xs={3}>
             <ButtonStyled
@@ -174,12 +176,14 @@ export default function ButtonSection({
             />
           </Grid>
           <Grid item xs={6}>
-            <ButtonStyled
-              text={buttonText}
-              alt={buttonText}
-              type="success"
-              onclick={!loading ? submit : null}
-            />
+            {type !== 'consultar' && (
+              <ButtonStyled
+                text={buttonText}
+                alt={buttonText}
+                type="success"
+                onclick={!loading ? submit : null}
+              />
+            )}
           </Grid>
           <Grid item xs={3}>
             <ButtonStyled
@@ -202,24 +206,28 @@ export default function ButtonSection({
             />
           </Grid>
           <Grid item xs={6}>
-            <ButtonStyled
-              text={buttonTextEnd}
-              alt={buttonTextEnd}
-              type="success"
-              onclick={!loading ? submit : null}
-            />
+            {type !== 'consultar' && (
+              <ButtonStyled
+                text={buttonTextEnd}
+                alt={buttonTextEnd}
+                type="success"
+                onclick={!loading ? submit : null}
+              />
+            )}
           </Grid>
         </Grid>
       )}
       {position === 'only' && (
         <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
           <Grid item xs={12}>
-            <ButtonStyled
-              text={buttonTextEnd}
-              alt={buttonTextEnd}
-              type="success"
-              onclick={!loading ? submit : null}
-            />
+            {type !== 'consultar' && (
+              <ButtonStyled
+                text={buttonTextEnd}
+                alt={buttonTextEnd}
+                type="success"
+                onclick={!loading ? submit : null}
+              />
+            )}
           </Grid>
         </Grid>
       )}

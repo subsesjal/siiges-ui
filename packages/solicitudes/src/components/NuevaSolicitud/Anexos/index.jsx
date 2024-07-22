@@ -17,20 +17,21 @@ export default function Anexos({
   } = pagination(useState, 1);
 
   useEffect(() => {
-    if (id !== undefined) {
-      setDisabled(false);
-    }
-  }, [id]);
+    // Update disabled state based on id and type
+    const isDisabled = type === 'consultar' || id === undefined;
+    setDisabled(isDisabled); // Debugging line
+  }, [id, type]);
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <SectionLayout
+          type={type}
           sectionTitle="Anexos"
           sections={section}
           position={position}
           total="1"
-          porcentage={porcentaje}
+          porcentaje={porcentaje}
           nextModule={nextModule}
           next={next}
           prev={prev}
