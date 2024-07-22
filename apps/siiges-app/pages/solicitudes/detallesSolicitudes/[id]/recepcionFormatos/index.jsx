@@ -139,6 +139,38 @@ export default function RecepcionFormatos() {
   };
   const allChecked = Object.values(checkboxes).every((value) => value);
 
+  const downloadFile = async (type) => {
+    try {
+      const solicitudId = solicitud?.id;
+
+      GetFile({
+        tipoEntidad: 'SOLICITUD',
+        entidadId: solicitudId,
+        tipoDocumento: type,
+      }, async (fileURL, error) => {
+        if (error) {
+          console.error('Error downloading the file', error);
+          return;
+        }
+
+        if (!fileURL) {
+          console.error('File URL not provided');
+          return;
+        }
+
+        // Ensure URL starts with 'http'
+        if (!fileURL.startsWith('http')) {
+          fileURL = `http://${fileURL}`;
+        }
+
+        // Open the URL in a new tab
+        window.open(fileURL, '_blank');
+      });
+    } catch (error) {
+      console.error('Error calling GetFile', error);
+    }
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     // Validate required fields
@@ -164,6 +196,7 @@ export default function RecepcionFormatos() {
             message: 'Éxito al actualizar la solicitud',
             type: 'success',
           });
+          downloadFile('OFICIO_ADMISORIO');
           router.back();
         } else {
           setLoading(false);
