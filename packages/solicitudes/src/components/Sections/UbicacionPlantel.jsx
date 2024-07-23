@@ -21,7 +21,7 @@ export default function UbicacionPlantel() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Ubicacion del Plantel</Typography>
+        <Typography variant="h6">Ubicación del Plantel</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={9}>
@@ -47,7 +47,7 @@ export default function UbicacionPlantel() {
           <Input id="colony" label="Colonia" name="colony" auto="colony" />
         </Grid>
         <Grid item xs={6}>
-          <Input id="phone2" label="Telefono 2" name="phone2" auto="phone2" />
+          <Input id="phone2" label="Teléfono 2" name="phone2" auto="phone2" />
         </Grid>
         <Grid item xs={6}>
           <Input

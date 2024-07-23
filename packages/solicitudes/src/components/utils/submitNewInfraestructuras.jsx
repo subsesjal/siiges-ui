@@ -20,7 +20,7 @@ const handleCreate = (
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
+      message: '¡Algo salió mal, revisa que los campos estén correctos!',
       type: 'error',
     });
     return;
@@ -46,7 +46,7 @@ const handleCreate = (
       setInitialValues({});
       setNoti({
         open: true,
-        message: 'Se creo la infraestructura exitosamente',
+        message: 'Se creó la infraestructura exitosamente',
         type: 'success',
       });
       setLoading(false);
@@ -54,7 +54,7 @@ const handleCreate = (
     .catch((error) => {
       setNoti({
         open: true,
-        message: `Ocurrio un error al cargar los datos: ${error}`,
+        message: `¡Ocurrió un error al cargar los datos!: ${error}`,
         type: 'error',
       });
       setLoading(false);

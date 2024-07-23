@@ -10,7 +10,7 @@ export default function errorDatosNuevaSolicitud(form, setError, error) {
     },
     plantel: () => {
       if (form.plantel === undefined || form.plantel === '') {
-        setError({ ...error, plantel: 'Plantel invalido' });
+        setError({ ...error, plantel: 'Plantel inválido' });
         return false;
       }
       setError({ ...error, plantel: '' });

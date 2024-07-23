@@ -24,7 +24,7 @@ export default function EvidenciaFotografica({
   const handleSave = async () => {
     try {
       if (files.length === 0) {
-        throw new Error('Algo salió mal, ingrese un documento');
+        throw new Error('¡Algo salió mal, ingrese un documento!');
       }
 
       const uploadPromises = files.map((file, index) => fileToFormData(file).then((formData) => {
@@ -38,13 +38,13 @@ export default function EvidenciaFotografica({
 
       setNoti({
         open: true,
-        message: 'Documento(s) cargado(s) con éxito',
+        message: '¡Documento(s) cargado(s) con éxito!',
         type: 'success',
       });
     } catch (error) {
       setNoti({
         open: true,
-        message: error.message || 'Algo salió mal, revise su documento',
+        message: error.message || '¡Algo salió mal, revise su documento!',
         type: 'error',
       });
     } finally {
@@ -92,8 +92,8 @@ export default function EvidenciaFotografica({
       </Grid>
       <DropzoneDialog
         open={open}
-        dropzoneText="Arrastre la evidencia fotografica aquí, o haga click"
-        dialogTitle="Subir evidencia fotografica"
+        dropzoneText="Arrastre la evidencia fotográfica aquí, o haga click"
+        dialogTitle="Subir evidencia fotográfica"
         submitButtonText="Aceptar"
         cancelButtonText="Cancelar"
         filesLimit={5}

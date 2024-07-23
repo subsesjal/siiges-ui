@@ -37,7 +37,7 @@ export default function submitEditSolicitud(validations, sections, id, setLoadin
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Hubo un problema, revise que los campos esten correctos',
+          message: 'Hubo un problema, revise que los campos estén correctos',
           type: 'error',
         });
       }, 1000);

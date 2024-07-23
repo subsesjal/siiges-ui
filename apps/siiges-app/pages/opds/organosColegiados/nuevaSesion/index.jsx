@@ -6,7 +6,7 @@ import React from 'react';
 
 export default function NuevaSesion() {
   return (
-    <Layout title="Organos Colegiados">
+    <Layout title="Órganos Colegiados">
       <OrganosColegiados />
     </Layout>
   );

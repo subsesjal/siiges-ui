@@ -193,7 +193,7 @@ export default function RecepcionFormatos() {
           setLoading(false);
           setNoti({
             open: true,
-            message: 'Éxito al actualizar la solicitud',
+            message: '¡Éxito al actualizar la solicitud!',
             type: 'success',
           });
           downloadFile('OFICIO_ADMISORIO');
@@ -202,7 +202,7 @@ export default function RecepcionFormatos() {
           setLoading(false);
           setNoti({
             open: true,
-            message: `Error al actualizar la solicitud: ${result.message}`,
+            message: `¡Error al actualizar la solicitud!: ${result.message}`,
             type: 'error',
           });
         }
@@ -210,7 +210,7 @@ export default function RecepcionFormatos() {
         setLoading(false);
         setNoti({
           open: true,
-          message: `Error al actualizar la solicitud: ${error.message}`,
+          message: `¡Error al actualizar la solicitud!: ${error.message}`,
           type: 'error',
         });
       }
@@ -219,7 +219,7 @@ export default function RecepcionFormatos() {
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Algo salió mal, revise que los campos esten correctos',
+        message: '¡Algo salió mal, revise que los campos estén correctos!',
         type: 'error',
       });
     }
