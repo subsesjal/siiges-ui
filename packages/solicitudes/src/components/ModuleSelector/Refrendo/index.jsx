@@ -15,7 +15,7 @@ function Refrendo() {
   const [method, setMethod] = useState('GET');
 
   const { data } = useApi({
-    endpoint: url || `api/v1/solicitudes/?estatus=11&usuarioId=${id}`,
+    endpoint: url || `api/v1/solicitudes?estatusSolicitudId=11&usuarioId=${id}`,
     dataBody,
     method,
   });
@@ -65,7 +65,7 @@ function Refrendo() {
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
-          <ButtonStyled text="Crear" alt="Refrendo" onclick={() => handleOnClick()} />
+          <ButtonStyled text="Crear" onclick={() => handleOnClick()} />
         </Grid>
       </Grid>
     </Grid>
