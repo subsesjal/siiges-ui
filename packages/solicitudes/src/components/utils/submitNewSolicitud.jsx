@@ -44,11 +44,11 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
         })
         .then(() => {
           // Update the section state
-          setSections((prevSeccions) => prevSeccions.map((seccion) => {
-            if (seccion.id === 1) {
-              return { ...seccion, disabled: true };
+          setSections((prevSections) => prevSections.map((section) => {
+            if (section.id === 1) {
+              return { ...section, disabled: true };
             }
-            return seccion;
+            return section;
           }));
           setNewSubmit(false);
           setTimeout(() => {
