@@ -113,9 +113,9 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             name="fecha"
             type="datetime"
             value={form.fecha}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             disabled={disabled}
             errorMessage={error.fecha}
             required
@@ -127,9 +127,9 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             name="evaluadorId"
             value={form.evaluadorId || ''}
             options={evaluadoresData}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.evaluadorId}
             disabled={disabled}
             required
@@ -141,9 +141,9 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             label="Cumplimiento numérico"
             name="numero"
             value={form.numero}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             errorMessage={error.numero}
             min={50}
             max={250}
@@ -175,9 +175,9 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             label="Valoración cualitativa"
             name="valoracion"
             value={form.valoracion}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
+            onchange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
             multiline
             rows={4}
             sx={{ width: '100%' }}

@@ -1,5 +1,5 @@
-import { Grid, Typography } from '@mui/material';
-import { GetFile, Input, InputFile } from '@siiges-ui/shared';
+import { Grid, TextField, Typography } from '@mui/material';
+import { GetFile, InputFile } from '@siiges-ui/shared';
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SolicitudContext from '../utils/Context/solicitudContext';
@@ -75,7 +75,7 @@ export default function Curricula({ disabled, type }) {
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
         <Grid item xs={12}>
-          <Input
+          <TextField
             id="mapaCurricular"
             name="mapaCurricular"
             label="Mapa curricular"
@@ -92,7 +92,7 @@ export default function Curricula({ disabled, type }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
+          <TextField
             id="flexibilidadCurricular"
             name="flexibilidadCurricular"
             label="Flexibilidad curricular"
@@ -109,7 +109,7 @@ export default function Curricula({ disabled, type }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
+          <TextField
             id="lineasGeneracionAplicacionConocimiento"
             name="lineasGeneracionAplicacionConocimiento"
             label="Líneas de generación del conocimiento"
@@ -126,7 +126,7 @@ export default function Curricula({ disabled, type }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
+          <TextField
             id="actualizacion"
             name="actualizacion"
             label="Actualización del plan de estudios"
@@ -143,7 +143,7 @@ export default function Curricula({ disabled, type }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
+          <TextField
             id="conveniosVinculacion"
             name="conveniosVinculacion"
             label="Vinculación con colegios de profesionistas, academias profesionales, entre otras"

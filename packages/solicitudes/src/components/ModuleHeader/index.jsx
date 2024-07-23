@@ -166,7 +166,7 @@ export default function ModuleHeader({
                 text="Salir"
                 alt="Salir"
                 type="success"
-                onclick={() => window.location.href = '/home'}
+                onclick={() => router.push('/home')}
               />
 
             </Grid>
