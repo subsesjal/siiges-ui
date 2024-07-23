@@ -157,23 +157,32 @@ export default function PlanEstudios({
 
   const value = useMemo(
     () => ({
-      modalidad,
-      form,
-      setForm,
-      error,
-      setError,
-      errors,
-      setErrors,
-      noti,
-      setNoti,
       id,
+      form,
+      noti,
+      error,
       setId,
+      errors,
+      setNoti,
+      setForm,
+      setError,
+      modalidad,
+      setErrors,
       programaId,
       setProgramaId,
       trayectoriaStatus,
       setTrayectoriaStatus,
     }),
-    [form, error, errors, noti, id, programaId, modalidad, trayectoriaStatus],
+    [
+      form,
+      error,
+      errors,
+      noti,
+      id,
+      programaId,
+      modalidad,
+      trayectoriaStatus,
+    ],
   );
   const {
     next, prev, section, position, porcentaje,
@@ -215,7 +224,7 @@ export default function PlanEstudios({
               {type === 'editar' && (
                 <Observaciones
                   id={id}
-                  section={section === 1 ? section : section + 1}
+                  section={section}
                 />
               )}
             </SectionLayout>
