@@ -43,7 +43,6 @@ export default function ButtonSection({
   const { setCreateObservaciones } = useContext(ObservacionesContext);
   const router = useRouter();
   let submit;
-  console.log('Current type:', type);
   const isControlDocumental = session.rol === 'control_documental';
   const buttonText = isControlDocumental
     ? 'Guardar observaciones'
