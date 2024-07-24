@@ -27,7 +27,7 @@ export default async function SubmitDocument(formData, setUrl, setNoti) {
   } catch (err) {
     setNoti({
       open: true,
-      message: err.message || 'Algo salió mal, revise su documento',
+      message: err.message || '¡Algo salió mal, revise su documento!',
       type: 'error',
     });
   }
