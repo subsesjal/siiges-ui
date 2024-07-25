@@ -217,8 +217,8 @@ export default function UsuarioForm({ session, accion, usuario }) {
               <Grid item xs={8} sx={{ mt: -2 }}>
                 <Typography variant="subtitle">
                   La contraseña debe contener entre 8 y 25 caracteres, así como
-                  contener al menos una letra minúscula, una letra mayúscula, un
-                  caracter y un dígito.
+                  contener al menos una letra mayúscula, una letra minúscula, un
+                  caracter especial y un número.
                 </Typography>
               </Grid>
             </>
