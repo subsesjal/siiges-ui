@@ -31,6 +31,7 @@ const mockData = [
 
 export default function FoliosForm({
   setTipoSolicitud,
+  setTipoDocumento,
   setSolicitudes,
   setPrograma,
   setLoading,
@@ -109,6 +110,11 @@ export default function FoliosForm({
     setTipoSolicitud(tipoSolicitud);
   };
 
+  const handleDocumentoChange = (event) => {
+    const tipoDocumento = event.target.value;
+    setTipoDocumento(tipoDocumento);
+  };
+
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
       if (error) {
@@ -134,14 +140,20 @@ export default function FoliosForm({
     } else setPlanteles([]);
   }, [selectedInstitucion]);
 
-  const solicitudes = [
+  const documentos = [
     { id: 1, nombre: 'Titulos' },
     { id: 2, nombre: 'Certificados' },
   ];
 
+  const solicitudes = [
+    { id: 1, nombre: 'Total' },
+    { id: 2, nombre: 'Parcial' },
+    { id: 3, nombre: 'Duplicado' },
+  ];
+
   return (
     <Grid container spacing={2} alignItems="center">
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         <Select
           title="Instituciones"
           name="instituciones"
@@ -151,7 +163,7 @@ export default function FoliosForm({
           disabled={isRepresentante}
         />
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         <Select
           title="Planteles"
           name="planteles"
@@ -161,7 +173,7 @@ export default function FoliosForm({
           disabled={!selectedInstitucion}
         />
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         <Select
           title="Programas"
           name="programas"
@@ -171,7 +183,16 @@ export default function FoliosForm({
           disabled={!selectedPlantel}
         />
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4}>
+        <Select
+          title="Tipo de documento"
+          name="documento"
+          options={documentos || []}
+          onchange={handleDocumentoChange}
+          disabled={!selectedPrograma}
+        />
+      </Grid>
+      <Grid item xs={4}>
         <Select
           title="Tipo de solicitud"
           name="solicitud"
@@ -186,6 +207,7 @@ export default function FoliosForm({
 
 FoliosForm.propTypes = {
   setTipoSolicitud: PropTypes.func.isRequired,
+  setTipoDocumento: PropTypes.func.isRequired,
   setSolicitudes: PropTypes.func.isRequired,
   setPrograma: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
