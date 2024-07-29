@@ -12,6 +12,8 @@ export default function submitEditSolicitud(
   const { form, setNoti } = validations;
   const token = getToken();
 
+  setLoading(true);
+
   fetch(`${url}/api/v1/solicitudes/${id}`, {
     method: 'PATCH',
     headers: {
@@ -23,7 +25,9 @@ export default function submitEditSolicitud(
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Error submitting the request');
+        return response.json().then((error) => {
+          throw new Error(error.message || 'Error submitting the request');
+        });
       }
       return response.json();
     })
@@ -36,7 +40,9 @@ export default function submitEditSolicitud(
     }))
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Error fetching the section data');
+        return response.json().then((error) => {
+          throw new Error(error.message || 'Error fetching the section data');
+        });
       }
       return response.json();
     })
@@ -49,24 +55,20 @@ export default function submitEditSolicitud(
         return section;
       }));
 
-      setTimeout(() => {
-        setLoading(false);
-        setNoti({
-          open: true,
-          message: 'Exito, no hubo problemas en esta sección',
-          type: 'success',
-        });
-      }, 1000);
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: 'Éxito, no hubo problemas en esta sección',
+        type: 'success',
+      });
     })
     .catch((err) => {
       console.error('Error:', err);
-      setTimeout(() => {
-        setLoading(false);
-        setNoti({
-          open: true,
-          message: `Hubo un problema, revise que los campos estén correctos: ${err}`,
-          type: 'error',
-        });
-      }, 1000);
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: `Hubo un problema, revise que los campos estén correctos: ${err.message}`,
+        type: 'error',
+      });
     });
 }

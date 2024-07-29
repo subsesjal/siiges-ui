@@ -104,11 +104,7 @@ export default function ButtonSection({
         setLoading,
         institucion.id,
       ),
-      3: () => submitHigienesPlantel(
-        plantelesValidations,
-        setNoti,
-        setLoading,
-      ),
+      3: () => submitHigienesPlantel(plantelesValidations, setNoti, setLoading),
       6: () => submitRatificacion(plantelesValidations, setNoti, setLoading),
     },
     'Evaluación Curricular': {
@@ -116,9 +112,9 @@ export default function ButtonSection({
     },
     'Plan de estudios': {
       1: () => validateNewSolicitud(),
-      3: () => submitEditSolicitud(validations, sections, id, setLoading),
-      4: () => submitEditSolicitud(validations, sections, id, setLoading),
-      5: () => submitEditSolicitud(validations, sections, id, setLoading),
+      3: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
+      4: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
+      5: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
       9: () => submitTrayectoriaEducativa(validations, setLoading),
     },
   };
