@@ -31,7 +31,6 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
       return fetch(`${url}/api/v1/solicitudes/${data.data.id}/secciones/1`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           api_key: apikey,
           Authorization: `Bearer ${token}`,
         },
