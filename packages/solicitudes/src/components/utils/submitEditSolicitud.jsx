@@ -58,7 +58,7 @@ export default function submitEditSolicitud(
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Exito, no hubo problemas en esta sección',
+        message: 'Éxito, no hubo problemas en esta sección',
         type: 'success',
       });
     })
