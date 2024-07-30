@@ -11,6 +11,7 @@ import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosPr
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useAsignaturas from '../utils/getAsignaturas';
 import { grados } from '../utils/Mocks/mockAsignaturas';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function Asignaturas({ disabled, type }) {
   const { programaId } = useContext(SolicitudContext);
@@ -28,6 +29,10 @@ export default function Asignaturas({ disabled, type }) {
     [setAsignaturasList, asignaturas],
   );
 
+  const isSectionDisabled = useSectionDisabled(6);
+
+  const isDisabled = disabled || isSectionDisabled;
+
   useEffect(() => {
     if (type === 'editar' && !loading) {
       setAsignaturasList(asignaturas);
@@ -40,7 +45,7 @@ export default function Asignaturas({ disabled, type }) {
         <Typography variant="h6">Asignaturas</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <Button onClick={showModal} text="Agregar" />}
+        {!isDisabled && <Button onClick={showModal} text="Agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
