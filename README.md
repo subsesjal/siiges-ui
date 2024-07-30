@@ -144,15 +144,43 @@ module.exports = withPlugins([withTM()], {
 
 # Levantar Frontend
 Hacer Fork del proyecto:
-- [Frontend](https://github.com/subsesjal/siiges-ui)
+- [Frontend](https://github.com/subsesjal/siiges-ui)`
+
+### Instalaciones necesarias.
+> Git
+> Node.js
+> Yarn
 
 ### Clonar el repositorio
->[!NOTE]
+> [!NOTE]
 > Debes estar dentro del proyecto que hiciste **Fork**.
 
 ```git clone https://github.com/yourUsername/siiges-ui```
 
-### Instalaciones necesarias dentro del directorio raíz
+> [!IMPORTANT]
+> Antes de hacer las instalaciones de las independencias, deberás acceder al repositorio remoto con el siguiente comando.
+
+```git remote add upstream https://github.com/subsesjal/siiges-ui.git```
+
+> [!NOTE]
+> Verificar que tu repo esté conectada remotamente con este comando.
+
+```git remote -v```
+
+> [!NOTE]
+> Debe dar un mensaje como este.
+
+> origin  https://github.com/yourUsername/siiges-ui.git (fetch)
+> origin  https://github.com/yourUsername/siiges-ui.git (push)
+> upstream        https://github.com/subsesjal/siiges-ui.git (fetch)
+> upstream        https://github.com/subsesjal/siiges-ui.git (push)
+
+> [!IMPORTANT]
+> Actualizar para traer los cambios más recientes con este comando.
+
+```git fetch upstream && git rebase upstream/master```
+
+### Instalar los módulos
 ```yarn install or yarn```
 ```yarn bootstrap```
 
