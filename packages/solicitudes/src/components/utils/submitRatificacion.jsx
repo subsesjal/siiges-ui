@@ -10,7 +10,7 @@ export default function submitRatificacion(validations, setNoti, setLoading) {
     setNoti({
       open: true,
       message:
-        'Algo salió mal, se requiere al menos 1 nombre propuesto y ambos archivos',
+        '¡Algo salió mal, se requiere al menos 1 nombre propuesto y ambos archivos!',
       type: 'error',
     });
     return;
@@ -42,7 +42,7 @@ export default function submitRatificacion(validations, setNoti, setLoading) {
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Exito, no hubo problemas en esta sección',
+          message: '¡Éxito, no hubo problemas en esta sección!',
           type: 'success',
         });
       }, 1000);
@@ -53,7 +53,7 @@ export default function submitRatificacion(validations, setNoti, setLoading) {
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Hubo un problema, revise que los campos esten correctos',
+          message: '¡Hubo un problema, revise que los campos estén correctos!',
           type: 'error',
         });
       }, 1000);

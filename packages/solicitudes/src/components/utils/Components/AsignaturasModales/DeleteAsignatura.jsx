@@ -38,7 +38,7 @@ function DeleteAsignatura({
       hideModal();
       setNoti({
         open: true,
-        message: 'Asignatura eliminada exitosamente.',
+        message: '¡Asignatura eliminada exitosamente!.',
         type: 'success',
       });
     } catch (error) {

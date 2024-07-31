@@ -19,7 +19,7 @@ const handleEdit = (
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salió mal, revisa que los campos estén correctos',
+      message: '¡Algo salió mal, revisa que los campos estén correctos!',
       type: 'error',
     });
     return;
@@ -52,7 +52,7 @@ const handleEdit = (
       setInitialValues({});
       setNoti({
         open: true,
-        message: 'Exito al cargar los datos de infraestructura',
+        message: '¡Éxito al cargar los datos de infraestructura!',
         type: 'success',
       });
       setLoading(false);
