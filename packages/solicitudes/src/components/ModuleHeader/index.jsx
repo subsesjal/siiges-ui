@@ -49,7 +49,7 @@ export default function ModuleHeader({
       if (result?.statusCode === 200) {
         setNoti({
           open: true,
-          message: 'Se completó la solicitud exitosamente',
+          message: '¡Se completó la solicitud exitosamente!',
           type: 'success',
         });
         router.back();

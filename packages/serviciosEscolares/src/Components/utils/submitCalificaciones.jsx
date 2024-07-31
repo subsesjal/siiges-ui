@@ -35,14 +35,14 @@ export default async function submitCalificaciones(
 
     setNoti({
       open: true,
-      message: 'Carga de calificaciones exitoso',
+      message: '¡Carga de calificaciones exitoso!',
       type: 'success',
     });
   } catch (err) {
     console.error('Error:', err);
     setNoti({
       open: true,
-      message: 'Algo salio mal, revise que la información este correcta',
+      message: '¡Algo salió mal, revise que la información este correcta!',
       type: 'error',
     });
   }

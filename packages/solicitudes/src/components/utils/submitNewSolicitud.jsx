@@ -54,7 +54,7 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
             setLoading(false);
             setNoti({
               open: true,
-              message: 'Exito, no hubo problemas en esta sección',
+              message: '¡Exito, no hubo problemas en esta sección!',
               type: 'success',
             });
           }, 1000);
@@ -65,7 +65,7 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
         setLoading(false);
         setNoti({
           open: true,
-          message: `Hubo un problema, revise que los campos esten correctos: ${err}`,
+          message: `¡Hubo un problema, revise que los campos estén correctos!: ${err}`,
           type: 'error',
         });
       }, 1000);

@@ -41,7 +41,7 @@ export default function GruposModal({
         if (response.statusCode === 201) {
           setNoti({
             open: true,
-            message: 'Grupo escolar creado exitosamente',
+            message: '¡Grupo escolar creado exitosamente!',
             type: 'success',
           });
           setFormGrupo({ programaId: formGrupo.programaId });
@@ -50,7 +50,7 @@ export default function GruposModal({
         } else {
           setNoti({
             open: true,
-            message: 'Error al crear Grupo escolar',
+            message: '¡Error al crear Grupo escolar!',
             type: 'error',
           });
         }

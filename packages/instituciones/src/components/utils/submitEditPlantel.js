@@ -17,14 +17,14 @@ export default function submitEditPlantel(form, setNoti) {
     .then(
       setNoti({
         open: true,
-        message: 'Se edito el plantel exitosamente',
+        message: '¡Se editó el plantel exitosamente!',
         type: 'success',
       }),
     )
     .catch(() => {
       setNoti({
         open: true,
-        message: 'Algo salio mal, revisa que los campos esten correctos',
+        message: '¡Algo salió mal, revisa que los campos estén correctos!',
         type: 'error',
       });
     });

@@ -5,7 +5,7 @@ export default function plantelErrors(form, setError, error) {
   const errors = {
     calle: () => {
       if (form.domicilio.calle === undefined || form.domicilio.calle === '') {
-        setError({ ...error, calle: 'Calle invalida' });
+        setError({ ...error, calle: 'Calle inválida' });
         return false;
       }
       setError({ ...error, calle: '' });
@@ -94,7 +94,7 @@ export default function plantelErrors(form, setError, error) {
         return false;
       }
       if (form.telefono1.length !== 10) {
-        setError({ ...error, telefono1: 'Ingrese 10 digitos' });
+        setError({ ...error, telefono1: 'Ingrese 10 dígitos' });
         return false;
       }
       setError({ ...error, telefono1: '' });
@@ -106,7 +106,7 @@ export default function plantelErrors(form, setError, error) {
         return false;
       }
       if (form.telefono2.length !== 10) {
-        setError({ ...error, telefono2: 'Ingrese 10 digitos' });
+        setError({ ...error, telefono2: 'Ingrese 10 dígitos' });
         return false;
       }
       setError({ ...error, telefono2: '' });

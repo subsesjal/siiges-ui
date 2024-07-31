@@ -44,7 +44,7 @@ export default function GruposModal({
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Grupo creado con exito',
+          message: '¡Grupo creado con éxito!',
           type: 'success',
         });
         if (fetchGrupos) {

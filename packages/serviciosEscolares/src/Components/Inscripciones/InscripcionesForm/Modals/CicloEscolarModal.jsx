@@ -67,7 +67,7 @@ export default function CicloEscolarModal({
         if (response.statusCode === 201) {
           setNoti({
             open: true,
-            message: 'Ciclo escolar creado exitosamente',
+            message: '¡Ciclo escolar creado exitosamente!',
             type: 'success',
           });
           setFormCicloEscolar({ programaId: formCicloEscolar.programaId });

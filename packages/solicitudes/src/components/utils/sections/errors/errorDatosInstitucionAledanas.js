@@ -2,7 +2,7 @@ export default function errorDatosInstitucionAledanas(form, setError, error) {
   const errors = {
     nombre: () => {
       if (form.nombre === undefined || form.nombre === '') {
-        setError({ ...error, nombre: 'Nombre invalido' });
+        setError({ ...error, nombre: 'Nombre inválido' });
         return false;
       }
       setError({ ...error, nombre: '' });
@@ -10,7 +10,7 @@ export default function errorDatosInstitucionAledanas(form, setError, error) {
     },
     tiempo: () => {
       if (form.tiempo === undefined || form.tiempo === '') {
-        setError({ ...error, tiempo: 'Tiempo de Llegada invalidos' });
+        setError({ ...error, tiempo: 'Tiempo de Llegada inválidos' });
         return false;
       }
       setError({ ...error, tiempo: '' });
