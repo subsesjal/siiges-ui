@@ -3,6 +3,7 @@ import { GetFile, InputFile } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import SolicitudContext from '../utils/Context/solicitudContext';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function FundamentosPlanEstudios({ disabled, type }) {
   const { form, setForm, id } = useContext(SolicitudContext);
@@ -12,6 +13,10 @@ export default function FundamentosPlanEstudios({ disabled, type }) {
     tipoEntidad: 'PROGRAMA',
     tipoDocumento: 'FORMATO_PEDAGOGICO_01',
   };
+
+  const isSectionDisabled = useSectionDisabled(2);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
     if (type === 'editar') {
@@ -40,7 +45,7 @@ export default function FundamentosPlanEstudios({ disabled, type }) {
             setLoaded={() => {}}
             url={url}
             setUrl={setUrl}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>

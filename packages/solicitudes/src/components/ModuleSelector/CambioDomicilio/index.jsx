@@ -17,7 +17,7 @@ function ChangeAddress() {
   const [method, setMethod] = useState('GET');
 
   const { data } = useApi({
-    endpoint: url || `api/v1/solicitudes/?estatus=11&usuarioId=${id}`,
+    endpoint: url || `api/v1/solicitudes?estatusSolicitudId=11&usuarioId=${id}`,
     dataBody,
     method,
   });
@@ -28,15 +28,19 @@ function ChangeAddress() {
         const newData = data.map(({ id: programaId, programa, folio }) => ({
           id: programaId,
           nombre: `${programa.nombre} ${folio} ${programa.plantel.institucion.nombre}`,
+          plantelId: programa.plantel.id,
         }));
         setProgramaData(newData);
         setUrl(`api/v1/planteles/usuarios/${id}`);
       }
       if (!plantelData.length && programaData.length) {
-        const newData = data.map(({ id: plantelId, domicilio }) => ({
-          id: plantelId,
-          nombre: `${domicilio.calle} ${domicilio.numeroExterior} ${domicilio.colonia} ${domicilio.municipio.nombre}`,
-        }));
+        const selectedProg = programaData.find((prog) => prog.id === programaSelect);
+        const newData = data
+          .filter(({ id: plantelId }) => selectedProg && plantelId !== selectedProg.plantelId)
+          .map(({ id: plantelId, domicilio }) => ({
+            id: plantelId,
+            nombre: `${domicilio.calle} ${domicilio.numeroExterior} ${domicilio.colonia} ${domicilio.municipio.nombre}`,
+          }));
         setPlantelData(newData);
       }
     }
@@ -50,7 +54,7 @@ function ChangeAddress() {
         pathname: `/solicitudes/detallesSolicitudes/${data.id}/editarSolicitud`,
       });
     }
-  }, [data]);
+  }, [data, programaSelect]);
 
   const handleOnClick = () => {
     if (programaSelect && plantelSelect) {
@@ -69,7 +73,10 @@ function ChangeAddress() {
             name="programa"
             value={programaSelect}
             options={programaData || []}
-            onchange={(event) => setProgramaSelect(event.target.value || '')}
+            onchange={(event) => {
+              setProgramaSelect(event.target.value || '');
+              setPlantelData([]);
+            }}
           />
         </Grid>
         <Grid item xs={5}>
@@ -82,7 +89,7 @@ function ChangeAddress() {
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
-          <ButtonStyled text="Crear" alt="Cambiar Direccion" onclick={() => handleOnClick()} />
+          <ButtonStyled text="Crear" onclick={() => handleOnClick()} />
         </Grid>
       </Grid>
     </Grid>

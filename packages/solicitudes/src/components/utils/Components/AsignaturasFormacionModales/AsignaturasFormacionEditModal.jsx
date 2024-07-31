@@ -177,12 +177,13 @@ export default function AsignaturasFormacionEditModal({
             title="Seriación"
             name="seriacion"
             value={rowItem.seriacion}
-            options={asignaturasTotalList || []}
+            options={[{ value: '', label: '' }, ...(asignaturasTotalList || [])]}
             onchange={handleOnChange}
             disabled={edit === 'Consultar Asignatura'}
             textValue
           />
         </Grid>
+
         <Grid item xs={6}>
           <Input
             id="horasDocente"

@@ -4,9 +4,14 @@ import PropTypes from 'prop-types';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import errorIngreso from '../utils/sections/errors/errorIngreso';
 import formPrograma from '../utils/sections/forms/formPrograma';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function Ingreso({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
+
+  const isSectionDisabled = useSectionDisabled(3);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   const {
     form, setForm, error, setError, setErrors,
@@ -59,7 +64,7 @@ export default function Ingreso({ disabled }) {
             onFocus={handleInputFocus}
             helperText={error.metodosInduccion}
             error={!!error.metodosInduccion}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -82,7 +87,7 @@ export default function Ingreso({ disabled }) {
             onFocus={handleInputFocus}
             helperText={error.perfilIngresoConocimientos}
             error={!!error.perfilIngresoConocimientos}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -100,7 +105,7 @@ export default function Ingreso({ disabled }) {
             onFocus={handleInputFocus}
             helperText={error.perfilIngresoHabilidades}
             error={!!error.perfilIngresoHabilidades}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -118,7 +123,7 @@ export default function Ingreso({ disabled }) {
             onFocus={handleInputFocus}
             helperText={error.perfilIngresoActitudes}
             error={!!error.perfilIngresoActitudes}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -136,7 +141,7 @@ export default function Ingreso({ disabled }) {
             onFocus={handleInputFocus}
             helperText={error.procesoSeleccion}
             error={!!error.procesoSeleccion}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>

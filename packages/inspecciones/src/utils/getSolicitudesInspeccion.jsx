@@ -12,7 +12,7 @@ export default function getSolicitudesInspecciones() {
 
   useEffect(() => {
     if (session !== undefined) {
-      fetch(`${url}/api/v1/solicitudes/?estatus=6`, {
+      fetch(`${url}/api/v1/solicitudes?estatusSolicitudId=6,7`, {
         headers: {
           method: 'GET',
           api_key: apikey,

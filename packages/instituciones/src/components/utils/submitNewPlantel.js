@@ -4,7 +4,6 @@ import router from 'next/router';
 export default function submitNewPlantel({
   errors, form, setNoti, setLoading,
 }) {
-  setLoading(true);
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -44,6 +43,9 @@ export default function submitNewPlantel({
         message: 'Se creo el plantel exitosamente',
         type: 'success',
       }),
+      setTimeout(() => {
+        setLoading(true);
+      }, 2000),
       setTimeout(() => {
         setLoading(false);
         router.back();

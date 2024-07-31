@@ -6,6 +6,7 @@ import SolicitudContext from '../utils/Context/solicitudContext';
 import errorTrayectoriaEducativa from '../utils/sections/errors/errorTrayectoriaEducativa';
 import formtrayectoria from '../utils/sections/forms/formTrayectoria';
 import useTrayectoriasEducativas from '../utils/getTrayectoriasEducativas';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function TrayectoriaEducativa({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
@@ -15,6 +16,10 @@ export default function TrayectoriaEducativa({ disabled, type }) {
   } = useContext(SolicitudContext);
   const { trayectorias } = useTrayectoriasEducativas(programaId);
   const errors = errorTrayectoriaEducativa(form, setError, error);
+
+  const isSectionDisabled = useSectionDisabled(9);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   const fileData = [
     'INFORME_RESULTADOS_TRAYECTORIA_EDUCATIVA',
@@ -115,7 +120,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             onFocus={handleInputFocus}
             helperText={error.programaSeguimiento}
             error={!!error.programaSeguimiento}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -133,7 +138,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             onFocus={handleInputFocus}
             helperText={error.funcionTutorial}
             error={!!error.funcionTutorial}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -151,7 +156,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             onFocus={handleInputFocus}
             helperText={error.tipoTutoria}
             error={!!error.tipoTutoria}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -169,7 +174,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             onFocus={handleInputFocus}
             helperText={error.tasaEgreso}
             error={!!error.tasaEgreso}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -187,7 +192,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             onFocus={handleInputFocus}
             helperText={error.estadisticasTitulacion}
             error={!!error.estadisticasTitulacion}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -205,7 +210,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             onFocus={handleInputFocus}
             helperText={error.modalidadesTitulacion}
             error={!!error.modalidadesTitulacion}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -217,7 +222,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             label="Informe de resultados"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -228,7 +233,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             label="Instrumentos o formatos utilizados para dar seguimiento al programa de trayectoria y tutoría académica"
             setUrl={(url) => handleFileLoaded(1, url)}
             url={fileURLs[1]}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -239,7 +244,7 @@ export default function TrayectoriaEducativa({ disabled, type }) {
             label="Trayectoria educativa y tutoría de los estudiantes (opcional)"
             url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>

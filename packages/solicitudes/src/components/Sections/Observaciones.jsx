@@ -8,6 +8,7 @@ function Observaciones({ id, section }) {
   const {
     createObservaciones,
     setCreateObservaciones,
+    setSections,
   } = useContext(ObservacionesContext);
   const { setNoti, session, setLoading } = useContext(Context);
   const { rol } = session;
@@ -68,6 +69,9 @@ function Observaciones({ id, section }) {
   useEffect(() => {
     if (method === 'GET' && data) {
       setObservaciones(data?.observaciones);
+      setSections((prevSections) => prevSections.map((seccion) => (seccion.id === data?.seccionId
+        ? { ...seccion, disabled: data?.isClosed }
+        : seccion)));
     }
     if (!data) setObservaciones('');
   }, [data]);
@@ -107,9 +111,6 @@ Observaciones.defaultProps = {
 };
 
 Observaciones.propTypes = {
-  id: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   section: PropTypes.number.isRequired,
 };

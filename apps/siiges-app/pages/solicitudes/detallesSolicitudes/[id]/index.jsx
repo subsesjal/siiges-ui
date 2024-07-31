@@ -126,9 +126,11 @@ export default function detallesSolicitudes() {
             Otros
           </Typography>
           <List component="nav">
-            <ListItem button onClick={() => downloadFile('OficioAdmisorio')}>
-              <ListItemText primary="Oficio Admisorio" />
-            </ListItem>
+            {solicitud.fechaRecepcion && (
+              <ListItem button onClick={() => downloadFile('OFICIO_ADMISORIO')}>
+                <ListItemText primary="Oficio Admisorio" />
+              </ListItem>
+            )}
             <ListItem button onClick={() => downloadFile('Desistimiento')}>
               <ListItemText primary="Desistimiento" />
             </ListItem>

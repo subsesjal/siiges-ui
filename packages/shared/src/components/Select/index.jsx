@@ -55,7 +55,11 @@ export default function BasicSelect({
           multiple={multiple}
           error={!!errorMessage}
           disabled={disabled}
+          displayEmpty
         >
+          <MenuItem value="" disabled={!multiple}>
+            <em />
+          </MenuItem>
           {options
             && options.map((opcion) => (
               <MenuItem
@@ -79,9 +83,9 @@ BasicSelect.defaultProps = {
   disabled: false,
   textValue: false,
   errorMessage: '',
-  onchange: () => {},
-  onblur: () => {},
-  onfocus: () => {},
+  onchange: () => { },
+  onblur: () => { },
+  onfocus: () => { },
 };
 
 BasicSelect.propTypes = {
