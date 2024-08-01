@@ -33,7 +33,7 @@ function Modal({
     if (data) {
       setNoti({
         open: true,
-        message: 'Proceso creado correctamente',
+        message: '¡Proceso creado correctamente!',
         type: 'success',
       });
       router.back();

@@ -34,7 +34,7 @@ export default function BotonesInpeccion({ id }) {
       .catch((error) => {
         setNoti({
           open: true,
-          message: `Error al generar el acta: ${error}`,
+          message: `¡Error al generar el acta!: ${error}`,
           type: 'error',
         });
         setLoading(false);

@@ -31,7 +31,7 @@ function Refrendo() {
     if (typeof data === 'object' && method === 'POST' && data) {
       setNoti({
         open: true,
-        message: 'Refrendo creado correctamente',
+        message: '¡Refrendo creado correctamente!',
         type: 'success',
       });
       router.push({

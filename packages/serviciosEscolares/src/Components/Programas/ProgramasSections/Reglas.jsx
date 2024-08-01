@@ -76,7 +76,7 @@ export default function Reglas() {
       setLoading(false);
       setNoti({
         open: true,
-        message: `Error al actualizar las reglas: ${error.message}`,
+        message: `¡Error al actualizar las reglas!: ${error.message}`,
         type: 'error',
       });
       return null;

@@ -19,7 +19,7 @@ export default async function getSolicitudDetalles(id, session, setNoti) {
       if (!response.ok) {
         setNoti({
           open: true,
-          message: 'Algo salió mal al cargar la información',
+          message: '¡Algo salió mal al cargar la información!',
           type: 'error',
         });
         throw new Error('Failed to fetch data');
