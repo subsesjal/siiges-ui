@@ -57,7 +57,7 @@ export default function GruposModal({
       setLoading(false);
       setNoti({
         open: true,
-        message: `Error al guardar Grupo: ${error}`,
+        message: `¡Error al guardar Grupo!: ${error}`,
         type: 'error',
       });
     }

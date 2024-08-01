@@ -76,7 +76,7 @@ export default function CicloEscolarModal({
         } else {
           setNoti({
             open: true,
-            message: 'Error al crear ciclo escolar',
+            message: '¡Error al crear ciclo escolar!',
             type: 'error',
           });
         }
@@ -84,7 +84,7 @@ export default function CicloEscolarModal({
       .catch((error) => {
         setNoti({
           open: true,
-          message: `Error al crear ciclo escolar: ${error.message}`,
+          message: `¡Error al crear ciclo escolar!: ${error.message}`,
           type: 'error',
         });
       });

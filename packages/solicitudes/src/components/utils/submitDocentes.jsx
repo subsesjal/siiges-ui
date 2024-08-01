@@ -70,7 +70,7 @@ const handleSubmit = (
       setLoading(false);
       setNoti({
         open: true,
-        message: `Error al enviar Docente: ${error.message}`,
+        message: `¡Error al enviar Docente!: ${error.message}`,
         type: 'error',
       });
     });

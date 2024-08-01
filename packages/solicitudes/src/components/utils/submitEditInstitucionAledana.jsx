@@ -68,7 +68,7 @@ const handleEdit = async (
   } catch (error) {
     setNoti({
       open: true,
-      message: `Ocurrió un error al guardar los datos: ${error}`,
+      message: `¡Ocurrió un error al guardar los datos!: ${error}`,
       type: 'error',
     });
     setLoading(false);

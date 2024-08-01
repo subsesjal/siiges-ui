@@ -58,7 +58,7 @@ export default function GruposModal({
       .catch((error) => {
         setNoti({
           open: true,
-          message: `Error al crear Grupo escolar: ${error.message}`,
+          message: `¡Error al crear Grupo escolar!: ${error.message}`,
           type: 'error',
         });
       });
