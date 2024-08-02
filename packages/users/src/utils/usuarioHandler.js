@@ -72,7 +72,7 @@ const errors = {
   usuario: (form, setError) => setErrorState(
     'usuario',
     !form.usuario
-      ? 'Usuario inválido'
+      ? '¡Usuario inválido!'
       : '',
     setError,
   ),
