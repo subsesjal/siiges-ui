@@ -28,7 +28,7 @@ function DeleteDiligencia({ modal, hideModal, id }) {
       .catch((error) => {
         setNoti({
           open: true,
-          message: `¡Ocurrio un error al eliminar la diligencia!: ${error}`,
+          message: `¡Ocurrió un error al eliminar la diligencia!: ${error}`,
           type: 'error',
         });
       });

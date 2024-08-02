@@ -23,7 +23,7 @@ function DeleteInfraestructura({ modal, hideModal, id }) {
       setLoading(false);
       setNoti({
         open: true,
-        message: `¡Ocurrio un error al borrar esta institución!: ${response.message}`,
+        message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
         type: 'error',
       });
     }
