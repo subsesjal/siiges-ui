@@ -46,7 +46,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
     },
     ubicacion: () => {
       if (form.ubicacion === undefined || form.ubicacion === '') {
-        setError({ ...error, ubicacion: 'Ubicación inválida' });
+        setError({ ...error, ubicacion: '¡Ubicación inválida!' });
         return false;
       }
       setError({ ...error, ubicacion: '' });
@@ -56,7 +56,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
       if (form.recursos === undefined || form.recursos === '') {
         setError({
           ...error,
-          recursos: 'Recursos materiales inválidos',
+          recursos: '¡Recursos materiales inválidos!',
         });
         return false;
       }
@@ -71,7 +71,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
         ) {
           setError({
             ...error,
-            asignaturasInfraestructura: 'Asignaturas inválidas',
+            asignaturasInfraestructura: '¡Asignaturas inválidas!',
           });
           return false;
         }
