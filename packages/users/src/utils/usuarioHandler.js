@@ -174,7 +174,7 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
         },
         {
           id: '10',
-          nombre: 'Comite de evaluación',
+          nombre: 'Comité de evaluación',
         },
         {
           id: '11',
