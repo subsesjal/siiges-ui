@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -54,7 +53,3 @@ export default function Asignaturas() {
     </Grid>
   );
 }
-
-Asignaturas.propTypes = {
-  type: PropTypes.string,
-};
