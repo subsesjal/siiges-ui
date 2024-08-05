@@ -44,18 +44,18 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
 
   useEffect(() => {
     const nombrePropuestos = [
-      form[6].nombrePropuesto1,
-      form[6].nombrePropuesto2,
-      form[6].nombrePropuesto3,
+      form[6]?.nombrePropuesto1,
+      form[6]?.nombrePropuesto2,
+      form[6]?.nombrePropuesto3,
     ];
     const isNombrePropuestoValid = nombrePropuestos.some(
-      (nombre) => nombre !== null,
+      (nombre) => nombre !== null && nombre !== '',
     );
 
-    const areFilesLoaded = fileURLs.length === 2;
+    const areFilesLoaded = fileURLs.every((url) => url !== null);
 
     setValidNombres(isNombrePropuestoValid && areFilesLoaded);
-  }, [form, fileURLs]);
+  }, [form, fileURLs, setValidNombres]);
 
   return (
     <Grid container spacing={2}>
@@ -71,8 +71,8 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
             label="Nombre propuesto 1"
             name="nombrePropuesto1"
             auto="nombrePropuesto1"
-            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto1}
-            onchange={handleOnChange}
+            value={institucion?.ratificacionesNombre?.[0]?.nombrePropuesto1 || ''}
+            onChange={handleOnChange}
             required
             disabled={disabled}
           />
@@ -83,8 +83,8 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
             label="Nombre propuesto 2"
             name="nombrePropuesto2"
             auto="nombrePropuesto2"
-            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto2}
-            onchange={handleOnChange}
+            value={institucion?.ratificacionesNombre?.[0]?.nombrePropuesto2 || ''}
+            onChange={handleOnChange}
             disabled={disabled}
           />
         </Grid>
@@ -94,8 +94,8 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
             label="Nombre propuesto 3"
             name="nombrePropuesto3"
             auto="nombrePropuesto3"
-            value={institucion?.ratificacionesNombre[0]?.nombrePropuesto3}
-            onchange={handleOnChange}
+            value={institucion?.ratificacionesNombre?.[0]?.nombrePropuesto3 || ''}
+            onChange={handleOnChange}
             disabled={disabled}
           />
         </Grid>

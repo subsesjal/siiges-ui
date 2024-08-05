@@ -6,6 +6,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 function SolicitudesActions({ id, estatus }) {
   const { session, setNoti } = useContext(Context);
@@ -15,12 +16,14 @@ function SolicitudesActions({ id, estatus }) {
     consultar: true,
     editar: false,
     eliminar: false,
+    ver: false,
   });
 
   useEffect(() => {
     switch (session.rol) {
       case 'representante':
         setShowButtons({
+          ver: true,
           consultar: true,
           editar: estatus === 1 || estatus === 200,
           eliminar: estatus === 1 || estatus === 200,
@@ -52,6 +55,18 @@ function SolicitudesActions({ id, estatus }) {
   return (
     <>
       <Grid container spacing={2}>
+        {showButtons.ver && (
+          <Grid item xs={4}>
+            <Link
+              href={`/solicitudes/detallesSolicitudes/${id}/consultarSolicitud`}
+              passHref
+            >
+              <IconButton aria-label="ver">
+                <VisibilityOutlinedIcon />
+              </IconButton>
+            </Link>
+          </Grid>
+        )}
         {showButtons.consultar && (
           <Grid item xs={4}>
             <Link href={consultLink} passHref>

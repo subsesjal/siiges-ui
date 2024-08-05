@@ -29,6 +29,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
 
   useEffect(() => {
     const modalidadSource = type === 'editar' ? solicitudes?.programa?.modalidadId : query.modalidad;
+
     if (type === 'editar' && solicitudes?.programa?.evaluacion?.id) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -45,6 +46,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         modalidad: modalidadSource,
       }));
     }
+
     if (type === 'editar' && form.programaId) {
       const fileData = {
         entidadId: form.programaId,
@@ -53,7 +55,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
       };
       GetFile(fileData, setUrl);
     }
-  }, [solicitudes, form.programaId]);
+  }, [type, solicitudes, form.programaId, query.modalidad]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -89,7 +91,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         porcentajeCumplimiento: cumplimiento.porcentajeCumplimiento,
       }));
     }
-  }, [error, cumplimiento]);
+  }, [error, cumplimiento, validation]);
 
   const { evaluadores } = getEvaluadores();
 
@@ -145,6 +147,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             errorMessage={error.numero}
             min={50}
             max={250}
+            disabled={disabled}
             required
           />
         </Grid>

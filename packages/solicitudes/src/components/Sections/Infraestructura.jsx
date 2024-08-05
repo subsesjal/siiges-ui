@@ -36,7 +36,7 @@ export default function Infraestructura({ disabled, programaId }) {
       };
       fetchData();
     }
-  }, [plantelId]);
+  }, [plantelId, programaId, setInfraestructuras]);
 
   const rows = useMemo(
     () => infraestructuras.map((item) => ({

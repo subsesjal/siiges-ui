@@ -10,17 +10,21 @@ import { DatosGeneralesProvider } from '../../utils/Context/datosGeneralesContex
 import Observaciones from '../../Sections/Observaciones';
 
 export default function DatosGenerales({
-  nextModule, id,
+  nextModule, id, type, // Asegúrate de recibir 'disabled' como prop
 }) {
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 3);
+
+  // Utiliza el prop disabled en lugar de una variable no definida
+  const isDisabled = type === 'consultar';
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <DatosGeneralesProvider>
           <SectionLayout
+            type={type}
             sectionTitle="Datos Generales"
             sections={section}
             position={position}
@@ -30,12 +34,13 @@ export default function DatosGenerales({
             next={next}
             prev={prev}
           >
-            {section === 1 && <InstitucionData id={id} />}
-            {section === 2 && <RepresentanteLegalData id={id} />}
-            {section === 3 && <DiligenciasData id={id} />}
+            {section === 1 && <InstitucionData disabled={isDisabled} id={id} type={type} />}
+            {section === 2 && <RepresentanteLegalData disabled={isDisabled} id={id} type={type} />}
+            {section === 3 && <DiligenciasData disabled={isDisabled} id={id} type={type} />}
             <Observaciones
               id={id}
               section={section + 9}
+              type={type}
             />
           </SectionLayout>
         </DatosGeneralesProvider>
@@ -54,4 +59,5 @@ DatosGenerales.propTypes = {
     PropTypes.number,
     PropTypes.string,
   ]),
+  type: PropTypes.string.isRequired,
 };
