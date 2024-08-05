@@ -37,8 +37,6 @@ export default function AsignaturasEditModal({
 
     const selectedGradeValue = cicloIdMap[cicloId] || grados.semestral;
     setSelectedGrade(selectedGradeValue);
-    console.log('selectedGrade:', cicloIdMap[cicloId]);
-    console.log('cicloId:', cicloId);
   }, [cicloId]);
 
   useEffect(() => {

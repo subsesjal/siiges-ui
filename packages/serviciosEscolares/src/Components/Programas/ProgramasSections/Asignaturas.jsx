@@ -21,7 +21,6 @@ export default function Asignaturas() {
   useEffect(() => {
     if (!asignaturasLoading) {
       setAsignaturasList(asignaturas);
-      console.log(rol);
     }
   }, [asignaturasLoading, asignaturas]);
 
