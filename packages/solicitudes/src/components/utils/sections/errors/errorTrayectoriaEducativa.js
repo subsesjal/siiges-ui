@@ -6,7 +6,7 @@ export default function errorTrayectoriaEducativa(form, setError, error) {
         formData.programaSeguimiento === undefined
         || formData.programaSeguimiento === ''
       ) {
-        setError({ ...error, programaSeguimiento: 'Conocimientos invalidos' });
+        setError({ ...error, programaSeguimiento: 'Conocimientos inválidos' });
         return false;
       }
       setError({ ...error, programaSeguimiento: '' });
@@ -17,7 +17,7 @@ export default function errorTrayectoriaEducativa(form, setError, error) {
         formData.funcionTutorial === undefined
         || formData.funcionTutorial === ''
       ) {
-        setError({ ...error, funcionTutorial: 'Habilidades invalidas' });
+        setError({ ...error, funcionTutorial: 'Habilidades inválidas' });
         return false;
       }
       setError({ ...error, funcionTutorial: '' });
@@ -25,7 +25,7 @@ export default function errorTrayectoriaEducativa(form, setError, error) {
     },
     tipoTutoria: () => {
       if (formData.tipoTutoria === undefined || formData.tipoTutoria === '') {
-        setError({ ...error, tipoTutoria: 'Turnos invalidos' });
+        setError({ ...error, tipoTutoria: 'Turnos inválidos' });
         return false;
       }
       setError({ ...error, tipoTutoria: '' });
@@ -35,7 +35,7 @@ export default function errorTrayectoriaEducativa(form, setError, error) {
       if (formData.tasaEgreso === undefined || formData.tasaEgreso === '') {
         setError({
           ...error,
-          tasaEgreso: 'Proceso de selección invalida',
+          tasaEgreso: 'Proceso de selección inválida',
         });
         return false;
       }
@@ -47,7 +47,7 @@ export default function errorTrayectoriaEducativa(form, setError, error) {
         formData.estadisticasTitulacion === undefined
         || formData.estadisticasTitulacion === ''
       ) {
-        setError({ ...error, estadisticasTitulacion: 'Turnos invalidos' });
+        setError({ ...error, estadisticasTitulacion: 'Turnos inválidos' });
         return false;
       }
       setError({ ...error, estadisticasTitulacion: '' });
@@ -60,7 +60,7 @@ export default function errorTrayectoriaEducativa(form, setError, error) {
       ) {
         setError({
           ...error,
-          modalidadesTitulacion: 'Proceso de selección invalida',
+          modalidadesTitulacion: 'Proceso de selección inválida',
         });
         return false;
       }

@@ -49,7 +49,7 @@ function Observaciones({ id, section }) {
     if (method === 'POST' && error) {
       setNoti({
         open: true,
-        message: 'Error al guardar observaciones',
+        message: '¡Error al guardar observaciones!',
         type: 'error',
       });
       setMethod('GET');
@@ -58,7 +58,7 @@ function Observaciones({ id, section }) {
     if (method === 'POST' && data) {
       setNoti({
         open: true,
-        message: 'Observaciones guardadas',
+        message: '¡Observaciones guardadas!',
         type: 'success',
       });
       setMethod('GET');

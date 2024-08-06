@@ -42,7 +42,7 @@ export default function solicitudesFolios() {
       setNoti({
         open: true,
         message:
-          'Error, revise que todos los campos esten seleccionados correctamente',
+          '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     }
@@ -57,7 +57,7 @@ export default function solicitudesFolios() {
       setNoti({
         open: true,
         message:
-          'Error, revise que todos los campos esten seleccionados correctamente',
+          '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     }
@@ -79,8 +79,8 @@ export default function solicitudesFolios() {
         <DataTable
           buttonAdd
           buttonClick={handleCreate}
-          buttonText="Agregar Titulo"
-          title="Solicitudes de Titulos"
+          buttonText="Agregar Título"
+          title="Solicitudes de Títulos"
           rows={solicitudes}
           columns={columns(handleEdit)}
         />

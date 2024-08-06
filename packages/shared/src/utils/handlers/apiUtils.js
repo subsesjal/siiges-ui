@@ -1,9 +1,9 @@
 import getToken from './getToken';
 
 const ERROR_MAPPING = {
-  400: { statusCode: 400, errorMessage: 'Revisa que los campos sean correctos' },
-  401: { statusCode: 401, errorMessage: 'Usuario no autorizado' },
-  404: { statusCode: 404, errorMessage: 'Registro no encontrado' },
+  400: { statusCode: 400, errorMessage: '¡Revisa que los campos sean correctos!' },
+  401: { statusCode: 401, errorMessage: '¡Usuario no autorizado!' },
+  404: { statusCode: 404, errorMessage: '¡Registro no encontrado!' },
 };
 
 const makeCall = async ({

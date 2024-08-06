@@ -38,7 +38,7 @@ const handleEdit = (
         : row)));
       setNoti({
         open: true,
-        message: 'Éxito, no hubo problemas en esta sección',
+        message: '¡Éxito, no hubo problemas en esta sección!',
         type: 'success',
       });
       setLoading(false);
@@ -46,7 +46,7 @@ const handleEdit = (
     .catch((error) => {
       setNoti({
         open: true,
-        message: `Algo salió mal, revisa que los campos estén correctos: ${error}`,
+        message: `¡Algo salió mal, revisa que los campos estén correctos!: ${error}`,
         type: 'error',
       });
       setLoading(false);

@@ -24,7 +24,7 @@ export default function submitEvaluacionCurricular(
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salió mal, revise los campos',
+      message: '¡Algo salió mal, revise los campos!',
       type: 'error',
     });
     return;
@@ -55,7 +55,7 @@ export default function submitEvaluacionCurricular(
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Exito, no hubo problemas en esta sección',
+          message: '¡Éxito, no hubo problemas en esta sección!',
           type: 'success',
         });
       }, 1000);
@@ -66,7 +66,7 @@ export default function submitEvaluacionCurricular(
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Hubo un problema, revise que los campos estén correctos',
+          message: '¡Hubo un problema, revise que los campos estén correctos!',
           type: 'error',
         });
       }, 1000);

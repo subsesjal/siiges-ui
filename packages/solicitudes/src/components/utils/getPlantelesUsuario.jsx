@@ -24,7 +24,7 @@ export default function getPlantelesUsuario() {
       .catch((err) => {
         setNoti({
           open: true,
-          message: `Error al actualizar la solicitud: ${err}`,
+          message: `¡Error al actualizar la solicitud!: ${err}`,
           type: 'success',
         });
         setPlanteles(null); // puedes establecer planteles a null o manejar el error de otra manera

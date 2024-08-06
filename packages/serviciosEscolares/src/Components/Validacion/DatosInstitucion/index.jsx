@@ -184,7 +184,7 @@ export default function DatosInstitucion({ alumno }) {
           setLoading(false);
           setNoti({
             open: true,
-            message: 'Datos guardados correctamente',
+            message: '¡Datos guardados correctamente!',
             type: 'success',
           });
         } else {
@@ -195,14 +195,14 @@ export default function DatosInstitucion({ alumno }) {
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Error: No se pudo guardar la información',
+          message: '¡Error: No se pudo guardar la información!',
           type: 'error',
         });
       }
     } else {
       setNoti({
         open: true,
-        message: 'Error: Verifique los campos',
+        message: '¡Error: Verifique los campos!',
         type: 'error',
       });
     }

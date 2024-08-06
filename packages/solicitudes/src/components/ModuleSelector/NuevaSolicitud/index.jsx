@@ -28,7 +28,7 @@ function NewRequest() {
     if (error.plantel) {
       setNoti({
         open: true,
-        message: 'Error al cargar los planteles',
+        message: '¡Error al cargar los planteles!',
         type: 'error',
       });
     }

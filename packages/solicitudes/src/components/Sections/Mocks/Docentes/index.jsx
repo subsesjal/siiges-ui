@@ -14,7 +14,7 @@ const columns = (setDocentesList) => [
   },
   {
     field: 'antiguedad',
-    headerName: 'Antiguedad',
+    headerName: 'Antigüedad',
     width: 120,
   },
   {

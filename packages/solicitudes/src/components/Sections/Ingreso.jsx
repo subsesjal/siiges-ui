@@ -54,7 +54,7 @@ export default function Ingreso({ disabled }) {
           <TextField
             id="metodosInduccion"
             name="metodosInduccion"
-            label="Metodos de inducción"
+            label="Métodos de inducción"
             rows={4}
             multiline
             sx={{ width: '100%' }}

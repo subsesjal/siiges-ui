@@ -64,7 +64,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener planteles: ${error.message}`,
+          message: `¡Error al obtener planteles!: ${error.message}`,
           type: 'error',
         });
         setPlanteles([]);
@@ -83,7 +83,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener programas: ${error.message}`,
+          message: `¡Error al obtener programas!: ${error.message}`,
           type: 'error',
         });
         setProgramas([]);
@@ -103,7 +103,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener ciclosEscolares: ${error.message}`,
+          message: `¡Error al obtener ciclosEscolares!: ${error.message}`,
           type: 'error',
         });
         setCiclosEscolares([]);
@@ -118,7 +118,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener grados: ${error.message}`,
+          message: `¡Error al obtener grados!: ${error.message}`,
           type: 'error',
         });
         setGrados([]);
@@ -152,7 +152,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener asignaturas: ${error.message}`,
+          message: `¡Error al obtener asignaturas!: ${error.message}`,
           type: 'error',
         });
         setAsignaturas([]);

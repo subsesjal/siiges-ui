@@ -2,7 +2,7 @@ export default function errorDatosNewInstitucion(form, setError, error) {
   const errors = {
     nombre: () => {
       if (form.nombre === undefined || form.nombre === '') {
-        setError({ ...error, nombre: 'Nombre de institucion incorrecto' });
+        setError({ ...error, nombre: '¡Nombre de institución incorrecto!' });
         return false;
       }
       setError({ ...error, nombre: '' });
@@ -10,7 +10,7 @@ export default function errorDatosNewInstitucion(form, setError, error) {
     },
     razonSocial: () => {
       if (form.razonSocial === undefined || form.razonSocial === '') {
-        setError({ ...error, razonSocial: 'Razón social invalida' });
+        setError({ ...error, razonSocial: '¡Razón social inválida!' });
         return false;
       }
       setError({ ...error, razonSocial: '' });

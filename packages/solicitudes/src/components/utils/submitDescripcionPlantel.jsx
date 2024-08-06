@@ -57,13 +57,13 @@ export default function submitDescripcionPlantel(
       if (errors.length > 0) {
         setNoti({
           open: true,
-          message: `Error al cargar los datos: ${errors[0].reason.message}`,
+          message: `¡Error al cargar los datos!: ${errors[0].reason.message}`,
           type: 'error',
         });
       } else {
         setNoti({
           open: true,
-          message: 'Se cargaron los datos exitosamente!',
+          message: '¡Se cargaron los datos exitosamente!',
           type: 'success',
         });
       }

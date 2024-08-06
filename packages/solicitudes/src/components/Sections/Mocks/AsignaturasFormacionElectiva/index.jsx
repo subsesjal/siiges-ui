@@ -4,8 +4,8 @@ import AsignaturasFormacionButtons from '../../../utils/Components/AsignaturasFo
 const columns = () => [
   { field: 'nombre', headerName: 'Nombre', width: 450 },
   { field: 'clave', headerName: 'Clave', width: 80 },
-  { field: 'seriacion', headerName: 'Seriacion', width: 300 },
-  { field: 'creditos', headerName: 'Creditos', width: 90 },
+  { field: 'seriacion', headerName: 'Seriación', width: 300 },
+  { field: 'creditos', headerName: 'Créditos', width: 90 },
   {
     field: 'actions',
     headerName: 'Acciones',

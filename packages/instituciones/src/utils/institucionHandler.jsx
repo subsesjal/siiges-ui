@@ -56,7 +56,7 @@ const submitInstitucion = async ({
   if (!validateErrorFields(errorFields)) {
     setNoti({
       open: true,
-      message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+      message: '¡Revisa!, que los campos requeridos hayan sido llenados correctamente',
       type: 'error',
     });
     setLoading(false);
@@ -79,7 +79,7 @@ const submitInstitucion = async ({
   if (!valid) {
     setNoti({
       open: true,
-      message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+      message: '¡Revisa!, que los campos requeridos hayan sido llenados correctamente',
       type: 'error',
     });
     setLoading(false);
@@ -93,7 +93,7 @@ const submitInstitucion = async ({
     setLoading(false);
     setNoti({
       open: true,
-      message: 'Registro exitoso',
+      message: '¡Registro exitoso!',
       type: 'success',
     });
     router.back();
@@ -185,7 +185,7 @@ const errors = {
   apellidoMaterno: (form, setError) => setErrorState(
     'apellidoMaterno',
     !form.apellidoMaterno
-      ? 'Segundo Apellido materno inválido'
+      ? 'Segundo Apellido inválido'
       : '',
     setError,
   ),

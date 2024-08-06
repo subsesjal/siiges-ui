@@ -34,7 +34,7 @@ export default function getEvaluadores() {
           console.error('There was a problem with the fetch operation:', error);
           setNoti({
             open: true,
-            message: 'Algo salio mal al cargar evaluadores',
+            message: '¡Algo salió mal al cargar evaluadores!',
             type: 'error',
           });
         })

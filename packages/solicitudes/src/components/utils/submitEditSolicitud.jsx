@@ -58,7 +58,7 @@ export default function submitEditSolicitud(
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Éxito, no hubo problemas en esta sección',
+        message: '¡Éxito, no hubo problemas en esta sección!',
         type: 'success',
       });
     })
@@ -67,7 +67,7 @@ export default function submitEditSolicitud(
       setLoading(false);
       setNoti({
         open: true,
-        message: `Hubo un problema, revise que los campos estén correctos: ${err.message}`,
+        message: `¡Hubo un problema, revise que los campos estén correctos!: ${err.message}`,
         type: 'error',
       });
     });

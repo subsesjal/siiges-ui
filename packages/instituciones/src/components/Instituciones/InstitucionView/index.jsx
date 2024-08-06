@@ -30,14 +30,14 @@ export default function InstitucionView({ institucion, session }) {
       } catch (error) {
         setNoti({
           open: true,
-          message: 'Algo salió mal, revise su documento',
+          message: '¡Algo salió mal, revise su documento!',
           type: 'error',
         });
       }
     } else {
       setNoti({
         open: true,
-        message: 'Algo salió mal, ingrese un documento',
+        message: '¡Algo salió mal, ingrese un documento!',
         type: 'error',
       });
     }

@@ -126,7 +126,7 @@ export default function RecepcionFormatos() {
     const { name, value } = event.target;
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: value ? '' : 'Este campo es obligatorio',
+      [name]: value ? '' : '¡Este campo es obligatorio!',
     }));
   };
 
@@ -176,10 +176,10 @@ export default function RecepcionFormatos() {
     // Validate required fields
     const newErrors = {};
     if (!form.fechaRecepcion) {
-      newErrors.fechaRecepcion = 'Este campo es obligatorio';
+      newErrors.fechaRecepcion = '¡Este campo es obligatorio!';
     }
     if (!form.oficioAdmisorio) {
-      newErrors.oficioAdmisorio = 'Este campo es obligatorio';
+      newErrors.oficioAdmisorio = '¡Este campo es obligatorio!';
     }
 
     if (Object.keys(newErrors).length === 0) {
@@ -193,7 +193,7 @@ export default function RecepcionFormatos() {
           setLoading(false);
           setNoti({
             open: true,
-            message: 'Éxito al actualizar la solicitud',
+            message: '¡Éxito al actualizar la solicitud!',
             type: 'success',
           });
           downloadFile('OFICIO_ADMISORIO');
@@ -202,7 +202,7 @@ export default function RecepcionFormatos() {
           setLoading(false);
           setNoti({
             open: true,
-            message: `Error al actualizar la solicitud: ${result.message}`,
+            message: `¡Error al actualizar la solicitud!: ${result.message}`,
             type: 'error',
           });
         }
@@ -210,7 +210,7 @@ export default function RecepcionFormatos() {
         setLoading(false);
         setNoti({
           open: true,
-          message: `Error al actualizar la solicitud: ${error.message}`,
+          message: `¡Error al actualizar la solicitud!: ${error.message}`,
           type: 'error',
         });
       }
@@ -219,7 +219,7 @@ export default function RecepcionFormatos() {
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Algo salió mal, revise que los campos esten correctos',
+        message: '¡Algo salió mal, revise que los campos estén correctos!',
         type: 'error',
       });
     }

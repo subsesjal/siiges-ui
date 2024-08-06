@@ -80,7 +80,7 @@ export default function FoliosForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener programas: ${error.message}`,
+          message: `¡Error al obtener programas!: ${error.message}`,
           type: 'error',
         });
         setProgramas([]);
@@ -114,7 +114,7 @@ export default function FoliosForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener planteles: ${error.message}`,
+          message: `¡Error al obtener planteles!: ${error.message}`,
           type: 'error',
         });
         setPlanteles([]);
@@ -135,7 +135,7 @@ export default function FoliosForm({
   }, [selectedInstitucion]);
 
   const solicitudes = [
-    { id: 1, nombre: 'Titulos' },
+    { id: 1, nombre: 'Títulos' },
     { id: 2, nombre: 'Certificados' },
   ];
 
