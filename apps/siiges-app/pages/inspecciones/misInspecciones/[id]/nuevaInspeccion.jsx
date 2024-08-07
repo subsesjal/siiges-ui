@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import TextField from '@mui/material/TextField';
 import {
-  ButtonsInspeccionSection, Context, Layout, useApi, getToken,
+  ButtonsInspeccionSection, Context, Layout, useApi,
 } from '@siiges-ui/shared';
 import {
   Box, Grid, Tabs, Tab,
@@ -12,6 +12,7 @@ import {
   apartados,
   InspeccionPregunta,
 } from '@siiges-ui/inspecciones';
+import { createRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function NuevaInspeccion() {
   const { setLoading, setNoti } = useContext(Context);
@@ -23,9 +24,6 @@ export default function NuevaInspeccion() {
   const [method, setMethod] = useState('GET');
   const router = useRouter();
   const { query } = router;
-  const prevUrl = process.env.NEXT_PUBLIC_URL;
-  const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  const token = getToken();
   const { data, loading, error } = useApi({
     endpoint: url || 'api/v1/inspecciones/preguntas',
     method,
@@ -69,7 +67,7 @@ export default function NuevaInspeccion() {
     setSelectedTab(newValue);
   };
 
-  const sendAllComments = async (currentApartadoId) => {
+  const sendCurrentComment = async (currentApartadoId) => {
     const currentIndex = apartados.findIndex((apartado) => apartado.id === currentApartadoId);
     const comment = commentRefs.current[currentIndex]?.value || '';
 
@@ -80,17 +78,12 @@ export default function NuevaInspeccion() {
     };
 
     try {
-      const response = await fetch(`${prevUrl}/api/v1/inspecciones/${query.id}/observaciones`, {
-        method: 'POST',
-        headers: {
-          api_key: apikey,
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(commentData),
+      const response = await createRecord({
+        data: commentData,
+        endpoint: `/inspecciones/${query.id}/observaciones`,
       });
 
-      if (response.ok) {
+      if (response.statusCode === 200 || response.statusCode === 201) {
         setNoti({
           open: true,
           message: 'Comentario enviado correctamente',
@@ -99,11 +92,11 @@ export default function NuevaInspeccion() {
       } else {
         setNoti({
           open: true,
-          message: 'Error al enviar el comentario',
+          message: response.errorMessage || 'Error al enviar el comentario',
           type: 'error',
         });
       }
-      // eslint-disable-next-line no-shadow
+    // eslint-disable-next-line no-shadow
     } catch (error) {
       setNoti({
         open: true,
@@ -161,7 +154,7 @@ export default function NuevaInspeccion() {
                 prev={() => setSelectedTab(index - 1)}
                 next={() => setSelectedTab(index + 1)}
                 confirm={() => {
-                  sendAllComments(apartado.id);
+                  sendCurrentComment(apartado.id);
                   sendQuestionData();
                 }}
                 position={getPosition(index)}
