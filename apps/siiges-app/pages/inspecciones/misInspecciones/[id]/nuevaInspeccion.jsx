@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import TextField from '@mui/material/TextField';
 import {
@@ -21,26 +21,24 @@ export default function NuevaInspeccion() {
   const [url, setUrl] = useState('');
   const [body, setBody] = useState(null);
   const [method, setMethod] = useState('GET');
-  const [comments, setComments] = useState({});
   const router = useRouter();
   const { query } = router;
   const prevUrl = process.env.NEXT_PUBLIC_URL;
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const token = getToken();
-  let observacionesQuantity = 0;
-  let observacionesSent = 0;
   const { data, loading, error } = useApi({
     endpoint: url || 'api/v1/inspecciones/preguntas',
     method,
     dataBody: body,
   });
-  let commentsArray;
+  const commentRefs = useRef([]);
+
   useEffect(() => {
     setLoading(loading);
     if (Array.isArray(data)) {
       setPreguntas(data);
     }
-    if (data && method === 'POST' && error === null && observacionesQuantity === observacionesSent) {
+    if (data && method === 'POST' && error === null) {
       setNoti({
         open: true,
         message: 'Inspección guardada correctamente',
@@ -71,41 +69,16 @@ export default function NuevaInspeccion() {
     setSelectedTab(newValue);
   };
 
-  const handleCommentChange = (inspeccionApartadoId) => (e) => {
-    const { value } = e.target;
-    setComments((prevComments) => {
-      const updatedComments = { ...prevComments };
+  const sendAllComments = async (currentApartadoId) => {
+    const currentIndex = apartados.findIndex((apartado) => apartado.id === currentApartadoId);
+    const comment = commentRefs.current[currentIndex]?.value || '';
 
-      if (value.trim() === '') {
-        // Eliminar el comentario si el valor está vacío
-        delete updatedComments[inspeccionApartadoId];
-      } else {
-        // Actualizar o agregar el comentario si el valor no está vacío
-        updatedComments[inspeccionApartadoId] = value;
-      }
-      return updatedComments;
-    });
-  };
+    const commentData = {
+      inspeccionId: query.id,
+      inspeccionApartadoId: Number(currentApartadoId),
+      comentario: comment,
+    };
 
-  // eslint-disable-next-line no-shadow
-  const sendAllComments = async (commentsArray = null, index = 0) => {
-    // Inicializar el array de comentarios si no se proporciona
-    if (!commentsArray) {
-      // eslint-disable-next-line no-param-reassign
-      commentsArray = Object.entries(comments).map(([inspeccionApartadoId, comentario]) => ({
-        inspeccionId: query.id,
-        inspeccionApartadoId: Number(inspeccionApartadoId),
-        comentario,
-      }));
-      observacionesQuantity = commentsArray.length;
-    }
-
-    // Verificar si todos los comentarios han sido enviados
-    if (index >= commentsArray.length) {
-      return;
-    }
-
-    const commentData = commentsArray[index];
     try {
       const response = await fetch(`${prevUrl}/api/v1/inspecciones/${query.id}/observaciones`, {
         method: 'POST',
@@ -118,20 +91,27 @@ export default function NuevaInspeccion() {
       });
 
       if (response.ok) {
-        observacionesSent++;
-        await sendAllComments(commentsArray, index + 1);
+        setNoti({
+          open: true,
+          message: 'Comentario enviado correctamente',
+          type: 'success',
+        });
+      } else {
+        setNoti({
+          open: true,
+          message: 'Error al enviar el comentario',
+          type: 'error',
+        });
       }
-    // eslint-disable-next-line no-shadow
+      // eslint-disable-next-line no-shadow
     } catch (error) {
-      // Manejar errores según sea necesario
+      setNoti({
+        open: true,
+        message: 'Error al enviar el comentario',
+        type: 'error',
+      });
     }
   };
-
-  useEffect(() => {
-    if (method === 'POST' && !error && observacionesQuantity === 0) {
-      sendAllComments(commentsArray);
-    }
-  }, [data, method, error]);
 
   const sendQuestionData = () => {
     setBody(form);
@@ -174,13 +154,14 @@ export default function NuevaInspeccion() {
                 multiline
                 sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
                 rows={4}
-                value={comments[apartado.id] || ''}
-                onChange={handleCommentChange(apartado.id)}
+                // eslint-disable-next-line no-return-assign
+                inputRef={(el) => commentRefs.current[index] = el}
               />
               <ButtonsInspeccionSection
                 prev={() => setSelectedTab(index - 1)}
                 next={() => setSelectedTab(index + 1)}
                 confirm={() => {
+                  sendAllComments(apartado.id);
                   sendQuestionData();
                 }}
                 position={getPosition(index)}
