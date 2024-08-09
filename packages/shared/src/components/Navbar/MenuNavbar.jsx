@@ -81,6 +81,15 @@ export default function MenuNavbar() {
           </MenuItem>
         </Link>
         <Divider />
+<<<<<<< HEAD
+=======
+        {/* <MenuItem>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Ajustes
+        </MenuItem> */}
+>>>>>>> 807bb7b (SDT-649Fix: se corriegieron observaciones)
         <Link href="/notificaciones">
           <MenuItem>
             <ListItemIcon>
