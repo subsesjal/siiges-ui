@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import { DefaultModal, Input, ButtonStyled } from '@siiges-ui/shared';
 // eslint-disable-next-line import/prefer-default-export
-export function OficioModal({ open, hideModal }) {
+export function OficioModal({ open, hideModal, downloadFile }) {
   const [oficioNumber, setOficioNumber] = useState('');
   const [fechaEfecto, setFechaEfecto] = useState('');
 
   const handleOnSubmit = () => {
-    console.log('Hello');
+    downloadFile('RVOE');
     hideModal();
   };
 
@@ -62,4 +62,5 @@ export function OficioModal({ open, hideModal }) {
 OficioModal.propTypes = {
   open: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
+  downloadFile: PropTypes.func.isRequired,
 };

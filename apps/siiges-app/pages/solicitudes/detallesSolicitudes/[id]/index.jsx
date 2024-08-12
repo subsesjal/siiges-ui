@@ -141,7 +141,7 @@ export default function detallesSolicitudes() {
           </List>
         </Grid>
       </Grid>
-      <OficioModal open={isOficioModalOpen} hideModal={hideOficioModal} />
+      <OficioModal open={isOficioModalOpen} hideModal={hideOficioModal} downloadFile={downloadFile} />
     </Layout>
   );
 }
