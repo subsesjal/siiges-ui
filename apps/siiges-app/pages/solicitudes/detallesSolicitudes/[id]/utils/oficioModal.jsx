@@ -13,7 +13,7 @@ export function OficioModal({ open, hideModal }) {
   };
 
   return (
-    <DefaultModal open={open} setOpen={hideModal} title="Hello">
+    <DefaultModal open={open} setOpen={hideModal} title="Oficio">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Input
