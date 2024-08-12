@@ -3,7 +3,7 @@ import { Button, Typography, Grid } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 
 const placeholderPdfFiles = [
-  { title: 'FDPO1' },
+  { title: 'FDP01' },
   { title: 'Mapa Curricular' },
   { title: 'Reglas de operación' },
   { title: 'Asignaturas a detalle' },
