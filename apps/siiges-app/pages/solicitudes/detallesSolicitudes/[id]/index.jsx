@@ -5,8 +5,12 @@ import { Layout, Title, useApi } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
+import { OficioModal } from './utils/oficioModal';
 
 export default function detallesSolicitudes() {
+  const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
+  const showOficioModal = () => setIsOficioModalOpen(true);
+  const hideOficioModal = () => setIsOficioModalOpen(false);
   const router = useRouter();
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
@@ -100,7 +104,7 @@ export default function detallesSolicitudes() {
             RVOE
           </Typography>
           <List component="nav">
-            <ListItem button onClick={() => downloadFile('RVOE')}>
+            <ListItem button onClick={showOficioModal}>
               <ListItemText primary="Acuerdo RVOE" />
             </ListItem>
           </List>
@@ -137,6 +141,7 @@ export default function detallesSolicitudes() {
           </List>
         </Grid>
       </Grid>
+      <OficioModal open={isOficioModalOpen} hideModal={hideOficioModal} />
     </Layout>
   );
 }
