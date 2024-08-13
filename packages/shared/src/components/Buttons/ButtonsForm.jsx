@@ -2,15 +2,9 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
-
 import '../../styles/buttons/ButtonAdd.css';
 
-<<<<<<< HEAD
-export default function UserForm({ confirm, cancel, confirmDisabled, confirmText = 'Guardar' }) {
-=======
-
-export default function UserForm({ confirm, cancel, confirmDisabled }) {
->>>>>>> 807bb7b (SDT-649Fix: se corriegieron observaciones)
+export default function UserForm({ confirm, cancel, confirmDisabled, confirmText = 'Confirmar' }) {
   return (
     <Grid container justifyContent="flex-end" spacing={2}>
       <Grid item>
@@ -37,7 +31,7 @@ export default function UserForm({ confirm, cancel, confirmDisabled }) {
             className="buttonAdd guardar"
             onClick={confirm}
           >
-            <Typography variant="body1">Confirmar</Typography>
+            <Typography variant="body1">{confirmText}</Typography>
           </ButtonUnstyled>
         </Grid>
       )}
@@ -49,4 +43,5 @@ UserForm.propTypes = {
   confirm: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   confirmDisabled: PropTypes.bool,
+  confirmText: PropTypes.string,
 };
