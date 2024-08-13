@@ -32,6 +32,8 @@ const buildInstitucionData = (form) => ({
       nombre: form.nombreRector,
       apellidoPaterno: form.apellidoPaterno,
       apellidoMaterno: form.apellidoMaterno,
+      celular: form.celular,
+      telefono: form.telefono,
       curp: form.curp,
       correoPrimario: form.correoPrimario,
     },
@@ -69,7 +71,6 @@ const submitInstitucion = async ({
   } = DATA_MAPPING[accion](form);
 
   const formattedData = buildInstitucionData(form);
-
   const { valid, data } = validateFormData({
     dataBody: formattedData,
     cleanData: true,
@@ -186,6 +187,20 @@ const errors = {
     'apellidoMaterno',
     !form.apellidoMaterno
       ? 'Segundo Apellido materno inválido'
+      : '',
+    setError,
+  ),
+  celular: (form, setError) => setErrorState(
+    'celular',
+    !form.celular
+      ? 'Celular inválido'
+      : '',
+    setError,
+  ),
+  telefono: (form, setError) => setErrorState(
+    'telefono',
+    !form.telefono
+      ? 'Teléfono inválido'
       : '',
     setError,
   ),

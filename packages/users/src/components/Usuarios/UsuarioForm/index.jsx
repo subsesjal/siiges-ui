@@ -68,8 +68,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
         message: 'Registro exitoso',
         type: 'success',
       });
-
-      router.back();
+      setTimeout(() => {
+        router.back();
+      }, 500);
     }
   }, [data]);
 
@@ -216,9 +217,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
               <Grid item xs={3} />
               <Grid item xs={8} sx={{ mt: -2 }}>
                 <Typography variant="subtitle">
-                  La contraseña debe contener entre 8 y 25 caracteres, asi como
-                  contener el menos una letra minuscula, una letra mayuscula, un
-                  caracter y un digito.
+                  La contraseña debe contener entre 8 y 25 caracteres, así como
+                  contener al menos una letra minúscula, una letra mayúscula, un
+                  carácter y un dígito.
                 </Typography>
               </Grid>
             </>
