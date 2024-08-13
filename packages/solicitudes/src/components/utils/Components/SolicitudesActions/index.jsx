@@ -105,43 +105,12 @@ function SolicitudesActions({ id, estatus }) {
           </Grid>
         )}
       </Grid>
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <DefaultModal title="Eliminar solicitud" open={openDelete} setOpen={setOpenDelete}>
-        <Typography>
-          ¿Está seguro que quiere eliminar esta solicitud?
-        </Typography>
-        <ButtonsForm cancel={() => setOpenDelete(false)} confirm={handleDelete} />
-      </DefaultModal>
-      <DefaultModal title="Confirmación" open={openDownload} setOpen={setOpenDownload}>
-        <Typography>
-          ¿Está seguro que quiere descargar esta solicitud?
-        </Typography>
-        <TextField
-          fullWidth
-          label="Comentarios"
-          placeholder="comentarios"
-          value={comments}
-          onChange={(e) => setComments(e.target.value)}
-          multiline
-          rows={4}
-          margin="normal"
-        />
-        <ButtonsForm cancel={() => setOpenDownload(false)} confirm={handleDownload} />
-      </DefaultModal>
-=======
-=======
->>>>>>> fcbda9d (se areglo boton obsevaciones)
       <DefaultModal title="Eliminar solicitud" open={open} setOpen={setOpen}>
   <Typography>
     ¿Está seguro que quiere eliminar esta solicitud?
   </Typography>
   <ButtonsForm cancel={() => setOpen(false)} confirm={handleDelete} confirmText="Confirmar"/>
 </DefaultModal>
-<<<<<<< HEAD
->>>>>>> fcbda9d (se areglo boton obsevaciones)
-=======
->>>>>>> fcbda9d (se areglo boton obsevaciones)
     </>
   );
 }
