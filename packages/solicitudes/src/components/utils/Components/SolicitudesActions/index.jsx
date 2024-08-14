@@ -20,7 +20,7 @@ function SolicitudesActions({ id, estatus }) {
     consultar: true,
     editar: false,
     eliminar: false,
-    descargar: true,
+    descargar: false,
   });
 
   useEffect(() => {

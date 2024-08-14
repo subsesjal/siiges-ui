@@ -29,7 +29,7 @@ export function OficioModal({ open, hideModal, downloadFile }) {
         <Grid item xs={12}>
           <Input
             id="fechaEfecto"
-            label="Fecha en que surge efecto"
+            label="Fecha en que surte efecto"
             name="fechaEfecto"
             type="date"
             value={fechaEfecto}
