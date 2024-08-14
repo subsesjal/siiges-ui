@@ -64,11 +64,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-<<<<<<< HEAD
         title="Agregar Asignatura Formación Electiva"
-=======
-        title="Agregar Asignatura Formacion Electiva"
->>>>>>> 807bb7b (SDT-649Fix: se corriegieron observaciones)
       />
     </Grid>
   );
