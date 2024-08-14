@@ -150,7 +150,7 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Select
                 title="Nivel de estudio de antecedente"
-                options={[]} // Add your options here
+                options={[]}
                 name="nivelEstudios"
                 value={form.nivelEstudios || ''}
                 onChange={handleSelectChange('nivelEstudios')}
@@ -159,7 +159,7 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Select
                 title="Estado de antecedente"
-                options={[]} // Add your options here
+                options={[]}
                 name="estadoAntecedente"
                 value={form.estadoAntecedente || ''}
                 onChange={handleSelectChange('estadoAntecedente')}
@@ -208,7 +208,7 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Select
                 title="Modalidad de titulación"
-                options={[]} // Add your options here
+                options={[]}
                 name="modalidadTitulacion"
                 value={form.modalidadTitulacion || ''}
                 onChange={handleSelectChange('modalidadTitulacion')}
@@ -226,7 +226,7 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Select
                 title="Cumplió servicio social"
-                options={[]} // Add your options here
+                options={[]}
                 name="cumplioServicioSocial"
                 value={form.cumplioServicioSocial || ''}
                 onChange={handleSelectChange('cumplioServicioSocial')}
@@ -235,7 +235,7 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Select
                 title="Fundamento legal de servicio social"
-                options={[]} // Add your options here
+                options={[]}
                 name="fundamentoLegal"
                 value={form.fundamentoLegal || ''}
                 onChange={handleSelectChange('fundamentoLegal')}
@@ -244,7 +244,7 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Select
                 title="Estados"
-                options={[]} // Add your options here
+                options={[]}
                 name="estados"
                 value={form.estados || ''}
                 onChange={handleSelectChange('estados')}

@@ -8,32 +8,11 @@ import {
   getProgramas,
 } from '@siiges-ui/instituciones';
 
-const mockData = [
-  {
-    id: 1,
-    name: 'John Doe',
-    folio: '12345',
-    date: '2024-06-01',
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    folio: '67890',
-    date: '2024-06-02',
-  },
-  {
-    id: 3,
-    name: 'Alice Johnson',
-    folio: '54321',
-    date: '2024-06-03',
-  },
-];
-
 export default function FoliosForm({
   setTipoSolicitud,
   setTipoDocumento,
-  setSolicitudes,
   setPrograma,
+  setPlantel,
   setLoading,
 }) {
   const { instituciones } = getInstituciones({
@@ -51,11 +30,6 @@ export default function FoliosForm({
   const [selectedPrograma, setSelectedPrograma] = useState('');
   const isRepresentante = session.rol === 'representante';
 
-  // eslint-disable-next-line no-unused-vars
-  const fetchFolios = (programaId) => {
-    setSolicitudes(mockData);
-  };
-
   useEffect(() => {
     if (isRepresentante && instituciones?.length) {
       const findIndexIntitucion = instituciones.findIndex(
@@ -69,11 +43,6 @@ export default function FoliosForm({
     const programaId = event.target.value;
     setPrograma(programaId);
     setSelectedPrograma(programaId);
-    if (programaId) {
-      fetchFolios(programaId);
-    } else {
-      setSolicitudes([]);
-    }
   };
 
   const fetchProgramas = (plantelId) => {
@@ -98,6 +67,15 @@ export default function FoliosForm({
   const handlePlantelChange = (event) => {
     const plantelId = event.target.value;
     setSelectedPlantel(plantelId);
+
+    // Find the matching plantel object
+    const selectedPlantelObject = planteles.find(
+      (plantel) => plantel.id === plantelId,
+    );
+
+    // Set the plantel state with the matching plantel object
+    setPlantel(selectedPlantelObject.nombre);
+
     if (plantelId) {
       fetchProgramas(plantelId);
     } else {
@@ -208,7 +186,7 @@ export default function FoliosForm({
 FoliosForm.propTypes = {
   setTipoSolicitud: PropTypes.func.isRequired,
   setTipoDocumento: PropTypes.func.isRequired,
-  setSolicitudes: PropTypes.func.isRequired,
   setPrograma: PropTypes.func.isRequired,
+  setPlantel: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
 };

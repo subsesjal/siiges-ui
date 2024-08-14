@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function CrearCertificado() {
   return (
-    <Layout title="Agregar certificado">
+    <Layout title="Agregar Solicitud de Folios de certificado">
       <FoliosData solicitudType="certificado" />
     </Layout>
   );

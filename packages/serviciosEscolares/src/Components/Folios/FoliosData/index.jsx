@@ -1,86 +1,160 @@
-import { Grid, IconButton, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import {
-  ButtonsForm, Input, InputFile, LabelData,
+  Button,
+  ButtonsForm,
+  Context,
+  createRecord,
+  getData,
+  InputFile,
+  InputNumber,
+  LabelData,
+  updateRecord,
 } from '@siiges-ui/shared';
-import React, { useState } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import AlumnosTitulo from './Alumnos/alumnosTitulo';
-import AlumnosCertificado from './Alumnos/alumnoCertificado';
+import dayjs from 'dayjs';
 
-const columns = (handleEdit) => [
-  {
-    field: 'id',
-    headerName: 'ID',
-    width: 70,
-    hidden: true,
-  },
-  { field: 'matricula', headerName: 'Matrícula', width: 150 },
-  { field: 'name', headerName: 'Nombre', width: 450 },
-  { field: 'folio', headerName: 'Folio', width: 150 },
-  { field: 'date', headerName: 'Fecha', width: 150 },
-  {
-    field: 'actions',
-    headerName: 'Acciones',
-    width: 150,
-    renderCell: (params) => (
-      <IconButton onClick={() => handleEdit(params.row.id)}>
-        <EditIcon />
-      </IconButton>
-    ),
-  },
-];
-
-const rows = [
-  {
-    id: 1,
-    matricula: '20210001',
-    name: 'Juan Perez',
-    folio: 'A001',
-    date: '2024-01-10',
-  },
-  {
-    id: 2,
-    matricula: '20210002',
-    name: 'Maria Gomez',
-    folio: 'A002',
-    date: '2024-01-11',
-  },
-  {
-    id: 3,
-    matricula: '20210003',
-    name: 'Carlos Ruiz',
-    folio: 'A003',
-    date: '2024-01-12',
-  },
-  {
-    id: 4,
-    matricula: '20210004',
-    name: 'Ana Lopez',
-    folio: 'A004',
-    date: '2024-01-13',
-  },
-  {
-    id: 5,
-    matricula: '20210005',
-    name: 'Luis Fernandez',
-    folio: 'A005',
-    date: '2024-01-14',
-  },
-];
-
-export default function FoliosData({ solicitudType }) {
+export default function FoliosData({ solicitudType, type }) {
   const [url, setUrl] = useState();
+  const { setNoti, setLoading } = useContext(Context);
   const [id, setId] = useState(null);
+  const [buttonAlumnos, setButtonAlumnos] = useState('Agregar Alumnos');
   const router = useRouter();
+  const {
+    tipoDocumento, tipoSolicitud, programa, id: editId,
+  } = router.query;
+  const [etiquetas, setEtiquetas] = useState({
+    tipoDocumento: '',
+    tipoSolicitudFolio: '',
+    acuerdoRvoe: '',
+    planEstudios: '',
+    gradoAcademico: '',
+  });
 
-  const handleEdit = (valueId) => {
-    setId(valueId);
+  const [formData, setFormData] = useState({
+    folioPago: '',
+    tipoDocumentoId: tipoDocumento || '',
+    tipoSolicitudFolioId: tipoSolicitud || '',
+    estatusSolicitudFolioId: 1,
+    programaId: programa || '',
+    fecha: dayjs(),
+  });
+
+  useEffect(() => {
+    if (type === 'edit' && editId) {
+      setButtonAlumnos('Editar Alumnos');
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await getData({
+            endpoint: `/solicitudesFolios/${editId}`,
+          });
+          const { data } = response;
+          setFormData({
+            folioPago: data.folioPago,
+            tipoDocumentoId: data.tipoDocumentoId,
+            tipoSolicitudFolioId: data.tipoSolicitudFolioId,
+            estatusSolicitudFolioId: data.estatusSolicitudFolioI,
+            programaId: data.programaId,
+            fecha: dayjs(data.fecha),
+          });
+          setEtiquetas({
+            tipoDocumento: data.tipoDocumento.nombre,
+            tipoSolicitudFolio: data.tipoSolicitudFolio.nombre,
+            acuerdoRvoe: data.programa.acuerdoRvoe,
+            planEstudios: data.programa.nombre,
+            gradoAcademico: data.programa.nivelId,
+          });
+          setId(editId);
+        } catch (error) {
+          setNoti({
+            open: true,
+            message: `Error al cargar la solicitud: ${error.message}`,
+            type: 'error',
+          });
+        } finally {
+          setTimeout(() => {
+            setLoading(false);
+          }, 500);
+        }
+      };
+      fetchData();
+    }
+  }, [type, editId]);
+
+  useEffect(() => {
+    if (tipoDocumento && tipoSolicitud && programa) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        tipoDocumentoId: tipoDocumento,
+        tipoSolicitudFolioId: tipoSolicitud,
+        programaId: programa,
+      }));
+    }
+  }, [tipoDocumento, tipoSolicitud, programa]);
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    try {
+      const response = type === 'edit'
+        ? await updateRecord({
+          data: formData,
+          endpoint: `/solicitudesFolios/${id}`,
+        })
+        : await createRecord({
+          data: formData,
+          endpoint: '/solicitudesFolios',
+        });
+
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        setId(response.data.id);
+        setNoti({
+          open: true,
+          message:
+            type === 'edit'
+              ? 'Éxito al actualizar la solicitud'
+              : 'Éxito al crear la solicitud, ya puede agregar alumnos',
+          type: 'success',
+        });
+      } else {
+        setNoti({
+          open: true,
+          message:
+            response.message
+            || 'Error al procesar la solicitud, revise que los campos estén correctos',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `Error al procesar la solicitud: ${error.message}`,
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleConfirm = () => {
-    console.log('confirm');
+  const handleAddAlumno = () => {
+    if (solicitudType === 'titulo') {
+      router.push(
+        `/serviciosEscolares/solicitudesFolios/alumnos/${id}/titulos?programa=${programa}`,
+      );
+    } else {
+      router.push(
+        `/serviciosEscolares/solicitudesFolios/alumnos/${id}/certificados?programa=${programa}`,
+      );
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -95,28 +169,39 @@ export default function FoliosData({ solicitudType }) {
         />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="RVOE" subtitle="ABCD1234567" />
+        <LabelData title="RVOE" subtitle={etiquetas.acuerdoRvoe} />
       </Grid>
       <Grid item xs={8}>
-        <LabelData title="Grado Académico" subtitle="ABCD1234567" />
+        <LabelData
+          title="Grado Académico"
+          subtitle={etiquetas.gradoAcademico}
+        />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="Plan de Estudios" subtitle="no c jaja salu2" />
+        <LabelData title="Plan de Estudios" subtitle={etiquetas.planEstudios} />
       </Grid>
       <Grid item xs={8}>
         <LabelData title="Clave de centro de trabajo" subtitle="1234567" />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="Tipo de Documento" subtitle="no c jaja salu2" />
+        <LabelData
+          title="Tipo de Documento"
+          subtitle={etiquetas.tipoDocumento}
+        />
       </Grid>
       <Grid item xs={12}>
-        <LabelData title="Tipo de Solicitud" subtitle="no c jaja salu2" />
+        <LabelData
+          title="Tipo de Solicitud"
+          subtitle={etiquetas.tipoSolicitudFolio}
+        />
       </Grid>
       <Grid item xs={4}>
-        <Input
+        <InputNumber
           label="Número de recibo de pago oficial"
-          id="numeroRecibo"
-          name="numeroRecibo"
+          id="folioPago"
+          name="folioPago"
+          value={formData.folioPago}
+          onchange={handleChange}
         />
       </Grid>
       <Grid item xs={12}>
@@ -129,7 +214,12 @@ export default function FoliosData({ solicitudType }) {
           setUrl={setUrl}
         />
       </Grid>
-      <Grid item xs={12}>
+      {id && (
+        <Grid item xs={4}>
+          <Button text={buttonAlumnos} onClick={handleAddAlumno} />
+        </Grid>
+      )}
+      <Grid item xs={id ? 8 : 12}>
         <ButtonsForm
           confirm={handleConfirm}
           cancel={() => {
@@ -137,26 +227,11 @@ export default function FoliosData({ solicitudType }) {
           }}
         />
       </Grid>
-      {solicitudType === 'titulo' && (
-        <AlumnosTitulo
-          handleEdit={handleEdit}
-          rows={rows}
-          columns={columns(handleEdit)}
-          id={id}
-        />
-      )}
-      {solicitudType === 'certificado' && (
-        <AlumnosCertificado
-          handleEdit={handleEdit}
-          rows={rows}
-          columns={columns(handleEdit)}
-          id={id}
-        />
-      )}
     </Grid>
   );
 }
 
 FoliosData.propTypes = {
-  solicitudType: PropTypes.string.isRequired,
+  solicitudType: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
 };

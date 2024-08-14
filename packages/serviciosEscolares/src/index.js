@@ -1,11 +1,12 @@
 import columnsProgramas from './Tables/programas';
 import FormAlumno from './Components/Alumnos/FormAlumno';
-import FoliosData from './Components/Folios/FoliosData/index';
-import FoliosForm from './Components/Folios/FoliosForm/index';
 import AlumnosForm from './Components/Alumnos/AlumnosForm';
 import getGrupoById from './Components/utils/getGrupoById';
 import columnsAsignaturas from './Tables/inscripcionesTable';
 import AlumnosTable from './Components/Alumnos/AlumnosTable';
+import FoliosData from './Components/Folios/FoliosData/index';
+import FoliosForm from './Components/Folios/FoliosForm/index';
+import FoliosTable from './Components/Folios/FoliosTable/index';
 import ProgramasForm from './Components/Programas/ProgramasForm';
 import ProgramasTable from './Components/Programas/ProgramasTable';
 import DatosAlumno from './Components/Validacion/DatosAlumno/index';
@@ -25,6 +26,7 @@ import InscripcionesTable from './Components/Inscripciones/InscripcionesTable';
 import DocumentosAlumno from './Components/Alumnos/FormAlumno/DocumentosAlumno';
 import columnsInstitucionesAutorizadas from './Tables/institucionesAutorizadas';
 import ActionsAlumnosInscritos from './Components/utils/ActionsAlumnosInscritos';
+import ModalCertificado from './Components/Folios/FoliosData/Modal/certificados';
 import FechaExamenInput from './Components/utils/Calificaciones/FechaExamenInput';
 import ProgramasData from './Components/Programas/ProgramasSections/ProgramasData';
 import CalificacionInput from './Components/utils/Calificaciones/CalificacionInput';
@@ -40,6 +42,7 @@ export {
   FormAlumno,
   FoliosData,
   FoliosForm,
+  FoliosTable,
   Asignaturas,
   AlumnosForm,
   DatosAlumno,
@@ -54,6 +57,7 @@ export {
   CiclosEscolares,
   ValidacionTable,
   DatosInstitucion,
+  ModalCertificado,
   columnsProgramas,
   DocumentosAlumno,
   FechaExamenInput,
