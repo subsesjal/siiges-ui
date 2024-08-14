@@ -265,18 +265,24 @@ export default function PlantelNewForm({ plantel }) {
           <Grid item xs={3}>
             <Input
               label="Página Web"
-              id="webSite"
-              name="webSite"
-              auto="webSite"
+              id="paginaWeb"
+              name="paginaWeb"
+              auto="paginaWeb"
+              value={plantel
+                ? plantel.paginaWeb
+                : ''}
               onchange={handleOnChange}
             />
           </Grid>
           <Grid item xs={3}>
             <Input
               label="Redes sociales"
-              id="socialNetwork"
-              name="socialNetwork"
-              auto="socialNetwork"
+              id="redeSociales"
+              name="redesSociales"
+              auto="redesSociales"
+              value={plantel
+                ? plantel.redesSociales
+                : ''}
               onchange={handleOnChange}
             />
           </Grid>
@@ -436,6 +442,8 @@ PlantelNewForm.propTypes = {
     telefono1: PropTypes.string,
     telefono2: PropTypes.string,
     telefono3: PropTypes.string,
+    paginaWeb: PropTypes.string,
+    redesSociales: PropTypes.string,
     claveCentroTrabajo: PropTypes.string,
     directores: PropTypes.arrayOf(
       PropTypes.shape({

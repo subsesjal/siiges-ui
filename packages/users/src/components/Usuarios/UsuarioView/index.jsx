@@ -18,9 +18,9 @@ export default function UsuarioView({ usuario }) {
             <List>
               <ListTitle text="Nombre(s)" />
               <ListTitle text="Apellidos" />
-              <ListTitle text="Correo electrónico" />
-              <ListTitle text="Nacionalidad" />
               <ListTitle text="Sexo" />
+              <ListTitle text="Nacionalidad" />
+              <ListTitle text="Correo electrónico" />
               <ListTitle text="Celular" />
               <ListTitle text="Teléfono" />
             </List>
@@ -32,9 +32,9 @@ export default function UsuarioView({ usuario }) {
               <ListSubtitle
                 text={`${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`}
               />
-              <ListSubtitle text={usuario?.correo} />
-              <ListSubtitle text={persona?.nacionalidad} />
               <ListSubtitle text={persona?.sexo} />
+              <ListSubtitle text={persona?.nacionalidad} />
+              <ListSubtitle text={usuario?.correo} />
               <ListSubtitle text={persona?.celular} />
               <ListSubtitle text={persona?.telefono} />
             </List>

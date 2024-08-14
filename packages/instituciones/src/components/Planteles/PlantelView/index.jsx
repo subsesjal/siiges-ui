@@ -100,8 +100,8 @@ export default function PlantelViewForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle text="" />
-            <ListSubtitle text="" />
+            <ListSubtitle text={data.paginaWeb} />
+            <ListSubtitle text={data.redesSociales} />
           </List>
         </Grid>
       </Grid>
@@ -168,6 +168,8 @@ PlantelViewForm.propTypes = {
     telefono1: PropTypes.string,
     telefono2: PropTypes.string,
     telefono3: PropTypes.string,
+    paginaWeb: PropTypes.string,
+    redesSociales: PropTypes.string,
     claveCentroTrabajo: PropTypes.string,
     directores: PropTypes.arrayOf(
       PropTypes.shape({
