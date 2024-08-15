@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props */
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -39,4 +38,8 @@ UserForm.propTypes = {
   cancel: PropTypes.func.isRequired,
   confirmDisabled: PropTypes.bool,
   confirmText: PropTypes.string,
+};
+UserForm.defaultProps = {
+  confirmDisabled: false,
+  confirmText: 'Guardar',
 };
