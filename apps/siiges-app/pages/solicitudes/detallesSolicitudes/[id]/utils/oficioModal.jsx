@@ -4,6 +4,7 @@ import { DefaultModal, Input, ButtonStyled } from '@siiges-ui/shared';
 import { updateRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import PropTypes from 'prop-types';
 
+// eslint-disable-next-line import/prefer-default-export
 export function OficioModal({
   open,
   hideModal,
@@ -20,7 +21,6 @@ export function OficioModal({
     } else if (name === 'fechaEfecto') {
       setFechaEfecto(value);
     }
-    console.log('Estado actualizado:', { oficioNumber, fechaEfecto });
   };
 
   const handleOnSubmit = async () => {
@@ -29,25 +29,24 @@ export function OficioModal({
       return;
     }
 
-    const formattedDate = new Date(fechaEfecto).toISOString().split('T')[0];
+    const formattedDate = new Date(fechaEfecto).toISOString();
     const dataRvoe = {
       programa: {
         fechaSurteEfecto: formattedDate,
-        acuerdoRvoe: Number(oficioNumber),
+        acuerdoRvoe: String(oficioNumber),
       },
     };
 
     try {
       const response = await updateRecord({ data: dataRvoe, endpoint: `/solicitudes/${solicitudId}` });
       if (response.statusCode === 200) {
-        console.log('Actualización exitosa:', response.data);
-        downloadFile();
+        downloadFile('RVOE');
         hideModal();
       } else {
-        console.error('Error en la actualización:', response.errorMessage);
+        console.error(response.errorMessage);
       }
     } catch (error) {
-      console.error('Error en la solicitud:', error);
+      console.error(error);
     }
   };
 
@@ -61,7 +60,7 @@ export function OficioModal({
             name="oficioNumber"
             type="number"
             value={oficioNumber}
-            onChange={handleChange}
+            onchange={handleChange}
             required
           />
         </Grid>
@@ -72,7 +71,7 @@ export function OficioModal({
             name="fechaEfecto"
             type="date"
             value={fechaEfecto}
-            onChange={handleChange}
+            onchange={handleChange}
             required
           />
         </Grid>
