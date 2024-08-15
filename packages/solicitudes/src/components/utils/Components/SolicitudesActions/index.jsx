@@ -5,8 +5,8 @@ import Link from 'next/link';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
 
 function SolicitudesActions({ id, estatus }) {
   const { session, setNoti } = useContext(Context);
@@ -23,7 +23,7 @@ function SolicitudesActions({ id, estatus }) {
     switch (session.rol) {
       case 'representante':
         setShowButtons({
-          ver: true,
+          ver: estatus > 2,
           consultar: true,
           editar: estatus === 1 || estatus === 200,
           eliminar: estatus === 1 || estatus === 200,
@@ -38,7 +38,9 @@ function SolicitudesActions({ id, estatus }) {
         });
         break;
       default:
-        setShowButtons({ consultar: true, editar: false, eliminar: false });
+        setShowButtons({
+          ver: estatus > 2, consultar: true, editar: false, eliminar: false,
+        });
         break;
     }
   }, [session.rol]);
@@ -54,9 +56,9 @@ function SolicitudesActions({ id, estatus }) {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={1} alignItems="center">
         {showButtons.ver && (
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Link
               href={`/solicitudes/detallesSolicitudes/${id}/consultarSolicitud`}
               passHref
@@ -68,7 +70,7 @@ function SolicitudesActions({ id, estatus }) {
           </Grid>
         )}
         {showButtons.consultar && (
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Link href={consultLink} passHref>
               <IconButton aria-label="consultar">
                 <ListAltIcon />
@@ -77,7 +79,7 @@ function SolicitudesActions({ id, estatus }) {
           </Grid>
         )}
         {showButtons.editar && (
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Link
               href={`/solicitudes/detallesSolicitudes/${id}/editarSolicitud`}
               passHref
@@ -89,7 +91,7 @@ function SolicitudesActions({ id, estatus }) {
           </Grid>
         )}
         {showButtons.eliminar && (
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <IconButton aria-label="eliminar" onClick={() => setOpen(true)}>
               <DeleteIcon />
             </IconButton>
