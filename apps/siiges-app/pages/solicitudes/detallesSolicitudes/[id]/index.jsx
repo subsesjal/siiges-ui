@@ -140,7 +140,14 @@ export default function detallesSolicitudes() {
           </List>
         </Grid>
       </Grid>
-      <OficioModal open={isOficioModalOpen} hideModal={hideOficioModal} downloadFile={downloadFile} />
+      {solicitud?.id && (
+      <OficioModal
+        open={isOficioModalOpen}
+        hideModal={hideOficioModal}
+        downloadFile={downloadFile}
+        solicitudId={solicitud.id}
+      />
+      )}
     </Layout>
   );
 }

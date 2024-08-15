@@ -1,15 +1,54 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import { DefaultModal, Input, ButtonStyled } from '@siiges-ui/shared';
-// eslint-disable-next-line import/prefer-default-export
-export function OficioModal({ open, hideModal, downloadFile }) {
+import { updateRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
+import PropTypes from 'prop-types';
+
+export function OficioModal({
+  open,
+  hideModal,
+  downloadFile,
+  solicitudId,
+}) {
   const [oficioNumber, setOficioNumber] = useState('');
   const [fechaEfecto, setFechaEfecto] = useState('');
 
-  const handleOnSubmit = () => {
-    downloadFile('RVOE');
-    hideModal();
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === 'oficioNumber') {
+      setOficioNumber(value);
+    } else if (name === 'fechaEfecto') {
+      setFechaEfecto(value);
+    }
+    console.log('Estado actualizado:', { oficioNumber, fechaEfecto });
+  };
+
+  const handleOnSubmit = async () => {
+    if (!fechaEfecto || !oficioNumber) {
+      console.error('Por favor, completa todos los campos.');
+      return;
+    }
+
+    const formattedDate = new Date(fechaEfecto).toISOString().split('T')[0];
+    const dataRvoe = {
+      programa: {
+        fechaSurteEfecto: formattedDate,
+        acuerdoRvoe: Number(oficioNumber),
+      },
+    };
+
+    try {
+      const response = await updateRecord({ data: dataRvoe, endpoint: `/solicitudes/${solicitudId}` });
+      if (response.statusCode === 200) {
+        console.log('Actualización exitosa:', response.data);
+        downloadFile();
+        hideModal();
+      } else {
+        console.error('Error en la actualización:', response.errorMessage);
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    }
   };
 
   return (
@@ -22,7 +61,7 @@ export function OficioModal({ open, hideModal, downloadFile }) {
             name="oficioNumber"
             type="number"
             value={oficioNumber}
-            onChange={(e) => setOficioNumber(e.target.value)}
+            onChange={handleChange}
             required
           />
         </Grid>
@@ -33,7 +72,7 @@ export function OficioModal({ open, hideModal, downloadFile }) {
             name="fechaEfecto"
             type="date"
             value={fechaEfecto}
-            onChange={(e) => setFechaEfecto(e.target.value)}
+            onChange={handleChange}
             required
           />
         </Grid>
@@ -63,4 +102,5 @@ OficioModal.propTypes = {
   open: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
   downloadFile: PropTypes.func.isRequired,
+  solicitudId: PropTypes.number.isRequired,
 };
