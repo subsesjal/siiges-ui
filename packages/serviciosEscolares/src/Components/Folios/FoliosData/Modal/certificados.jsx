@@ -8,6 +8,7 @@ import {
   LabelData,
   createRecord,
   getData,
+  updateRecord,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -72,26 +73,53 @@ export default function ModalCertificado({
 
   const handleConfirm = () => {
     setLoading(true);
+
+    // Format the dates to 'YYYY-MM-DDTHH:mm:ssZ' format
+    const formattedForm = {
+      ...form,
+      fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
+      fechaElaboracion: dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ'),
+    };
+
     const endpoint = type === 'edit'
-      ? `/solicitudesFolios/${id}/alumnos/${form.id}`
+      ? `/solicitudesFolios/${form.id}`
       : `/solicitudesFolios/${id}/alumnos/${alumnoId}`;
-    createRecord({ data: form, endpoint })
+
+    const action = type === 'edit' ? updateRecord : createRecord;
+
+    action({ data: formattedForm, endpoint })
       .then((response) => {
         if (response.data) {
-          const newRow = {
-            id: response.data.id,
-            name: `${response.data.alumno.persona.nombre} ${response.data.alumno.persona.apellidoPaterno} ${response.data.alumno.persona.apellidoMaterno}`,
-            fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
-            fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
-              'DD/MM/YYYY',
-            ),
-          };
+          let newRow;
+
+          if (type === 'edit') {
+            newRow = {
+              id: response.data.id,
+              name: alumno, // Retain the existing name
+              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+            };
+          } else {
+            newRow = {
+              id: response.data.id,
+              name: `${response.data.alumno.persona.nombre} ${response.data.alumno.persona.apellidoPaterno} ${response.data.alumno.persona.apellidoMaterno}`,
+              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+            };
+          }
+
           setNoti({
             open: true,
-            message: 'Registro creado exitosamente',
+            message: type === 'edit' ? 'Registro actualizado exitosamente' : 'Registro creado exitosamente',
             type: 'success',
           });
-          setRows((prevRows) => [...prevRows, newRow]);
+
+          if (type === 'edit') {
+            setRows((prevRows) => prevRows.map((row) => (row.id === newRow.id ? newRow : row)));
+          } else {
+            setRows((prevRows) => [...prevRows, newRow]);
+          }
+
           setOpen(false);
         }
       })
@@ -135,6 +163,7 @@ export default function ModalCertificado({
             label="Fecha de elaboración de certificado"
             id="fechaElaboracion"
             name="fechaElaboracion"
+            type="datetime"
             value={form.fechaElaboracion || ''}
             onchange={handleChange}
             required
@@ -145,6 +174,7 @@ export default function ModalCertificado({
             label="Fecha de terminación plan de estudios"
             id="fechaTermino"
             name="fechaTermino"
+            type="datetime"
             value={form.fechaTermino || ''}
             onchange={handleChange}
             required

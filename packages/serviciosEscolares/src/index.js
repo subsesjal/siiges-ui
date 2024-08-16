@@ -13,6 +13,7 @@ import DatosAlumno from './Components/Validacion/DatosAlumno/index';
 import Grupos from './Components/Programas/ProgramasSections/Grupos';
 import Reglas from './Components/Programas/ProgramasSections/Reglas';
 import getAsignaturaById from './Components/utils/getAsignaturaById';
+import ModalTitulo from './Components/Folios/FoliosData/Modal/titulos';
 import ValidacionForm from './Components/Validacion/ValidacionForm/index';
 import InscripcionForm from './Components/Inscripciones/InscripcionesForm';
 import submitCalificaciones from './Components/utils/submitCalificaciones';
@@ -42,6 +43,7 @@ export {
   FormAlumno,
   FoliosData,
   FoliosForm,
+  ModalTitulo,
   FoliosTable,
   Asignaturas,
   AlumnosForm,

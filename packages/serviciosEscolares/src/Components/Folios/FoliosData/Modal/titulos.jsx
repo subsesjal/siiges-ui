@@ -1,28 +1,34 @@
 import { Grid } from '@mui/material';
 import {
   ButtonsSections,
+  Context,
   DefaultModal,
   Input,
   InputDate,
   Select,
   createRecord,
+  updateRecord,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
 export default function ModalTitulo({
-  open, setOpen, type, id,
+  open, setOpen, type, id, setRows, rowData,
 }) {
   const [position, setPosition] = useState('first');
   const [form, setForm] = useState({});
+  const [alumno, setAlumno] = useState(null);
+  const [alumnoId, setAlumnoId] = useState(null);
+  const { setNoti, setLoading } = useContext(Context);
 
   useEffect(() => {
-    if (type === 'edit' && id) {
-      console.log('pending fetch function with id:', id);
-      // Fetch the existing data and set it in the form state
-      // Example: fetchDataById(id).then(data => setForm(data));
+    if (type === 'edit' && rowData) {
+      setForm(rowData);
+      setAlumno(rowData.name);
+      setAlumnoId(rowData.id);
     }
-  }, [type, id]);
+  }, [type, rowData]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -40,8 +46,67 @@ export default function ModalTitulo({
   };
 
   const handleConfirm = () => {
-    // Submit form
-    createRecord({ data: form, endpoint: '/your-endpoint-here' });
+    setLoading(true);
+
+    // Format the dates to 'YYYY-MM-DDTHH:mm:ssZ' format
+    const formattedForm = {
+      ...form,
+      fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
+      fechaElaboracion: dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ'),
+    };
+
+    const endpoint = type === 'edit'
+      ? `/solicitudesFolios/${form.id}`
+      : `/solicitudesFolios/${id}/alumnos/${alumnoId}`;
+
+    const action = type === 'edit' ? updateRecord : createRecord;
+
+    action({ data: formattedForm, endpoint })
+      .then((response) => {
+        if (response.data) {
+          let newRow;
+
+          if (type === 'edit') {
+            newRow = {
+              id: response.data.id,
+              name: alumno, // Retain the existing name
+              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+            };
+          } else {
+            newRow = {
+              id: response.data.id,
+              name: `${response.data.alumno.persona.nombre} ${response.data.alumno.persona.apellidoPaterno} ${response.data.alumno.persona.apellidoMaterno}`,
+              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+            };
+          }
+
+          setNoti({
+            open: true,
+            message: type === 'edit' ? 'Registro actualizado exitosamente' : 'Registro creado exitosamente',
+            type: 'success',
+          });
+
+          if (type === 'edit') {
+            setRows((prevRows) => prevRows.map((row) => (row.id === newRow.id ? newRow : row)));
+          } else {
+            setRows((prevRows) => [...prevRows, newRow]);
+          }
+
+          setOpen(false);
+        }
+      })
+      .catch((error) => {
+        setNoti({
+          open: true,
+          message: `Ocurrió un error inesperado: ${error}`,
+          type: 'error',
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleCancel = () => {
@@ -268,11 +333,19 @@ export default function ModalTitulo({
 
 ModalTitulo.defaultProps = {
   id: null,
+  rowData: {},
 };
 
 ModalTitulo.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
+  setRows: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
+  rowData: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    fechaTermino: PropTypes.string,
+    fechaElaboracion: PropTypes.string,
+  }),
 };
