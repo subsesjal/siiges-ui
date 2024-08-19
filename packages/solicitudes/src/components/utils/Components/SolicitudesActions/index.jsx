@@ -9,7 +9,7 @@ import {
   ButtonsForm,
   Context,
   DefaultModal,
-  getToken,
+  deleteRecord,
 } from '@siiges-ui/shared';
 
 function SolicitudesActions({ id, estatus }) {
@@ -21,9 +21,6 @@ function SolicitudesActions({ id, estatus }) {
     editar: false,
     eliminar: false,
   });
-  const token = getToken();
-  const apikey = process.env.NEXT_PUBLIC_API_KEY;
-  const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
     switch (session.rol) {
@@ -49,33 +46,19 @@ function SolicitudesActions({ id, estatus }) {
   }, [session.rol]);
 
   const handleDelete = async () => {
-    try {
-      const response = await fetch(`${url}/api/v1/solicitudes/${id}`, {
-        method: 'DELETE',
-        headers: {
-          api_key: apikey,
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const response = await deleteRecord({ endpoint: `/solicitudes/${id}` });
 
-      if (response.ok) {
-        setNoti({
-          open: true,
-          message: 'Solicitud eliminada exitosamente',
-          type: 'success',
-        });
-        setOpen(false);
-      } else {
-        setNoti({
-          open: true,
-          message: 'Hubo un problema al eliminar la solicitud',
-          type: 'error',
-        });
-      }
-    } catch (error) {
+    if (response.statusCode === 200) {
       setNoti({
         open: true,
-        message: 'Ocurrió un error al intentar eliminar la solicitud',
+        message: 'Solicitud eliminada exitosamente',
+        type: 'success',
+      });
+      setOpen(false);
+    } else {
+      setNoti({
+        open: true,
+        message: response.errorMessage || 'Hubo un problema al eliminar la solicitud',
         type: 'error',
       });
     }
