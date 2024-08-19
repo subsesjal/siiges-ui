@@ -5,7 +5,12 @@ import Link from 'next/link';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
+import {
+  ButtonsForm,
+  Context,
+  DefaultModal,
+  deleteRecord,
+} from '@siiges-ui/shared';
 
 function SolicitudesActions({ id, estatus }) {
   const { session, setNoti } = useContext(Context);
@@ -40,13 +45,23 @@ function SolicitudesActions({ id, estatus }) {
     }
   }, [session.rol]);
 
-  const handleDelete = () => {
-    setOpen(false);
-    setNoti({
-      open: true,
-      message: `Funcionalidad pendiente, intento eliminar solicitud: ${id}`,
-      type: 'error',
-    });
+  const handleDelete = async () => {
+    const response = await deleteRecord({ endpoint: `/solicitudes/${id}` });
+
+    if (response.statusCode === 200) {
+      setNoti({
+        open: true,
+        message: 'Solicitud eliminada exitosamente',
+        type: 'success',
+      });
+      setOpen(false);
+    } else {
+      setNoti({
+        open: true,
+        message: response.errorMessage || 'Hubo un problema al eliminar la solicitud',
+        type: 'error',
+      });
+    }
   };
 
   return (
