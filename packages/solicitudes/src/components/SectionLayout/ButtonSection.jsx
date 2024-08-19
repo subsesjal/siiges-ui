@@ -47,10 +47,10 @@ export default function ButtonSection({
   const isControlDocumental = session.rol === 'control_documental';
   const buttonText = isControlDocumental
     ? 'Guardar observaciones'
-    : 'Guardar  Sección';
+    : 'Terminar Sección';
   const buttonTextEnd = isControlDocumental
     ? 'Guardar observaciones'
-    : 'Guardar  Sección';
+    : 'Terminar Sección';
 
   function observaciones() {
     return setCreateObservaciones(true);
