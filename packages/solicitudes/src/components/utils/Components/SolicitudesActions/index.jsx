@@ -5,7 +5,12 @@ import Link from 'next/link';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
+import {
+  ButtonsForm,
+  Context,
+  DefaultModal,
+  getToken,
+} from '@siiges-ui/shared';
 
 function SolicitudesActions({ id, estatus }) {
   const { session, setNoti } = useContext(Context);
@@ -16,6 +21,9 @@ function SolicitudesActions({ id, estatus }) {
     editar: false,
     eliminar: false,
   });
+  const token = getToken();
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
     switch (session.rol) {
@@ -40,13 +48,37 @@ function SolicitudesActions({ id, estatus }) {
     }
   }, [session.rol]);
 
-  const handleDelete = () => {
-    setOpen(false);
-    setNoti({
-      open: true,
-      message: `Funcionalidad pendiente, intento eliminar solicitud: ${id}`,
-      type: 'error',
-    });
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`${url}/api/v1/solicitudes/${id}`, {
+        method: 'DELETE',
+        headers: {
+          api_key: apikey,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setNoti({
+          open: true,
+          message: 'Solicitud eliminada exitosamente',
+          type: 'success',
+        });
+        setOpen(false);
+      } else {
+        setNoti({
+          open: true,
+          message: 'Hubo un problema al eliminar la solicitud',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: 'Ocurrió un error al intentar eliminar la solicitud',
+        type: 'error',
+      });
+    }
   };
 
   return (

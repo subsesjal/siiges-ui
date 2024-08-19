@@ -260,6 +260,9 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.claveCentroTrabajo
                 : ''}
               onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.claveCentroTrabajo}
+              required
             />
           </Grid>
           <Grid item xs={3}>
