@@ -1,7 +1,12 @@
 import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
-import { Layout, Title, useApi } from '@siiges-ui/shared';
+import {
+  ButtonSimple,
+  Layout,
+  Title,
+  useApi,
+} from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
@@ -126,13 +131,20 @@ export default function detallesSolicitudes() {
             Otros
           </Typography>
           <List component="nav">
-            <ListItem button onClick={() => downloadFile('OficioAdmisorio')}>
-              <ListItemText primary="Oficio Admisorio" />
-            </ListItem>
+            {solicitud.fechaRecepcion && (
+              <ListItem button onClick={() => downloadFile('OFICIO_ADMISORIO')}>
+                <ListItemText primary="Oficio Admisorio" />
+              </ListItem>
+            )}
             <ListItem button onClick={() => downloadFile('Desistimiento')}>
               <ListItemText primary="Desistimiento" />
             </ListItem>
           </List>
+        </Grid>
+        <Grid container justifyContent="flex-end" spacing={2}>
+          <Grid item>
+            <ButtonSimple onClick={() => router.back()} text="Regresar" />
+          </Grid>
         </Grid>
       </Grid>
     </Layout>

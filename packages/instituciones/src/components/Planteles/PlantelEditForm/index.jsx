@@ -3,14 +3,17 @@ import PropTypes from 'prop-types';
 import router from 'next/router';
 import { Grid, Typography } from '@mui/material';
 import { ButtonsForm, Input, SnackAlert } from '@siiges-ui/shared';
+import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import submitEditPlantel from '../../utils/submitEditPlantel';
 import plantelErrors from '../../utils/plantelErrors';
 import formPlantel from '../../utils/formPlantel';
 
 export default function PlantelEditForm({ plantel }) {
-  const [form, setForm] = useState({ domicilio: {}, directores: {} });
+  const [form, setForm] = useState({ domicilio: { estadoId: 14 }, directores: {} });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
+
+  const director = plantel.directores[0]?.persona;
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -20,11 +23,15 @@ export default function PlantelEditForm({ plantel }) {
   const errors = plantelErrors(form, setError, error);
 
   const handleOnBlur = (e) => {
-    const { name } = e.target;
-    errors[name]();
+    const { name, value } = e.target;
+    errors[name](value);
   };
 
-  const director = plantel.directores[0]?.persona;
+  const inmuebles = [
+    { id: 1, nombre: 'Construido' },
+    { id: 2, nombre: 'Adaptado' },
+    { id: 3, nombre: 'Mixto' },
+  ];
 
   return (
     <>
@@ -109,6 +116,8 @@ export default function PlantelEditForm({ plantel }) {
               name="municipio"
               auto="municipio"
               value={plantel.domicilio.municipio.nombre}
+              required
+              errorMessage={error.municipio}
               onchange={handleOnChange}
               class="data"
             />
@@ -119,9 +128,21 @@ export default function PlantelEditForm({ plantel }) {
               id="claveCentroTrabajo"
               name="claveCentroTrabajo"
               auto="claveCentroTrabajo"
-              value={plantel.domicilio.claveCentroTrabajo}
+              value={plantel.claveCentroTrabajo}
               onchange={handleOnChange}
               class="data"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <BasicSelect
+              title="Tipo de inmueble"
+              name="tipoInmuebleId"
+              value={plantel
+                ? plantel.tipoInmuebleId
+                : ''}
+              options={inmuebles}
+              onblur={handleOnBlur}
+              onchange={handleOnChange}
             />
           </Grid>
         </Grid>
@@ -214,9 +235,10 @@ export default function PlantelEditForm({ plantel }) {
           <Grid item xs={3}>
             <Input
               label="Página Web"
-              id="webSite"
-              name="webSite"
-              auto="webSite"
+              id="paginaWeb"
+              name="paginaWeb"
+              auto="paginaWeb"
+              value={plantel.paginaWeb}
               onchange={handleOnChange}
               class="data"
             />
@@ -224,9 +246,10 @@ export default function PlantelEditForm({ plantel }) {
           <Grid item xs={3}>
             <Input
               label="Redes sociales"
-              id="socialNetwork"
-              name="socialNetwork"
-              auto="socialNetwork"
+              id="redesSociales"
+              name="redesSociales"
+              auto="redesSociales"
+              value={plantel.redesSociales}
               onchange={handleOnChange}
               class="data"
             />
@@ -239,9 +262,9 @@ export default function PlantelEditForm({ plantel }) {
           <Grid item xs={6}>
             <Input
               label="Nombre(s)"
-              id="directorName"
-              name="directorName"
-              auto="directorName"
+              id="nombre"
+              name="nombre"
+              auto="nombre"
               required
               onchange={handleOnChange}
               onblur={handleOnBlur}
@@ -253,9 +276,9 @@ export default function PlantelEditForm({ plantel }) {
           <Grid item xs={6}>
             <Input
               label="Primer Apellido"
-              id="directorLastName1"
-              name="directorLastName1"
-              auto="directorLastName1"
+              id="apellidoPaterno"
+              name="apellidoPaterno"
+              auto="apellidoPaterno"
               required
               value={director?.apellidoPaterno}
               onchange={handleOnChange}
@@ -267,9 +290,9 @@ export default function PlantelEditForm({ plantel }) {
           <Grid item xs={6}>
             <Input
               label="Segundo Apellido"
-              id="directorLastName2"
-              name="directorLastName2"
-              auto="directorLastName2"
+              id="apellidoMaterno"
+              name="apellidoMaterno"
+              auto="apellidoMaterno"
               required
               value={director?.apellidoMaterno}
               onchange={handleOnChange}
@@ -306,7 +329,7 @@ export default function PlantelEditForm({ plantel }) {
           <Grid item xs={3}>
             <Input
               label="Género"
-              id="genero"
+              id="sexo"
               name="genero"
               auto="genero"
               required
@@ -320,9 +343,9 @@ export default function PlantelEditForm({ plantel }) {
           <Grid item xs={6}>
             <Input
               label="Correo electrónico"
-              id="email"
-              name="email"
-              auto="email"
+              id="correoPrimario"
+              name="correoPrimario"
+              auto="correoPrimario"
               required
               value={director?.correoPrimario}
               onchange={handleOnChange}
@@ -335,12 +358,10 @@ export default function PlantelEditForm({ plantel }) {
         <ButtonsForm
           cancel={() => router.back()}
           confirm={() => submitEditPlantel(
-            errors,
-            error,
-            form,
-            setNoti,
-            plantel.institucionId,
-            plantel.id,
+            {
+              form,
+              setNoti,
+            },
           )}
         />
       </Grid>
@@ -368,6 +389,9 @@ PlantelEditForm.propTypes = {
     telefono2: PropTypes.string,
     telefono3: PropTypes.string,
     claveCentroTrabajo: PropTypes.string,
+    tipoInmuebleId: PropTypes.number,
+    paginaWeb: PropTypes.string,
+    redesSociales: PropTypes.string,
     directores: PropTypes.arrayOf(
       PropTypes.shape({
         persona: PropTypes.shape({

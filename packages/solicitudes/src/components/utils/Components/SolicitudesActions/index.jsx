@@ -45,13 +45,23 @@ function SolicitudesActions({ id, estatus }) {
     }
   }, [session.rol]);
 
-  const handleDelete = () => {
-    setOpen(false);
-    setNoti({
-      open: true,
-      message: `Funcionalidad pendiente, intento eliminar solicitud: ${id}`,
-      type: 'error',
-    });
+  const handleDelete = async () => {
+    const response = await deleteRecord({ endpoint: `/solicitudes/${id}` });
+
+    if (response.statusCode === 200) {
+      setNoti({
+        open: true,
+        message: 'Solicitud eliminada exitosamente',
+        type: 'success',
+      });
+      setOpen(false);
+    } else {
+      setNoti({
+        open: true,
+        message: response.errorMessage || 'Hubo un problema al eliminar la solicitud',
+        type: 'error',
+      });
+    }
   };
 
   return (

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import formPrograma from '../utils/sections/forms/formPrograma';
 import errorCurricula from '../utils/sections/errors/errorCurricula';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function Curricula({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
@@ -13,6 +14,10 @@ export default function Curricula({ disabled, type }) {
     form, setForm, error, setError, id,
   } = useContext(SolicitudContext);
   const errors = errorCurricula(form, setError, error);
+
+  const isSectionDisabled = useSectionDisabled(5);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   const fileData = [
     'MAPA_CURRICULAR',
@@ -88,7 +93,7 @@ export default function Curricula({ disabled, type }) {
             onfocus={handleInputFocus}
             helperText={error.mapaCurricular}
             error={!!error.mapaCurricular}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -105,7 +110,7 @@ export default function Curricula({ disabled, type }) {
             onfocus={handleInputFocus}
             helperText={error.flexibilidadCurricular}
             error={!!error.flexibilidadCurricular}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -122,7 +127,7 @@ export default function Curricula({ disabled, type }) {
             onfocus={handleInputFocus}
             helperText={error.lineasGeneracionAplicacionConocimiento}
             error={!!error.lineasGeneracionAplicacionConocimiento}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -139,7 +144,7 @@ export default function Curricula({ disabled, type }) {
             onfocus={handleInputFocus}
             helperText={error.actualizacion}
             error={!!error.actualizacion}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -156,7 +161,7 @@ export default function Curricula({ disabled, type }) {
             onfocus={handleInputFocus}
             helperText={error.conveniosVinculacion}
             error={!!error.conveniosVinculacion}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={9}>
@@ -167,7 +172,7 @@ export default function Curricula({ disabled, type }) {
             label="Mapa curricular"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={9}>
@@ -178,7 +183,7 @@ export default function Curricula({ disabled, type }) {
             label="Reglas de operación de las academias"
             url={fileURLs[1]}
             setUrl={(url) => handleFileLoaded(1, url)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={9}>
@@ -189,7 +194,7 @@ export default function Curricula({ disabled, type }) {
             label="Asignaturas a detalle"
             url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={9}>
@@ -200,7 +205,7 @@ export default function Curricula({ disabled, type }) {
             label="Propuesta hemerobibliográfica"
             url={fileURLs[3]}
             setUrl={(url) => handleFileLoaded(3, url)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>

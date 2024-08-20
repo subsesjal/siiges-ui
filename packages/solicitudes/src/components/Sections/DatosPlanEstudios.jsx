@@ -8,6 +8,7 @@ import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstud
 import SolicitudContext from '../utils/Context/solicitudContext';
 import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 // eslint-disable-next-line react/prop-types
 export default function DatosPlanEstudios({ disabled }) {
@@ -16,6 +17,9 @@ export default function DatosPlanEstudios({ disabled }) {
   const {
     form, setForm, error, setError, setErrors, modalidad,
   } = useContext(SolicitudContext);
+
+  // Use the custom hook for section ID 1
+  const isSectionDisabled = useSectionDisabled(1);
 
   const handleOnChange = (e) => {
     const { name, value } = e?.target || {};
