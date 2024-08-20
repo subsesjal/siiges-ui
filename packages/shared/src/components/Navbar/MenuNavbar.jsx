@@ -5,6 +5,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
@@ -81,6 +82,12 @@ export default function MenuNavbar() {
           </MenuItem>
         </Link>
         <Divider />
+        <MenuItem>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Ajustes
+        </MenuItem>
         <Link href="/notificaciones">
           <MenuItem>
             <ListItemIcon>

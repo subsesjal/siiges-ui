@@ -56,7 +56,6 @@ function SolicitudesActions({ id, estatus }) {
       message: `Funcionalidad pendiente, intento eliminar solicitud: ${id}`,
       type: 'error',
     });
-  };
 
   const handleDownload = () => {
     setOpenDownload(false);
@@ -110,21 +109,23 @@ function SolicitudesActions({ id, estatus }) {
         <Typography>
           ¿Está seguro que quiere eliminar esta solicitud?
         </Typography>
-        <ButtonsForm cancel={() => setOpenDelete(false)} confirm={handleDelete} confirmText="Confirmar" />
+        <ButtonsForm cancel={() => setOpenDelete(false)} confirm={handleDelete} />
       </DefaultModal>
-      <DefaultModal title="Descargar solicitud" open={openDownload} setOpen={setOpenDownload}>
+      <DefaultModal title="Confirmación" open={openDownload} setOpen={setOpenDownload}>
         <Typography>
-          ¿Está seguro que quiere descargar esta solicitud con los siguientes comentarios?
+          ¿Está seguro que quiere descargar esta solicitud?
         </Typography>
         <TextField
           fullWidth
-          multiline
-          rows={4}
+          label="Comentarios"
+          placeholder="comentarios"
           value={comments}
           onChange={(e) => setComments(e.target.value)}
-          label="Comentarios"
+          multiline
+          rows={4}
+          margin="normal"
         />
-        <ButtonsForm cancel={() => setOpenDownload(false)} confirm={handleDownload} confirmText="Descargar" />
+        <ButtonsForm cancel={() => setOpenDownload(false)} confirm={handleDownload} />
       </DefaultModal>
     </>
   );

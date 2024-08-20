@@ -47,7 +47,7 @@ function ChangeAddress() {
     if (typeof data === 'object' && method === 'POST' && data) {
       setNoti({
         open: true,
-        message: 'Registro Exitoso',
+        message: 'Refrendo creado correctamente',
         type: 'success',
       });
       router.push({
