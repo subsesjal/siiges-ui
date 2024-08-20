@@ -56,7 +56,6 @@ function SolicitudesActions({ id, estatus }) {
       message: `Funcionalidad pendiente, intento eliminar solicitud: ${id}`,
       type: 'error',
     });
-  };
 
   const handleDownload = () => {
     setOpenDownload(false);

@@ -148,8 +148,8 @@ export default function InstitucionView({ institucion, session }) {
                   ${institucion?.rector?.persona?.apellidoMaterno}
                   `}
                   />
-                  <ListSubtitle text="" />
-                  <ListSubtitle text="" />
+                  <ListSubtitle text={institucion?.rector?.persona?.celular} />
+                  <ListSubtitle text={institucion?.rector?.persona?.telefono} />
                 </List>
               </Grid>
             </Grid>
@@ -226,7 +226,7 @@ export default function InstitucionView({ institucion, session }) {
                           }
                         />
                         <ListSubtitle text={
-                          institucion?.ratificacionesNombre[0]?.nombrePropuesto2
+                          institucion?.ratificacionesNombre[0]?.nombrePropuesto3
                           }
                         />
                       </List>
@@ -291,6 +291,8 @@ InstitucionView.propTypes = {
         nombre: PropTypes.string,
         apellidoPaterno: PropTypes.string,
         apellidoMaterno: PropTypes.string,
+        celular: PropTypes.string,
+        telefono: PropTypes.string,
         curp: PropTypes.string,
         correoPrimario: PropTypes.string,
       }),

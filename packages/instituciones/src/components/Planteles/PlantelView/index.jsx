@@ -8,6 +8,11 @@ import React from 'react';
 export default function PlantelViewForm({ data }) {
   const { directores, domicilio } = data;
   const director = directores[0]?.persona;
+  const tipoInmuebleMap = {
+    1: 'Construido',
+    2: 'Adaptado',
+    3: 'Mixto',
+  };
   return (
     <Grid container spacing={2} sx={{ m: 1 }}>
       <Typography variant="h6" sx={{ mt: 2 }}>
@@ -41,6 +46,7 @@ export default function PlantelViewForm({ data }) {
             <ListTitle text="Código Postal" />
             <ListTitle text="Municipio" />
             <ListTitle text="Clave de centro de trabajo" />
+            <ListTitle text="Tipo Inmueble" />
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -48,7 +54,8 @@ export default function PlantelViewForm({ data }) {
           <List>
             <ListSubtitle text={domicilio.codigoPostal} />
             <ListSubtitle text={domicilio.municipio.nombre} />
-            <ListSubtitle text={domicilio.calle} />
+            <ListSubtitle text={data.claveCentroTrabajo} />
+            <ListSubtitle text={tipoInmuebleMap[data.tipoInmuebleId] || ''} />
           </List>
         </Grid>
       </Grid>
@@ -100,8 +107,8 @@ export default function PlantelViewForm({ data }) {
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
         <Grid item xs>
           <List>
-            <ListSubtitle text="" />
-            <ListSubtitle text="" />
+            <ListSubtitle text={data.paginaWeb} />
+            <ListSubtitle text={data.redesSociales} />
           </List>
         </Grid>
       </Grid>
@@ -120,6 +127,7 @@ export default function PlantelViewForm({ data }) {
             <ListTitle text="Primer Apellido" />
             <ListTitle text="Segundo Apellido" />
             <ListTitle text="Género" />
+            <ListTitle text="CURP" />
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -129,6 +137,7 @@ export default function PlantelViewForm({ data }) {
             <ListSubtitle text={director?.apellidoPaterno} />
             <ListSubtitle text={director?.apellidoMaterno} />
             <ListSubtitle text={director?.sexo} />
+            <ListSubtitle text={director?.curp} />
           </List>
         </Grid>
         <Grid item xs>
@@ -162,12 +171,15 @@ PlantelViewForm.propTypes = {
         nombre: PropTypes.string,
       }),
     }),
+    tipoInmuebleId: PropTypes.number,
     correo1: PropTypes.string,
     correo2: PropTypes.string,
     correo3: PropTypes.string,
     telefono1: PropTypes.string,
     telefono2: PropTypes.string,
     telefono3: PropTypes.string,
+    paginaWeb: PropTypes.string,
+    redesSociales: PropTypes.string,
     claveCentroTrabajo: PropTypes.string,
     directores: PropTypes.arrayOf(
       PropTypes.shape({
@@ -178,6 +190,7 @@ PlantelViewForm.propTypes = {
           apellidoMaterno: PropTypes.string,
           sexo: PropTypes.string,
           nacionalidad: PropTypes.string,
+          curp: PropTypes.string,
           correoPrimario: PropTypes.string,
         }),
       }),

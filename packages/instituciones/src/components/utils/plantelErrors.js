@@ -90,7 +90,7 @@ export default function plantelErrors(form, setError, error) {
     },
     telefono1: () => {
       if (form.telefono1 === undefined || form.telefono1 === '' || !form.telefono1.match(validNumber)) {
-        setError({ ...error, telefono1: 'teléfono 1 inválido' });
+        setError({ ...error, telefono1: 'Teléfono 1 inválido' });
         return false;
       }
       if (form.telefono1.length !== 10) {
@@ -102,7 +102,7 @@ export default function plantelErrors(form, setError, error) {
     },
     telefono2: () => {
       if (form.telefono2 === undefined || form.telefono2 === '' || !form.telefono2.match(validNumber)) {
-        setError({ ...error, telefono2: 'teléfono 2 inválido' });
+        setError({ ...error, telefono2: 'Teléfono 2 inválido' });
         return false;
       }
       if (form.telefono2.length !== 10) {
@@ -110,6 +110,14 @@ export default function plantelErrors(form, setError, error) {
         return false;
       }
       setError({ ...error, telefono2: '' });
+      return true;
+    },
+    claveCentroTrabajo: () => {
+      if (form.claveCentroTrabajo === undefined || form.claveCentroTrabajo === '') {
+        setError({ ...error, claveCentroTrabajo: 'Clave de centro de trabajo inválido' });
+        return false;
+      }
+      setError({ ...error, claveCentroTrabajo: '' });
       return true;
     },
     nombre: () => {
