@@ -28,7 +28,7 @@ export default function InstitucionForm({
     if (accion === 'editar' && session.id) {
       if (institucion.id) {
         setForm({ id: institucion.id });
-        setTitle('Modificar Insitución');
+        setTitle('Modificar Institución');
       } else {
         router.back();
       }
