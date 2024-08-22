@@ -28,6 +28,7 @@ function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
         open: true,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
 =======
         message: `¡Ocurrio un error al borrar esta institución!: ${response.message}`,
@@ -35,6 +36,9 @@ function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
 =======
         message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
 >>>>>>> c8861c7 (correcion)
+=======
+        message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         type: 'error',
       });
     }

@@ -37,6 +37,7 @@ export default function MisInspecciones() {
         open: true,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: `¡Ocurrió un error al cargar las inspecciones!: ${error}`,
 =======
         message: `¡Ocurrio un error al cargar las inspecciones!: ${error}`,
@@ -44,6 +45,9 @@ export default function MisInspecciones() {
 =======
         message: `¡Ocurrió un error al cargar las inspecciones!: ${error}`,
 >>>>>>> c8861c7 (correcion)
+=======
+        message: `¡Ocurrió un error al cargar las inspecciones!: ${error}`,
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         type: 'error',
       });
     }

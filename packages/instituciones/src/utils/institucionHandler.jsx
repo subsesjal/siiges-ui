@@ -188,6 +188,7 @@ const errors = {
     !form.apellidoMaterno
       ? 'Segundo Apellido inválido'
 <<<<<<< HEAD
+<<<<<<< HEAD
       : '',
     setError,
   ),
@@ -204,6 +205,8 @@ const errors = {
       ? 'Teléfono inválido'
 =======
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
       : '',
     setError,
   ),

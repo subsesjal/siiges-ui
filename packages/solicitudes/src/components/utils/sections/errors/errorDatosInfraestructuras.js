@@ -48,6 +48,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
       if (form.ubicacion === undefined || form.ubicacion === '') {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         setError({ ...error, ubicacion: '¡Ubicación inválida!' });
 =======
         setError({ ...error, ubicacion: 'Ubicación inválida' });
@@ -55,6 +56,9 @@ export default function errorDatosInfraestructuras(form, setError, error) {
 =======
         setError({ ...error, ubicacion: '¡Ubicación inválida!' });
 >>>>>>> 063e4b7 (correcion)
+=======
+        setError({ ...error, ubicacion: '¡Ubicación inválida!' });
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         return false;
       }
       setError({ ...error, ubicacion: '' });
@@ -66,6 +70,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
           ...error,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           recursos: '¡Recursos materiales inválidos!',
 =======
           recursos: 'Recursos materiales inválidos',
@@ -73,6 +78,9 @@ export default function errorDatosInfraestructuras(form, setError, error) {
 =======
           recursos: '¡Recursos materiales inválidos!',
 >>>>>>> 063e4b7 (correcion)
+=======
+          recursos: '¡Recursos materiales inválidos!',
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         });
         return false;
       }
@@ -89,6 +97,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
             ...error,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             asignaturasInfraestructura: '¡Asignaturas inválidas!',
 =======
             asignaturasInfraestructura: 'Asignaturas inválidas',
@@ -96,6 +105,9 @@ export default function errorDatosInfraestructuras(form, setError, error) {
 =======
             asignaturasInfraestructura: '¡Asignaturas inválidas!',
 >>>>>>> 063e4b7 (correcion)
+=======
+            asignaturasInfraestructura: '¡Asignaturas inválidas!',
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
           });
           return false;
         }

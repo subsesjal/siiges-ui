@@ -221,6 +221,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   contener al menos una letra minúscula, una letra mayúscula, un
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                   carácter y un dígito.
 =======
                   caracter y un dígito.
@@ -228,6 +229,9 @@ export default function UsuarioForm({ session, accion, usuario }) {
 =======
                   caracter y un dígito.
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+                  caracter y un dígito.
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
                 </Typography>
               </Grid>
             </>

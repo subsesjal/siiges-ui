@@ -30,6 +30,7 @@ function DeleteDiligencia({ modal, hideModal, id }) {
           open: true,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           message: `¡Ocurrió un error al eliminar la diligencia!: ${error}`,
 =======
           message: `¡Ocurrio un error al eliminar la diligencia!: ${error}`,
@@ -37,6 +38,9 @@ function DeleteDiligencia({ modal, hideModal, id }) {
 =======
           message: `¡Ocurrió un error al eliminar la diligencia!: ${error}`,
 >>>>>>> c8861c7 (correcion)
+=======
+          message: `¡Ocurrió un error al eliminar la diligencia!: ${error}`,
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
           type: 'error',
         });
       });

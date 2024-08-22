@@ -8,6 +8,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       ) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         setError({ ...error, razonSocial: '¡Razón social inválida!' });
 =======
         setError({ ...error, razonSocial: 'Razón social inválida' });
@@ -15,6 +16,9 @@ export default function errorDatosInstitucion(form, setError, error) {
 =======
         setError({ ...error, razonSocial: '¡Razón social inválida!' });
 >>>>>>> 063e4b7 (correcion)
+=======
+        setError({ ...error, razonSocial: '¡Razón social inválida!' });
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         return false;
       }
       setError({ ...error, razonSocial: '' });
@@ -29,6 +33,7 @@ export default function errorDatosInstitucion(form, setError, error) {
           ...error,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           nombreInstitucion: '¡Nombre de institución inválido!',
 =======
           nombreInstitucion: 'Nombre de institución inválido',
@@ -36,6 +41,9 @@ export default function errorDatosInstitucion(form, setError, error) {
 =======
           nombreInstitucion: '¡Nombre de institución inválido!',
 >>>>>>> 063e4b7 (correcion)
+=======
+          nombreInstitucion: '¡Nombre de institución inválido!',
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         });
         return false;
       }
@@ -49,6 +57,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       ) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         setError({ ...error, historia: '¡Historia inválida!' });
 =======
         setError({ ...error, historia: 'Historia inválida' });
@@ -56,6 +65,9 @@ export default function errorDatosInstitucion(form, setError, error) {
 =======
         setError({ ...error, historia: '¡Historia inválida!' });
 >>>>>>> 063e4b7 (correcion)
+=======
+        setError({ ...error, historia: '¡Historia inválida!' });
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         return false;
       }
       setError({ ...error, historia: '' });
@@ -68,6 +80,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       ) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         setError({ ...error, vision: '¡Visión inválida!' });
 =======
         setError({ ...error, vision: 'Visión inválida' });
@@ -75,6 +88,9 @@ export default function errorDatosInstitucion(form, setError, error) {
 =======
         setError({ ...error, vision: '¡Visión inválida!' });
 >>>>>>> 063e4b7 (correcion)
+=======
+        setError({ ...error, vision: '¡Visión inválida!' });
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         return false;
       }
       setError({ ...error, vision: '' });
@@ -86,6 +102,7 @@ export default function errorDatosInstitucion(form, setError, error) {
           ...error,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           mision: '¡Misión inválida!',
 =======
           mision: 'Misión inválida',
@@ -93,6 +110,9 @@ export default function errorDatosInstitucion(form, setError, error) {
 =======
           mision: '¡Misión inválida!',
 >>>>>>> 063e4b7 (correcion)
+=======
+          mision: '¡Misión inválida!',
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         });
         return false;
       }
@@ -108,6 +128,7 @@ export default function errorDatosInstitucion(form, setError, error) {
           ...error,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           valoresInstitucionales: '¡Valores institucionales inválidos!',
 =======
           valoresInstitucionales: 'Valores institucionales inválidos',
@@ -115,6 +136,9 @@ export default function errorDatosInstitucion(form, setError, error) {
 =======
           valoresInstitucionales: '¡Valores institucionales inválidos!',
 >>>>>>> 063e4b7 (correcion)
+=======
+          valoresInstitucionales: '¡Valores institucionales inválidos!',
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         });
         return false;
       }

@@ -49,6 +49,7 @@ function ChangeAddress() {
         open: true,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: 'Registro Exitoso',
 =======
         message: '¡Refrendo creado correctamente!',
@@ -56,6 +57,9 @@ function ChangeAddress() {
 =======
         message: '¡Refrendo creado correctamente!',
 >>>>>>> f13bead (correcciones)
+=======
+        message: '¡Refrendo creado correctamente!',
+>>>>>>> 2d98c139b85e06c536a0986516579483abb5ae6d
         type: 'success',
       });
       router.push({
