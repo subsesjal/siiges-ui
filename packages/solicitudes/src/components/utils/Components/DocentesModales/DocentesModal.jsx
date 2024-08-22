@@ -24,18 +24,18 @@ import {
 import useDocente from '../../getDocente';
 
 const errorDatosDocentes = {
-  tipodocente: 'Nombre invalido',
-  nombre: 'Nombre invalido',
+  tipodocente: 'Nombre inválido',
+  nombre: 'Nombre inválido',
   apellidoPaterno: 'Primer Apellido inválido',
   apellidoMaterno: 'Segundo Apellido inválido',
   tipoDocente: 'Seleccione un nivel',
-  'persona.nombre': 'Nombre invalido',
+  'persona.nombre': 'Nombre inválido',
   'persona.apellidoPaterno': 'Primer Apellido inválido',
   'persona.apellidoMaterno': 'Segundo Apellido inválido',
   asignaturasDocentes: 'Seleccione una asignatura',
   tipoContratacion: 'Seleccione un tipo de contratación',
-  antiguedad: 'Antigüedad invalida',
-  experiencias: 'Experiencia laboral invalida',
+  antiguedad: 'Antigüedad inválida',
+  experiencias: 'Experiencia laboral inválida',
   formacion_1_nivelId: 'Seleccione un Nivel',
   formacion_1_nombre: 'Nombre inválido',
   formacion_1_descripcion: 'Seleccione un documento',

@@ -14,7 +14,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
     },
     nombre: () => {
       if (form.nombre === undefined || form.nombre === '') {
-        setError({ ...error, nombre: 'Nombre invalido' });
+        setError({ ...error, nombre: 'Nombre inválido' });
         return false;
       }
       setError({ ...error, nombre: '' });
@@ -26,7 +26,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
         || form.capacidad === ''
         || !validNumber.test(form.capacidad)
       ) {
-        setError({ ...error, capacidad: 'Capacidad invalidos' });
+        setError({ ...error, capacidad: 'Capacidad inválida' });
         return false;
       }
       setError({ ...error, capacidad: '' });
@@ -38,7 +38,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
         || form.metros === ''
         || !validNumber.test(form.metros)
       ) {
-        setError({ ...error, metros: 'Metros cuadrados invalidos' });
+        setError({ ...error, metros: 'Metros cuadrados inválidos' });
         return false;
       }
       setError({ ...error, metros: '' });
@@ -46,7 +46,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
     },
     ubicacion: () => {
       if (form.ubicacion === undefined || form.ubicacion === '') {
-        setError({ ...error, ubicacion: 'Ubicacion invalida' });
+        setError({ ...error, ubicacion: 'Ubicación inválida' });
         return false;
       }
       setError({ ...error, ubicacion: '' });
@@ -56,7 +56,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
       if (form.recursos === undefined || form.recursos === '') {
         setError({
           ...error,
-          recursos: 'Recursos materiales invalidos',
+          recursos: 'Recursos materiales inválidos',
         });
         return false;
       }
@@ -71,7 +71,7 @@ export default function errorDatosInfraestructuras(form, setError, error) {
         ) {
           setError({
             ...error,
-            asignaturasInfraestructura: 'Asignaturas invalidas',
+            asignaturasInfraestructura: 'Asignaturas inválidas',
           });
           return false;
         }
