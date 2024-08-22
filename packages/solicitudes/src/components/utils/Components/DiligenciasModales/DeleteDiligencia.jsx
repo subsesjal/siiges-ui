@@ -29,10 +29,14 @@ function DeleteDiligencia({ modal, hideModal, id }) {
         setNoti({
           open: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
           message: `¡Ocurrió un error al eliminar la diligencia!: ${error}`,
 =======
           message: `¡Ocurrio un error al eliminar la diligencia!: ${error}`,
 >>>>>>> f13bead (correcciones)
+=======
+          message: `¡Ocurrió un error al eliminar la diligencia!: ${error}`,
+>>>>>>> c8861c7 (correcion)
           type: 'error',
         });
       });

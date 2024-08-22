@@ -36,10 +36,14 @@ export default function MisInspecciones() {
       setNoti({
         open: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: `¡Ocurrió un error al cargar las inspecciones!: ${error}`,
 =======
         message: `¡Ocurrio un error al cargar las inspecciones!: ${error}`,
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+        message: `¡Ocurrió un error al cargar las inspecciones!: ${error}`,
+>>>>>>> c8861c7 (correcion)
         type: 'error',
       });
     }

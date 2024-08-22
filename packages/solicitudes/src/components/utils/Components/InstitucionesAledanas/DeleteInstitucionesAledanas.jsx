@@ -27,10 +27,14 @@ function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
       setNoti({
         open: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
 =======
         message: `¡Ocurrio un error al borrar esta institución!: ${response.message}`,
 >>>>>>> f13bead (correcciones)
+=======
+        message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
+>>>>>>> c8861c7 (correcion)
         type: 'error',
       });
     }
