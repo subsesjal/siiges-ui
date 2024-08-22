@@ -42,7 +42,7 @@ export default function solicitudesFolios() {
       setNoti({
         open: true,
         message:
-          'Error, revise que todos los campos estén seleccionados correctamente',
+          '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     }
@@ -57,7 +57,7 @@ export default function solicitudesFolios() {
       setNoti({
         open: true,
         message:
-          'Error, revise que todos los campos estén seleccionados correctamente',
+          '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     }

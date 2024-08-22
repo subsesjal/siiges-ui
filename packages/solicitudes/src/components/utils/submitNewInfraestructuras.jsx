@@ -46,7 +46,7 @@ const handleCreate = (
       setInitialValues({});
       setNoti({
         open: true,
-        message: 'Se creó la infraestructura exitosamente',
+        message: '¡Se creó la infraestructura exitosamente!',
         type: 'success',
       });
       setLoading(false);

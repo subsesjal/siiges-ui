@@ -24,14 +24,14 @@ export default function submitEditPlantel({
     .then(
       setNoti({
         open: true,
-        message: 'Se editó el plantel exitosamente',
+        message: '¡Se editó el plantel exitosamente!',
         type: 'success',
       }),
     )
     .catch(() => {
       setNoti({
         open: true,
-        message: 'Algo salió mal, revisa que los campos esten correctos',
+        message: 'Algo salió mal, revisa que los campos estén correctos',
         type: 'error',
       });
     });

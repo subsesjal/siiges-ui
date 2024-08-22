@@ -26,7 +26,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
         if (error) {
           setNoti({
             open: true,
-            message: `Error al obtener planteles: ${error.message}`,
+            message: `¡Error al obtener planteles!: ${error.message}`,
             type: 'error',
           });
           setPlanteles([]);
@@ -51,13 +51,13 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           if (error.message === '404') {
             setNoti({
               open: true,
-              message: 'No se encontraron programas para el plantel seleccionado.',
+              message: '¡No se encontraron programas para el plantel seleccionado!.',
               type: 'warning',
             });
           } else {
             setNoti({
               open: true,
-              message: `Error al obtener programas: ${error.message}`,
+              message: `¡Error al obtener programas!: ${error.message}`,
               type: 'error',
             });
           }
@@ -65,7 +65,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           if (data.programas.length === 0) {
             setNoti({
               open: true,
-              message: 'No se encontraron programas para el plantel seleccionado.',
+              message: '¡No se encontraron programas para el plantel seleccionado!.',
               type: 'warning',
             });
           }

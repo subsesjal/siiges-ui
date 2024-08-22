@@ -126,7 +126,7 @@ export default function RecepcionFormatos() {
     const { name, value } = event.target;
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: value ? '' : 'Este campo es obligatorio',
+      [name]: value ? '' : '¡Este campo es obligatorio!',
     }));
   };
 
@@ -176,10 +176,10 @@ export default function RecepcionFormatos() {
     // Validate required fields
     const newErrors = {};
     if (!form.fechaRecepcion) {
-      newErrors.fechaRecepcion = 'Este campo es obligatorio';
+      newErrors.fechaRecepcion = '¡Este campo es obligatorio!';
     }
     if (!form.oficioAdmisorio) {
-      newErrors.oficioAdmisorio = 'Este campo es obligatorio';
+      newErrors.oficioAdmisorio = '¡Este campo es obligatorio!';
     }
 
     if (Object.keys(newErrors).length === 0) {

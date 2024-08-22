@@ -63,7 +63,7 @@ export default function submitDescripcionPlantel(
       } else {
         setNoti({
           open: true,
-          message: 'Se cargaron los datos exitosamente!',
+          message: '¡Se cargaron los datos exitosamente!',
           type: 'success',
         });
       }

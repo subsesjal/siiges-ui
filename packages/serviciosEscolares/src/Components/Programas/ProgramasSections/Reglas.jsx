@@ -67,7 +67,7 @@ export default function Reglas() {
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Reglas actualizadas con éxito',
+        message: '¡Reglas actualizadas con éxito!',
         type: 'success',
       });
       router.back();
@@ -76,7 +76,7 @@ export default function Reglas() {
       setLoading(false);
       setNoti({
         open: true,
-        message: `Error al actualizar las reglas: ${error.message}`,
+        message: `¡Error al actualizar las reglas!: ${error.message}`,
         type: 'error',
       });
       return null;

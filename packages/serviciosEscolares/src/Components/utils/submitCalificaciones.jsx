@@ -35,7 +35,7 @@ export default async function submitCalificaciones(
 
     setNoti({
       open: true,
-      message: 'Carga de calificaciones exitoso',
+      message: '¡Carga de calificaciones exitoso!',
       type: 'success',
     });
   } catch (err) {
