@@ -43,7 +43,7 @@ const handleSubmit = (
         );
         setNoti({
           open: true,
-          message: 'Docente editado con éxito',
+          message: '¡Docente editado con éxito!',
           type: 'success',
         });
       } else {
@@ -53,7 +53,7 @@ const handleSubmit = (
         setInitialValues({});
         setNoti({
           open: true,
-          message: 'Docente creado con éxito',
+          message: '¡Docente creado con éxito!',
           type: 'success',
         });
       }

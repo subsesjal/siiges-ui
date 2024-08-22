@@ -39,7 +39,7 @@ export default function NuevaInspeccion() {
     if (data && method === 'POST' && error === null) {
       setNoti({
         open: true,
-        message: 'Inspección guardada correctamente',
+        message: '¡Inspección guardada correctamente!',
         type: 'success',
       });
       router.back();
@@ -47,7 +47,7 @@ export default function NuevaInspeccion() {
     if (error) {
       setNoti({
         open: true,
-        message: 'Error al guardar la inspección',
+        message: '¡Error al guardar la inspección!',
         type: 'error',
       });
     }

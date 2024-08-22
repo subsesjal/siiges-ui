@@ -25,7 +25,7 @@ export default function BotonesInpeccion({ id }) {
       .then(() => {
         setNoti({
           open: true,
-          message: 'Acta generada con exito',
+          message: '¡Acta generada con éxito!',
           type: 'success',
         });
         setOpen(false);

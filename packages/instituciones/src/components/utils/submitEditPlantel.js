@@ -24,14 +24,22 @@ export default function submitEditPlantel({
     .then(
       setNoti({
         open: true,
+<<<<<<< HEAD
         message: 'Se editó el plantel exitosamente',
+=======
+        message: '¡Se editó el plantel exitosamente!',
+>>>>>>> 1fbf427 (correcciones de ortografía y archivos)
         type: 'success',
       }),
     )
     .catch(() => {
       setNoti({
         open: true,
+<<<<<<< HEAD
         message: 'Algo salió mal, revisa que los campos esten correctos',
+=======
+        message: '¡Algo salió mal, revisa que los campos estén correctos!',
+>>>>>>> 1fbf427 (correcciones de ortografía y archivos)
         type: 'error',
       });
     });
