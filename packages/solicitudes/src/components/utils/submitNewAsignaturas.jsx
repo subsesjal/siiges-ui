@@ -34,7 +34,7 @@ const handleCreate = async (
       setNoti({
         open: true,
         message:
-          'Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo.',
+          '¡Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo.!',
         type: 'error',
       });
       setLoading(false);

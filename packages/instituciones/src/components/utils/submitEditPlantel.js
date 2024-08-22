@@ -31,7 +31,7 @@ export default function submitEditPlantel({
     .catch(() => {
       setNoti({
         open: true,
-        message: 'Algo salió mal, revisa que los campos estén correctos',
+        message: '¡Algo salió mal, revisa que los campos estén correctos!',
         type: 'error',
       });
     });
