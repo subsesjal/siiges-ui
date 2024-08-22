@@ -53,7 +53,7 @@ function SolicitudesActions({ id, estatus }) {
     setOpenDelete(false);
     setNoti({
       open: true,
-      message: `Funcionalidad pendiente, intento eliminar solicitud: ${id}`,
+      message: `¡Funcionalidad pendiente, intento eliminar solicitud!: ${id}`,
       type: 'error',
     });
   };

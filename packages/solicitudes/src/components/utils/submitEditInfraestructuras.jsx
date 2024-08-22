@@ -52,7 +52,7 @@ const handleEdit = (
       setInitialValues({});
       setNoti({
         open: true,
-        message: 'Exito al cargar los datos de infraestructura',
+        message: '¡Ëxito al cargar los datos de infraestructura!',
         type: 'success',
       });
       setLoading(false);

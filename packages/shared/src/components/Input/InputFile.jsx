@@ -29,7 +29,7 @@ export default function InputFile({
   const handleSave = async () => {
     try {
       if (files.length === 0) {
-        throw new Error('Algo salió mal, ingrese un documento');
+        throw new Error('¡Algo salió mal, ingrese un documento!');
       }
 
       const formData = await fileToFormData(files[0]);

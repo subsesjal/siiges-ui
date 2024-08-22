@@ -156,7 +156,7 @@ export default function AsignaturasFormacionCreateModal({
         </Grid>
         <Grid item xs={12}>
           <BasicSelect
-            title="Seriacion"
+            title="Seriación"
             name="seriacion"
             value={formAsignaturasFormacion.seriacion || ''}
             options={asignaturasTotalList || []}

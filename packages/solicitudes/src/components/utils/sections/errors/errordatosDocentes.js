@@ -1,12 +1,12 @@
 const errorDatosDocentes = {
   tipodocente: 'Nombre inválido',
   nombre: 'Nombre inválido',
-  apellidoPaterno: 'Apellido Paterno inválido',
-  apellidoMaterno: 'Apellido Materno inválido',
+  apellidoPaterno: 'Primer Apellido inválido',
+  apellidoMaterno: 'Segundo Apellido inválido',
   tipoDocente: 'Seleccione un nivel',
   'persona.nombre': 'Nombre inválido',
-  'persona.apellidoPaterno': 'Apellido paterno inválido',
-  'persona.apellidoMaterno': 'Apellido materno inválido',
+  'persona.apellidoPaterno': 'Primer Apellido inválido',
+  'persona.apellidoMaterno': 'Segundo Apellido inválido',
   asignaturasDocentes: 'Seleccione una asignatura',
   tipoContratacion: 'Seleccione un tipo de contratación',
   antiguedad: 'Antigüedad inválida',
@@ -15,12 +15,12 @@ const errorDatosDocentes = {
   formacion_1_nombre: 'Nombre inválido',
   formacion_1_descripcion: 'Seleccione un documento',
   formacion_1_fechaGraduado: 'Seleccione una fecha',
-  formacion_1_institucion: 'Institución no inválida',
+  formacion_1_institucion: 'Institución inválida',
   formacion_2_nivelId: 'Seleccione un Nivel',
   formacion_2_nombre: 'Nombre inválido',
   formacion_2_descripcion: 'Seleccione un documento',
   formacion_2_fechaGraduado: 'Seleccione una fecha',
-  formacion_2_institucion: 'Institución no inválida',
+  formacion_2_institucion: 'Institución inválida',
 };
 
 export default errorDatosDocentes;

@@ -3,7 +3,7 @@ export default function errorIngreso(form, setError, error) {
   const errors = {
     metodosInduccion: () => {
       if (formData.programa?.metodosInduccion === undefined || formData.programa?.metodosInduccion === '') {
-        setError({ ...error, metodosInduccion: 'Métodos de inducción inválidos' });
+        setError({ ...error, metodosInduccion: '¡Métodos de inducción inválidos!' });
         return false;
       }
       setError({ ...error, metodosInduccion: '' });

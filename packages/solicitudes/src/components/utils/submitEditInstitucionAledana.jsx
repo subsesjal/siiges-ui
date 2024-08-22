@@ -28,7 +28,7 @@ const handleEdit = async (
     const isFormValid = Object.keys(errors).every((campo) => errors[campo]());
 
     if (!isFormValid) {
-      throw new Error('Algo salió mal, revisa que los campos estén correctos');
+      throw new Error('¡Algo salió mal, revisa que los campos estén correctos!');
     }
 
     const response = await fetch(url, {
@@ -61,7 +61,7 @@ const handleEdit = async (
     setInitialValues({});
     setNoti({
       open: true,
-      message: 'Exito, no hubo problemas en esta sección',
+      message: '¡Éxito, no hubo problemas en esta sección!',
       type: 'success',
     });
     setLoading(false);

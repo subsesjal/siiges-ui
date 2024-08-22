@@ -35,7 +35,7 @@ export default function MisInspecciones() {
     if (error && userId) {
       setNoti({
         open: true,
-        message: `Ocurrio un error al cargar las inspecciones: ${error}`,
+        message: `¡Ocurrio un error al cargar las inspecciones!: ${error}`,
         type: 'error',
       });
     }
