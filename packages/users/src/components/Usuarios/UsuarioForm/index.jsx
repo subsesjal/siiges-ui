@@ -220,10 +220,14 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   La contraseña debe contener entre 8 y 25 caracteres, así como
                   contener al menos una letra minúscula, una letra mayúscula, un
 <<<<<<< HEAD
+<<<<<<< HEAD
                   carácter y un dígito.
 =======
                   caracter y un dígito.
 >>>>>>> 1fbf427 (correcciones de ortografía y archivos)
+=======
+                  caracter y un dígito.
+>>>>>>> 310fb93 (correcciones de ortografía y archivos)
                 </Typography>
               </Grid>
             </>

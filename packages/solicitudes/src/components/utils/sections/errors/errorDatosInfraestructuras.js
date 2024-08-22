@@ -46,7 +46,11 @@ export default function errorDatosInfraestructuras(form, setError, error) {
     },
     ubicacion: () => {
       if (form.ubicacion === undefined || form.ubicacion === '') {
+<<<<<<< HEAD
         setError({ ...error, ubicacion: '¡Ubicación inválida!' });
+=======
+        setError({ ...error, ubicacion: 'Ubicación inválida' });
+>>>>>>> 310fb93 (correcciones de ortografía y archivos)
         return false;
       }
       setError({ ...error, ubicacion: '' });
@@ -56,7 +60,11 @@ export default function errorDatosInfraestructuras(form, setError, error) {
       if (form.recursos === undefined || form.recursos === '') {
         setError({
           ...error,
+<<<<<<< HEAD
           recursos: '¡Recursos materiales inválidos!',
+=======
+          recursos: 'Recursos materiales inválidos',
+>>>>>>> 310fb93 (correcciones de ortografía y archivos)
         });
         return false;
       }
@@ -71,7 +79,11 @@ export default function errorDatosInfraestructuras(form, setError, error) {
         ) {
           setError({
             ...error,
+<<<<<<< HEAD
             asignaturasInfraestructura: '¡Asignaturas inválidas!',
+=======
+            asignaturasInfraestructura: 'Asignaturas inválidas',
+>>>>>>> 310fb93 (correcciones de ortografía y archivos)
           });
           return false;
         }

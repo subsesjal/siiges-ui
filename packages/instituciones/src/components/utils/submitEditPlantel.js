@@ -25,10 +25,14 @@ export default function submitEditPlantel({
       setNoti({
         open: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: 'Se editó el plantel exitosamente',
 =======
         message: '¡Se editó el plantel exitosamente!',
 >>>>>>> 1fbf427 (correcciones de ortografía y archivos)
+=======
+        message: '¡Se editó el plantel exitosamente!',
+>>>>>>> 310fb93 (correcciones de ortografía y archivos)
         type: 'success',
       }),
     )
@@ -36,10 +40,14 @@ export default function submitEditPlantel({
       setNoti({
         open: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: 'Algo salió mal, revisa que los campos esten correctos',
 =======
         message: '¡Algo salió mal, revisa que los campos estén correctos!',
 >>>>>>> 1fbf427 (correcciones de ortografía y archivos)
+=======
+        message: '¡Algo salió mal, revisa que los campos estén correctos!',
+>>>>>>> 310fb93 (correcciones de ortografía y archivos)
         type: 'error',
       });
     });
