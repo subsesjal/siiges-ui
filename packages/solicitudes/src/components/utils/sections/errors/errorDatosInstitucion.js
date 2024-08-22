@@ -7,10 +7,14 @@ export default function errorDatosInstitucion(form, setError, error) {
         || formData.programa?.razonSocial === ''
       ) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         setError({ ...error, razonSocial: '¡Razón social inválida!' });
 =======
         setError({ ...error, razonSocial: 'Razón social inválida' });
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+        setError({ ...error, razonSocial: '¡Razón social inválida!' });
+>>>>>>> 063e4b7 (correcion)
         return false;
       }
       setError({ ...error, razonSocial: '' });
@@ -24,10 +28,14 @@ export default function errorDatosInstitucion(form, setError, error) {
         setError({
           ...error,
 <<<<<<< HEAD
+<<<<<<< HEAD
           nombreInstitucion: '¡Nombre de institución inválido!',
 =======
           nombreInstitucion: 'Nombre de institución inválido',
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+          nombreInstitucion: '¡Nombre de institución inválido!',
+>>>>>>> 063e4b7 (correcion)
         });
         return false;
       }
@@ -40,10 +48,14 @@ export default function errorDatosInstitucion(form, setError, error) {
         || formData.programa?.historia === ''
       ) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         setError({ ...error, historia: '¡Historia inválida!' });
 =======
         setError({ ...error, historia: 'Historia inválida' });
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+        setError({ ...error, historia: '¡Historia inválida!' });
+>>>>>>> 063e4b7 (correcion)
         return false;
       }
       setError({ ...error, historia: '' });
@@ -55,10 +67,14 @@ export default function errorDatosInstitucion(form, setError, error) {
         || formData.programa?.vision === ''
       ) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         setError({ ...error, vision: '¡Visión inválida!' });
 =======
         setError({ ...error, vision: 'Visión inválida' });
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+        setError({ ...error, vision: '¡Visión inválida!' });
+>>>>>>> 063e4b7 (correcion)
         return false;
       }
       setError({ ...error, vision: '' });
@@ -69,10 +85,14 @@ export default function errorDatosInstitucion(form, setError, error) {
         setError({
           ...error,
 <<<<<<< HEAD
+<<<<<<< HEAD
           mision: '¡Misión inválida!',
 =======
           mision: 'Misión inválida',
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+          mision: '¡Misión inválida!',
+>>>>>>> 063e4b7 (correcion)
         });
         return false;
       }
@@ -87,10 +107,14 @@ export default function errorDatosInstitucion(form, setError, error) {
         setError({
           ...error,
 <<<<<<< HEAD
+<<<<<<< HEAD
           valoresInstitucionales: '¡Valores institucionales inválidos!',
 =======
           valoresInstitucionales: 'Valores institucionales inválidos',
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+          valoresInstitucionales: '¡Valores institucionales inválidos!',
+>>>>>>> 063e4b7 (correcion)
         });
         return false;
       }

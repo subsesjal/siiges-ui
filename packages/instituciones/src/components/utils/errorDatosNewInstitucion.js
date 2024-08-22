@@ -11,10 +11,14 @@ export default function errorDatosNewInstitucion(form, setError, error) {
     razonSocial: () => {
       if (form.razonSocial === undefined || form.razonSocial === '') {
 <<<<<<< HEAD
+<<<<<<< HEAD
         setError({ ...error, razonSocial: '¡Razón social inválida!' });
 =======
         setError({ ...error, razonSocial: 'Razón social inválida' });
 >>>>>>> 310fb93 (correcciones de ortografía y archivos)
+=======
+        setError({ ...error, razonSocial: '¡Razón social inválida!' });
+>>>>>>> 063e4b7 (correcion)
         return false;
       }
       setError({ ...error, razonSocial: '' });
