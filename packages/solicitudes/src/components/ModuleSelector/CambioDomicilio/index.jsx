@@ -48,10 +48,14 @@ function ChangeAddress() {
       setNoti({
         open: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: 'Registro Exitoso',
 =======
         message: '¡Refrendo creado correctamente!',
 >>>>>>> 6b947f4 (correcciones)
+=======
+        message: '¡Refrendo creado correctamente!',
+>>>>>>> f13bead (correcciones)
         type: 'success',
       });
       router.push({
