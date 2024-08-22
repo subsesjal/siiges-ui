@@ -60,7 +60,7 @@ const handleEdit = (
     .catch((error) => {
       setNoti({
         open: true,
-        message: `Error al cargar los datos de infraestructura: ${error}`,
+        message: `¡Error al cargar los datos de infraestructura!: ${error}`,
         type: 'error',
       });
       setLoading(false);

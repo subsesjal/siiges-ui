@@ -60,7 +60,7 @@ export default function ModuleHeader({
     } catch (error) {
       setNoti({
         open: true,
-        message: error.message || 'Hubo un error al completar la solicitud',
+        message: error.message || '¡Hubo un error al completar la solicitud!',
         type: 'error',
       });
       setLoading(false);
