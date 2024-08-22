@@ -12,7 +12,7 @@ export default function submitNewPlantel({
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
+      message: '¡Algo salió mal, revisa que los campos estén correctos!',
       type: 'error',
     });
     return;
@@ -40,7 +40,7 @@ export default function submitNewPlantel({
     .then(
       setNoti({
         open: true,
-        message: 'Se creo el plantel exitosamente',
+        message: '¡Se creó el plantel exitosamente!',
         type: 'success',
       }),
       setTimeout(() => {
@@ -54,7 +54,7 @@ export default function submitNewPlantel({
     .catch(() => {
       setNoti({
         open: true,
-        message: 'Algo salió mal, revisa que los campos esten correctos',
+        message: '¡Algo salió mal, revisa que los campos estén correctos!',
         type: 'error',
       });
     });

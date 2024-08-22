@@ -14,7 +14,7 @@ export default function updateInstitucion(
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
+      message: '¡Algo salió mal, revisa que los campos estén correctos!',
       type: 'error',
     });
     return;
@@ -43,7 +43,7 @@ export default function updateInstitucion(
     .then(() => {
       setNoti({
         open: true,
-        message: 'Exito, no hubo problemas en esta sección',
+        message: '¡Éxito, no hubo problemas en esta sección!',
         type: 'success',
       });
     })

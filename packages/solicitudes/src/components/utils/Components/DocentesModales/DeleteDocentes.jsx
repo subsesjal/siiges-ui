@@ -18,7 +18,7 @@ function DeleteDocentes({
         console.log('Record deleted:', response);
         setNoti({
           open: true,
-          message: 'Docente eliminado con éxito',
+          message: '¡Docente eliminado con éxito!',
           type: 'success',
         });
         setLoading(false);
@@ -28,7 +28,7 @@ function DeleteDocentes({
       .catch((error) => {
         setNoti({
           open: true,
-          message: `Error al eliminar el docente: ${error.message}`,
+          message: `¡Error al eliminar el docente!: ${error.message}`,
           type: 'error',
         });
         setLoading(false);

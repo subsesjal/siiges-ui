@@ -18,14 +18,14 @@ export default function errorDatosGeneralesEvaluacion(form, setError, error) {
   };
 
   const errors = {
-    fecha: () => validateField('fecha', 'Fecha de dictamen invalida'),
-    evaluadorId: () => validateField('evaluadorId', 'Evaluador invalido'),
+    fecha: () => validateField('fecha', 'Fecha de dictamen inválida'),
+    evaluadorId: () => validateField('evaluadorId', 'Evaluador inválido'),
     numero: () => validateField(
       'numero',
-      'Cumplimiento numerico invalidos',
+      'Cumplimiento númerico inválido',
       true,
     ),
-    valoracion: () => validateField('valoracion', 'Valoracion cualitativa invalido'),
+    valoracion: () => validateField('valoracion', 'Valoración cualitativa inválida'),
   };
 
   return errors;
