@@ -6,7 +6,7 @@ export default function errorDatosInstitucion(form, setError, error) {
         formData.programa?.razonSocial === undefined
         || formData.programa?.razonSocial === ''
       ) {
-        setError({ ...error, razonSocial: 'Razón social inválida' });
+        setError({ ...error, razonSocial: '¡Razón social inválida!' });
         return false;
       }
       setError({ ...error, razonSocial: '' });

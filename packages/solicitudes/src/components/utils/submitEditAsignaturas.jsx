@@ -61,7 +61,7 @@ const handleEdit = async (
     setNoti({
       open: true,
       message:
-        'Ocurrio un error al guardar los datos. Porfavor intentelo de nuevo.',
+        '¡Ocurrió un error al guardar los datos. Porfavor intentelo de nuevo!.',
       type: 'error',
     });
   }

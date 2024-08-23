@@ -39,7 +39,7 @@ export default function NuevaInspeccion() {
     if (data && method === 'POST' && error === null) {
       setNoti({
         open: true,
-        message: 'Inspección guardada correctamente',
+        message: '¡Inspección guardada correctamente!',
         type: 'success',
       });
       router.back();
@@ -47,7 +47,7 @@ export default function NuevaInspeccion() {
     if (error) {
       setNoti({
         open: true,
-        message: 'Error al guardar la inspección',
+        message: '¡Error al guardar la inspección!',
         type: 'error',
       });
     }
@@ -86,13 +86,13 @@ export default function NuevaInspeccion() {
       if (response.statusCode === 200 || response.statusCode === 201) {
         setNoti({
           open: true,
-          message: 'Comentario enviado correctamente',
+          message: '¡Comentario enviado correctamente!',
           type: 'success',
         });
       } else {
         setNoti({
           open: true,
-          message: response.errorMessage || 'Error al enviar el comentario',
+          message: response.errorMessage || '¡Error al enviar el comentario!',
           type: 'error',
         });
       }
@@ -100,7 +100,7 @@ export default function NuevaInspeccion() {
     } catch (error) {
       setNoti({
         open: true,
-        message: 'Error al enviar el comentario',
+        message: '¡Error al enviar el comentario!',
         type: 'error',
       });
     }

@@ -75,7 +75,7 @@ export default function FormAlumno({ type, alumno, setId }) {
         });
         setNoti({
           open: true,
-          message: 'Alumno actualizado con éxito',
+          message: '¡Alumno actualizado con éxito!',
           type: 'success',
         });
         setLoading(false);

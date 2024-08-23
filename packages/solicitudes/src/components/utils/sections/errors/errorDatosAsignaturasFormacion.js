@@ -3,7 +3,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
   const errors = {
     gradoId: () => {
       if (form.gradoId === undefined || form.gradoId === '') {
-        setError({ ...error, gradoId: 'Seleccione un grado' });
+        setError({ ...error, gradoId: '¡Seleccione un grado!' });
         return false;
       }
       setError({ ...error, gradoId: '' });
@@ -11,7 +11,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
     },
     area: () => {
       if (form.area === undefined || form.area === '') {
-        setError({ ...error, area: 'Seleccione un área' });
+        setError({ ...error, area: '¡Seleccione un área!' });
         return false;
       }
       setError({ ...error, area: '' });
@@ -19,7 +19,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
     },
     nombre: () => {
       if (form.nombre === undefined || form.nombre === '') {
-        setError({ ...error, nombre: 'Nombre inválido' });
+        setError({ ...error, nombre: '¡Nombre inválido!' });
         return false;
       }
       setError({ ...error, nombre: '' });
@@ -27,7 +27,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
     },
     clave: () => {
       if (form.clave === undefined || form.clave === '') {
-        setError({ ...error, clave: 'Clave inválida' });
+        setError({ ...error, clave: '¡Clave inválida!' });
         return false;
       }
       setError({ ...error, clave: '' });
@@ -39,7 +39,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
         || form.creditos === ''
         || !validNumber.test(form.creditos)
       ) {
-        setError({ ...error, creditos: 'Créditos inválidos' });
+        setError({ ...error, creditos: '¡Créditos inválidos!' });
         return false;
       }
       setError({ ...error, creditos: '' });
@@ -52,7 +52,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
       ) {
         setError({
           ...error,
-          formacionEspecializada: 'Formación especializada inválida',
+          formacionEspecializada: '¡Formación especializada inválida!',
         });
         return false;
       }
@@ -65,7 +65,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
         || form.horasDocente === ''
         || !validNumber.test(form.horasDocente)
       ) {
-        setError({ ...error, horasDocente: 'Horas docente inválidas' });
+        setError({ ...error, horasDocente: '¡Horas docente inválidas!' });
         return false;
       }
       setError({ ...error, horasDocente: '' });
@@ -77,7 +77,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
         || form.horasIndependiente === ''
         || !validNumber.test(form.horasIndependiente)
       ) {
-        setError({ ...error, horasIndependiente: 'Horas independiente inválidas' });
+        setError({ ...error, horasIndependiente: '¡Horas independiente inválidas!' });
         return false;
       }
       setError({ ...error, horasIndependiente: '' });
