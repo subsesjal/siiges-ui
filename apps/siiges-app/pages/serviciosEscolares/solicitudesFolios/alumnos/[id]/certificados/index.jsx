@@ -107,6 +107,7 @@ export default function AlumnosCertificado() {
         programaId={programa}
         setRows={setRows}
         rowData={rowData}
+        title="Alumnos certificados"
       />
     </Layout>
   );

@@ -5,7 +5,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/router';
-import { ModalTitulo } from '@siiges-ui/serviciosescolares';
+import { ModalCertificado } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 
 const columns = (handleEdit) => [
@@ -99,7 +99,7 @@ export default function AlumnosTitulo() {
           />
         </Grid>
       </Grid>
-      <ModalTitulo
+      <ModalCertificado
         open={open}
         setOpen={setOpen}
         type={type}
@@ -107,6 +107,7 @@ export default function AlumnosTitulo() {
         programaId={programa}
         setRows={setRows}
         rowData={rowData}
+        title="Alumnos Titulos"
       />
     </Layout>
   );

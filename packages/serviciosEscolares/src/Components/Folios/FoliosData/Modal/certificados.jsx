@@ -22,6 +22,7 @@ export default function ModalCertificado({
   programaId,
   setRows,
   rowData,
+  title,
 }) {
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
@@ -74,7 +75,6 @@ export default function ModalCertificado({
   const handleConfirm = () => {
     setLoading(true);
 
-    // Format the dates to 'YYYY-MM-DDTHH:mm:ssZ' format
     const formattedForm = {
       ...form,
       fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
@@ -141,7 +141,7 @@ export default function ModalCertificado({
   };
 
   return (
-    <DefaultModal title="Alumnos Certificados" open={open} setOpen={setOpen}>
+    <DefaultModal title={title} open={open} setOpen={setOpen}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Input
@@ -207,4 +207,5 @@ ModalCertificado.propTypes = {
     fechaTermino: PropTypes.string,
     fechaElaboracion: PropTypes.string,
   }),
+  title: PropTypes.string.isRequired,
 };

@@ -48,7 +48,6 @@ export default function ModalTitulo({
   const handleConfirm = () => {
     setLoading(true);
 
-    // Format the dates to 'YYYY-MM-DDTHH:mm:ssZ' format
     const formattedForm = {
       ...form,
       fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
@@ -69,7 +68,7 @@ export default function ModalTitulo({
           if (type === 'edit') {
             newRow = {
               id: response.data.id,
-              name: alumno, // Retain the existing name
+              name: alumno,
               fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
               fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
             };

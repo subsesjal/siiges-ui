@@ -16,8 +16,8 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 
 export default function FoliosData({ solicitudType, type }) {
-  const [url, setUrl] = useState();
   const { setNoti, setLoading } = useContext(Context);
+  const [url, setUrl] = useState();
   const [id, setId] = useState(null);
   const [buttonAlumnos, setButtonAlumnos] = useState('Agregar Alumnos');
   const router = useRouter();

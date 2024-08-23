@@ -10,6 +10,7 @@ import FoliosTable from './Components/Folios/FoliosTable/index';
 import ProgramasForm from './Components/Programas/ProgramasForm';
 import ProgramasTable from './Components/Programas/ProgramasTable';
 import DatosAlumno from './Components/Validacion/DatosAlumno/index';
+import AdminTable from './Components/Folios/FoliosTable/adminTable';
 import Grupos from './Components/Programas/ProgramasSections/Grupos';
 import Reglas from './Components/Programas/ProgramasSections/Reglas';
 import getAsignaturaById from './Components/utils/getAsignaturaById';
@@ -36,10 +37,13 @@ import CiclosEscolares from './Components/Programas/ProgramasSections/CiclosEsco
 import AcreditacionAsignaturas from './Components/Acreditacion/AcreditacionAsignaturas.jsx';
 import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditacionAsignaturas';
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
+import ButtonsFoliosAdmin from './Components/Folios/ButtonsFoliosAdmin/index';
 
 export {
+  ButtonsFoliosAdmin,
   Grupos,
   Reglas,
+  AdminTable,
   FormAlumno,
   FoliosData,
   FoliosForm,

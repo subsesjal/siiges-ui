@@ -11,6 +11,7 @@ import {
 export default function FoliosForm({
   setTipoSolicitud,
   setTipoDocumento,
+  setEstatus,
   setPrograma,
   setPlantel,
   setLoading,
@@ -29,6 +30,7 @@ export default function FoliosForm({
   const [programas, setProgramas] = useState([]);
   const [selectedPrograma, setSelectedPrograma] = useState('');
   const isRepresentante = session.rol === 'representante';
+  const isAdmin = session.rol === 'admin';
 
   useEffect(() => {
     if (isRepresentante && instituciones?.length) {
@@ -93,6 +95,11 @@ export default function FoliosForm({
     setTipoDocumento(tipoDocumento);
   };
 
+  const handleStatusChange = (event) => {
+    const selectedStatuses = event.target.value;
+    setEstatus(selectedStatuses);
+  };
+
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
       if (error) {
@@ -129,6 +136,13 @@ export default function FoliosForm({
     { id: 3, nombre: 'Duplicado' },
   ];
 
+  const estatus = [
+    { id: 1, nombre: 'Enviado' },
+    { id: 2, nombre: 'En revisión' },
+    { id: 3, nombre: 'Asignado' },
+    { id: 4, nombre: 'Cancelado' },
+  ];
+
   return (
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={4}>
@@ -138,7 +152,7 @@ export default function FoliosForm({
           value={selectedInstitucion}
           options={instituciones || []}
           onchange={(event) => setSelectedInstitucion(event.target.value)}
-          disabled={isRepresentante}
+          disabled={!isAdmin && isRepresentante}
         />
       </Grid>
       <Grid item xs={4}>
@@ -148,7 +162,7 @@ export default function FoliosForm({
           value={selectedPlantel}
           options={planteles || []}
           onchange={handlePlantelChange}
-          disabled={!selectedInstitucion}
+          disabled={!isAdmin && !selectedInstitucion}
         />
       </Grid>
       <Grid item xs={4}>
@@ -158,7 +172,7 @@ export default function FoliosForm({
           value={selectedPrograma}
           options={programas || []}
           onchange={handleProgramaChange}
-          disabled={!selectedPlantel}
+          disabled={!isAdmin && !selectedPlantel}
         />
       </Grid>
       <Grid item xs={4}>
@@ -167,7 +181,7 @@ export default function FoliosForm({
           name="documento"
           options={documentos || []}
           onchange={handleDocumentoChange}
-          disabled={!selectedPrograma}
+          disabled={!isAdmin && !selectedPrograma}
         />
       </Grid>
       <Grid item xs={4}>
@@ -176,9 +190,20 @@ export default function FoliosForm({
           name="solicitud"
           options={solicitudes || []}
           onchange={handleSolicitudChange}
-          disabled={!selectedPrograma}
+          disabled={!isAdmin && !selectedPrograma}
         />
       </Grid>
+      {isAdmin && (
+        <Grid item xs={4}>
+          <Select
+            title="Estatus"
+            name="estatus"
+            multiple
+            options={estatus || []}
+            onchange={handleStatusChange}
+          />
+        </Grid>
+      )}
     </Grid>
   );
 }
@@ -189,4 +214,5 @@ FoliosForm.propTypes = {
   setPrograma: PropTypes.func.isRequired,
   setPlantel: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
+  setEstatus: PropTypes.func.isRequired,
 };
