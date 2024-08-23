@@ -28,21 +28,21 @@ const errors = {
   nombre: (form, setError) => setErrorState(
     'nombre',
     !form.persona.nombre
-      ? 'Nombre inválido'
+      ? '¡Nombre inválido1'
       : '',
     setError,
   ),
   apellidoPaterno: (form, setError) => setErrorState(
     'apellidoPaterno',
     !form.persona.apellidoPaterno
-      ? 'Primer Apellido inválido'
+      ? '¡Primer Apellido inválido!'
       : '',
     setError,
   ),
   apellidoMaterno: (form, setError) => setErrorState(
     'apellidoMaterno',
     !form.persona.apellidoMaterno
-      ? 'Segundo Apellido inválido'
+      ? '¡Segundo Apellido inválido!'
       : '',
     setError,
   ),
@@ -50,7 +50,7 @@ const errors = {
     setErrorState(
       'rolId',
       !form.rolId
-        ? 'Rol inválido'
+        ? '¡Rol inválido!'
         : '',
       setError,
     );
@@ -58,21 +58,21 @@ const errors = {
   tituloCargo: (form, setError) => setErrorState(
     'tituloCargo',
     !form.persona.tituloCargo
-      ? 'Cargo inválido'
+      ? '¡Cargo inválido!'
       : '',
     setError,
   ),
   correo: (form, setError) => setErrorState(
     'correo',
     !form.correo
-      ? 'Correo inválido'
+      ? '¡Correo inválido!'
       : '',
     setError,
   ),
   usuario: (form, setError) => setErrorState(
     'usuario',
     !form.usuario
-      ? 'Usuario inválido'
+      ? '¡Usuario inválido!'
       : '',
     setError,
   ),

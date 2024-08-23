@@ -172,7 +172,7 @@ export default function InstitucionFields({
         </Grid>
         <Grid item xs={4}>
           <Input
-            label="Telefono"
+            label="Teléfono"
             id="telefono"
             name="telefono"
             auto="telefono"

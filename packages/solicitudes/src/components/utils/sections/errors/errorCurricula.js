@@ -3,7 +3,7 @@ export default function errorCurricula(form, setError, error) {
   const errors = {
     mapaCurricular: () => {
       if (formData.programa?.mapaCurricular === undefined || formData.programa?.mapaCurricular === '') {
-        setError({ ...error, mapaCurricular: 'Mapa curricular inválido' });
+        setError({ ...error, mapaCurricular: '¡Mapa curricular inválido!' });
         return false;
       }
       setError({ ...error, mapaCurricular: '' });
@@ -11,7 +11,7 @@ export default function errorCurricula(form, setError, error) {
     },
     flexibilidadCurricular: () => {
       if (formData.programa?.flexibilidadCurricular === undefined || formData.programa?.flexibilidadCurricular === '') {
-        setError({ ...error, flexibilidadCurricular: 'Flexibilidad curricular inválida' });
+        setError({ ...error, flexibilidadCurricular: '¡Flexibilidad curricular inválida!' });
         return false;
       }
       setError({ ...error, flexibilidadCurricular: '' });
@@ -19,7 +19,7 @@ export default function errorCurricula(form, setError, error) {
     },
     lineasGeneracionAplicacionConocimiento: () => {
       if (formData.programa?.lineasGeneracionAplicacionConocimiento === undefined || formData.programa?.lineasGeneracionAplicacionConocimiento === '') {
-        setError({ ...error, lineasGeneracionAplicacionConocimiento: 'Líneas de generación del conocimiento inválidas' });
+        setError({ ...error, lineasGeneracionAplicacionConocimiento: '¡Líneas de generación del conocimiento inválidas!' });
         return false;
       }
       setError({ ...error, lineasGeneracionAplicacionConocimiento: '' });
@@ -29,7 +29,7 @@ export default function errorCurricula(form, setError, error) {
       if (formData.programa?.actualizacion === undefined || formData.programa?.actualizacion === '') {
         setError({
           ...error,
-          actualizacion: 'Actualización inválida',
+          actualizacion: '¡Actualización inválida!',
         });
         return false;
       }
@@ -40,7 +40,7 @@ export default function errorCurricula(form, setError, error) {
       if (formData.programa?.conveniosVinculacion === undefined || formData.programa?.conveniosVinculacion === '') {
         setError({
           ...error,
-          conveniosVinculacion: 'Vinculación inválida',
+          conveniosVinculacion: '¡Vinculación inválida!',
         });
         return false;
       }

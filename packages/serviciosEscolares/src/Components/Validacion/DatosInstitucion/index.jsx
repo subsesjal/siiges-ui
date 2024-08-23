@@ -131,7 +131,7 @@ export default function DatosInstitucion({ alumno }) {
     const { name, value } = event.target;
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: !value ? 'Este campo es obligatorio' : '',
+      [name]: !value ? '¡Este campo es obligatorio!' : '',
     }));
   };
 
@@ -151,7 +151,7 @@ export default function DatosInstitucion({ alumno }) {
 
     requiredFields.forEach((field) => {
       if (!form[field]) {
-        newErrors[field] = 'Este campo es obligatorio';
+        newErrors[field] = '¡Este campo es obligatorio!';
       }
     });
 

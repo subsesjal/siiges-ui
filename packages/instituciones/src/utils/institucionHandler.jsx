@@ -119,7 +119,7 @@ const errors = {
     setErrorState(
       'nombreInstitucion',
       !form.nombreInstitucion
-        ? 'Nombre inválido'
+        ? '¡Nombre inválido!'
         : '',
       setError,
     );
@@ -128,7 +128,7 @@ const errors = {
     setErrorState(
       'razonSocial',
       !form.razonSocial
-        ? 'Razón Social inválida'
+        ? '¡Razón Social inválida!'
         : '',
       setError,
     );
@@ -172,35 +172,35 @@ const errors = {
   nombreRector: (form, setError) => setErrorState(
     'nombreRector',
     !form.nombreRector
-      ? 'Nombre inválido'
+      ? '¡Nombre inválido!'
       : '',
     setError,
   ),
   apellidoPaterno: (form, setError) => setErrorState(
     'apellidoPaterno',
     !form.apellidoPaterno
-      ? 'Primer Apellido inválido'
+      ? '¡Primer Apellido inválido!'
       : '',
     setError,
   ),
   apellidoMaterno: (form, setError) => setErrorState(
     'apellidoMaterno',
     !form.apellidoMaterno
-      ? 'Segundo Apellido inválido'
+      ? '¡Segundo Apellido inválido!'
       : '',
     setError,
   ),
   celular: (form, setError) => setErrorState(
     'celular',
     !form.celular
-      ? 'Celular inválido'
+      ? '¡Celular inválido!'
       : '',
     setError,
   ),
   telefono: (form, setError) => setErrorState(
     'telefono',
     !form.telefono
-      ? 'Teléfono inválido'
+      ? '¡Teléfono inválido!'
       : '',
     setError,
   ),
@@ -208,7 +208,7 @@ const errors = {
     const { curp } = form;
     let errorMessage = '';
     if (curp && curp.length !== 18) {
-      errorMessage = 'La CURP debe contener 18 caracteres';
+      errorMessage = '¡La CURP debe contener 18 caracteres!';
     }
     setErrorState('curp', errorMessage, setError);
   },
@@ -216,7 +216,7 @@ const errors = {
     const { correoPrimario } = form;
     let errorMessage = '';
     if (correoPrimario && !correoPrimario.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
-      errorMessage = 'El correo electrónico no es válido';
+      errorMessage = '¡El correo electrónico no es válido!';
     }
     setErrorState('correoPrimario', errorMessage, setError);
   },
@@ -224,7 +224,7 @@ const errors = {
     setErrorState(
       'nombrePropuesto1',
       !form.nombrePropuesto1
-        ? 'Nombre propuesto inválido'
+        ? '¡Nombre propuesto inválido!'
         : '',
       setError,
     );
@@ -233,7 +233,7 @@ const errors = {
     setErrorState(
       'nombrePropuesto2',
       !form.nombrePropuesto2
-        ? 'Nombre propuesto inválido'
+        ? '¡Nombre propuesto inválido!'
         : '',
       setError,
     );
@@ -242,7 +242,7 @@ const errors = {
     setErrorState(
       'nombrePropuesto3',
       !form.nombrePropuesto3
-        ? 'Nombre propuesto inválido'
+        ? '¡Nombre propuesto inválido!'
         : '',
       setError,
     );

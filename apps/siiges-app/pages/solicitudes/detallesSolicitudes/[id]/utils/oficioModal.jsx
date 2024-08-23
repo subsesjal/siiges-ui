@@ -25,7 +25,7 @@ export function OficioModal({
 
   const handleOnSubmit = async () => {
     if (!fechaEfecto || !oficioNumber) {
-      console.error('Por favor, completa todos los campos.');
+      console.error('¡Por favor, completa todos los campos!.');
       return;
     }
 
