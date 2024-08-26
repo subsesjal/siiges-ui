@@ -147,7 +147,7 @@ export default function ModalCertificado({
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Input
-            label="Matricula"
+            label="Matrícula"
             id="matricula"
             name="matricula"
             value={form.matricula || ''}

@@ -1,16 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+/* eslint-disable no-plusplus */
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
+import TextField from '@mui/material/TextField';
 import {
-  ButtonsInspeccionSection, Context, Input, Layout, useApi,
+  ButtonsInspeccionSection, Context, Layout, useApi,
 } from '@siiges-ui/shared';
 import {
   Box, Grid, Tabs, Tab,
 } from '@mui/material';
 import {
   apartados,
-  // preguntas,
   InspeccionPregunta,
 } from '@siiges-ui/inspecciones';
+import { createRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function NuevaInspeccion() {
   const { setLoading, setNoti } = useContext(Context);
@@ -22,12 +24,12 @@ export default function NuevaInspeccion() {
   const [method, setMethod] = useState('GET');
   const router = useRouter();
   const { query } = router;
-
   const { data, loading, error } = useApi({
     endpoint: url || 'api/v1/inspecciones/preguntas',
     method,
     dataBody: body,
   });
+  const commentRefs = useRef([]);
 
   useEffect(() => {
     setLoading(loading);
@@ -37,7 +39,7 @@ export default function NuevaInspeccion() {
     if (data && method === 'POST' && error === null) {
       setNoti({
         open: true,
-        message: 'Inspección guardada correctamente',
+        message: '¡Inspección guardada correctamente!',
         type: 'success',
       });
       router.back();
@@ -45,7 +47,7 @@ export default function NuevaInspeccion() {
     if (error) {
       setNoti({
         open: true,
-        message: 'Error al guardar la inspección',
+        message: '¡Error al guardar la inspección!',
         type: 'error',
       });
     }
@@ -65,24 +67,50 @@ export default function NuevaInspeccion() {
     setSelectedTab(newValue);
   };
 
+  const sendCurrentComment = async (currentApartadoId) => {
+    const currentIndex = apartados.findIndex((apartado) => apartado.id === currentApartadoId);
+    const comment = commentRefs.current[currentIndex]?.value || '';
+
+    const commentData = {
+      inspeccionId: query.id,
+      inspeccionApartadoId: Number(currentApartadoId),
+      comentario: comment,
+    };
+
+    try {
+      const response = await createRecord({
+        data: commentData,
+        endpoint: `/inspecciones/${query.id}/observaciones`,
+      });
+
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        setNoti({
+          open: true,
+          message: '¡Comentario enviado correctamente!',
+          type: 'success',
+        });
+      } else {
+        setNoti({
+          open: true,
+          message: response.errorMessage || '¡Error al enviar el comentario!',
+          type: 'error',
+        });
+      }
+    // eslint-disable-next-line no-shadow
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: '¡Error al enviar el comentario!',
+        type: 'error',
+      });
+    }
+  };
+
   const sendQuestionData = () => {
     setBody(form);
     setMethod('POST');
     setUrl(`api/v1/inspecciones/${query.id}/preguntas`);
   };
-
-  // Falta implementar la lógica para guardar comentarios en el backend
-  /*
-  const handleCommentChange = (inspeccionCategoriaId) => (e) => {
-    const { value } = e.target;
-    setForm((prevForm) => ({
-      ...prevForm,
-      [inspeccionCategoriaId]: {
-        ...prevForm[inspeccionCategoriaId],
-        comentarios: value,
-      },
-    }));
-  }; */
 
   return (
     <Layout title="Nueva inspección">
@@ -112,20 +140,23 @@ export default function NuevaInspeccion() {
                     id={query.id}
                   />
                 ))}
-              <Input
+              <TextField
                 id={`comentarios-${apartado.id}`}
                 name={`comentarios-${apartado.id}`}
                 label="Comentarios"
                 multiline
+                sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
                 rows={4}
-                sx={{ marginTop: 0 }}
-                value={form[apartado.id]?.comentarios || ''}
-                // onchange={handleCommentChange(apartado.id)}
+                // eslint-disable-next-line no-return-assign
+                inputRef={(el) => commentRefs.current[index] = el}
               />
               <ButtonsInspeccionSection
                 prev={() => setSelectedTab(index - 1)}
                 next={() => setSelectedTab(index + 1)}
-                confirm={() => sendQuestionData()}
+                confirm={() => {
+                  sendCurrentComment(apartado.id);
+                  sendQuestionData();
+                }}
                 position={getPosition(index)}
               />
             </Box>

@@ -32,7 +32,7 @@ export default function ConsultarUsuario() {
       {data ? (
         <Grid container spacing={2}>
           <Grid item xs={4} sx={{ marginTop: 7 }}>
-            <UsuarioAvatar usuario={data} />
+            <UsuarioAvatar />
           </Grid>
           <UsuarioView usuario={data} />
           <Grid container justifyContent="flex-end" spacing={2}>

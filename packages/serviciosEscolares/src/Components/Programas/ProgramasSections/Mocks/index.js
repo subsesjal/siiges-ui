@@ -1,5 +1,5 @@
 import React from 'react';
-import AsignaturasButtons from '../../../utils/Components/AsignaturasButtons';
+import AsignaturasButtons from '../../../utils/AsignaturasButtons';
 
 // Create a mapping of gradoId to nombre
 const createGradoMap = (grados) => {
@@ -14,7 +14,7 @@ const createGradoMap = (grados) => {
   return gradoMap;
 };
 
-const columns = (grados) => {
+const columns = (grados, programaId, asignaturasList, setAsignaturasList, cicloId, setLoading, setNoti, rol) => {
   const gradoMap = createGradoMap(grados);
 
   return [
@@ -32,7 +32,18 @@ const columns = (grados) => {
       field: 'actions',
       headerName: 'Acciones',
       width: 150,
-      renderCell: (params) => <AsignaturasButtons id={params.id} />,
+      renderCell: (params) => (
+        <AsignaturasButtons
+          id={params.id}
+          programaId={programaId}
+          asignaturasList={asignaturasList}
+          setAsignaturasList={setAsignaturasList}
+          cicloId={cicloId}
+          setLoading={setLoading}
+          setNoti={setNoti}
+          rol={rol}
+        />
+      ),
       sortable: false,
       filterable: false,
     },

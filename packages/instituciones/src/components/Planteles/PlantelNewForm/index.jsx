@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  ButtonsForm, Input, SnackAlert,
+  ButtonsForm, Input, SnackAlert, Context,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
@@ -12,23 +12,24 @@ import plantelErrors from '../../utils/plantelErrors';
 import formPlantel from '../../utils/formPlantel';
 import submitEditPlantel from '../../utils/submitEditPlantel';
 
-export default function PlantelNewForm({ plantel, setLoading }) {
+export default function PlantelNewForm({ plantel }) {
   const router = useRouter();
   const [form, setForm] = useState({
     domicilio: { estadoId: 14 },
     director: { persona: {} },
   });
+  const {
+    setLoading,
+  } = useContext(Context);
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const { municipios } = getMunicipios();
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     formPlantel(name, form, setForm, value);
   };
 
   const errors = plantelErrors(form, setError, error);
-
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
     errors[name](value);
@@ -259,23 +260,32 @@ export default function PlantelNewForm({ plantel, setLoading }) {
                 ? plantel.claveCentroTrabajo
                 : ''}
               onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.claveCentroTrabajo}
+              required
             />
           </Grid>
           <Grid item xs={3}>
             <Input
               label="Página Web"
-              id="webSite"
-              name="webSite"
-              auto="webSite"
+              id="paginaWeb"
+              name="paginaWeb"
+              auto="paginaWeb"
+              value={plantel
+                ? plantel.paginaWeb
+                : ''}
               onchange={handleOnChange}
             />
           </Grid>
           <Grid item xs={3}>
             <Input
               label="Redes sociales"
-              id="socialNetwork"
-              name="socialNetwork"
-              auto="socialNetwork"
+              id="redeSociales"
+              name="redesSociales"
+              auto="redesSociales"
+              value={plantel
+                ? plantel.redesSociales
+                : ''}
               onchange={handleOnChange}
             />
           </Grid>
@@ -415,7 +425,6 @@ PlantelNewForm.defaultProps = {
 };
 
 PlantelNewForm.propTypes = {
-  setLoading: PropTypes.func.isRequired,
   plantel: PropTypes.shape({
     domicilio: PropTypes.shape({
       id: PropTypes.number,
@@ -436,6 +445,8 @@ PlantelNewForm.propTypes = {
     telefono1: PropTypes.string,
     telefono2: PropTypes.string,
     telefono3: PropTypes.string,
+    paginaWeb: PropTypes.string,
+    redesSociales: PropTypes.string,
     claveCentroTrabajo: PropTypes.string,
     directores: PropTypes.arrayOf(
       PropTypes.shape({

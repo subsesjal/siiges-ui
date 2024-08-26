@@ -37,7 +37,8 @@ export default function SolicitudesFolios() {
     } catch (error) {
       setNoti({
         open: true,
-        message: 'Error al cargar los datos',
+        message:
+          '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     } finally {

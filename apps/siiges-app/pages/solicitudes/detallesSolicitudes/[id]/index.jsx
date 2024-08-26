@@ -1,12 +1,21 @@
 import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
-import { Layout, Title, useApi } from '@siiges-ui/shared';
+import {
+  ButtonSimple,
+  Layout,
+  Title,
+  useApi,
+} from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
+import { OficioModal } from './utils/oficioModal';
 
 export default function detallesSolicitudes() {
+  const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
+  const showOficioModal = () => setIsOficioModalOpen(true);
+  const hideOficioModal = () => setIsOficioModalOpen(false);
   const router = useRouter();
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
@@ -16,8 +25,7 @@ export default function detallesSolicitudes() {
     if (data) {
       setSolicitud(data);
     }
-  }, [data, solicitud]);
-
+  }, [data]);
   const downloadFile = async (type) => {
     try {
       const solicitudId = solicitud?.id;
@@ -27,12 +35,10 @@ export default function detallesSolicitudes() {
         entidadId: solicitudId,
         tipoDocumento: type,
       }, async (url) => {
-        // Ensure URL starts with 'http'
         if (!url.startsWith('http')) {
           // eslint-disable-next-line no-param-reassign
-          url = `http://${url}`; // Assuming it's HTTP; adjust if HTTPS is required
+          url = `http://${url}`;
         }
-        // Open the URL in a new tab
         window.open(url, '_blank');
       });
     } catch (error) {
@@ -95,16 +101,18 @@ export default function detallesSolicitudes() {
             </ListItem>
           </List>
         </Grid>
-        <Grid item xs={4}>
-          <Typography variant="subtitle1" color="textSecondary">
-            RVOE
-          </Typography>
-          <List component="nav">
-            <ListItem button onClick={() => downloadFile('RVOE')}>
-              <ListItemText primary="Acuerdo RVOE" />
-            </ListItem>
-          </List>
-        </Grid>
+        {solicitud.estatusSolicitudId > 8 && (
+          <Grid item xs={4}>
+            <Typography variant="subtitle1" color="textSecondary">
+              RVOE
+            </Typography>
+            <List component="nav">
+              <ListItem button onClick={showOficioModal}>
+                <ListItemText primary="Acuerdo RVOE" />
+              </ListItem>
+            </List>
+          </Grid>
+        )}
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
             Inspección
@@ -136,7 +144,20 @@ export default function detallesSolicitudes() {
             </ListItem>
           </List>
         </Grid>
+        <Grid container justifyContent="flex-end" spacing={2}>
+          <Grid item>
+            <ButtonSimple onClick={() => router.back()} text="Regresar" />
+          </Grid>
+        </Grid>
       </Grid>
+      {solicitud?.id && (
+      <OficioModal
+        open={isOficioModalOpen}
+        hideModal={hideOficioModal}
+        downloadFile={downloadFile}
+        solicitudId={solicitud.id}
+      />
+      )}
     </Layout>
   );
 }

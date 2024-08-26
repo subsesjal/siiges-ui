@@ -96,6 +96,7 @@ function Modal({
       nombre: 'IMPORTE INGRESOS PROPIOS (FF14)',
     },
   ];
+
   return (
     <DefaultModal
       title={modalState.title}

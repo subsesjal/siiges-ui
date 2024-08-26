@@ -39,7 +39,7 @@ export default function InfraestructuraAdd() {
         <Grid item xs={6}>
           <Input
             id="location"
-            label="Ubicacion"
+            label="Ubicación"
             name="location"
             auto="location"
           />

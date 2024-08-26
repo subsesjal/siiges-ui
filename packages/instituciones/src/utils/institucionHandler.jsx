@@ -32,6 +32,8 @@ const buildInstitucionData = (form) => ({
       nombre: form.nombreRector,
       apellidoPaterno: form.apellidoPaterno,
       apellidoMaterno: form.apellidoMaterno,
+      celular: form.celular,
+      telefono: form.telefono,
       curp: form.curp,
       correoPrimario: form.correoPrimario,
     },
@@ -56,7 +58,7 @@ const submitInstitucion = async ({
   if (!validateErrorFields(errorFields)) {
     setNoti({
       open: true,
-      message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+      message: '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
       type: 'error',
     });
     setLoading(false);
@@ -69,7 +71,6 @@ const submitInstitucion = async ({
   } = DATA_MAPPING[accion](form);
 
   const formattedData = buildInstitucionData(form);
-
   const { valid, data } = validateFormData({
     dataBody: formattedData,
     cleanData: true,
@@ -79,7 +80,7 @@ const submitInstitucion = async ({
   if (!valid) {
     setNoti({
       open: true,
-      message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+      message: '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
       type: 'error',
     });
     setLoading(false);
@@ -93,7 +94,7 @@ const submitInstitucion = async ({
     setLoading(false);
     setNoti({
       open: true,
-      message: 'Registro exitoso',
+      message: '¡Registro exitoso!',
       type: 'success',
     });
     router.back();
@@ -118,7 +119,7 @@ const errors = {
     setErrorState(
       'nombreInstitucion',
       !form.nombreInstitucion
-        ? 'Nombre inválido'
+        ? '¡Nombre inválido!'
         : '',
       setError,
     );
@@ -127,7 +128,7 @@ const errors = {
     setErrorState(
       'razonSocial',
       !form.razonSocial
-        ? 'Razón Social inválida'
+        ? '¡Razón Social inválida!'
         : '',
       setError,
     );
@@ -171,21 +172,35 @@ const errors = {
   nombreRector: (form, setError) => setErrorState(
     'nombreRector',
     !form.nombreRector
-      ? 'Nombre inválido'
+      ? '¡Nombre inválido!'
       : '',
     setError,
   ),
   apellidoPaterno: (form, setError) => setErrorState(
     'apellidoPaterno',
     !form.apellidoPaterno
-      ? 'Primer Apellido inválido'
+      ? '¡Primer Apellido inválido!'
       : '',
     setError,
   ),
   apellidoMaterno: (form, setError) => setErrorState(
     'apellidoMaterno',
     !form.apellidoMaterno
-      ? 'Segundo Apellido materno inválido'
+      ? '¡Segundo Apellido inválido!'
+      : '',
+    setError,
+  ),
+  celular: (form, setError) => setErrorState(
+    'celular',
+    !form.celular
+      ? '¡Celular inválido!'
+      : '',
+    setError,
+  ),
+  telefono: (form, setError) => setErrorState(
+    'telefono',
+    !form.telefono
+      ? '¡Teléfono inválido!'
       : '',
     setError,
   ),
@@ -193,7 +208,7 @@ const errors = {
     const { curp } = form;
     let errorMessage = '';
     if (curp && curp.length !== 18) {
-      errorMessage = 'La CURP debe contener 18 caracteres';
+      errorMessage = '¡La CURP debe contener 18 caracteres!';
     }
     setErrorState('curp', errorMessage, setError);
   },
@@ -201,7 +216,7 @@ const errors = {
     const { correoPrimario } = form;
     let errorMessage = '';
     if (correoPrimario && !correoPrimario.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
-      errorMessage = 'El correo electrónico no es válido';
+      errorMessage = '¡El correo electrónico no es válido!';
     }
     setErrorState('correoPrimario', errorMessage, setError);
   },
@@ -209,7 +224,7 @@ const errors = {
     setErrorState(
       'nombrePropuesto1',
       !form.nombrePropuesto1
-        ? 'Nombre propuesto inválido'
+        ? '¡Nombre propuesto inválido!'
         : '',
       setError,
     );
@@ -218,7 +233,7 @@ const errors = {
     setErrorState(
       'nombrePropuesto2',
       !form.nombrePropuesto2
-        ? 'Nombre propuesto inválido'
+        ? '¡Nombre propuesto inválido!'
         : '',
       setError,
     );
@@ -227,7 +242,7 @@ const errors = {
     setErrorState(
       'nombrePropuesto3',
       !form.nombrePropuesto3
-        ? 'Nombre propuesto inválido'
+        ? '¡Nombre propuesto inválido!'
         : '',
       setError,
     );

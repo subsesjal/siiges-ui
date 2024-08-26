@@ -4,7 +4,6 @@ import router from 'next/router';
 export default function submitNewPlantel({
   errors, form, setNoti, setLoading,
 }) {
-  setLoading(true);
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -13,7 +12,7 @@ export default function submitNewPlantel({
   if (!isValid) {
     setNoti({
       open: true,
-      message: 'Algo salio mal, revisa que los campos esten correctos',
+      message: '¡Algo salió mal, revisa que los campos estén correctos!',
       type: 'error',
     });
     return;
@@ -41,9 +40,12 @@ export default function submitNewPlantel({
     .then(
       setNoti({
         open: true,
-        message: 'Se creo el plantel exitosamente',
+        message: '¡Se creó el plantel exitosamente!',
         type: 'success',
       }),
+      setTimeout(() => {
+        setLoading(true);
+      }, 2000),
       setTimeout(() => {
         setLoading(false);
         router.back();
@@ -52,7 +54,7 @@ export default function submitNewPlantel({
     .catch(() => {
       setNoti({
         open: true,
-        message: 'Algo salió mal, revisa que los campos esten correctos',
+        message: '¡Algo salió mal, revisa que los campos estén correctos!',
         type: 'error',
       });
     });
