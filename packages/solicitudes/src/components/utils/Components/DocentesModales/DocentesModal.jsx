@@ -24,28 +24,28 @@ import {
 import useDocente from '../../getDocente';
 
 const errorDatosDocentes = {
-  tipodocente: 'Nombre invalido',
-  nombre: 'Nombre invalido',
-  apellidoPaterno: 'Primer Apellido inválido',
-  apellidoMaterno: 'Segundo Apellido inválido',
-  tipoDocente: 'Seleccione un nivel',
-  'persona.nombre': 'Nombre invalido',
-  'persona.apellidoPaterno': 'Primer Apellido inválido',
-  'persona.apellidoMaterno': 'Segundo Apellido inválido',
-  asignaturasDocentes: 'Seleccione una asignatura',
-  tipoContratacion: 'Seleccione un tipo de contratación',
-  antiguedad: 'Antigüedad invalida',
-  experiencias: 'Experiencia laboral invalida',
-  formacion_1_nivelId: 'Seleccione un Nivel',
-  formacion_1_nombre: 'Nombre inválido',
-  formacion_1_descripcion: 'Seleccione un documento',
-  formacion_1_fechaGraduado: 'Seleccione una fecha',
-  formacion_1_institucion: 'Institución no inválida',
-  formacion_2_nivelId: 'Seleccione un Nivel',
-  formacion_2_nombre: 'Nombre inválido',
-  formacion_2_descripcion: 'Seleccione un documento',
-  formacion_2_fechaGraduado: 'Seleccione una fecha',
-  formacion_2_institucion: 'Institución no inválida',
+  tipodocente: '¡Nombre inválido!',
+  nombre: '¡Nombre inválido!',
+  apellidoPaterno: '¡Primer Apellido inválido!',
+  apellidoMaterno: '¡Segundo Apellido inválido!',
+  tipoDocente: '¡Seleccione un nivel¡',
+  'persona.nombre': '¡Nombre inválido!',
+  'persona.apellidoPaterno': '¡Primer Apellido inválido!',
+  'persona.apellidoMaterno': '¡Segundo Apellido inválido!',
+  asignaturasDocentes: '¡Seleccione una asignatura!',
+  tipoContratacion: '¡Seleccione un tipo de contratación!',
+  antiguedad: '¡Antigüedad inválida!',
+  experiencias: '¡Experiencia laboral inválida!',
+  formacion_1_nivelId: '¡Seleccione un Nivel!',
+  formacion_1_nombre: '¡Nombre inválido!',
+  formacion_1_descripcion: '¡Seleccione un documento!',
+  formacion_1_fechaGraduado: '¡Seleccione una fecha!',
+  formacion_1_institucion: '¡Institución no inválida!',
+  formacion_2_nivelId: '¡Seleccione un Nivel!',
+  formacion_2_nombre: '¡Nombre inválido!',
+  formacion_2_descripcion: '¡Seleccione un documento!',
+  formacion_2_fechaGraduado: '¡Seleccione una fecha!',
+  formacion_2_institucion: '¡Institución no inválida!',
 };
 
 export default function DocentesModal({
@@ -483,18 +483,45 @@ export default function DocentesModal({
           />
         </Grid>
         {currentSection === 1 && (
-          <Grid item xs={9}>
-            <ButtonSimple
-              text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-              alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-              onClick={handleNextSection}
-              align="right"
-            />
+          <Grid
+            item
+            xs={9}
+            sx={
+            {
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+            }
+          }
+          >
+            <Typography variant="body1" sx={{ marginRight: 2 }}>Página 1-2</Typography>
+            <Grid item sx={{ marginRight: 2 }}>
+              <ButtonSimple
+                text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                onClick={handleNextSection}
+                align="right"
+              />
+            </Grid>
           </Grid>
         )}
         {currentSection === 2 && (
-          <>
-            <Grid item xs={isConsultMode ? 9 : 6.7}>
+          <Grid
+            item
+            xs={9}
+            sx={
+            {
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+            }
+          }
+          >
+            <Typography variant="body1" sx={{ marginRight: 2 }}>Página 2-2</Typography>
+
+            <Grid item sx={{ marginRight: 2 }}>
               <ButtonSimple
                 text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
                 alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
@@ -503,7 +530,7 @@ export default function DocentesModal({
               />
             </Grid>
             {!isConsultMode && (
-              <Grid item xs={2.3}>
+              <Grid item>
                 <ButtonSimple
                   text="Guardar"
                   alt="Guardar"
@@ -512,9 +539,12 @@ export default function DocentesModal({
                 />
               </Grid>
             )}
-          </>
+          </Grid>
         )}
+
+
       </Grid>
+
     </DefaultModal>
   );
 }

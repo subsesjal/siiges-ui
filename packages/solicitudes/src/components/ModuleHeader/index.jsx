@@ -49,7 +49,7 @@ export default function ModuleHeader({
       if (result?.statusCode === 200) {
         setNoti({
           open: true,
-          message: 'Se completó la solicitud exitosamente',
+          message: '¡Se completó la solicitud exitosamente!',
           type: 'success',
         });
         router.back();
@@ -60,7 +60,7 @@ export default function ModuleHeader({
     } catch (error) {
       setNoti({
         open: true,
-        message: error.message || 'Hubo un error al completar la solicitud',
+        message: error.message || '¡Hubo un error al completar la solicitud!',
         type: 'error',
       });
       setLoading(false);
@@ -132,8 +132,8 @@ export default function ModuleHeader({
             <Grid item xs={6} sx={{ textAlign: 'right', alignItems: 'end' }}>
               {module >= 1 && (
                 <ButtonStyled
-                  text="Modulo anterior"
-                  alt="Modulo anterior"
+                  text="Módulo anterior"
+                  alt="Módulo anterior"
                   type="success"
                   onclick={() => prevButton()}
                   disabled={disabled}

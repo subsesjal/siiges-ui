@@ -112,9 +112,13 @@ export default function ButtonSection({
     },
     'Plan de estudios': {
       1: () => validateNewSolicitud(),
+      2: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
       3: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
       4: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
       5: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
+      6: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
+      7: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
+      8: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
       9: () => submitTrayectoriaEducativa(validations, setLoading),
     },
   };

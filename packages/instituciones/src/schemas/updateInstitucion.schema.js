@@ -28,6 +28,8 @@ const updateInstitucionSchema = {
             nombre: { type: 'string' },
             apellidoPaterno: { type: 'string' },
             apellidoMaterno: { type: 'string' },
+            celular: { type: 'string' },
+            telefono: { type: 'string' },
             curp: { type: 'string' },
             correoPrimario: { type: 'string' },
           },

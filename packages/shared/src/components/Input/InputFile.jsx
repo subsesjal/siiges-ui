@@ -29,7 +29,7 @@ export default function InputFile({
   const handleSave = async () => {
     try {
       if (files.length === 0) {
-        throw new Error('Algo salió mal, ingrese un documento');
+        throw new Error('¡Algo salió mal, ingrese un documento!');
       }
 
       const formData = await fileToFormData(files[0]);
@@ -41,13 +41,13 @@ export default function InputFile({
 
       setNoti({
         open: true,
-        message: 'Documento cargado con éxito',
+        message: '¡Documento cargado con éxito!',
         type: 'success',
       });
     } catch (error) {
       setNoti({
         open: true,
-        message: error.message || 'Algo salió mal, revise su documento',
+        message: error.message || '¡Algo salió mal, revise su documento!',
         type: 'error',
       });
     } finally {

@@ -160,6 +160,30 @@ export default function InstitucionFields({
         </Grid>
         <Grid item xs={4}>
           <Input
+            label="Celular"
+            id="celular"
+            name="celular"
+            auto="celular"
+            onchange={(e) => handleOnChange(e, { form, setForm })}
+            onBlur={(e) => handleOnBlur(e, { form, setError })}
+            errorMessage={errors.celular}
+            value={institucion?.rector?.persona?.celular}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <Input
+            label="Teléfono"
+            id="telefono"
+            name="telefono"
+            auto="telefono"
+            onchange={(e) => handleOnChange(e, { form, setForm })}
+            onBlur={(e) => handleOnBlur(e, { form, setError })}
+            errorMessage={errors.telefono}
+            value={institucion?.rector?.persona?.telefono}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <Input
             label="CURP"
             id="curp"
             name="curp"
@@ -281,6 +305,8 @@ InstitucionFields.propTypes = {
     valoresInstitucionales: PropTypes.string,
     apellidoPaterno: PropTypes.string,
     apellidoMaterno: PropTypes.string,
+    celular: PropTypes.string,
+    telefono: PropTypes.string,
     curp: PropTypes.string,
     correoPrimario: PropTypes.string,
     nombreRector: PropTypes.string,
@@ -300,6 +326,8 @@ InstitucionFields.propTypes = {
         nombre: PropTypes.string,
         apellidoPaterno: PropTypes.string,
         apellidoMaterno: PropTypes.string,
+        celular: PropTypes.string,
+        telefono: PropTypes.string,
         curp: PropTypes.string,
         correoPrimario: PropTypes.string,
       }),

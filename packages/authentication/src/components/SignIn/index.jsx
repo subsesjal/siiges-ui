@@ -15,7 +15,7 @@ export default function SignIn() {
 
   const errors = {
     usuario: 'Usuario equivocado',
-    contrasena: 'Contraseña equivocada',
+    contrasena: '¡Contraseña equivocada!',
   };
 
   const handleOnChange = (e) => {

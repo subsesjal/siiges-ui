@@ -8,7 +8,7 @@ export const apartados = [
   { id: 7, nombre: 'Elementos de la biblioteca' },
   { id: 8, nombre: 'Dimensiones biblioteca' },
   { id: 9, nombre: 'Sanitarios' },
-  { id: 10, nombre: 'Especificaciones de equipo de computo' },
+  { id: 10, nombre: 'Especificaciones de equipo de cómputo' },
   { id: 11, nombre: 'Identificación del plantel (Exterior)' },
   { id: 12, nombre: 'Identificación de las áreas administrativas' },
 ];
@@ -203,7 +203,7 @@ export const preguntas = [
     apartadoId: 9,
   },
 
-  // Especificaciones de equipo de computo
+  // Especificaciones de equipo de cómputo
   {
     id: 28,
     pregunta: '¿El equipo de cómputo cumple con las especificaciones mínimas?',

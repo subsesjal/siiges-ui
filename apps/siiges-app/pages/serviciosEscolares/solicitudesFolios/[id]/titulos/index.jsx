@@ -5,7 +5,7 @@ import React from 'react';
 export default function EditFoliosTitulos() {
   return (
     <Layout title="Editar Folio de Titulo">
-      <FoliosData solicitudType="titulo" />
+      <FoliosData solicitudType="titulo" type="edit" />
     </Layout>
   );
 }

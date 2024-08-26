@@ -94,7 +94,3 @@ export default function UsuarioAvatar({ usuario }) {
     </>
   );
 }
-
-UsuarioAvatar.propTypes = {
-  usuario: PropTypes.objectOf.isRequired,
-};

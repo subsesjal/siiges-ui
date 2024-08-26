@@ -26,8 +26,8 @@ const columns = (grados, programaId, asignaturasList, setAsignaturasList, cicloI
     },
     { field: 'nombre', headerName: 'Nombre', width: 320 },
     { field: 'clave', headerName: 'Clave', width: 100 },
-    { field: 'seriacion', headerName: 'Seriacion', width: 170 },
-    { field: 'creditos', headerName: 'Creditos' },
+    { field: 'seriacion', headerName: 'Seriación', width: 170 },
+    { field: 'creditos', headerName: 'Créditos' },
     {
       field: 'actions',
       headerName: 'Acciones',

@@ -48,7 +48,7 @@ export default function Docentes({ disabled, type }) {
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
             rows={docentesList}
-            columns={columns(setDocentesList)}
+            columns={columns(isDisabled, setDocentesList)}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />

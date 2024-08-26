@@ -66,7 +66,7 @@ export default function PlanMaestro() {
         </Grid>
         <Grid item xs={6}>
           <Select
-            title="Tipo de Sesion"
+            title="Tipo de Sesión"
             name="tipoSesion"
             value={session}
             options={sessionData}
