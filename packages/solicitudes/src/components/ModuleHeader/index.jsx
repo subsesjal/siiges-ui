@@ -132,8 +132,8 @@ export default function ModuleHeader({
             <Grid item xs={6} sx={{ textAlign: 'right', alignItems: 'end' }}>
               {module >= 1 && (
                 <ButtonStyled
-                  text="Modulo anterior"
-                  alt="Modulo anterior"
+                  text="Módulo anterior"
+                  alt="Módulo anterior"
                   type="success"
                   onclick={() => prevButton()}
                   disabled={disabled}
