@@ -11,10 +11,10 @@ export default function MisInspecciones() {
   const [inspecciones, setInspecciones] = useState([]);
 
   const inspeccionesEstatus = [
-    { id: 1, descripcion: 'Inspeccion asignada' },
-    { id: 2, descripcion: 'Inspeccion en proceso' },
-    { id: 3, descripcion: 'Inspeccion completa' },
-    { id: 4, descripcion: 'Inspección terminada pero por atender observaciones' },
+    { id: 1, descripcion: 'Inspección asignada' },
+    { id: 2, descripcion: 'Inspección en proceso' },
+    { id: 3, descripcion: 'Inspección completa' },
+    { id: 4, descripcion: 'Inspección terminada, pero por atender observaciones' },
     { id: 5, descripcion: 'Acta de cierre expedida' },
   ];
 
