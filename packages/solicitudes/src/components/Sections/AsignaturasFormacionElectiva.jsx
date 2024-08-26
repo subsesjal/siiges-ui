@@ -32,7 +32,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
     : { asignaturasFormacion: [], loading: false };
 
   const tableColumns = useMemo(
-    () => columns(setAsignaturasFormacionList, asignaturasFormacionList),
+    () => columns(isDisabled, setAsignaturasFormacionList, asignaturasFormacionList),
     [setAsignaturasFormacionList, asignaturasFormacion],
   );
 
@@ -49,7 +49,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
         <Typography variant="h6">Asignaturas formación electiva</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!isDisabled && <Button onClick={showModal} text="agregar" />}
+        {!isDisabled && <Button onClick={showModal} text="Agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>

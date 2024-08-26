@@ -483,18 +483,45 @@ export default function DocentesModal({
           />
         </Grid>
         {currentSection === 1 && (
-          <Grid item xs={9}>
-            <ButtonSimple
-              text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-              alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-              onClick={handleNextSection}
-              align="right"
-            />
+          <Grid
+            item
+            xs={9}
+            sx={
+            {
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+            }
+          }
+          >
+            <Typography variant="body1" sx={{ marginRight: 2 }}>Página 1-2</Typography>
+            <Grid item sx={{ marginRight: 2 }}>
+              <ButtonSimple
+                text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                onClick={handleNextSection}
+                align="right"
+              />
+            </Grid>
           </Grid>
         )}
         {currentSection === 2 && (
-          <>
-            <Grid item xs={isConsultMode ? 9 : 6.7}>
+          <Grid
+            item
+            xs={9}
+            sx={
+            {
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+            }
+          }
+          >
+            <Typography variant="body1" sx={{ marginRight: 2 }}>Página 2-2</Typography>
+
+            <Grid item sx={{ marginRight: 2 }}>
               <ButtonSimple
                 text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
                 alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
@@ -503,7 +530,7 @@ export default function DocentesModal({
               />
             </Grid>
             {!isConsultMode && (
-              <Grid item xs={2.3}>
+              <Grid item>
                 <ButtonSimple
                   text="Guardar"
                   alt="Guardar"
@@ -512,9 +539,12 @@ export default function DocentesModal({
                 />
               </Grid>
             )}
-          </>
+          </Grid>
         )}
+
+
       </Grid>
+
     </DefaultModal>
   );
 }

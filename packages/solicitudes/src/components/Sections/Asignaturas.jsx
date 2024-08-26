@@ -21,17 +21,18 @@ export default function Asignaturas({ disabled, type }) {
   const { asignaturasList, setAsignaturasList } = useContext(
     TablesPlanEstudiosContext,
   );
-  const { asignaturas, loading } = type === 'editar'
-    ? useAsignaturas(programaId)
-    : { asignaturas: [], loading: false };
-  const tableColumns = useMemo(
-    () => columns(grados, setAsignaturasList, asignaturasList),
-    [setAsignaturasList, asignaturas],
-  );
 
   const isSectionDisabled = useSectionDisabled(6);
 
   const isDisabled = disabled || isSectionDisabled;
+
+  const { asignaturas, loading } = type === 'editar'
+    ? useAsignaturas(programaId)
+    : { asignaturas: [], loading: false };
+  const tableColumns = useMemo(
+    () => columns(grados, isDisabled, setAsignaturasList, asignaturasList),
+    [setAsignaturasList, asignaturas],
+  );
 
   useEffect(() => {
     if (type === 'editar' && !loading) {

@@ -8,7 +8,7 @@ import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProvider
 import AsignaturasFormacionEditModal from './AsignaturasFormacionModales/AsignaturasFormacionEditModal';
 import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
 
-export default function AsignaturasFormacionButtons({ id }) {
+export default function AsignaturasFormacionButtons({ id, isDisabled }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -45,12 +45,16 @@ export default function AsignaturasFormacionButtons({ id }) {
       <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
         <DescriptionIcon />
       </IconButton>
-      <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
-        <EditIcon />
-      </IconButton>
-      <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
-        <DeleteIcon />
-      </IconButton>
+      {!isDisabled && (
+        <>
+          <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
+            <EditIcon />
+          </IconButton>
+          <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
+            <DeleteIcon />
+          </IconButton>
+        </>
+      )}
 
       {modalOpen && (
         <AsignaturasFormacionEditModal
@@ -75,4 +79,5 @@ export default function AsignaturasFormacionButtons({ id }) {
 
 AsignaturasFormacionButtons.propTypes = {
   id: PropTypes.number.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
 };
