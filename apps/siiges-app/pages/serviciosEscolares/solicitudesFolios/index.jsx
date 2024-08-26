@@ -1,99 +1,91 @@
-import { IconButton } from '@mui/material';
-import { FoliosForm } from '@siiges-ui/serviciosescolares';
-import { Context, DataTable, Layout } from '@siiges-ui/shared';
+import {
+  AdminTable,
+  FoliosForm,
+  FoliosTable,
+} from '@siiges-ui/serviciosescolares';
+import { Context, getData, Layout } from '@siiges-ui/shared';
 import React, { useState, useContext, useEffect } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
-import { useRouter } from 'next/router';
 
-const columns = (handleEdit) => [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'name', headerName: 'Nombre', width: 610 },
-  { field: 'folio', headerName: 'Folio', width: 150 },
-  { field: 'date', headerName: 'Fecha', width: 150 },
-  {
-    field: 'actions',
-    headerName: 'Acciones',
-    width: 150,
-    renderCell: (params) => (
-      <IconButton onClick={() => handleEdit(params.row.id)}>
-        <EditIcon />
-      </IconButton>
-    ),
-  },
-];
+export default function SolicitudesFolios() {
+  const { setLoading, setNoti, session } = useContext(Context);
+  const [tipoSolicitud, setTipoSolicitud] = useState(null);
+  const [tipoDocumento, setTipoDocumento] = useState(null);
+  const [estatus, setEstatus] = useState([]);
+  const [solicitudes, setSolicitudes] = useState([]);
+  const [programa, setPrograma] = useState(null);
+  const [plantel, setPlantel] = useState(null);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const isAdmin = session.rol === 'admin';
 
-export default function solicitudesFolios() {
-  const { setLoading, setNoti } = useContext(Context);
-  const [tipoSolicitud, setTipoSolicitud] = useState();
-  const [solicitudes, setSolicitudes] = useState();
-  // eslint-disable-next-line no-unused-vars
-  const [programa, setPrograma] = useState();
-  const [loading, setLoadingPage] = useState(true);
-  const router = useRouter();
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const endpoint = isAdmin
+        ? '/solicitudesFolios'
+        : `/solicitudesFolios?programaId=${programa}&tipoDocumentoId=${tipoDocumento}&tipoSolicitudFolioId=${tipoSolicitud}`;
 
-  const handleCreate = () => {
-    if (tipoSolicitud === 1) {
-      router.push('/serviciosEscolares/solicitudesFolios/createFolio/titulos');
-    } else if (tipoSolicitud === 2) {
-      router.push(
-        '/serviciosEscolares/solicitudesFolios/createFolio/certificados',
-      );
-    } else {
+      const response = await getData({ endpoint });
+      if (response.statusCode === 200) {
+        setSolicitudes(response.data);
+      } else {
+        setNoti({
+          open: true,
+          message: response.message || 'Error al cargar los datos',
+          type: 'error',
+        });
+      }
+    } catch (error) {
       setNoti({
         open: true,
         message:
           '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
-    }
-  };
-
-  const handleEdit = (id) => {
-    if (tipoSolicitud === 1) {
-      router.push(`/serviciosEscolares/solicitudesFolios/${id}/titulos`);
-    } else if (tipoSolicitud === 2) {
-      router.push(`/serviciosEscolares/solicitudesFolios/${id}/certificados`);
-    } else {
-      setNoti({
-        open: true,
-        message:
-          '¡Error, revise que todos los campos estén seleccionados correctamente!',
-        type: 'error',
-      });
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    setLoading(loading);
-  }, [loading]);
+    const shouldFetchData = isAdmin || (tipoSolicitud && tipoDocumento);
+
+    if (shouldFetchData) {
+      fetchData();
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [isAdmin, tipoSolicitud, tipoDocumento, programa, plantel, estatus]);
 
   return (
     <Layout title="Solicitudes de Folios">
       <FoliosForm
         setTipoSolicitud={setTipoSolicitud}
-        setSolicitudes={setSolicitudes}
+        setTipoDocumento={setTipoDocumento}
+        setEstatus={setEstatus}
         setPrograma={setPrograma}
-        setLoading={setLoadingPage}
+        setPlantel={setPlantel}
+        setLoading={setLoading}
       />
-      {tipoSolicitud === 1 && (
-        <DataTable
-          buttonAdd
-          buttonClick={handleCreate}
-          buttonText="Agregar Título"
-          title="Solicitudes de Títulos"
-          rows={solicitudes}
-          columns={columns(handleEdit)}
+      {isAdmin ? (
+        <AdminTable
+          tipoDocumento={tipoDocumento}
+          tipoSolicitud={tipoSolicitud}
+          estatus={estatus}
+          programa={programa}
+          plantel={plantel}
+          solicitudes={solicitudes}
         />
-      )}
-      {tipoSolicitud === 2 && (
-        <DataTable
-          buttonAdd
-          buttonClick={handleCreate}
-          buttonText="Agregar Certificado"
-          title="Solicitudes de Certificados"
-          rows={solicitudes}
-          columns={columns(handleEdit)}
-        />
+      ) : (
+        !buttonDisabled && (
+          <FoliosTable
+            tipoDocumento={tipoDocumento}
+            tipoSolicitud={tipoSolicitud}
+            programa={programa}
+            plantel={plantel}
+            solicitudes={solicitudes}
+          />
+        )
       )}
     </Layout>
   );
