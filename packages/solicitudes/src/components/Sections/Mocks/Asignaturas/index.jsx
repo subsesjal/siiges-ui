@@ -14,7 +14,7 @@ const createGradoMap = (grados) => {
   return gradoMap;
 };
 
-const columns = (grados) => {
+const columns = (grados, isDisabled) => {
   const gradoMap = createGradoMap(grados);
 
   return [
@@ -32,7 +32,7 @@ const columns = (grados) => {
       field: 'actions',
       headerName: 'Acciones',
       width: 150,
-      renderCell: (params) => <AsignaturasButtons id={params.id} />,
+      renderCell: (params) => <AsignaturasButtons id={params.id} isDisabled={isDisabled} />,
       sortable: false,
       filterable: false,
     },

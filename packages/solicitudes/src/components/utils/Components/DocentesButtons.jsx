@@ -8,7 +8,7 @@ import DeleteDocentes from './DocentesModales/DeleteDocentes';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
 import DocentesModal from './DocentesModales/DocentesModal';
 
-export default function DocentesButtons({ id, setDocentesList }) {
+export default function DocentesButtons({ id, setDocentesList, isDisabled }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -44,12 +44,16 @@ export default function DocentesButtons({ id, setDocentesList }) {
       <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
         <DescriptionIcon />
       </IconButton>
-      <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
-        <EditIcon />
-      </IconButton>
-      <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
-        <DeleteIcon />
-      </IconButton>
+      {!isDisabled && (
+        <>
+          <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
+            <EditIcon />
+          </IconButton>
+          <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
+            <DeleteIcon />
+          </IconButton>
+        </>
+      )}
 
       {modalOpen && (
         <DocentesModal
@@ -76,4 +80,5 @@ export default function DocentesButtons({ id, setDocentesList }) {
 DocentesButtons.propTypes = {
   id: PropTypes.number.isRequired,
   setDocentesList: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
 };

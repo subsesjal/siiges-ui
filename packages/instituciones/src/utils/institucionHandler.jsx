@@ -47,12 +47,43 @@ const buildInstitucionData = (form) => ({
   },
 });
 
+const setErrorState = (name, errorMessage, setError) => {
+  setError((prevError) => ({ ...prevError, [name]: errorMessage }));
+};
+
+const validateNombresPropuestos = (form, institucion) => {
+  const { nombrePropuesto1 = '', nombrePropuesto2 = '', nombrePropuesto3 = '' } = form;
+
+  const originalRatificaciones = institucion.ratificacionesNombre?.[0] || {};
+  const {
+    nombrePropuesto1: defName1 = '',
+    nombrePropuesto2: defName2 = '',
+    nombrePropuesto3: defName3 = '',
+  } = originalRatificaciones;
+
+  if (
+    (nombrePropuesto1 && (nombrePropuesto1 === nombrePropuesto2
+      || nombrePropuesto1 === nombrePropuesto3))
+    || (nombrePropuesto2 && nombrePropuesto2 === nombrePropuesto3)
+  ) {
+    return false;
+  }
+
+  if (
+    (nombrePropuesto1 && (nombrePropuesto1 === defName2 || nombrePropuesto1 === defName3))
+    || (nombrePropuesto2 && (nombrePropuesto2 === defName1 || nombrePropuesto2 === defName3))
+    || (nombrePropuesto3 && (nombrePropuesto3 === defName1 || nombrePropuesto3 === defName2))
+  ) return false;
+  return true;
+};
+
 const submitInstitucion = async ({
   form,
   accion,
   errorFields,
   setNoti,
   setLoading,
+  institucion,
 }) => {
   setLoading(true);
   if (!validateErrorFields(errorFields)) {
@@ -62,7 +93,16 @@ const submitInstitucion = async ({
       type: 'error',
     });
     setLoading(false);
-
+    return false;
+  }
+  const nombresValidos = validateNombresPropuestos(form, institucion);
+  if (!nombresValidos) {
+    setNoti({
+      open: true,
+      message: 'Revisa que los nombres propuestos no sean duplicados',
+      type: 'error',
+    });
+    setLoading(false);
     return false;
   }
 
@@ -84,7 +124,6 @@ const submitInstitucion = async ({
       type: 'error',
     });
     setLoading(false);
-
     return false;
   }
 
@@ -108,10 +147,6 @@ const submitInstitucion = async ({
   });
 
   return response;
-};
-
-const setErrorState = (name, errorMessage, setError) => {
-  setError((prevError) => ({ ...prevError, [name]: errorMessage }));
 };
 
 const errors = {
