@@ -17,6 +17,9 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
+    'no-console': 'off',
+    'no-shadow': 'off',
+    'no-param-reassign': 'off',
     'linebreak-style': 0,
     'import/no-extraneous-dependencies': process.env.NODE_ENV === 'production' ? 'off' : [
       'error',
