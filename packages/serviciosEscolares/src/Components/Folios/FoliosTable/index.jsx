@@ -62,9 +62,15 @@ function FoliosTable({
 
   const handleEdit = (id) => {
     if (tipoDocumento === 1) {
-      router.push(`/serviciosEscolares/solicitudesFolios/${id}/titulos`);
+      router.push({
+        pathname: `/serviciosEscolares/solicitudesFolios/${id}/titulos`,
+        query: { tipoDocumento, tipoSolicitud, programa },
+      });
     } else if (tipoDocumento === 2) {
-      router.push(`/serviciosEscolares/solicitudesFolios/${id}/certificados`);
+      router.push({
+        pathname: `/serviciosEscolares/solicitudesFolios/${id}/certificados`,
+        query: { tipoDocumento, tipoSolicitud, programa },
+      });
     } else {
       setNoti({
         open: true,
@@ -75,7 +81,6 @@ function FoliosTable({
     }
   };
 
-  // Flatten the nested values before passing to DataGrid
   const formattedSolicitudes = solicitudes.map((solicitud) => ({
     ...solicitud,
     programaNombre: solicitud.programa.nombre,

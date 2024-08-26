@@ -3,12 +3,12 @@ import {
 } from '@mui/material';
 import {
   Context,
+  createRecord,
   DataTable,
   getData,
   Input,
   LabelData,
   Layout,
-  updateRecord,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -77,12 +77,12 @@ export default function Folios() {
     if (id && observaciones) {
       setLoading(true);
       try {
-        const response = await updateRecord({
+        const response = await createRecord({
           data: { observaciones },
           endpoint: `/solicitudesFolios/${id}/observaciones`,
         });
 
-        if (response.statusCode === 200) {
+        if (response.statusCode === 201) {
           setNoti({
             open: true,
             message: 'Observaciones actualizadas con éxito',
@@ -103,8 +103,33 @@ export default function Folios() {
     }
   };
 
-  const handleFoliosSubmit = () => {
-    console.log('Folios Generados');
+  const handleFoliosSubmit = async () => {
+    if (id) {
+      setLoading(true);
+      try {
+        const response = await createRecord({
+          data: {}, // Send an empty object if there's no data to send
+          endpoint: `/solicitudesFolios/${id}/asignacionFolios`,
+        });
+        if (response.statusCode === 201) {
+          setNoti({
+            open: true,
+            message: 'Folios asignados con éxito',
+            type: 'success',
+          });
+        } else {
+          throw new Error(response.message || 'Error al asignar los folios');
+        }
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: `Error al asignar los folios: ${error.message}`,
+          type: 'error',
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   return (
@@ -184,7 +209,7 @@ export default function Folios() {
             multiline
             rows={4}
             value={observaciones}
-            onChange={handleObservacionesChange}
+            onchange={handleObservacionesChange}
           />
         </Grid>
         <Grid item xs={12}>

@@ -15,9 +15,9 @@ const columns = [
     hide: true,
   },
   { field: 'folioSolicitud', headerName: 'Folio de captura', width: 150 },
-  { field: 'programaNombre', headerName: 'Plan de estudios', width: 350 },
-  { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 150 },
-  { field: 'plantel', headerName: 'Plantel', width: 300 },
+  { field: 'programaNombre', headerName: 'Plan de estudios', width: 250 },
+  { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 250 },
+  { field: 'plantelNombre', headerName: 'Plantel', width: 300 },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -56,13 +56,31 @@ export default function AdminTable({
   plantel,
   solicitudes,
 }) {
-  const filteredSolicitudes = solicitudes.filter((solicitud) => {
+  // Map the solicitudes data to match the structure required by the DataTable
+
+  const mappedSolicitudes = solicitudes.map((solicitud) => ({
+    id: solicitud.id,
+    folioSolicitud: solicitud.folioSolicitud,
+    programaId: solicitud.programa.id,
+    tipoDocumentoId: solicitud.tipoDocumentoId,
+    tipoSolicitudFolioId: solicitud.tipoSolicitudFolioId,
+    estatusSolicitudFolioId: solicitud.estatusSolicitudFolioId,
+    programaNombre: solicitud.programa ? solicitud.programa.nombre : '',
+    estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio
+      ? solicitud.estatusSolicitudFolio.nombre
+      : '',
+    plantelNombre: solicitud.programa.plantel
+      ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
+      : '',
+  }));
+
+  // Apply filters to the mappedSolicitudes array
+  const filteredSolicitudes = mappedSolicitudes.filter((solicitud) => {
     const matchesTipoDocumento = !tipoDocumento || solicitud.tipoDocumentoId === tipoDocumento;
     const matchesTipoSolicitud = !tipoSolicitud || solicitud.tipoSolicitudFolioId === tipoSolicitud;
-    const matchesEstatus = !estatus.length
-    || estatus.includes(solicitud.estatusSolicitudFolioNombre);
-    const matchesPrograma = !programa || solicitud.programaNombre === programa;
-    const matchesPlantel = !plantel || solicitud.plantel === plantel;
+    const matchesEstatus = !estatus.length || estatus.includes(solicitud.estatusSolicitudFolioId);
+    const matchesPrograma = !programa || solicitud.programaId === programa;
+    const matchesPlantel = !plantel || solicitud.plantelNombre === plantel;
 
     return (
       matchesTipoDocumento
@@ -98,7 +116,7 @@ AdminTable.propTypes = {
       folioSolicitud: PropTypes.string.isRequired,
       programaNombre: PropTypes.string.isRequired,
       estatusSolicitudFolioNombre: PropTypes.string.isRequired,
-      plantel: PropTypes.string.isRequired,
+      plantelNombre: PropTypes.string.isRequired,
     }),
   ).isRequired,
 };

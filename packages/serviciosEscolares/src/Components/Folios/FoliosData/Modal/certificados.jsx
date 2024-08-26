@@ -34,6 +34,8 @@ export default function ModalCertificado({
       setForm(rowData);
       setAlumno(rowData.name);
       setAlumnoId(rowData.id);
+    } else {
+      setForm({});
     }
   }, [type, rowData]);
 
@@ -95,7 +97,7 @@ export default function ModalCertificado({
           if (type === 'edit') {
             newRow = {
               id: response.data.id,
-              name: alumno, // Retain the existing name
+              name: alumno,
               fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
               fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
             };
