@@ -2,7 +2,6 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
-
 import '../../styles/buttons/ButtonAdd.css';
 
 export default function UserForm({
@@ -11,11 +10,13 @@ export default function UserForm({
   confirmDisabled,
   confirmText = 'Guardar',
 }) {
+  const cancelText = confirmDisabled ? 'Regresar' : 'Cancelar';
+
   return (
     <Grid container justifyContent="flex-end" spacing={2}>
       <Grid item>
         <ButtonUnstyled className="buttonAdd cancel" onClick={cancel}>
-          <Typography variant="body1">Cancelar</Typography>
+          <Typography variant="body1">{cancelText}</Typography>
         </ButtonUnstyled>
       </Grid>
       {!confirmDisabled && (
