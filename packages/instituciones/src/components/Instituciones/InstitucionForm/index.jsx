@@ -60,6 +60,7 @@ export default function InstitucionForm({
           setForm={setForm}
           form={form}
           setLoading={setLoading}
+          accion={accion}
         />
         <Grid item xs={11} sx={{ marginTop: 5 }}>
           <ButtonsForm
