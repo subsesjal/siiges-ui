@@ -81,7 +81,7 @@ export default function InputFile({
             </Button>
             {url && (
               <a
-                href={`https://${url}`}
+                href={`http://${url}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
