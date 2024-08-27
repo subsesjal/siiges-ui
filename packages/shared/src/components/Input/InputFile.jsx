@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import '../../styles/Inputs/InputFile.css';
 import {
   Button, ButtonGroup, Grid, Typography,
@@ -23,6 +24,7 @@ export default function InputFile({
   const [files, setFiles] = useState([]);
   const { setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
+  const domain = process.env.NEXT_PUBLIC_URL;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -80,15 +82,16 @@ export default function InputFile({
               <AttachFileIcon />
             </Button>
             {url && (
-              <a
-                href={`http://${url}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="text">
+              <Link href={`${domain}${url}`} passHref legacyBehavior>
+                <Button
+                  component="a"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="text"
+                >
                   <FileOpenIcon />
                 </Button>
-              </a>
+              </Link>
             )}
           </ButtonGroup>
         </Grid>
@@ -117,10 +120,7 @@ InputFile.defaultProps = {
 
 InputFile.propTypes = {
   label: PropTypes.string.isRequired,
-  id: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tipoDocumento: PropTypes.string.isRequired,
   tipoEntidad: PropTypes.string.isRequired,
   url: PropTypes.string,
