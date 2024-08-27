@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import {
   Card, CardContent, Grid, Typography,
 } from '@mui/material';
@@ -7,7 +8,6 @@ import {
   Context,
   updateRecord,
   DefaultModal,
-  ButtonsForm,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useContext } from 'react';
@@ -22,6 +22,7 @@ export default function ModuleHeader({
   nextModule,
   module,
   id,
+  isEditOrView, // Recibe la propiedad isEditOrView
 }) {
   const [disabled, setDisabled] = useState(false);
   const [modalState, setModalState] = useState(false);
@@ -108,6 +109,8 @@ export default function ModuleHeader({
     }
   }, [module, steps]);
 
+  const showFinishButton = isEditOrView !== 'consultar' && isFinalModule;
+
   return (
     <>
       <Card sx={{ width: '100%', mt: 5 }}>
@@ -140,13 +143,24 @@ export default function ModuleHeader({
                 />
               )}
               <span>&nbsp;&nbsp;</span>
-              <ButtonStyled
-                text={textRol}
-                alt={textRol}
-                type="success"
-                onclick={() => submitButton()}
-                disabled={disabled}
-              />
+              {showFinishButton && (
+                <ButtonStyled
+                  text={textRol}
+                  alt={textRol}
+                  type="success"
+                  onclick={() => submitButton()}
+                  disabled={disabled}
+                />
+              )}
+              {!showFinishButton && !isFinalModule && (
+                <ButtonStyled
+                  text="Siguiente módulo"
+                  alt="Siguiente módulo"
+                  type="success"
+                  onclick={() => submitButton()}
+                  disabled={disabled}
+                />
+              )}
               <span>&nbsp;&nbsp;</span>
               <ButtonStyled
                 text="Salir"
@@ -154,6 +168,7 @@ export default function ModuleHeader({
                 type="success"
                 onclick={() => router.push('/home')}
               />
+
             </Grid>
           </Grid>
         </CardContent>
@@ -166,14 +181,20 @@ export default function ModuleHeader({
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography>
-              ¿Esta seguro que desea terminar la solicitud?
+            <Typography variant="body1">
+              ¿Deseas completar la solicitud? Esta acción no podrá deshacerse.
             </Typography>
           </Grid>
-          <Grid item xs={12}>
-            <ButtonsForm
-              cancel={() => setModalRepresentante(false)}
-              confirm={handleLastStepAction}
+          <Grid item xs={12} sx={{ textAlign: 'right' }}>
+            <ButtonStyled
+              text="Aceptar"
+              type="success"
+              onclick={() => handleLastStepAction()}
+            />
+            <ButtonStyled
+              text="Cancelar"
+              type="danger"
+              onclick={() => setModalRepresentante(false)}
             />
           </Grid>
         </Grid>
@@ -182,16 +203,13 @@ export default function ModuleHeader({
   );
 }
 
-ModuleHeader.defaultProps = {
-  id: null,
-};
-
 ModuleHeader.propTypes = {
+  steps: PropTypes.array.isRequired,
   type: PropTypes.string.isRequired,
-  steps: PropTypes.arrayOf(PropTypes.string).isRequired,
   date: PropTypes.string.isRequired,
-  nextModule: PropTypes.func.isRequired,
   prevModule: PropTypes.func.isRequired,
+  nextModule: PropTypes.func.isRequired,
   module: PropTypes.number.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  isEditOrView: PropTypes.string.isRequired,
 };
