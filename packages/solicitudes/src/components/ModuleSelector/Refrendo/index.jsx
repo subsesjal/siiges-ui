@@ -6,7 +6,7 @@ import {
 } from '@siiges-ui/shared';
 
 function Refrendo() {
-  const { setNoti } = useContext(Context);
+  const { setNoti, session: { id } } = useContext(Context);
   const router = useRouter();
   const [options, setOptions] = useState([]);
   const [option, setOption] = useState('');
@@ -15,7 +15,7 @@ function Refrendo() {
   const [method, setMethod] = useState('GET');
 
   const { data } = useApi({
-    endpoint: url || 'api/v1/solicitudes/?estatus=11',
+    endpoint: url || `api/v1/solicitudes?estatusSolicitudId=11&usuarioId=${id}`,
     dataBody,
     method,
   });
@@ -31,10 +31,9 @@ function Refrendo() {
     if (typeof data === 'object' && method === 'POST' && data) {
       setNoti({
         open: true,
-        message: 'Refrendo creado correctamente',
+        message: '¡Registro Exitoso!',
         type: 'success',
       });
-      console.log(data);
       router.push({
         pathname: `/solicitudes/detallesSolicitudes/${data.id}/editarSolicitud`,
       });
@@ -66,7 +65,7 @@ function Refrendo() {
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
-          <ButtonStyled text="Crear" alt="Refrendo" onclick={() => handleOnClick()} />
+          <ButtonStyled text="Crear" onclick={() => handleOnClick()} />
         </Grid>
       </Grid>
     </Grid>

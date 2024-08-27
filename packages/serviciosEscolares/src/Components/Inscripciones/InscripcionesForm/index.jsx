@@ -64,7 +64,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener planteles: ${error.message}`,
+          message: `¡Error al obtener planteles!: ${error.message}`,
           type: 'error',
         });
         setPlanteles([]);
@@ -83,7 +83,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener programas: ${error.message}`,
+          message: `¡Error al obtener programas!: ${error.message}`,
           type: 'error',
         });
         setProgramas([]);
@@ -103,7 +103,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener ciclosEscolares: ${error.message}`,
+          message: `¡Error al obtener ciclosEscolares!: ${error.message}`,
           type: 'error',
         });
         setCiclosEscolares([]);
@@ -118,12 +118,16 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener grados: ${error.message}`,
+          message: `¡Error al obtener grados!: ${error.message}`,
           type: 'error',
         });
         setGrados([]);
       } else {
-        setGrados(data.grados);
+        const gradosFiltrados = data.grados.filter((grado) => {
+          const nombre = grado.nombre.toLowerCase();
+          return nombre !== 'optativa' && nombre !== 'optativas';
+        });
+        setGrados(gradosFiltrados);
       }
     });
   };
@@ -131,11 +135,6 @@ export default function InscripcionForm({
   const fetchGrupos = (gradoId) => {
     getGrupos(gradoId, selectedCicloEscolar, (error, data) => {
       if (error) {
-        setNoti({
-          open: true,
-          message: `Error al obtener grupos: ${error.message}`,
-          type: 'error',
-        });
         setGrupos([]);
       } else {
         const transformedGrupos = data.grupos.map((programa) => ({
@@ -153,7 +152,7 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `Error al obtener asignaturas: ${error.message}`,
+          message: `¡Error al obtener asignaturas!: ${error.message}`,
           type: 'error',
         });
         setAsignaturas([]);

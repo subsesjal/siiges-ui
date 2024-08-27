@@ -6,7 +6,7 @@ export default function errorDatosInstitucion(form, setError, error) {
         formData.programa?.razonSocial === undefined
         || formData.programa?.razonSocial === ''
       ) {
-        setError({ ...error, razonSocial: 'Razon social invalida' });
+        setError({ ...error, razonSocial: '¡Razón social inválida!' });
         return false;
       }
       setError({ ...error, razonSocial: '' });
@@ -19,7 +19,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       ) {
         setError({
           ...error,
-          nombreInstitucion: 'Nombre de institucion invalido',
+          nombreInstitucion: 'Nombre de institución inválido',
         });
         return false;
       }
@@ -31,7 +31,7 @@ export default function errorDatosInstitucion(form, setError, error) {
         formData.programa?.historia === undefined
         || formData.programa?.historia === ''
       ) {
-        setError({ ...error, historia: 'Historia invalida' });
+        setError({ ...error, historia: 'Historia inválida' });
         return false;
       }
       setError({ ...error, historia: '' });
@@ -42,7 +42,7 @@ export default function errorDatosInstitucion(form, setError, error) {
         formData.programa?.vision === undefined
         || formData.programa?.vision === ''
       ) {
-        setError({ ...error, vision: 'Vision invalida' });
+        setError({ ...error, vision: 'Visión inválida' });
         return false;
       }
       setError({ ...error, vision: '' });
@@ -52,7 +52,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       if (formData.mision === undefined || formData.mision === '') {
         setError({
           ...error,
-          mision: 'Mision invalida',
+          mision: 'Misión inválida',
         });
         return false;
       }
@@ -66,7 +66,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       ) {
         setError({
           ...error,
-          valoresInstitucionales: 'Valores institucionales invalidos',
+          valoresInstitucionales: 'Valores institucionales inválidos',
         });
         return false;
       }

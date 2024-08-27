@@ -222,7 +222,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
           />
           <InputNumber
             id="puntosReunionEvacuacion"
-            label="Puntos de reunion para evacuación"
+            label="Puntos de reunión para evacuación"
             name="puntosReunionEvacuacion"
             auto="puntosReunionEvacuacion"
             value={seguridad[7]?.cantidad}

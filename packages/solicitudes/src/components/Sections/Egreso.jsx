@@ -4,9 +4,14 @@ import PropTypes from 'prop-types';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import errorEgreso from '../utils/sections/errors/errorEgreso';
 import formPrograma from '../utils/sections/forms/formPrograma';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function Egreso({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
+
+  const isSectionDisabled = useSectionDisabled(4);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   const {
     form, setForm, error, setError, setErrors,
@@ -62,7 +67,7 @@ export default function Egreso({ disabled }) {
             onFocus={handleInputFocus}
             helperText={error.perfilEgresoConocimientos}
             error={!!error.perfilEgresoConocimientos}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -80,7 +85,7 @@ export default function Egreso({ disabled }) {
             value={form[4].programa?.perfilEgresoHabilidades}
             helperText={error.perfilEgresoHabilidades}
             error={!!error.perfilEgresoHabilidades}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -98,7 +103,7 @@ export default function Egreso({ disabled }) {
             value={form[4].programa?.perfilEgresoActitudes}
             helperText={error.perfilEgresoActitudes}
             error={!!error.perfilEgresoActitudes}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -116,7 +121,7 @@ export default function Egreso({ disabled }) {
             value={form[4].programa?.seguimientoEgresados}
             helperText={error.seguimientoEgresados}
             error={!!error.seguimientoEgresados}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>

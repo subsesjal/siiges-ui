@@ -38,7 +38,7 @@ function DeleteAsignatura({
       hideModal();
       setNoti({
         open: true,
-        message: 'Asignatura eliminada exitosamente.',
+        message: '¡Asignatura eliminada exitosamente!.',
         type: 'success',
       });
     } catch (error) {
@@ -47,7 +47,7 @@ function DeleteAsignatura({
     }
   };
   return (
-    <DefaultModal open={modal} setOpen={hideModal}>
+    <DefaultModal open={modal} setOpen={hideModal} title="Eliminar Asignatura">
       <Typography>¿Desea eliminar esta asignatura?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>

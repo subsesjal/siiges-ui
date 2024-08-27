@@ -73,7 +73,12 @@ export default function RecepcionFormatos() {
       tipoDocumento: 'FDA06',
     },
   ];
-
+  const ensureUrlHasHttp = (url) => {
+    if (url && !url.startsWith('http')) {
+      return `http://${url}`;
+    }
+    return url;
+  };
   useEffect(() => {
     const fetchSolicitud = async () => {
       if (query.id !== undefined) {
@@ -92,9 +97,10 @@ export default function RecepcionFormatos() {
                 console.error('Error fetching file:', error);
                 return;
               }
+              const validatedUrl = ensureUrlHasHttp(fileUrl);
               setUrl((prevUrls) => {
                 const newUrls = [...prevUrls];
-                newUrls[index] = fileUrl; // Update the URL at the correct index
+                newUrls[index] = validatedUrl; // Update the URL at the correct index
                 return newUrls;
               });
             });
@@ -120,7 +126,7 @@ export default function RecepcionFormatos() {
     const { name, value } = event.target;
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: value ? '' : 'Este campo es obligatorio',
+      [name]: value ? '' : '¡Este campo es obligatorio!',
     }));
   };
 
@@ -131,18 +137,49 @@ export default function RecepcionFormatos() {
       [name]: checked,
     }));
   };
-
   const allChecked = Object.values(checkboxes).every((value) => value);
+
+  const downloadFile = async (type) => {
+    try {
+      const solicitudId = solicitud?.id;
+
+      GetFile({
+        tipoEntidad: 'SOLICITUD',
+        entidadId: solicitudId,
+        tipoDocumento: type,
+      }, async (fileURL, error) => {
+        if (error) {
+          console.error('Error downloading the file', error);
+          return;
+        }
+
+        if (!fileURL) {
+          console.error('File URL not provided');
+          return;
+        }
+
+        // Ensure URL starts with 'http'
+        if (!fileURL.startsWith('http')) {
+          fileURL = `http://${fileURL}`;
+        }
+
+        // Open the URL in a new tab
+        window.open(fileURL, '_blank');
+      });
+    } catch (error) {
+      console.error('Error calling GetFile', error);
+    }
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
     // Validate required fields
     const newErrors = {};
     if (!form.fechaRecepcion) {
-      newErrors.fechaRecepcion = 'Este campo es obligatorio';
+      newErrors.fechaRecepcion = '¡Este campo es obligatorio!';
     }
     if (!form.oficioAdmisorio) {
-      newErrors.oficioAdmisorio = 'Este campo es obligatorio';
+      newErrors.oficioAdmisorio = '¡Este campo es obligatorio!';
     }
 
     if (Object.keys(newErrors).length === 0) {
@@ -156,15 +193,16 @@ export default function RecepcionFormatos() {
           setLoading(false);
           setNoti({
             open: true,
-            message: 'Éxito al actualizar la solicitud',
+            message: '¡Éxito al actualizar la solicitud!',
             type: 'success',
           });
+          downloadFile('OFICIO_ADMISORIO');
           router.back();
         } else {
           setLoading(false);
           setNoti({
             open: true,
-            message: `Error al actualizar la solicitud: ${result.message}`,
+            message: `¡Error al actualizar la solicitud!: ${result.message}`,
             type: 'error',
           });
         }
@@ -172,7 +210,7 @@ export default function RecepcionFormatos() {
         setLoading(false);
         setNoti({
           open: true,
-          message: `Error al actualizar la solicitud: ${error.message}`,
+          message: `¡Error al actualizar la solicitud!: ${error.message}`,
           type: 'error',
         });
       }
@@ -181,7 +219,7 @@ export default function RecepcionFormatos() {
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Algo salió mal, revise que los campos esten correctos',
+        message: '¡Algo salió mal, revise que los campos estén correctos!',
         type: 'error',
       });
     }

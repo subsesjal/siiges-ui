@@ -8,6 +8,7 @@ import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstud
 import SolicitudContext from '../utils/Context/solicitudContext';
 import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function DatosPlanEstudios() {
   const [initialValues, setInitialValues] = useState({});
@@ -15,6 +16,9 @@ export default function DatosPlanEstudios() {
   const {
     form, setForm, error, setError, setErrors, modalidad,
   } = useContext(SolicitudContext);
+
+  // Use the custom hook for section ID 1
+  const isSectionDisabled = useSectionDisabled(1);
 
   const handleOnChange = (e) => {
     const { name, value } = e?.target || {};
@@ -103,6 +107,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.nivelId}
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
         <Grid item xs={9}>
@@ -117,6 +122,7 @@ export default function DatosPlanEstudios() {
             value={form[1].programa?.nombre || ''}
             errorMessage={error.nombre}
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -140,6 +146,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.cicloId}
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -154,6 +161,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -168,6 +176,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.duracionPeriodos}
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
         <Grid item xs={3} sx={{ mt: 3 }}>
@@ -185,6 +194,7 @@ export default function DatosPlanEstudios() {
             onfocus={handleInputFocus}
             errorMessage={error.creditos}
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -199,6 +209,7 @@ export default function DatosPlanEstudios() {
             errorMessage={error.antecedenteAcademico}
             textValue
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -217,6 +228,7 @@ export default function DatosPlanEstudios() {
             helperText={error.objetivoGeneral}
             error={!!error.objetivoGeneral}
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -235,6 +247,7 @@ export default function DatosPlanEstudios() {
             helperText={error.objetivosParticulares}
             error={!!error.objetivosParticulares}
             required
+            disabled={isSectionDisabled}
           />
         </Grid>
       </Grid>

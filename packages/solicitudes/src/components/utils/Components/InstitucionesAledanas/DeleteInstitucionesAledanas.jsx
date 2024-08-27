@@ -39,15 +39,15 @@ function DeleteInstitucionesAledanas({
       setLoading(false);
       setNoti({
         open: true,
-        message: `Ocurrió un error al borrar esta institución: ${response.message}`,
+        message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
         type: 'error',
       });
     }
   };
 
   return (
-    <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>¿Desea eliminar esta Institución Aledaña?</Typography>
+    <DefaultModal open={modal} setOpen={hideModal} title="Eliminar Institución Aledaña">
+      <Typography>¿Desea eliminar esta institución aledaña?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled

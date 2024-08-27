@@ -11,6 +11,7 @@ import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosPr
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useAsignaturas from '../utils/getAsignaturas';
 import { grados } from '../utils/Mocks/mockAsignaturas';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function Asignaturas({ disabled, type }) {
   const { programaId } = useContext(SolicitudContext);
@@ -20,11 +21,16 @@ export default function Asignaturas({ disabled, type }) {
   const { asignaturasList, setAsignaturasList } = useContext(
     TablesPlanEstudiosContext,
   );
+
+  const isSectionDisabled = useSectionDisabled(6);
+
+  const isDisabled = disabled || isSectionDisabled;
+
   const { asignaturas, loading } = type === 'editar'
     ? useAsignaturas(programaId)
     : { asignaturas: [], loading: false };
   const tableColumns = useMemo(
-    () => columns(grados, setAsignaturasList, asignaturasList),
+    () => columns(grados, isDisabled, setAsignaturasList, asignaturasList),
     [setAsignaturasList, asignaturas],
   );
 
@@ -40,7 +46,7 @@ export default function Asignaturas({ disabled, type }) {
         <Typography variant="h6">Asignaturas</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <Button onClick={showModal} text="Agregar" />}
+        {!isDisabled && <Button onClick={showModal} text="Agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
@@ -57,7 +63,7 @@ export default function Asignaturas({ disabled, type }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-        title="Crear Asignatura"
+        title="Agregar Asignatura"
       />
     </Grid>
   );

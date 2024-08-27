@@ -124,8 +124,8 @@ export default function InstitucionAledanaEditModal({
         </Grid>
         <Grid item>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           />
         </Grid>

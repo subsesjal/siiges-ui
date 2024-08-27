@@ -156,7 +156,7 @@ export default function AsignaturasFormacionCreateModal({
         </Grid>
         <Grid item xs={12}>
           <BasicSelect
-            title="Seriacion"
+            title="Seriación"
             name="seriacion"
             value={formAsignaturasFormacion.seriacion || ''}
             options={asignaturasTotalList || []}
@@ -206,8 +206,8 @@ export default function AsignaturasFormacionCreateModal({
         </Grid>
         <Grid item xs={2}>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           >
             Confirmar

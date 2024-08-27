@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Modal, Box } from '@mui/material';
+import { Modal, Box } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Title } from '@siiges-ui/shared';
 
@@ -27,15 +27,13 @@ export default function DefaultModal({
       aria-describedby="modal-confirmación-asignación-inspectores"
     >
       <Box sx={style}>
-        <Typography id="modal-confirmación" variant="h6" component="h2">
+        {/* Cambia el Typography si Title está generando un encabezado */}
+        <div id="modal-confirmación">
           <Title title={title} />
-        </Typography>
-        <Typography
-          id="modal-confirmación-asignación-inspectores"
-          sx={{ mt: 2 }}
-        >
+        </div>
+        <Box sx={{ mt: 2 }}>
           {children}
-        </Typography>
+        </Box>
       </Box>
     </Modal>
   );

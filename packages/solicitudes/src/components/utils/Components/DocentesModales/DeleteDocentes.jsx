@@ -18,7 +18,7 @@ function DeleteDocentes({
         console.log('Record deleted:', response);
         setNoti({
           open: true,
-          message: 'Docente eliminado con éxito',
+          message: '¡Docente eliminado con éxito!',
           type: 'success',
         });
         setLoading(false);
@@ -28,7 +28,7 @@ function DeleteDocentes({
       .catch((error) => {
         setNoti({
           open: true,
-          message: `Error al eliminar el docente: ${error.message}`,
+          message: `¡Error al eliminar el docente!: ${error.message}`,
           type: 'error',
         });
         setLoading(false);
@@ -36,8 +36,8 @@ function DeleteDocentes({
   };
 
   return (
-    <DefaultModal open={modal} setOpen={hideModal}>
-      <Typography>¿Desea eliminar esta Docente?</Typography>
+    <DefaultModal open={modal} setOpen={hideModal} title="Eliminar Docente">
+      <Typography>¿Desea eliminar a este/a docente?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <ButtonStyled

@@ -1,7 +1,7 @@
 import React from 'react';
 import DocentesButtons from '../../../utils/Components/DocentesButtons';
 
-const columns = (setDocentesList) => [
+const columns = (isDisabled, setDocentesList) => [
   { field: 'nombre', headerName: 'Nombre', width: 350 },
   { field: 'tipoDocente', headerName: 'Tipo de docente', width: 230 },
   { field: 'formacion', headerName: 'Formación profesional', width: 180 },
@@ -9,12 +9,12 @@ const columns = (setDocentesList) => [
   { field: 'experiencia', headerName: 'Experiencia', width: 680 },
   {
     field: 'tipoContratacion',
-    headerName: 'Contratacion',
+    headerName: 'Contratación',
     width: 150,
   },
   {
     field: 'antiguedad',
-    headerName: 'Antiguedad',
+    headerName: 'Antigüedad',
     width: 120,
   },
   {
@@ -25,6 +25,7 @@ const columns = (setDocentesList) => [
       <DocentesButtons
         id={params.id}
         setDocentesList={setDocentesList}
+        isDisabled={isDisabled}
       />
     ),
     sortable: false,

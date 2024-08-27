@@ -35,14 +35,14 @@ function DeleteInfraestructura({ modal, hideModal, id }) {
       setLoading(false);
       setNoti({
         open: true,
-        message: `Ocurrió un error al borrar esta infraestructura: ${response.message}`,
+        message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
         type: 'error',
       });
     }
   };
 
   return (
-    <DefaultModal open={modal} setOpen={hideModal}>
+    <DefaultModal open={modal} setOpen={hideModal} title="Eliminar Infraestructura">
       <Typography>¿Desea eliminar esta Infraestructura?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>

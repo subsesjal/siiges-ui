@@ -23,7 +23,7 @@ export default function InstitucionesAledanas({ disabled, programaId }) {
           setLoading(false);
         })
         .catch((error) => {
-          console.error('Error al cargar los datos de las instituciones aledañas:', error);
+          console.error('¡Error al cargar los datos de las instituciones aledañas!:', error);
           setLoading(false);
         });
     }
@@ -67,7 +67,7 @@ export default function InstitucionesAledanas({ disabled, programaId }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-        title="Crear Instituciones Aledañas"
+        title="Agregar Instituciones Aledañas"
         programaId={programaId}
       />
     </Grid>

@@ -129,17 +129,24 @@ export default function InfraestructuraEditModal({
   };
 
   const handleOnSubmit = () => {
-    handleEdit(
-      formInfraestructuras,
-      setFormInfraestructuras,
-      setInitialValues,
-      setInfraestructuras,
-      hideModal,
-      errors,
-      setNoti,
-      plantelId,
-      setLoading,
-    );
+    setFormInfraestructuras((prevData) => {
+      const newData = { ...prevData };
+      if (!newData.programaId && programaId) {
+        newData.programaId = programaId;
+      }
+      handleEdit(
+        newData,
+        setFormInfraestructuras,
+        setInitialValues,
+        setInfraestructuras,
+        hideModal,
+        errors,
+        setNoti,
+        plantelId,
+        setLoading,
+      );
+      return newData;
+    });
   };
 
   return (

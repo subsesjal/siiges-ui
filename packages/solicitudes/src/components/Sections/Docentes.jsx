@@ -8,6 +8,7 @@ import SolicitudContext from '../utils/Context/solicitudContext';
 import useDocentes from '../utils/getDocentes';
 import DocentesModal from '../utils/Components/DocentesModales/DocentesModal';
 import { transformDataForTable } from './Mocks/Docentes/utils';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function Docentes({ disabled, type }) {
   const [modal, setModal] = useState(false);
@@ -15,6 +16,10 @@ export default function Docentes({ disabled, type }) {
   const [docentesList, setDocentesList] = useState([]);
   const docentesData = useDocentes(programaId);
   const { docentesTable, loading } = type === 'editar' ? docentesData : { docentesTable: [], loading: false };
+
+  const isSectionDisabled = useSectionDisabled(8);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
     if (type === 'editar' && !loading) {
@@ -37,13 +42,13 @@ export default function Docentes({ disabled, type }) {
         <Typography variant="h6">Docentes</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <Button onClick={showModal} text="Agregar" />}
+        {!isDisabled && <Button onClick={showModal} text="Agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
             rows={docentesList}
-            columns={columns(setDocentesList)}
+            columns={columns(isDisabled, setDocentesList)}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />

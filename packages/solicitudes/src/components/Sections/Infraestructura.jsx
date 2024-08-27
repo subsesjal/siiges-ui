@@ -73,7 +73,7 @@ export default function Infraestructura({ disabled, programaId }) {
         open={modalOpen}
         hideModal={hideModal}
         type="crear"
-        title="Crear Infraestructura"
+        title="Agregar Infraestructura"
         programaId={programaId}
       />
     </Grid>

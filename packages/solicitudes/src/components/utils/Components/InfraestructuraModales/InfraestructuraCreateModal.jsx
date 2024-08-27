@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Grid } from '@mui/material';
 import {
   DefaultModal, ButtonStyled, Context, Select,
@@ -29,6 +29,8 @@ export default function InfraestructuraCreateModal({
     setInitialValues,
     plantelId,
   } = useContext(PlantelContext);
+
+  const [tipoInstalacion, setTipoInstalacion] = useState('');
 
   useEffect(() => {
     setFormInfraestructuras({});
@@ -63,8 +65,11 @@ export default function InfraestructuraCreateModal({
     const { name, value } = e.target;
     setFormInfraestructuras((prevData) => {
       const newData = { ...prevData };
-      if (name === 'tipoInstalacionId' && value === 1) {
-        newData.programaId = programaId;
+      if (name === 'tipoInstalacionId') {
+        setTipoInstalacion(value); // Actualiza el estado cuando cambia el valor
+        if (value === 1) {
+          newData.programaId = programaId;
+        }
       }
 
       if (name === 'asignaturasInfraestructura') {
@@ -112,6 +117,10 @@ export default function InfraestructuraCreateModal({
     );
   };
 
+  const adjustedAsignaturasOptions = tipoInstalacion !== 1
+    ? [{ id: 0, nombre: 'Uso común' }, ...asignaturasTotal]
+    : asignaturasTotal;
+
   return (
     <DefaultModal open={open} setOpen={hideModal} title={title}>
       <Grid container spacing={2}>
@@ -119,7 +128,7 @@ export default function InfraestructuraCreateModal({
           <BasicSelect
             title="Instalación"
             name="tipoInstalacionId"
-            value=""
+            value={tipoInstalacion}
             options={instalacion}
             onchange={handleOnChange}
             onblur={handleOnBlur}
@@ -198,7 +207,7 @@ export default function InfraestructuraCreateModal({
             title="Asignatura que atiende"
             name="asignaturasInfraestructura"
             multiple
-            options={asignaturasTotal}
+            options={adjustedAsignaturasOptions}
             onchange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.asignaturasInfraestructura}
@@ -215,8 +224,8 @@ export default function InfraestructuraCreateModal({
         </Grid>
         <Grid item>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           />
         </Grid>

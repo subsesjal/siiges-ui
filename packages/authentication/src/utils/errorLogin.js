@@ -10,7 +10,7 @@ export default function errorLogin(form, setError, error) {
     },
     contrasena: () => {
       if (form.contrasena === undefined || form.contrasena === '') {
-        setError({ ...error, contrasena: 'Contraseña invalido' });
+        setError({ ...error, contrasena: '¡Contraseña inválida!'});
         return false;
       }
       setError({ ...error, contrasena: '' });

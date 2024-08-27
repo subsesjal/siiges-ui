@@ -30,7 +30,7 @@ const handleCreate = (
       setDiligenciasRows((prevRows) => [...prevRows, newRow]);
       setNoti({
         open: true,
-        message: 'Exito, no hubo problemas en esta sección',
+        message: '¡Éxito, no hubo problemas en esta sección!',
         type: 'success',
       });
       setLoading(false);
@@ -38,7 +38,7 @@ const handleCreate = (
     .catch((error) => {
       setNoti({
         open: true,
-        message: `Algo salio mal, revisa que los campos esten correctos: ${error}`,
+        message: `¡Algo salió mal, revisa que los campos estén correctos!: ${error}`,
         type: 'error',
       });
       setLoading(false);

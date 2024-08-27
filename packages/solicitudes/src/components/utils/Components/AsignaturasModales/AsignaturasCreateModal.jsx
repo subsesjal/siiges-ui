@@ -171,11 +171,12 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             title="Seriación"
             name="seriacion"
             value=""
-            options={asignaturasList || []}
+            options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
             onchange={handleOnChange}
             textValue
           />
         </Grid>
+
         <Grid item xs={6}>
           <Input
             id="horasDocente"
@@ -214,8 +215,8 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
         </Grid>
         <Grid item xs={2}>
           <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
+            text="Guardar"
+            alt="Guardar"
             onclick={handleOnSubmit}
           />
         </Grid>

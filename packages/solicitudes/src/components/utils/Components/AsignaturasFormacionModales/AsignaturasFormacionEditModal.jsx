@@ -111,7 +111,7 @@ export default function AsignaturasFormacionEditModal({
     );
   };
 
-  const cancelButtonText = edit === 'Consultar Asignatura' ? 'Cerrar' : 'Cancelar';
+  const cancelButtonText = edit === 'Consultar Asignatura' ? 'Regresar' : 'Cancelar';
 
   return (
     <DefaultModal open={open} setOpen={hideModal} title={edit}>
@@ -177,12 +177,13 @@ export default function AsignaturasFormacionEditModal({
             title="Seriación"
             name="seriacion"
             value={rowItem.seriacion}
-            options={asignaturasTotalList || []}
+            options={[{ value: '', label: '' }, ...(asignaturasTotalList || [])]}
             onchange={handleOnChange}
             disabled={edit === 'Consultar Asignatura'}
             textValue
           />
         </Grid>
+
         <Grid item xs={6}>
           <Input
             id="horasDocente"
@@ -224,8 +225,8 @@ export default function AsignaturasFormacionEditModal({
         {edit !== 'Consultar Asignatura' && (
           <Grid item xs={2}>
             <ButtonStyled
-              text="Confirmar"
-              alt="Confirmar"
+              text="Guardar"
+              alt="Guardar"
               onclick={handleOnSubmit}
             />
           </Grid>

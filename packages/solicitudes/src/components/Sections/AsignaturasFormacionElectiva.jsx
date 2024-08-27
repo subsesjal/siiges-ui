@@ -10,6 +10,7 @@ import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosPr
 import AsignaturasFormacionCreateModal from '../utils/Components/AsignaturasFormacionModales/AsignaturasFormacionCreateModal';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useAsignaturas from '../utils/getAsignaturas';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function AsignaturasFormacionElectiva({ disabled, type }) {
   const { programaId } = useContext(SolicitudContext);
@@ -22,12 +23,16 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
     setAsignaturasTotalList,
   } = useContext(TablesPlanEstudiosContext);
 
+  const isSectionDisabled = useSectionDisabled(7);
+
+  const isDisabled = disabled || isSectionDisabled;
+
   const { asignaturasFormacion, asignaturasTotal, loading } = type === 'editar'
     ? useAsignaturas(programaId)
     : { asignaturasFormacion: [], loading: false };
 
   const tableColumns = useMemo(
-    () => columns(setAsignaturasFormacionList, asignaturasFormacionList),
+    () => columns(isDisabled, setAsignaturasFormacionList, asignaturasFormacionList),
     [setAsignaturasFormacionList, asignaturasFormacion],
   );
 
@@ -44,7 +49,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
         <Typography variant="h6">Asignaturas formación electiva</Typography>
       </Grid>
       <Grid item xs={3}>
-        {!disabled && <Button onClick={showModal} text="agregar" />}
+        {!isDisabled && <Button onClick={showModal} text="Agregar" />}
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
@@ -60,7 +65,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-        title="Crear Asignatura"
+        title="Agregar Asignatura Formación Electiva"
       />
     </Grid>
   );

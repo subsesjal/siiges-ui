@@ -1,20 +1,26 @@
-import { Grid, IconButton, Typography } from '@mui/material';
+import {
+  Grid, IconButton, Typography, TextField,
+} from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PrintIcon from '@mui/icons-material/Print';
 import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
 
 function SolicitudesActions({ id, estatus }) {
   const { session, setNoti } = useContext(Context);
-  const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openDownload, setOpenDownload] = useState(false);
+  const [comments, setComments] = useState('');
   const [consultLink, setConsultLink] = useState(`/solicitudes/detallesSolicitudes/${id}`);
   const [showButtons, setShowButtons] = useState({
     consultar: true,
     editar: false,
     eliminar: false,
+    descargar: false,
   });
 
   useEffect(() => {
@@ -32,20 +38,32 @@ function SolicitudesActions({ id, estatus }) {
           consultar: estatus === 3,
           editar: estatus === 2,
           eliminar: false,
+          descargar: estatus === 10,
         });
         break;
       default:
-        setShowButtons({ consultar: true, editar: false, eliminar: false });
+        setShowButtons({
+          consultar: true, editar: false, eliminar: false,
+        });
         break;
     }
   }, [session.rol]);
 
   const handleDelete = () => {
-    setOpen(false);
+    setOpenDelete(false);
     setNoti({
       open: true,
-      message: `Funcionalidad pendiente, intento eliminar solicitud: ${id}`,
+      message: `¡Funcionalidad pendiente, intento eliminar solicitud!: ${id}`,
       type: 'error',
+    });
+  };
+
+  const handleDownload = () => {
+    setOpenDownload(false);
+    setNoti({
+      open: true,
+      message: `Solicitud: ${id} descargada con comentarios: ${comments}`,
+      type: 'success',
     });
   };
 
@@ -75,17 +93,38 @@ function SolicitudesActions({ id, estatus }) {
         )}
         {showButtons.eliminar && (
           <Grid item xs={4}>
-            <IconButton aria-label="eliminar" onClick={() => setOpen(true)}>
+            <IconButton aria-label="eliminar" onClick={() => setOpenDelete(true)}>
               <DeleteIcon />
             </IconButton>
           </Grid>
         )}
+        {showButtons.descargar && (
+          <Grid item xs={4}>
+            <IconButton aria-label="descargar" onClick={() => setOpenDownload(true)}>
+              <PrintIcon />
+            </IconButton>
+          </Grid>
+        )}
       </Grid>
-      <DefaultModal title="Eliminar solicitud" open={open} setOpen={setOpen}>
+      <DefaultModal title="Eliminar solicitud" open={openDelete} setOpen={setOpenDelete}>
         <Typography>
           ¿Está seguro que quiere eliminar esta solicitud?
         </Typography>
-        <ButtonsForm cancel={() => setOpen(false)} confirm={handleDelete} />
+        <ButtonsForm cancel={() => setOpenDelete(false)} confirm={handleDelete} confirmText="Confirmar" />
+      </DefaultModal>
+      <DefaultModal title="Descargar solicitud" open={openDownload} setOpen={setOpenDownload}>
+        <Typography>
+          ¿Está seguro que quiere descargar esta solicitud con los siguientes comentarios?
+        </Typography>
+        <TextField
+          fullWidth
+          multiline
+          rows={4}
+          value={comments}
+          onChange={(e) => setComments(e.target.value)}
+          label="Comentarios"
+        />
+        <ButtonsForm cancel={() => setOpenDownload(false)} confirm={handleDownload} confirmText="Descargar" />
       </DefaultModal>
     </>
   );
