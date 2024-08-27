@@ -20,27 +20,32 @@ export default function EvaluacionCurricular({
   } = pagination(useState, 1);
 
   useEffect(() => {
-    if (id !== undefined) {
-      setDisabled(false);
-    }
-  }, [id]);
+    // Determine if the component should be disabled
+    const isDisabled = type === 'consultar' || id === undefined;
+    setDisabled(isDisabled);
+  }, [id, type]);
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
         <EvaluacionCurricularProvider programaId={programaId}>
           <SectionLayout
+            type={type}
             sectionTitle="Evaluación Curricular"
             sections={section}
             position={position}
             total="1"
-            porcentage={porcentaje}
+            porcentaje={porcentaje}
             nextModule={nextModule}
             next={next}
             prev={prev}
           >
             {section === 1 && (
-              <DatosGeneralesEvaluacion disabled={disabled} id={id} type={type} />
+              <DatosGeneralesEvaluacion
+                disabled={disabled}
+                id={id}
+                type={type}
+              />
             )}
             <Observaciones
               id={id}

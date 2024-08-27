@@ -8,7 +8,11 @@ const columns = () => [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => <InstitucionesAledanasButtons id={params.id} />,
+    renderCell: (params) => (
+      <InstitucionesAledanasButtons
+        id={params.id}
+      />
+    ),
     sortable: false,
     filterable: false,
   },

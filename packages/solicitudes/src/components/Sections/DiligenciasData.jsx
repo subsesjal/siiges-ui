@@ -47,7 +47,7 @@ function DiligenciasData({ disabled, id }) {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   const tableColumns = columns(setDiligencias, diligencias);
 

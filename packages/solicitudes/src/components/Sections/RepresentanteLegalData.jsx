@@ -9,7 +9,7 @@ import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import formDatosRepresentante from '../utils/sections/forms/formDatosRepresentante';
 
-function RepresentanteLegalData({ id }) {
+function RepresentanteLegalData({ id, disabled }) {
   const { municipios } = getMunicipios();
   const { user } = getCurrentUser();
   const [fileUrl, setFileUrl] = useState();
@@ -24,10 +24,8 @@ function RepresentanteLegalData({ id }) {
   }, []);
 
   const {
-    disabled, setDisabled, form, setForm,
-  } = useContext(
-    DatosGeneralesContext,
-  );
+    setDisabled, form, setForm,
+  } = useContext(DatosGeneralesContext);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -234,9 +232,13 @@ function RepresentanteLegalData({ id }) {
   );
 }
 
+RepresentanteLegalData.defaultProps = {
+  disabled: false,
+};
+
 RepresentanteLegalData.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]).isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default RepresentanteLegalData;

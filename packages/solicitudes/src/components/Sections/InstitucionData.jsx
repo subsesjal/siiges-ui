@@ -5,12 +5,10 @@ import PropTypes from 'prop-types';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
 
-function InstitucionData({ id }) {
+function InstitucionData({ id, disabled }) {
   const {
-    disabled, setDisabled, form, setForm, institucion,
-  } = useContext(
-    DatosGeneralesContext,
-  );
+    setDisabled, form, setForm, institucion,
+  } = useContext(DatosGeneralesContext);
   const [fileUrl, setFileUrl] = useState();
   const fileData = {
     entidadId: id,
@@ -59,7 +57,7 @@ function InstitucionData({ id }) {
             auto="nombre"
             onchange={handleOnChange}
             value={institucion.nombre}
-            disabled
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -126,10 +124,16 @@ function InstitucionData({ id }) {
     </Grid>
   );
 }
+InstitucionData.defaultProps = {
+  disabled: false,
+};
 
 InstitucionData.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([undefined]),
+  ]).isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default InstitucionData;
