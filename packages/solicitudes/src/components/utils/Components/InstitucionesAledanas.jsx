@@ -11,7 +11,7 @@ export default function InstitucionesAledanasButtons({ id }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const { institucionesAledanas } = useContext(PlantelContext);
+  const { institucionesAledanas, setInstitucionesAledanas } = useContext(PlantelContext);
   const rowItem = institucionesAledanas.find((item) => item.id === id)
     ? {
       id: institucionesAledanas.find((item) => item.id === id).id,
@@ -64,6 +64,7 @@ export default function InstitucionesAledanasButtons({ id }) {
         <DeleteInstitucionesAledanas
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
+          setInstitucionesAledanas={setInstitucionesAledanas}
           id={rowItem.id}
         />
       )}

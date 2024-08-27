@@ -9,24 +9,37 @@ import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import PlantelContext from '../../Context/plantelContext';
 
-function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
+function DeleteInstitucionesAledanas({
+  modal, hideModal, id, setInstitucionesAledanas,
+}) {
   const { setNoti, setLoading } = useContext(Context);
   const { plantelId } = useContext(PlantelContext);
+
   const handleDelete = async () => {
     setLoading(true);
     const endpoint = `/planteles/${plantelId}/saludInstituciones/${id}`;
     const response = await deleteRecord({ endpoint });
 
-    if (response.status === 200) {
-      // Handle success (e.g., show a success message, refresh data)
+    if (response.statusCode === 200) {
+      // Update the institucionesAledanas array by filtering out the deleted item
+      setInstitucionesAledanas(
+        (prevInstitucionesAledanas) => prevInstitucionesAledanas.filter(
+          (institucion) => institucion.id !== id,
+        ),
+      );
+
       setLoading(false);
       hideModal();
+      setNoti({
+        open: true,
+        message: 'Se eliminó exitosamente la institución aledaña',
+        type: 'success',
+      });
     } else {
-      // Handle error (e.g., show an error message)
       setLoading(false);
       setNoti({
         open: true,
-        message: `Ocurrio un error al borrar esta institución: ${response.message}`,
+        message: `Ocurrió un error al borrar esta institución: ${response.message}`,
         type: 'error',
       });
     }
@@ -45,7 +58,11 @@ function DeleteInstitucionesAledanas({ modal, hideModal, id }) {
           />
         </Grid>
         <Grid item>
-          <ButtonStyled text="Confirmar" alt="Confirmar" onclick={handleDelete} />
+          <ButtonStyled
+            text="Confirmar"
+            alt="Confirmar"
+            onclick={handleDelete}
+          />
         </Grid>
       </Grid>
     </DefaultModal>
@@ -56,6 +73,7 @@ DeleteInstitucionesAledanas.propTypes = {
   id: PropTypes.number.isRequired,
   modal: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
+  setInstitucionesAledanas: PropTypes.func.isRequired,
 };
 
 export default DeleteInstitucionesAledanas;

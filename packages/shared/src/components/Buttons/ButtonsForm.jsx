@@ -6,22 +6,25 @@ import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import '../../styles/buttons/ButtonAdd.css';
 
 export default function UserForm({ confirm, cancel, confirmDisabled }) {
+  const cancelText = confirmDisabled ? 'Regresar' : 'Cancelar';
   return (
     <Grid container justifyContent="flex-end" spacing={2}>
       <Grid item>
         <ButtonUnstyled className="buttonAdd cancel" onClick={cancel}>
-          <Typography variant="body1">Cancelar</Typography>
+          <Typography variant="body1">{cancelText}</Typography>
         </ButtonUnstyled>
       </Grid>
-      <Grid item>
-        <ButtonUnstyled
-          className="buttonAdd guardar"
-          disabled={confirmDisabled}
-          onClick={confirm}
-        >
-          <Typography variant="body1">Guardar</Typography>
-        </ButtonUnstyled>
-      </Grid>
+      {!confirmDisabled && (
+        <Grid item>
+          <ButtonUnstyled
+            className="buttonAdd guardar"
+            disabled={confirmDisabled}
+            onClick={confirm}
+          >
+            <Typography variant="body1">Guardar</Typography>
+          </ButtonUnstyled>
+        </Grid>
+      )}
     </Grid>
   );
 }
