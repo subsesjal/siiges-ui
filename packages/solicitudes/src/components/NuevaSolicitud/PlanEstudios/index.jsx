@@ -62,7 +62,7 @@ export default function PlanEstudios({
       setModalidad(query.modalidad);
     }
 
-    if (!loadingSolicitud && solicitudes.programa && type === 'editar') {
+    if (!loadingSolicitud && solicitudes.programa && (type === 'editar' || type === 'consultar')) {
       setProgramaId(solicitudes.programa.id);
       setModalidad(solicitudes.programa.modalidadId);
 

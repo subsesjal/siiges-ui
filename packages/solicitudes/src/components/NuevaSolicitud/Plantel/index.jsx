@@ -116,7 +116,7 @@ export default function Plantel({
                 type={type}
               />
             )}
-            {section === 4 && <InstitucionesAledanas disabled={isDisabled} type={type} />}
+            {section === 4 && <InstitucionesAledanas disabled={isDisabled} programaId={programaId} type={type} />}
             {section === 5 && (
               <Infraestructura disabled={isDisabled} programaId={programaId} type={type} />
             )}
