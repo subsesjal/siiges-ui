@@ -32,7 +32,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
     : { asignaturasFormacion: [], loading: false };
 
   const tableColumns = useMemo(
-    () => columns(isDisabled, setAsignaturasFormacionList, asignaturasFormacionList, type),
+    () => columns(isDisabled, type),
     [setAsignaturasFormacionList, asignaturasFormacion],
   );
 

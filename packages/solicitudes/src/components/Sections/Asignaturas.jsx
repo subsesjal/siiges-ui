@@ -31,7 +31,7 @@ export default function Asignaturas({ disabled, type }) {
     : { asignaturas: [], loading: false };
 
   const tableColumns = useMemo(
-    () => columns(grados, isDisabled, setAsignaturasList, asignaturasList, type),
+    () => columns(grados, isDisabled, type),
     [setAsignaturasList, asignaturas],
   );
 

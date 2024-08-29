@@ -49,7 +49,7 @@ function DiligenciasData({ disabled, id, type }) {
     fetchData();
   }, [id]);
 
-  const tableColumns = columns(setDiligencias, diligencias, type);
+  const tableColumns = columns(type);
 
   return (
     <Grid container spacing={2}>

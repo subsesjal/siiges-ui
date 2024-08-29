@@ -1,7 +1,7 @@
 import React from 'react';
 import AsignaturasFormacionButtons from '../../../utils/Components/AsignaturasFormacionButtons';
 
-const columns = (isDisabled, setAsignaturasFormacionList, asignaturasFormacionList, type) => [
+const columns = (isDisabled, type) => [
   { field: 'nombre', headerName: 'Nombre', width: 450 },
   { field: 'clave', headerName: 'Clave', width: 80 },
   { field: 'seriacion', headerName: 'Seriación', width: 300 },

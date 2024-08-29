@@ -14,7 +14,7 @@ const createGradoMap = (grados) => {
   return gradoMap;
 };
 
-const columns = (grados, isDisabled, setAsignaturasList, asignaturasList, type) => {
+const columns = (grados, isDisabled, type) => {
   const gradoMap = createGradoMap(grados);
 
   return [
