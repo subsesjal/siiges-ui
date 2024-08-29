@@ -37,7 +37,6 @@ export default function InstitucionesAledanasButtons({ id, type }) {
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
   };
-  console.log(type);
   if (type === 'consultar') {
     return null;
   }

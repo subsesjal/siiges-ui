@@ -58,6 +58,10 @@ export default function PlanEstudios({
       setDisabled(false);
     }
 
+    if (type === 'consultar') {
+      setDisabled(true);
+    }
+
     if (query.modalidad) {
       setModalidad(query.modalidad);
     }

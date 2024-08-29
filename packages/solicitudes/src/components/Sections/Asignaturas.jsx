@@ -26,16 +26,17 @@ export default function Asignaturas({ disabled, type }) {
 
   const isDisabled = disabled || isSectionDisabled;
 
-  const { asignaturas, loading } = type === 'editar'
+  const { asignaturas, loading } = type === 'editar' || type === 'consultar'
     ? useAsignaturas(programaId)
     : { asignaturas: [], loading: false };
+
   const tableColumns = useMemo(
-    () => columns(grados, isDisabled, setAsignaturasList, asignaturasList),
+    () => columns(grados, isDisabled, setAsignaturasList, asignaturasList, type),
     [setAsignaturasList, asignaturas],
   );
 
   useEffect(() => {
-    if (type === 'editar' && !loading) {
+    if ((type === 'editar' || type === 'consultar') && !loading) {
       setAsignaturasList(asignaturas);
     }
   }, [loading, asignaturas]);

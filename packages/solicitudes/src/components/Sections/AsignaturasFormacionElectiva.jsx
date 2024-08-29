@@ -27,17 +27,17 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
 
   const isDisabled = disabled || isSectionDisabled;
 
-  const { asignaturasFormacion, asignaturasTotal, loading } = type === 'editar'
+  const { asignaturasFormacion, asignaturasTotal, loading } = type === 'editar' || type === 'consultar'
     ? useAsignaturas(programaId)
     : { asignaturasFormacion: [], loading: false };
 
   const tableColumns = useMemo(
-    () => columns(isDisabled, setAsignaturasFormacionList, asignaturasFormacionList),
+    () => columns(isDisabled, setAsignaturasFormacionList, asignaturasFormacionList, type),
     [setAsignaturasFormacionList, asignaturasFormacion],
   );
 
   useEffect(() => {
-    if (type === 'editar' && !loading) {
+    if ((type === 'editar' || type === 'consultar') && !loading) {
       setAsignaturasFormacionList(asignaturasFormacion);
       setAsignaturasTotalList(asignaturasTotal);
     }

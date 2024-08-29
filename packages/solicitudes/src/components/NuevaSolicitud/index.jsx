@@ -101,7 +101,7 @@ export default function NuevaSolicitud({
     <ObservacionesProvider>
       <ModuleHeader
         steps={steps[modalidad].map((component) => getStepName(component))}
-        isEditOrView={type} // Pasa `type` como `isEditOrView`
+        isEditOrView={type}
         type="Nueva solicitud"
         date="22 de Agosto 2022"
         nextModule={nextModule}

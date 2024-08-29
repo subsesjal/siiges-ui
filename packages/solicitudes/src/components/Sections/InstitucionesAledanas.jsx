@@ -23,7 +23,6 @@ export default function InstitucionesAledanas({ disabled, programaId, type }) {
           setLoading(false);
         })
         .catch((error) => {
-          console.error('¡Error al cargar los datos de las instituciones aledañas!:', error);
           setLoading(false);
         });
     }

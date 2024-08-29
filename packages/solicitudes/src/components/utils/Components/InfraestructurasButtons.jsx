@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import DeleteInfraestructura from './InfraestructuraModales/DeleteInfraestructura';
 import InfraestructuraEditModal from './InfraestructuraModales/InfraestructuraEditModal';
 
-export default function InfraestructurasButtons({ id, programaId }) {
+export default function InfraestructurasButtons({ id, programaId, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -29,7 +29,9 @@ export default function InfraestructurasButtons({ id, programaId }) {
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
   };
-
+  if (type === 'consultar') {
+    return null;
+  }
   return (
     <Stack direction="row" spacing={1}>
       <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
@@ -66,4 +68,5 @@ export default function InfraestructurasButtons({ id, programaId }) {
 InfraestructurasButtons.propTypes = {
   id: PropTypes.number.isRequired,
   programaId: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
 };

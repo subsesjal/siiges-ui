@@ -8,11 +8,10 @@ import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
 import AsignaturasEditModal from './AsignaturasModales/AsignaturasEditModal';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
 
-export default function AsignaturasButtons({ id, isDisabled }) {
+export default function AsignaturasButtons({ id, isDisabled, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
   const {
     setFormAsignaturas,
     setAsignaturasList,
@@ -39,7 +38,9 @@ export default function AsignaturasButtons({ id, isDisabled }) {
     setDeleteDialogOpen(false);
     setFormAsignaturas(() => ({ programaId, tipo: 1 }));
   };
-
+  if (type === 'consultar') {
+    return null;
+  }
   return (
     <Stack direction="row" spacing={1}>
       <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>

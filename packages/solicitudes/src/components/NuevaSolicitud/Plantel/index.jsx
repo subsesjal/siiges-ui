@@ -32,12 +32,11 @@ export default function Plantel({
   const isDisabled = type === 'consultar' || disabled;
 
   useEffect(() => {
-    console.log('Updating disabled state:', !id); // Debugging line
     setDisabled(!id);
   }, [id]);
 
   useEffect(() => {
-    if (institucion) { // Debugging line
+    if (institucion) {
       if (
         !institucion.ratificacionNombre
         || (Array.isArray(institucion.ratificacionNombre)
