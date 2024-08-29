@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Image from 'next/image';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
-import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
+import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function UsuarioAvatar({ usuario }) {
   const { removeAuth, session } = useContext(Context);
@@ -14,34 +14,29 @@ export default function UsuarioAvatar({ usuario }) {
   const [imageUrl, setImageUrl] = useState(null);
   const getProfilePhoto = async () => {
     try {
-      GetFile({
-        tipoEntidad: 'PERSONA',
-        entidadId: session.id,
-        tipoDocumento: 'FOTOGRAFIA_PERSONA',
-      }, async (url) => {
+      const endpoint = '/files/';
+      const query = `?tipoEntidad=PERSONA&entidadId=${session.id}&tipoDocumento=FOTOGRAFIA_PERSONA`;
+      const response = await getData({ endpoint, query });
+      if (response.statusCode === 200 && response.data) {
+        let { url } = response.data;
         if (url) {
           if (!url.startsWith('http')) {
-            // eslint-disable-next-line no-param-reassign
             url = `http://${url}`;
           }
-          try {
-            const response = await fetch(url);
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            const blob = await response.blob();
-            const imageObjectUrl = URL.createObjectURL(blob);
-            setImageUrl(imageObjectUrl);
-          } catch (fetchError) {
-            console.error('Error fetching image', fetchError);
-            setImageUrl(undefined);
+          const response2 = await fetch(url);
+          if (!response2.ok) {
+            throw new Error('Network response was not ok');
           }
+          const blob = await response2.blob();
+          const imageObjectUrl = URL.createObjectURL(blob);
+          setImageUrl(imageObjectUrl);
         } else {
           setImageUrl(undefined);
         }
-      });
+      } else {
+        setImageUrl(undefined);
+      }
     } catch (error) {
-      console.error('Error llamando a GetFile', error);
       setImageUrl(undefined);
     }
   };
@@ -94,3 +89,16 @@ export default function UsuarioAvatar({ usuario }) {
     </>
   );
 }
+
+UsuarioAvatar.propTypes = {
+  usuario: PropTypes.shape({
+    persona: PropTypes.shape({
+      nombre: PropTypes.string,
+      apellidoPaterno: PropTypes.string,
+      apellidoMaterno: PropTypes.string,
+    }),
+    rol: PropTypes.shape({
+      descripcion: PropTypes.string,
+    }),
+  }).isRequired,
+};
