@@ -11,6 +11,7 @@ export default function DatosPlantel({
   disabled,
   plantelesData,
   setPlantelesData,
+  type,
 }) {
   const { planteles } = getPlantelesUsuario();
   const { setForm, plantelId } = useContext(PlantelContext);
@@ -266,6 +267,7 @@ DatosPlantel.propTypes = {
     paginaWeb: PropTypes.string,
     correo2: PropTypes.string,
     redesSociales: PropTypes.string,
+    type: PropTypes.string,
     correo3: PropTypes.string,
     domicilio: PropTypes.shape({
       calle: PropTypes.string,

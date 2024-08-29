@@ -1,5 +1,6 @@
 import { Grid, IconButton } from '@mui/material';
 import {
+  ButtonSimple,
   Context, DataTable, getData, Layout,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
@@ -86,6 +87,10 @@ export default function AlumnosCertificado() {
     setType('create');
   };
 
+  const handleRegresar = () => {
+    router.push('/serviciosEscolares/solicitudesFolios');
+  };
+
   return (
     <Layout title="Folios Certificados">
       <Grid container spacing={2}>
@@ -96,6 +101,14 @@ export default function AlumnosCertificado() {
             buttonText="Agregar Alumnos"
             rows={rows}
             columns={columns(handleEdit)}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <ButtonSimple
+            text="Regresar"
+            align="left"
+            design="enviar"
+            onClick={handleRegresar}
           />
         </Grid>
       </Grid>

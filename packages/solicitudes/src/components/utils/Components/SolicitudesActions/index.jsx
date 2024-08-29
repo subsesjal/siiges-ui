@@ -21,7 +21,7 @@ function SolicitudesActions({ id, estatus }) {
     consultar: true,
     editar: false,
     eliminar: false,
-    ver: false,
+    ver: true,
     descargar: false,
   });
 
@@ -29,7 +29,7 @@ function SolicitudesActions({ id, estatus }) {
     switch (session.rol) {
       case 'representante':
         setShowButtons({
-          ver: estatus > 2,
+          ver: true,
           consultar: true,
           editar: estatus === 1 || estatus === 200,
           eliminar: estatus === 1 || estatus === 200,
@@ -38,6 +38,7 @@ function SolicitudesActions({ id, estatus }) {
       case 'control_documental':
         setConsultLink(`/solicitudes/detallesSolicitudes/${id}/recepcionFormatos`);
         setShowButtons({
+          ver: true,
           consultar: estatus === 3,
           editar: estatus === 2,
           eliminar: false,
@@ -46,8 +47,7 @@ function SolicitudesActions({ id, estatus }) {
         break;
       default:
         setShowButtons({
-          ver: estatus > 2, consultar: true, editar: false, eliminar: false,
-          consultar: true, editar: false, eliminar: false,
+          ver: true, consultar: true, editar: false, eliminar: false,
         });
         break;
     }

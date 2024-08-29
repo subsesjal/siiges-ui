@@ -15,14 +15,13 @@ export default function Docentes({ disabled, type }) {
   const { programaId } = useContext(SolicitudContext);
   const [docentesList, setDocentesList] = useState([]);
   const docentesData = useDocentes(programaId);
-  const { docentesTable, loading } = type === 'editar' ? docentesData : { docentesTable: [], loading: false };
+  const { docentesTable, loading } = type === 'editar' || type === 'consultar' ? docentesData : { docentesTable: [], loading: false };
 
   const isSectionDisabled = useSectionDisabled(8);
-
   const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
-    if (type === 'editar' && !loading) {
+    if ((type === 'editar' || type === 'consultar') && !loading) {
       const transformedData = transformDataForTable(docentesTable);
       setDocentesList(transformedData);
     }
@@ -48,7 +47,7 @@ export default function Docentes({ disabled, type }) {
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
           <DataGrid
             rows={docentesList}
-            columns={columns(isDisabled, setDocentesList)}
+            columns={columns(isDisabled, setDocentesList, type)}
             pageSize={5}
             rowsPerPageOptions={[5]}
           />

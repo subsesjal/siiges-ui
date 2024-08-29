@@ -37,7 +37,15 @@ export default function FoliosForm({
       const findIndexIntitucion = instituciones.findIndex(
         ({ usuarioId }) => usuarioId === session.id,
       );
-      setSelectedInstitucion(instituciones[findIndexIntitucion].id);
+      if (findIndexIntitucion !== -1 && findIndexIntitucion !== undefined) {
+        setSelectedInstitucion(instituciones[findIndexIntitucion].id);
+      } else {
+        setNoti({
+          open: true,
+          message: 'No se encontró una institución con nombre autorizado asociada al usuario.',
+          type: 'error',
+        });
+      }
     }
   }, [isRepresentante, instituciones]);
 
@@ -121,8 +129,19 @@ export default function FoliosForm({
 
   useEffect(() => {
     if (selectedInstitucion) {
-      fetchPlanteles(selectedInstitucion);
-    } else setPlanteles([]);
+      try {
+        fetchPlanteles(selectedInstitucion);
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: `Error al buscar los planteles: ${error.message}`,
+          type: 'error',
+        });
+        setPlanteles([]);
+      }
+    } else {
+      setPlanteles([]);
+    }
   }, [selectedInstitucion]);
 
   const documentos = [

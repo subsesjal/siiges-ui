@@ -1,7 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import {
   Button,
-  ButtonsForm,
   Context,
   createRecord,
   getData,
@@ -14,6 +13,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
+import ButtonsFolios from '../ButtonsFolios';
 
 export default function FoliosData({ solicitudType, type }) {
   const { setNoti, setLoading } = useContext(Context);
@@ -94,6 +94,18 @@ export default function FoliosData({ solicitudType, type }) {
     }
   }, [tipoDocumento, tipoSolicitud, programa]);
 
+  const handleAddAlumno = () => {
+    if (solicitudType === 'titulo') {
+      router.push(
+        `/serviciosEscolares/solicitudesFolios/alumnos/${id}/titulos?programa=${programa}`,
+      );
+    } else {
+      router.push(
+        `/serviciosEscolares/solicitudesFolios/alumnos/${id}/certificados?programa=${programa}`,
+      );
+    }
+  };
+
   const handleConfirm = async () => {
     setLoading(true);
     try {
@@ -117,6 +129,7 @@ export default function FoliosData({ solicitudType, type }) {
               : 'Éxito al crear la solicitud, ya puede agregar alumnos',
           type: 'success',
         });
+        handleAddAlumno();
       } else {
         setNoti({
           open: true,
@@ -137,16 +150,15 @@ export default function FoliosData({ solicitudType, type }) {
     }
   };
 
-  const handleAddAlumno = () => {
-    if (solicitudType === 'titulo') {
-      router.push(
-        `/serviciosEscolares/solicitudesFolios/alumnos/${id}/titulos?programa=${programa}`,
-      );
-    } else {
-      router.push(
-        `/serviciosEscolares/solicitudesFolios/alumnos/${id}/certificados?programa=${programa}`,
-      );
-    }
+  const handleSend = async () => {
+    // Set estatusSolicitudFolioId to 2
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      estatusSolicitudFolioId: 2,
+    }));
+
+    // Then call the confirm function
+    await handleConfirm();
   };
 
   const handleChange = (event) => {
@@ -220,11 +232,12 @@ export default function FoliosData({ solicitudType, type }) {
         </Grid>
       )}
       <Grid item xs={id ? 8 : 12}>
-        <ButtonsForm
+        <ButtonsFolios
           confirm={handleConfirm}
           cancel={() => {
             router.back();
           }}
+          send={handleSend}
         />
       </Grid>
     </Grid>

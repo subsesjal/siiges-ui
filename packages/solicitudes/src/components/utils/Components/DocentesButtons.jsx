@@ -8,7 +8,7 @@ import DeleteDocentes from './DocentesModales/DeleteDocentes';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
 import DocentesModal from './DocentesModales/DocentesModal';
 
-export default function DocentesButtons({ id, setDocentesList, isDisabled }) {
+export default function DocentesButtons({ id, setDocentesList, isDisabled, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -19,7 +19,6 @@ export default function DocentesButtons({ id, setDocentesList, isDisabled }) {
     setIsEdit(editMode);
     setModalOpen(true);
   };
-
   const handleModalClose = () => {
     setModalOpen(false);
     setFormDocentes({
@@ -38,7 +37,9 @@ export default function DocentesButtons({ id, setDocentesList, isDisabled }) {
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
   };
-
+  if (type === 'consultar') {
+    return null;
+  }
   return (
     <Stack direction="row" spacing={1}>
       <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>

@@ -7,7 +7,7 @@ import DeleteInstitucionesAledanas from './InstitucionesAledanas/DeleteInstituci
 import InstitucionAledanaEditModal from './InstitucionesAledanas/InstitucionAledanaEditModal';
 import PlantelContext from '../Context/plantelContext';
 
-export default function InstitucionesAledanasButtons({ id }) {
+export default function InstitucionesAledanasButtons({ id, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -37,7 +37,9 @@ export default function InstitucionesAledanasButtons({ id }) {
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
   };
-
+  if (type === 'consultar') {
+    return null;
+  }
   return (
     <Stack direction="row" spacing={1}>
       <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
@@ -74,6 +76,7 @@ export default function InstitucionesAledanasButtons({ id }) {
 
 InstitucionesAledanasButtons.propTypes = {
   id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
   rowItem: PropTypes.shape({
     programaID: PropTypes.number,
   }).isRequired,

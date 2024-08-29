@@ -12,7 +12,7 @@ import columns from './Mocks/Infraestructura';
 import PlantelContext from '../utils/Context/plantelContext';
 import InfraestructuraCreateModal from '../utils/Components/InfraestructuraModales/InfraestructuraCreateModal';
 
-export default function Infraestructura({ disabled, programaId }) {
+export default function Infraestructura({ disabled, programaId, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const { infraestructuras, setInfraestructuras, plantelId } = useContext(PlantelContext);
 
@@ -64,7 +64,7 @@ export default function Infraestructura({ disabled, programaId }) {
           buttonText="Agregar"
           buttonClick={showModal}
           rows={rows}
-          columns={columns(programaId)}
+          columns={columns(programaId, type)}
           pageSize={5}
           rowsPerPageOptions={[5]}
         />
