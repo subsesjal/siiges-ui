@@ -58,11 +58,15 @@ export default function PlanEstudios({
       setDisabled(false);
     }
 
+    if (type === 'consultar') {
+      setDisabled(true);
+    }
+
     if (query.modalidad) {
       setModalidad(query.modalidad);
     }
 
-    if (!loadingSolicitud && solicitudes.programa && type === 'editar') {
+    if (!loadingSolicitud && solicitudes.programa && (type === 'editar' || type === 'consultar')) {
       setProgramaId(solicitudes.programa.id);
       setModalidad(solicitudes.programa.modalidadId);
 

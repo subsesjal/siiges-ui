@@ -8,7 +8,7 @@ import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import DiligenciasFormModal from '../utils/Components/DiligenciasModales/DiligenciasFormModal';
 import DiligenciasToRows from '../utils/Components/DiligenciasToRows';
 
-function DiligenciasData({ disabled, id }) {
+function DiligenciasData({ disabled, id, type }) {
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +49,7 @@ function DiligenciasData({ disabled, id }) {
     fetchData();
   }, [id]);
 
-  const tableColumns = columns(setDiligencias, diligencias);
+  const tableColumns = columns(type);
 
   return (
     <Grid container spacing={2}>
@@ -84,6 +84,7 @@ function DiligenciasData({ disabled, id }) {
 DiligenciasData.propTypes = {
   disabled: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default DiligenciasData;

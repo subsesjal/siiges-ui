@@ -8,11 +8,10 @@ import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProvider
 import AsignaturasFormacionEditModal from './AsignaturasFormacionModales/AsignaturasFormacionEditModal';
 import DeleteAsignatura from './AsignaturasModales/DeleteAsignatura';
 
-export default function AsignaturasFormacionButtons({ id, isDisabled }) {
+export default function AsignaturasFormacionButtons({ id, isDisabled, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
   const {
     setFormAsignaturasFormacion,
     setAsignaturasFormacionList,
@@ -39,7 +38,9 @@ export default function AsignaturasFormacionButtons({ id, isDisabled }) {
     setDeleteDialogOpen(false);
     setFormAsignaturasFormacion(() => ({ programaId, tipo: 1, areaId: 4 }));
   };
-
+  if (type === 'consultar') {
+    return null;
+  }
   return (
     <Stack direction="row" spacing={1}>
       <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
@@ -80,4 +81,5 @@ export default function AsignaturasFormacionButtons({ id, isDisabled }) {
 AsignaturasFormacionButtons.propTypes = {
   id: PropTypes.number.isRequired,
   isDisabled: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };

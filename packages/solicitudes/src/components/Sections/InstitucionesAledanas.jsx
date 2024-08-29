@@ -6,11 +6,11 @@ import columns from './Mocks/InstitucionesAledanas';
 import PlantelContext from '../utils/Context/plantelContext';
 import InstitucionesAledanasCreateModal from '../utils/Components/InstitucionesAledanas/InstitucionesAledanasCreateModal';
 
-export default function InstitucionesAledanas({ disabled, programaId }) {
+export default function InstitucionesAledanas({ disabled, programaId, type }) {
   const [modal, setModal] = useState(false);
   const [rows, setRows] = useState([]);
   const { institucionesAledanas, setInstitucionesAledanas, plantelId } = useContext(PlantelContext);
-  const tableColumns = columns(setInstitucionesAledanas, institucionesAledanas);
+  const tableColumns = columns(type);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +23,6 @@ export default function InstitucionesAledanas({ disabled, programaId }) {
           setLoading(false);
         })
         .catch((error) => {
-          console.error('¡Error al cargar los datos de las instituciones aledañas!:', error);
           setLoading(false);
         });
     }

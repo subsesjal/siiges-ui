@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import DeleteDiligencia from './DiligenciasModales/DeleteDiligencia';
 import DiligenciasFormModal from './DiligenciasModales/DiligenciasFormModal';
 
-export default function DiligenciasButtons({ id }) {
+export default function DiligenciasButtons({ id, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -29,7 +29,9 @@ export default function DiligenciasButtons({ id }) {
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
   };
-
+  if (type === 'consultar') {
+    return null;
+  }
   return (
     <Stack direction="row" spacing={1}>
       <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
@@ -65,4 +67,5 @@ export default function DiligenciasButtons({ id }) {
 
 DiligenciasButtons.propTypes = {
   id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
 };
