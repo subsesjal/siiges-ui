@@ -23,8 +23,8 @@ export default function ButtonsFolios({ confirm, cancel, send }) {
       </Grid>
       <DefaultModal title="Enviar solicitud" open={open} setOpen={setOpen}>
         <Typography sx={{ mb: 2 }}>
-          ¿Esta seguro de enviar la solicitud?. una vez enviada ya no podra ser
-          editada
+          ¿Está seguro de enviar la solicitud? Una vez enviada, ya no podrá ser
+          editada.
         </Typography>
         <ButtonsForm
           cancel={() => {
