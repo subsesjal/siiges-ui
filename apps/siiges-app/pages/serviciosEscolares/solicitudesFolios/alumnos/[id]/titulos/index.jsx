@@ -1,6 +1,6 @@
 import { Grid, IconButton } from '@mui/material';
 import {
-  Context, DataTable, getData, Layout,
+  ButtonSimple, Context, DataTable, getData, Layout,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
@@ -56,7 +56,9 @@ export default function AlumnosTitulo() {
               id: alumnos.id,
               name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
               fechaTermino: dayjs(alumnos.fechaTermino).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(alumnos.fechaElaboracion).format('DD/MM/YYYY'),
+              fechaElaboracion: dayjs(alumnos.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
             }));
             setRows(mappedRows);
           }
@@ -86,6 +88,10 @@ export default function AlumnosTitulo() {
     setType('create');
   };
 
+  const handleRegresar = () => {
+    router.push('/serviciosEscolares/solicitudesFolios');
+  };
+
   return (
     <Layout title="Folios Titulos">
       <Grid container spacing={2}>
@@ -96,6 +102,14 @@ export default function AlumnosTitulo() {
             buttonText="Agregar Alumnos"
             rows={rows}
             columns={columns(handleEdit)}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <ButtonSimple
+            text="Regresar"
+            align="left"
+            design="enviar"
+            onClick={handleRegresar}
           />
         </Grid>
       </Grid>
