@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import {
-  DataTable, DefaultModal, ButtonStyled,
+  DataTable, DefaultModal, ButtonStyled, getData, deleteRecord,
 } from '@siiges-ui/shared';
 import institucionesColumns from '../../Tables/institucionesColumns';
-// import { deleteInstitucion } from '../../../utils/institucionHandler';
 
 const formattedRows = (instituciones) => instituciones.map((institucion) => ({
   id: institucion.id,
@@ -50,12 +49,42 @@ export default function InstitucionesTable({ instituciones, session }) {
     }
   }, [instituciones]);
 
+  const handleDeleteClick = async (id) => {
+    try {
+      console.log(id);
+      // Verificar si la institución tiene solicitudes activas
+      const endpoint = '/solicitudes';
+      const query = `?usuarioId=${id}&estatusSolicitudId=11`;
+      const response = await getData({ endpoint, query });
+
+      if (response.statusCode !== 200) {
+        throw new Error(response.errorMessage || 'Error en la solicitud al servidor');
+      }
+
+      if (response.data.length > 0) {
+        alert('No se puede eliminar la institución porque tiene solicitudes activas.');
+        return; // No eliminar si tiene solicitudes activas
+      }
+
+      // Si no tiene solicitudes activas, proceder a eliminar
+      const deleteEndpoint = `/instituciones/${id}`;
+      await deleteRecord({ endpoint: deleteEndpoint });
+
+      // Filtrar la fila eliminada del estado
+      setRows(rows.filter((row) => row.id !== id));
+    } catch (error) {
+      console.error('Error al eliminar la institución:', error.message);
+    }
+  };
+
   return (
     <Grid container sx={{ marginTop: 2 }}>
       <DataTable
         title="Tabla Instituciones"
         rows={rows}
-        columns={institucionesColumns(showModal)}
+        columns={institucionesColumns((id) => {
+          showModal(id);
+        })}
       />
       <DefaultModal open={modal} setOpen={hideModal} id={modalId} title="Eliminar Institución">
         <Typography>
@@ -80,10 +109,7 @@ export default function InstitucionesTable({ instituciones, session }) {
               design="error"
               onclick={() => {
                 hideModal();
-                /* deleteInstitucion(
-                  modalId.id,
-                  handleDeleteClick,
-                ); */
+                handleDeleteClick(instituciones[0]);
               }}
             >
               Confirmar
@@ -102,12 +128,8 @@ InstitucionesTable.propTypes = {
       usuario: PropTypes.string.isRequired,
       correo: PropTypes.string.isRequired,
     }),
-  ),
+  ).isRequired,
   session: PropTypes.shape({
-    rol: PropTypes.string,
+    rol: PropTypes.string.isRequired,
   }).isRequired,
-};
-
-InstitucionesTable.defaultProps = {
-  instituciones: [] || undefined,
 };

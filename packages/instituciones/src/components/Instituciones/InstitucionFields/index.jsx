@@ -37,13 +37,11 @@ export default function InstitucionFields({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // Cargar archivos al montar si el modo es de edición
   useEffect(() => {
     if (accion === 'editar') {
       const fetchFiles = async () => {
         setLoading(true);
 
-        // Obtener la biografía
         GetFile(
           {
             entidadId: institucion.id,
@@ -57,14 +55,12 @@ export default function InstitucionFields({
                 message: 'Error al cargar el archivo de biografía',
                 type: 'error',
               });
-              console.log(institucion);
             } else {
               setUrlBiografia(url);
             }
           },
         );
 
-        // Obtener la bibliografía
         GetFile(
           {
             entidadId: institucion.id,
@@ -131,6 +127,8 @@ export default function InstitucionFields({
       return updatedForm;
     });
   };
+
+  const ratificacionesNombre = institucion?.ratificacionesNombre ?? [{}];
 
   return (
     <>
@@ -339,7 +337,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.nombrePropuesto1}
-            value={institucion?.ratificacionesNombre?.nombrePropuesto1}
+            value={ratificacionesNombre[0]?.nombrePropuesto1 || ''}
           />
         </Grid>
         <Grid item xs={11}>
@@ -351,7 +349,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.nombrePropuesto2}
-            value={institucion?.ratificacionesNombre?.nombrePropuesto2}
+            value={ratificacionesNombre[0]?.nombrePropuesto2 || ''}
           />
         </Grid>
         <Grid item xs={11}>
@@ -363,7 +361,7 @@ export default function InstitucionFields({
             onchange={(e) => handleOnChange(e, { form, setForm })}
             onblur={(e) => handleOnBlur(e, { form, setError })}
             errorMessage={errors.nombrePropuesto3}
-            value={institucion?.ratificacionesNombre?.nombrePropuesto3}
+            value={ratificacionesNombre[0]?.nombrePropuesto3 || ''}
           />
         </Grid>
         <Grid item xs={11}>
@@ -371,7 +369,7 @@ export default function InstitucionFields({
             label="Biografía o Fundamento"
             tipoEntidad="RATIFICACION"
             tipoDocumento="BIOGRAFIA"
-            id={router.query.institucionId}
+            id={router.query.institucionId || institucion.id}
             url={urlBiografia}
             setUrl={setUrlBiografia}
             setLoaded={(url) => handleFileLoaded(0, url)}
@@ -383,7 +381,7 @@ export default function InstitucionFields({
             label="Bibliografía para fuente de consulta"
             tipoEntidad="RATIFICACION"
             tipoDocumento="BIBLIOGRAFIA"
-            id={router.query.institucionId}
+            id={router.query.institucionId || institucion.id}
             url={urlBibliografia}
             setUrl={setUrlBibliografia}
             setLoaded={(url) => handleFileLoaded(1, url)}

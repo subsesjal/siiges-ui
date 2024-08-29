@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import fetchNotificaciones from '@siiges-ui/notificaciones';
+import fetchNotificaciones, { NotificacionesButtons } from '@siiges-ui/notificaciones';
 import { useRouter } from 'next/router';
-import { Layout, DataTable, Context } from '@siiges-ui/shared';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import { Divider, IconButton } from '@mui/material';
-import Link from 'next/link';
+import {
+  Layout,
+  DataTable,
+  Context,
+} from '@siiges-ui/shared';
+import { Divider } from '@mui/material';
 
 const commonColumns = [
   { field: 'asunto', headerName: 'Asunto', width: 300 },
@@ -14,11 +16,7 @@ const commonColumns = [
     headerName: 'Acciones',
     width: 150,
     renderCell: ({ id }) => (
-      <Link href={`/notificaciones/detallesNotificaciones/${id}`}>
-        <IconButton aria-label="consultar">
-          <ListAltIcon />
-        </IconButton>
-      </Link>
+      <NotificacionesButtons id={id} />
     ),
   },
 ];
@@ -34,11 +32,7 @@ const adminColumns = [
     headerName: 'Acciones',
     width: 110,
     renderCell: ({ id }) => (
-      <Link href={`/notificaciones/detallesNotificaciones/${id}`}>
-        <IconButton aria-label="consultar">
-          <ListAltIcon />
-        </IconButton>
-      </Link>
+      <NotificacionesButtons id={id} />
     ),
   },
 ];
