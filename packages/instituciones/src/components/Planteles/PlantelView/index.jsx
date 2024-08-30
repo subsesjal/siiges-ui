@@ -2,12 +2,14 @@ import {
   Divider, Grid, List, Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
+import { ButtonSimple, ListSubtitle, ListTitle } from '@siiges-ui/shared';
 import React from 'react';
+import { useRouter } from 'next/router';
 
 export default function PlantelViewForm({ data }) {
   const { directores, domicilio } = data;
   const director = directores[0]?.persona;
+  const router = useRouter();
   const tipoInmuebleMap = {
     1: 'Construido',
     2: 'Adaptado',
@@ -154,6 +156,13 @@ export default function PlantelViewForm({ data }) {
           </List>
         </Grid>
       </Grid>
+      <ButtonSimple
+        text="Regresar"
+        design="enviar"
+        onClick={() => {
+          router.back();
+        }}
+      />
     </Grid>
   );
 }
