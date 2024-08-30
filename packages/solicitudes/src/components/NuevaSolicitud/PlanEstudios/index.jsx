@@ -43,7 +43,7 @@ export default function PlanEstudios({
     8: {},
     9: {},
   });
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState({});
   const [errors, setErrors] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
@@ -57,7 +57,6 @@ export default function PlanEstudios({
     if (id && isMounted) {
       setDisabled(false);
     }
-
     if (type === 'consultar') {
       setDisabled(true);
     }

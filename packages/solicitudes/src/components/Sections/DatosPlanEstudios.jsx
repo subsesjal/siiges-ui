@@ -8,7 +8,7 @@ import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstud
 import SolicitudContext from '../utils/Context/solicitudContext';
 import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
-import useSectionDisabled from './Hooks/useSectionDisabled';
+// import useSectionDisabled from './Hooks/useSectionDisabled';
 
 // eslint-disable-next-line react/prop-types
 export default function DatosPlanEstudios({ disabled }) {
@@ -19,7 +19,7 @@ export default function DatosPlanEstudios({ disabled }) {
   } = useContext(SolicitudContext);
 
   // Use the custom hook for section ID 1
-  const isSectionDisabled = useSectionDisabled(1);
+  // const isSectionDisabled = useSectionDisabled(1);
 
   const handleOnChange = (e) => {
     const { name, value } = e?.target || {};
@@ -108,7 +108,7 @@ export default function DatosPlanEstudios({ disabled }) {
             onfocus={handleInputFocus}
             errorMessage={error.nivelId}
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={9}>
@@ -123,7 +123,7 @@ export default function DatosPlanEstudios({ disabled }) {
             value={form[1].programa?.nombre || ''}
             errorMessage={error.nombre}
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -133,7 +133,7 @@ export default function DatosPlanEstudios({ disabled }) {
             value={modalidad || ''}
             onfocus={handleInputFocus}
             options={modalidades}
-            disabled // Siempre deshabilitado en este ejemplo, pero puedes condicionar
+            disabled
           />
         </Grid>
         <Grid item xs={3}>
@@ -147,7 +147,7 @@ export default function DatosPlanEstudios({ disabled }) {
             onfocus={handleInputFocus}
             errorMessage={error.cicloId}
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -162,7 +162,7 @@ export default function DatosPlanEstudios({ disabled }) {
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -177,7 +177,7 @@ export default function DatosPlanEstudios({ disabled }) {
             onfocus={handleInputFocus}
             errorMessage={error.duracionPeriodos}
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={3} sx={{ mt: 3 }}>
@@ -195,7 +195,7 @@ export default function DatosPlanEstudios({ disabled }) {
             onfocus={handleInputFocus}
             errorMessage={error.creditos}
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -210,7 +210,7 @@ export default function DatosPlanEstudios({ disabled }) {
             errorMessage={error.antecedenteAcademico}
             textValue
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -229,7 +229,7 @@ export default function DatosPlanEstudios({ disabled }) {
             helperText={error.objetivoGeneral}
             error={!!error.objetivoGeneral}
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -248,7 +248,7 @@ export default function DatosPlanEstudios({ disabled }) {
             helperText={error.objetivosParticulares}
             error={!!error.objetivosParticulares}
             required
-            disabled={disabled} // Añadido
+            disabled={disabled}
           />
         </Grid>
       </Grid>
