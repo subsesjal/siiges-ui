@@ -88,7 +88,7 @@ export default function AlumnosCertificado() {
   };
 
   const handleRegresar = () => {
-    router.push('/serviciosEscolares/solicitudesFolios');
+    router.back();
   };
 
   return (

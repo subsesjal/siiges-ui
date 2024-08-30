@@ -89,7 +89,7 @@ export default function AlumnosTitulo() {
   };
 
   const handleRegresar = () => {
-    router.push('/serviciosEscolares/solicitudesFolios');
+    router.back();
   };
 
   return (

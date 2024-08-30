@@ -4,8 +4,8 @@ import {
   Context,
   createRecord,
   getData,
+  Input,
   InputFile,
-  InputNumber,
   LabelData,
   updateRecord,
 } from '@siiges-ui/shared';
@@ -208,7 +208,7 @@ export default function FoliosData({ solicitudType, type }) {
         />
       </Grid>
       <Grid item xs={4}>
-        <InputNumber
+        <Input
           label="Número de recibo de pago oficial"
           id="folioPago"
           name="folioPago"
