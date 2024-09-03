@@ -66,7 +66,7 @@ export default function AlumnosTitulo() {
         .catch((error) => {
           setNoti({
             open: true,
-            message: `Ocurrió un error inesperado: ${error}`,
+            message: `¡Ocurrió un error inesperado!: ${error}`,
             type: 'error',
           });
         })
@@ -93,7 +93,7 @@ export default function AlumnosTitulo() {
   };
 
   return (
-    <Layout title="Folios Titulos">
+    <Layout title="Folios Títulos">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <DataTable

@@ -1,6 +1,7 @@
 export const generos = [
   { id: 1, nombre: 'Masculino' },
   { id: 2, nombre: 'Femenino' },
+  { id: 3, nombre: 'Prefiero no decirlo' },
 ];
 
 export const nacionalidad = [
