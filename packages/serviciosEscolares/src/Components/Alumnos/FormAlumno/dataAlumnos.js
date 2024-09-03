@@ -23,7 +23,7 @@ export const campos = [
   { id: 'fechaNacimiento', label: 'Fecha de nacimiento', type: 'date' },
   {
     id: 'sexo',
-    label: 'Sexo',
+    label: 'Género',
     type: 'select',
     options: generos,
   },

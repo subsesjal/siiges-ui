@@ -18,7 +18,7 @@ export default function UsuarioView({ usuario }) {
             <List>
               <ListTitle text="Nombre(s)" />
               <ListTitle text="Apellidos" />
-              <ListTitle text="Sexo" />
+              <ListTitle text="Género" />
               <ListTitle text="Nacionalidad" />
               <ListTitle text="Correo electrónico" />
               <ListTitle text="Celular" />
