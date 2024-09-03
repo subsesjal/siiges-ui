@@ -54,7 +54,7 @@ function FoliosTable({
       setNoti({
         open: true,
         message:
-          'Error, revise que todos los campos estén seleccionados correctamente',
+          '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     }
@@ -75,7 +75,7 @@ function FoliosTable({
       setNoti({
         open: true,
         message:
-          'Error, revise que todos los campos estén seleccionados correctamente',
+          '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     }

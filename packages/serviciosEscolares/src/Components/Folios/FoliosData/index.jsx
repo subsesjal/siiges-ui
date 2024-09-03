@@ -70,7 +70,7 @@ export default function FoliosData({ solicitudType, type }) {
         } catch (error) {
           setNoti({
             open: true,
-            message: `Error al cargar la solicitud: ${error.message}`,
+            message: `¡Error al cargar la solicitud!: ${error.message}`,
             type: 'error',
           });
         } finally {
@@ -135,14 +135,14 @@ export default function FoliosData({ solicitudType, type }) {
           open: true,
           message:
             response.message
-            || 'Error al procesar la solicitud, revise que los campos estén correctos',
+            || '¡Error al procesar la solicitud, revise que los campos estén correctos!',
           type: 'error',
         });
       }
     } catch (error) {
       setNoti({
         open: true,
-        message: `Error al procesar la solicitud: ${error.message}`,
+        message: `¡Error al procesar la solicitud!: ${error.message}`,
         type: 'error',
       });
     } finally {
