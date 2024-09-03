@@ -73,14 +73,14 @@ function SolicitudesActions({ id, estatus }) {
       } else {
         setNoti({
           open: true,
-          message: response.errorMessage || 'Error al eliminar la solicitud.',
+          message: response.errorMessage || '¡Error al eliminar la solicitud!.',
           type: 'error',
         });
       }
     } catch (error) {
       setNoti({
         open: true,
-        message: 'Error interno. Inténtalo nuevamente más tarde.',
+        message: '¡Error interno. Inténtalo nuevamente más tarde!.',
         type: 'error',
       });
     }
