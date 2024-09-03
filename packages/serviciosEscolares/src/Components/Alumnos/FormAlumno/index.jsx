@@ -110,7 +110,7 @@ export default function FormAlumno({ type, alumno, setId }) {
       <Typography variant="body1">
         ¡Nota importante!. El nombre del alumno se debe registrar tal y como
         aparece en el acta de nacimiento, en mayúsculas y en caso de tener
-        acentos, letra Ñ (poner N), diéresis o algún otro carácter especial, omitirlos.
+        acentos, letra Ñ (poner N), diéresis o algún otro caracter especial, favor de omitirlos.
       </Typography>
       <br />
       <Grid container spacing={2}>
