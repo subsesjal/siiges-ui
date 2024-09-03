@@ -93,7 +93,7 @@ export default function AlumnosTitulo() {
   };
 
   return (
-    <Layout title="Folios Titulos">
+    <Layout title="Folios Títulos">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <DataTable
