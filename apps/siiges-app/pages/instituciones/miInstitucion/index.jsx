@@ -24,6 +24,7 @@ function InstitucionWrapper({
             setLoading={setLoading}
             setTitle={setTitle}
             setNoti={setNoti}
+            institucion={institucion}
           />
         )}
     </div>
