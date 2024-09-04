@@ -95,9 +95,9 @@ function FoliosTable({
           buttonAdd
           buttonClick={handleCreate}
           buttonText={
-            tipoDocumento === 1 ? 'Agregar Titulo' : 'Agregar Certificado'
+            tipoDocumento === 1 ? 'Agregar Título' : 'Agregar Certificado'
           }
-          title="Solicitudes de Titulos"
+          title="Solicitudes de Títulos"
           rows={formattedSolicitudes}
           columns={columns(handleEdit)}
         />
