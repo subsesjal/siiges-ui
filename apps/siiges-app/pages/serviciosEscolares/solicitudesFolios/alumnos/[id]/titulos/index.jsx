@@ -121,7 +121,7 @@ export default function AlumnosTitulo() {
         programaId={programa}
         setRows={setRows}
         rowData={rowData}
-        title="Alumnos Titulos"
+        title="Alumnos Títulos"
       />
     </Layout>
   );

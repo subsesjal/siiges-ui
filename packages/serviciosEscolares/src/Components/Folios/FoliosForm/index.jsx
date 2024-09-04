@@ -145,7 +145,7 @@ export default function FoliosForm({
   }, [selectedInstitucion]);
 
   const documentos = [
-    { id: 1, nombre: 'Titulos' },
+    { id: 1, nombre: 'Títulos' },
     { id: 2, nombre: 'Certificados' },
   ];
 
