@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Layout, DataTable, Context, DefaultModal, getData } from '@siiges-ui/shared';
-import { Divider, IconButton, Typography, Grid, CircularProgress } from '@mui/material';
+import {
+  Layout, DataTable, Context, DefaultModal, getData,
+} from '@siiges-ui/shared';
+import {
+  Divider, IconButton, Typography, Grid, CircularProgress,
+} from '@mui/material';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 
 function ModalState() {
