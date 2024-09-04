@@ -15,6 +15,7 @@ const columns = (handleEdit) => [
     hide: true,
   },
   { field: 'name', headerName: 'Nombre', width: 250 },
+  { field: 'folio', headerName: 'Folio', width: 150 },
   {
     field: 'fechaTermino',
     headerName: 'Fecha de terminación de plan de estudios',
@@ -40,7 +41,7 @@ const columns = (handleEdit) => [
 export default function AlumnosTitulo() {
   const { setNoti, setLoading } = useContext(Context);
   const router = useRouter();
-  const { id, programa } = router.query;
+  const { id, programa, tipoSolicitud } = router.query;
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState('create');
@@ -89,11 +90,13 @@ export default function AlumnosTitulo() {
   };
 
   const handleRegresar = () => {
-    router.back();
+    router.push(
+      `/serviciosEscolares/solicitudesFolios/${id}/titulos?tipoDocumento=1&tipoSolicitud=${tipoSolicitud}&programa=${programa}`,
+    );
   };
 
   return (
-    <Layout title="Folios Titulos">
+    <Layout title="Agregar Solicitud de Folios">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <DataTable
@@ -121,7 +124,7 @@ export default function AlumnosTitulo() {
         programaId={programa}
         setRows={setRows}
         rowData={rowData}
-        title="Alumnos Titulos"
+        title="Agregar Alumno"
       />
     </Layout>
   );

@@ -27,6 +27,7 @@ export default function ModalCertificado({
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
   const [alumnoId, setAlumnoId] = useState(null);
+  const [disabled, setDisabled] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
 
   useEffect(() => {
@@ -59,14 +60,17 @@ export default function ModalCertificado({
             const fullName = `${response.data.persona.nombre} ${response.data.persona.apellidoPaterno} ${response.data.persona.apellidoMaterno}`;
             setAlumno(fullName);
             setAlumnoId(response.data.id);
+            setDisabled(true);
           }
         })
         .catch((error) => {
+          console.error(error);
           setNoti({
             open: true,
-            message: `Ocurrió un error inesperado: ${error}`,
+            message: 'No se encontro el Alumno',
             type: 'error',
           });
+          setDisabled(false);
         })
         .finally(() => {
           setLoading(false);
@@ -80,7 +84,9 @@ export default function ModalCertificado({
     const formattedForm = {
       ...form,
       fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
-      fechaElaboracion: dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ'),
+      fechaElaboracion: dayjs(form.fechaElaboracion).format(
+        'YYYY-MM-DDTHH:mm:ssZ',
+      ),
     };
 
     const endpoint = type === 'edit'
@@ -98,21 +104,32 @@ export default function ModalCertificado({
             newRow = {
               id: response.data.id,
               name: alumno,
-              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+              fechaTermino: dayjs(response.data.fechaTermino).format(
+                'DD/MM/YYYY',
+              ),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
             };
           } else {
             newRow = {
               id: response.data.id,
               name: `${response.data.alumno.persona.nombre} ${response.data.alumno.persona.apellidoPaterno} ${response.data.alumno.persona.apellidoMaterno}`,
-              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+              fechaTermino: dayjs(response.data.fechaTermino).format(
+                'DD/MM/YYYY',
+              ),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
             };
           }
 
           setNoti({
             open: true,
-            message: type === 'edit' ? 'Registro actualizado exitosamente' : 'Registro creado exitosamente',
+            message:
+              type === 'edit'
+                ? 'Registro actualizado exitosamente'
+                : 'Registro creado exitosamente',
             type: 'success',
           });
 
@@ -183,7 +200,11 @@ export default function ModalCertificado({
           />
         </Grid>
         <Grid item xs={12}>
-          <ButtonsForm confirm={handleConfirm} cancel={handleCancel} />
+          <ButtonsForm
+            confirm={handleConfirm}
+            confirmDisabled={!disabled}
+            cancel={handleCancel}
+          />
         </Grid>
       </Grid>
     </DefaultModal>

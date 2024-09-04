@@ -48,6 +48,8 @@ export default function Folios() {
             gradoAcademico: data.programa.nivelId,
             nombreAlumno: data.alumno ? data.alumno.nombre : '',
             matriculaAlumno: data.alumno ? data.alumno.matricula : '',
+            institucion: data.programa?.plantel?.institucion?.nombre,
+            claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
           });
         } catch (error) {
           setNoti({
@@ -108,7 +110,7 @@ export default function Folios() {
       setLoading(true);
       try {
         const response = await createRecord({
-          data: {}, // Send an empty object if there's no data to send
+          data: {},
           endpoint: `/solicitudesFolios/${id}/asignacionFolios`,
         });
         if (response.statusCode === 201) {
@@ -156,7 +158,7 @@ export default function Folios() {
             <Grid item xs={8}>
               <LabelData
                 title="Institución"
-                subtitle="Universidad Enrique Diáz de León"
+                subtitle={etiquetas.institucion}
               />
             </Grid>
             <Grid item xs={4}>
@@ -177,7 +179,7 @@ export default function Folios() {
             <Grid item xs={8}>
               <LabelData
                 title="Clave de centro de trabajo"
-                subtitle="1234567"
+                subtitle={etiquetas.claveCentroTrabajo}
               />
             </Grid>
             <Grid item xs={4}>

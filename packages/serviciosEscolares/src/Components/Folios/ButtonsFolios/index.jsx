@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import { ButtonsForm, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
 
 export default function ButtonsFolios({ confirm, cancel, send }) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   return (
     <Grid container justifyContent="flex-end" spacing={2}>
       <Grid item>
@@ -15,7 +17,7 @@ export default function ButtonsFolios({ confirm, cancel, send }) {
       </Grid>
       <Grid item>
         <ButtonSimple
-          text="Enviar"
+          text="Enviar Solicitud"
           onClick={() => {
             setOpen(true);
           }}
@@ -30,8 +32,15 @@ export default function ButtonsFolios({ confirm, cancel, send }) {
           cancel={() => {
             setOpen(false);
           }}
-          confirm={() => {
-            send();
+          confirm={async () => {
+            const response = await send();
+            if (
+              response
+              && (response.statusCode === 200 || response.statusCode === 201)
+            ) {
+              setOpen(false);
+              router.push('/serviciosEscolares/solicitudesFolios'); // Redirects to the specific route
+            }
           }}
         />
       </DefaultModal>

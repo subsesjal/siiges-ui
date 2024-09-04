@@ -19,8 +19,8 @@ export default async function SubmitDocument(formData, setUrl, setNoti) {
 
     const data = await response.json();
 
-    if (data && data.url) {
-      setUrl(data.url);
+    if (data && data.ubicacion) {
+      setUrl(data.ubicacion);
     } else {
       throw new Error('No se encontro "ubicación" en la respuesta.');
     }
