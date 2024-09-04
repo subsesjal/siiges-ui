@@ -44,7 +44,7 @@ export default function InstitucionFields({
             if (error) {
               setNoti({
                 open: true,
-                message: 'Error al cargar el archivo de biografía',
+                message: '¡Error al cargar el archivo de biografía!',
                 type: 'error',
               });
             } else {
@@ -62,7 +62,7 @@ export default function InstitucionFields({
             if (error) {
               setNoti({
                 open: true,
-                message: 'Error al cargar el archivo de bibliografía',
+                message: '¡Error al cargar el archivo de bibliografía!',
                 type: 'error',
               });
             } else {
@@ -80,7 +80,7 @@ export default function InstitucionFields({
             if (error) {
               setNoti({
                 open: true,
-                message: 'Error al cargar el archivo de acta constitutiva',
+                message: '¡Error al cargar el archivo de acta constitutiva!',
                 type: 'error',
               });
             } else {
