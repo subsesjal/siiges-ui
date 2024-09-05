@@ -19,8 +19,10 @@ import formData from './components/utils/sections/forms/formData';
 import getSolicitudDetalles from './components/utils/getSolicitudDetalles';
 import columnsSolicitudes from './components/utils/Tables/solicitudesColumns';
 import DocentesCreateModal from './components/utils/Components/DocentesModales/DocentesModal';
+import HerramientaEducativa from './components/Sections/HerramientaEducativa';
 
 export {
+  HerramientaEducativa,
   getSolicitudDetalles,
   NewRequest,
   ChangeAddress,

@@ -20,6 +20,7 @@ import SolicitudContext from '../../utils/Context/solicitudContext';
 import getSolicitudesById from '../../utils/getSolicitudesById';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
 import Observaciones from '../../Sections/Observaciones';
+import HerramientaEducativa from '../../Sections/HerramientaEducativa';
 
 export default function PlanEstudios({
   nextModule,
@@ -240,7 +241,7 @@ export default function PlanEstudios({
                 <TrayectoriaEducativa disabled={isDisabled} type={type} />
               )}
               {section === 10 && (
-                <FundamentosPlanEstudios disabled={isDisabled} type={type} />
+                <HerramientaEducativa disabled={isDisabled} type={type} />
               )}
               {type === 'editar' && <Observaciones id={id} section={section} />}
             </SectionLayout>
