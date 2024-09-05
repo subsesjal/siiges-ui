@@ -3,7 +3,7 @@ import { Context, DataTable } from '@siiges-ui/shared';
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import ArticleIcon from '@mui/icons-material/Article';
 import PropTypes from 'prop-types';
 
 const columns = (handleEdit, handleConsultar) => [
@@ -23,14 +23,14 @@ const columns = (handleEdit, handleConsultar) => [
     width: 150,
     renderCell: (params) => (
       <>
+        <IconButton onClick={() => handleConsultar(params.row.id)}>
+          <ArticleIcon />
+        </IconButton>
         {params.row.estatusSolicitudFolioNombre !== 'REVISION' && (
           <IconButton onClick={() => handleEdit(params.row.id)}>
             <EditIcon />
           </IconButton>
         )}
-        <IconButton onClick={() => handleConsultar(params.row.id)}>
-          <VisibilityIcon />
-        </IconButton>
       </>
     ),
   },
@@ -46,17 +46,16 @@ function FoliosTable({
   const router = useRouter();
   const { setNoti } = useContext(Context);
 
-  // General function for navigation, passing status as an argument
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
 
     if (tipoDocumento === 1 || tipoDocumento === 2) {
       router.push({
         pathname: `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`,
-        state: {
+        query: {
           tipoDocumento, tipoSolicitud, programa, status,
         },
-      });
+      }, `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`);
     } else {
       setNoti({
         open: true,

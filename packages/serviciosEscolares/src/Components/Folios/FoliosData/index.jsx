@@ -351,6 +351,7 @@ export default function FoliosData({ type }) {
             confirm={handleConfirm}
             cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
             send={handleSend}
+            disabled={status === 'consult'}
           />
         </Grid>
       </Grid>

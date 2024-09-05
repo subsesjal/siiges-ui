@@ -13,6 +13,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ButtonsFoliosAdmin } from '@siiges-ui/serviciosescolares';
+import dayjs from 'dayjs';
 
 export default function Folios() {
   const { setNoti, setLoading } = useContext(Context);
@@ -27,6 +28,7 @@ export default function Folios() {
   });
   const [tabIndex, setTabIndex] = useState(0);
   const [observaciones, setObservaciones] = useState('');
+  const [alumnosRows, setAlumnosRows] = useState([]);
 
   const router = useRouter();
   const { id } = router.query;
@@ -51,6 +53,25 @@ export default function Folios() {
             institucion: data.programa?.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
           });
+
+          // Fetch alumnos if solicitudFolio exists
+          const alumnosResponse = await getData({
+            endpoint: `/solicitudesFolios/${id}/alumnos`,
+          });
+
+          if (alumnosResponse.data) {
+            const mappedAlumnos = alumnosResponse.data.map((res) => ({
+              id: res.id,
+              nombre: `${res.alumno.persona.nombre} ${res.alumno.persona.apellidoPaterno} ${res.alumno.persona.apellidoMaterno}`,
+              matricula: res.alumno.matricula,
+              fechaElaboracion: dayjs(res.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
+              fechaTermino: dayjs(res.fechaTermino).format('DD/MM/YYYY'),
+            }));
+
+            setAlumnosRows(mappedAlumnos);
+          }
         } catch (error) {
           setNoti({
             open: true,
@@ -91,7 +112,9 @@ export default function Folios() {
             type: 'success',
           });
         } else {
-          throw new Error(response.message || 'Error al actualizar las observaciones');
+          throw new Error(
+            response.message || 'Error al actualizar las observaciones',
+          );
         }
       } catch (error) {
         setNoti({
@@ -134,6 +157,20 @@ export default function Folios() {
     }
   };
 
+  const alumnosColumns = [
+    {
+      field: 'id', headerName: 'ID', width: 100, hide: true,
+    },
+    { field: 'nombre', headerName: 'Nombre', width: 320 },
+    { field: 'matricula', headerName: 'Matrícula', width: 150 },
+    {
+      field: 'fechaElaboracion',
+      headerName: 'Fecha de Elaboración',
+      width: 300,
+    },
+    { field: 'fechaTermino', headerName: 'Fecha de Termino', width: 300 },
+  ];
+
   return (
     <Layout title="Consultar solicitud">
       <Grid container spacing={1}>
@@ -156,10 +193,7 @@ export default function Folios() {
               <Typography variant="h6">Datos de la institución</Typography>
             </Grid>
             <Grid item xs={8}>
-              <LabelData
-                title="Institución"
-                subtitle={etiquetas.institucion}
-              />
+              <LabelData title="Institución" subtitle={etiquetas.institucion} />
             </Grid>
             <Grid item xs={4}>
               <LabelData title="RVOE" subtitle={etiquetas.acuerdoRvoe} />
@@ -199,7 +233,11 @@ export default function Folios() {
 
         {tabIndex === 1 && (
           <Grid item xs={12}>
-            <DataTable title="Alumnos" rows={[]} columns={[]} />
+            <DataTable
+              title="Alumnos"
+              rows={alumnosRows}
+              columns={alumnosColumns}
+            />
           </Grid>
         )}
 
@@ -211,7 +249,7 @@ export default function Folios() {
             multiline
             rows={4}
             value={observaciones}
-            onchange={handleObservacionesChange}
+            onChange={handleObservacionesChange}
           />
         </Grid>
         <Grid item xs={12}>
