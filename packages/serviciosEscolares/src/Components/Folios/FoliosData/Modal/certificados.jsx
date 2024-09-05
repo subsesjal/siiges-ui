@@ -30,13 +30,35 @@ export default function ModalCertificado({
   const [disabled, setDisabled] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
 
+  const validateForm = () => {
+    const isValid = alumno
+      && form.fechaElaboracion
+      && form.fechaTermino;
+
+    setDisabled(!isValid);
+  };
+
+  useEffect(() => {
+    validateForm();
+  }, [form, alumnoId]);
+
   useEffect(() => {
     if (type === 'edit' && rowData) {
-      setForm(rowData);
+      setForm({
+        ...rowData,
+        fechaElaboracion: rowData.fechaElaboracion
+          ? dayjs(rowData.fechaElaboracion, 'MM/DD/YYYY').format('DD/MM/YYYY')
+          : '',
+        fechaTermino: rowData.fechaTermino
+          ? dayjs(rowData.fechaTermino, 'MM/DD/YYYY').format('DD/MM/YYYY')
+          : '',
+      });
       setAlumno(rowData.name);
       setAlumnoId(rowData.id);
     } else {
       setForm({});
+      setAlumno();
+      setAlumnoId();
     }
   }, [type, rowData]);
 
@@ -60,7 +82,6 @@ export default function ModalCertificado({
             const fullName = `${response.data.persona.nombre} ${response.data.persona.apellidoPaterno} ${response.data.persona.apellidoMaterno}`;
             setAlumno(fullName);
             setAlumnoId(response.data.id);
-            setDisabled(true);
           }
         })
         .catch((error) => {
@@ -70,7 +91,6 @@ export default function ModalCertificado({
             message: 'No se encontro el Alumno',
             type: 'error',
           });
-          setDisabled(false);
         })
         .finally(() => {
           setLoading(false);
@@ -90,7 +110,7 @@ export default function ModalCertificado({
     };
 
     const endpoint = type === 'edit'
-      ? `/solicitudesFolios/${form.id}`
+      ? `/solicitudesFolios/solicitudesFoliosAlumnos/${form.id}`
       : `/solicitudesFolios/${id}/alumnos/${alumnoId}`;
 
     const action = type === 'edit' ? updateRecord : createRecord;
@@ -202,7 +222,7 @@ export default function ModalCertificado({
         <Grid item xs={12}>
           <ButtonsForm
             confirm={handleConfirm}
-            confirmDisabled={!disabled}
+            confirmDisabled={disabled}
             cancel={handleCancel}
           />
         </Grid>
