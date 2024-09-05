@@ -30,7 +30,6 @@ export default function NuevaInspeccion() {
     dataBody: body,
   });
   const commentRefs = useRef([]);
-
   useEffect(() => {
     setLoading(loading);
     if (Array.isArray(data)) {

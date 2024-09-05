@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { DataTable } from '@siiges-ui/shared';
 import getSolicitudesInspecciones from '../../utils/getSolicitudesInspeccion';
-import columns from '../Mocks/Inspecciones';
+import getColumns from '../Mocks/Inspecciones';
 
 export default function InspeccionesTable() {
   const { solicitudesInspecciones, loading } = getSolicitudesInspecciones();
   const [inspecciones, setInspecciones] = useState([]);
-
+  const isAssigned = false;
+  const columns = getColumns(isAssigned);
   const mapSolicitudesToRows = (solicitudes) => solicitudes.map((solicitud) => ({
     id: solicitud.id,
     folio: solicitud.folio,
