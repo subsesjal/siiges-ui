@@ -123,7 +123,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
         </Grid>
         <Grid item xs={12}>
           <Typography>
-            *Nombre de personas físicas: Se debera anexar la biografía o
+            *Nombre de personas físicas: Se deberá anexar la biografía o
             fundamento por el que se hace la propuesta de nombre. En su caso, se
             anexará la biografía que sirva de fuente de consulta (autor, título
             de la obra, lugar y fecha de edición).

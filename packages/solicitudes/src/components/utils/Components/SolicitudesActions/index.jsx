@@ -10,6 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PrintIcon from '@mui/icons-material/Print';
 import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
+import { deleteRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
+import { useRouter } from 'next/router';
 
 function SolicitudesActions({ id, estatus }) {
   const { session, setNoti } = useContext(Context);
@@ -24,7 +26,7 @@ function SolicitudesActions({ id, estatus }) {
     ver: true,
     descargar: false,
   });
-
+  const router = useRouter();
   useEffect(() => {
     switch (session.rol) {
       case 'representante':
@@ -53,13 +55,35 @@ function SolicitudesActions({ id, estatus }) {
     }
   }, [session.rol]);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setOpenDelete(false);
-    setNoti({
-      open: true,
-      message: `¡Funcionalidad pendiente, intento eliminar solicitud!: ${id}`,
-      type: 'error',
-    });
+
+    try {
+      const response = await deleteRecord({ endpoint: `/solicitudes/${id}` });
+
+      if (response.statusCode === 200) {
+        setNoti({
+          open: true,
+          message: `¡Solicitud ${id} eliminada correctamente!`,
+          type: 'success',
+        });
+        setTimeout(() => {
+          router.replace(router.asPath);
+        }, 1500);
+      } else {
+        setNoti({
+          open: true,
+          message: response.errorMessage || '¡Error al eliminar la solicitud!.',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: '¡Error interno. Inténtalo nuevamente más tarde!.',
+        type: 'error',
+      });
+    }
   };
 
   const handleDownload = () => {
@@ -109,7 +133,7 @@ function SolicitudesActions({ id, estatus }) {
         )}
         {showButtons.eliminar && (
           <Grid item xs={3}>
-            <IconButton aria-label="eliminar" onClick={() => setOpen(true)}>
+            <IconButton aria-label="eliminar" onClick={() => setOpenDelete(true)}>
               <DeleteIcon />
             </IconButton>
           </Grid>

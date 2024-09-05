@@ -11,12 +11,16 @@ import {
   handleOnChange,
   handleOnBlur,
 } from '../../../utils/institucionHandler';
+import BiografiaBibliografiaModal from '../../utils/BiografiaBibliografiaModal';
 
 export default function InstitucionForm({
   session, accion, institucion, setLoading, setTitle, setNoti,
 }) {
   const [errorFields, setErrorFields] = useState({});
   const [form, setForm] = useState({});
+  const [openModal, setOpenModal] = useState(false);
+  const [showButtons, setShowButtons] = useState(true);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setLoading(true);
@@ -33,7 +37,27 @@ export default function InstitucionForm({
         router.back();
       }
     }
-  }, []);
+    setLoading(false);
+  }, [accion, institucion.id, session.id, setLoading, setTitle]);
+
+  const handleConfirm = async () => {
+    const success = await submitInstitucion({
+      form,
+      accion,
+      errorFields,
+      setNoti,
+      setLoading,
+      institucion,
+      setForm,
+    });
+
+    if (success) {
+      setShowButtons(false); // Oculta los botones tras el éxito
+      if (accion === 'crear') {
+        setOpenModal(true); // Abre el modal para subir biografía y bibliografía
+      }
+    }
+  };
 
   return (
     <Grid container>
@@ -60,21 +84,27 @@ export default function InstitucionForm({
           setForm={setForm}
           form={form}
           setLoading={setLoading}
+          accion={accion}
+          page={page}
+          setPage={setPage}
         />
-        <Grid item xs={11} sx={{ marginTop: 5 }}>
-          <ButtonsForm
-            confirm={() => submitInstitucion({
-              form,
-              accion,
-              errorFields,
-              setNoti,
-              setLoading,
-              institucion,
-            })}
-            cancel={() => handleCancel()}
-          />
-        </Grid>
+        {showButtons && page === 2 && (
+          <Grid item xs={11} sx={{ marginTop: 5 }}>
+            <ButtonsForm
+              confirm={handleConfirm}
+              cancel={() => handleCancel()}
+            />
+          </Grid>
+        )}
       </Grid>
+
+      <BiografiaBibliografiaModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        institucionId={form.id}
+        setNoti={setNoti}
+        setLoading={setLoading}
+      />
     </Grid>
   );
 }

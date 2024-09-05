@@ -226,7 +226,9 @@ export default function FoliosData({ type }) {
       } else {
         setNoti({
           open: true,
-          message: response.message || 'Error al procesar la solicitud',
+          message:
+            response.message
+            || '¡Error al procesar la solicitud, revise que los campos estén correctos!',
           type: 'error',
         });
       }
@@ -234,7 +236,7 @@ export default function FoliosData({ type }) {
     } catch (error) {
       setNoti({
         open: true,
-        message: `Error al procesar la solicitud: ${error.message}`,
+        message: `¡Error al procesar la solicitud!: ${error.message}`,
         type: 'error',
       });
       return { statusCode: 500, message: error.message };

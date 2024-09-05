@@ -59,7 +59,8 @@ function FoliosTable({
     } else {
       setNoti({
         open: true,
-        message: 'Error, revise que todos los campos estén seleccionados correctamente',
+        message:
+          '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     }
