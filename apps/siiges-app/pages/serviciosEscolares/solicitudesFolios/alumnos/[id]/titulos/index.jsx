@@ -67,7 +67,7 @@ export default function AlumnosTitulo() {
         .catch((error) => {
           setNoti({
             open: true,
-            message: `Ocurrió un error inesperado: ${error}`,
+            message: `¡Ocurrió un error inesperado!: ${error}`,
             type: 'error',
           });
         })
@@ -125,6 +125,7 @@ export default function AlumnosTitulo() {
         setRows={setRows}
         rowData={rowData}
         title="Agregar Alumno"
+
       />
     </Layout>
   );

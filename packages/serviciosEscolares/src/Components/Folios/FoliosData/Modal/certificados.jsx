@@ -145,7 +145,7 @@ export default function ModalCertificado({
       .catch((error) => {
         setNoti({
           open: true,
-          message: `Ocurrió un error inesperado: ${error}`,
+          message: `¡Ocurrió un error inesperado!: ${error}`,
           type: 'error',
         });
       })

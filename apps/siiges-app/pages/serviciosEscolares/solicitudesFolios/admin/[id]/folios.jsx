@@ -75,7 +75,7 @@ export default function Folios() {
         } catch (error) {
           setNoti({
             open: true,
-            message: `Error al cargar la solicitud: ${error.message}`,
+            message: `¡Error al cargar la solicitud!: ${error.message}`,
             type: 'error',
           });
         } finally {
@@ -108,18 +108,16 @@ export default function Folios() {
         if (response.statusCode === 201) {
           setNoti({
             open: true,
-            message: 'Observaciones actualizadas con éxito',
+            message: '¡Observaciones actualizadas con éxito!',
             type: 'success',
           });
         } else {
-          throw new Error(
-            response.message || 'Error al actualizar las observaciones',
-          );
+          throw new Error(response.message || '¡Error al actualizar las observaciones!');
         }
       } catch (error) {
         setNoti({
           open: true,
-          message: `Error al actualizar las observaciones: ${error.message}`,
+          message: `¡Error al actualizar las observaciones!: ${error.message}`,
           type: 'error',
         });
       } finally {
@@ -139,16 +137,16 @@ export default function Folios() {
         if (response.statusCode === 201) {
           setNoti({
             open: true,
-            message: 'Folios asignados con éxito',
+            message: '¡Folios asignados con éxito!',
             type: 'success',
           });
         } else {
-          throw new Error(response.message || 'Error al asignar los folios');
+          throw new Error(response.message || '¡Error al asignar los folios!');
         }
       } catch (error) {
         setNoti({
           open: true,
-          message: `Error al asignar los folios: ${error.message}`,
+          message: `¡Error al asignar los folios!: ${error.message}`,
           type: 'error',
         });
       } finally {
