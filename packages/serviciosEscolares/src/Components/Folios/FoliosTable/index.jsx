@@ -3,9 +3,10 @@ import { Context, DataTable } from '@siiges-ui/shared';
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
+import ArticleIcon from '@mui/icons-material/Article';
 import PropTypes from 'prop-types';
 
-const columns = (handleEdit) => [
+const columns = (handleEdit, handleConsultar) => [
   {
     field: 'id',
     headerName: 'ID',
@@ -21,9 +22,16 @@ const columns = (handleEdit) => [
     headerName: 'Acciones',
     width: 150,
     renderCell: (params) => (
-      <IconButton onClick={() => handleEdit(params.row.id)}>
-        <EditIcon />
-      </IconButton>
+      <>
+        <IconButton onClick={() => handleConsultar(params.row.id)}>
+          <ArticleIcon />
+        </IconButton>
+        {params.row.estatusSolicitudFolioNombre !== 'REVISION' && (
+          <IconButton onClick={() => handleEdit(params.row.id)}>
+            <EditIcon />
+          </IconButton>
+        )}
+      </>
     ),
   },
 ];
@@ -38,18 +46,16 @@ function FoliosTable({
   const router = useRouter();
   const { setNoti } = useContext(Context);
 
-  const handleCreate = () => {
-    if (tipoDocumento === 1) {
+  const navigateTo = (id, status) => {
+    const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
+
+    if (tipoDocumento === 1 || tipoDocumento === 2) {
       router.push({
-        pathname: '/serviciosEscolares/solicitudesFolios/createFolio/titulos',
-        query: { tipoDocumento, tipoSolicitud, programa },
-      });
-    } else if (tipoDocumento === 2) {
-      router.push({
-        pathname:
-          '/serviciosEscolares/solicitudesFolios/createFolio/certificados',
-        query: { tipoDocumento, tipoSolicitud, programa },
-      });
+        pathname: `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`,
+        query: {
+          tipoDocumento, tipoSolicitud, programa, status,
+        },
+      }, `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`);
     } else {
       setNoti({
         open: true,
@@ -60,26 +66,8 @@ function FoliosTable({
     }
   };
 
-  const handleEdit = (id) => {
-    if (tipoDocumento === 1) {
-      router.push({
-        pathname: `/serviciosEscolares/solicitudesFolios/${id}/titulos`,
-        query: { tipoDocumento, tipoSolicitud, programa },
-      });
-    } else if (tipoDocumento === 2) {
-      router.push({
-        pathname: `/serviciosEscolares/solicitudesFolios/${id}/certificados`,
-        query: { tipoDocumento, tipoSolicitud, programa },
-      });
-    } else {
-      setNoti({
-        open: true,
-        message:
-          '¡Error, revise que todos los campos estén seleccionados correctamente!',
-        type: 'error',
-      });
-    }
-  };
+  const handleEdit = (id) => navigateTo(id, 'edit');
+  const handleConsultar = (id) => navigateTo(id, 'consult');
 
   const formattedSolicitudes = solicitudes.map((solicitud) => ({
     ...solicitud,
@@ -93,13 +81,11 @@ function FoliosTable({
       <Grid item xs={12}>
         <DataTable
           buttonAdd
-          buttonClick={handleCreate}
-          buttonText={
-            tipoDocumento === 1 ? 'Agregar Título' : 'Agregar Certificado'
-          }
+          buttonClick={() => navigateTo(null, 'create')}
+          buttonText="Agregar Solicitud"
           title="Solicitudes de Títulos"
           rows={formattedSolicitudes}
-          columns={columns(handleEdit)}
+          columns={columns(handleEdit, handleConsultar)}
         />
       </Grid>
     </Grid>
