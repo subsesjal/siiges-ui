@@ -100,7 +100,7 @@ const submitInstitucion = async ({
   if (!nombresValidos) {
     setNoti({
       open: true,
-      message: 'Revisa que los nombres propuestos no sean duplicados',
+      message: '¡Revisa!, que los nombres propuestos no sean duplicados',
       type: 'error',
     });
     setLoading(false);

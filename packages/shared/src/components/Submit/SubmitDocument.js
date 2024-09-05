@@ -22,7 +22,7 @@ export default async function SubmitDocument(formData, setUrl, setNoti) {
     if (data && data.url) {
       setUrl(data.url);
     } else {
-      throw new Error('No se encontro "ubicación" en la respuesta.');
+      throw new Error('¡No se encontró "ubicación" en la respuesta.!');
     }
   } catch (err) {
     setNoti({
