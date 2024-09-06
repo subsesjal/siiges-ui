@@ -2,7 +2,7 @@ import React from 'react';
 import InstitucionesAledanasButtons from '../../../utils/Components/InstitucionesAledanas';
 
 const columns = (type) => [
-  { field: 'nombre', headerName: 'Nombre de la institucion', width: 570 },
+  { field: 'nombre', headerName: 'Nombre de la institución', width: 570 },
   { field: 'tiempo', headerName: 'Tiempo de llegada', width: 370 },
   {
     field: 'actions',

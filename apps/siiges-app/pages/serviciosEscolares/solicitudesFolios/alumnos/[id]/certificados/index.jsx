@@ -41,7 +41,7 @@ const columns = (handleEdit) => [
 export default function AlumnosCertificado() {
   const { setNoti, setLoading } = useContext(Context);
   const router = useRouter();
-  const { id, programa } = router.query;
+  const { id, programa, tipoSolicitud } = router.query;
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState('create');
@@ -65,7 +65,7 @@ export default function AlumnosCertificado() {
         .catch((error) => {
           setNoti({
             open: true,
-            message: `Ocurrió un error inesperado: ${error}`,
+            message: `¡Ocurrió un error inesperado!: ${error}`,
             type: 'error',
           });
         })
@@ -88,11 +88,13 @@ export default function AlumnosCertificado() {
   };
 
   const handleRegresar = () => {
-    router.push('/serviciosEscolares/solicitudesFolios');
+    router.push(
+      `/serviciosEscolares/solicitudesFolios/${id}/certificados?tipoDocumento=2&tipoSolicitud=${tipoSolicitud}&programa=${programa}`,
+    );
   };
 
   return (
-    <Layout title="Folios Certificados">
+    <Layout title="Agregar Solicitud de Folios">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <DataTable
@@ -120,7 +122,7 @@ export default function AlumnosCertificado() {
         programaId={programa}
         setRows={setRows}
         rowData={rowData}
-        title="Alumnos certificados"
+        title="Agregar Alumno"
       />
     </Layout>
   );

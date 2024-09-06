@@ -42,7 +42,7 @@ export default function FoliosForm({
       } else {
         setNoti({
           open: true,
-          message: 'No se encontró una institución con nombre autorizado asociada al usuario.',
+          message: '¡No se encontró una institución con nombre autorizado asociada al usuario!.',
           type: 'error',
         });
       }
@@ -145,7 +145,7 @@ export default function FoliosForm({
   }, [selectedInstitucion]);
 
   const documentos = [
-    { id: 1, nombre: 'Titulos' },
+    { id: 1, nombre: 'Títulos' },
     { id: 2, nombre: 'Certificados' },
   ];
 

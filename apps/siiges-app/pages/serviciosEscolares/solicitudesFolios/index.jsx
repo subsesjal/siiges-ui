@@ -30,7 +30,7 @@ export default function SolicitudesFolios() {
       } else {
         setNoti({
           open: true,
-          message: response.message || 'Error al cargar los datos',
+          message: response.message || '¡Error al cargar los datos!',
           type: 'error',
         });
       }
