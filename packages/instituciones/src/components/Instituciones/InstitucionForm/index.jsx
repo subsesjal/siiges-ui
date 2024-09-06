@@ -2,26 +2,32 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import router from 'next/router';
 import Image from 'next/image';
-import { Grid, Typography, Modal, Box } from '@mui/material';
+import {
+  Grid, Typography, Modal, Box,
+} from '@mui/material';
 import { ButtonStyled, ButtonsForm, SubmitDocument } from '@siiges-ui/shared';
-import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import InstitucionFields from '../InstitucionFields';
 import {
+  submitInstitucion,
   handleCancel,
   handleOnChange,
   handleOnBlur,
 } from '../../../utils/institucionHandler';
+import BiografiaBibliografiaModal from '../../utils/BiografiaBibliografiaModal';
+import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function InstitucionForm({
   session, accion, institucion, setLoading, setTitle, setNoti,
 }) {
   const [errorFields, setErrorFields] = useState({});
   const [form, setForm] = useState({});
-  const [selectedFile, setSelectedFile] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [showButtons, setShowButtons] = useState(true);
+  const [page, setPage] = useState(1);
   const [imageUrl, setImageUrl] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
-
+  const [openModalPhoto, setOpenModalPhoto] = useState(false);
   useEffect(() => {
     setLoading(true);
     if (accion === 'crear' && session.id) {
@@ -33,12 +39,33 @@ export default function InstitucionForm({
       if (institucion.id) {
         setForm({ id: institucion.id });
         setTitle('Modificar Institución');
+        // eslint-disable-next-line no-use-before-define
         getInstitutionPhoto(institucion.id);
       } else {
         router.back();
       }
     }
-  }, [accion, session.id, institucion.id, setLoading, setTitle]);
+    setLoading(false);
+  }, [accion, institucion.id, session.id, setLoading, setTitle]);
+
+  const handleConfirm = async () => {
+    const success = await submitInstitucion({
+      form,
+      accion,
+      errorFields,
+      setNoti,
+      setLoading,
+      institucion,
+      setForm,
+    });
+
+    if (success) {
+      setShowButtons(false); // Oculta los botones tras el éxito
+      if (accion === 'crear') {
+        setOpenModal(true); // Abre el modal para subir biografía y bibliografía
+      }
+    }
+  };
   const getInstitutionPhoto = async (institucionId) => {
     try {
       const endpoint = '/files/';
@@ -69,7 +96,7 @@ export default function InstitucionForm({
   };
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
-    setOpenModal(true); // Mostrar el modal cuando se seleccione un archivo
+    setOpenModalPhoto(true);
   };
 
   const handleUploadClick = async () => {
@@ -83,15 +110,14 @@ export default function InstitucionForm({
     } catch (error) {
       router.reload();
     } finally {
-      setOpenModal(false);
+      setOpenModalPhoto(false);
       setSelectedFile(null);
     }
   };
 
   const handleModalClose = () => {
-    setOpenModal(false);
+    setOpenModalPhoto(false);
   };
-
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
@@ -130,24 +156,21 @@ export default function InstitucionForm({
           setForm={setForm}
           form={form}
           setLoading={setLoading}
+          accion={accion}
+          page={page}
+          setPage={setPage}
         />
-        <Grid item xs={11} sx={{ marginTop: 5 }}>
-          <ButtonsForm
-            confirm={() => submitInstitucion({
-              form,
-              accion,
-              errorFields,
-              setNoti,
-              setLoading,
-              institucion,
-            })}
-            cancel={() => handleCancel()}
-          />
-        </Grid>
+        {showButtons && page === 2 && (
+          <Grid item xs={11} sx={{ marginTop: 5 }}>
+            <ButtonsForm
+              confirm={handleConfirm}
+              cancel={() => handleCancel()}
+            />
+          </Grid>
+        )}
       </Grid>
-
       <Modal
-        open={openModal}
+        open={openModalPhoto}
         onClose={handleModalClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
@@ -181,6 +204,13 @@ export default function InstitucionForm({
           </Grid>
         </Box>
       </Modal>
+      <BiografiaBibliografiaModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        institucionId={form.id}
+        setNoti={setNoti}
+        setLoading={setLoading}
+      />
     </Grid>
   );
 }
