@@ -88,7 +88,7 @@ export default function ModalCertificado({
           console.error(error);
           setNoti({
             open: true,
-            message: 'No se encontro el Alumno',
+            message: '¡No se encontró el Alumno!',
             type: 'error',
           });
         })
