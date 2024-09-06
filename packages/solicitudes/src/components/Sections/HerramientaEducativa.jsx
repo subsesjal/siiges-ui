@@ -11,7 +11,7 @@ export default function HerramientaEducativa({ disabled, type }) {
   const fileData = {
     entidadId: id,
     tipoEntidad: 'PROGRAMA',
-    tipoDocumento: 'FORMATO_PEDAGOGICO_01',
+    tipoDocumento: 'FDA05',
   };
 
   const isSectionDisabled = useSectionDisabled(2);
@@ -39,10 +39,9 @@ export default function HerramientaEducativa({ disabled, type }) {
         <Grid item xs={9}>
           <InputFile
             tipoEntidad="PROGRAMA"
-            tipoDocumento="FORMATO_PEDAGOGICO_01"
+            tipoDocumento="FDA05"
             id={id}
             label="Herramienta Educativa"
-            setLoaded={() => {}}
             url={url}
             setUrl={setUrl}
             disabled={isDisabled}
