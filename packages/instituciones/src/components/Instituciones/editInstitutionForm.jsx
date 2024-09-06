@@ -43,7 +43,7 @@ export default function EditInstitutionForm({
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Input
-              label=" de institución"
+              label="Nombre de institución"
               id="nombre"
               name="nombre"
               auto="nombreInstitucion"
