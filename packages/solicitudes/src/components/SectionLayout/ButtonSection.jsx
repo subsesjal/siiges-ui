@@ -1,4 +1,4 @@
-import { ButtonStyled, Context } from '@siiges-ui/shared';
+import { ButtonSimple, Context } from '@siiges-ui/shared';
 import React, { useContext, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -143,91 +143,91 @@ export default function ButtonSection({
   return (
     <>
       {position === 'first' && (
-        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={9}>
-            {type !== 'consultar' && (
-              <ButtonStyled
+        <Grid container spacing={1} sx={{ mt: 0.5 }} justifyContent="right">
+          {type !== 'consultar' && (
+            <Grid item>
+              <ButtonSimple
                 text={buttonText}
                 alt={buttonText}
                 type="success"
-                onclick={!loading ? submit : null}
+                onClick={!loading ? submit : null}
               />
-            )}
-          </Grid>
-          <Grid item xs={3}>
-            <ButtonStyled
+            </Grid>
+          )}
+          <Grid item>
+            <ButtonSimple
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               type="success"
-              onclick={next}
+              onClick={next}
             />
           </Grid>
         </Grid>
       )}
       {position === 'middle' && (
-        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={3}>
-            <ButtonStyled
+        <Grid container spacing={1} sx={{ mt: 0.5 }} justifyContent="right">
+          <Grid item>
+            <ButtonSimple
               text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               type="success"
-              onclick={prev}
+              onClick={prev}
             />
           </Grid>
-          <Grid item xs={6}>
-            {type !== 'consultar' && (
-              <ButtonStyled
+          {type !== 'consultar' && (
+            <Grid item>
+              <ButtonSimple
                 text={buttonText}
                 alt={buttonText}
                 type="success"
-                onclick={!loading ? submit : null}
+                onClick={!loading ? submit : null}
               />
-            )}
-          </Grid>
-          <Grid item xs={3}>
-            <ButtonStyled
+            </Grid>
+          )}
+          <Grid item>
+            <ButtonSimple
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               type="success"
-              onclick={next}
+              onClick={next}
             />
           </Grid>
         </Grid>
       )}
       {position === 'last' && (
-        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={6}>
-            <ButtonStyled
+        <Grid container spacing={1} sx={{ mt: 0.5 }} justifyContent="right">
+          <Grid item>
+            <ButtonSimple
               text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               type="success"
-              onclick={prev}
+              onClick={prev}
             />
           </Grid>
-          <Grid item xs={6}>
-            {type !== 'consultar' && (
-              <ButtonStyled
+          {type !== 'consultar' && (
+            <Grid item>
+              <ButtonSimple
                 text={buttonTextEnd}
                 alt={buttonTextEnd}
                 type="success"
-                onclick={!loading ? submit : null}
+                onClick={!loading ? submit : null}
               />
-            )}
-          </Grid>
+            </Grid>
+          )}
         </Grid>
       )}
       {position === 'only' && (
-        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={12}>
-            {type !== 'consultar' && (
-              <ButtonStyled
+        <Grid container spacing={1} sx={{ mt: 0.5 }} justifyContent="right">
+          {type !== 'consultar' && (
+            <Grid item>
+              <ButtonSimple
                 text={buttonTextEnd}
                 alt={buttonTextEnd}
                 type="success"
-                onclick={!loading ? submit : null}
+                onClick={!loading ? submit : null}
               />
-            )}
-          </Grid>
+            </Grid>
+          )}
         </Grid>
       )}
     </>
