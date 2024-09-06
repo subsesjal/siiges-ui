@@ -6,6 +6,7 @@ import {
   Grid, Typography, Modal, Box,
 } from '@mui/material';
 import { ButtonStyled, ButtonsForm, SubmitDocument } from '@siiges-ui/shared';
+import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import InstitucionFields from '../InstitucionFields';
 import {
   submitInstitucion,
@@ -14,7 +15,6 @@ import {
   handleOnBlur,
 } from '../../../utils/institucionHandler';
 import BiografiaBibliografiaModal from '../../utils/BiografiaBibliografiaModal';
-import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function InstitucionForm({
   session, accion, institucion, setLoading, setTitle, setNoti,
@@ -28,25 +28,6 @@ export default function InstitucionForm({
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
   const [openModalPhoto, setOpenModalPhoto] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    if (accion === 'crear' && session.id) {
-      setForm({ usuarioId: session.id, tipoInstitucionId: 1, esNombreAutorizado: false });
-      setTitle('Registrar Institución');
-    }
-
-    if (accion === 'editar' && session.id) {
-      if (institucion.id) {
-        setForm({ id: institucion.id });
-        setTitle('Modificar Institución');
-        // eslint-disable-next-line no-use-before-define
-        getInstitutionPhoto(institucion.id);
-      } else {
-        router.back();
-      }
-    }
-    setLoading(false);
-  }, [accion, institucion.id, session.id, setLoading, setTitle]);
 
   const handleConfirm = async () => {
     const success = await submitInstitucion({
@@ -60,9 +41,9 @@ export default function InstitucionForm({
     });
 
     if (success) {
-      setShowButtons(false); // Oculta los botones tras el éxito
+      setShowButtons(false);
       if (accion === 'crear') {
-        setOpenModal(true); // Abre el modal para subir biografía y bibliografía
+        setOpenModal(true);
       }
     }
   };
@@ -118,6 +99,24 @@ export default function InstitucionForm({
   const handleModalClose = () => {
     setOpenModalPhoto(false);
   };
+  useEffect(() => {
+    setLoading(true);
+    if (accion === 'crear' && session.id) {
+      setForm({ usuarioId: session.id, tipoInstitucionId: 1, esNombreAutorizado: false });
+      setTitle('Registrar Institución');
+    }
+
+    if (accion === 'editar' && session.id) {
+      if (institucion.id) {
+        setForm({ id: institucion.id });
+        setTitle('Modificar Institución');
+        getInstitutionPhoto(institucion.id);
+      } else {
+        router.back();
+      }
+    }
+    setLoading(false);
+  }, [accion, institucion.id, session.id, setLoading, setTitle]);
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
