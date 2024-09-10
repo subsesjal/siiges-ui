@@ -9,8 +9,8 @@ import PropTypes from 'prop-types';
 import Image from 'next/image';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
-import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import { useRouter } from 'next/router';
+import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function UsuarioAvatar({ usuario }) {
   const router = useRouter();
