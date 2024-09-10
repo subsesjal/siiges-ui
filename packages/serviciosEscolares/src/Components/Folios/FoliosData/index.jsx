@@ -1,29 +1,71 @@
-import { Grid, Typography } from '@mui/material';
 import {
-  Button,
+  Grid, Typography, Tabs, Tab, Box, IconButton,
+} from '@mui/material';
+import {
   Context,
   createRecord,
+  DataTable,
   getData,
+  GetFile,
+  Input,
   InputFile,
-  InputNumber,
   LabelData,
   updateRecord,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import ButtonsFolios from '../ButtonsFolios';
+import ModalCertificado from './Modal/certificados';
 
-export default function FoliosData({ solicitudType, type }) {
+const columns = (handleEdit) => [
+  {
+    field: 'id',
+    headerName: 'ID',
+    hide: true,
+  },
+  { field: 'name', headerName: 'Nombre', width: 250 },
+  {
+    field: 'fechaTermino',
+    headerName: 'Fecha de terminación de plan de estudios',
+    width: 350,
+  },
+  {
+    field: 'fechaElaboracion',
+    headerName: 'Fecha de elaboración de certificado',
+    width: 350,
+  },
+  {
+    field: 'actions',
+    headerName: 'Acciones',
+    width: 150,
+    renderCell: (params) => (
+      <IconButton onClick={() => handleEdit(params.row.id)}>
+        <EditIcon />
+      </IconButton>
+    ),
+  },
+];
+
+export default function FoliosData({ type }) {
   const { setNoti, setLoading } = useContext(Context);
-  const [url, setUrl] = useState();
+  const [url, setUrl] = useState(null);
   const [id, setId] = useState(null);
-  const [buttonAlumnos, setButtonAlumnos] = useState('Agregar Alumnos');
-  const router = useRouter();
-  const {
-    tipoDocumento, tipoSolicitud, programa, id: editId,
-  } = router.query;
+  const [tabIndex, setTabIndex] = useState(0);
+  const [rows, setRows] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [rowData, setRowData] = useState({});
+  const [alumnoType, setAlumnoType] = useState('create');
+  const [formData, setFormData] = useState({
+    folioPago: '',
+    tipoDocumentoId: '',
+    tipoSolicitudFolioId: '',
+    estatusSolicitudFolioId: 1,
+    programaId: '',
+    fecha: dayjs(),
+  });
   const [etiquetas, setEtiquetas] = useState({
     tipoDocumento: '',
     tipoSolicitudFolio: '',
@@ -32,25 +74,36 @@ export default function FoliosData({ solicitudType, type }) {
     gradoAcademico: '',
   });
 
-  const [formData, setFormData] = useState({
-    folioPago: '',
-    tipoDocumentoId: tipoDocumento || '',
-    tipoSolicitudFolioId: tipoSolicitud || '',
-    estatusSolicitudFolioId: 1,
-    programaId: programa || '',
-    fecha: dayjs(),
-  });
+  const router = useRouter();
+  const {
+    tipoDocumento, tipoSolicitud, programa, id: editId, status,
+  } = router.query;
+
+  const tipoSolicitudFolioOptions = [
+    { id: 1, label: 'Total' },
+    { id: 2, label: 'Parcial' },
+    { id: 3, label: 'Duplicado' },
+  ];
+
+  const selectedTipoSolicitudFolio = tipoSolicitudFolioOptions.find(
+    (option) => option.id === Number(tipoSolicitud),
+  )?.label || 'Desconocido';
 
   useEffect(() => {
-    if (type === 'edit' && editId) {
-      setButtonAlumnos('Editar Alumnos');
-      const fetchData = async () => {
-        setLoading(true);
-        try {
-          const response = await getData({
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let response;
+        if (type === 'edit' && editId) {
+          response = await getData({
             endpoint: `/solicitudesFolios/${editId}`,
           });
-          const { data } = response;
+        } else {
+          response = await getData({ endpoint: `/programas/${programa}` });
+        }
+        const { data } = response;
+
+        if (type === 'edit') {
           setFormData({
             folioPago: data.folioPago,
             tipoDocumentoId: data.tipoDocumentoId,
@@ -65,45 +118,86 @@ export default function FoliosData({ solicitudType, type }) {
             acuerdoRvoe: data.programa.acuerdoRvoe,
             planEstudios: data.programa.nombre,
             gradoAcademico: data.programa.nivelId,
+            institucion: data.programa?.plantel?.institucion?.nombre,
+            claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
           });
           setId(editId);
-        } catch (error) {
-          setNoti({
-            open: true,
-            message: `Error al cargar la solicitud: ${error.message}`,
-            type: 'error',
+          GetFile(
+            {
+              entidadId: editId,
+              tipoEntidad: 'SOLICITUD_FOLIO',
+              tipoDocumento: 'COMPROBANTE_PAGO_FOLIOS',
+            },
+            setUrl,
+          );
+        } else {
+          setEtiquetas({
+            institucion: data.plantel?.institucion?.nombre,
+            claveCentroTrabajo: data.plantel?.claveCentroTrabajo,
+            tipoDocumento: tipoDocumento === '1' ? 'Titulo' : 'Certificado',
+            tipoSolicitudFolio: selectedTipoSolicitudFolio,
+            acuerdoRvoe: data.acuerdoRvoe,
+            planEstudios: data.nombre,
+            gradoAcademico: data.nivelId,
           });
-        } finally {
-          setTimeout(() => {
-            setLoading(false);
-          }, 500);
         }
-      };
-      fetchData();
-    }
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: `Error al cargar la solicitud: ${error.message}`,
+          type: 'error',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [type, editId]);
 
   useEffect(() => {
-    if (tipoDocumento && tipoSolicitud && programa) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        tipoDocumentoId: tipoDocumento,
-        tipoSolicitudFolioId: tipoSolicitud,
-        programaId: programa,
-      }));
+    if (id) {
+      setLoading(true);
+      getData({ endpoint: `/solicitudesFolios/${id}/alumnos` })
+        .then((response) => {
+          if (response.data) {
+            const mappedRows = response.data.map((alumnos) => ({
+              id: alumnos.id,
+              name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
+              fechaTermino: dayjs(alumnos.fechaTermino).format('DD/MM/YYYY'),
+              fechaElaboracion: dayjs(alumnos.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
+            }));
+            setRows(mappedRows);
+          }
+        })
+        .catch((error) => {
+          setNoti({
+            open: true,
+            message: `Ocurrió un error inesperado: ${error}`,
+            type: 'error',
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
-  }, [tipoDocumento, tipoSolicitud, programa]);
+  }, [id]);
+
+  const handleEdit = (value) => {
+    const data = rows.find((row) => row.id === value);
+    setAlumnoType('edit');
+    setRowData(data);
+    setOpen(true);
+  };
 
   const handleAddAlumno = () => {
-    if (solicitudType === 'titulo') {
-      router.push(
-        `/serviciosEscolares/solicitudesFolios/alumnos/${id}/titulos?programa=${programa}`,
-      );
-    } else {
-      router.push(
-        `/serviciosEscolares/solicitudesFolios/alumnos/${id}/certificados?programa=${programa}`,
-      );
-    }
+    setAlumnoType('create');
+    setOpen(true);
+  };
+
+  const handleTabChange = (event, newValue) => {
+    setTabIndex(newValue);
   };
 
   const handleConfirm = async () => {
@@ -129,35 +223,34 @@ export default function FoliosData({ solicitudType, type }) {
               : 'Éxito al crear la solicitud, ya puede agregar alumnos',
           type: 'success',
         });
-        handleAddAlumno();
       } else {
         setNoti({
           open: true,
           message:
             response.message
-            || 'Error al procesar la solicitud, revise que los campos estén correctos',
+            || '¡Error al procesar la solicitud, revise que los campos estén correctos!',
           type: 'error',
         });
       }
+      return response;
     } catch (error) {
       setNoti({
         open: true,
-        message: `Error al procesar la solicitud: ${error.message}`,
+        message: `¡Error al procesar la solicitud!: ${error.message}`,
         type: 'error',
       });
+      return { statusCode: 500, message: error.message };
     } finally {
       setLoading(false);
     }
   };
 
   const handleSend = async () => {
-    // Set estatusSolicitudFolioId to 2
     setFormData((prevFormData) => ({
       ...prevFormData,
       estatusSolicitudFolioId: 2,
     }));
 
-    // Then call the confirm function
     await handleConfirm();
   };
 
@@ -170,81 +263,114 @@ export default function FoliosData({ solicitudType, type }) {
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Typography variant="h6">Datos de la institución</Typography>
-      </Grid>
-      <Grid item xs={8}>
-        <LabelData
-          title="Institución"
-          subtitle="Universidad Enrique Diáz de León"
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <LabelData title="RVOE" subtitle={etiquetas.acuerdoRvoe} />
-      </Grid>
-      <Grid item xs={8}>
-        <LabelData
-          title="Grado Académico"
-          subtitle={etiquetas.gradoAcademico}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <LabelData title="Plan de Estudios" subtitle={etiquetas.planEstudios} />
-      </Grid>
-      <Grid item xs={8}>
-        <LabelData title="Clave de centro de trabajo" subtitle="1234567" />
-      </Grid>
-      <Grid item xs={4}>
-        <LabelData
-          title="Tipo de Documento"
-          subtitle={etiquetas.tipoDocumento}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <LabelData
-          title="Tipo de Solicitud"
-          subtitle={etiquetas.tipoSolicitudFolio}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <InputNumber
-          label="Número de recibo de pago oficial"
-          id="folioPago"
-          name="folioPago"
-          value={formData.folioPago}
-          onchange={handleChange}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <InputFile
-          label="Recibo de Pago"
-          id={5}
-          tipoDocumento="RECIBO_PAGO"
-          tipoEntidad="ALUMNO"
-          url={url}
-          setUrl={setUrl}
-        />
-      </Grid>
-      {id && (
-        <Grid item xs={4}>
-          <Button text={buttonAlumnos} onClick={handleAddAlumno} />
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Tabs value={tabIndex} onChange={handleTabChange}>
+          <Tab label="Datos de la Solicitud" />
+          <Tab label="Alumnos" disabled={!id} />
+        </Tabs>
+      </Box>
+      {tabIndex === 0 && (
+        <Grid container spacing={2} sx={{ mt: 1 }}>
+          <Grid item xs={12}>
+            <Typography variant="h6">Datos de la institución</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <LabelData title="Institución" subtitle={etiquetas.institucion} />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData title="RVOE" subtitle={etiquetas.acuerdoRvoe} />
+          </Grid>
+          <Grid item xs={8}>
+            <LabelData
+              title="Grado Académico"
+              subtitle={etiquetas.gradoAcademico}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData
+              title="Plan de Estudios"
+              subtitle={etiquetas.planEstudios}
+            />
+          </Grid>
+          <Grid item xs={8}>
+            <LabelData
+              title="Clave de centro de trabajo"
+              subtitle={etiquetas.claveCentroTrabajo}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData
+              title="Tipo de Documento"
+              subtitle={etiquetas.tipoDocumento}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <LabelData
+              title="Tipo de Solicitud"
+              subtitle={etiquetas.tipoSolicitudFolio}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Input
+              label="Número de recibo de pago oficial"
+              id="folioPago"
+              name="folioPago"
+              value={formData.folioPago}
+              onChange={handleChange}
+              disabled={status === 'consult'}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <InputFile
+              label="Recibo de Pago"
+              id={id}
+              tipoDocumento="COMPROBANTE_PAGO_FOLIOS"
+              tipoEntidad="SOLICITUD_FOLIO"
+              url={url}
+              setUrl={setUrl}
+              disabled={status === 'consult'}
+            />
+          </Grid>
         </Grid>
       )}
-      <Grid item xs={id ? 8 : 12}>
-        <ButtonsFolios
-          confirm={handleConfirm}
-          cancel={() => {
-            router.back();
-          }}
-          send={handleSend}
-        />
+      {tabIndex === 1 && (
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <DataTable
+              buttonAdd
+              buttonClick={handleAddAlumno}
+              buttonText="Agregar Alumnos"
+              rows={rows}
+              columns={columns(handleEdit)}
+            />
+          </Grid>
+        </Grid>
+      )}
+      <Grid container spacing={2} sx={{ mt: 1 }}>
+        <Grid item xs={12}>
+          <ButtonsFolios
+            confirm={handleConfirm}
+            cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
+            send={handleSend}
+            disabled={status === 'consult'}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+      <ModalCertificado
+        open={open}
+        setOpen={setOpen}
+        type={alumnoType}
+        id={id}
+        programaId={programa}
+        setRows={setRows}
+        rowData={rowData}
+        title="Agregar Alumno"
+      />
+    </Box>
   );
 }
 
 FoliosData.propTypes = {
-  solicitudType: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
 };
