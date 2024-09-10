@@ -73,12 +73,6 @@ export default function RecepcionFormatos() {
       tipoDocumento: 'FDA06',
     },
   ];
-  const ensureUrlHasHttp = (url2) => {
-    if (url2 && !url2.startsWith('http')) {
-      return `http://${url2}`;
-    }
-    return url2;
-  };
   useEffect(() => {
     const fetchSolicitud = async () => {
       if (query.id !== undefined) {
@@ -99,10 +93,10 @@ export default function RecepcionFormatos() {
                 }));
                 return;
               }
-              const validatedUrl = ensureUrlHasHttp(fileUrl);
+
               setUrl((prevUrls) => {
                 const newUrls = [...prevUrls];
-                newUrls[index] = validatedUrl;
+                newUrls[index] = fileUrl; // Sin la validación de 'http'
                 return newUrls;
               });
             });
@@ -169,9 +163,7 @@ export default function RecepcionFormatos() {
           return;
         }
 
-        const validFileURL = fileURL.startsWith('http') ? fileURL : `http://${fileURL}`;
-
-        window.open(validFileURL, '_blank');
+        window.open(fileURL, '_blank');
       });
     } catch (error) {
       setErrors((prevErrors) => ({
