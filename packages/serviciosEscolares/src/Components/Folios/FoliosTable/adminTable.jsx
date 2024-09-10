@@ -2,7 +2,6 @@ import { Grid, IconButton } from '@mui/material';
 import { DataTable } from '@siiges-ui/shared';
 import React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
-import CancelIcon from '@mui/icons-material/Cancel';
 import SendIcon from '@mui/icons-material/Send';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -35,9 +34,6 @@ const columns = [
         <>
           <IconButton onClick={handleAddClick}>
             <ArticleIcon />
-          </IconButton>
-          <IconButton>
-            <CancelIcon />
           </IconButton>
           <IconButton>
             <SendIcon />

@@ -84,6 +84,7 @@ const submitInstitucion = async ({
   setNoti,
   setLoading,
   institucion,
+  setForm,
 }) => {
   setLoading(true);
   if (!validateErrorFields(errorFields)) {
@@ -99,7 +100,7 @@ const submitInstitucion = async ({
   if (!nombresValidos) {
     setNoti({
       open: true,
-      message: 'Revisa que los nombres propuestos no sean duplicados',
+      message: '¡Revisa!, que los nombres propuestos no sean duplicados',
       type: 'error',
     });
     setLoading(false);
@@ -136,7 +137,12 @@ const submitInstitucion = async ({
       message: '¡Registro exitoso!',
       type: 'success',
     });
-    router.back();
+
+    if (accion === 'crear') {
+      setForm((prevForm) => ({ ...prevForm, id: response.data.id }));
+    } else {
+      router.back();
+    }
     return true;
   }
 
@@ -146,7 +152,8 @@ const submitInstitucion = async ({
     type: 'error',
   });
 
-  return response;
+  setLoading(false);
+  return false;
 };
 
 const errors = {

@@ -2,53 +2,88 @@ import {
   Box, Divider, Grid, List, ListItem, ListItemText, Typography,
 } from '@mui/material';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
-  ButtonStyled, SnackAlert, SubmitDocument, fileToFormData, ListSubtitle, ListTitle, formattedDate,
+  ButtonStyled, SnackAlert, GetFile, ListSubtitle, ListTitle, formattedDate, InputFile,
 } from '@siiges-ui/shared';
-import { DropzoneDialog } from 'mui-file-dropzone';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 export default function InstitucionView({ institucion, session }) {
   const router = useRouter();
-  const [files, setFiles] = useState([]);
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
-  const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleSave = async () => {
-    if (files.length > 0) {
-      try {
-        const formData = await fileToFormData(files[0]);
-        formData.append('tipoEntidad', 'INSTITUCION');
-        formData.append('entidadId', router.query.institucionId);
-        formData.append('tipoDocumento', 'ACTA_CONSTITUTIVA');
-        SubmitDocument(formData);
-      } catch (error) {
-        setNoti({
-          open: true,
-          message: '¡Algo salió mal, revise su documento!',
-          type: 'error',
-        });
-      }
-    } else {
-      setNoti({
-        open: true,
-        message: '¡Algo salió mal, ingrese un documento!',
-        type: 'error',
-      });
-    }
-    setOpen(false);
-  };
+  const [urlBiografia, setUrlBiografia] = useState('');
+  const [urlBibliografia, setUrlBibliografia] = useState('');
+  const [urlActaConstitutiva, setUrlActaConstitutiva] = useState('');
 
-  // Funciones para avanzar y retroceder entre páginas
+  useEffect(() => {
+    const fetchFiles = () => {
+      GetFile(
+        {
+          entidadId: institucion.id,
+          tipoEntidad: 'RATIFICACION',
+          tipoDocumento: 'BIOGRAFIA',
+        },
+        (url, error) => {
+          if (error) {
+            setNoti({
+              open: true,
+              message: '¡Error al cargar el archivo de biografía!',
+              type: 'error',
+            });
+          } else {
+            setUrlBiografia(url);
+          }
+        },
+      );
+
+      GetFile(
+        {
+          entidadId: institucion.id,
+          tipoEntidad: 'RATIFICACION',
+          tipoDocumento: 'BIBLIOGRAFIA',
+        },
+        (url, error) => {
+          if (error) {
+            setNoti({
+              open: true,
+              message: '¡Error al cargar el archivo de bibliografía!',
+              type: 'error',
+            });
+          } else {
+            setUrlBibliografia(url);
+          }
+        },
+      );
+
+      GetFile(
+        {
+          entidadId: institucion.id,
+          tipoEntidad: 'INSTITUCION',
+          tipoDocumento: 'ACTA_CONSTITUTIVA',
+        },
+        (url, error) => {
+          if (error) {
+            setNoti({
+              open: true,
+              message: '¡Error al cargar el archivo de acta constitutiva!',
+              type: 'error',
+            });
+          } else {
+            setUrlActaConstitutiva(url);
+          }
+        },
+      );
+    };
+
+    fetchFiles();
+  }, [institucion.id]);
+
   const totalPages = 2;
   const nextPage = () => setPage((prevPage) => (prevPage % totalPages) + 1);
   const prevPage = () => setPage((prev) => (prev === 1 ? totalPages : prev - 1));
@@ -68,10 +103,6 @@ export default function InstitucionView({ institucion, session }) {
               overflow: 'hidden',
             }}
           />
-          <br />
-          <Box sx={{ textAlign: 'center', mt: 5 }}>
-            <ButtonStyled onclick={handleOpen} text="Acta constitutiva" alt="Consultar acta" />
-          </Box>
         </Grid>
         {page === 1 && (
           <Grid item xs={8} sx={{ marginTop: 3 }}>
@@ -158,6 +189,7 @@ export default function InstitucionView({ institucion, session }) {
                   <ListTitle text="Apellidos" />
                   <ListTitle text="Celular" />
                   <ListTitle text="Teléfono" />
+                  <ListTitle text="Correo" />
                 </List>
               </Grid>
               <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -172,6 +204,7 @@ export default function InstitucionView({ institucion, session }) {
                   />
                   <ListSubtitle text={institucion?.rector?.persona?.celular} />
                   <ListSubtitle text={institucion?.rector?.persona?.telefono} />
+                  <ListSubtitle text={institucion?.rector?.persona?.correoPrimario} />
                 </List>
               </Grid>
             </Grid>
@@ -222,6 +255,41 @@ export default function InstitucionView({ institucion, session }) {
                 </>
               )}
             </Grid>
+
+            {/* Aquí se agregan los InputFile para Biografía, Bibliografía y Acta Constitutiva */}
+            <Grid container spacing={3} sx={{ mt: 3 }}>
+              <Grid item xs={12}>
+                <InputFile
+                  label="Biografía o Fundamento"
+                  tipoEntidad="RATIFICACION"
+                  tipoDocumento="BIOGRAFIA"
+                  id={institucion.id}
+                  url={urlBiografia}
+                  disabled
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputFile
+                  label="Bibliografía para fuente de consulta"
+                  tipoEntidad="RATIFICACION"
+                  tipoDocumento="BIBLIOGRAFIA"
+                  id={institucion.id}
+                  url={urlBibliografia}
+                  disabled
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputFile
+                  label="Acta Constitutiva"
+                  tipoEntidad="INSTITUCION"
+                  tipoDocumento="ACTA_CONSTITUTIVA"
+                  id={institucion.id}
+                  url={urlActaConstitutiva}
+                  disabled
+                />
+              </Grid>
+            </Grid>
+
             <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
               <ButtonStyled
                 text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
@@ -254,21 +322,7 @@ export default function InstitucionView({ institucion, session }) {
             </Box>
           </Grid>
         )}
-
       </Grid>
-      <DropzoneDialog
-        open={open}
-        dropzoneText="Arrastre un archivo aquí, o haga click"
-        dialogTitle="Subir archivo"
-        submitButtonText="Aceptar"
-        cancelButtonText="Cancelar"
-        filesLimit={1}
-        showPreviews
-        onChange={(newFiles) => setFiles(newFiles)}
-        onSave={handleSave}
-        maxFileSize={5000000}
-        onClose={handleClose}
-      />
       <SnackAlert
         open={noti.open}
         close={() => {

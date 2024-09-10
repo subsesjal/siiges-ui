@@ -10,7 +10,6 @@ import Image from 'next/image';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
-import { useRouter } from 'next/router';
 
 export default function UsuarioAvatar({ usuario }) {
   const router = useRouter();
@@ -18,10 +17,6 @@ export default function UsuarioAvatar({ usuario }) {
   const { persona = undefined, rol = undefined } = usuario || {};
   const fullName = `${persona?.nombre} ${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`;
   const [imageUrl, setImageUrl] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
-  const fileInputRef = useRef(null);
-
   const getProfilePhoto = async () => {
     try {
       const endpoint = '/files/';
@@ -83,7 +78,6 @@ export default function UsuarioAvatar({ usuario }) {
   const handleModalClose = () => {
     setOpenModal(false);
   };
-
   return (
     <>
       {imageUrl ? (
@@ -124,25 +118,7 @@ export default function UsuarioAvatar({ usuario }) {
         <br />
         <Divider sx={{ marginY: 1 }} />
         <Typography variant="p">{rol?.descripcion}</Typography>
-        <Grid container spacing={2} justifyContent="flex-end">
-          <Grid item>
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
-            <ButtonStyled
-              text="Cambiar Foto"
-              alt="Cambiar Foto"
-              onclick={() => fileInputRef.current.click()}
-            >
-              Cambiar imagen
-            </ButtonStyled>
-          </Grid>
-        </Grid>
       </Paper>
-
       <DefaultModal
         open={openModal}
         setOpen={handleModalClose}
