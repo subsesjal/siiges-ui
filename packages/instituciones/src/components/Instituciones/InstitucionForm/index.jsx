@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import router from 'next/router';
 import Image from 'next/image';
 import {
-  Grid, Typography, Modal, Box,
+  Grid, Typography,
 } from '@mui/material';
-import { ButtonStyled, ButtonsForm, SubmitDocument } from '@siiges-ui/shared';
+import {
+  ButtonStyled, ButtonsForm, SubmitDocument, DefaultModal,
+} from '@siiges-ui/shared';
 import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import InstitucionFields from '../InstitucionFields';
 import {
@@ -176,41 +178,35 @@ export default function InstitucionForm({
           </Grid>
         )}
       </Grid>
-      <Modal
+      <DefaultModal
         open={openModalPhoto}
-        onClose={handleModalClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+        setOpen={handleModalClose}
+        title="Confirmar cambio de imagen"
       >
-        <Box sx={modalStyle}>
-          <Typography id="modal-title" variant="h6" component="h2">
-            Confirmar cambio de imagen
-          </Typography>
-          <Typography id="modal-description" sx={{ mt: 2 }}>
-            ¿Estás seguro de que quieres cambiar la imagen?
-          </Typography>
-          <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
-            <Grid item>
-              <ButtonStyled
-                text="Cancelar"
-                alt="Cancelar"
-                onclick={handleModalClose}
-              >
-                Cancelar
-              </ButtonStyled>
-            </Grid>
-            <Grid item>
-              <ButtonStyled
-                text="Confirmar"
-                alt="Confirmar"
-                onclick={handleUploadClick}
-              >
-                Confirmar
-              </ButtonStyled>
-            </Grid>
+        <Typography>
+          ¿Estás seguro de que quieres cambiar la imagen?
+        </Typography>
+        <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
+          <Grid item>
+            <ButtonStyled
+              text="Cancelar"
+              alt="Cancelar"
+              onclick={handleModalClose}
+            >
+              Cancelar
+            </ButtonStyled>
           </Grid>
-        </Box>
-      </Modal>
+          <Grid item>
+            <ButtonStyled
+              text="Confirmar"
+              alt="Confirmar"
+              onclick={handleUploadClick}
+            >
+              Confirmar
+            </ButtonStyled>
+          </Grid>
+        </Grid>
+      </DefaultModal>
       <BiografiaBibliografiaModal
         open={openModal}
         onClose={() => setOpenModal(false)}
@@ -245,16 +241,4 @@ InstitucionForm.propTypes = {
 
 InstitucionForm.defaultProps = {
   institucion: null,
-};
-
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
 };

@@ -1,6 +1,10 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Context, ButtonStyled, SubmitDocument } from '@siiges-ui/shared';
-import { Typography, Grid, Modal, Box } from '@mui/material';
+import React, {
+  useContext, useState, useEffect, useRef,
+} from 'react';
+import {
+  Context, ButtonStyled, SubmitDocument, DefaultModal,
+} from '@siiges-ui/shared';
+import { Typography, Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import Paper from '@mui/material/Paper';
@@ -10,7 +14,7 @@ import { useRouter } from 'next/router';
 
 export default function UsuarioAvatar({ usuario }) {
   const router = useRouter();
-  const { removeAuth, session } = useContext(Context);
+  const { session } = useContext(Context);
   const { persona = undefined, rol = undefined } = usuario || {};
   const fullName = `${persona?.nombre} ${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`;
   const [imageUrl, setImageUrl] = useState(null);
@@ -53,12 +57,11 @@ export default function UsuarioAvatar({ usuario }) {
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
-    setOpenModal(true); // Mostrar el modal cuando se seleccione un archivo
+    setOpenModal(true);
   };
 
   const handleUploadClick = async () => {
     if (!selectedFile) {
-      alert('No file selected');
       return;
     }
 
@@ -140,41 +143,35 @@ export default function UsuarioAvatar({ usuario }) {
         </Grid>
       </Paper>
 
-      <Modal
+      <DefaultModal
         open={openModal}
-        onClose={handleModalClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+        setOpen={handleModalClose}
+        title="Confirmar cambio de imagen"
       >
-        <Box sx={{ ...modalStyle }}>
-          <Typography id="modal-title" variant="h6" component="h2">
-            Confirmar cambio de imagen
-          </Typography>
-          <Typography id="modal-description" sx={{ mt: 2 }}>
-            ¿Estás seguro de que quieres cambiar la imagen?
-          </Typography>
-          <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
-            <Grid item>
-              <ButtonStyled
-                text="Cancelar"
-                alt="Cancelar"
-                onclick={handleModalClose}
-              >
-                Cancelar
-              </ButtonStyled>
-            </Grid>
-            <Grid item>
-              <ButtonStyled
-                text="Confirmar"
-                alt="Confirmar"
-                onclick={handleUploadClick}
-              >
-                Confirmar
-              </ButtonStyled>
-            </Grid>
+        <Typography>
+          ¿Estás seguro de que quieres cambiar la imagen?
+        </Typography>
+        <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
+          <Grid item>
+            <ButtonStyled
+              text="Cancelar"
+              alt="Cancelar"
+              onclick={handleModalClose}
+            >
+              Cancelar
+            </ButtonStyled>
           </Grid>
-        </Box>
-      </Modal>
+          <Grid item>
+            <ButtonStyled
+              text="Confirmar"
+              alt="Confirmar"
+              onclick={handleUploadClick}
+            >
+              Confirmar
+            </ButtonStyled>
+          </Grid>
+        </Grid>
+      </DefaultModal>
     </>
   );
 }
@@ -190,16 +187,4 @@ UsuarioAvatar.propTypes = {
       descripcion: PropTypes.string,
     }),
   }).isRequired,
-};
-
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
 };
