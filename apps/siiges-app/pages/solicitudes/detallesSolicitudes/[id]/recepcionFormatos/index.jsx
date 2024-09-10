@@ -73,11 +73,11 @@ export default function RecepcionFormatos() {
       tipoDocumento: 'FDA06',
     },
   ];
-  const ensureUrlHasHttp = (url) => {
-    if (url && !url.startsWith('http')) {
-      return `http://${url}`;
+  const ensureUrlHasHttp = (url2) => {
+    if (url2 && !url2.startsWith('http')) {
+      return `http://${url2}`;
     }
-    return url;
+    return url2;
   };
   useEffect(() => {
     const fetchSolicitud = async () => {
@@ -90,23 +90,28 @@ export default function RecepcionFormatos() {
           );
           setSolicitud(solicitudData.data);
 
-          // Handle each file data entry individually using GetFile
           fileData.forEach((data, index) => {
             GetFile(data, (fileUrl, error) => {
               if (error) {
-                console.error('Error fetching file:', error);
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  fileError: `Error fetching file: ${error}`,
+                }));
                 return;
               }
               const validatedUrl = ensureUrlHasHttp(fileUrl);
               setUrl((prevUrls) => {
                 const newUrls = [...prevUrls];
-                newUrls[index] = validatedUrl; // Update the URL at the correct index
+                newUrls[index] = validatedUrl;
                 return newUrls;
               });
             });
           });
         } catch (error) {
-          console.error('Error fetching solicitud:', error);
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            solicitudError: `Error fetching solicitud: ${error}`,
+          }));
         }
       }
     };
@@ -149,31 +154,35 @@ export default function RecepcionFormatos() {
         tipoDocumento: type,
       }, async (fileURL, error) => {
         if (error) {
-          console.error('Error downloading the file', error);
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            fileDownloadError: `Error downloading the file: ${error}`,
+          }));
           return;
         }
 
         if (!fileURL) {
-          console.error('File URL not provided');
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            fileDownloadError: 'File URL not provided',
+          }));
           return;
         }
 
-        // Ensure URL starts with 'http'
-        if (!fileURL.startsWith('http')) {
-          fileURL = `http://${fileURL}`;
-        }
+        const validFileURL = fileURL.startsWith('http') ? fileURL : `http://${fileURL}`;
 
-        // Open the URL in a new tab
-        window.open(fileURL, '_blank');
+        window.open(validFileURL, '_blank');
       });
     } catch (error) {
-      console.error('Error calling GetFile', error);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        fileDownloadError: `Error calling GetFile: ${error}`,
+      }));
     }
   };
 
   const handleSubmit = async () => {
     setLoading(true);
-    // Validate required fields
     const newErrors = {};
     if (!form.fechaRecepcion) {
       newErrors.fechaRecepcion = '¡Este campo es obligatorio!';

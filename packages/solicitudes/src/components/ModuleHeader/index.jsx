@@ -1,4 +1,6 @@
-/* eslint-disable no-return-assign */
+import React, { useEffect, useState, useContext } from 'react';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import {
   Card, CardContent, Grid, Typography,
 } from '@mui/material';
@@ -9,9 +11,6 @@ import {
   updateRecord,
   DefaultModal,
 } from '@siiges-ui/shared';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
-import { useRouter } from 'next/router';
 import Modal from '../Modal/ModalObservacion';
 
 export default function ModuleHeader({
@@ -22,7 +21,8 @@ export default function ModuleHeader({
   nextModule,
   module,
   id,
-  isEditOrView, // Recibe la propiedad isEditOrView
+  isEditOrView,
+  switchModule,
 }) {
   const [disabled, setDisabled] = useState(false);
   const [modalState, setModalState] = useState(false);
@@ -101,7 +101,6 @@ export default function ModuleHeader({
   }, [id]);
 
   useEffect(() => {
-    // Check if the current module is the last step
     if (module === steps.length - 1) {
       setLastStepReached(true);
     } else {
@@ -117,7 +116,11 @@ export default function ModuleHeader({
         <CardContent>
           <Grid container>
             <Grid item xs={12}>
-              <StepperComponent steps={steps} position={module} />
+              <StepperComponent
+                steps={steps}
+                position={module}
+                onStepClick={switchModule}
+              />
             </Grid>
             <Grid item xs={6}>
               <Typography variant="p" sx={{ fontWeight: 'bold' }}>
@@ -138,7 +141,7 @@ export default function ModuleHeader({
                   text="Módulo anterior"
                   alt="Módulo anterior"
                   type="success"
-                  onclick={() => prevButton()}
+                  onclick={prevButton}
                   disabled={disabled}
                 />
               )}
@@ -148,7 +151,7 @@ export default function ModuleHeader({
                   text={textRol}
                   alt={textRol}
                   type="success"
-                  onclick={() => submitButton()}
+                  onclick={submitButton}
                   disabled={disabled}
                 />
               )}
@@ -157,7 +160,7 @@ export default function ModuleHeader({
                   text="Siguiente módulo"
                   alt="Siguiente módulo"
                   type="success"
-                  onclick={() => submitButton()}
+                  onclick={submitButton}
                   disabled={disabled}
                 />
               )}
@@ -168,7 +171,6 @@ export default function ModuleHeader({
                 type="success"
                 onclick={() => router.push('/home')}
               />
-
             </Grid>
           </Grid>
         </CardContent>
@@ -189,7 +191,7 @@ export default function ModuleHeader({
             <ButtonStyled
               text="Aceptar"
               type="success"
-              onclick={() => handleLastStepAction()}
+              onclick={handleLastStepAction}
             />
             <ButtonStyled
               text="Cancelar"
@@ -212,4 +214,5 @@ ModuleHeader.propTypes = {
   module: PropTypes.number.isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   isEditOrView: PropTypes.string.isRequired,
+  switchModule: PropTypes.func.isRequired,
 };
