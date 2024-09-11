@@ -12,7 +12,7 @@ export default function OficioModal({
 }) {
   const [oficioNumber, setOficioNumber] = useState('');
   const [fechaEfecto, setFechaEfecto] = useState('');
-
+  const [error, setError] = useState({});
   const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === 'oficioNumber') {
@@ -41,7 +41,9 @@ export default function OficioModal({
         downloadFile('RVOE');
         hideModal();
       }
-    } catch (error) {}
+    } catch (errorResponse) {
+      setError(errorResponse);
+    }
   };
 
   return (
