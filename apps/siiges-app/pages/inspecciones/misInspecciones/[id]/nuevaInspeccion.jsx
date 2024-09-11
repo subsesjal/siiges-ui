@@ -1,5 +1,7 @@
 /* eslint-disable no-plusplus */
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, {
+  useContext, useEffect, useState, useRef,
+} from 'react';
 import { useRouter } from 'next/router';
 import TextField from '@mui/material/TextField';
 import {
@@ -128,10 +130,10 @@ export default function NuevaInspeccion() {
     setMethod('POST');
     setUrl(`api/v1/inspecciones/${query.id}/preguntas`);
   };
-  console.log("Preguntas");
-  console.log(preguntas);
-  console.log("respuestas");
-  console.log(respuestas);
+  // console.log('Preguntas');
+  // console.log(preguntas);
+  // console.log('respuestas');
+  // console.log(respuestas);
   return (
     <Layout title="Nueva inspección">
       <Grid container spacing={2}>
@@ -151,10 +153,10 @@ export default function NuevaInspeccion() {
               sx={{ display: selectedTab === index ? 'block' : 'none' }}
             >
               {preguntas
-                .filter((pregunta) => pregunta.inspeccionCategoriaId === apartado.id)
+                .filter((pregunta) => pregunta.inspeccionApartadoId === apartado.id)
                 .map((pregunta) => {
                   const respuesta = respuestas.find(
-                    (resp) => resp.preguntaId === pregunta.id,
+                    (resp) => resp.inspeccionPreguntaId === pregunta.id,
                   );
                   return (
                     <InspeccionPregunta
@@ -162,10 +164,11 @@ export default function NuevaInspeccion() {
                       pregunta={pregunta}
                       setForm={setForm}
                       id={query.id}
-                      respuesta={respuesta?.respuesta || ''}
+                      respuesta={respuesta?.respuesta || ''} // Asigna la respuesta si existe, si no, cadena vacía
                     />
                   );
                 })}
+
               <TextField
                 id={`comentarios-${apartado.id}`}
                 name={`comentarios-${apartado.id}`}

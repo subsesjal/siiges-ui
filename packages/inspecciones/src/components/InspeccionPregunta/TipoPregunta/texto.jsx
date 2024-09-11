@@ -18,10 +18,8 @@ export default function Texto({
       );
 
       if (existingQuestionIndex !== -1) {
-        // Si la pregunta ya existe en el array, actualiza su respuesta
         return prevForm.map((item, index) => (index === existingQuestionIndex ? questionData : item));
       }
-      // Si la pregunta no existe en el array, añádela
       return [...prevForm, questionData];
     });
   };
@@ -33,8 +31,8 @@ export default function Texto({
       label=""
       multiline
       rows={2}
-      value={respuesta || ''} // Usa la respuesta como valor inicial
-      onChange={handleChange} // Corrige el nombre del prop a 'onChange'
+      value={respuesta || ''}
+      onChange={handleChange}
       sx={{ marginTop: 0 }}
     />
   );
@@ -47,5 +45,9 @@ Texto.propTypes = {
     pregunta: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   }).isRequired,
-  respuesta: PropTypes.string, // Agrega esta prop para manejar la respuesta
+  respuesta: PropTypes.string,
+};
+
+Texto.defaultProps = {
+  respuesta: '',
 };
