@@ -158,7 +158,7 @@ export default function NuevaInspeccion() {
                       pregunta={pregunta}
                       setForm={setForm}
                       id={query.id}
-                      respuesta={respuesta?.respuesta || ''} // Asigna la respuesta si existe, si no, cadena vacía
+                      respuesta={respuesta?.respuesta || ''}
                     />
                   );
                 })}
