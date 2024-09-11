@@ -55,9 +55,6 @@ export default function InspeccionesTable() {
     fetchInspecciones();
   }, [loading, solicitudesInspecciones, inspeccionesdata]);
 
-  console.log(inspecciones);
-  console.log(inspeccionesdata);
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>

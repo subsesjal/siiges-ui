@@ -46,12 +46,10 @@ export default function NuevaInspeccion() {
 
         if (response.statusCode === 200 && response.data) {
           setRespuestas(response.data);
-          console.log(respuestas);
         } else {
           setRespuestas([]);
         }
       } catch (error) {
-        console.error('Error fetching respuestas:', error);
         setRespuestas([]);
       }
     };
