@@ -41,6 +41,8 @@ export default function OficioModal({
       if (response.statusCode === 200) {
         downloadFile('RVOE');
         hideModal();
+      } else {
+        setError(response.errorMessage);
       }
     } catch (errorResponse) {
       setError(errorResponse);
