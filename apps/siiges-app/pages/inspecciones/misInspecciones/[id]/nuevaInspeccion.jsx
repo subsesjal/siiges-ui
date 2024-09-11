@@ -130,10 +130,6 @@ export default function NuevaInspeccion() {
     setMethod('POST');
     setUrl(`api/v1/inspecciones/${query.id}/preguntas`);
   };
-  // console.log('Preguntas');
-  // console.log(preguntas);
-  // console.log('respuestas');
-  // console.log(respuestas);
   return (
     <Layout title="Nueva inspección">
       <Grid container spacing={2}>
@@ -176,7 +172,6 @@ export default function NuevaInspeccion() {
                 multiline
                 sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
                 rows={4}
-                // eslint-disable-next-line no-return-assign
                 inputRef={(el) => commentRefs.current[index] = el}
               />
               <ButtonsInspeccionSection
