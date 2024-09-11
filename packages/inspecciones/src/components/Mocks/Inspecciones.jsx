@@ -2,7 +2,7 @@ import React from 'react';
 import { IconButton, Link } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 
-const getColumns = (isAssigned) => {
+const getColumns = () => {
   const columns = [
     { field: 'folio', headerName: 'Folio de captura', width: 150 },
     { field: 'planEstudios', headerName: 'Plan de estudios', width: 170 },
@@ -13,7 +13,7 @@ const getColumns = (isAssigned) => {
       field: 'actions',
       headerName: 'Acciones',
       renderCell: (params) => (
-        !isAssigned ? (
+        !params.row.isAssigned ? (
           <Link href={`/inspecciones/asignacionInspecciones/${params.id}`}>
             <IconButton aria-label="Asignar Inspecciones">
               <PostAddIcon />

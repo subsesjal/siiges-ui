@@ -12,13 +12,14 @@ import {
   apartados,
   InspeccionPregunta,
 } from '@siiges-ui/inspecciones';
-import { createRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
+import { createRecord, getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function NuevaInspeccion() {
   const { setLoading, setNoti } = useContext(Context);
   const [selectedTab, setSelectedTab] = useState(0);
   const [form, setForm] = useState([]);
   const [preguntas, setPreguntas] = useState([]);
+  const [respuestas, setRespuestas] = useState([]); // Nuevo estado para respuestas
   const [url, setUrl] = useState('');
   const [body, setBody] = useState(null);
   const [method, setMethod] = useState('GET');
@@ -30,11 +31,29 @@ export default function NuevaInspeccion() {
     dataBody: body,
   });
   const commentRefs = useRef([]);
+
   useEffect(() => {
     setLoading(loading);
     if (Array.isArray(data)) {
       setPreguntas(data);
     }
+    const fetchRespuestas = async () => {
+      try {
+        const endpoint = `/inspecciones/inspeccionesPreguntas/${query.id}`;
+        const response = await getData({ endpoint });
+
+        if (response.statusCode === 200 && response.data) {
+          setRespuestas(response.data);
+          console.log(respuestas);
+        } else {
+          setRespuestas([]);
+        }
+      } catch (error) {
+        console.error('Error fetching respuestas:', error);
+        setRespuestas([]);
+      }
+    };
+    fetchRespuestas();
     if (data && method === 'POST' && error === null) {
       setNoti({
         open: true,
@@ -50,7 +69,7 @@ export default function NuevaInspeccion() {
         type: 'error',
       });
     }
-  }, [data, loading]);
+  }, [data, loading, method, error, setLoading, setNoti, router, query.id]);
 
   const getPosition = (index) => {
     if (index === 0) {
@@ -95,7 +114,6 @@ export default function NuevaInspeccion() {
           type: 'error',
         });
       }
-    // eslint-disable-next-line no-shadow
     } catch (error) {
       setNoti({
         open: true,
@@ -131,14 +149,21 @@ export default function NuevaInspeccion() {
             >
               {preguntas
                 .filter((pregunta) => pregunta.inspeccionCategoriaId === apartado.id)
-                .map((pregunta) => (
-                  <InspeccionPregunta
-                    key={pregunta.id}
-                    pregunta={pregunta}
-                    setForm={setForm}
-                    id={query.id}
-                  />
-                ))}
+                .map((pregunta) => {
+                  const respuesta = respuestas.find(
+                    (resp) => resp.preguntaId === pregunta.id,
+                  );
+
+                  return (
+                    <InspeccionPregunta
+                      key={pregunta.id}
+                      pregunta={pregunta}
+                      setForm={setForm}
+                      id={query.id}
+                      respuesta={respuesta?.respuesta || ''} // Pasar la respuesta si existe
+                    />
+                  );
+                })}
               <TextField
                 id={`comentarios-${apartado.id}`}
                 name={`comentarios-${apartado.id}`}
