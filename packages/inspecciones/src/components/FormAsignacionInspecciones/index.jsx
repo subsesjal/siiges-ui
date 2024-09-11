@@ -8,7 +8,6 @@ import getInspectoresProgramas from '../../utils/getInspectoresProgramas';
 export default function FormAsignacionInspecciones({ solicitud }) {
   const { inspectoresProgramas, loading } = getInspectoresProgramas();
   const [inspecciones, setInspecciones] = useState([]);
-
   const mapSolicitudesToRows = (inspectores) => inspectores.map((inspector) => ({
     id: inspector.id,
     nombre: `${inspector.persona.nombre} ${inspector.persona.apellidoPaterno} ${inspector.persona.apellidoMaterno}`,
