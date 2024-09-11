@@ -4,8 +4,7 @@ import { DefaultModal, Input, ButtonStyled } from '@siiges-ui/shared';
 import { updateRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import PropTypes from 'prop-types';
 
-// eslint-disable-next-line import/prefer-default-export
-export function OficioModal({
+export default function OficioModal({
   open,
   hideModal,
   downloadFile,
@@ -25,7 +24,6 @@ export function OficioModal({
 
   const handleOnSubmit = async () => {
     if (!fechaEfecto || !oficioNumber) {
-      console.error('¡Por favor, completa todos los campos!.');
       return;
     }
 
@@ -42,12 +40,8 @@ export function OficioModal({
       if (response.statusCode === 200) {
         downloadFile('RVOE');
         hideModal();
-      } else {
-        console.error(response.errorMessage);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   return (
