@@ -8,7 +8,7 @@ import PlantelContext from '../utils/Context/plantelContext';
 import formPrograma from '../utils/sections/forms/formPrograma';
 
 export default function DatosPlantel({
-  disabled,
+  disabled: initialDisabled,
   plantelesData,
   setPlantelesData,
   type,
@@ -16,6 +16,15 @@ export default function DatosPlantel({
   const { planteles } = getPlantelesUsuario();
   const { setForm, plantelId } = useContext(PlantelContext);
   const [plantelesSelect, setPlantelesSelect] = useState([]);
+  const [disabled, setDisabled] = useState(initialDisabled);
+
+  useEffect(() => {
+    if (type === 'editar') {
+      setDisabled(!initialDisabled);
+    } else {
+      setDisabled(initialDisabled);
+    }
+  }, [type, initialDisabled]);
 
   useEffect(() => {
     if (planteles) {
@@ -70,7 +79,7 @@ export default function DatosPlantel({
             options={plantelesSelect}
             value={plantelId || ''}
             onchange={handleOnChange}
-            disabled={disabled}
+            disabled={type !== 'editar'}
           />
         </Grid>
         <Grid item xs={3}>
@@ -283,4 +292,5 @@ DatosPlantel.propTypes = {
     }),
   }).isRequired,
   setPlantelesData: PropTypes.func.isRequired,
+  type: PropTypes.oneOf(['crear', 'editar']).isRequired,
 };

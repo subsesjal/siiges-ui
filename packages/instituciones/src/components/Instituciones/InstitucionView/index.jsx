@@ -16,7 +16,7 @@ export default function InstitucionView({ institucion, session }) {
   const router = useRouter();
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const [page, setPage] = useState(1);
-
+  const { rol } = session;
   const [urlBiografia, setUrlBiografia] = useState('');
   const [urlBibliografia, setUrlBibliografia] = useState('');
   const [urlActaConstitutiva, setUrlActaConstitutiva] = useState('');
@@ -85,7 +85,7 @@ export default function InstitucionView({ institucion, session }) {
   }, [institucion.id]);
 
   const totalPages = 2;
-  const nextPage = () => setPage((prevPage) => (prevPage % totalPages) + 1);
+  const nextPage = () => setPage((prev) => (prev % totalPages) + 1);
   const prevPage = () => setPage((prev) => (prev === 1 ? totalPages : prev - 1));
 
   return (
@@ -165,15 +165,36 @@ export default function InstitucionView({ institucion, session }) {
             <div style={{ marginLeft: 100, marginTop: 15, marginBottom: 20 }}>
               <Typography variant="p">{institucion.valoresInstitucionales}</Typography>
             </div>
-
-            <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
-              <ButtonStyled
-                text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-                alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-                type="success"
-                onclick={nextPage}
-              />
-            </Grid>
+            {
+              rol === 'admin' ? (
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 6 }}>
+                  <ButtonUnstyled
+                    className="buttonAdd regresar"
+                    onClick={() => {
+                      router.back();
+                    }}
+                    sx={{ mr: 8 }}
+                  >
+                    <Typography variant="body1">Regresar</Typography>
+                  </ButtonUnstyled>
+                  <ButtonStyled
+                    text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                    alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                    type="success"
+                    onclick={nextPage}
+                  />
+                </Box>
+              ) : (
+                <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
+                  <ButtonStyled
+                    text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                    alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                    type="success"
+                    onclick={nextPage}
+                  />
+                </Grid>
+              )
+            }
           </Grid>
         )}
         {page === 2 && (
@@ -255,8 +276,6 @@ export default function InstitucionView({ institucion, session }) {
                 </>
               )}
             </Grid>
-
-            {/* Aquí se agregan los InputFile para Biografía, Bibliografía y Acta Constitutiva */}
             <Grid container spacing={3} sx={{ mt: 3 }}>
               <Grid item xs={12}>
                 <InputFile
@@ -290,14 +309,36 @@ export default function InstitucionView({ institucion, session }) {
               </Grid>
             </Grid>
 
-            <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
-              <ButtonStyled
-                text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-                alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-                type="success"
-                onclick={prevPage}
-              />
-            </Grid>
+            {
+              rol === 'admin' ? (
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 6 }}>
+                  <ButtonUnstyled
+                    className="buttonAdd regresar"
+                    onClick={() => {
+                      router.back();
+                    }}
+                    sx={{ mr: 8 }}
+                  >
+                    <Typography variant="body1">Regresar</Typography>
+                  </ButtonUnstyled>
+                  <ButtonStyled
+                    text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+                    alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+                    type="success"
+                    onclick={nextPage}
+                  />
+                </Box>
+              ) : (
+                <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
+                  <ButtonStyled
+                    text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+                    alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+                    type="success"
+                    onclick={prevPage}
+                  />
+                </Grid>
+              )
+            }
           </Grid>
         )}
         {session.rol === 'representante' && !institucion.ratificacionesNombre[0]?.esNombreAutorizado && (

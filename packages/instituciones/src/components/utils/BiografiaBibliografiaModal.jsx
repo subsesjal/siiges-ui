@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { DefaultModal, InputFile, SubmitDocument } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import { Grid } from '@mui/material';
+import { Grid, Button } from '@mui/material';
 import { DropzoneDialog } from 'mui-file-dropzone';
+import { useRouter } from 'next/router';
 
 export default function BiografiaBibliografiaModal({
   open,
@@ -18,9 +19,21 @@ export default function BiografiaBibliografiaModal({
   const [disableBibliografia, setDisableBibliografia] = useState(false);
   const [disableActa, setDisableActa] = useState(false);
 
+  const router = useRouter();
+
   const handleOpenDropzone = (type) => {
     setDocumentType(type);
     setOpenDropzone(true);
+  };
+
+  const getDialogTitle = () => {
+    if (documentType === 'BIOGRAFIA') {
+      return 'Biografía';
+    }
+    if (documentType === 'BIBLIOGRAFIA') {
+      return 'Bibliografía';
+    }
+    return 'Acta Constitutiva';
   };
 
   const handleSave = async () => {
@@ -28,7 +41,10 @@ export default function BiografiaBibliografiaModal({
       setLoading(true);
       try {
         const formData = new FormData();
-        formData.append('tipoEntidad', documentType === 'ACTA_CONSTITUTIVA' ? 'INSTITUCION' : 'RATIFICACION');
+        formData.append(
+          'tipoEntidad',
+          documentType === 'ACTA_CONSTITUTIVA' ? 'INSTITUCION' : 'RATIFICACION',
+        );
         formData.append('entidadId', institucionId);
         formData.append('tipoDocumento', documentType);
         formData.append('file', files[0]);
@@ -57,6 +73,7 @@ export default function BiografiaBibliografiaModal({
       } finally {
         setLoading(false);
         setOpenDropzone(false);
+        setFiles([]);
       }
     } else {
       setNoti({
@@ -68,7 +85,7 @@ export default function BiografiaBibliografiaModal({
   };
 
   return (
-    <DefaultModal open={open} setOpen={onClose} title="Subir Documentos Institucionales">
+    <DefaultModal open={open} setOpen={onClose} title="Subir Documentos Institucionales" disableBackdropClick>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <InputFile
@@ -100,12 +117,25 @@ export default function BiografiaBibliografiaModal({
             onclick={() => handleOpenDropzone('ACTA_CONSTITUTIVA')}
           />
         </Grid>
+
+        <Grid item xs={12}>
+          <Grid container justifyContent="flex-end">
+            <Button
+              onClick={() => {
+                onClose();
+                router.reload();
+              }}
+            >
+              Cerrar
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
 
       <DropzoneDialog
         open={openDropzone}
         dropzoneText="Arrastre un archivo aquí, o haga click"
-        dialogTitle={`Subir archivo de ${documentType === 'BIOGRAFIA' ? 'Biografía' : documentType === 'BIBLIOGRAFIA' ? 'Bibliografía' : 'Acta Constitutiva'}`}
+        dialogTitle={`Subir archivo de ${getDialogTitle()}`}
         submitButtonText="Aceptar"
         cancelButtonText="Cancelar"
         filesLimit={1}
