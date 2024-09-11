@@ -9,6 +9,7 @@ export default function InspeccionesTable() {
   const { solicitudesInspecciones, loading } = getSolicitudesInspecciones();
   const [inspecciones, setInspecciones] = useState([]);
   const [inspeccionesdata, setInspeccionesData] = useState([]);
+
   const columns = getColumns();
   const mapSolicitudesToRows = (solicitudes, inspeccionesdata) => solicitudes.map((solicitud) => {
     // Busca la inspección correspondiente en inspeccionesdata basada en programaId
@@ -42,7 +43,6 @@ export default function InspeccionesTable() {
         setInspeccionesData([]);
       }
     } catch (error) {
-      console.error('Error fetching inspecciones:', error);
       setInspeccionesData([]);
     }
   };
@@ -54,6 +54,9 @@ export default function InspeccionesTable() {
     }
     fetchInspecciones();
   }, [loading, solicitudesInspecciones, inspeccionesdata]);
+
+  console.log(inspecciones);
+  console.log(inspeccionesdata);
 
   return (
     <Grid container spacing={2}>

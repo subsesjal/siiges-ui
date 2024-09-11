@@ -128,7 +128,10 @@ export default function NuevaInspeccion() {
     setMethod('POST');
     setUrl(`api/v1/inspecciones/${query.id}/preguntas`);
   };
-
+  console.log("Preguntas");
+  console.log(preguntas);
+  console.log("respuestas");
+  console.log(respuestas);
   return (
     <Layout title="Nueva inspección">
       <Grid container spacing={2}>
@@ -153,14 +156,13 @@ export default function NuevaInspeccion() {
                   const respuesta = respuestas.find(
                     (resp) => resp.preguntaId === pregunta.id,
                   );
-
                   return (
                     <InspeccionPregunta
                       key={pregunta.id}
                       pregunta={pregunta}
                       setForm={setForm}
                       id={query.id}
-                      respuesta={respuesta?.respuesta || ''} // Pasar la respuesta si existe
+                      respuesta={respuesta?.respuesta || ''}
                     />
                   );
                 })}

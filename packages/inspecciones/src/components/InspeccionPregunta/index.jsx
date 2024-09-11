@@ -13,15 +13,19 @@ export default function InspeccionPregunta({
     2: Numerico,
     3: Texto,
   };
-
+  // console.log("pregunta:", pregunta);
+  // console.log("id:", id);
+  // console.log("respuesta", respuesta);
   const QuestionComponent = componentMap[pregunta.inspeccionTipoPreguntaId];
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={8}>
         <Typography>{pregunta.pregunta}</Typography>
       </Grid>
       <Grid item xs={4}>
+        {id}
+        hello 
+        {respuesta}
         {QuestionComponent && <QuestionComponent setForm={setForm} pregunta={pregunta} id={id} respuesta={respuesta} />}
       </Grid>
       <Grid item xs={12}>
