@@ -149,7 +149,7 @@ export default function UsuarioAvatar({ usuario }) {
         title="Confirmar cambio de imagen"
       >
         <Typography>
-          ¿Estás seguro de que quieres cambiar la imagen?
+          ¿Estás seguro de cambiar la imagen?
         </Typography>
         <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
           <Grid item>
