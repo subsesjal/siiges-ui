@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import React, {
   useContext, useEffect, useState, useRef,
 } from 'react';
@@ -21,7 +20,8 @@ export default function NuevaInspeccion() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [form, setForm] = useState([]);
   const [preguntas, setPreguntas] = useState([]);
-  const [respuestas, setRespuestas] = useState([]); // Nuevo estado para respuestas
+  const [respuestas, setRespuestas] = useState([]);
+  const [observaciones, setObservaciones] = useState([]);
   const [url, setUrl] = useState('');
   const [body, setBody] = useState(null);
   const [method, setMethod] = useState('GET');
@@ -49,11 +49,26 @@ export default function NuevaInspeccion() {
         } else {
           setRespuestas([]);
         }
-      } catch (error) {
+      } catch (errorRespuestas) {
         setRespuestas([]);
       }
     };
     fetchRespuestas();
+    const fetchObservaciones = async () => {
+      try {
+        const endpoint = `/inspecciones/${query.id}/observaciones`;
+        const response = await getData({ endpoint });
+
+        if (response.statusCode === 200 && response.data) {
+          setObservaciones(response.data);
+        } else {
+          setObservaciones([]);
+        }
+      } catch (errorObservaciones) {
+        setObservaciones([]);
+      }
+    };
+    fetchObservaciones();
     if (data && method === 'POST' && error === null) {
       setNoti({
         open: true,
@@ -128,6 +143,7 @@ export default function NuevaInspeccion() {
     setMethod('POST');
     setUrl(`api/v1/inspecciones/${query.id}/preguntas`);
   };
+
   return (
     <Layout title="Nueva inspección">
       <Grid container spacing={2}>
@@ -141,48 +157,55 @@ export default function NuevaInspeccion() {
           </Box>
         </Grid>
         <Grid item xs={12}>
-          {apartados.map((apartado, index) => (
-            <Box
-              key={apartado.id}
-              sx={{ display: selectedTab === index ? 'block' : 'none' }}
-            >
-              {preguntas
-                .filter((pregunta) => pregunta.inspeccionApartadoId === apartado.id)
-                .map((pregunta) => {
-                  const respuesta = respuestas.find(
-                    (resp) => resp.inspeccionPreguntaId === pregunta.id,
-                  );
-                  return (
-                    <InspeccionPregunta
-                      key={pregunta.id}
-                      pregunta={pregunta}
-                      setForm={setForm}
-                      id={query.id}
-                      respuesta={respuesta?.respuesta || ''}
-                    />
-                  );
-                })}
+          {apartados.map((apartado, index) => {
+            const observacion = observaciones.find(
+              (obs) => obs.inspeccionApartadoId === apartado.id,
+            );
 
-              <TextField
-                id={`comentarios-${apartado.id}`}
-                name={`comentarios-${apartado.id}`}
-                label="Comentarios"
-                multiline
-                sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
-                rows={4}
-                inputRef={(el) => commentRefs.current[index] = el}
-              />
-              <ButtonsInspeccionSection
-                prev={() => setSelectedTab(index - 1)}
-                next={() => setSelectedTab(index + 1)}
-                confirm={() => {
-                  sendCurrentComment(apartado.id);
-                  sendQuestionData();
-                }}
-                position={getPosition(index)}
-              />
-            </Box>
-          ))}
+            return (
+              <Box
+                key={apartado.id}
+                sx={{ display: selectedTab === index ? 'block' : 'none' }}
+              >
+                {preguntas
+                  .filter((pregunta) => pregunta.inspeccionApartadoId === apartado.id)
+                  .map((pregunta) => {
+                    const respuesta = respuestas.find(
+                      (resp) => resp.inspeccionPreguntaId === pregunta.id,
+                    );
+                    return (
+                      <InspeccionPregunta
+                        key={pregunta.id}
+                        pregunta={pregunta}
+                        setForm={setForm}
+                        id={query.id}
+                        respuesta={respuesta?.respuesta || ''}
+                      />
+                    );
+                  })}
+
+                <TextField
+                  id={`comentarios-${apartado.id}`}
+                  name={`comentarios-${apartado.id}`}
+                  label={observacion?.comentario ? '' : 'Comentario'}
+                  multiline
+                  sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
+                  rows={4}
+                  defaultValue={observacion?.comentario || ''}
+                  inputRef={(el) => (commentRefs.current[index] = el)}
+                />
+                <ButtonsInspeccionSection
+                  prev={() => setSelectedTab(index - 1)}
+                  next={() => setSelectedTab(index + 1)}
+                  confirm={() => {
+                    sendCurrentComment(apartado.id);
+                    sendQuestionData();
+                  }}
+                  position={getPosition(index)}
+                />
+              </Box>
+            );
+          })}
         </Grid>
       </Grid>
     </Layout>
