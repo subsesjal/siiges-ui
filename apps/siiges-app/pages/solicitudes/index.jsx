@@ -20,13 +20,17 @@ export default function Solicitudes() {
   const [RefrendoContentVisible, setRefrendoContentVisible] = useState(false);
   const [rows, setRows] = useState([]);
   const { solicitudes } = getSolicitudes();
-
   useEffect(() => {
     if (solicitudes !== undefined && solicitudes !== null) {
-      const filteredSolicitudes = session.rol === 'control_documental'
-        ? solicitudes.filter((solicitud) => [2, 3].includes(solicitud.estatusSolicitudId))
-        : solicitudes;
+      let filteredSolicitudes;
 
+      if (session.rol === 'control_documental') {
+        filteredSolicitudes = solicitudes.filter((solicitud) => [2, 3].includes(solicitud.estatusSolicitudId));
+      } else if (session.rol === 'sicyt_editar') {
+        filteredSolicitudes = solicitudes.filter((solicitud) => solicitud.estatusSolicitudId === 8);
+      } else {
+        filteredSolicitudes = solicitudes;
+      }
       const formattedRows = filteredSolicitudes.map((solicitud) => ({
         id: solicitud.id,
         estatus: solicitud.estatusSolicitudId,
@@ -39,7 +43,7 @@ export default function Solicitudes() {
 
       setRows(formattedRows);
     }
-  }, [solicitudes]);
+  }, [solicitudes, session.rol]);
 
   useEffect(() => {
     if (session.rol === 'representante') {

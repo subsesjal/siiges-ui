@@ -1,21 +1,26 @@
 import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
-import { Layout, Title, useApi } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import {
+  Layout, Title, useApi, Context,
+} from '@siiges-ui/shared';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
 import { OficioModal } from './utils/oficioModal';
 
 export default function detallesSolicitudes() {
+  const { session } = useContext(Context);
   const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
+  const [setError] = useState();
   const showOficioModal = () => setIsOficioModalOpen(true);
   const hideOficioModal = () => setIsOficioModalOpen(false);
   const router = useRouter();
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
   const { data } = useApi({ endpoint: `api/v1/solicitudes/${query.id}/detalles` });
-
+  console.log(session.rol);
+  console.log(solicitud.estatusSolicitudId);
   useEffect(() => {
     if (data) {
       setSolicitud(data);
@@ -24,21 +29,19 @@ export default function detallesSolicitudes() {
   const downloadFile = async (type) => {
     try {
       const solicitudId = solicitud?.id;
-
       GetFile({
         tipoEntidad: 'SOLICITUD',
         entidadId: solicitudId,
         tipoDocumento: type,
-      }, async (url) => {
-        if (!url.startsWith('http')) {
-          // eslint-disable-next-line no-param-reassign
-          url = `http://${url}`;
+      }, async (fileUrl) => {
+        let finalUrl = fileUrl;
+        if (!finalUrl.startsWith('http')) {
+          finalUrl = `http://${finalUrl}`;
         }
-        window.open(url, '_blank');
+        window.open(finalUrl, '_blank');
       });
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error calling GetFile', error);
+      setError('Error calling GetFile', error);
     }
   };
   return (
@@ -96,17 +99,24 @@ export default function detallesSolicitudes() {
             </ListItem>
           </List>
         </Grid>
-        {solicitud.estatusSolicitudId > 8 && (
-          <Grid item xs={4}>
-            <Typography variant="subtitle1" color="textSecondary">
-              RVOE
-            </Typography>
-            <List component="nav">
-              <ListItem button onClick={showOficioModal}>
-                <ListItemText primary="Acuerdo RVOE" />
-              </ListItem>
-            </List>
-          </Grid>
+        {(solicitud.estatusSolicitudId >= 8
+          || (solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar')) && (
+            <Grid item xs={4}>
+              <Typography variant="subtitle1" color="textSecondary">
+                RVOE
+              </Typography>
+              <List component="nav">
+                {solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar' ? (
+                  <ListItem button onClick={showOficioModal}>
+                    <ListItemText primary="Acuerdo RVOE" />
+                  </ListItem>
+                ) : (
+                  <ListItem button onClick={() => downloadFile('ACUERDO_RVOE')}>
+                    <ListItemText primary="RVOE" />
+                  </ListItem>
+                )}
+              </List>
+            </Grid>
         )}
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
@@ -141,12 +151,12 @@ export default function detallesSolicitudes() {
         </Grid>
       </Grid>
       {solicitud?.id && (
-      <OficioModal
-        open={isOficioModalOpen}
-        hideModal={hideOficioModal}
-        downloadFile={downloadFile}
-        solicitudId={solicitud.id}
-      />
+        <OficioModal
+          open={isOficioModalOpen}
+          hideModal={hideOficioModal}
+          downloadFile={downloadFile}
+          solicitudId={solicitud.id}
+        />
       )}
     </Layout>
   );

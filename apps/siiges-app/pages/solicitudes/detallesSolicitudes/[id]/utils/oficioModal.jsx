@@ -13,7 +13,7 @@ export function OficioModal({
 }) {
   const [oficioNumber, setOficioNumber] = useState('');
   const [fechaEfecto, setFechaEfecto] = useState('');
-
+  const [setError] = useState('');
   const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === 'oficioNumber') {
@@ -25,7 +25,7 @@ export function OficioModal({
 
   const handleOnSubmit = async () => {
     if (!fechaEfecto || !oficioNumber) {
-      console.error('Por favor, completa todos los campos.');
+      setError('Por favor, completa todos los campos.');
       return;
     }
 
@@ -40,13 +40,13 @@ export function OficioModal({
     try {
       const response = await updateRecord({ data: dataRvoe, endpoint: `/solicitudes/${solicitudId}` });
       if (response.statusCode === 200) {
-        downloadFile('RVOE');
+        downloadFile('ACUERDO_RVOE');
         hideModal();
       } else {
-        console.error(response.errorMessage);
+        setError(response.errorMessage);
       }
-    } catch (error) {
-      console.error(error);
+    } catch (errorResponse) {
+      setError(errorResponse);
     }
   };
 
