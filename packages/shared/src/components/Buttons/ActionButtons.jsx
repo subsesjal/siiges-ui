@@ -1,5 +1,5 @@
 import { IconButton, Stack } from '@mui/material';
-import DescriptionIcon from '@mui/icons-material/Description';
+import SearchIcon from '@mui/icons-material/Search';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -20,7 +20,7 @@ export default function ActionButtons({ consultar, editar, eliminar }) {
 
   return (
     <Stack direction="row" spacing={1}>
-      {renderButton(consultar, 'consultar', <DescriptionIcon />)}
+      {renderButton(consultar, 'consultar', <SearchIcon />)}
       {renderButton(editar, 'editar', <EditIcon />)}
       {eliminar && (
         <IconButton aria-label="eliminar" onClick={eliminar}>

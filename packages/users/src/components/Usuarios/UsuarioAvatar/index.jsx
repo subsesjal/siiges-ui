@@ -1,17 +1,27 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Context } from '@siiges-ui/shared';
-import { Typography } from '@mui/material';
+import React, {
+  useContext, useState, useEffect, useRef,
+} from 'react';
+import {
+  Context, ButtonStyled, SubmitDocument, DefaultModal,
+} from '@siiges-ui/shared';
+import { Typography, Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
+import { useRouter } from 'next/router';
 import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function UsuarioAvatar({ usuario }) {
-  const { removeAuth, session } = useContext(Context);
+  const router = useRouter();
+  const { session } = useContext(Context);
   const { persona = undefined, rol = undefined } = usuario || {};
   const fullName = `${persona?.nombre} ${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`;
   const [imageUrl, setImageUrl] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const fileInputRef = useRef(null);
+
   const getProfilePhoto = async () => {
     try {
       const endpoint = '/files/';
@@ -44,6 +54,35 @@ export default function UsuarioAvatar({ usuario }) {
   useEffect(() => {
     getProfilePhoto();
   }, [session]);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    setOpenModal(true);
+  };
+
+  const handleUploadClick = async () => {
+    if (!selectedFile) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('archivoAdjunto', selectedFile);
+    formData.append('tipoEntidad', 'PERSONA');
+    formData.append('entidadId', session.id);
+    formData.append('tipoDocumento', 'FOTOGRAFIA_PERSONA');
+    try {
+      await SubmitDocument(formData);
+    } catch (error) {
+      router.reload();
+    } finally {
+      setOpenModal(false);
+      setSelectedFile(null);
+    }
+  };
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+  };
 
   return (
     <>
@@ -85,7 +124,54 @@ export default function UsuarioAvatar({ usuario }) {
         <br />
         <Divider sx={{ marginY: 1 }} />
         <Typography variant="p">{rol?.descripcion}</Typography>
+        <Grid container spacing={2} justifyContent="flex-end">
+          <Grid item>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
+            <ButtonStyled
+              text="Cambiar Foto"
+              alt="Cambiar Foto"
+              onclick={() => fileInputRef.current.click()}
+            >
+              Cambiar imagen
+            </ButtonStyled>
+          </Grid>
+        </Grid>
       </Paper>
+
+      <DefaultModal
+        open={openModal}
+        setOpen={handleModalClose}
+        title="Confirmar cambio de imagen"
+      >
+        <Typography>
+          ¿Estás seguro de cambiar la imagen?
+        </Typography>
+        <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
+          <Grid item>
+            <ButtonStyled
+              text="Cancelar"
+              alt="Cancelar"
+              onclick={handleModalClose}
+            >
+              Cancelar
+            </ButtonStyled>
+          </Grid>
+          <Grid item>
+            <ButtonStyled
+              text="Confirmar"
+              alt="Confirmar"
+              onclick={handleUploadClick}
+            >
+              Confirmar
+            </ButtonStyled>
+          </Grid>
+        </Grid>
+      </DefaultModal>
     </>
   );
 }

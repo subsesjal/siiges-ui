@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import React, {
   useContext, useEffect, useState, useRef,
 } from 'react';
@@ -14,13 +13,15 @@ import {
   apartados,
   InspeccionPregunta,
 } from '@siiges-ui/inspecciones';
-import { createRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
+import { createRecord, getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function NuevaInspeccion() {
   const { setLoading, setNoti } = useContext(Context);
   const [selectedTab, setSelectedTab] = useState(0);
   const [form, setForm] = useState([]);
   const [preguntas, setPreguntas] = useState([]);
+  const [respuestas, setRespuestas] = useState([]);
+  const [observaciones, setObservaciones] = useState([]);
   const [url, setUrl] = useState('');
   const [body, setBody] = useState(null);
   const [method, setMethod] = useState('GET');
@@ -38,6 +39,36 @@ export default function NuevaInspeccion() {
     if (Array.isArray(data)) {
       setPreguntas(data);
     }
+    const fetchRespuestas = async () => {
+      try {
+        const endpoint = `/inspecciones/inspeccionesPreguntas/${query.id}`;
+        const response = await getData({ endpoint });
+
+        if (response.statusCode === 200 && response.data) {
+          setRespuestas(response.data);
+        } else {
+          setRespuestas([]);
+        }
+      } catch (errorRespuestas) {
+        setRespuestas([]);
+      }
+    };
+    fetchRespuestas();
+    const fetchObservaciones = async () => {
+      try {
+        const endpoint = `/inspecciones/${query.id}/observaciones`;
+        const response = await getData({ endpoint });
+
+        if (response.statusCode === 200 && response.data) {
+          setObservaciones(response.data);
+        } else {
+          setObservaciones([]);
+        }
+      } catch (errorObservaciones) {
+        setObservaciones([]);
+      }
+    };
+    fetchObservaciones();
     if (data && method === 'POST' && error === null) {
       setNoti({
         open: true,
@@ -53,7 +84,7 @@ export default function NuevaInspeccion() {
         type: 'error',
       });
     }
-  }, [data, loading]);
+  }, [data, loading, method, error, setLoading, setNoti, router, query.id]);
 
   const getPosition = (index) => {
     if (index === 0) {
@@ -98,7 +129,6 @@ export default function NuevaInspeccion() {
           type: 'error',
         });
       }
-    // eslint-disable-next-line no-shadow
     } catch (error) {
       setNoti({
         open: true,
@@ -127,42 +157,55 @@ export default function NuevaInspeccion() {
           </Box>
         </Grid>
         <Grid item xs={12}>
-          {apartados.map((apartado, index) => (
-            <Box
-              key={apartado.id}
-              sx={{ display: selectedTab === index ? 'block' : 'none' }}
-            >
-              {preguntas
-                .filter((pregunta) => pregunta.inspeccionCategoriaId === apartado.id)
-                .map((pregunta) => (
-                  <InspeccionPregunta
-                    key={pregunta.id}
-                    pregunta={pregunta}
-                    setForm={setForm}
-                    id={query.id}
-                  />
-                ))}
-              <TextField
-                id={`comentarios-${apartado.id}`}
-                name={`comentarios-${apartado.id}`}
-                label="Comentarios"
-                multiline
-                sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
-                rows={4}
-                // eslint-disable-next-line no-return-assign
-                inputRef={(el) => commentRefs.current[index] = el}
-              />
-              <ButtonsInspeccionSection
-                prev={() => setSelectedTab(index - 1)}
-                next={() => setSelectedTab(index + 1)}
-                confirm={() => {
-                  sendCurrentComment(apartado.id);
-                  sendQuestionData();
-                }}
-                position={getPosition(index)}
-              />
-            </Box>
-          ))}
+          {apartados.map((apartado, index) => {
+            const observacion = observaciones.find(
+              (obs) => obs.inspeccionApartadoId === apartado.id,
+            );
+
+            return (
+              <Box
+                key={apartado.id}
+                sx={{ display: selectedTab === index ? 'block' : 'none' }}
+              >
+                {preguntas
+                  .filter((pregunta) => pregunta.inspeccionApartadoId === apartado.id)
+                  .map((pregunta) => {
+                    const respuesta = respuestas.find(
+                      (resp) => resp.inspeccionPreguntaId === pregunta.id,
+                    );
+                    return (
+                      <InspeccionPregunta
+                        key={pregunta.id}
+                        pregunta={pregunta}
+                        setForm={setForm}
+                        id={query.id}
+                        respuesta={respuesta?.respuesta || ''}
+                      />
+                    );
+                  })}
+
+                <TextField
+                  id={`comentarios-${apartado.id}`}
+                  name={`comentarios-${apartado.id}`}
+                  label={observacion?.comentario ? '' : 'Comentario'}
+                  multiline
+                  sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
+                  rows={4}
+                  defaultValue={observacion?.comentario || ''}
+                  inputRef={(el) => (commentRefs.current[index] = el)}
+                />
+                <ButtonsInspeccionSection
+                  prev={() => setSelectedTab(index - 1)}
+                  next={() => setSelectedTab(index + 1)}
+                  confirm={() => {
+                    sendCurrentComment(apartado.id);
+                    sendQuestionData();
+                  }}
+                  position={getPosition(index)}
+                />
+              </Box>
+            );
+          })}
         </Grid>
       </Grid>
     </Layout>

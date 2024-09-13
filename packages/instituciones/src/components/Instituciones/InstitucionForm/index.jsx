@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import router from 'next/router';
 import Image from 'next/image';
-import { Grid } from '@mui/material';
-import { ButtonsForm } from '@siiges-ui/shared';
+import {
+  Grid, Typography,
+} from '@mui/material';
+import {
+  ButtonStyled, ButtonsForm, SubmitDocument, DefaultModal,
+} from '@siiges-ui/shared';
+import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import InstitucionFields from '../InstitucionFields';
 import {
   submitInstitucion,
@@ -21,24 +26,10 @@ export default function InstitucionForm({
   const [openModal, setOpenModal] = useState(false);
   const [showButtons, setShowButtons] = useState(true);
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    setLoading(true);
-    if (accion === 'crear' && session.id) {
-      setForm({ usuarioId: session.id, tipoInstitucionId: 1, esNombreAutorizado: false });
-      setTitle('Registrar Institución');
-    }
-
-    if (accion === 'editar' && session.id) {
-      if (institucion.id) {
-        setForm({ id: institucion.id });
-        setTitle('Modificar Institución');
-      } else {
-        router.back();
-      }
-    }
-    setLoading(false);
-  }, [accion, institucion.id, session.id, setLoading, setTitle]);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+  const [openModalPhoto, setOpenModalPhoto] = useState(false);
 
   const handleConfirm = async () => {
     const success = await submitInstitucion({
@@ -52,19 +43,88 @@ export default function InstitucionForm({
     });
 
     if (success) {
-      setShowButtons(false); // Oculta los botones tras el éxito
+      setShowButtons(false);
       if (accion === 'crear') {
-        setOpenModal(true); // Abre el modal para subir biografía y bibliografía
+        setOpenModal(true);
       }
     }
   };
+  const getInstitutionPhoto = async (institucionId) => {
+    try {
+      const endpoint = '/files/';
+      const query = `?tipoEntidad=INSTITUCION&entidadId=${institucionId}&tipoDocumento=LOGOTIPO`;
+      const response = await getData({ endpoint, query });
+      if (response.statusCode === 200 && response.data) {
+        let { url } = response.data;
+        if (url) {
+          if (!url.startsWith('http')) {
+            url = `http://${url}`;
+          }
+          const response2 = await fetch(url);
+          if (!response2.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const blob = await response2.blob();
+          const imageObjectUrl = URL.createObjectURL(blob);
+          setImageUrl(imageObjectUrl);
+        } else {
+          setImageUrl(undefined);
+        }
+      } else {
+        setImageUrl(undefined);
+      }
+    } catch (error) {
+      setImageUrl(undefined);
+    }
+  };
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    setOpenModalPhoto(true);
+  };
 
+  const handleUploadClick = async () => {
+    const formData = new FormData();
+    formData.append('archivoAdjunto', selectedFile);
+    formData.append('tipoEntidad', 'INSTITUCION');
+    formData.append('entidadId', institucion.id);
+    formData.append('tipoDocumento', 'LOGOTIPO');
+    try {
+      await SubmitDocument(formData);
+    } catch (error) {
+      router.reload();
+    } finally {
+      setOpenModalPhoto(false);
+      setSelectedFile(null);
+    }
+  };
+
+  const handleModalClose = () => {
+    setOpenModalPhoto(false);
+  };
+  useEffect(() => {
+    setLoading(true);
+    if (accion === 'crear' && session.id) {
+      setForm({ usuarioId: session.id, tipoInstitucionId: 1, esNombreAutorizado: false });
+      setTitle('Registrar Institución');
+    }
+
+    if (accion === 'editar' && session.id) {
+      if (institucion.id) {
+        setForm({ id: institucion.id });
+        setTitle('Modificar Institución');
+        getInstitutionPhoto(institucion.id);
+      } else {
+        router.back();
+      }
+    }
+    setLoading(false);
+  }, [accion, institucion.id, session.id, setLoading, setTitle]);
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
         <Image
-          alt="logoschool"
-          src="/logoschool.png"
+          alt="institucion-logo"
+          src={imageUrl || '/logoschool.png'}
           quality={100}
           width="300px"
           height="300px"
@@ -73,6 +133,19 @@ export default function InstitucionForm({
             overflow: 'hidden',
           }}
         />
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
+        <ButtonStyled
+          text="Cambiar Imagen"
+          alt="Cambiar Imagen"
+          onclick={() => fileInputRef.current.click()}
+        >
+          Cambiar Imagen
+        </ButtonStyled>
       </Grid>
       <Grid item xs={8}>
         <InstitucionFields
@@ -96,8 +169,44 @@ export default function InstitucionForm({
             />
           </Grid>
         )}
+        {showButtons && page === 2 && (
+          <Grid item xs={11} sx={{ marginTop: 5 }}>
+            <ButtonsForm
+              confirm={handleConfirm}
+              cancel={() => handleCancel()}
+            />
+          </Grid>
+        )}
       </Grid>
-
+      <DefaultModal
+        open={openModalPhoto}
+        setOpen={handleModalClose}
+        title="Confirmar cambio de imagen"
+      >
+        <Typography>
+          ¿Estás seguro de cambiar la imagen?
+        </Typography>
+        <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
+          <Grid item>
+            <ButtonStyled
+              text="Cancelar"
+              alt="Cancelar"
+              onclick={handleModalClose}
+            >
+              Cancelar
+            </ButtonStyled>
+          </Grid>
+          <Grid item>
+            <ButtonStyled
+              text="Confirmar"
+              alt="Confirmar"
+              onclick={handleUploadClick}
+            >
+              Confirmar
+            </ButtonStyled>
+          </Grid>
+        </Grid>
+      </DefaultModal>
       <BiografiaBibliografiaModal
         open={openModal}
         onClose={() => setOpenModal(false)}

@@ -88,6 +88,10 @@ export default function NuevaSolicitud({
     }
   };
 
+  const switchModule = (stepIndex) => {
+    setModule(stepIndex);
+  };
+
   const renderModule = () => {
     const Component = steps[modalidad][module];
     return Component ? (
@@ -113,6 +117,7 @@ export default function NuevaSolicitud({
         prevModule={prevModule}
         module={module}
         id={id}
+        switchModule={switchModule}
       />
       {renderModule()}
     </ObservacionesProvider>

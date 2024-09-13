@@ -27,15 +27,38 @@ export default function ModalCertificado({
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
   const [alumnoId, setAlumnoId] = useState(null);
+  const [disabled, setDisabled] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
+
+  const validateForm = () => {
+    const isValid = alumno
+      && form.fechaElaboracion
+      && form.fechaTermino;
+
+    setDisabled(!isValid);
+  };
+
+  useEffect(() => {
+    validateForm();
+  }, [form, alumnoId]);
 
   useEffect(() => {
     if (type === 'edit' && rowData) {
-      setForm(rowData);
+      setForm({
+        ...rowData,
+        fechaElaboracion: rowData.fechaElaboracion
+          ? dayjs(rowData.fechaElaboracion, 'MM/DD/YYYY').format('DD/MM/YYYY')
+          : '',
+        fechaTermino: rowData.fechaTermino
+          ? dayjs(rowData.fechaTermino, 'MM/DD/YYYY').format('DD/MM/YYYY')
+          : '',
+      });
       setAlumno(rowData.name);
       setAlumnoId(rowData.id);
     } else {
       setForm({});
+      setAlumno();
+      setAlumnoId();
     }
   }, [type, rowData]);
 
@@ -62,9 +85,10 @@ export default function ModalCertificado({
           }
         })
         .catch((error) => {
+          console.error(error);
           setNoti({
             open: true,
-            message: `¡Ocurrió un error inesperado!: ${error}`,
+            message: '¡No se encontró el Alumno!',
             type: 'error',
           });
         })
@@ -80,11 +104,13 @@ export default function ModalCertificado({
     const formattedForm = {
       ...form,
       fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
-      fechaElaboracion: dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ'),
+      fechaElaboracion: dayjs(form.fechaElaboracion).format(
+        'YYYY-MM-DDTHH:mm:ssZ',
+      ),
     };
 
     const endpoint = type === 'edit'
-      ? `/solicitudesFolios/${form.id}`
+      ? `/solicitudesFolios/solicitudesFoliosAlumnos/${form.id}`
       : `/solicitudesFolios/${id}/alumnos/${alumnoId}`;
 
     const action = type === 'edit' ? updateRecord : createRecord;
@@ -98,21 +124,32 @@ export default function ModalCertificado({
             newRow = {
               id: response.data.id,
               name: alumno,
-              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+              fechaTermino: dayjs(response.data.fechaTermino).format(
+                'DD/MM/YYYY',
+              ),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
             };
           } else {
             newRow = {
               id: response.data.id,
               name: `${response.data.alumno.persona.nombre} ${response.data.alumno.persona.apellidoPaterno} ${response.data.alumno.persona.apellidoMaterno}`,
-              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+              fechaTermino: dayjs(response.data.fechaTermino).format(
+                'DD/MM/YYYY',
+              ),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
             };
           }
 
           setNoti({
             open: true,
-            message: type === 'edit' ? 'Registro actualizado exitosamente' : 'Registro creado exitosamente',
+            message:
+              type === 'edit'
+                ? 'Registro actualizado exitosamente'
+                : 'Registro creado exitosamente',
             type: 'success',
           });
 
@@ -183,7 +220,11 @@ export default function ModalCertificado({
           />
         </Grid>
         <Grid item xs={12}>
-          <ButtonsForm confirm={handleConfirm} cancel={handleCancel} />
+          <ButtonsForm
+            confirm={handleConfirm}
+            confirmDisabled={disabled}
+            cancel={handleCancel}
+          />
         </Grid>
       </Grid>
     </DefaultModal>

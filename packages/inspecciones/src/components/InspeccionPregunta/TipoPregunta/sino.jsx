@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Button, Box } from '@mui/material';
 import PropTypes from 'prop-types';
 
-export default function Sino({ setForm, pregunta, id }) {
+export default function Sino({
+  setForm, pregunta, id, respuesta,
+}) {
   const [selected, setSelected] = useState(null);
-
   const handleClick = (value) => {
     setSelected(value);
     const questionData = {
@@ -18,13 +19,42 @@ export default function Sino({ setForm, pregunta, id }) {
       );
 
       if (existingQuestionIndex !== -1) {
-      // Si la pregunta ya existe en el array, actualiza su respuesta
         return prevForm
           .map((item, index) => (index === existingQuestionIndex ? questionData : item));
       }
-      // Si la pregunta no existe en el array, añádela
       return [...prevForm, questionData];
     });
+  };
+  useEffect(() => {
+    if (respuesta !== null) {
+      setSelected(respuesta);
+    }
+    if (respuesta === 'true') {
+      handleClick(true);
+    } else if (respuesta === 'false') {
+      handleClick(false);
+    }
+  }, [respuesta]);
+  const sxStyles = {
+    yesButton: {
+      color: selected === true ? 'white' : 'green',
+      backgroundColor: selected === true ? 'green' : 'transparent',
+      border: '1px solid green',
+      marginRight: 1,
+      '&:hover': {
+        backgroundColor: 'green',
+        color: 'white',
+      },
+    },
+    noButton: {
+      color: selected === false ? 'white' : 'red',
+      backgroundColor: selected === false ? 'red' : 'transparent',
+      border: '1px solid red',
+      '&:hover': {
+        backgroundColor: 'red',
+        color: 'white',
+      },
+    },
   };
 
   return (
@@ -33,30 +63,13 @@ export default function Sino({ setForm, pregunta, id }) {
         <Box>
           <Button
             onClick={() => handleClick(true)}
-            sx={{
-              color: selected === true ? 'white' : 'green',
-              backgroundColor: selected === true ? 'green' : 'transparent',
-              border: '1px solid green',
-              marginRight: 1,
-              '&:hover': {
-                backgroundColor: 'green',
-                color: 'white',
-              },
-            }}
+            sx={sxStyles.yesButton}
           >
             Sí
           </Button>
           <Button
             onClick={() => handleClick(false)}
-            sx={{
-              color: selected === false ? 'white' : 'red',
-              backgroundColor: selected === false ? 'red' : 'transparent',
-              border: '1px solid red',
-              '&:hover': {
-                backgroundColor: 'red',
-                color: 'white',
-              },
-            }}
+            sx={sxStyles.noButton}
           >
             No
           </Button>
@@ -73,4 +86,9 @@ Sino.propTypes = {
     pregunta: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   }).isRequired,
+  respuesta: PropTypes.bool,
+};
+
+Sino.defaultProps = {
+  respuesta: null,
 };

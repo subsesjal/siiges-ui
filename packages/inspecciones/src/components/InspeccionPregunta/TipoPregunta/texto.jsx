@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Input } from '@siiges-ui/shared';
 
-export default function Texto({ setForm, pregunta, id }) {
+export default function Texto({
+  setForm, pregunta, id, respuesta,
+}) {
   const handleChange = (e) => {
     const questionData = {
       inspeccionId: id,
@@ -32,6 +34,7 @@ export default function Texto({ setForm, pregunta, id }) {
       rows={2}
       onchange={handleChange}
       sx={{ marginTop: 0 }}
+      value={respuesta}
     />
   );
 }
@@ -43,4 +46,5 @@ Texto.propTypes = {
     pregunta: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   }).isRequired,
+  respuesta: PropTypes.string.isRequired,
 };

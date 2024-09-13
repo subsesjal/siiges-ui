@@ -9,13 +9,22 @@ import formPrograma from '../utils/sections/forms/formPrograma';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function DatosPlantel({
-  disabled,
+  disabled: initialDisabled,
   plantelesData,
   setPlantelesData,
 }) {
   const { planteles } = getPlantelesUsuario();
   const { setForm, plantelId } = useContext(PlantelContext);
   const [plantelesSelect, setPlantelesSelect] = useState([]);
+  const [disabled, setDisabled] = useState(initialDisabled);
+
+  useEffect(() => {
+    if (type === 'editar') {
+      setDisabled(!initialDisabled);
+    } else {
+      setDisabled(initialDisabled);
+    }
+  }, [type, initialDisabled]);
 
   const isSectionDisabled = useSectionDisabled(14);
 
@@ -286,4 +295,5 @@ DatosPlantel.propTypes = {
     }),
   }).isRequired,
   setPlantelesData: PropTypes.func.isRequired,
+  type: PropTypes.oneOf(['crear', 'editar']).isRequired,
 };

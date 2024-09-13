@@ -8,6 +8,7 @@ import {
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import deletePlantel from '../../utils/deletePlantel';
 
 function ModalState() {
@@ -30,7 +31,31 @@ function ModalState() {
   };
 }
 
+async function checkSolicitudes(planteles, session, setNonDeletablePlanteles) {
+  try {
+    const endpoint = '/solicitudes';
+    const query = `?usuarioId=${session.id}&estatusSolicitudId=11`;
+
+    const response = await getData({ endpoint, query });
+
+    if (response.statusCode !== 200) {
+      throw new Error(response.errorMessage || '¡Error en la solicitud al servidor!');
+    }
+
+    const { data } = response;
+    const plantelesConSolicitudes = data.map((solicitud) => solicitud.id);
+    const nonDeletable = planteles.filter((plantel) => plantelesConSolicitudes.includes(plantel.id)).map((plantel) => plantel.id);
+    setNonDeletablePlanteles(nonDeletable);
+  } catch (errorSolicitud) {
+    console.error('¡Error en la solicitud!:', errorSolicitud.message);
+  }
+}
+
 export default function Planteles({ planteles, institucionId, session }) {
+  const [nonDeletablePlanteles, setNonDeletablePlanteles] = useState([]);
+
+  checkSolicitudes(planteles, session, setNonDeletablePlanteles);
+
   const router = useRouter();
   const {
     modal, showModal, hideModal, modalId,
@@ -74,7 +99,10 @@ export default function Planteles({ planteles, institucionId, session }) {
 
         if (!params.row.claveCentroTrabajo && session.rol !== 'gestor') {
           actionButtonsProps.editar = `/instituciones/${institucionId}/planteles/editar/${params.id}`;
-          actionButtonsProps.eliminar = () => showModal(params.id);
+
+          if (!nonDeletablePlanteles.includes(params.id)) {
+            actionButtonsProps.eliminar = () => showModal(params.id);
+          }
         }
 
         return (
@@ -112,7 +140,7 @@ export default function Planteles({ planteles, institucionId, session }) {
                     onclick={() => {
                       hideModal();
                       deletePlantel(
-                        params.row.institucion,
+                        institucionId,
                         modalId,
                         handleDeleteClick,
                       );

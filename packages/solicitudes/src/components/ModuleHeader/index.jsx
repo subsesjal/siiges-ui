@@ -1,4 +1,6 @@
-/* eslint-disable no-return-assign */
+import React, { useEffect, useState, useContext } from 'react';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import {
   Card, CardContent, Grid, Typography,
 } from '@mui/material';
@@ -9,9 +11,6 @@ import {
   DefaultModal,
   ButtonSimple,
 } from '@siiges-ui/shared';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
-import { useRouter } from 'next/router';
 import Modal from '../Modal/ModalObservacion';
 
 export default function ModuleHeader({
@@ -22,7 +21,8 @@ export default function ModuleHeader({
   nextModule,
   module,
   id,
-  isEditOrView, // Recibe la propiedad isEditOrView
+  isEditOrView,
+  switchModule,
 }) {
   const [disabled, setDisabled] = useState(false);
   const [modalState, setModalState] = useState(false);
@@ -118,7 +118,11 @@ export default function ModuleHeader({
         <CardContent>
           <Grid container>
             <Grid item xs={12}>
-              <StepperComponent steps={steps} position={module} />
+              <StepperComponent
+                steps={steps}
+                position={module}
+                onStepClick={switchModule}
+              />
             </Grid>
             <Grid item xs={6}>
               <Typography variant="p" sx={{ fontWeight: 'bold' }}>
@@ -218,4 +222,5 @@ ModuleHeader.propTypes = {
   module: PropTypes.number.isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   isEditOrView: PropTypes.string.isRequired,
+  switchModule: PropTypes.func.isRequired,
 };

@@ -20,8 +20,8 @@ export default function InstitucionFields({
   errors,
   form,
   accion,
-  page, // Nuevo prop para la página actual
-  setPage, // Nuevo prop para cambiar la página
+  page,
+  setPage,
 }) {
   const router = useRouter();
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
@@ -350,8 +350,6 @@ export default function InstitucionFields({
                   value={ratificacionesNombre[0]?.nombrePropuesto3 || ''}
                 />
               </Grid>
-
-              {/* Inputs de archivos para Biografía, Bibliografía y Acta Constitutiva */}
               {accion === 'editar' && (
                 <>
                   <Grid item xs={11}>
@@ -483,6 +481,6 @@ InstitucionFields.propTypes = {
       }),
     ),
   }),
-  page: PropTypes.number.isRequired, // Nuevo prop
-  setPage: PropTypes.func.isRequired, // Nuevo prop
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
 };

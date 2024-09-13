@@ -45,7 +45,6 @@ export default function UsuarioView({ usuario }) {
             <List>
               <ListTitle text="Rol" />
               <ListTitle text="Cargo" />
-              <ListTitle text="INE" />
               <ListTitle text="RFC" />
               <ListTitle text="Curp" />
             </List>
@@ -55,7 +54,6 @@ export default function UsuarioView({ usuario }) {
             <List>
               <ListSubtitle text={rol?.descripcion} />
               <ListSubtitle text={persona?.tituloCargo} />
-              <ListSubtitle text={persona?.ine} />
               <ListSubtitle text={persona?.rfc} />
               <ListSubtitle text={persona?.curp} />
             </List>
