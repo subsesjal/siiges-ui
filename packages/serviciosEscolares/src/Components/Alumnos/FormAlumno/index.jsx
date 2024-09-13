@@ -39,7 +39,7 @@ export default function FormAlumno({ type, alumno, setId }) {
         situacionId: alumno.situacionId ? alumno.situacionId : '',
       }));
     }
-    if (session.rol === 'representante') {
+    if (session.rol === 'representante' || session.rol === 'ce_ies') {
       setForm((prevForm) => ({
         ...prevForm,
         situacionId: 2,
@@ -133,14 +133,14 @@ export default function FormAlumno({ type, alumno, setId }) {
                 title={campo.label}
                 name={campo.id}
                 value={
-                  campo.id === 'situacionId' && session.rol === 'representante'
+                  campo.id === 'situacionId' && (session.rol === 'representante' || session.rol === 'ce_ies')
                     ? 2
                     : formSelect?.[campo.id] || ''
                 }
                 options={campo.options}
                 onChange={handleOnChange}
                 disabled={
-                  campo.id === 'situacionId' && session.rol === 'representante'
+                  campo.id === 'situacionId' && (session.rol === 'representante' || session.rol === 'ce_ies')
                 }
               />
             )}

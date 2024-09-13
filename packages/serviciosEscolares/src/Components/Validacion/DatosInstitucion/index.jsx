@@ -15,6 +15,7 @@ import {
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function DatosInstitucion({ alumno }) {
   const { setNoti, session, setLoading } = useContext(Context);
@@ -38,11 +39,12 @@ export default function DatosInstitucion({ alumno }) {
     tipoValidacionId: '',
   });
   const [errors, setErrors] = useState({});
+  const router = useRouter();
 
   const fileData = {
     entidadId: alumno.id,
-    tipoEntidad: 'PERSONA',
-    tipoDocumento: 'VALIDACION_ALUMNO',
+    tipoEntidad: 'ALUMNO',
+    tipoDocumento: 'ARCHIVO_VALIDACION_ALUMNO',
   };
 
   useEffect(() => {
@@ -364,8 +366,8 @@ export default function DatosInstitucion({ alumno }) {
           <Grid item xs={12}>
             <InputFile
               label="Archivo de validación"
-              id={1}
-              tipoDocumento="VALIDACION_ALUMNO"
+              id={alumno.id}
+              tipoDocumento="ARCHIVO_VALIDACION_ALUMNO"
               tipoEntidad="ALUMNO"
               url={url}
               setUrl={setUrl}
@@ -376,7 +378,7 @@ export default function DatosInstitucion({ alumno }) {
         </>
       )}
       <Grid item xs={12}>
-        <ButtonsForm confirm={handleConfirm} cancel={() => {}} />
+        <ButtonsForm confirm={handleConfirm} cancel={() => router.back()} />
       </Grid>
     </Grid>
   );

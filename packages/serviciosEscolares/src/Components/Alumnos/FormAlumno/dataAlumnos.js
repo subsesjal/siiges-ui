@@ -51,7 +51,7 @@ export const mailValidator = (email) => {
   return regex.test(email);
 };
 export const setFormData = (data) => ({
-  situacionId: data?.situacionId,
+  situacionId: data?.situacionId || 2,
   programaId: data?.alumnoId,
   matricula: data?.matricula,
   estatus: 1,

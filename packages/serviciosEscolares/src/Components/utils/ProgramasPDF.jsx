@@ -4,13 +4,17 @@ import DescriptionIcon from '@mui/icons-material/Description';
 
 const placeholderPdfFiles = [
   { title: 'FDP01' },
-  { title: 'Mapa Curricular' },
-  { title: 'Reglas de operación' },
-  { title: 'Asignaturas a detalle' },
-  { title: 'Propuesta hemerobibliografíca' },
-  { title: 'Informe de resultados' },
-  { title: 'Instrumentos o formatos utilizados' },
-  { title: 'Trayectoria Educativa' },
+  { title: 'FDP02' },
+  { title: 'FDP03' },
+  { title: 'FDP04' },
+  { title: 'FDP05' },
+  { title: 'FDP06' },
+  { title: 'FDA01' },
+  { title: 'FDA02' },
+  { title: 'FDA03' },
+  { title: 'FDA04' },
+  { title: 'FDA05' },
+  { title: 'FDA06' },
 ];
 
 export default function ProgramasPDF() {
@@ -34,7 +38,7 @@ export default function ProgramasPDF() {
               borderColor: 'black',
               backgroundColor: 'white',
               width: '100%',
-              height: '46px',
+              height: '43px',
               justifyContent: 'flex-start',
               '&:hover': {
                 backgroundColor: 'black',
