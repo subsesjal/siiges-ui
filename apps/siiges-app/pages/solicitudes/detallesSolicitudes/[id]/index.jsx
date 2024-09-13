@@ -19,8 +19,6 @@ export default function detallesSolicitudes() {
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
   const { data } = useApi({ endpoint: `api/v1/solicitudes/${query.id}/detalles` });
-  console.log(session.rol);
-  console.log(solicitud.estatusSolicitudId);
   useEffect(() => {
     if (data) {
       setSolicitud(data);

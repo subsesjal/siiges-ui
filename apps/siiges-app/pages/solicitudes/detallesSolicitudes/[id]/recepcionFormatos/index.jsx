@@ -73,11 +73,11 @@ export default function RecepcionFormatos() {
       tipoDocumento: 'FDA06',
     },
   ];
-  const ensureUrlHasHttp = (url) => {
-    if (url && !url.startsWith('http')) {
-      return `http://${url}`;
+  const ensureUrlHasHttp = (urlFile) => {
+    if (urlFile && !urlFile.startsWith('http')) {
+      return `http://${urlFile}`;
     }
-    return url;
+    return urlFile;
   };
   useEffect(() => {
     const fetchSolicitud = async () => {
@@ -89,12 +89,10 @@ export default function RecepcionFormatos() {
             setNoti,
           );
           setSolicitud(solicitudData.data);
-
-          // Handle each file data entry individually using GetFile
           fileData.forEach((data, index) => {
             GetFile(data, (fileUrl, error) => {
               if (error) {
-                console.error('Error fetching file:', error);
+                setErrors('Error fetching file:', error);
                 return;
               }
               const validatedUrl = ensureUrlHasHttp(fileUrl);
@@ -106,7 +104,7 @@ export default function RecepcionFormatos() {
             });
           });
         } catch (error) {
-          console.error('Error fetching solicitud:', error);
+          setErrors('Error fetching solicitud:', error);
         }
       }
     };
@@ -142,32 +140,27 @@ export default function RecepcionFormatos() {
   const downloadFile = async (type) => {
     try {
       const solicitudId = solicitud?.id;
-
       GetFile({
         tipoEntidad: 'SOLICITUD',
         entidadId: solicitudId,
         tipoDocumento: type,
       }, async (fileURL, error) => {
         if (error) {
-          console.error('Error downloading the file', error);
+          setErrors('Error downloading the file', error);
           return;
         }
-
         if (!fileURL) {
-          console.error('File URL not provided');
+          setErrors('File URL not provided');
           return;
         }
-
-        // Ensure URL starts with 'http'
-        if (!fileURL.startsWith('http')) {
-          fileURL = `http://${fileURL}`;
+        let finalFileURL = fileURL;
+        if (!finalFileURL.startsWith('http')) {
+          finalFileURL = `http://${finalFileURL}`;
         }
-
-        // Open the URL in a new tab
-        window.open(fileURL, '_blank');
+        window.open(finalFileURL, '_blank');
       });
     } catch (error) {
-      console.error('Error calling GetFile', error);
+      setErrors('Error calling GetFile', error);
     }
   };
 

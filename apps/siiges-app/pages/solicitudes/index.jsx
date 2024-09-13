@@ -25,9 +25,13 @@ export default function Solicitudes() {
       let filteredSolicitudes;
 
       if (session.rol === 'control_documental') {
-        filteredSolicitudes = solicitudes.filter((solicitud) => [2, 3].includes(solicitud.estatusSolicitudId));
+        filteredSolicitudes = solicitudes.filter(
+          (solicitud) => [2, 3].includes(solicitud.estatusSolicitudId),
+        );
       } else if (session.rol === 'sicyt_editar') {
-        filteredSolicitudes = solicitudes.filter((solicitud) => solicitud.estatusSolicitudId === 8);
+        filteredSolicitudes = solicitudes.filter(
+          (solicitud) => solicitud.estatusSolicitudId === 8,
+        );
       } else {
         filteredSolicitudes = solicitudes;
       }
