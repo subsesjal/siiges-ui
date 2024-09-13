@@ -39,7 +39,7 @@ async function checkSolicitudes(planteles, session, setNonDeletablePlanteles) {
     const response = await getData({ endpoint, query });
 
     if (response.statusCode !== 200) {
-      throw new Error(response.errorMessage || 'Error en la solicitud al servidor');
+      throw new Error(response.errorMessage || '¡Error en la solicitud al servidor!');
     }
 
     const { data } = response;
@@ -47,7 +47,7 @@ async function checkSolicitudes(planteles, session, setNonDeletablePlanteles) {
     const nonDeletable = planteles.filter((plantel) => plantelesConSolicitudes.includes(plantel.id)).map((plantel) => plantel.id);
     setNonDeletablePlanteles(nonDeletable);
   } catch (errorSolicitud) {
-    console.error('Error en la solicitud:', errorSolicitud.message);
+    console.error('¡Error en la solicitud!:', errorSolicitud.message);
   }
 }
 
