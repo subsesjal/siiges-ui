@@ -4,8 +4,7 @@ import { DefaultModal, Input, ButtonStyled } from '@siiges-ui/shared';
 import { updateRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import PropTypes from 'prop-types';
 
-// eslint-disable-next-line import/prefer-default-export
-export function OficioModal({
+export default function OficioModal({
   open,
   hideModal,
   downloadFile,
