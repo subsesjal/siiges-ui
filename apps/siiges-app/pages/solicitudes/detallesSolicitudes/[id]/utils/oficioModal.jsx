@@ -12,7 +12,7 @@ export default function OficioModal({
 }) {
   const [oficioNumber, setOficioNumber] = useState('');
   const [fechaEfecto, setFechaEfecto] = useState('');
-  const [error, setError] = useState({});
+  const [, setError] = useState({});
   const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === 'oficioNumber') {
