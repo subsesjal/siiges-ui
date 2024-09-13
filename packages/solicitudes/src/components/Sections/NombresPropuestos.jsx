@@ -4,10 +4,15 @@ import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import PlantelContext from '../utils/Context/plantelContext';
 import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function NombresPropuestos({ disabled, id, institucion }) {
   const { form, setForm, setValidNombres } = useContext(PlantelContext);
   const [fileURLs, setFileURLs] = useState([null, null]);
+
+  const isSectionDisabled = useSectionDisabled(19);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   const fileData = ['BIOGRAFIA', 'BIBLIOGRAFIA'].map((tipoDocumento) => ({
     entidadId: id,
@@ -74,7 +79,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
             value={institucion?.ratificacionesNombre?.[0]?.nombrePropuesto1 || ''}
             onChange={handleOnChange}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -85,7 +90,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
             auto="nombrePropuesto2"
             value={institucion?.ratificacionesNombre?.[0]?.nombrePropuesto2 || ''}
             onChange={handleOnChange}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -96,7 +101,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
             auto="nombrePropuesto3"
             value={institucion?.ratificacionesNombre?.[0]?.nombrePropuesto3 || ''}
             onChange={handleOnChange}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -107,7 +112,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
             label="Biografía o Fundamento"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -118,7 +123,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
             label="Bibliografía para fuente de consulta"
             url={fileURLs[1]}
             setUrl={(url) => handleFileLoaded(1, url)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>

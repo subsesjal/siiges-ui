@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs'; // Import dayjs
+import 'dayjs/locale/es'; // Import Spanish locale for dayjs
 import {
   ModuleHeader,
   DatosGenerales,
@@ -52,6 +54,9 @@ export default function NuevaSolicitud({
   const [module, setModule] = useState(0);
   const [id, setId] = useState(solicitudId);
   const [programaId, setProgramaId] = useState('');
+
+  // Get current date using dayjs and format it in Spanish
+  const currentDate = dayjs().locale('es').format('DD [de] MMMM YYYY');
 
   useEffect(() => {
     setId(solicitudId);
@@ -107,7 +112,7 @@ export default function NuevaSolicitud({
         steps={steps[modalidad].map((component) => getStepName(component))}
         isEditOrView={type}
         type="Nueva solicitud"
-        date="22 de Agosto 2022"
+        date={currentDate}
         nextModule={nextModule}
         prevModule={prevModule}
         module={module}

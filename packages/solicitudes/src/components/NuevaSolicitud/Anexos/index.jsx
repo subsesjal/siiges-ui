@@ -31,6 +31,7 @@ export default function Anexos({
           sections={section}
           position={position}
           total="1"
+          id={id}
           porcentage={porcentaje}
           nextModule={nextModule}
           next={next}

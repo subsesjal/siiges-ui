@@ -7,7 +7,7 @@ import DeleteInstitucionesAledanas from './InstitucionesAledanas/DeleteInstituci
 import InstitucionAledanaEditModal from './InstitucionesAledanas/InstitucionAledanaEditModal';
 import PlantelContext from '../Context/plantelContext';
 
-export default function InstitucionesAledanasButtons({ id, type }) {
+export default function InstitucionesAledanasButtons({ id, type, isDisabled }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -42,12 +42,16 @@ export default function InstitucionesAledanasButtons({ id, type }) {
   }
   return (
     <Stack direction="row" spacing={1}>
-      <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
-        <EditIcon />
-      </IconButton>
-      <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
-        <DeleteIcon />
-      </IconButton>
+      {!isDisabled && (
+      <>
+        <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
+          <DeleteIcon />
+        </IconButton>
+      </>
+      )}
 
       {modalOpen && (
         <InstitucionAledanaEditModal
@@ -77,6 +81,7 @@ export default function InstitucionesAledanasButtons({ id, type }) {
 InstitucionesAledanasButtons.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
   rowItem: PropTypes.shape({
     programaID: PropTypes.number,
   }).isRequired,

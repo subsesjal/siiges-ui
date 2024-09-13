@@ -1,7 +1,7 @@
 import React from 'react';
 import InstitucionesAledanasButtons from '../../../utils/Components/InstitucionesAledanas';
 
-const columns = (type) => [
+const columns = (type, isDisabled) => [
   { field: 'nombre', headerName: 'Nombre de la institución', width: 570 },
   { field: 'tiempo', headerName: 'Tiempo de llegada', width: 370 },
   {
@@ -12,6 +12,7 @@ const columns = (type) => [
       <InstitucionesAledanasButtons
         id={params.id}
         type={type}
+        isDisabled={isDisabled}
       />
     ),
     sortable: false,

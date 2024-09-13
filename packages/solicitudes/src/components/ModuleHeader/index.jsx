@@ -145,7 +145,7 @@ export default function ModuleHeader({
                   text="Módulo anterior"
                   alt="Módulo anterior"
                   type="success"
-                  onclick={prevButton}
+                  onClick={() => prevButton()}
                   disabled={disabled}
                 />
               </Grid>
@@ -156,7 +156,7 @@ export default function ModuleHeader({
                   text={textRol}
                   alt={textRol}
                   type="success"
-                  onclick={submitButton}
+                  onClick={() => submitButton()}
                   disabled={disabled}
                 />
               </Grid>
@@ -167,7 +167,7 @@ export default function ModuleHeader({
                   text="Siguiente módulo"
                   alt="Siguiente módulo"
                   type="success"
-                  onclick={submitButton}
+                  onClick={() => submitButton()}
                   disabled={disabled}
                 />
               </Grid>
@@ -177,7 +177,7 @@ export default function ModuleHeader({
                 text="Salir"
                 alt="Salir"
                 type="success"
-                onclick={() => router.push('/home')}
+                onClick={() => router.push('/home')}
               />
             </Grid>
           </Grid>
@@ -199,12 +199,12 @@ export default function ModuleHeader({
             <ButtonSimple
               text="Aceptar"
               type="success"
-              onclick={handleLastStepAction}
+              onClick={() => handleLastStepAction()}
             />
             <ButtonSimple
               text="Cancelar"
               type="danger"
-              onclick={() => setModalRepresentante(false)}
+              onClick={() => setModalRepresentante(false)}
             />
           </Grid>
         </Grid>
