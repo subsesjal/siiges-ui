@@ -10,13 +10,12 @@ import { DatosGeneralesProvider } from '../../utils/Context/datosGeneralesContex
 import Observaciones from '../../Sections/Observaciones';
 
 export default function DatosGenerales({
-  nextModule, id, type, // Asegúrate de recibir 'disabled' como prop
+  nextModule, id, type,
 }) {
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 3);
 
-  // Utiliza el prop disabled en lugar de una variable no definida
   const isDisabled = type === 'consultar';
 
   return (
@@ -31,6 +30,7 @@ export default function DatosGenerales({
             total="3"
             porcentage={porcentaje}
             nextModule={nextModule}
+            id={id}
             next={next}
             prev={prev}
           >

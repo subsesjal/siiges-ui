@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import DeleteDiligencia from './DiligenciasModales/DeleteDiligencia';
 import DiligenciasFormModal from './DiligenciasModales/DiligenciasFormModal';
 
-export default function DiligenciasButtons({ id, type }) {
+export default function DiligenciasButtons({ id, type, isDisabled }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -37,12 +37,16 @@ export default function DiligenciasButtons({ id, type }) {
       <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
         <DescriptionIcon />
       </IconButton>
-      <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
-        <EditIcon />
-      </IconButton>
-      <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
-        <DeleteIcon />
-      </IconButton>
+      {!isDisabled && (
+      <>
+        <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
+          <DeleteIcon />
+        </IconButton>
+      </>
+      )}
 
       {modalOpen && (
         <DiligenciasFormModal
@@ -68,4 +72,5 @@ export default function DiligenciasButtons({ id, type }) {
 DiligenciasButtons.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
 };

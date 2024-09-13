@@ -10,6 +10,7 @@ import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import PlantelContext from '../utils/Context/plantelContext';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function DescripcionPlantel({ plantelesData, disabled }) {
   const {
@@ -19,6 +20,10 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
     seguridad,
     setSeguridad,
   } = useContext(PlantelContext);
+
+  const isSectionDisabled = useSectionDisabled(15);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,7 +111,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={plantelesData?.tipoInmuebleId}
             onchange={handleOnChange}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -118,7 +123,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={plantelesData?.dimensiones}
             onchange={handleOnChange}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={4}>
@@ -142,7 +147,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
                     onChange={() => handleCheckboxChange(checkbox.id)}
                   />
                 )}
-                disabled={disabled}
+                disabled={isDisabled}
                 label={checkbox.label}
               />
             ))}
@@ -158,7 +163,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={seguridad[0]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 0)}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <InputNumber
             id="alarmaIncendiosTerremotos"
@@ -168,7 +173,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={seguridad[1]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 1)}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <InputNumber
             id="senalamientosEvacuacion"
@@ -178,7 +183,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={seguridad[2]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 2)}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <InputNumber
             id="botiquin"
@@ -188,7 +193,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={seguridad[3]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 3)}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <InputNumber
             id="escalerasEmergencia"
@@ -198,7 +203,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={seguridad[4]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 4)}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <InputNumber
             id="areaSeguridad"
@@ -208,7 +213,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={seguridad[5]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 5)}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <InputNumber
             id="extintores"
@@ -218,7 +223,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={seguridad[6]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 6)}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <InputNumber
             id="puntosReunionEvacuacion"
@@ -228,7 +233,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             value={seguridad[7]?.cantidad}
             onchange={(e) => handleOnChangeSeguridad(e, 7)}
             required
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>

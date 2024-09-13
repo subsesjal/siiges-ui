@@ -1,33 +1,40 @@
 export default function pagination(useState, sections) {
-  const step = 100 / sections;
-  const lastSection = sections - 1;
-  const firstSection = 2;
-  let startPosition = 'first';
-  if (sections === 1) {
-    startPosition = 'only';
-  }
-  const [position, setPosition] = useState(startPosition);
-  const [porcentaje, setPorcentaje] = useState(step);
-  const [section, setSection] = useState(1);
+  const lastSection = sections;
+  const firstSection = 1;
+
+  const calculatePorcentaje = (currentSection) => Math.round((currentSection / sections) * 100);
+
+  // Initialize states
+  const [position, setPosition] = useState(sections === 1 ? 'only' : 'first');
+  const [porcentaje, setPorcentaje] = useState(calculatePorcentaje(firstSection));
+  const [section, setSection] = useState(firstSection);
 
   const next = () => {
-    setSection(section + 1);
-    setPorcentaje(Math.round(porcentaje + step));
-    if (section === lastSection) {
-      setPosition('last');
-    } else {
-      setPosition('middle');
-    }
+    setSection((prevSection) => {
+      const newSection = Math.min(prevSection + 1, lastSection);
+      setPorcentaje(calculatePorcentaje(newSection));
+
+      if (newSection === lastSection) {
+        setPosition('last');
+      } else {
+        setPosition('middle');
+      }
+      return newSection;
+    });
   };
 
   const prev = () => {
-    setSection(section - 1);
-    setPorcentaje(Math.round(porcentaje - step));
-    if (section === firstSection) {
-      setPosition('first');
-    } else {
-      setPosition('middle');
-    }
+    setSection((prevSection) => {
+      const newSection = Math.max(prevSection - 1, firstSection);
+      setPorcentaje(calculatePorcentaje(newSection));
+
+      if (newSection === firstSection) {
+        setPosition('first');
+      } else {
+        setPosition('middle');
+      }
+      return newSection;
+    });
   };
 
   return {

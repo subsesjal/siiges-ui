@@ -35,6 +35,7 @@ export default function EvaluacionCurricular({
             sections={section}
             position={position}
             total="1"
+            id={id}
             porcentaje={porcentaje}
             nextModule={nextModule}
             next={next}

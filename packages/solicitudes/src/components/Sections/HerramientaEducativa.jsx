@@ -14,7 +14,7 @@ export default function HerramientaEducativa({ disabled, type }) {
     tipoDocumento: 'FDA05',
   };
 
-  const isSectionDisabled = useSectionDisabled(2);
+  const isSectionDisabled = useSectionDisabled(10);
 
   const isDisabled = disabled || isSectionDisabled;
 

@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
+import { DataTable } from '@siiges-ui/shared';
 import columns from './Mocks/Docentes';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useDocentes from '../utils/getDocentes';
@@ -40,12 +39,13 @@ export default function Docentes({ disabled, type }) {
       <Grid item xs={12}>
         <Typography variant="h6">Docentes</Typography>
       </Grid>
-      <Grid item xs={3}>
-        {!isDisabled && <Button onClick={showModal} text="Agregar" />}
-      </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataGrid
+          <DataTable
+            buttonAdd
+            buttonText="Agregar Docente"
+            buttonClick={showModal}
+            buttonDisabled={isDisabled}
             rows={docentesList}
             columns={columns(isDisabled, setDocentesList, type)}
             pageSize={5}

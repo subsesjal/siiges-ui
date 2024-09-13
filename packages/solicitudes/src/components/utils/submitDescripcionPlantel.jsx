@@ -21,11 +21,13 @@ async function sendRequest(
   return response.json();
 }
 
-export default function submitDescripcionPlantel(
+export default async function submitDescripcionPlantel(
   validations,
   setNoti,
   setLoading,
   institucionId,
+  setSections,
+  id,
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -42,36 +44,62 @@ export default function submitDescripcionPlantel(
 
   setLoading(true);
 
-  const requests = [
-    sendRequest(url, `planteles/${plantelId}/niveles`, headers, selectedCheckboxes, 'POST'),
-    sendRequest(url, `planteles/${plantelId}/seguridad`, headers, seguridad, 'POST'),
-  ];
+  try {
+    const requests = [
+      sendRequest(url, `planteles/${plantelId}/niveles`, headers, selectedCheckboxes, 'POST'),
+      sendRequest(url, `planteles/${plantelId}/seguridad`, headers, seguridad, 'POST'),
+    ];
 
-  if (institucionId) {
-    requests.push(sendRequest(url, `instituciones/${institucionId}/planteles/${plantelId}`, headers, form[2], 'PATCH'));
-  }
+    if (institucionId) {
+      requests.push(sendRequest(url, `instituciones/${institucionId}/planteles/${plantelId}`, headers, form[2], 'PATCH'));
+    }
 
-  Promise.allSettled(requests)
-    .then((results) => {
-      const errors = results.filter((result) => result.status === 'rejected');
-      if (errors.length > 0) {
-        setNoti({
-          open: true,
-          message: `¡Error al cargar los datos!: ${errors[0].reason.message}`,
-          type: 'error',
-        });
-      } else {
-        setNoti({
-          open: true,
-          message: '¡Se cargaron los datos exitosamente!',
-          type: 'success',
-        });
-      }
-    })
-    .catch((error) => {
-      console.error('Unexpected error:', error);
-    })
-    .finally(() => {
-      setLoading(false);
+    const results = await Promise.allSettled(requests);
+
+    const errors = results.filter((result) => result.status === 'rejected');
+
+    if (errors.length > 0) {
+      setNoti({
+        open: true,
+        message: `¡Error al cargar los datos!: ${errors[0].reason.message}`,
+        type: 'error',
+      });
+      return;
+    }
+
+    const postResponse = await fetch(`${url}/api/v1/solicitudes/${id}/secciones/15`, {
+      method: 'POST',
+      headers: {
+        api_key: apikey,
+        Authorization: `Bearer ${token}`,
+      },
     });
+
+    if (!postResponse.ok) {
+      const errorData = await postResponse.json();
+      throw new Error(errorData.message || 'Error fetching the section data');
+    }
+
+    setSections((prevSections) => prevSections.map((section) => {
+      if (section.id === 15) {
+        return { ...section, disabled: true };
+      }
+      return section;
+    }));
+
+    setNoti({
+      open: true,
+      message: '¡Se cargaron los datos exitosamente!',
+      type: 'success',
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    setNoti({
+      open: true,
+      message: `¡Hubo un problema!: ${error.message}`,
+      type: 'error',
+    });
+  } finally {
+    setLoading(false);
+  }
 }
