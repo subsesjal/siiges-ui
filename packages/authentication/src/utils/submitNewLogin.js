@@ -3,7 +3,7 @@ function submitNewLogin(form, errors, setErrorMessages, activateAuth, setLoading
   const url = process.env.NEXT_PUBLIC_URL;
   if (form.usuario !== '' && form.contrasena !== '') {
     setLoading(true);
-    fetch(`${url}/api/v1/auth/login`, {
+    fetch(`${url}/api/v1/public/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', api_key: apikey },
       body: JSON.stringify(form),
