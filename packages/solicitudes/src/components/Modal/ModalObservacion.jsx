@@ -2,11 +2,11 @@
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
+  ButtonSimple,
   Context, DefaultModal, useApi,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import '@siiges-ui/shared/src/styles/buttons/ButtonAdd.css';
 
 function Modal({
@@ -80,28 +80,28 @@ function Modal({
       </Grid>
       <Grid container justifyContent="flex-end" spacing={2}>
         <Grid item>
-          <ButtonUnstyled
+          <ButtonSimple
             className="buttonAdd cancel"
             onClick={() => router.back()}
           >
             Cancelar
-          </ButtonUnstyled>
+          </ButtonSimple>
         </Grid>
         <Grid item>
-          <ButtonUnstyled
+          <ButtonSimple
             className="buttonAdd enviar"
             onClick={() => confirmDocument()}
           >
             Enviar Observaciones
-          </ButtonUnstyled>
+          </ButtonSimple>
         </Grid>
         <Grid item>
-          <ButtonUnstyled
+          <ButtonSimple
             className="buttonAdd guardar"
             onClick={() => confirmDocumentWithoutObservations()}
           >
             Aprobar Revisión
-          </ButtonUnstyled>
+          </ButtonSimple>
         </Grid>
       </Grid>
     </DefaultModal>
