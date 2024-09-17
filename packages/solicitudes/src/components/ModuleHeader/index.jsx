@@ -58,7 +58,7 @@ export default function ModuleHeader({
         router.push('/solicitudes');
         setLoading(false);
       } else {
-        throw new Error('Error al completar la solicitud');
+        throw new Error('¡Error al completar la solicitud!');
       }
     } catch (error) {
       setNoti({
@@ -77,7 +77,7 @@ export default function ModuleHeader({
       } else {
         setNoti({
           open: true,
-          message: 'Favor de llenar la solicitud',
+          message: '¡Por Favor llenar la solicitud!',
           type: 'error',
         });
       }
