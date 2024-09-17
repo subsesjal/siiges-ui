@@ -12,6 +12,7 @@ export default function DatosPlantel({
   disabled: initialDisabled,
   plantelesData,
   setPlantelesData,
+  type,
 }) {
   const { planteles } = getPlantelesUsuario();
   const { setForm, plantelId } = useContext(PlantelContext);

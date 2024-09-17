@@ -169,14 +169,6 @@ export default function InstitucionForm({
             />
           </Grid>
         )}
-        {showButtons && page === 2 && (
-          <Grid item xs={11} sx={{ marginTop: 5 }}>
-            <ButtonsForm
-              confirm={handleConfirm}
-              cancel={() => handleCancel()}
-            />
-          </Grid>
-        )}
       </Grid>
       <DefaultModal
         open={openModalPhoto}
