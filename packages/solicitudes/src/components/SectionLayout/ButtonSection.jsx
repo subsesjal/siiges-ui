@@ -27,7 +27,7 @@ import submitTrayectoriaEducativa from '../utils/submitTrayectoriaeducativa';
 export default function ButtonSection({
   type,
   id,
-  sections,
+  sections: currentSection,
   position,
   next,
   prev,
@@ -66,7 +66,8 @@ export default function ButtonSection({
       'Evaluación Curricular': 20,
     };
 
-    return sections + (moduleOffsets[sectionTitle] || 1);
+    const offset = moduleOffsets[sectionTitle] || 0;
+    return currentSection + offset;
   };
 
   useEffect(() => {
@@ -79,7 +80,7 @@ export default function ButtonSection({
     if (foundSection) {
       setCurrentSectionStatus(() => foundSection.disabled);
     }
-  }, [sectionState, sections, sectionTitle]);
+  }, [sectionState, currentSection, sectionTitle]);
 
   function observaciones() {
     setCreateObservaciones(true);
@@ -127,10 +128,10 @@ export default function ButtonSection({
       if (type !== 'editar') {
         submitNewSolicitud(validations, setNewSubmit, setLoading, setSections);
       } else {
-        submitEditSolicitud(validations, sections, id, setLoading, setSections);
+        submitEditSolicitud(validations, currentSection, id, setLoading, setSections);
       }
     } else {
-      submitEditSolicitud(validations, sections, id, setLoading, setSections);
+      submitEditSolicitud(validations, currentSection, id, setLoading, setSections);
     }
   };
 
@@ -144,14 +145,14 @@ export default function ButtonSection({
       6: () => handleCreateRecord({ commentData: {}, query: { id } }),
       7: () => handleCreateRecord({ commentData: {}, query: { id } }),
       8: () => handleCreateRecord({ commentData: {}, query: { id } }),
-      9: () => submitTrayectoriaEducativa(validations, setLoading, setSections),
+      9: () => submitTrayectoriaEducativa(validations, setLoading, setSections, id),
       10: () => handleCreateRecord({ commentData: {}, query: { id } }),
     },
     'Datos Generales': {
       1: useCallback(
         () => submitInstitucion(
           datosGeneralesValidations,
-          sections,
+          currentSection,
           setNoti,
           setLoading,
           setSections,
@@ -162,7 +163,7 @@ export default function ButtonSection({
       2: useCallback(
         () => submitRepresentante(
           datosGeneralesValidations,
-          sections,
+          currentSection,
           setNoti,
           setLoading,
           setSections,
@@ -175,7 +176,7 @@ export default function ButtonSection({
     Plantel: {
       1: () => submitEditPlantel(
         plantelesValidations,
-        sections,
+        currentSection,
         id,
         setNoti,
         router,
@@ -227,9 +228,9 @@ export default function ButtonSection({
     } else if (sectionFunctions[sectionTitle]) {
       if (currentSectionStatus === true) {
         await handleCreateRecord({ commentData: {}, query: { id } });
-      } else if (sectionFunctions[sectionTitle][sections]) {
+      } else if (sectionFunctions[sectionTitle][currentSection]) {
         setLoading(true);
-        sectionFunctions[sectionTitle][sections]();
+        sectionFunctions[sectionTitle][currentSection]();
       }
     }
   };

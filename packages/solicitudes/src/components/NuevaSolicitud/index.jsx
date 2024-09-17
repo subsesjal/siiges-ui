@@ -55,7 +55,6 @@ export default function NuevaSolicitud({
   const [id, setId] = useState(solicitudId);
   const [programaId, setProgramaId] = useState('');
 
-  // Get current date using dayjs and format it in Spanish
   const currentDate = dayjs().locale('es').format('DD [de] MMMM YYYY');
 
   useEffect(() => {
