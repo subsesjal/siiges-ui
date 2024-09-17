@@ -78,30 +78,25 @@ function Modal({
           </Typography>
         </Grid>
       </Grid>
-      <Grid container justifyContent="flex-end" spacing={2}>
+      <Grid container justifyContent="flex-end" spacing={2} sx={{ mt: 1 }}>
         <Grid item>
           <ButtonSimple
-            className="buttonAdd cancel"
+            text="Cancelar"
+            design="cancel"
             onClick={() => router.back()}
-          >
-            Cancelar
-          </ButtonSimple>
+          />
         </Grid>
         <Grid item>
           <ButtonSimple
-            className="buttonAdd enviar"
+            text="Enviar Observaciones"
             onClick={() => confirmDocument()}
-          >
-            Enviar Observaciones
-          </ButtonSimple>
+          />
         </Grid>
         <Grid item>
           <ButtonSimple
-            className="buttonAdd guardar"
+            text="Aprobar Revisión"
             onClick={() => confirmDocumentWithoutObservations()}
-          >
-            Aprobar Revisión
-          </ButtonSimple>
+          />
         </Grid>
       </Grid>
     </DefaultModal>
