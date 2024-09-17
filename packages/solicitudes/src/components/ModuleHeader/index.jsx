@@ -55,7 +55,7 @@ export default function ModuleHeader({
           message: '¡Se completó la solicitud exitosamente!',
           type: 'success',
         });
-        router.back();
+        router.push('/solicitudes');
         setLoading(false);
       } else {
         throw new Error('Error al completar la solicitud');
@@ -195,17 +195,21 @@ export default function ModuleHeader({
               ¿Deseas completar la solicitud? Esta acción no podrá deshacerse.
             </Typography>
           </Grid>
-          <Grid item xs={12} sx={{ textAlign: 'right' }}>
-            <ButtonSimple
-              text="Aceptar"
-              type="success"
-              onClick={() => handleLastStepAction()}
-            />
-            <ButtonSimple
-              text="Cancelar"
-              type="danger"
-              onClick={() => setModalRepresentante(false)}
-            />
+          <Grid container justifyContent="right" spacing={2} sx={{ mt: 1 }}>
+            <Grid item>
+              <ButtonSimple
+                text="Cancelar"
+                design="cancel"
+                onClick={() => setModalRepresentante(false)}
+              />
+            </Grid>
+            <Grid item>
+              <ButtonSimple
+                text="Aceptar"
+                type="success"
+                onClick={() => handleLastStepAction()}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </DefaultModal>

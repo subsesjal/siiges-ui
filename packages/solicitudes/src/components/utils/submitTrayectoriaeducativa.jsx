@@ -1,6 +1,6 @@
 import { getToken } from '@siiges-ui/shared';
 
-async function submitTrayectoriaEducativa(validations, setLoading, setSections) {
+async function submitTrayectoriaEducativa(validations, setLoading, setSections, solicitudId) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
@@ -29,6 +29,7 @@ async function submitTrayectoriaEducativa(validations, setLoading, setSections) 
       message: '¡No es posible continuar, falta completar información obligatoria en la sección de Trayectoria Educativa!.',
       type: 'error',
     });
+    setLoading(false);
     return;
   }
 
@@ -69,8 +70,7 @@ async function submitTrayectoriaEducativa(validations, setLoading, setSections) 
       });
     }
 
-    const { id } = form[9];
-    await fetch(`${url}/api/v1/solicitudes/${id}/secciones/9`, {
+    await fetch(`${url}/api/v1/solicitudes/${solicitudId}/secciones/9`, {
       method: 'POST',
       headers: {
         api_key: apikey,

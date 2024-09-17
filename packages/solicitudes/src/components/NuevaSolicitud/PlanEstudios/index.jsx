@@ -212,7 +212,7 @@ export default function PlanEstudios({
               sections={section}
               position={position}
               total={sectionLength}
-              porcentage={porcentaje}
+              porcentaje={porcentaje}
               nextModule={nextModule}
               next={next}
               prev={prev}
