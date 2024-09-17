@@ -86,7 +86,7 @@ export default function Plantel({
             sections={section}
             position={position}
             total="6"
-            porcentaje={porcentaje}
+            porcentage={porcentaje}
             nextModule={nextModule}
             next={next}
             prev={prev}

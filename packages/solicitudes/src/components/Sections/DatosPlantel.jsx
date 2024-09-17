@@ -12,7 +12,6 @@ export default function DatosPlantel({
   disabled: initialDisabled,
   plantelesData,
   setPlantelesData,
-  type,
 }) {
   const { planteles } = getPlantelesUsuario();
   const { setForm, plantelId } = useContext(PlantelContext);
@@ -84,7 +83,7 @@ export default function DatosPlantel({
             options={plantelesSelect}
             value={plantelId || ''}
             onchange={handleOnChange}
-            disabled={type !== 'editar'}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={4}>
