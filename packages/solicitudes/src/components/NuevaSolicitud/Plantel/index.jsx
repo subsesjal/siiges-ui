@@ -86,7 +86,7 @@ export default function Plantel({
             sections={section}
             position={position}
             total="6"
-            porcentaje={porcentaje}
+            porcentage={porcentaje}
             nextModule={nextModule}
             next={next}
             prev={prev}
@@ -115,7 +115,9 @@ export default function Plantel({
                 type={type}
               />
             )}
-            {section === 4 && <InstitucionesAledanas disabled={isDisabled} programaId={programaId} type={type} />}
+            {section === 4 && (
+              <InstitucionesAledanas disabled={isDisabled} programaId={programaId} type={type} />
+            )}
             {section === 5 && (
               <Infraestructura disabled={isDisabled} programaId={programaId} type={type} />
             )}

@@ -32,7 +32,13 @@ const columns = (grados, isDisabled, type) => {
       field: 'actions',
       headerName: 'Acciones',
       width: 150,
-      renderCell: (params) => <AsignaturasButtons id={params.id} isDisabled={isDisabled} type = {type}/>,
+      renderCell: (params) => (
+        <AsignaturasButtons
+          id={params.id}
+          isDisabled={isDisabled}
+          type={type}
+        />
+      ),
       sortable: false,
       filterable: false,
     },

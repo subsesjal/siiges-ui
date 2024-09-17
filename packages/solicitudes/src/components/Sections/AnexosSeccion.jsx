@@ -2,6 +2,7 @@ import { Grid, Typography } from '@mui/material';
 import { GetFile, InputFile } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function AnexosSeccion({ disabled, id, type }) {
   const [fileURLs, setFileURLs] = useState(Array(11).fill(null));
@@ -23,6 +24,10 @@ export default function AnexosSeccion({ disabled, id, type }) {
     tipoEntidad: 'SOLICITUD',
     tipoDocumento,
   }));
+
+  const isSectionDisabled = useSectionDisabled(20);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
     if (type === 'editar' && id) {
@@ -61,7 +66,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[0] || ''}
             setUrl={(url) => handleFileLoaded(0, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Identificación oficial con fotografía de la persona física, o acta constitutiva de la persona moral y poder de su Representante Legal"
           />
         </Grid>
@@ -72,7 +77,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[1] || ''}
             setUrl={(url) => handleFileLoaded(1, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Comprobante de pago"
           />
         </Grid>
@@ -83,7 +88,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[2] || ''}
             setUrl={(url) => handleFileLoaded(2, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Fotografías inmuebles"
           />
         </Grid>
@@ -94,7 +99,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[3] || ''}
             setUrl={(url) => handleFileLoaded(3, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Constancia INFEJAL"
           />
         </Grid>
@@ -105,7 +110,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[4] || ''}
             setUrl={(url) => handleFileLoaded(4, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Licencia municipal"
           />
         </Grid>
@@ -116,7 +121,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[5] || ''}
             setUrl={(url) => handleFileLoaded(5, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Dictamen del Instituto Mexicano de Propiedad Intelectual (IMPI)"
           />
         </Grid>
@@ -127,7 +132,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[6] || ''}
             setUrl={(url) => handleFileLoaded(6, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Aviso funcionamiento de Secretaría de Salud ó Carta bajo protesta de decir verdad de NO venta de alimentos."
           />
         </Grid>
@@ -138,7 +143,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[7] || ''}
             setUrl={(url) => handleFileLoaded(7, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Comprobante de línea telefónica"
           />
         </Grid>
@@ -149,7 +154,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[8] || ''}
             setUrl={(url) => handleFileLoaded(8, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Proyecto de vinculación y movilidad"
           />
         </Grid>
@@ -160,7 +165,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[9] || ''}
             setUrl={(url) => handleFileLoaded(9, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Plan de mejora"
           />
         </Grid>
@@ -171,7 +176,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[10] || ''}
             setUrl={(url) => handleFileLoaded(10, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Formas de migratorias de los profesores"
           />
         </Grid>
@@ -182,7 +187,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
             id={id}
             url={fileURLs[11] || ''}
             setUrl={(url) => handleFileLoaded(11, url)}
-            disabled={disabled}
+            disabled={isDisabled}
             label="Programa de superación"
           />
         </Grid>

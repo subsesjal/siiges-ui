@@ -10,7 +10,7 @@ export const ObservacionesContext = createContext();
 export function ObservacionesProvider({ children }) {
   const [createObservaciones, setCreateObservaciones] = useState(false);
   const [sectionStatus, setSectionStatus] = useState();
-  const initialSeccions = Array.from({ length: 20 }, (_, i) => ({
+  const initialSeccions = Array.from({ length: 21 }, (_, i) => ({
     id: i + 1,
     disabled: false,
   }));

@@ -1,10 +1,9 @@
 import { Grid, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
-import { Button } from '@siiges-ui/shared';
 import React, {
   useContext, useState, useEffect, useMemo,
 } from 'react';
+import { DataTable } from '@siiges-ui/shared';
 import columns from './Mocks/AsignaturasFormacionElectiva';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import AsignaturasFormacionCreateModal from '../utils/Components/AsignaturasFormacionModales/AsignaturasFormacionCreateModal';
@@ -33,7 +32,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
 
   const tableColumns = useMemo(
     () => columns(isDisabled, type),
-    [setAsignaturasFormacionList, asignaturasFormacion],
+    [setAsignaturasFormacionList, asignaturasFormacion, isDisabled],
   );
 
   useEffect(() => {
@@ -48,12 +47,13 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
       <Grid item xs={12}>
         <Typography variant="h6">Asignaturas formación electiva</Typography>
       </Grid>
-      <Grid item xs={3}>
-        {!isDisabled && <Button onClick={showModal} text="Agregar" />}
-      </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataGrid
+          <DataTable
+            buttonAdd
+            buttonText="Agregar Asignatura"
+            buttonClick={showModal}
+            buttonDisabled={isDisabled}
             rows={asignaturasFormacionList}
             columns={tableColumns}
             pageSize={5}

@@ -82,4 +82,5 @@ export default function AsignaturasButtons({ id, isDisabled, type }) {
 AsignaturasButtons.propTypes = {
   id: PropTypes.number.isRequired,
   isDisabled: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };

@@ -5,11 +5,11 @@ import {
   Card, CardContent, Grid, Typography,
 } from '@mui/material';
 import {
-  ButtonStyled,
   StepperComponent,
   Context,
   updateRecord,
   DefaultModal,
+  ButtonSimple,
 } from '@siiges-ui/shared';
 import Modal from '../Modal/ModalObservacion';
 
@@ -34,7 +34,9 @@ export default function ModuleHeader({
 
   const isControlDocumental = rol === 'control_documental';
   const isFinalModule = module === steps.length - 1;
-  const textIsControlDocumental = isFinalModule ? 'Terminar revisión' : 'Siguiente módulo';
+  const textIsControlDocumental = isFinalModule
+    ? 'Terminar revisión'
+    : 'Siguiente módulo';
   const textNormal = isFinalModule ? 'Terminar solicitud' : 'Siguiente módulo';
   const textRol = isControlDocumental ? textIsControlDocumental : textNormal;
 
@@ -135,41 +137,47 @@ export default function ModuleHeader({
               </Typography>
               <Typography variant="p">{date}</Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right', alignItems: 'end' }}>
-              {module >= 1 && (
-                <ButtonStyled
+          </Grid>
+          <Grid container spacing={1} justifyContent="right">
+            {module >= 1 && (
+              <Grid item>
+                <ButtonSimple
                   text="Módulo anterior"
                   alt="Módulo anterior"
                   type="success"
-                  onclick={prevButton}
+                  onClick={() => prevButton()}
                   disabled={disabled}
                 />
-              )}
-              <span>&nbsp;&nbsp;</span>
-              {showFinishButton && (
-                <ButtonStyled
+              </Grid>
+            )}
+            {showFinishButton && (
+              <Grid item>
+                <ButtonSimple
                   text={textRol}
                   alt={textRol}
                   type="success"
-                  onclick={submitButton}
+                  onClick={() => submitButton()}
                   disabled={disabled}
                 />
-              )}
-              {!showFinishButton && !isFinalModule && (
-                <ButtonStyled
+              </Grid>
+            )}
+            {!showFinishButton && !isFinalModule && (
+              <Grid item>
+                <ButtonSimple
                   text="Siguiente módulo"
                   alt="Siguiente módulo"
                   type="success"
-                  onclick={submitButton}
+                  onClick={() => submitButton()}
                   disabled={disabled}
                 />
-              )}
-              <span>&nbsp;&nbsp;</span>
-              <ButtonStyled
+              </Grid>
+            )}
+            <Grid item>
+              <ButtonSimple
                 text="Salir"
                 alt="Salir"
                 type="success"
-                onclick={() => router.push('/home')}
+                onClick={() => router.push('/home')}
               />
             </Grid>
           </Grid>
@@ -188,15 +196,15 @@ export default function ModuleHeader({
             </Typography>
           </Grid>
           <Grid item xs={12} sx={{ textAlign: 'right' }}>
-            <ButtonStyled
+            <ButtonSimple
               text="Aceptar"
               type="success"
-              onclick={handleLastStepAction}
+              onClick={() => handleLastStepAction()}
             />
-            <ButtonStyled
+            <ButtonSimple
               text="Cancelar"
               type="danger"
-              onclick={() => setModalRepresentante(false)}
+              onClick={() => setModalRepresentante(false)}
             />
           </Grid>
         </Grid>
@@ -206,7 +214,7 @@ export default function ModuleHeader({
 }
 
 ModuleHeader.propTypes = {
-  steps: PropTypes.array.isRequired,
+  steps: PropTypes.arrayOf(PropTypes.number).isRequired,
   type: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   prevModule: PropTypes.func.isRequired,

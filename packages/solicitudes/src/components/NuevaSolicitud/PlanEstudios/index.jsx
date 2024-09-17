@@ -20,6 +20,7 @@ import SolicitudContext from '../../utils/Context/solicitudContext';
 import getSolicitudesById from '../../utils/getSolicitudesById';
 import { TablesPlanEstudiosProvider } from '../../utils/Context/tablesPlanEstudiosProviderContext';
 import Observaciones from '../../Sections/Observaciones';
+import HerramientaEducativa from '../../Sections/HerramientaEducativa';
 
 export default function PlanEstudios({
   nextModule,
@@ -42,6 +43,7 @@ export default function PlanEstudios({
     7: {},
     8: {},
     9: {},
+    10: {},
   });
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState({});
@@ -50,6 +52,7 @@ export default function PlanEstudios({
   const [modalidad, setModalidad] = useState();
   const { solicitudes, loading: loadingSolicitud } = getSolicitudesById(id);
   const [trayectoriaStatus, setTrayectoriaStatus] = useState('new');
+  const [sectionLength, setSectionLength] = useState(10);
 
   useEffect(() => {
     let isMounted = true;
@@ -65,7 +68,11 @@ export default function PlanEstudios({
       setModalidad(query.modalidad);
     }
 
-    if (!loadingSolicitud && solicitudes.programa && (type === 'editar' || type === 'consultar')) {
+    if (
+      !loadingSolicitud
+      && solicitudes.programa
+      && (type === 'editar' || type === 'consultar')
+    ) {
       setProgramaId(solicitudes.programa.id);
       setModalidad(solicitudes.programa.modalidadId);
 
@@ -176,20 +183,20 @@ export default function PlanEstudios({
       trayectoriaStatus,
       setTrayectoriaStatus,
     }),
-    [
-      form,
-      error,
-      errors,
-      noti,
-      id,
-      programaId,
-      modalidad,
-      trayectoriaStatus,
-    ],
+    [form, error, errors, noti, id, programaId, modalidad, trayectoriaStatus],
   );
   const {
     next, prev, section, position, porcentaje,
-  } = pagination(useState, 9);
+  } = pagination(useState, sectionLength);
+
+  useEffect(() => {
+    const modalidadNumber = Number(modalidad);
+    if (modalidadNumber === 1) {
+      setSectionLength(9);
+    } else {
+      setSectionLength(10);
+    }
+  }, [modalidad]);
 
   const isDisabled = type === 'consultar' || disabled;
 
@@ -204,28 +211,39 @@ export default function PlanEstudios({
               sectionTitle="Plan de estudios"
               sections={section}
               position={position}
-              total="9"
+              total={sectionLength}
               porcentage={porcentaje}
               nextModule={nextModule}
               next={next}
               prev={prev}
             >
               <Loading loading={loading} />
-              {section === 1 && <DatosPlanEstudios disabled={isDisabled} type={type} />}
-              {section === 2 && <FundamentosPlanEstudios disabled={isDisabled} type={type} />}
+              {section === 1 && (
+                <DatosPlanEstudios disabled={isDisabled} type={type} />
+              )}
+              {section === 2 && (
+                <FundamentosPlanEstudios disabled={isDisabled} type={type} />
+              )}
               {section === 3 && <Ingreso disabled={isDisabled} type={type} />}
               {section === 4 && <Egreso disabled={isDisabled} type={type} />}
               {section === 5 && <Curricula disabled={isDisabled} type={type} />}
-              {section === 6 && <Asignaturas disabled={isDisabled} type={type} />}
-              {section === 7 && <AsignaturasFormacionElectiva disabled={isDisabled} type={type} />}
-              {section === 8 && <Docentes disabled={isDisabled} type={type} />}
-              {section === 9 && <TrayectoriaEducativa disabled={isDisabled} type={type} />}
-              {type === 'editar' && (
-                <Observaciones
-                  id={id}
-                  section={section}
+              {section === 6 && (
+                <Asignaturas disabled={isDisabled} type={type} />
+              )}
+              {section === 7 && (
+                <AsignaturasFormacionElectiva
+                  disabled={isDisabled}
+                  type={type}
                 />
               )}
+              {section === 8 && <Docentes disabled={isDisabled} type={type} />}
+              {section === 9 && (
+                <TrayectoriaEducativa disabled={isDisabled} type={type} />
+              )}
+              {section === 10 && (
+                <HerramientaEducativa disabled={isDisabled} type={type} />
+              )}
+              {type === 'editar' && <Observaciones id={id} section={section} />}
             </SectionLayout>
           </CardContent>
         </Card>

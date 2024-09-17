@@ -6,6 +6,7 @@ import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import getPlantelesUsuario from '../utils/getPlantelesUsuario';
 import PlantelContext from '../utils/Context/plantelContext';
 import formPrograma from '../utils/sections/forms/formPrograma';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function DatosPlantel({
   disabled: initialDisabled,
@@ -25,6 +26,10 @@ export default function DatosPlantel({
       setDisabled(initialDisabled);
     }
   }, [type, initialDisabled]);
+
+  const isSectionDisabled = useSectionDisabled(14);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
     if (planteles) {
@@ -72,54 +77,54 @@ export default function DatosPlantel({
         <Typography variant="h6">Datos del Plantel</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <BasicSelect
             title="Plantel"
             name="plantelId"
             options={plantelesSelect}
             value={plantelId || ''}
             onchange={handleOnChange}
-            disabled={type !== 'editar'}
+            disabled={isDisabled}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Input
             id="claveCentroTrabajo"
             label="Clave de centro de trabajo"
             name="claveCentroTrabajo"
             auto="claveCentroTrabajo"
             value={plantelesData?.claveCentroTrabajo}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Input
             id="telefono1"
             label="Teléfono 1"
             name="telefono1"
             auto="telefono1"
             value={plantelesData?.telefono1}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Input
             id="telefono2"
             label="Teléfono 2"
             name="telefono2"
             auto="telefono2"
             value={plantelesData?.telefono2}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Input
             id="telefono3"
             label="Teléfono 3"
             name="telefono3"
             auto="telefono3"
             value={plantelesData?.telefono3}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -129,7 +134,7 @@ export default function DatosPlantel({
             name="correo1"
             auto="correo1"
             value={plantelesData?.correo1}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -139,7 +144,7 @@ export default function DatosPlantel({
             name="paginaWeb"
             auto="paginaWeb"
             value={plantelesData?.paginaWeb}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -149,20 +154,7 @@ export default function DatosPlantel({
             name="correo2"
             auto="correo2"
             value={plantelesData?.correo2}
-            disabled={disabled}
-          />
-        </Grid>
-        <Grid item xs={6} sx={{ mt: 2 }}>
-          <Input
-            id="redesSociales"
-            label="Redes sociales"
-            name="redesSociales"
-            auto="redesSociales"
-            rows={3}
-            multiline
-            sx={{ width: '100%' }}
-            value={plantelesData?.redesSociales}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -172,7 +164,19 @@ export default function DatosPlantel({
             name="correo3"
             auto="correo3"
             value={plantelesData?.correo3}
-            disabled={disabled}
+            disabled={isDisabled}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Input
+            id="redesSociales"
+            label="Redes sociales"
+            name="redesSociales"
+            auto="redesSociales"
+            rows={3}
+            multiline
+            value={plantelesData?.redesSociales}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>
@@ -187,7 +191,7 @@ export default function DatosPlantel({
             name="calle"
             auto="calle"
             value={plantelesData?.domicilio?.calle}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -197,7 +201,7 @@ export default function DatosPlantel({
             name="numeroExterior"
             auto="numeroExterior"
             value={plantelesData?.domicilio?.numeroExterior}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -207,7 +211,7 @@ export default function DatosPlantel({
             name="numeroInterior"
             auto="numeroInterior"
             value={plantelesData?.domicilio?.numeroInterior}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -217,7 +221,7 @@ export default function DatosPlantel({
             name="colonia"
             auto="colonia"
             value={plantelesData?.domicilio?.colonia}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -227,7 +231,7 @@ export default function DatosPlantel({
             name="codigoPostal"
             auto="codigoPostal"
             value={plantelesData?.domicilio?.codigoPostal}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={3}>
@@ -237,7 +241,7 @@ export default function DatosPlantel({
             name="municipio"
             auto="municipio"
             value={plantelesData?.domicilio?.municipio?.nombre}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -247,7 +251,7 @@ export default function DatosPlantel({
             name="longitud"
             auto="longitud"
             value={`${plantelesData?.domicilio?.latitud}, ${plantelesData?.domicilio?.longitud}`}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -257,7 +261,7 @@ export default function DatosPlantel({
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>

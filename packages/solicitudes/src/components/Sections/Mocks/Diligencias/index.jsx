@@ -1,7 +1,7 @@
 import React from 'react';
 import DiligenciasButtons from '../../../utils/Components/DiligenciasButtons';
 
-const columns = (type) => [
+const columns = (type, isDisabled) => [
   { field: 'nombre', headerName: 'Nombre', width: 270 },
   { field: 'tituloCargo', headerName: 'Cargo', width: 100 },
   { field: 'telefono', headerName: 'Teléfono', width: 130 },
@@ -12,7 +12,9 @@ const columns = (type) => [
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
-    renderCell: (params) => <DiligenciasButtons id={params.id} type={type} />,
+    renderCell: (params) => (
+      <DiligenciasButtons id={params.id} type={type} isDisabled={isDisabled} />
+    ),
     sortable: false,
     filterable: false,
   },
