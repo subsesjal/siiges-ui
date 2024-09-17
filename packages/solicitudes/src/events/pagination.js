@@ -2,17 +2,16 @@ export default function pagination(useState, sections) {
   const lastSection = sections;
   const firstSection = 1;
 
-  const calculatePorcentaje = (currentSection) => Math.round((currentSection / sections) * 100);
+  const calcularPorcentaje = (currentSection) => Math.round((currentSection / sections) * 100);
 
-  // Initialize states
   const [position, setPosition] = useState(sections === 1 ? 'only' : 'first');
-  const [porcentaje, setPorcentaje] = useState(calculatePorcentaje(firstSection));
+  const [porcentaje, setPorcentaje] = useState(calcularPorcentaje(firstSection));
   const [section, setSection] = useState(firstSection);
 
   const next = () => {
     setSection((prevSection) => {
       const newSection = Math.min(prevSection + 1, lastSection);
-      setPorcentaje(calculatePorcentaje(newSection));
+      setPorcentaje(calcularPorcentaje(newSection));
 
       if (newSection === lastSection) {
         setPosition('last');
@@ -26,7 +25,7 @@ export default function pagination(useState, sections) {
   const prev = () => {
     setSection((prevSection) => {
       const newSection = Math.max(prevSection - 1, firstSection);
-      setPorcentaje(calculatePorcentaje(newSection));
+      setPorcentaje(calcularPorcentaje(newSection));
 
       if (newSection === firstSection) {
         setPosition('first');
