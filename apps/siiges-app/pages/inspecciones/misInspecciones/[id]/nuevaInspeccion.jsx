@@ -33,7 +33,6 @@ export default function NuevaInspeccion() {
     dataBody: body,
   });
   const commentRefs = useRef([]);
-
   useEffect(() => {
     setLoading(loading);
     if (Array.isArray(data)) {
@@ -75,7 +74,12 @@ export default function NuevaInspeccion() {
         message: '¡Inspección guardada correctamente!',
         type: 'success',
       });
-      router.back();
+      const isLastApartado = selectedTab === apartados.length - 1;
+      if (isLastApartado) {
+        router.back();
+      } else {
+        router.reload();
+      }
     }
     if (error) {
       setNoti({
@@ -129,7 +133,7 @@ export default function NuevaInspeccion() {
           type: 'error',
         });
       }
-    } catch (error) {
+    } catch (errorComment) {
       setNoti({
         open: true,
         message: '¡Error al enviar el comentario!',
@@ -192,7 +196,9 @@ export default function NuevaInspeccion() {
                   sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
                   rows={4}
                   defaultValue={observacion?.comentario || ''}
-                  inputRef={(el) => (commentRefs.current[index] = el)}
+                  inputRef={(el) => {
+                    commentRefs.current[index] = el;
+                  }}
                 />
                 <ButtonsInspeccionSection
                   prev={() => setSelectedTab(index - 1)}
