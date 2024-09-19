@@ -182,7 +182,7 @@ export default function DatosInstitucion({ alumno }) {
           response
           && (response.statusCode === 200 || response.statusCode === 201)
         ) {
-          setFormSent(true); // Set formSent to true after a successful creation
+          setFormSent(true);
           setLoading(false);
           setNoti({
             open: true,

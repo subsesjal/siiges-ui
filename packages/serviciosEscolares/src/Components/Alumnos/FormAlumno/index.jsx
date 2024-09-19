@@ -81,7 +81,7 @@ export default function FormAlumno({ type, alumno, setId }) {
         setLoading(false);
       } else {
         response = await alumnosService({ dataBody, method: 'POST' });
-        setId(response.data.id); // Set ID only when creating a new alumno
+        setId(response.data.id);
         setNoti({
           open: true,
           message: '¡Alumno registrado con éxito!',
