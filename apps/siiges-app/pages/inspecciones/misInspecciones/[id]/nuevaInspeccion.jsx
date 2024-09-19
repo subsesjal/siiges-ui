@@ -129,7 +129,7 @@ export default function NuevaInspeccion() {
           type: 'error',
         });
       }
-    } catch (error) {
+    } catch (errorResponse) {
       setNoti({
         open: true,
         message: '¡Error al enviar el comentario!',
@@ -192,7 +192,10 @@ export default function NuevaInspeccion() {
                   sx={{ marginTop: 0, width: '100%', marginBottom: 2 }}
                   rows={4}
                   defaultValue={observacion?.comentario || ''}
-                  inputRef={(el) => (commentRefs.current[index] = el)}
+                  inputRef={(el) => {
+                    commentRefs.current[index] = el;
+                    return null;
+                  }}
                 />
                 <ButtonsInspeccionSection
                   prev={() => setSelectedTab(index - 1)}
