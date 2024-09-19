@@ -7,7 +7,6 @@ import {
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
-import { OficioModal } from './utils/oficioModal';
 
 export default function detallesSolicitudes() {
   const { session } = useContext(Context);
@@ -27,21 +26,34 @@ export default function detallesSolicitudes() {
   const downloadFile = async (type) => {
     try {
       const solicitudId = solicitud?.id;
-      GetFile({
-        tipoEntidad: 'SOLICITUD',
-        entidadId: solicitudId,
-        tipoDocumento: type,
-      }, async (fileUrl) => {
-        let finalUrl = fileUrl;
-        if (!finalUrl.startsWith('http')) {
-          finalUrl = `http://${finalUrl}`;
-        }
-        window.open(finalUrl, '_blank');
+      if (!solicitudId) {
+        throw new Error('Solicitud ID no disponible');
+      }
+
+      const fileUrl = await new Promise((resolve) => {
+        GetFile({
+          tipoEntidad: 'SOLICITUD',
+          entidadId: solicitudId,
+          tipoDocumento: type,
+        }, (url) => {
+          if (url) {
+            resolve(url);
+          } else {
+            setError('No se pudo obtener la URL del archivo');
+          }
+        });
       });
+      const finalUrl = fileUrl.startsWith('http://') || fileUrl.startsWith('https://')
+        ? fileUrl
+        : `http://${fileUrl}`;
+
+      // Abre la URL en una nueva pestaña
+      window.open(finalUrl, '_blank');
     } catch (error) {
-      setError('Error calling GetFile', error);
+      setError(`Error al descargar el archivo: ${error.message || error}`);
     }
   };
+
   return (
     <Layout>
       <Title title="Detalles de la solicitud" />
@@ -149,7 +161,7 @@ export default function detallesSolicitudes() {
         </Grid>
       </Grid>
       {solicitud?.id && (
-        <OficioModal
+        <oficioModal
           open={isOficioModalOpen}
           hideModal={hideOficioModal}
           downloadFile={downloadFile}

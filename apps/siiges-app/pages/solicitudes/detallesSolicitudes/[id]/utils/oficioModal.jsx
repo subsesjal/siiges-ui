@@ -4,7 +4,7 @@ import { DefaultModal, Input, ButtonStyled } from '@siiges-ui/shared';
 import { updateRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import PropTypes from 'prop-types';
 
-export default function OficioModal({
+export default function oficioModal({
   open,
   hideModal,
   downloadFile,
@@ -96,7 +96,7 @@ export default function OficioModal({
   );
 }
 
-OficioModal.propTypes = {
+oficioModal.propTypes = {
   open: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
   downloadFile: PropTypes.func.isRequired,
