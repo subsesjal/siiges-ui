@@ -22,9 +22,9 @@ export default function NuevaInspeccion() {
   const [preguntas, setPreguntas] = useState([]);
   const [respuestas, setRespuestas] = useState([]);
   const [observaciones, setObservaciones] = useState([]);
-  const [url, setUrl] = useState('');
-  const [body, setBody] = useState(null);
-  const [method, setMethod] = useState('GET');
+  const [url] = useState('');
+  const [body] = useState(null);
+  const [method] = useState('GET');
   const router = useRouter();
   const { query } = router;
   const { data, loading, error } = useApi({
@@ -33,57 +33,71 @@ export default function NuevaInspeccion() {
     dataBody: body,
   });
   const commentRefs = useRef([]);
+  const fetchRespuestas = async () => {
+    try {
+      const endpoint = `/inspecciones/inspeccionesPreguntas/${query.id}`;
+      const response = await getData({ endpoint });
+
+      if (response.statusCode === 200 && response.data) {
+        setRespuestas(response.data);
+      } else {
+        setRespuestas([]);
+      }
+    } catch (errorRespuestas) {
+      setRespuestas([]);
+    }
+  };
+  const fetchObservaciones = async () => {
+    try {
+      const endpoint = `/inspecciones/${query.id}/observaciones`;
+      const response = await getData({ endpoint });
+
+      if (response.statusCode === 200 && response.data) {
+        setObservaciones(response.data);
+      } else {
+        setObservaciones([]);
+      }
+    } catch (errorObservaciones) {
+      setObservaciones([]);
+    }
+  };
+  const saveAnswers = async () => {
+    setLoading(loading);
+    try {
+      const response = await createRecord({
+        data: form,
+        endpoint: `/inspecciones/${query.id}/preguntas`,
+      });
+
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        setNoti({
+          open: true,
+          message: 'Inspección guardada correctamente!',
+          type: 'success',
+        });
+      } else {
+        setNoti({
+          open: true,
+          message: response.errorMessage || '¡Error al enviar la inspección!',
+          type: 'error',
+        });
+      }
+    } catch (errorInspeccion) {
+      setNoti({
+        open: true,
+        message: '¡Error al enviar el comentario!',
+        type: 'error',
+      });
+    }
+  };
 
   useEffect(() => {
     setLoading(loading);
     if (Array.isArray(data)) {
       setPreguntas(data);
     }
-    const fetchRespuestas = async () => {
-      try {
-        const endpoint = `/inspecciones/inspeccionesPreguntas/${query.id}`;
-        const response = await getData({ endpoint });
-
-        if (response.statusCode === 200 && response.data) {
-          setRespuestas(response.data);
-        } else {
-          setRespuestas([]);
-        }
-      } catch (errorRespuestas) {
-        setRespuestas([]);
-      }
-    };
     fetchRespuestas();
-    const fetchObservaciones = async () => {
-      try {
-        const endpoint = `/inspecciones/${query.id}/observaciones`;
-        const response = await getData({ endpoint });
-
-        if (response.statusCode === 200 && response.data) {
-          setObservaciones(response.data);
-        } else {
-          setObservaciones([]);
-        }
-      } catch (errorObservaciones) {
-        setObservaciones([]);
-      }
-    };
     fetchObservaciones();
-    if (data && method === 'POST' && error === null) {
-      setNoti({
-        open: true,
-        message: '¡Inspección guardada correctamente!',
-        type: 'success',
-      });
-      router.back();
-    }
-    if (error) {
-      setNoti({
-        open: true,
-        message: '¡Error al guardar la inspección!',
-        type: 'error',
-      });
-    }
   }, [data, loading, method, error, setLoading, setNoti, router, query.id]);
 
   const getPosition = (index) => {
@@ -101,6 +115,7 @@ export default function NuevaInspeccion() {
   };
 
   const sendCurrentComment = async (currentApartadoId) => {
+    saveAnswers();
     const currentIndex = apartados.findIndex((apartado) => apartado.id === currentApartadoId);
     const comment = commentRefs.current[currentIndex]?.value || '';
 
@@ -119,9 +134,16 @@ export default function NuevaInspeccion() {
       if (response.statusCode === 200 || response.statusCode === 201) {
         setNoti({
           open: true,
-          message: '¡Comentario enviado correctamente!',
+          message: 'Comentario guardado correctamente!',
           type: 'success',
         });
+        const isLastApartado = apartados.findIndex(
+          (apartado) => apartado.id === currentApartadoId,
+        ) === apartados.length - 1;
+
+        if (isLastApartado) {
+          router.back();
+        }
       } else {
         setNoti({
           open: true,
@@ -129,19 +151,16 @@ export default function NuevaInspeccion() {
           type: 'error',
         });
       }
-    } catch (errorResponse) {
+    } catch (errorComment) {
       setNoti({
         open: true,
         message: '¡Error al enviar el comentario!',
         type: 'error',
       });
     }
-  };
-
-  const sendQuestionData = () => {
-    setBody(form);
-    setMethod('POST');
-    setUrl(`api/v1/inspecciones/${query.id}/preguntas`);
+    fetchRespuestas();
+    fetchObservaciones();
+    setPreguntas(preguntas);
   };
 
   return (
@@ -194,7 +213,6 @@ export default function NuevaInspeccion() {
                   defaultValue={observacion?.comentario || ''}
                   inputRef={(el) => {
                     commentRefs.current[index] = el;
-                    return null;
                   }}
                 />
                 <ButtonsInspeccionSection
@@ -202,7 +220,6 @@ export default function NuevaInspeccion() {
                   next={() => setSelectedTab(index + 1)}
                   confirm={() => {
                     sendCurrentComment(apartado.id);
-                    sendQuestionData();
                   }}
                   position={getPosition(index)}
                 />
