@@ -1,10 +1,10 @@
 import React from 'react';
 import ActionsAsignaturas from '../Components/utils/ActionsAsignaturas';
 
-const columnsAlumnosInscritos = (handleCheckboxChange, selectedAsignaturas) => [
+const columnsAlumnosInscritos = (handleCheckboxChange, selectedAsignaturas, isConsulta) => [
   { field: 'clave', headerName: 'Clave', width: 100 },
   { field: 'seriacion', headerName: 'Seriación', width: 150 },
-  { field: 'asignatura', headerName: 'Asignatura', width: 300 },
+  { field: 'nombre', headerName: 'Asignatura', width: 300 },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -14,6 +14,7 @@ const columnsAlumnosInscritos = (handleCheckboxChange, selectedAsignaturas) => [
         id={params.id}
         onCheckboxChange={handleCheckboxChange}
         selectedAsignaturas={selectedAsignaturas}
+        isConsulta={isConsulta}
       />
     ),
     sortable: false,

@@ -85,7 +85,6 @@ export default function Reglas() {
         message: '¡Reglas actualizadas con éxito!',
         type: 'success',
       });
-      router.back();
       return response;
     } catch (error) {
       setLoading(false);
