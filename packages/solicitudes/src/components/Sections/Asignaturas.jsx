@@ -2,9 +2,8 @@ import React, {
   useState, useContext, useEffect, useMemo,
 } from 'react';
 import { Grid, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
+import { DataTable } from '@siiges-ui/shared';
 import columns from './Mocks/Asignaturas';
 import AsignaturasModal from '../utils/Components/AsignaturasModales/AsignaturasCreateModal';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
@@ -21,20 +20,22 @@ export default function Asignaturas({ disabled, type }) {
   const { asignaturasList, setAsignaturasList } = useContext(
     TablesPlanEstudiosContext,
   );
-  const { asignaturas, loading } = type === 'editar'
-    ? useAsignaturas(programaId)
-    : { asignaturas: [], loading: false };
-  const tableColumns = useMemo(
-    () => columns(grados, setAsignaturasList, asignaturasList),
-    [setAsignaturasList, asignaturas],
-  );
 
   const isSectionDisabled = useSectionDisabled(6);
 
   const isDisabled = disabled || isSectionDisabled;
 
+  const { asignaturas, loading } = type === 'editar' || type === 'consultar'
+    ? useAsignaturas(programaId)
+    : { asignaturas: [], loading: false };
+
+  const tableColumns = useMemo(
+    () => columns(grados, isDisabled, type),
+    [setAsignaturasList, asignaturas, isDisabled],
+  );
+
   useEffect(() => {
-    if (type === 'editar' && !loading) {
+    if ((type === 'editar' || type === 'consultar') && !loading) {
       setAsignaturasList(asignaturas);
     }
   }, [loading, asignaturas]);
@@ -44,12 +45,13 @@ export default function Asignaturas({ disabled, type }) {
       <Grid item xs={12}>
         <Typography variant="h6">Asignaturas</Typography>
       </Grid>
-      <Grid item xs={3}>
-        {!isDisabled && <Button onClick={showModal} text="Agregar" />}
-      </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataGrid
+          <DataTable
+            buttonAdd
+            buttonText="Agregar Asignatura"
+            buttonClick={showModal}
+            buttonDisabled={isDisabled}
             rows={asignaturasList}
             columns={tableColumns}
             pageSize={5}

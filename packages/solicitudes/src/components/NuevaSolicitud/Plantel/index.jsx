@@ -20,17 +20,22 @@ export default function Plantel({
   nextModule,
   id,
   programaId,
+  type,
 }) {
   const [disabled, setDisabled] = useState(true);
   const { session } = useContext(Context);
   const institucion = getInstitucionUsuario(session);
-  const [ratificacion, setRatificacion] = useState(<RatificacionNombre />);
+  const [ratificacion, setRatificacion] = useState(<RatificacionNombre disabled={disabled} />);
   const [plantelesData, setPlantelesData] = useState({});
   const [selectedPlantel, setSelectedPlantel] = useState();
   const { solicitudes } = getSolicitudesById(id);
+  const isDisabled = type === 'consultar' || disabled;
 
   useEffect(() => {
     setDisabled(!id);
+  }, [id]);
+
+  useEffect(() => {
     if (institucion) {
       if (
         !institucion.ratificacionNombre
@@ -41,14 +46,16 @@ export default function Plantel({
       ) {
         setRatificacion(
           <NombresPropuestos
-            disabled={disabled}
+            disabled={isDisabled}
             id={institucion.id}
             institucion={institucion}
           />,
         );
+      } else {
+        setRatificacion(<RatificacionNombre disabled={isDisabled} />);
       }
     }
-  }, [id, disabled, institucion]);
+  }, [id, isDisabled, institucion]);
 
   useEffect(() => {
     if (solicitudes.programa) {
@@ -74,6 +81,7 @@ export default function Plantel({
           institucion={institucion}
         >
           <SectionLayout
+            type={type}
             sectionTitle="Plantel"
             sections={section}
             position={position}
@@ -86,32 +94,38 @@ export default function Plantel({
           >
             {section === 1 && (
               <DatosPlantel
-                disabled={disabled}
+                disabled={isDisabled}
                 plantelesData={plantelesData}
                 setPlantelesData={setPlantelesData}
+                type={type}
               />
             )}
             {section === 2 && (
               <DescripcionPlantel
-                disabled={disabled}
+                disabled={isDisabled}
                 plantelesData={plantelesData}
                 setPlantelesData={setPlantelesData}
+                type={type}
               />
             )}
             {section === 3 && (
               <HigienePlantel
-                disabled={disabled}
+                disabled={isDisabled}
                 plantelId={plantelesData?.id}
+                type={type}
               />
             )}
-            {section === 4 && <InstitucionesAledanas disabled={disabled} />}
+            {section === 4 && (
+              <InstitucionesAledanas disabled={isDisabled} programaId={programaId} type={type} />
+            )}
             {section === 5 && (
-              <Infraestructura disabled={disabled} programaId={programaId} />
+              <Infraestructura disabled={isDisabled} programaId={programaId} type={type} />
             )}
             {renderSection6()}
             <Observaciones
               id={id}
               section={section + 12}
+              type={type}
             />
           </SectionLayout>
         </PlantelProvider>
@@ -123,10 +137,12 @@ export default function Plantel({
 Plantel.defaultProps = {
   id: null,
   programaId: null,
+  type: '',
 };
 
 Plantel.propTypes = {
   nextModule: PropTypes.func.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  type: PropTypes.string,
 };

@@ -19,15 +19,15 @@ export default async function SubmitDocument(formData, setUrl, setNoti) {
 
     const data = await response.json();
 
-    if (data && data.url) {
-      setUrl(data.url);
+    if (data && data.ubicacion) {
+      setUrl(data.ubicacion);
     } else {
-      throw new Error('No se encontro "ubicación" en la respuesta.');
+      throw new Error('¡No se encontró "ubicación" en la respuesta.!');
     }
   } catch (err) {
     setNoti({
       open: true,
-      message: err.message || 'Algo salió mal, revise su documento',
+      message: err.message || '¡Algo salió mal, revise su documento!',
       type: 'error',
     });
   }

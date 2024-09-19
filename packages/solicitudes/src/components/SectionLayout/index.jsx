@@ -11,7 +11,7 @@ export default function SectionLayout({
   sections,
   position,
   total,
-  porcentage,
+  porcentaje,
   sectionTitle,
   next,
   prev,
@@ -39,7 +39,7 @@ export default function SectionLayout({
               borderRadius: 20,
             }}
           >
-            <LoadCircle state={porcentage} />
+            <LoadCircle state={porcentaje} />
             <Typography
               alignItems="center"
               variant="p"
@@ -103,7 +103,7 @@ SectionLayout.propTypes = {
   children: PropTypes.node.isRequired,
   position: PropTypes.string.isRequired,
   total: PropTypes.string.isRequired,
-  porcentage: PropTypes.number.isRequired,
+  porcentaje: PropTypes.number.isRequired,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
 };

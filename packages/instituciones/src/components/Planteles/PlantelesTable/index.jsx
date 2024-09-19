@@ -39,7 +39,7 @@ async function checkSolicitudes(planteles, session, setNonDeletablePlanteles, se
     const response = await getData({ endpoint, query });
 
     if (response.statusCode !== 200) {
-      throw new Error(response.errorMessage || 'Error en la solicitud al servidor');
+      throw new Error(response.errorMessage || '¡Error en la solicitud al servidor!');
     }
     const { data } = response;
     const plantelesConSolicitudes = data.map((solicitud) => solicitud.programa.plantelId);
@@ -82,7 +82,7 @@ export default function Planteles({ planteles, institucionId, session }) {
     { field: 'domicilio', headerName: 'Domicilio', width: 240 },
     { field: 'colonia', headerName: 'Colonia', width: 240 },
     { field: 'municipio', headerName: 'Municipio', width: 140 },
-    { field: 'codigoPostal', headerName: 'Codigo Postal', width: 130 },
+    { field: 'codigoPostal', headerName: 'Código Postal', width: 130 },
     {
       field: 'claveCentroTrabajo',
       headerName: 'Clave centro de trabajo',

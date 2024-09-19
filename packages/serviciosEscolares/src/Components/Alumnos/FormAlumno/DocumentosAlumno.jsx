@@ -1,10 +1,12 @@
 import { Grid, Typography } from '@mui/material';
-import { GetFile, InputFile } from '@siiges-ui/shared';
+import { ButtonSimple, GetFile, InputFile } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 
 export default function DocumentosAlumno({ id, type }) {
   const [fileURLs, setFileURLs] = useState([null, null, null]);
+  const router = useRouter();
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => {
@@ -37,7 +39,7 @@ export default function DocumentosAlumno({ id, type }) {
   return (
     <div style={{ padding: '20px' }}>
       <Typography variant="body1">
-        ¡Nota importante! Los documentos que se adjunten tendran que ser
+        ¡Nota importante!. Los documentos que se adjunten tendrán que ser
         escaneados a color, con buena resolución y cuidando de que no se pierda
         u omita información.
       </Typography>
@@ -48,7 +50,7 @@ export default function DocumentosAlumno({ id, type }) {
             tipoEntidad="ALUMNO"
             tipoDocumento="ARCHIVO_CERTIFICADO"
             id={id}
-            label="Archivo Cédula Profesional, Titulo o equivalente (PDF)"
+            label="Archivo de Cédula Profesional, Título o equivalente (PDF)"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
           />
@@ -71,6 +73,15 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo CURP (PDF)"
             url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
+          />
+        </Grid>
+        <Grid item xs={12} style={{ textAlign: 'right' }}>
+          <ButtonSimple
+            text="Regresar"
+            align="right"
+            onClick={() => {
+              router.back();
+            }}
           />
         </Grid>
       </Grid>

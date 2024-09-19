@@ -15,6 +15,7 @@ import {
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function DatosInstitucion({ alumno }) {
   const { setNoti, session, setLoading } = useContext(Context);
@@ -38,11 +39,12 @@ export default function DatosInstitucion({ alumno }) {
     tipoValidacionId: '',
   });
   const [errors, setErrors] = useState({});
+  const router = useRouter();
 
   const fileData = {
     entidadId: alumno.id,
-    tipoEntidad: 'PERSONA',
-    tipoDocumento: 'VALIDACION_ALUMNO',
+    tipoEntidad: 'ALUMNO',
+    tipoDocumento: 'ARCHIVO_VALIDACION_ALUMNO',
   };
 
   useEffect(() => {
@@ -131,7 +133,7 @@ export default function DatosInstitucion({ alumno }) {
     const { name, value } = event.target;
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: !value ? 'Este campo es obligatorio' : '',
+      [name]: !value ? '¡Este campo es obligatorio!' : '',
     }));
   };
 
@@ -151,7 +153,7 @@ export default function DatosInstitucion({ alumno }) {
 
     requiredFields.forEach((field) => {
       if (!form[field]) {
-        newErrors[field] = 'Este campo es obligatorio';
+        newErrors[field] = '¡Este campo es obligatorio!';
       }
     });
 
@@ -180,11 +182,11 @@ export default function DatosInstitucion({ alumno }) {
           response
           && (response.statusCode === 200 || response.statusCode === 201)
         ) {
-          setFormSent(true); // Set formSent to true after a successful creation
+          setFormSent(true);
           setLoading(false);
           setNoti({
             open: true,
-            message: 'Datos guardados correctamente',
+            message: '¡Datos guardados correctamente!',
             type: 'success',
           });
         } else {
@@ -195,14 +197,14 @@ export default function DatosInstitucion({ alumno }) {
         setLoading(false);
         setNoti({
           open: true,
-          message: 'Error: No se pudo guardar la información',
+          message: '¡Error: No se pudo guardar la información!',
           type: 'error',
         });
       }
     } else {
       setNoti({
         open: true,
-        message: 'Error: Verifique los campos',
+        message: '¡Error: Verifique los campos!',
         type: 'error',
       });
     }
@@ -364,8 +366,8 @@ export default function DatosInstitucion({ alumno }) {
           <Grid item xs={12}>
             <InputFile
               label="Archivo de validación"
-              id={1}
-              tipoDocumento="VALIDACION_ALUMNO"
+              id={alumno.id}
+              tipoDocumento="ARCHIVO_VALIDACION_ALUMNO"
               tipoEntidad="ALUMNO"
               url={url}
               setUrl={setUrl}
@@ -376,7 +378,7 @@ export default function DatosInstitucion({ alumno }) {
         </>
       )}
       <Grid item xs={12}>
-        <ButtonsForm confirm={handleConfirm} cancel={() => {}} />
+        <ButtonsForm confirm={handleConfirm} cancel={() => router.back()} />
       </Grid>
     </Grid>
   );

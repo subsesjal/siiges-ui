@@ -1,5 +1,5 @@
 import {
-  Button, Context, DataTable, Input,
+  Button, Context, DataTable, Input, getData,
 } from '@siiges-ui/shared';
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
@@ -21,6 +21,9 @@ export default function InscripcionesTable({
   const [alumnoByMatricula, setAlumnoByMatricula] = useState();
   const [selectedAsignaturas, setSelectedAsignaturas] = useState([]);
   const [alumnosInscritos, setAlumnosInscritos] = useState([]);
+  const [alumnoValidacion, setAlumnoValidacion] = useState(null);
+  const [alumnoData, setAlumnoData] = useState(null);
+  const [isAlumnoValido, setIsAlumnoValido] = useState(false);
 
   const handleCheckboxChange = (id, isChecked) => {
     if (isChecked) {
@@ -31,22 +34,78 @@ export default function InscripcionesTable({
   };
 
   const handleBlurMatricula = () => {
-    getAlumnoByMatricula(matriculaValue, programaId, (error, result) => {
+    getAlumnoByMatricula(matriculaValue, programaId, async (error, result) => {
       if (error) {
         console.error('Error fetching alumno:', error);
         setNoti({
           open: true,
-          message: 'Algo salio mal al cargar al alumno, revisa la matricula',
+          message: '¡Algo salió mal al cargar al alumno, revisa la matrícula!',
           type: 'error',
         });
+        setIsAlumnoValido(false);
         return;
       }
+
       setAlumnoByMatricula(result.alumnos);
+
+      try {
+        const validacionResult = await getData({ endpoint: `/alumnos/${result.alumnos.id}/validaciones` });
+        if (!validacionResult || validacionResult.data.situacionValidacionId !== 1) {
+          setNoti({
+            open: true,
+            message: 'Este alumno no tiene una validación Auténtica.',
+            type: 'error',
+          });
+          setIsAlumnoValido(false);
+          return;
+        }
+        setAlumnoValidacion(validacionResult.data);
+
+        const alumnoResult = await getData({ endpoint: `/alumnos/${result.alumnos.id}` });
+        if (!alumnoResult || alumnoResult.data.situacionId !== 1) {
+          setNoti({
+            open: true,
+            message: 'Este alumno no está Activo.',
+            type: 'error',
+          });
+          setIsAlumnoValido(false);
+          return;
+        }
+        setAlumnoData(alumnoResult.data);
+        setIsAlumnoValido(true);
+      } catch (fetchError) {
+        console.error('Error fetching alumno data:', fetchError);
+        setNoti({
+          open: true,
+          message: '¡Algo salió mal al validar al alumno!',
+          type: 'error',
+        });
+        setIsAlumnoValido(false);
+      }
     });
   };
 
   const handleInscribirAlumno = () => {
+    if (!alumnoValidacion || !alumnoData) {
+      setNoti({
+        open: true,
+        message: 'El alumno no cumple con los requisitos de validación y estado.',
+        type: 'error',
+      });
+      return;
+    }
+
     if (alumnoByMatricula && selectedAsignaturas.length > 0) {
+      const alumnoYaInscrito = alumnosInscritos
+        .some((alumno) => alumno.id === alumnoByMatricula.id);
+      if (alumnoYaInscrito) {
+        setNoti({
+          open: true,
+          message: 'Este alumno ya está inscrito en el grupo.',
+          type: 'error',
+        });
+        return;
+      }
       const dataToSend = [
         {
           alumnoId: alumnoByMatricula.id,
@@ -60,13 +119,13 @@ export default function InscripcionesTable({
           setNoti({
             open: true,
             message:
-              'Algo salio mal al inscribir el alumno, reintente mas tarde',
+              '¡Algo salió mal al inscribir el alumno, reintente más tarde!',
             type: 'error',
           });
         } else {
           setNoti({
             open: true,
-            message: 'Exito al inscribir el alumno!',
+            message: '¡Éxito al inscribir el alumno!',
             type: 'success',
           });
           setAlumnosInscritos((prev) => [...prev, alumnoByMatricula]);
@@ -81,7 +140,7 @@ export default function InscripcionesTable({
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Input
-          label="Matricula"
+          label="Matrícula"
           name="matricula"
           value={matriculaValue}
           onchange={(e) => setMatriculaValue(e.target.value)}
@@ -99,11 +158,13 @@ export default function InscripcionesTable({
         />
       </Grid>
       <Grid item xs={12} style={{ textAlign: 'right' }}>
-        <Button
-          text="Inscribir alumno"
-          disabled={!alumnoByMatricula || selectedAsignaturas.length === 0}
-          onClick={handleInscribirAlumno}
-        />
+        {isAlumnoValido && (
+          <Button
+            text="Inscribir alumno"
+            disabled={!alumnoByMatricula || selectedAsignaturas.length === 0}
+            onClick={handleInscribirAlumno}
+          />
+        )}
       </Grid>
       <Grid item xs={12}>
         <DataTable

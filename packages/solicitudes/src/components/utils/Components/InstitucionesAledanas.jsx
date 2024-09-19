@@ -7,11 +7,11 @@ import DeleteInstitucionesAledanas from './InstitucionesAledanas/DeleteInstituci
 import InstitucionAledanaEditModal from './InstitucionesAledanas/InstitucionAledanaEditModal';
 import PlantelContext from '../Context/plantelContext';
 
-export default function InstitucionesAledanasButtons({ id }) {
+export default function InstitucionesAledanasButtons({ id, type, isDisabled }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const { institucionesAledanas } = useContext(PlantelContext);
+  const { institucionesAledanas, setInstitucionesAledanas } = useContext(PlantelContext);
   const rowItem = institucionesAledanas.find((item) => item.id === id)
     ? {
       id: institucionesAledanas.find((item) => item.id === id).id,
@@ -37,15 +37,21 @@ export default function InstitucionesAledanasButtons({ id }) {
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
   };
-
+  if (type === 'consultar') {
+    return null;
+  }
   return (
     <Stack direction="row" spacing={1}>
-      <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
-        <EditIcon />
-      </IconButton>
-      <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
-        <DeleteIcon />
-      </IconButton>
+      {!isDisabled && (
+      <>
+        <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
+          <DeleteIcon />
+        </IconButton>
+      </>
+      )}
 
       {modalOpen && (
         <InstitucionAledanaEditModal
@@ -64,6 +70,7 @@ export default function InstitucionesAledanasButtons({ id }) {
         <DeleteInstitucionesAledanas
           modal={deleteDialogOpen}
           hideModal={handleDeleteDialogClose}
+          setInstitucionesAledanas={setInstitucionesAledanas}
           id={rowItem.id}
         />
       )}
@@ -73,6 +80,8 @@ export default function InstitucionesAledanasButtons({ id }) {
 
 InstitucionesAledanasButtons.propTypes = {
   id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
   rowItem: PropTypes.shape({
     programaID: PropTypes.number,
   }).isRequired,

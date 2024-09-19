@@ -39,7 +39,7 @@ export default function FormAlumno({ type, alumno, setId }) {
         situacionId: alumno.situacionId ? alumno.situacionId : '',
       }));
     }
-    if (session.rol === 'representante') {
+    if (session.rol === 'representante' || session.rol === 'ce_ies') {
       setForm((prevForm) => ({
         ...prevForm,
         situacionId: 2,
@@ -75,16 +75,16 @@ export default function FormAlumno({ type, alumno, setId }) {
         });
         setNoti({
           open: true,
-          message: 'Alumno actualizado con exito',
+          message: '¡Alumno actualizado con éxito!',
           type: 'success',
         });
         setLoading(false);
       } else {
         response = await alumnosService({ dataBody, method: 'POST' });
-        setId(response.data.id); // Set ID only when creating a new alumno
+        setId(response.data.id);
         setNoti({
           open: true,
-          message: 'Alumno registrado con exito',
+          message: '¡Alumno registrado con éxito!',
           type: 'success',
         });
         setLoading(false);
@@ -93,7 +93,7 @@ export default function FormAlumno({ type, alumno, setId }) {
       setError(err.message);
       setNoti({
         open: true,
-        message: 'Error al registrar alumno',
+        message: '¡Error al registrar alumno!',
         type: 'error',
       });
       setLoading(false);
@@ -108,9 +108,9 @@ export default function FormAlumno({ type, alumno, setId }) {
         </Typography>
       )}
       <Typography variant="body1">
-        ¡Nota importante! El nombre del alumno se debe registrar tal y como
+        ¡Nota importante!. El nombre del alumno se debe registrar tal y como
         aparece en el acta de nacimiento, en mayúsculas y en caso de tener
-        acentos, omitirlos.
+        acentos, letra Ñ (poner N), diéresis o algún otro caracter especial, favor de omitirlos.
       </Typography>
       <br />
       <Grid container spacing={2}>
@@ -133,14 +133,14 @@ export default function FormAlumno({ type, alumno, setId }) {
                 title={campo.label}
                 name={campo.id}
                 value={
-                  campo.id === 'situacionId' && session.rol === 'representante'
+                  campo.id === 'situacionId' && (session.rol === 'representante' || session.rol === 'ce_ies')
                     ? 2
                     : formSelect?.[campo.id] || ''
                 }
                 options={campo.options}
                 onChange={handleOnChange}
                 disabled={
-                  campo.id === 'situacionId' && session.rol === 'representante'
+                  campo.id === 'situacionId' && (session.rol === 'representante' || session.rol === 'ce_ies')
                 }
               />
             )}

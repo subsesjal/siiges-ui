@@ -5,7 +5,7 @@ export default function plantelErrors(form, setError, error) {
   const errors = {
     calle: () => {
       if (form.domicilio.calle === undefined || form.domicilio.calle === '') {
-        setError({ ...error, calle: 'Calle invalida' });
+        setError({ ...error, calle: '¡Calle inválida!' });
         return false;
       }
       setError({ ...error, calle: '' });
@@ -13,7 +13,7 @@ export default function plantelErrors(form, setError, error) {
     },
     numeroExterior: () => {
       if (form.domicilio.numeroExterior === undefined || form.domicilio.numeroExterior === '') {
-        setError({ ...error, numeroExterior: 'Número exterior inválido' });
+        setError({ ...error, numeroExterior: '¡Número exterior inválido!' });
         return false;
       }
       setError({ ...error, numeroExterior: '' });
@@ -21,7 +21,7 @@ export default function plantelErrors(form, setError, error) {
     },
     colonia: () => {
       if (form.domicilio.colonia === undefined || form.domicilio.colonia === '') {
-        setError({ ...error, colonia: 'Colonia inválida' });
+        setError({ ...error, colonia: '¡Colonia inválida!' });
         return false;
       }
       setError({ ...error, colonia: '' });
@@ -31,14 +31,14 @@ export default function plantelErrors(form, setError, error) {
       if (form.domicilio.codigoPostal === undefined || form.domicilio.codigoPostal === '') {
         setError({
           ...error,
-          codigoPostal: 'Código postal inválido',
+          codigoPostal: '¡Código postal inválido!',
         });
         return false;
       }
       if (!String(form.domicilio.codigoPostal).match(validNumber)) {
         setError({
           ...error,
-          codigoPostal: 'Ingrese solo numeros',
+          codigoPostal: 'Ingrese solo números',
         });
         return false;
       }
@@ -66,7 +66,7 @@ export default function plantelErrors(form, setError, error) {
     },
     correo1: () => {
       if (form.correo1 === undefined || form.correo1 === '' || !form.correo1.match(validEmail)) {
-        setError({ ...error, correo1: 'Correo institucional inválido' });
+        setError({ ...error, correo1: '¡Correo institucional inválido!' });
         return false;
       }
       setError({ ...error, correo1: '' });
@@ -74,7 +74,7 @@ export default function plantelErrors(form, setError, error) {
     },
     correo2: () => {
       if (form.correo2 === undefined || form.correo2 === '' || !form.correo2.match(validEmail)) {
-        setError({ ...error, correo2: 'Correo de contacto inválido' });
+        setError({ ...error, correo2: '¡Correo de contacto inválido!' });
         return false;
       }
       setError({ ...error, correo2: '' });
@@ -82,7 +82,7 @@ export default function plantelErrors(form, setError, error) {
     },
     correo3: () => {
       if (form.correo3 !== undefined && form.correo3 !== '' && !form.correo3.match(validEmail)) {
-        setError({ ...error, correo3: 'Correo secundario inválido' });
+        setError({ ...error, correo3: '¡Correo secundario inválido!' });
         return false;
       }
       setError({ ...error, correo3: '' });
@@ -90,11 +90,11 @@ export default function plantelErrors(form, setError, error) {
     },
     telefono1: () => {
       if (form.telefono1 === undefined || form.telefono1 === '' || !form.telefono1.match(validNumber)) {
-        setError({ ...error, telefono1: 'teléfono 1 inválido' });
+        setError({ ...error, telefono1: '¡Teléfono 1 inválido!' });
         return false;
       }
       if (form.telefono1.length !== 10) {
-        setError({ ...error, telefono1: 'Ingrese 10 digitos' });
+        setError({ ...error, telefono1: '¡Por favor, ingrese 10 dígitos!' });
         return false;
       }
       setError({ ...error, telefono1: '' });
@@ -102,19 +102,27 @@ export default function plantelErrors(form, setError, error) {
     },
     telefono2: () => {
       if (form.telefono2 === undefined || form.telefono2 === '' || !form.telefono2.match(validNumber)) {
-        setError({ ...error, telefono2: 'teléfono 2 inválido' });
+        setError({ ...error, telefono2: '¡Teléfono 2 inválido!' });
         return false;
       }
       if (form.telefono2.length !== 10) {
-        setError({ ...error, telefono2: 'Ingrese 10 digitos' });
+        setError({ ...error, telefono2: '¡Por favor, ingrese 10 dígitos!' });
         return false;
       }
       setError({ ...error, telefono2: '' });
       return true;
     },
+    claveCentroTrabajo: () => {
+      if (form.claveCentroTrabajo === undefined || form.claveCentroTrabajo === '') {
+        setError({ ...error, claveCentroTrabajo: '¡Clave de centro de trabajo inválido!' });
+        return false;
+      }
+      setError({ ...error, claveCentroTrabajo: '' });
+      return true;
+    },
     nombre: () => {
       if (form.director.persona.nombre === undefined || form.director.persona.nombre === '') {
-        setError({ ...error, nombre: 'Nombre inválido' });
+        setError({ ...error, nombre: '¡Nombre inválido!' });
         return false;
       }
       setError({ ...error, nombre: '' });
@@ -122,7 +130,7 @@ export default function plantelErrors(form, setError, error) {
     },
     apellidoPaterno: () => {
       if (form.director.persona.apellidoPaterno === undefined || form.director.persona.apellidoPaterno === '') {
-        setError({ ...error, apellidoPaterno: 'Primer Apellido inválido' });
+        setError({ ...error, apellidoPaterno: '¡Primer Apellido inválido!' });
         return false;
       }
       setError({ ...error, apellidoPaterno: '' });
@@ -130,7 +138,7 @@ export default function plantelErrors(form, setError, error) {
     },
     apellidoMaterno: () => {
       if (form.director.persona.apellidoMaterno === undefined || form.director.persona.apellidoMaterno === '') {
-        setError({ ...error, apellidoMaterno: 'Segundo Apellido inválido' });
+        setError({ ...error, apellidoMaterno: '¡Segundo Apellido inválido!' });
         return false;
       }
       setError({ ...error, apellidoMaterno: '' });
@@ -138,7 +146,7 @@ export default function plantelErrors(form, setError, error) {
     },
     nacionalidad: () => {
       if (form.director.persona.nacionalidad === undefined || form.director.persona.nacionalidad === '') {
-        setError({ ...error, nacionalidad: 'Nacionalidad inválida' });
+        setError({ ...error, nacionalidad: '¡Nacionalidad inválida!' });
         return false;
       }
       setError({ ...error, nacionalidad: '' });
@@ -154,7 +162,7 @@ export default function plantelErrors(form, setError, error) {
     },
     sexo: () => {
       if (form.director.persona.sexo === undefined || form.director.persona.sexo === '') {
-        setError({ ...error, sexo: 'Género inválido' });
+        setError({ ...error, sexo: '¡Género inválido!' });
         return false;
       }
       setError({ ...error, sexo: '' });
@@ -162,7 +170,7 @@ export default function plantelErrors(form, setError, error) {
     },
     correoPrimario: () => {
       if (form.director.persona.correoPrimario === undefined || form.director.persona.correoPrimario === '' || !form.director.persona.correoPrimario.match(validEmail)) {
-        setError({ ...error, correoPrimario: 'Correo inválido' });
+        setError({ ...error, correoPrimario: '¡Correo inválido!' });
         return false;
       }
       setError({ ...error, correoPrimario: '' });

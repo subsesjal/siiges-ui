@@ -1,17 +1,16 @@
+import React, { useEffect, useState, useContext } from 'react';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import {
   Card, CardContent, Grid, Typography,
 } from '@mui/material';
 import {
-  ButtonStyled,
   StepperComponent,
   Context,
   updateRecord,
   DefaultModal,
-  ButtonsForm,
+  ButtonSimple,
 } from '@siiges-ui/shared';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
-import { useRouter } from 'next/router';
 import Modal from '../Modal/ModalObservacion';
 
 export default function ModuleHeader({
@@ -22,6 +21,8 @@ export default function ModuleHeader({
   nextModule,
   module,
   id,
+  isEditOrView,
+  switchModule,
 }) {
   const [disabled, setDisabled] = useState(false);
   const [modalState, setModalState] = useState(false);
@@ -33,7 +34,9 @@ export default function ModuleHeader({
 
   const isControlDocumental = rol === 'control_documental';
   const isFinalModule = module === steps.length - 1;
-  const textIsControlDocumental = isFinalModule ? 'Terminar revisión' : 'Siguiente módulo';
+  const textIsControlDocumental = isFinalModule
+    ? 'Terminar revisión'
+    : 'Siguiente módulo';
   const textNormal = isFinalModule ? 'Terminar solicitud' : 'Siguiente módulo';
   const textRol = isControlDocumental ? textIsControlDocumental : textNormal;
 
@@ -49,10 +52,10 @@ export default function ModuleHeader({
       if (result?.statusCode === 200) {
         setNoti({
           open: true,
-          message: 'Se completó la solicitud exitosamente',
+          message: '¡Se completó la solicitud exitosamente!',
           type: 'success',
         });
-        router.back();
+        router.push('/solicitudes');
         setLoading(false);
       } else {
         throw new Error('Error al completar la solicitud');
@@ -60,7 +63,7 @@ export default function ModuleHeader({
     } catch (error) {
       setNoti({
         open: true,
-        message: error.message || 'Hubo un error al completar la solicitud',
+        message: error.message || '¡Hubo un error al completar la solicitud!',
         type: 'error',
       });
       setLoading(false);
@@ -100,7 +103,6 @@ export default function ModuleHeader({
   }, [id]);
 
   useEffect(() => {
-    // Check if the current module is the last step
     if (module === steps.length - 1) {
       setLastStepReached(true);
     } else {
@@ -108,13 +110,19 @@ export default function ModuleHeader({
     }
   }, [module, steps]);
 
+  const showFinishButton = isEditOrView !== 'consultar' && isFinalModule;
+
   return (
     <>
       <Card sx={{ width: '100%', mt: 5 }}>
         <CardContent>
           <Grid container>
             <Grid item xs={12}>
-              <StepperComponent steps={steps} position={module} />
+              <StepperComponent
+                steps={steps}
+                position={module}
+                onStepClick={switchModule}
+              />
             </Grid>
             <Grid item xs={6}>
               <Typography variant="p" sx={{ fontWeight: 'bold' }}>
@@ -129,30 +137,47 @@ export default function ModuleHeader({
               </Typography>
               <Typography variant="p">{date}</Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right', alignItems: 'end' }}>
-              {module >= 1 && (
-                <ButtonStyled
-                  text="Modulo anterior"
-                  alt="Modulo anterior"
+          </Grid>
+          <Grid container spacing={1} justifyContent="right">
+            {module >= 1 && (
+              <Grid item>
+                <ButtonSimple
+                  text="Módulo anterior"
+                  alt="Módulo anterior"
                   type="success"
-                  onclick={() => prevButton()}
+                  onClick={() => prevButton()}
                   disabled={disabled}
                 />
-              )}
-              <span>&nbsp;&nbsp;</span>
-              <ButtonStyled
-                text={textRol}
-                alt={textRol}
-                type="success"
-                onclick={() => submitButton()}
-                disabled={disabled}
-              />
-              <span>&nbsp;&nbsp;</span>
-              <ButtonStyled
+              </Grid>
+            )}
+            {showFinishButton && (
+              <Grid item>
+                <ButtonSimple
+                  text={textRol}
+                  alt={textRol}
+                  type="success"
+                  onClick={() => submitButton()}
+                  disabled={disabled}
+                />
+              </Grid>
+            )}
+            {!showFinishButton && !isFinalModule && (
+              <Grid item>
+                <ButtonSimple
+                  text="Siguiente módulo"
+                  alt="Siguiente módulo"
+                  type="success"
+                  onClick={() => submitButton()}
+                  disabled={disabled}
+                />
+              </Grid>
+            )}
+            <Grid item>
+              <ButtonSimple
                 text="Salir"
                 alt="Salir"
                 type="success"
-                onclick={() => router.push('/home')}
+                onClick={() => router.push('/home')}
               />
             </Grid>
           </Grid>
@@ -166,15 +191,25 @@ export default function ModuleHeader({
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography>
-              ¿Esta seguro que desea terminar la solicitud?
+            <Typography variant="body1">
+              ¿Deseas completar la solicitud? Esta acción no podrá deshacerse.
             </Typography>
           </Grid>
-          <Grid item xs={12}>
-            <ButtonsForm
-              cancel={() => setModalRepresentante(false)}
-              confirm={handleLastStepAction}
-            />
+          <Grid container justifyContent="right" spacing={2} sx={{ mt: 1 }}>
+            <Grid item>
+              <ButtonSimple
+                text="Cancelar"
+                design="cancel"
+                onClick={() => setModalRepresentante(false)}
+              />
+            </Grid>
+            <Grid item>
+              <ButtonSimple
+                text="Aceptar"
+                type="success"
+                onClick={() => handleLastStepAction()}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </DefaultModal>
@@ -182,16 +217,14 @@ export default function ModuleHeader({
   );
 }
 
-ModuleHeader.defaultProps = {
-  id: null,
-};
-
 ModuleHeader.propTypes = {
+  steps: PropTypes.arrayOf(PropTypes.number).isRequired,
   type: PropTypes.string.isRequired,
-  steps: PropTypes.arrayOf(PropTypes.string).isRequired,
   date: PropTypes.string.isRequired,
-  nextModule: PropTypes.func.isRequired,
   prevModule: PropTypes.func.isRequired,
+  nextModule: PropTypes.func.isRequired,
   module: PropTypes.number.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  isEditOrView: PropTypes.string.isRequired,
+  switchModule: PropTypes.func.isRequired,
 };

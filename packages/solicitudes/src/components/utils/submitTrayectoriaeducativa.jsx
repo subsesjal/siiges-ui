@@ -1,6 +1,6 @@
 import { getToken } from '@siiges-ui/shared';
 
-async function submitTrayectoriaEducativa(validations, setLoading) {
+async function submitTrayectoriaEducativa(validations, setLoading, setSections, solicitudId) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
@@ -16,28 +16,26 @@ async function submitTrayectoriaEducativa(validations, setLoading) {
     'tasaEgreso',
   ];
 
+  const trayectoriaData = form[9];
+
   const isValid = requiredFields.some(
-    (field) => form[9][field] !== undefined && form[9][field] !== '',
+    (field) => trayectoriaData[field] !== undefined && trayectoriaData[field] !== '',
   );
 
   if (!isValid) {
-    console.error(
-      'Submission criteria not met. At least one required field must be present.',
-    );
+    console.error('Submission criteria not met. Required fields missing.');
     setNoti({
       open: true,
-      message:
-        'No es posible continuar, falta completar información obligatoria en la sección de Trayectoria Educativa.',
+      message: '¡No es posible continuar, falta completar información obligatoria en la sección de Trayectoria Educativa!.',
       type: 'error',
     });
+    setLoading(false);
     return;
   }
 
   const token = getToken();
   const method = trayectoriaStatus === 'edit' ? 'PATCH' : 'POST';
-  const endpoint = trayectoriaStatus === 'edit'
-    ? `${url}/api/v1/trayectorias/${form[9].id}`
-    : `${url}/api/v1/trayectorias`;
+  const endpoint = `${url}/api/v1/trayectorias${trayectoriaStatus === 'edit' ? `/${trayectoriaData.id}` : ''}`;
 
   try {
     const response = await fetch(endpoint, {
@@ -47,25 +45,23 @@ async function submitTrayectoriaEducativa(validations, setLoading) {
         api_key: apikey,
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(form[9]),
+      body: JSON.stringify(trayectoriaData),
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Error submitting the request: ${response.status} ${response.statusText}`,
-      );
+      throw new Error(`Error ${method === 'POST' ? 'creating' : 'updating'} Trayectoria: ${response.status} ${response.statusText}`);
     }
 
-    setTimeout(() => {
-      setLoading(false);
-      setNoti({
-        open: true,
-        message: 'Exito, no hubo problemas en esta sección',
-        type: 'success',
-      });
-    }, 1000);
+    const responseData = await response.json();
+
+    setLoading(false);
+    setNoti({
+      open: true,
+      message: '¡Éxito, no hubo problemas en esta sección!',
+      type: 'success',
+    });
+
     if (method === 'POST') {
-      const responseData = await response.json();
       setTrayectoriaStatus('edit');
       setForm((prevForm) => {
         const updatedForm = { ...prevForm };
@@ -73,16 +69,36 @@ async function submitTrayectoriaEducativa(validations, setLoading) {
         return updatedForm;
       });
     }
+
+    await fetch(`${url}/api/v1/solicitudes/${solicitudId}/secciones/9`, {
+      method: 'POST',
+      headers: {
+        api_key: apikey,
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        return res.json().then((error) => {
+          throw new Error(error.message || 'Error fetching the section data');
+        });
+      }
+      return res.json();
+    }).then(() => {
+      setSections((prevSections) => prevSections.map((section) => {
+        if (section.id === 9) {
+          return { ...section, disabled: true };
+        }
+        return section;
+      }));
+    });
   } catch (err) {
-    console.error('Error:', err);
-    setTimeout(() => {
-      setLoading(false);
-      setNoti({
-        open: true,
-        message: 'Hubo un problema, revise que los campos esten correctos',
-        type: 'error',
-      });
-    }, 1000);
+    console.error('Error:', err.message);
+    setLoading(false);
+    setNoti({
+      open: true,
+      message: '¡Hubo un problema, revise que los campos estén correctos!',
+      type: 'error',
+    });
   }
 }
 

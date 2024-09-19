@@ -8,8 +8,9 @@ import getMunicipios from '@siiges-ui/instituciones/src/components/utils/getMuni
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import formDatosRepresentante from '../utils/sections/forms/formDatosRepresentante';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
-function RepresentanteLegalData({ id }) {
+function RepresentanteLegalData({ id, disabled }) {
   const { municipios } = getMunicipios();
   const { user } = getCurrentUser();
   const [fileUrl, setFileUrl] = useState();
@@ -23,11 +24,13 @@ function RepresentanteLegalData({ id }) {
     GetFile(fileData, setFileUrl);
   }, []);
 
+  const isSectionDisabled = useSectionDisabled(12);
+
+  const isDisabled = disabled || isSectionDisabled;
+
   const {
-    disabled, setDisabled, form, setForm,
-  } = useContext(
-    DatosGeneralesContext,
-  );
+    setDisabled, form, setForm,
+  } = useContext(DatosGeneralesContext);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -83,7 +86,7 @@ function RepresentanteLegalData({ id }) {
             name="nombre"
             auto="nombre"
             value={user?.persona?.nombre}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -94,7 +97,7 @@ function RepresentanteLegalData({ id }) {
             name="apellidoPaterno"
             auto="apellidoPaterno"
             value={user?.persona?.apellidoPaterno}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -105,7 +108,7 @@ function RepresentanteLegalData({ id }) {
             name="apellidoMaterno"
             auto="apellidoMaterno"
             value={user?.persona?.apellidoMaterno}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -116,7 +119,7 @@ function RepresentanteLegalData({ id }) {
             name="nacionalidad"
             auto="nacionalidad"
             value={user?.persona?.nacionalidad}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -127,7 +130,7 @@ function RepresentanteLegalData({ id }) {
             name="calle"
             auto="calle"
             value={user?.persona?.domicilio?.calle}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -138,7 +141,7 @@ function RepresentanteLegalData({ id }) {
             name="numeroExterior"
             auto="numeroExterior"
             value={user?.persona?.domicilio?.numeroExterior}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -149,7 +152,7 @@ function RepresentanteLegalData({ id }) {
             name="numeroInterior"
             auto="numeroInterior"
             value={user?.persona?.domicilio?.numeroInterior}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -160,7 +163,7 @@ function RepresentanteLegalData({ id }) {
             name="colonia"
             auto="colonia"
             value={user?.persona?.domicilio?.colonia}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -171,7 +174,7 @@ function RepresentanteLegalData({ id }) {
             name="codigoPostal"
             auto="codigoPostal"
             value={user?.persona?.domicilio?.codigoPostal}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -182,7 +185,7 @@ function RepresentanteLegalData({ id }) {
             value={user?.persona?.domicilio?.municipio?.id}
             options={municipios}
             onchange={handleOnChange}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -192,7 +195,7 @@ function RepresentanteLegalData({ id }) {
             name="correo"
             auto="correo"
             value={user?.correo}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -203,7 +206,7 @@ function RepresentanteLegalData({ id }) {
             name="telefono"
             auto="telefono"
             value={user?.persona?.telefono}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -214,7 +217,7 @@ function RepresentanteLegalData({ id }) {
             name="celular"
             auto="celular"
             value={user?.persona?.celular}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -226,7 +229,7 @@ function RepresentanteLegalData({ id }) {
             label="Subir firma"
             url={fileUrl}
             setUrl={setFileUrl}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>
@@ -234,9 +237,13 @@ function RepresentanteLegalData({ id }) {
   );
 }
 
+RepresentanteLegalData.defaultProps = {
+  disabled: false,
+};
+
 RepresentanteLegalData.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])]).isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default RepresentanteLegalData;

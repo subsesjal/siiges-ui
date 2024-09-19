@@ -15,6 +15,7 @@ import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularCo
 import getEvaluadores from '../utils/getEvaluadores';
 import useCumplimiento from '../utils/getCumplimiento';
 import getSolicitudesById from '../utils/getSolicitudesById';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
   const {
@@ -27,8 +28,13 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
   const { cumplimiento } = useCumplimiento(form.modalidad, form.numero);
   const [url, setUrl] = useState('');
 
+  const isSectionDisabled = useSectionDisabled(21);
+
+  const isDisabled = disabled || isSectionDisabled;
+
   useEffect(() => {
     const modalidadSource = type === 'editar' ? solicitudes?.programa?.modalidadId : query.modalidad;
+
     if (type === 'editar' && solicitudes?.programa?.evaluacion?.id) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -45,6 +51,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         modalidad: modalidadSource,
       }));
     }
+
     if (type === 'editar' && form.programaId) {
       const fileData = {
         entidadId: form.programaId,
@@ -53,7 +60,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
       };
       GetFile(fileData, setUrl);
     }
-  }, [solicitudes, form.programaId]);
+  }, [type, solicitudes, form.programaId, query.modalidad]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -89,7 +96,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         porcentajeCumplimiento: cumplimiento.porcentajeCumplimiento,
       }));
     }
-  }, [error, cumplimiento]);
+  }, [error, cumplimiento, validation]);
 
   const { evaluadores } = getEvaluadores();
 
@@ -114,7 +121,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             onchange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            disabled={disabled}
+            disabled={isDisabled}
             errorMessage={error.fecha}
             required
           />
@@ -129,7 +136,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.evaluadorId}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -145,6 +152,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             errorMessage={error.numero}
             min={50}
             max={250}
+            disabled={isDisabled}
             required
           />
         </Grid>
@@ -178,7 +186,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             multiline
             rows={4}
             sx={{ width: '100%' }}
-            disabled={disabled}
+            disabled={isDisabled}
             helperText={error.valoracion}
             error={!!error.valoracion}
             required
@@ -192,7 +200,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             tipoDocumento="DICTAMEN_EVALUACION"
             url={url}
             setUrl={setUrl}
-            disabled={disabled}
+            disabled={isDisabled}
             required
           />
         </Grid>

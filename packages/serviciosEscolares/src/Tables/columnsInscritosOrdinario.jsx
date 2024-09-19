@@ -5,7 +5,7 @@ import CalificacionInput from '../Components/utils/Calificaciones/CalificacionIn
 const columnsInscritosOrdinario = (disabled, updateCalificaciones) => [
   {
     field: 'matricula',
-    headerName: 'Matricula',
+    headerName: 'Matrícula',
     width: 150,
   },
   {

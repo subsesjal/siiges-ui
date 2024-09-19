@@ -11,10 +11,14 @@ import React, {
 import columns from './Mocks/Infraestructura';
 import PlantelContext from '../utils/Context/plantelContext';
 import InfraestructuraCreateModal from '../utils/Components/InfraestructuraModales/InfraestructuraCreateModal';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
-export default function Infraestructura({ disabled, programaId }) {
+export default function Infraestructura({ disabled, programaId, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const { infraestructuras, setInfraestructuras, plantelId } = useContext(PlantelContext);
+  const isSectionDisabled = useSectionDisabled(18);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   const showModal = useCallback(() => setModalOpen(true), []);
   const hideModal = useCallback(() => setModalOpen(false), []);
@@ -36,7 +40,7 @@ export default function Infraestructura({ disabled, programaId }) {
       };
       fetchData();
     }
-  }, [plantelId]);
+  }, [plantelId, programaId, setInfraestructuras]);
 
   const rows = useMemo(
     () => infraestructuras.map((item) => ({
@@ -61,10 +65,11 @@ export default function Infraestructura({ disabled, programaId }) {
       <Grid item xs={12}>
         <DataTable
           buttonAdd={!disabled}
-          buttonText="Agregar"
+          buttonText="Agregar Infraestructura"
           buttonClick={showModal}
+          buttonDisabled={isDisabled}
           rows={rows}
-          columns={columns(programaId)}
+          columns={columns(programaId, type, isDisabled)}
           pageSize={5}
           rowsPerPageOptions={[5]}
         />
@@ -83,4 +88,5 @@ export default function Infraestructura({ disabled, programaId }) {
 Infraestructura.propTypes = {
   disabled: PropTypes.bool.isRequired,
   programaId: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
 };

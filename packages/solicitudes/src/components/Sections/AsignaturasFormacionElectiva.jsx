@@ -1,10 +1,9 @@
 import { Grid, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
-import { Button } from '@siiges-ui/shared';
 import React, {
   useContext, useState, useEffect, useMemo,
 } from 'react';
+import { DataTable } from '@siiges-ui/shared';
 import columns from './Mocks/AsignaturasFormacionElectiva';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
 import AsignaturasFormacionCreateModal from '../utils/Components/AsignaturasFormacionModales/AsignaturasFormacionCreateModal';
@@ -27,17 +26,17 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
 
   const isDisabled = disabled || isSectionDisabled;
 
-  const { asignaturasFormacion, asignaturasTotal, loading } = type === 'editar'
+  const { asignaturasFormacion, asignaturasTotal, loading } = type === 'editar' || type === 'consultar'
     ? useAsignaturas(programaId)
     : { asignaturasFormacion: [], loading: false };
 
   const tableColumns = useMemo(
-    () => columns(setAsignaturasFormacionList, asignaturasFormacionList),
-    [setAsignaturasFormacionList, asignaturasFormacion],
+    () => columns(isDisabled, type),
+    [setAsignaturasFormacionList, asignaturasFormacion, isDisabled],
   );
 
   useEffect(() => {
-    if (type === 'editar' && !loading) {
+    if ((type === 'editar' || type === 'consultar') && !loading) {
       setAsignaturasFormacionList(asignaturasFormacion);
       setAsignaturasTotalList(asignaturasTotal);
     }
@@ -48,12 +47,13 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
       <Grid item xs={12}>
         <Typography variant="h6">Asignaturas formación electiva</Typography>
       </Grid>
-      <Grid item xs={3}>
-        {!isDisabled && <Button onClick={showModal} text="agregar" />}
-      </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataGrid
+          <DataTable
+            buttonAdd
+            buttonText="Agregar Asignatura"
+            buttonClick={showModal}
+            buttonDisabled={isDisabled}
             rows={asignaturasFormacionList}
             columns={tableColumns}
             pageSize={5}
@@ -65,7 +65,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
         open={modal}
         hideModal={hideModal}
         type="crear"
-        title="Agregar Asignatura"
+        title="Agregar Asignatura Formación Electiva"
       />
     </Grid>
   );

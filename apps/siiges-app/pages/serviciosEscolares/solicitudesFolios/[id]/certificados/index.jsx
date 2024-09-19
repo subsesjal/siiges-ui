@@ -4,8 +4,8 @@ import React from 'react';
 
 export default function EditFoliosCertificados() {
   return (
-    <Layout title="Editar Folio de Certificado">
-      <FoliosData solicitudType="certificado" />
+    <Layout title="Editar Solicitud de Folios">
+      <FoliosData solicitudType="certificado" type="edit" />
     </Layout>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Modal, Box } from '@mui/material';
+import { Modal, Box } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Title } from '@siiges-ui/shared';
 
@@ -16,26 +16,32 @@ const style = {
 };
 
 export default function DefaultModal({
-  open, setOpen, children, title,
+  open,
+  setOpen,
+  children,
+  title,
+  disableBackdropClick,
 }) {
-  const handleClose = () => setOpen(false);
+  const handleClose = (event, reason) => {
+    if (!disableBackdropClick || reason !== 'backdropClick') {
+      setOpen(false);
+    }
+  };
+
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={disableBackdropClick ? handleClose : () => setOpen(false)}
       aria-labelledby="modal-confirmación"
       aria-describedby="modal-confirmación-asignación-inspectores"
     >
       <Box sx={style}>
-        <Typography id="modal-confirmación" variant="h6" component="h2">
+        <div id="modal-confirmación">
           <Title title={title} />
-        </Typography>
-        <Typography
-          id="modal-confirmación-asignación-inspectores"
-          sx={{ mt: 2 }}
-        >
+        </div>
+        <Box sx={{ mt: 2 }}>
           {children}
-        </Typography>
+        </Box>
       </Box>
     </Modal>
   );
@@ -44,6 +50,7 @@ export default function DefaultModal({
 DefaultModal.defaultProps = {
   open: false,
   title: null,
+  disableBackdropClick: false,
 };
 
 DefaultModal.propTypes = {
@@ -51,4 +58,5 @@ DefaultModal.propTypes = {
   setOpen: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   title: PropTypes.string,
+  disableBackdropClick: PropTypes.bool,
 };
