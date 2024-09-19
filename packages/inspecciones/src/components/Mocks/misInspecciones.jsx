@@ -11,7 +11,7 @@ const columns = [
     field: 'actions',
     headerName: 'Acciones',
     renderCell: (params) => (
-      <BotonesInpeccion id={params.id} />
+      <BotonesInpeccion id={params.id} solicitudId={params.row.programaId} />
     ),
   },
 ];
