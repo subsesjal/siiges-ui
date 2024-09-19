@@ -1,10 +1,12 @@
 import { Grid, Typography } from '@mui/material';
-import { GetFile, InputFile } from '@siiges-ui/shared';
+import { ButtonSimple, GetFile, InputFile } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 
 export default function DocumentosAlumno({ id, type }) {
   const [fileURLs, setFileURLs] = useState([null, null, null]);
+  const router = useRouter();
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => {
@@ -71,6 +73,15 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo CURP (PDF)"
             url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
+          />
+        </Grid>
+        <Grid item xs={12} style={{ textAlign: 'right' }}>
+          <ButtonSimple
+            text="Regresar"
+            align="right"
+            onClick={() => {
+              router.back();
+            }}
           />
         </Grid>
       </Grid>

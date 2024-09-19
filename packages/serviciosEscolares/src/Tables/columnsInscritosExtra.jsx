@@ -7,7 +7,11 @@ const columnsInscritosExtra = (
   updateCalificaciones,
   isExtraordinarioEnabled,
 ) => [
-  { field: 'matricula', headerName: 'Matrícula', width: 150 },
+  {
+    field: 'matricula',
+    headerName: 'Matrícula',
+    width: 150,
+  },
   {
     field: 'nombre',
     headerName: 'Nombre',
@@ -23,7 +27,6 @@ const columnsInscritosExtra = (
   {
     field: 'extraordinario',
     headerName: 'Calificación Extraordinario',
-    editable: !disabled,
     width: 220,
     renderCell: (params) => {
       const calificacion = params.row.calificaciones[1]?.calificacion || '';
@@ -31,8 +34,8 @@ const columnsInscritosExtra = (
         <CalificacionInput
           id={params.id}
           value={calificacion}
-          disabled={!isExtraordinarioEnabled(params.row.id)}
-          updateCalificaciones={updateCalificaciones}
+          disabled={disabled || !isExtraordinarioEnabled(params.row.id)}
+          updateCalificaciones={(alumnoId, newValue) => updateCalificaciones(alumnoId, newValue, 'calificacion', 2)}
         />
       );
     },
@@ -42,7 +45,6 @@ const columnsInscritosExtra = (
   {
     field: 'fechaExamen',
     headerName: 'Fecha de examen',
-    editable: !disabled,
     width: 220,
     renderCell: (params) => {
       const fechaExamen = params.row.calificaciones[1]?.fechaExamen || '';
@@ -50,8 +52,10 @@ const columnsInscritosExtra = (
         <FechaExamenInput
           id={params.id}
           value={fechaExamen}
-          disabled={!isExtraordinarioEnabled(params.row.id)}
-          updateCalificaciones={(alumnoId, newFechaExamen) => updateCalificaciones(alumnoId, newFechaExamen, 'fechaExamen')}
+          disabled={disabled || !isExtraordinarioEnabled(params.row.id)}
+          updateCalificaciones={(alumnoId, newFechaExamen) =>
+            updateCalificaciones(alumnoId, newFechaExamen, 'fechaExamen', 2)
+          }
         />
       );
     },

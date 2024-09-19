@@ -22,6 +22,7 @@ export default function DetallesAsignatura({ type }) {
   const [labelTurno, setLabelTurno] = useState();
   const [labelCiclo, setLabelCiclo] = useState();
   const [labelAsignatura, setLabelAsignatura] = useState();
+  const [programaId, setProgramaId] = useState(0);
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -43,6 +44,7 @@ export default function DetallesAsignatura({ type }) {
           setLabelTurno(grupoData.turno.nombre);
           setLabelCiclo(grupoData.cicloEscolar.nombre);
           setLabelPrograma(grupoData.cicloEscolar.programa.nombre);
+          setProgramaId(grupoData.cicloEscolar.programaId);
         }
         if (asignaturaId && grupoId) {
           const alumnosAcreditacion = await getAlumnosAcreditacion(
@@ -104,6 +106,8 @@ export default function DetallesAsignatura({ type }) {
               alumnos={alumnos}
               asignaturaId={asignaturaId}
               grupoId={grupoId}
+              programaId={programaId}
+              setAlumnos={setAlumnos}
             />
           )}
           {value === 1 && (
@@ -114,6 +118,8 @@ export default function DetallesAsignatura({ type }) {
               alumnos={alumnos}
               asignaturaId={asignaturaId}
               grupoId={grupoId}
+              programaId={programaId}
+              setAlumnos={setAlumnos}
             />
           )}
         </>
