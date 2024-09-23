@@ -34,7 +34,7 @@ export default function BotonesInpeccion({ id, solicitudId }) {
         setLoading(false);
         setOpen(false);
       } else {
-        throw new Error('Error al completar la inspección');
+        throw new Error('¡Error al completar la inspección!');
       }
     } catch (error) {
       setNoti({
