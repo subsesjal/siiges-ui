@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ActionButtons,
   ButtonStyled,
@@ -31,7 +31,7 @@ function ModalState() {
   };
 }
 
-async function checkSolicitudes(planteles, session, setNonDeletablePlanteles) {
+async function checkSolicitudes(planteles, session, setNonDeletablePlanteles, setError) {
   try {
     const endpoint = '/solicitudes';
     const query = `?usuarioId=${session.id}&estatusSolicitudId=11`;
@@ -41,20 +41,22 @@ async function checkSolicitudes(planteles, session, setNonDeletablePlanteles) {
     if (response.statusCode !== 200) {
       throw new Error(response.errorMessage || '¡Error en la solicitud al servidor!');
     }
-
     const { data } = response;
-    const plantelesConSolicitudes = data.map((solicitud) => solicitud.id);
-    const nonDeletable = planteles.filter((plantel) => plantelesConSolicitudes.includes(plantel.id)).map((plantel) => plantel.id);
+    const plantelesConSolicitudes = data.map((solicitud) => solicitud.programa.plantelId);
+    const ids = planteles.map(({ id }) => id);
+    const nonDeletable = ids.filter((id) => plantelesConSolicitudes.includes(id));
     setNonDeletablePlanteles(nonDeletable);
   } catch (errorSolicitud) {
-    console.error('¡Error en la solicitud!:', errorSolicitud.message);
+    setError('Error en la solicitud:', errorSolicitud.message);
   }
 }
 
 export default function Planteles({ planteles, institucionId, session }) {
+  const [setError] = useState('');
   const [nonDeletablePlanteles, setNonDeletablePlanteles] = useState([]);
-
-  checkSolicitudes(planteles, session, setNonDeletablePlanteles);
+  useEffect(() => {
+    checkSolicitudes(planteles, session, setNonDeletablePlanteles, setError);
+  }, [planteles, session]);
 
   const router = useRouter();
   const {
@@ -76,7 +78,6 @@ export default function Planteles({ planteles, institucionId, session }) {
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
   };
-
   const columns = [
     { field: 'domicilio', headerName: 'Domicilio', width: 240 },
     { field: 'colonia', headerName: 'Colonia', width: 240 },
@@ -99,27 +100,21 @@ export default function Planteles({ planteles, institucionId, session }) {
 
         if (!params.row.claveCentroTrabajo && session.rol !== 'gestor') {
           actionButtonsProps.editar = `/instituciones/${institucionId}/planteles/editar/${params.id}`;
+        }
 
-          if (!nonDeletablePlanteles.includes(params.id)) {
-            actionButtonsProps.eliminar = () => showModal(params.id);
-          }
+        if (!nonDeletablePlanteles.includes(params.id) && session.rol === 'representante') {
+          actionButtonsProps.eliminar = () => showModal(params.id);
+          actionButtonsProps.editar = `/instituciones/${institucionId}/planteles/editar/${params.id}`;
         }
 
         return (
           <>
-            {params.row.claveCentroTrabajo ? (
-              <ActionButtons
-                id={actionButtonsProps.id}
-                consultar={actionButtonsProps.consultar}
-              />
-            ) : (
-              <ActionButtons
-                id={actionButtonsProps.id}
-                consultar={actionButtonsProps.consultar}
-                editar={actionButtonsProps.editar}
-                eliminar={actionButtonsProps.eliminar}
-              />
-            )}
+            <ActionButtons
+              id={actionButtonsProps.id}
+              consultar={actionButtonsProps.consultar}
+              editar={actionButtonsProps.editar}
+              eliminar={actionButtonsProps.eliminar}
+            />
             <DefaultModal open={modal} setOpen={hideModal} id={modalId}>
               <Typography>¿Desea eliminar este plantel?</Typography>
               <Grid container spacing={2} justifyContent="flex-end">
