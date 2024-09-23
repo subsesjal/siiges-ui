@@ -2,7 +2,7 @@ export default function errorLogin(form, setError, error) {
   const errors = {
     usuario: () => {
       if (form.usuario === undefined || form.usuario === '') {
-        setError({ ...error, usuario: 'Usuario incorrecto' });
+        setError({ ...error, usuario: '¡Usuario incorrecto!' });
         return false;
       }
       setError({ ...error, usuario: '' });
@@ -10,7 +10,7 @@ export default function errorLogin(form, setError, error) {
     },
     contrasena: () => {
       if (form.contrasena === undefined || form.contrasena === '') {
-        setError({ ...error, contrasena: '¡Contraseña inválida!'});
+        setError({ ...error, contrasena: '¡Contraseña inválida!' });
         return false;
       }
       setError({ ...error, contrasena: '' });

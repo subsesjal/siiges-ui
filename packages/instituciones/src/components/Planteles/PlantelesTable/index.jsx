@@ -47,7 +47,7 @@ async function checkSolicitudes(planteles, session, setNonDeletablePlanteles, se
     const nonDeletable = ids.filter((id) => plantelesConSolicitudes.includes(id));
     setNonDeletablePlanteles(nonDeletable);
   } catch (errorSolicitud) {
-    setError('Error en la solicitud:', errorSolicitud.message);
+    setError('¡Error en la solicitud!:', errorSolicitud.message);
   }
 }
 
