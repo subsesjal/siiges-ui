@@ -29,7 +29,7 @@ function DeleteAsignatura({
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete the asignatura.');
+        throw new Error('¡No se ha podido eliminar la asignatura!.');
       }
 
       setAsignaturasList((prevAsignaturas) => prevAsignaturas.filter(
