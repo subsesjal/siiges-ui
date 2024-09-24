@@ -2,12 +2,12 @@ import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
 import {
-  Layout, Title, useApi, Context,
+  Layout, Title, useApi, Context, getData,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
 
+const url = process.env.NEXT_PUBLIC_URL;
 export default function detallesSolicitudes() {
   const { session } = useContext(Context);
   const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
@@ -23,34 +23,16 @@ export default function detallesSolicitudes() {
       setSolicitud(data);
     }
   }, [data]);
+
   const downloadFile = async (type) => {
-    try {
-      const solicitudId = solicitud?.id;
-      if (!solicitudId) {
-        throw new Error('Solicitud ID no disponible');
-      }
-
-      const fileUrl = await new Promise((resolve) => {
-        GetFile({
-          tipoEntidad: 'SOLICITUD',
-          entidadId: solicitudId,
-          tipoDocumento: type,
-        }, (url) => {
-          if (url) {
-            resolve(url);
-          } else {
-            setError('No se pudo obtener la URL del archivo');
-          }
-        });
-      });
-      const finalUrl = fileUrl.startsWith('http://') || fileUrl.startsWith('https://')
-        ? fileUrl
-        : `http://${fileUrl}`;
-
-      // Abre la URL en una nueva pestaña
+    const solicitudId = solicitud?.id;
+    const response = await getData({ endpoint: `/files/?tipoEntidad=SOLICITUD&entidadId=${solicitudId}&tipoDocumento=${type}` });
+    if (response && response.data) {
+      const { ubicacion } = response.data;
+      const finalUrl = url + ubicacion;
       window.open(finalUrl, '_blank');
-    } catch (error) {
-      setError(`Error al descargar el archivo: ${error.message || error}`);
+    } else {
+      setError('Error getting file');
     }
   };
 
