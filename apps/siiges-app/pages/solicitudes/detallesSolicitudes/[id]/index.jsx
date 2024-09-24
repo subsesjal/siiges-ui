@@ -2,50 +2,40 @@ import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
 import {
-  ButtonSimple,
-  Layout,
-  Title,
-  useApi,
+  ButtonSimple, Layout, Title, useApi, Context, getData,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
-import { OficioModal } from './utils/oficioModal';
 
+const url = process.env.NEXT_PUBLIC_URL;
 export default function detallesSolicitudes() {
+  const { session } = useContext(Context);
   const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
+  const [setError] = useState();
   const showOficioModal = () => setIsOficioModalOpen(true);
   const hideOficioModal = () => setIsOficioModalOpen(false);
   const router = useRouter();
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
   const { data } = useApi({ endpoint: `api/v1/solicitudes/${query.id}/detalles` });
-
   useEffect(() => {
     if (data) {
       setSolicitud(data);
     }
   }, [data]);
-  const downloadFile = async (type) => {
-    try {
-      const solicitudId = solicitud?.id;
 
-      GetFile({
-        tipoEntidad: 'SOLICITUD',
-        entidadId: solicitudId,
-        tipoDocumento: type,
-      }, async (url) => {
-        if (!url.startsWith('http')) {
-          // eslint-disable-next-line no-param-reassign
-          url = `http://${url}`;
-        }
-        window.open(url, '_blank');
-      });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error calling GetFile', error);
+  const downloadFile = async (type) => {
+    const solicitudId = solicitud?.id;
+    const response = await getData({ endpoint: `/files/?tipoEntidad=SOLICITUD&entidadId=${solicitudId}&tipoDocumento=${type}` });
+    if (response && response.data) {
+      const { ubicacion } = response.data;
+      const finalUrl = url + ubicacion;
+      window.open(finalUrl, '_blank');
+    } else {
+      setError('Error getting file');
     }
   };
+
   return (
     <Layout>
       <Title title="Detalles de la solicitud" />
@@ -101,17 +91,24 @@ export default function detallesSolicitudes() {
             </ListItem>
           </List>
         </Grid>
-        {solicitud.estatusSolicitudId > 8 && (
-          <Grid item xs={4}>
-            <Typography variant="subtitle1" color="textSecondary">
-              RVOE
-            </Typography>
-            <List component="nav">
-              <ListItem button onClick={showOficioModal}>
-                <ListItemText primary="Acuerdo RVOE" />
-              </ListItem>
-            </List>
-          </Grid>
+        {(solicitud.estatusSolicitudId >= 8
+          || (solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar')) && (
+            <Grid item xs={4}>
+              <Typography variant="subtitle1" color="textSecondary">
+                RVOE
+              </Typography>
+              <List component="nav">
+                {solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar' ? (
+                  <ListItem button onClick={showOficioModal}>
+                    <ListItemText primary="Acuerdo RVOE" />
+                  </ListItem>
+                ) : (
+                  <ListItem button onClick={() => downloadFile('ACUERDO_RVOE')}>
+                    <ListItemText primary="RVOE" />
+                  </ListItem>
+                )}
+              </List>
+            </Grid>
         )}
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
@@ -151,12 +148,12 @@ export default function detallesSolicitudes() {
         </Grid>
       </Grid>
       {solicitud?.id && (
-      <OficioModal
-        open={isOficioModalOpen}
-        hideModal={hideOficioModal}
-        downloadFile={downloadFile}
-        solicitudId={solicitud.id}
-      />
+        <oficioModal
+          open={isOficioModalOpen}
+          hideModal={hideOficioModal}
+          downloadFile={downloadFile}
+          solicitudId={solicitud.id}
+        />
       )}
     </Layout>
   );

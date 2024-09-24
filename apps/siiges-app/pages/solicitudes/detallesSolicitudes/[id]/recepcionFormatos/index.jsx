@@ -83,7 +83,6 @@ export default function RecepcionFormatos() {
             setNoti,
           );
           setSolicitud(solicitudData.data);
-
           fileData.forEach((data, index) => {
             GetFile(data, (fileUrl, error) => {
               if (error) {
@@ -141,7 +140,6 @@ export default function RecepcionFormatos() {
   const downloadFile = async (type) => {
     try {
       const solicitudId = solicitud?.id;
-
       GetFile({
         tipoEntidad: 'SOLICITUD',
         entidadId: solicitudId,
@@ -154,7 +152,6 @@ export default function RecepcionFormatos() {
           }));
           return;
         }
-
         if (!fileURL) {
           setErrors((prevErrors) => ({
             ...prevErrors,
