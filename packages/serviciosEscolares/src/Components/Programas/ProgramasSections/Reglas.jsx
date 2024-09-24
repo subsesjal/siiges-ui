@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   TextField,
   MenuItem,
@@ -6,11 +6,8 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import { Context, getToken } from '@siiges-ui/shared';
+import { Context, getData, updateRecord } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
-
-const apikey = process.env.NEXT_PUBLIC_API_KEY;
-const url = process.env.NEXT_PUBLIC_URL;
 
 export default function Reglas() {
   const { setNoti, setLoading } = useContext(Context);
@@ -18,12 +15,41 @@ export default function Reglas() {
   const { query } = router;
 
   const [form, setForm] = useState({
-    id: query.id,
+    id: query.id || '',
     calificacionMinima: '',
     calificacionMaxima: '',
     calificacionAprobatoria: '',
     calificacionDecimal: '',
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const response = await getData({ endpoint: `/programas/${query.id}` });
+
+      if (response.statusCode === 200) {
+        const data = response.data || {};
+        setForm({
+          id: query.id || '',
+          calificacionMinima: data.calificacionMinima || '',
+          calificacionMaxima: data.calificacionMaxima || '',
+          calificacionAprobatoria: data.calificacionAprobatoria || '',
+          calificacionDecimal: data.calificacionDecimal ? '1' : '2',
+        });
+      } else {
+        setNoti({
+          open: true,
+          message: response.errorMessage,
+          type: 'error',
+        });
+      }
+      setLoading(false);
+    };
+
+    if (query.id) {
+      fetchData();
+    }
+  }, [query.id, setLoading, setNoti]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -34,7 +60,6 @@ export default function Reglas() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const token = getToken();
     const dataBody = {
       programa: {
         calificacionMinima: form.calificacionDecimal === '1' ? formatToDecimal(form.calificacionMinima) : form.calificacionMinima,
@@ -45,38 +70,27 @@ export default function Reglas() {
     };
 
     try {
-      const response = await fetch(
-        `${url}/api/v1/solicitudes/${query.id}`,
-        {
-          method: 'PATCH',
-          headers: {
-            api_key: apikey,
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dataBody),
-        },
-      );
+      const response = await updateRecord({
+        data: dataBody,
+        endpoint: `/solicitudes/${query.id}`,
+      });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      if (response.statusCode !== 200) {
+        throw new Error(response.errorMessage || 'Error al actualizar las reglas');
       }
-
-      const result = await response.json();
 
       setLoading(false);
       setNoti({
         open: true,
-        message: 'Reglas actualizadas con éxito',
+        message: '¡Reglas actualizadas con éxito!',
         type: 'success',
       });
-      router.back();
-      return result;
+      return response;
     } catch (error) {
       setLoading(false);
       setNoti({
         open: true,
-        message: `Error al actualizar las reglas: ${error.message}`,
+        message: `¡Error al actualizar las reglas!: ${error.message}`,
         type: 'error',
       });
       return null;

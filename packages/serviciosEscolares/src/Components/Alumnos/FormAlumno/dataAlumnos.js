@@ -1,6 +1,7 @@
 export const generos = [
   { id: 1, nombre: 'Masculino' },
   { id: 2, nombre: 'Femenino' },
+  { id: 3, nombre: 'Prefiero no decirlo' },
 ];
 
 export const nacionalidad = [
@@ -22,7 +23,7 @@ export const campos = [
   { id: 'fechaNacimiento', label: 'Fecha de nacimiento', type: 'date' },
   {
     id: 'sexo',
-    label: 'Sexo',
+    label: 'Género',
     type: 'select',
     options: generos,
   },
@@ -50,7 +51,7 @@ export const mailValidator = (email) => {
   return regex.test(email);
 };
 export const setFormData = (data) => ({
-  situacionId: data?.situacionId,
+  situacionId: data?.situacionId || 2,
   programaId: data?.alumnoId,
   matricula: data?.matricula,
   estatus: 1,

@@ -4,10 +4,15 @@ import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from '@mui/material/CircularProgress';
 import PlantelContext from '../utils/Context/plantelContext';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function HigienePlantel({ disabled }) {
   const { form, setForm, plantelId } = useContext(PlantelContext);
   const [loading, setLoading] = useState(true);
+
+  const isSectionDisabled = useSectionDisabled(16);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
     if (plantelId) {
@@ -87,7 +92,7 @@ export default function HigienePlantel({ disabled }) {
             auto="hombresAlumnos"
             value={form[3][0]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 0)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -98,7 +103,7 @@ export default function HigienePlantel({ disabled }) {
             auto="mujeresAlumnos"
             value={form[3][1]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 1)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>
@@ -116,7 +121,7 @@ export default function HigienePlantel({ disabled }) {
             auto="hombresDocentes"
             value={form[3][2]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 2)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -127,7 +132,7 @@ export default function HigienePlantel({ disabled }) {
             auto="mujeresDocentes"
             value={form[3][3]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 3)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>
@@ -143,7 +148,7 @@ export default function HigienePlantel({ disabled }) {
             auto="personasLimpieza"
             value={form[3][4]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 4)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -154,7 +159,7 @@ export default function HigienePlantel({ disabled }) {
             auto="cestosBasura"
             value={form[3][5]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 5)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>
@@ -170,7 +175,7 @@ export default function HigienePlantel({ disabled }) {
             auto="numeroAulas"
             value={form[3][6]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 6)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -181,7 +186,7 @@ export default function HigienePlantel({ disabled }) {
             auto="butacasAula"
             value={form[3][7]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 7)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>
@@ -197,7 +202,7 @@ export default function HigienePlantel({ disabled }) {
             auto="ventanasAbrenPorAula"
             value={form[3][8]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 8)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -208,7 +213,7 @@ export default function HigienePlantel({ disabled }) {
             auto="ventiladores"
             value={form[3][9]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 9)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -219,7 +224,7 @@ export default function HigienePlantel({ disabled }) {
             auto="aireAcondicionado"
             value={form[3][10]?.cantidad || ''}
             onchange={(e) => handleOnChange(e, 10)}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>

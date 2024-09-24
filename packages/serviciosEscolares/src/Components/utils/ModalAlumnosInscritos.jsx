@@ -60,13 +60,13 @@ export default function ModalAlumnosInscritos({
           setNoti({
             open: true,
             message:
-              'Algo salio mal al inscribir el alumno, reintente mas tarde',
+              '¡Algo salió mal al inscribir el alumno, reintente más tarde!',
             type: 'error',
           });
         } else {
           setNoti({
             open: true,
-            message: 'Exito al inscribir el alumno!',
+            message: '¡Éxito al inscribir el alumno!',
             type: 'success',
           });
           setOpen(false);
@@ -76,7 +76,7 @@ export default function ModalAlumnosInscritos({
       setNoti({
         open: true,
         message:
-          'Algo salio mal, el alumno debe estar inscrito a almenos una materia',
+          '¡Algo salió mal, el alumno debe estar inscrito en al menos una materia!',
         type: 'error',
       });
     }
@@ -89,7 +89,7 @@ export default function ModalAlumnosInscritos({
           <LabelData title="Alumno" subtitle="Pedro Perez" />
         </Grid>
         <Grid item xs={6}>
-          <LabelData title="Matricula" subtitle="PSC101" />
+          <LabelData title="Matrícula" subtitle="PSC101" />
         </Grid>
       </Grid>
       <DataTable
@@ -98,24 +98,39 @@ export default function ModalAlumnosInscritos({
         columns={columnsAlumnosInscritos(
           handleCheckboxChange,
           selectedAsignaturas,
+          title === 'Consultar Alumno',
         )}
       />
       <Grid container justifyContent="flex-end" marginTop={2}>
-        <Grid item xs={2}>
-          <ButtonStyled
-            text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={() => setOpen(false)}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <ButtonStyled
-            text="Confirmar"
-            alt="Confirmar"
-            onclick={handleInscribirAlumno}
-          />
-        </Grid>
+        {title === 'Consultar Alumno' ? (
+          <Grid item xs={2}>
+            <ButtonStyled
+              text="Cerrar"
+              alt="Cerrar"
+              onclick={() => setOpen(false)}
+            />
+          </Grid>
+        ) : (
+          <>
+            <Grid item xs={2}>
+              <ButtonStyled
+                text="Cancelar"
+                alt="Cancelar"
+                design="error"
+                onclick={() => setOpen(false)}
+              />
+            </Grid>
+            {selectedAsignaturas.length > 0 && (
+              <Grid item xs={2}>
+                <ButtonStyled
+                  text="Confirmar"
+                  alt="Confirmar"
+                  onclick={handleInscribirAlumno}
+                />
+              </Grid>
+            )}
+          </>
+        )}
       </Grid>
     </DefaultModal>
   );

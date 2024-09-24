@@ -2,7 +2,7 @@ import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
 import {
-  Layout, Title, useApi, Context, getData,
+  ButtonSimple, Layout, Title, useApi, Context, getData,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
@@ -140,6 +140,11 @@ export default function detallesSolicitudes() {
               <ListItemText primary="Desistimiento" />
             </ListItem>
           </List>
+        </Grid>
+        <Grid container justifyContent="flex-end" spacing={2}>
+          <Grid item>
+            <ButtonSimple onClick={() => router.back()} text="Regresar" />
+          </Grid>
         </Grid>
       </Grid>
       {solicitud?.id && (

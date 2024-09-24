@@ -1,3 +1,3 @@
-import fetchNotificaciones from './Components/utils/fetchNotificaciones';
+import fetchNotificaciones from './components/utils/fetchNotificaciones';
 
 export default fetchNotificaciones;

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -13,11 +13,46 @@ import Link from 'next/link';
 import { Context } from '@siiges-ui/shared';
 import setHandler from '../../utils/handlers/set-anchor';
 import StyledBadge from '../../styles/Navbar/MenuNavbarStyle';
+import { getData } from '../../utils/handlers/apiUtils';
 
 export default function MenuNavbar() {
   const { removeAuth, session } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  const getProfilePhoto = async () => {
+    try {
+      const endpoint = '/files/';
+      const query = `?tipoEntidad=PERSONA&entidadId=${session.id}&tipoDocumento=FOTOGRAFIA_PERSONA`;
+      const response = await getData({ endpoint, query });
+      if (response.statusCode === 200 && response.data) {
+        let { url } = response.data;
+        if (url) {
+          if (!url.startsWith('http')) {
+            url = `http://${url}`;
+          }
+          const response2 = await fetch(url);
+          if (!response2.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const blob = await response2.blob();
+          const imageObjectUrl = URL.createObjectURL(blob);
+          setImageUrl(imageObjectUrl);
+        } else {
+          setImageUrl(undefined);
+        }
+      } else {
+        setImageUrl(undefined);
+      }
+    } catch (error) {
+      setImageUrl(undefined);
+    }
+  };
+
+  useEffect(() => {
+    getProfilePhoto();
+  }, [session]);
 
   return (
     <>
@@ -36,7 +71,12 @@ export default function MenuNavbar() {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-            <Avatar alt={session.nombre}>TS</Avatar>
+            <Avatar
+              alt={session.nombre}
+              src={imageUrl}
+            >
+              TS
+            </Avatar>
           </StyledBadge>
         </Stack>
       </IconButton>
@@ -77,7 +117,12 @@ export default function MenuNavbar() {
       >
         <Link href="/usuarios/perfilUsuario">
           <MenuItem>
-            <Avatar />
+            <Avatar
+              alt={session.nombre}
+              src={imageUrl}
+            >
+              TS
+            </Avatar>
             {session.nombre}
           </MenuItem>
         </Link>

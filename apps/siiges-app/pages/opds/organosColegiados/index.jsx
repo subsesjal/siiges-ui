@@ -5,7 +5,7 @@ import React from 'react';
 
 export default function orgColegiado() {
   return (
-    <Layout title="Organos Colegiados">
+    <Layout title="Órganos Colegiados">
       <Grid container spacing={2}>
         <Grid item xs={12} sx={{ mt: 3 }}>
           <InstitucionesCarousel opdType="orgColegiado" />

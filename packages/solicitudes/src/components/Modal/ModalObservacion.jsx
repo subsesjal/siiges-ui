@@ -2,11 +2,11 @@
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
+  ButtonSimple,
   Context, DefaultModal, useApi,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import '@siiges-ui/shared/src/styles/buttons/ButtonAdd.css';
 
 function Modal({
@@ -33,7 +33,7 @@ function Modal({
     if (data) {
       setNoti({
         open: true,
-        message: 'Proceso creado correctamente',
+        message: '¡Proceso creado correctamente!',
         type: 'success',
       });
       router.back();
@@ -78,30 +78,25 @@ function Modal({
           </Typography>
         </Grid>
       </Grid>
-      <Grid container justifyContent="flex-end" spacing={2}>
+      <Grid container justifyContent="flex-end" spacing={2} sx={{ mt: 1 }}>
         <Grid item>
-          <ButtonUnstyled
-            className="buttonAdd cancel"
+          <ButtonSimple
+            text="Cancelar"
+            design="cancel"
             onClick={() => router.back()}
-          >
-            Cancelar
-          </ButtonUnstyled>
+          />
         </Grid>
         <Grid item>
-          <ButtonUnstyled
-            className="buttonAdd enviar"
+          <ButtonSimple
+            text="Enviar Observaciones"
             onClick={() => confirmDocument()}
-          >
-            Enviar Observaciones
-          </ButtonUnstyled>
+          />
         </Grid>
         <Grid item>
-          <ButtonUnstyled
-            className="buttonAdd guardar"
+          <ButtonSimple
+            text="Aprobar Revisión"
             onClick={() => confirmDocumentWithoutObservations()}
-          >
-            Aprobar Revisión
-          </ButtonUnstyled>
+          />
         </Grid>
       </Grid>
     </DefaultModal>

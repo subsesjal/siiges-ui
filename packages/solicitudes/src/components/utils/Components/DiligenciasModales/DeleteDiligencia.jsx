@@ -21,14 +21,14 @@ function DeleteDiligencia({ modal, hideModal, id }) {
         setDiligenciasRows(updatedRows);
         setNoti({
           open: true,
-          message: 'Se ha borrado la diligencia exitosamente!',
+          message: '¡Se ha borrado la diligencia exitosamente!',
           type: 'success',
         });
       })
       .catch((error) => {
         setNoti({
           open: true,
-          message: `Ocurrio un error al eliminar la diligencia: ${error}`,
+          message: `¡Ocurrió un error al eliminar la diligencia!: ${error}`,
           type: 'error',
         });
       });

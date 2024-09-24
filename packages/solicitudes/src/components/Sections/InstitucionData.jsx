@@ -4,19 +4,22 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
-function InstitucionData({ id }) {
+function InstitucionData({ id, disabled }) {
   const {
-    disabled, setDisabled, form, setForm, institucion,
-  } = useContext(
-    DatosGeneralesContext,
-  );
+    setDisabled, form, setForm, institucion,
+  } = useContext(DatosGeneralesContext);
   const [fileUrl, setFileUrl] = useState();
   const fileData = {
     entidadId: id,
     tipoEntidad: 'INSTITUCION',
     tipoDocumento: 'LOGOTIPO',
   };
+
+  const isSectionDisabled = useSectionDisabled(11);
+
+  const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
     if (id !== undefined) {
@@ -48,7 +51,7 @@ function InstitucionData({ id }) {
             auto="razonSocial"
             onchange={handleOnChange}
             value={institucion?.razonSocial}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={9}>
@@ -59,7 +62,7 @@ function InstitucionData({ id }) {
             auto="nombre"
             onchange={handleOnChange}
             value={institucion.nombre}
-            disabled
+            disabled={isDisabled}
           />
         </Grid>
         <Grid item xs={12}>
@@ -71,7 +74,7 @@ function InstitucionData({ id }) {
             multiline
             sx={{ width: '100%' }}
             value={institucion.historia}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -83,7 +86,7 @@ function InstitucionData({ id }) {
             multiline
             sx={{ width: '100%' }}
             value={institucion?.vision}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -95,7 +98,7 @@ function InstitucionData({ id }) {
             multiline
             sx={{ width: '100%' }}
             value={institucion?.mision}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -107,7 +110,7 @@ function InstitucionData({ id }) {
             multiline
             sx={{ width: '100%' }}
             value={institucion?.valoresInstitucionales}
-            disabled={disabled}
+            disabled={isDisabled}
             onchange={handleOnChange}
           />
         </Grid>
@@ -119,17 +122,23 @@ function InstitucionData({ id }) {
             label="Logo de la institución"
             url={fileUrl}
             setUrl={setFileUrl}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </Grid>
       </Grid>
     </Grid>
   );
 }
+InstitucionData.defaultProps = {
+  disabled: false,
+};
 
 InstitucionData.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([undefined])])
-    .isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([undefined]),
+  ]).isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default InstitucionData;

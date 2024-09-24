@@ -55,7 +55,7 @@ export default function organosColegiados() {
   }, [data]);
 
   return (
-    <Layout title="Organos Colegiados">
+    <Layout title="Órganos Colegiados">
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Select
@@ -68,7 +68,7 @@ export default function organosColegiados() {
         </Grid>
         <Grid item xs={6}>
           <Select
-            title="Tipo de Sesion"
+            title="Tipo de Sesión"
             name="tipoSesion"
             value={session}
             options={sessionData}

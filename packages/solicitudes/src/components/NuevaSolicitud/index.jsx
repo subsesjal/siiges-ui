@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs'; // Import dayjs
+import 'dayjs/locale/es'; // Import Spanish locale for dayjs
 import {
   ModuleHeader,
   DatosGenerales,
@@ -53,6 +55,8 @@ export default function NuevaSolicitud({
   const [id, setId] = useState(solicitudId);
   const [programaId, setProgramaId] = useState('');
 
+  const currentDate = dayjs().locale('es').format('DD [de] MMMM YYYY');
+
   useEffect(() => {
     setId(solicitudId);
   }, [solicitudId]);
@@ -83,6 +87,10 @@ export default function NuevaSolicitud({
     }
   };
 
+  const switchModule = (stepIndex) => {
+    setModule(stepIndex);
+  };
+
   const renderModule = () => {
     const Component = steps[modalidad][module];
     return Component ? (
@@ -101,12 +109,14 @@ export default function NuevaSolicitud({
     <ObservacionesProvider>
       <ModuleHeader
         steps={steps[modalidad].map((component) => getStepName(component))}
+        isEditOrView={type}
         type="Nueva solicitud"
-        date="22 de Agosto 2022"
+        date={currentDate}
         nextModule={nextModule}
         prevModule={prevModule}
         module={module}
         id={id}
+        switchModule={switchModule}
       />
       {renderModule()}
     </ObservacionesProvider>

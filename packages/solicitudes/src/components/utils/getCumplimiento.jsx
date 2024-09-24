@@ -37,7 +37,7 @@ export default function useCumplimiento(modalidad, puntuacion) {
           console.error('There was a problem with the fetch operation:', error);
           setNoti({
             open: true,
-            message: 'Algo salio mal al cargar el cumplimiento',
+            message: '¡Algo salió mal al cargar el cumplimiento!',
             type: 'error',
           });
         })

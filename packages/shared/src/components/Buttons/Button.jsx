@@ -2,6 +2,7 @@ import React from 'react';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import PropTypes from 'prop-types';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PeopleIcon from '@mui/icons-material/People';
 import { Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -26,6 +27,8 @@ export default function Button({
         return <PersonAddIcon />;
       case 'cancel':
         return <ArrowBackIosNewIcon />;
+      case 'people':
+        return <PeopleIcon />;
       default:
         return <AddIcon />;
     }

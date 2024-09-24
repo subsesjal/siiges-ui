@@ -28,21 +28,21 @@ const errors = {
   nombre: (form, setError) => setErrorState(
     'nombre',
     !form.persona.nombre
-      ? 'Nombre inválido'
+      ? '¡Nombre inválido1'
       : '',
     setError,
   ),
   apellidoPaterno: (form, setError) => setErrorState(
     'apellidoPaterno',
     !form.persona.apellidoPaterno
-      ? 'Primer Apellido inválido'
+      ? '¡Primer Apellido inválido!'
       : '',
     setError,
   ),
   apellidoMaterno: (form, setError) => setErrorState(
     'apellidoMaterno',
     !form.persona.apellidoMaterno
-      ? 'Segundo Apellido inválido'
+      ? '¡Segundo Apellido inválido!'
       : '',
     setError,
   ),
@@ -50,7 +50,7 @@ const errors = {
     setErrorState(
       'rolId',
       !form.rolId
-        ? 'Rol inválido'
+        ? '¡Rol inválido!'
         : '',
       setError,
     );
@@ -58,21 +58,21 @@ const errors = {
   tituloCargo: (form, setError) => setErrorState(
     'tituloCargo',
     !form.persona.tituloCargo
-      ? 'Cargo inválido'
+      ? '¡Cargo inválido!'
       : '',
     setError,
   ),
   correo: (form, setError) => setErrorState(
     'correo',
     !form.correo
-      ? 'Correo inválido'
+      ? '¡Correo inválido!'
       : '',
     setError,
   ),
   usuario: (form, setError) => setErrorState(
     'usuario',
     !form.usuario
-      ? 'Usuario inválido'
+      ? '¡Usuario inválido!'
       : '',
     setError,
   ),
@@ -81,11 +81,11 @@ const errors = {
     let errorMessage = '';
 
     if (!contrasena) {
-      errorMessage = 'Contraseña inválida';
+      errorMessage = '¡Contraseña inválida!';
     } else if (contrasena.length < 8 || contrasena.length > 25) {
-      errorMessage = 'La contraseña debe contener entre 8 y 25 caracteres';
+      errorMessage = '¡La contraseña debe contener entre 8 y 25 caracteres!';
     } else if (!contrasena.match(/^(?!.* )(?=.*[a-z])(?=.*[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&./])[A-Za-z0-9@$!%*?&./]{8,25}$/)) {
-      errorMessage = 'La contraseña no cumple con los criterios de seguridad';
+      errorMessage = '¡La contraseña no cumple con los criterios de seguridad!';
     }
 
     setErrorState('contrasena', errorMessage, setError);
@@ -174,7 +174,7 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
         },
         {
           id: '10',
-          nombre: 'Comite de evaluación',
+          nombre: 'Comité de evaluación',
         },
         {
           id: '11',
@@ -207,7 +207,7 @@ const submitUsuario = ({
   if (!validateErrorFields(errorFields)) {
     setNoti({
       open: true,
-      message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+      message: '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
       type: 'error',
     });
 
@@ -223,7 +223,7 @@ const submitUsuario = ({
   if (!valid) {
     setNoti({
       open: true,
-      message: 'Revisa que los campos requeridos hayan sido llenados correctamente',
+      message: '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
       type: 'error',
     });
 

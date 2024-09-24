@@ -16,18 +16,26 @@ const style = {
 };
 
 export default function DefaultModal({
-  open, setOpen, children, title,
+  open,
+  setOpen,
+  children,
+  title,
+  disableBackdropClick,
 }) {
-  const handleClose = () => setOpen(false);
+  const handleClose = (event, reason) => {
+    if (!disableBackdropClick || reason !== 'backdropClick') {
+      setOpen(false);
+    }
+  };
+
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={disableBackdropClick ? handleClose : () => setOpen(false)}
       aria-labelledby="modal-confirmación"
       aria-describedby="modal-confirmación-asignación-inspectores"
     >
       <Box sx={style}>
-        {/* Cambia el Typography si Title está generando un encabezado */}
         <div id="modal-confirmación">
           <Title title={title} />
         </div>
@@ -42,6 +50,7 @@ export default function DefaultModal({
 DefaultModal.defaultProps = {
   open: false,
   title: null,
+  disableBackdropClick: false,
 };
 
 DefaultModal.propTypes = {
@@ -49,4 +58,5 @@ DefaultModal.propTypes = {
   setOpen: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   title: PropTypes.string,
+  disableBackdropClick: PropTypes.bool,
 };

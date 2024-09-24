@@ -32,7 +32,7 @@ export default function ButtonsAlumnosInscritos({ id, asignaturas, grupoId }) {
           setNoti({
             open: true,
             message:
-              'Algo salio mal al inscribir el alumno, reintente mas tarde',
+              '¡Algo salió mal al inscribir el alumno, reintente más tarde!',
             type: 'error',
           });
         }

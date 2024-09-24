@@ -8,39 +8,44 @@ import {
   Context,
   DefaultModal,
   Input,
-  createRecord,
+  updateRecord,
 } from '@siiges-ui/shared';
 import Link from 'next/link';
 
-export default function BotonesInpeccion({ id }) {
+export default function BotonesInpeccion({ id, solicitudId }) {
   const { setLoading, setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
   const [observaciones, setObservaciones] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
-    const data = { id, observaciones };
-    const endpoint = '/your-endpoint';
-    createRecord({ data, endpoint })
-      .then(() => {
+    const endpoint = `/solicitudes/${solicitudId}`;
+    const data = {
+      estatusSolicitudId: 8,
+    };
+    try {
+      const result = await updateRecord({ data, endpoint });
+      if (result?.statusCode === 200) {
         setNoti({
           open: true,
-          message: 'Acta generada con exito',
+          message: '¡Se completó la inspección exitosamente!',
           type: 'success',
         });
+        setLoading(false);
         setOpen(false);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setNoti({
-          open: true,
-          message: `Error al generar el acta: ${error}`,
-          type: 'error',
-        });
-        setLoading(false);
+      } else {
+        throw new Error('¡Error al completar la inspección!');
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: error.message || '¡Hubo un error al completar la inspección!',
+        type: 'error',
       });
+      setLoading(false);
+      setOpen(false);
+    }
   };
-
   return (
     <>
       <Grid container spacing={2}>
@@ -91,4 +96,5 @@ export default function BotonesInpeccion({ id }) {
 
 BotonesInpeccion.propTypes = {
   id: PropTypes.number.isRequired,
+  solicitudId: PropTypes.number.isRequired,
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ActionButtons,
   ButtonStyled,
@@ -8,6 +8,7 @@ import {
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import deletePlantel from '../../utils/deletePlantel';
 
 function ModalState() {
@@ -30,7 +31,33 @@ function ModalState() {
   };
 }
 
+async function checkSolicitudes(planteles, session, setNonDeletablePlanteles, setError) {
+  try {
+    const endpoint = '/solicitudes';
+    const query = `?usuarioId=${session.id}&estatusSolicitudId=11`;
+
+    const response = await getData({ endpoint, query });
+
+    if (response.statusCode !== 200) {
+      throw new Error(response.errorMessage || '¡Error en la solicitud al servidor!');
+    }
+    const { data } = response;
+    const plantelesConSolicitudes = data.map((solicitud) => solicitud.programa.plantelId);
+    const ids = planteles.map(({ id }) => id);
+    const nonDeletable = ids.filter((id) => plantelesConSolicitudes.includes(id));
+    setNonDeletablePlanteles(nonDeletable);
+  } catch (errorSolicitud) {
+    setError('¡Error en la solicitud!:', errorSolicitud.message);
+  }
+}
+
 export default function Planteles({ planteles, institucionId, session }) {
+  const [setError] = useState('');
+  const [nonDeletablePlanteles, setNonDeletablePlanteles] = useState([]);
+  useEffect(() => {
+    checkSolicitudes(planteles, session, setNonDeletablePlanteles, setError);
+  }, [planteles, session]);
+
   const router = useRouter();
   const {
     modal, showModal, hideModal, modalId,
@@ -51,12 +78,11 @@ export default function Planteles({ planteles, institucionId, session }) {
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
   };
-
   const columns = [
     { field: 'domicilio', headerName: 'Domicilio', width: 240 },
     { field: 'colonia', headerName: 'Colonia', width: 240 },
     { field: 'municipio', headerName: 'Municipio', width: 140 },
-    { field: 'codigoPostal', headerName: 'Codigo Postal', width: 130 },
+    { field: 'codigoPostal', headerName: 'Código Postal', width: 130 },
     {
       field: 'claveCentroTrabajo',
       headerName: 'Clave centro de trabajo',
@@ -74,24 +100,21 @@ export default function Planteles({ planteles, institucionId, session }) {
 
         if (!params.row.claveCentroTrabajo && session.rol !== 'gestor') {
           actionButtonsProps.editar = `/instituciones/${institucionId}/planteles/editar/${params.id}`;
+        }
+
+        if (!nonDeletablePlanteles.includes(params.id) && session.rol === 'representante') {
           actionButtonsProps.eliminar = () => showModal(params.id);
+          actionButtonsProps.editar = `/instituciones/${institucionId}/planteles/editar/${params.id}`;
         }
 
         return (
           <>
-            {params.row.claveCentroTrabajo ? (
-              <ActionButtons
-                id={actionButtonsProps.id}
-                consultar={actionButtonsProps.consultar}
-              />
-            ) : (
-              <ActionButtons
-                id={actionButtonsProps.id}
-                consultar={actionButtonsProps.consultar}
-                editar={actionButtonsProps.editar}
-                eliminar={actionButtonsProps.eliminar}
-              />
-            )}
+            <ActionButtons
+              id={actionButtonsProps.id}
+              consultar={actionButtonsProps.consultar}
+              editar={actionButtonsProps.editar}
+              eliminar={actionButtonsProps.eliminar}
+            />
             <DefaultModal open={modal} setOpen={hideModal} id={modalId}>
               <Typography>¿Desea eliminar este plantel?</Typography>
               <Grid container spacing={2} justifyContent="flex-end">
@@ -112,7 +135,7 @@ export default function Planteles({ planteles, institucionId, session }) {
                     onclick={() => {
                       hideModal();
                       deletePlantel(
-                        params.row.institucion,
+                        institucionId,
                         modalId,
                         handleDeleteClick,
                       );

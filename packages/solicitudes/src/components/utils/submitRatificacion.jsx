@@ -1,6 +1,12 @@
 import { getToken } from '@siiges-ui/shared';
 
-export default function submitRatificacion(validations, setNoti, setLoading) {
+export default async function submitRatificacion(
+  validations,
+  setNoti,
+  setLoading,
+  setSections,
+  id,
+) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const baseUrl = process.env.NEXT_PUBLIC_URL;
   const { form, validNombres } = validations;
@@ -9,10 +15,10 @@ export default function submitRatificacion(validations, setNoti, setLoading) {
   if (!validNombres) {
     setNoti({
       open: true,
-      message:
-        'Algo salió mal, se requiere al menos 1 nombre propuesto y ambos archivos',
+      message: '¡Algo salió mal, se requiere al menos 1 nombre propuesto y ambos archivos!',
       type: 'error',
     });
+    setLoading(false);
     return;
   }
 
@@ -22,40 +28,59 @@ export default function submitRatificacion(validations, setNoti, setLoading) {
     ? `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones/${ratificacionId}`
     : `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones`;
 
-  fetch(endpoint, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      api_key: apikey,
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(form[6]),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Error submitting the request');
-    })
-    .then(() => {
-      setTimeout(() => {
-        setLoading(false);
-        setNoti({
-          open: true,
-          message: 'Exito, no hubo problemas en esta sección',
-          type: 'success',
-        });
-      }, 1000);
-    })
-    .catch((err) => {
-      console.error('Error:', err);
-      setTimeout(() => {
-        setLoading(false);
-        setNoti({
-          open: true,
-          message: 'Hubo un problema, revise que los campos esten correctos',
-          type: 'error',
-        });
-      }, 1000);
+  try {
+    setLoading(true);
+
+    // First request to submit ratificacion
+    const ratificacionResponse = await fetch(endpoint, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        api_key: apikey,
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(form[6]),
     });
+
+    if (!ratificacionResponse.ok) {
+      const errorData = await ratificacionResponse.json();
+      throw new Error(errorData.message || 'Error submitting the ratificacion');
+    }
+
+    // Second request to disable section 11
+    const postSectionResponse = await fetch(`${baseUrl}/api/v1/solicitudes/${id}/secciones/19`, {
+      method: 'POST',
+      headers: {
+        api_key: apikey,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!postSectionResponse.ok) {
+      const errorData = await postSectionResponse.json();
+      throw new Error(errorData.message || 'Error disabling section 19');
+    }
+
+    setSections((prevSections) => prevSections.map((section) => {
+      if (section.id === 19) {
+        return { ...section, disabled: true };
+      }
+      return section;
+    }));
+
+    setNoti({
+      open: true,
+      message: '¡Éxito, no hubo problemas en esta sección!',
+      type: 'success',
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    setNoti({
+      open: true,
+      message: `¡Hubo un problema!: ${error.message}`,
+      type: 'error',
+    });
+  } finally {
+    setLoading(false);
+  }
 }

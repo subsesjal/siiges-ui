@@ -1,19 +1,22 @@
 import { Grid, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import { Button, getData } from '@siiges-ui/shared';
+import { DataTable, getData } from '@siiges-ui/shared';
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import columns from './Mocks/Diligencias';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import DiligenciasFormModal from '../utils/Components/DiligenciasModales/DiligenciasFormModal';
 import DiligenciasToRows from '../utils/Components/DiligenciasToRows';
+import useSectionDisabled from './Hooks/useSectionDisabled';
 
-function DiligenciasData({ disabled, id }) {
+function DiligenciasData({ disabled, id, type }) {
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const isSectionDisabled = useSectionDisabled(13);
+
+  const isDisabled = disabled || isSectionDisabled;
+
   const {
-    diligencias,
     setDiligencias,
     setFormDiligencias,
     diligenciasRows,
@@ -47,21 +50,22 @@ function DiligenciasData({ disabled, id }) {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
-  const tableColumns = columns(setDiligencias, diligencias);
+  const tableColumns = columns(type, isDisabled);
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">Diligencias</Typography>
       </Grid>
-      <Grid item xs={3}>
-        {!disabled && <Button onClick={showModal} text="Agregar" />}
-      </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataGrid
+          <DataTable
+            buttonAdd
+            buttonText="Agregar Diligencia"
+            buttonClick={showModal}
+            buttonDisabled={isDisabled}
             rows={diligenciasRows}
             columns={tableColumns}
             pageSize={5}
@@ -84,6 +88,7 @@ function DiligenciasData({ disabled, id }) {
 DiligenciasData.propTypes = {
   disabled: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default DiligenciasData;

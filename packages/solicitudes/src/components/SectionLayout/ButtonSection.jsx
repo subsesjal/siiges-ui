@@ -1,5 +1,7 @@
-import { ButtonStyled, Context } from '@siiges-ui/shared';
-import React, { useContext, useCallback, useState } from 'react';
+import { ButtonSimple, Context, createRecord } from '@siiges-ui/shared';
+import React, {
+  useContext, useCallback, useState, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -25,13 +27,15 @@ import submitTrayectoriaEducativa from '../utils/submitTrayectoriaeducativa';
 export default function ButtonSection({
   type,
   id,
-  sections,
+  sections: currentSection,
   position,
   next,
   prev,
   sectionTitle,
 }) {
   const [newSubmit, setNewSubmit] = useState(true);
+  const [currentSectionStatus, setCurrentSectionStatus] = useState(null);
+
   const {
     setNoti, session, loading, setLoading,
   } = useContext(Context);
@@ -40,184 +44,245 @@ export default function ButtonSection({
   const evaluacionCurricular = useEvaluacionCurricular();
   const plantelesValidations = useContext(PlantelContext);
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
-  const { setCreateObservaciones, setSections } = useContext(ObservacionesContext);
+  const {
+    setCreateObservaciones,
+    setSections,
+    sections: sectionState,
+  } = useContext(ObservacionesContext);
   const router = useRouter();
-  let submit;
 
   const isControlDocumental = session.rol === 'control_documental';
   const buttonText = isControlDocumental
     ? 'Guardar observaciones'
     : 'Terminar Sección';
-  const buttonTextEnd = isControlDocumental
-    ? 'Guardar observaciones'
-    : 'Terminar Sección';
+  const buttonTextEnd = buttonText;
+
+  const calculateSectionOffset = () => {
+    const moduleOffsets = {
+      'Plan de estudios': 0,
+      'Datos Generales': 10,
+      Plantel: 13,
+      Anexos: 19,
+      'Evaluación Curricular': 20,
+    };
+
+    const offset = moduleOffsets[sectionTitle] || 0;
+    return currentSection + offset;
+  };
+
+  useEffect(() => {
+    const offsetSection = calculateSectionOffset();
+
+    const foundSection = sectionState.find(
+      (section) => section.id === offsetSection,
+    );
+
+    if (foundSection) {
+      setCurrentSectionStatus(() => foundSection.disabled);
+    }
+  }, [sectionState, currentSection, sectionTitle]);
 
   function observaciones() {
-    return setCreateObservaciones(true);
+    setCreateObservaciones(true);
   }
 
-  function validateNewSolicitud() {
+  const handleCreateRecord = async (commentData) => {
+    try {
+      const offsetSection = calculateSectionOffset();
+      const response = await createRecord({
+        data: commentData,
+        endpoint: `/solicitudes/${id}/secciones/${offsetSection}`,
+      });
+
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        setNoti({
+          message: 'Esta sección ya puede ser editada.',
+          type: 'success',
+        });
+
+        setSections((prevSections) => prevSections.map(
+          (section) => (section.id === response.data.seccionId
+            ? { ...section, disabled: response.data.isClosed }
+            : section),
+        ));
+      } else {
+        setNoti({
+          open: true,
+          message: response.errorMessage || '¡Error al reactivar la sección!',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: '¡Error al reactivar la sección!',
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const validateNewSolicitud = () => {
     if (newSubmit) {
       if (type !== 'editar') {
         submitNewSolicitud(validations, setNewSubmit, setLoading, setSections);
       } else {
-        submitEditSolicitud(validations, sections, id, setLoading, setSections);
+        submitEditSolicitud(validations, currentSection, id, setLoading, setSections);
       }
     } else {
-      submitEditSolicitud(validations, sections, id, setLoading, setSections);
+      submitEditSolicitud(validations, currentSection, id, setLoading, setSections);
     }
-  }
+  };
 
   const sectionFunctions = {
+    'Plan de estudios': {
+      1: validateNewSolicitud,
+      2: () => handleCreateRecord({ commentData: {}, query: { id } }),
+      3: validateNewSolicitud,
+      4: validateNewSolicitud,
+      5: validateNewSolicitud,
+      6: () => handleCreateRecord({ commentData: {}, query: { id } }),
+      7: () => handleCreateRecord({ commentData: {}, query: { id } }),
+      8: () => handleCreateRecord({ commentData: {}, query: { id } }),
+      9: () => submitTrayectoriaEducativa(validations, setLoading, setSections, id),
+      10: () => handleCreateRecord({ commentData: {}, query: { id } }),
+    },
     'Datos Generales': {
       1: useCallback(
         () => submitInstitucion(
           datosGeneralesValidations,
-          sections,
+          currentSection,
           setNoti,
           setLoading,
+          setSections,
+          id,
         ),
-        [datosGeneralesValidations, sections],
+        [datosGeneralesValidations],
       ),
       2: useCallback(
         () => submitRepresentante(
           datosGeneralesValidations,
-          sections,
+          currentSection,
           setNoti,
           setLoading,
+          setSections,
+          id,
         ),
-        [datosGeneralesValidations, sections],
+        [datosGeneralesValidations],
       ),
+      3: () => handleCreateRecord({ commentData: {}, query: { id } }),
     },
     Plantel: {
       1: () => submitEditPlantel(
         plantelesValidations,
-        sections,
+        currentSection,
         id,
         setNoti,
         router,
         setLoading,
+        setSections,
       ),
       2: () => submitDescripcionPlantel(
         plantelesValidations,
         setNoti,
         setLoading,
         institucion.id,
+        setSections,
+        id,
       ),
-      3: () => submitHigienesPlantel(plantelesValidations, setNoti, setLoading),
-      6: () => submitRatificacion(plantelesValidations, setNoti, setLoading),
+      3: () => submitHigienesPlantel(
+        plantelesValidations,
+        setNoti,
+        setLoading,
+        setSections,
+        id,
+      ),
+      4: () => handleCreateRecord({ commentData: {}, query: { id } }),
+      5: () => handleCreateRecord({ commentData: {}, query: { id } }),
+      6: () => submitRatificacion(
+        plantelesValidations,
+        setNoti,
+        setLoading,
+        setSections,
+        id,
+      ),
+    },
+    Anexos: {
+      1: () => handleCreateRecord({ commentData: {}, query: { id } }),
     },
     'Evaluación Curricular': {
-      1: () => submitEvaluacionCurricular(evaluacionCurricular, setNoti, setLoading),
-    },
-    'Plan de estudios': {
-      1: () => validateNewSolicitud(),
-      3: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
-      4: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
-      5: () => submitEditSolicitud(validations, sections, id, setLoading, setSections),
-      9: () => submitTrayectoriaEducativa(validations, setLoading),
+      1: () => submitEvaluacionCurricular(
+        evaluacionCurricular,
+        setNoti,
+        setLoading,
+        setSections,
+        id,
+      ),
     },
   };
-  if (isControlDocumental) {
-    submit = () => {
+
+  const submit = async () => {
+    if (isControlDocumental) {
       observaciones();
-    };
-  }
-  if (sectionFunctions[sectionTitle] && !isControlDocumental) {
-    if (typeof sectionFunctions[sectionTitle] === 'function') {
-      submit = () => {
+    } else if (sectionFunctions[sectionTitle]) {
+      if (currentSectionStatus === true) {
+        await handleCreateRecord({ commentData: {}, query: { id } });
+      } else if (sectionFunctions[sectionTitle][currentSection]) {
         setLoading(true);
-        sectionFunctions[sectionTitle]();
-      };
-    } else if (sectionFunctions[sectionTitle][sections]) {
-      submit = () => {
-        setLoading(true);
-        sectionFunctions[sectionTitle][sections]();
-      };
+        sectionFunctions[sectionTitle][currentSection]();
+      }
     }
-  }
+  };
+
+  const buttonTextDynamic = currentSectionStatus === true ? 'Habilitar Sección' : buttonText;
+
+  const buttonTextEndDynamic = currentSectionStatus === true ? 'Habilitar Sección' : buttonTextEnd;
 
   return (
     <>
-      {position === 'first' && (
-        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={9}>
-            <ButtonStyled
-              text={buttonText}
-              alt={buttonText}
-              type="success"
-              onclick={!loading ? submit : null}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <ButtonStyled
-              text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-              alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-              type="success"
-              onclick={next}
-            />
-          </Grid>
-        </Grid>
-      )}
-      {position === 'middle' && (
-        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={3}>
-            <ButtonStyled
+      {['first', 'middle', 'last', 'only'].map(
+        (pos) => position === pos && (
+        <Grid
+          container
+          spacing={1}
+          sx={{ mt: 0.5 }}
+          justifyContent="right"
+          key={pos}
+        >
+          {position !== 'only' && position !== 'first' && (
+          <Grid item>
+            <ButtonSimple
               text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-              alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               type="success"
-              onclick={prev}
+              onClick={prev}
             />
           </Grid>
-          <Grid item xs={6}>
-            <ButtonStyled
-              text={buttonText}
-              alt={buttonText}
+          )}
+          {type !== 'consultar' && (
+          <Grid item>
+            <ButtonSimple
+              text={
+                      position === 'last' || position === 'only'
+                        ? buttonTextEndDynamic
+                        : buttonTextDynamic
+                    }
               type="success"
-              onclick={!loading ? submit : null}
+              onClick={!loading ? submit : null}
             />
           </Grid>
-          <Grid item xs={3}>
-            <ButtonStyled
+          )}
+          {position !== 'last' && position !== 'only' && (
+          <Grid item>
+            <ButtonSimple
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-              alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               type="success"
-              onclick={next}
+              onClick={next}
             />
           </Grid>
+          )}
         </Grid>
-      )}
-      {position === 'last' && (
-        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={6}>
-            <ButtonStyled
-              text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-              alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-              type="success"
-              onclick={prev}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <ButtonStyled
-              text={buttonTextEnd}
-              alt={buttonTextEnd}
-              type="success"
-              onclick={!loading ? submit : null}
-            />
-          </Grid>
-        </Grid>
-      )}
-      {position === 'only' && (
-        <Grid container spacing={1} sx={{ textAlign: 'right', mt: 0.5 }}>
-          <Grid item xs={12}>
-            <ButtonStyled
-              text={buttonTextEnd}
-              alt={buttonTextEnd}
-              type="success"
-              onclick={!loading ? submit : null}
-            />
-          </Grid>
-        </Grid>
+        ),
       )}
     </>
   );
