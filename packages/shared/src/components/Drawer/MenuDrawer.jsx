@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
@@ -59,51 +59,62 @@ function MenuDrawer({
   open, openFunction, closeFunction, section, session,
 }) {
   const [users, setUsers] = useState([]);
+  const [isEmpty, setIsEmpty] = useState(false);
+
+  useEffect(() => {
+    if (users.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [users]);
 
   userRol(session, setUsers, section);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', marginTop: isEmpty ? '67px' : 0 }}>
       <CssBaseline />
-      <Drawer variant="permanent" open={open}>
-        <List onMouseOver={openFunction} onMouseLeave={closeFunction}>
-          {users?.map((item) => (
-            <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
-              {item.type === 'dropdown' ? (
-                <DropdownButton
-                  icon={item.icon}
-                  text={item.text}
-                  options={item.options}
-                />
-              ) : (
-                <Link href={item.route}>
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? 'initial' : 'center',
-                      px: 2.5,
-                    }}
-                  >
-                    <ListItemIcon
+      {!isEmpty && (
+        <Drawer variant="permanent" open={open}>
+          <List onMouseOver={openFunction} onMouseLeave={closeFunction}>
+            {users?.map((item) => (
+              <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
+                {item.type === 'dropdown' ? (
+                  <DropdownButton
+                    icon={item.icon}
+                    text={item.text}
+                    options={item.options}
+                  />
+                ) : (
+                  <Link href={item.route}>
+                    <ListItemButton
                       sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
+                        minHeight: 48,
+                        justifyContent: open ? 'initial' : 'center',
+                        px: 2.5,
                       }}
                     >
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.text}
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </ListItemButton>
-                </Link>
-              )}
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.text}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </Link>
+                )}
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+      )}
     </Box>
   );
 }

@@ -63,8 +63,12 @@ import ButtonFile from './components/Buttons/ButtonFile';
 import ButtonsInspeccionSection from './components/Buttons/ButtonsInspeccionSection';
 import SelectAdd from './components/Select/SelectAdd';
 import InputTime from './components/Input/InputTime';
+import PositionDisplay from './components/PositionDisplay';
+import Subtitle from './components/Subtitle';
 
 export {
+  Subtitle,
+  PositionDisplay,
   InputTime,
   SelectAdd,
   ButtonsInspeccionSection,
