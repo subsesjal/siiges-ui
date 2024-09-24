@@ -53,7 +53,7 @@ export default function BiografiaBibliografiaModal({
 
         setNoti({
           open: true,
-          message: 'Documento subido con éxito',
+          message: '¡Documento subido con éxito!',
           type: 'success',
         });
 
@@ -67,7 +67,7 @@ export default function BiografiaBibliografiaModal({
       } catch (error) {
         setNoti({
           open: true,
-          message: 'Algo salió mal, revise su documento',
+          message: '¡Algo salió mal, revise su documento!',
           type: 'error',
         });
       } finally {
@@ -78,7 +78,7 @@ export default function BiografiaBibliografiaModal({
     } else {
       setNoti({
         open: true,
-        message: 'Ingrese un documento',
+        message: '¡Ingrese un documento!',
         type: 'error',
       });
     }

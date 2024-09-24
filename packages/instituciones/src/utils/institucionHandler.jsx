@@ -121,7 +121,7 @@ const submitInstitucion = async ({
   if (!valid) {
     setNoti({
       open: true,
-      message: '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
+      message: '¡Revisa!, que los campos requeridos hayan sido llenados correctamente',
       type: 'error',
     });
     setLoading(false);
@@ -179,7 +179,7 @@ const errors = {
     setErrorState(
       'historia',
       !form.historia
-        ? 'Historia de institución inválida'
+        ? '¡Historia de institución inválida!'
         : '',
       setError,
     );
@@ -188,7 +188,7 @@ const errors = {
     setErrorState(
       'vision',
       !form.vision
-        ? 'Visión de institución inválida'
+        ? '¡Visión de institución inválida!'
         : '',
       setError,
     );
@@ -197,7 +197,7 @@ const errors = {
     setErrorState(
       'mision',
       !form.mision
-        ? 'Misión de institución inválida'
+        ? '¡Misión de institución inválida!'
         : '',
       setError,
     );
@@ -206,7 +206,7 @@ const errors = {
     setErrorState(
       'valoresInstitucionales',
       !form.valoresInstitucionales
-        ? 'Valores de institución inválido'
+        ? '¡Valores de institución inválido!'
         : '',
       setError,
     );

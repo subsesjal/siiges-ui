@@ -39,10 +39,10 @@ export default function Calificaciones({
           });
         }
       } catch (error) {
-        console.error('Error fetching calificacionMinima:', error);
+        console.error('¡Error al obtener calificación mínima!:', error);
         setNoti({
           open: true,
-          message: 'Error al obtener la calificación mínima.',
+          message: '¡Error al obtener la calificación mínima!',
           type: 'error',
         });
       }
@@ -62,23 +62,23 @@ export default function Calificaciones({
             setAlumnos(alumnosActualizados);
             setNoti({
               open: true,
-              message: 'Datos actualizados correctamente.',
+              message: '¡Datos actualizados correctamente!',
               type: 'success',
             });
           } else {
             setNoti({
               open: true,
-              message: 'Error al actualizar los datos.',
+              message: '¡Error al actualizar los datos!',
               type: 'error',
             });
           }
         } catch (error) {
-          console.error('Error reloading alumnos:', error);
+          console.error('¡Error al recargar alumnos!:', error);
           console.log(asignaturaId);
           console.log(grupoId);
           setNoti({
             open: true,
-            message: 'Error al actualizar los datos.',
+            message: '¡Error al actualizar los datos!',
             type: 'error',
           });
         }
@@ -129,7 +129,7 @@ export default function Calificaciones({
     if (calificacionesValidas.length === 0) {
       setNoti({
         open: true,
-        message: 'No hay calificaciones válidas para subir.',
+        message: '¡No hay calificaciones válidas para subir!',
         type: 'error',
       });
       return;
@@ -144,7 +144,7 @@ export default function Calificaciones({
       setTimeout(() => {
         setNoti({
           open: true,
-          message: `No se pueden subir calificaciones para los alumnos debido a su situación: ${alumnosInvalidos}.`,
+          message: `¡No se pueden subir calificaciones para los alumnos debido a su situación!: ${alumnosInvalidos}.`,
           type: 'error',
         });
       }, 3500);

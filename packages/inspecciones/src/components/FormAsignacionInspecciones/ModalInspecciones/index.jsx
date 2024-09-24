@@ -76,9 +76,9 @@ function ModalInspecciones({ params: { row } }) {
   const validations = useCallback(() => {
     const newErrors = {};
     if (!form.fechaInspeccion) {
-      newErrors.fechaInspeccion = 'Fecha de inspección no puede ser nula';
+      newErrors.fechaInspeccion = '¡La fecha de inspección no puede ser nula!';
     } else if (dayjs(form.fechaInspeccion).isBefore(dayjs(), 'day')) {
-      newErrors.fechaInspeccion = 'Fecha de inspección no puede ser anterior a la fecha actual';
+      newErrors.fechaInspeccion = '¡La fecha de inspección no puede ser anterior a la fecha actual!';
     }
     if (!form.folio) {
       newErrors.folio = 'Ingrese un folio';
