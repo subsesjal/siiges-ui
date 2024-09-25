@@ -32,14 +32,14 @@ function DeleteInstitucionesAledanas({
       hideModal();
       setNoti({
         open: true,
-        message: 'Se eliminó exitosamente la institución aledaña',
+        message: '¡Se eliminó exitosamente la institución aledaña!',
         type: 'success',
       });
     } else {
       setLoading(false);
       setNoti({
         open: true,
-        message: `¡Ocurrió un error al borrar esta institución!: ${response.message}`,
+        message: `¡Ocurrió un error al borrar la institución!: ${response.message}`,
         type: 'error',
       });
     }

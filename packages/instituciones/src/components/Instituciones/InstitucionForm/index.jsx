@@ -62,7 +62,7 @@ export default function InstitucionForm({
           }
           const response2 = await fetch(url);
           if (!response2.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('La respuesta de la red no fue correcta');
           }
           const blob = await response2.blob();
           const imageObjectUrl = URL.createObjectURL(blob);
