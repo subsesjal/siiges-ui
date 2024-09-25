@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 const url = process.env.NEXT_PUBLIC_URL;
 export default function detallesSolicitudes() {
-  const { session } = useContext(Context);
+  const { session, setNoti } = useContext(Context);
   const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
   const [setError] = useState();
   const showOficioModal = () => setIsOficioModalOpen(true);
@@ -25,14 +25,43 @@ export default function detallesSolicitudes() {
   }, [data]);
 
   const downloadFile = async (type) => {
-    const solicitudId = solicitud?.id;
-    const response = await getData({ endpoint: `/files/?tipoEntidad=SOLICITUD&entidadId=${solicitudId}&tipoDocumento=${type}` });
-    if (response && response.data) {
-      const { ubicacion } = response.data;
-      const finalUrl = url + ubicacion;
-      window.open(finalUrl, '_blank');
-    } else {
-      setError('Error getting file');
+    try {
+      const solicitudId = solicitud?.id;
+      const response = await getData({ endpoint: `/files/?tipoEntidad=SOLICITUD&entidadId=${solicitudId}&tipoDocumento=${type}` });
+
+      if (response && response.data) {
+        const { ubicacion } = response.data;
+        if (ubicacion && typeof ubicacion === 'string') {
+          const finalUrl = url + ubicacion;
+          if (finalUrl && finalUrl !== 'undefined') {
+            window.open(finalUrl, '_blank');
+          } else {
+            setNoti({
+              open: true,
+              message: 'Url no válido, intente de nuevo.',
+              type: 'error',
+            });
+          }
+        } else {
+          setNoti({
+            open: true,
+            message: 'Error al descargar el archivo, intente de nuevo.',
+            type: 'error',
+          });
+        }
+      } else {
+        setNoti({
+          open: true,
+          message: 'Error al descargar el archivo, intente de nuevo.',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: 'Error al descargar el archivo',
+        type: 'error',
+      });
     }
   };
 
@@ -109,7 +138,7 @@ export default function detallesSolicitudes() {
                 )}
               </List>
             </Grid>
-        )}
+          )}
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
             Inspección
