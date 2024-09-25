@@ -21,7 +21,7 @@ function DeleteDiligencia({ modal, hideModal, id }) {
         setDiligenciasRows(updatedRows);
         setNoti({
           open: true,
-          message: '¡Se ha borrado la diligencia exitosamente!',
+          message: '¡Se ha eliminado la diligencia exitosamente!',
           type: 'success',
         });
       })
