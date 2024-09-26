@@ -38,28 +38,28 @@ export default function detallesSolicitudes() {
           } else {
             setNoti({
               open: true,
-              message: 'Url no válido, intente de nuevo.',
+              message: '¡Url no válido, intente de nuevo!',
               type: 'error',
             });
           }
         } else {
           setNoti({
             open: true,
-            message: 'Error al descargar el archivo, intente de nuevo.',
+            message: '¡Error al descargar el archivo, intente de nuevo!.',
             type: 'error',
           });
         }
       } else {
         setNoti({
           open: true,
-          message: 'Error al descargar el archivo, intente de nuevo.',
+          message: '¡Error al descargar el archivo, intente de nuevo!.',
           type: 'error',
         });
       }
     } catch (error) {
       setNoti({
         open: true,
-        message: 'Error al descargar el archivo',
+        message: '¡Error al descargar el archivo!',
         type: 'error',
       });
     }
