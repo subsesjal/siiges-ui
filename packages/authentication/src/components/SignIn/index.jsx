@@ -109,6 +109,10 @@ export default function SignIn() {
           &copy; 2024 Secretaría General de Gobierno - Todos los derechos reservados.
         </Typography>
         <Typography variant="body2" style={{ color: '#3b4245' }}>
+          Edificio MIND Av. Faro #2350 , Colonia: Verde Valle , CP: 44540, Guadalajara, Jalisco
+          Lunes a Viernes de 09:00:00 a 17:00:00 horas
+        </Typography>
+        <Typography variant="body2" style={{ color: '#3b4245' }}>
           <Link
             href="https://info.jalisco.gob.mx/politicas/?remote=true"
             passHref
