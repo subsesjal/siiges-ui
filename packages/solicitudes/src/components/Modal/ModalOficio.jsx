@@ -24,7 +24,7 @@ export default function oficioModal({
 
   const handleOnSubmit = async () => {
     if (!fechaEfecto || !oficioNumber) {
-      setError('Por favor, completa todos los campos.');
+      setError('¡Por favor, completa todos los campos!.');
       return;
     }
 
