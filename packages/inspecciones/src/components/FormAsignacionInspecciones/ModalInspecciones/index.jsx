@@ -32,7 +32,7 @@ const fetchData = async ({
       },
       body: dataBody,
     });
-    if (!response.ok) throw new Error('Network response was not ok');
+    if (!response.ok) throw new Error('¡La respuesta de la red no fue correcta!');
     const { data } = await response.json();
     setLoading(false);
     setNoti({
