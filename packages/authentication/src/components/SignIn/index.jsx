@@ -45,7 +45,6 @@ export default function SignIn() {
             mt: 3,
             py: 3,
             px: 3,
-            height: '330px',
             width: '320px',
           },
         }}
