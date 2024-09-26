@@ -6,12 +6,12 @@ import {
 } from '@siiges-ui/shared';
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
+import OficioModal from '@siiges-ui/solicitudes/src/components/Modal/ModalOficio';
 
 const url = process.env.NEXT_PUBLIC_URL;
 export default function detallesSolicitudes() {
   const { session, setNoti } = useContext(Context);
   const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
-  const [setError] = useState();
   const showOficioModal = () => setIsOficioModalOpen(true);
   const hideOficioModal = () => setIsOficioModalOpen(false);
   const router = useRouter();
@@ -120,25 +120,31 @@ export default function detallesSolicitudes() {
             </ListItem>
           </List>
         </Grid>
-        {(solicitud.estatusSolicitudId >= 8
-          || (solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar')) && (
+        {(solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar') ? (
+          <Grid item xs={4}>
+            <Typography variant="subtitle1" color="textSecondary">
+              RVOE
+            </Typography>
+            <List component="nav">
+              <ListItem button onClick={showOficioModal}>
+                <ListItemText primary="Acuerdo RVOE" />
+              </ListItem>
+            </List>
+          </Grid>
+        ) : (
+          solicitud.estatusSolicitudId > 8 && (
             <Grid item xs={4}>
               <Typography variant="subtitle1" color="textSecondary">
                 RVOE
               </Typography>
               <List component="nav">
-                {solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar' ? (
-                  <ListItem button onClick={showOficioModal}>
-                    <ListItemText primary="Acuerdo RVOE" />
-                  </ListItem>
-                ) : (
-                  <ListItem button onClick={() => downloadFile('ACUERDO_RVOE')}>
-                    <ListItemText primary="RVOE" />
-                  </ListItem>
-                )}
+                <ListItem button onClick={() => downloadFile('ACUERDO_RVOE')}>
+                  <ListItemText primary="Acuerdo RVOE" />
+                </ListItem>
               </List>
             </Grid>
-          )}
+          )
+        )}
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
             Inspección
@@ -176,14 +182,12 @@ export default function detallesSolicitudes() {
           </Grid>
         </Grid>
       </Grid>
-      {solicitud?.id && (
-        <oficioModal
-          open={isOficioModalOpen}
-          hideModal={hideOficioModal}
-          downloadFile={downloadFile}
-          solicitudId={solicitud.id}
-        />
-      )}
+      <OficioModal
+        open={isOficioModalOpen}
+        hideModal={hideOficioModal}
+        downloadFile={downloadFile}
+        solicitudId={solicitud.id}
+      />
     </Layout>
   );
 }
