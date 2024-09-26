@@ -39,34 +39,34 @@ export default function Register() {
     const newErrors = {};
 
     if (!formValues.usuario) {
-      newErrors.usuario = 'El usuario es obligatorio';
+      newErrors.usuario = '¡El usuario es obligatorio!';
     } else if (
       formValues.usuario.length < 3
       || formValues.usuario.length > 25
     ) {
-      newErrors.usuario = 'El usuario debe tener entre 3 y 25 caracteres';
+      newErrors.usuario = '¡El usuario debe tener entre 3 y 25 caracteres!';
     }
 
     if (!formValues.correo) {
-      newErrors.correo = 'El correo es obligatorio';
+      newErrors.correo = '¡El correo es obligatorio!';
     } else if (
       formValues.correo.length < 3
       || formValues.correo.length > 50
       || !correoPattern.test(formValues.correo)
     ) {
-      newErrors.correo = 'El correo debe ser válido y tener entre 3 y 50 caracteres';
+      newErrors.correo = '!¡l correo debe ser válido y tener entre 3 y 50 caracteres!';
     }
 
     if (!formValues.contrasena) {
-      newErrors.contrasena = 'La contraseña es obligatoria';
+      newErrors.contrasena = '¡La contraseña es obligatoria!';
     } else if (!contrasenaPattern.test(formValues.contrasena)) {
       newErrors.contrasena = 'La contraseña debe tener entre 8 y 25 caracteres, al menos una mayúscula, una minúscula, un número, y un símbolo especial';
     }
 
     if (!formValues.recontrasena) {
-      newErrors.recontrasena = 'Repetir contraseña es obligatorio';
+      newErrors.recontrasena = '¡Repetir contraseña es obligatorio!';
     } else if (formValues.contrasena !== formValues.recontrasena) {
-      newErrors.recontrasena = 'Las contraseñas no coinciden';
+      newErrors.recontrasena = '¡Las contraseñas no coinciden!';
     }
 
     setErrors(newErrors);
@@ -99,14 +99,14 @@ export default function Register() {
       });
 
       if (!response.ok) {
-        throw new Error('Error en el registro');
+        throw new Error('¡Error en el registro!');
       }
 
       setNoti({
         open: true,
         type: 'success',
         message:
-          'Su usuario se envio con exito, y ahora se esta procesando, se le avisara cuando este aprovado',
+          '¡Su usuario se envío con éxito!, ahora se esta procesando, se le avisará cuando sea aprobado',
       });
 
       // Add a delay before redirecting
@@ -119,7 +119,7 @@ export default function Register() {
         open: true,
         type: 'error',
         message:
-          'Ocurrio un error al procesar su usuario, revise que los campos esten correctos y vuelva a intentarlo mas tarde',
+          '¡Ocurrió un error al procesar su usuario, revise que los campos estén correctos y vuelva a intentarlo más tarde!',
       });
     } finally {
       setLoading(false);

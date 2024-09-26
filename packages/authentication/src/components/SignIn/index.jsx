@@ -14,7 +14,7 @@ export default function SignIn() {
   const [form, setForm] = useState({ usuario: '', contrasena: '' });
 
   const errors = {
-    usuario: 'Usuario equivocado',
+    usuario: '¡Usuario equivocado!',
     contrasena: '¡Contraseña equivocada!',
   };
 
