@@ -13,7 +13,7 @@ export default function getProgramas(plantelId, callback) {
         if (response.status === 404) {
           throw new Error('404');
         }
-        throw new Error('Error fetching data');
+        throw new Error('¡Error al obtener datos!');
       }
       return response.json();
     })

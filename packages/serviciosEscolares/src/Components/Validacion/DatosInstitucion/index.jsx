@@ -190,10 +190,10 @@ export default function DatosInstitucion({ alumno }) {
             type: 'success',
           });
         } else {
-          throw new Error('API did not return success');
+          throw new Error('¡La API no obtuvo éxito!');
         }
       } catch (error) {
-        console.error('API call failed:', error);
+        console.error('¡Error en la llamda a la API!:', error);
         setLoading(false);
         setNoti({
           open: true,

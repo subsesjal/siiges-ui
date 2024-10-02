@@ -25,7 +25,7 @@ export default async function submitRepresentante(
     });
 
     if (!patchResponse.ok) {
-      throw new Error('Error submitting the request');
+      throw new Error('¡Error al enviar la solicitud!');
     }
 
     const postResponse = await fetch(`${url}/api/v1/solicitudes/${id}/secciones/12`, {
