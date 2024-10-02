@@ -27,7 +27,7 @@ export default async function submitHigienesPlantel(
 
     if (!postHigienesResponse.ok) {
       const errorData = await postHigienesResponse.json();
-      throw new Error(errorData.message || 'Error submitting the higienes data');
+      throw new Error(errorData.message || '¡Error al enviar los datos de higiene!');
     }
 
     const postSectionResponse = await fetch(`${url}/api/v1/solicitudes/${id}/secciones/16`, {
@@ -40,7 +40,7 @@ export default async function submitHigienesPlantel(
 
     if (!postSectionResponse.ok) {
       const errorData = await postSectionResponse.json();
-      throw new Error(errorData.message || 'Error disabling section 11');
+      throw new Error(errorData.message || '¡Error al desactivar la sección 11!');
     }
 
     setSections((prevSections) => prevSections.map((section) => {

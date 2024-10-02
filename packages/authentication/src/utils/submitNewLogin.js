@@ -14,11 +14,11 @@ function submitNewLogin(form, errors, setErrorMessages, activateAuth, setLoading
         }
         if (response.status === 404) {
           setErrorMessages({ usuario: errors.usuario });
-          throw new Error('Not Found');
+          throw new Error('¡No se encontro!');
         }
         if (response.status === 401) {
           setErrorMessages({ contrasena: errors.contrasena });
-          throw new Error('Unauthorized');
+          throw new Error('¡No autorizado!');
         }
         throw new Error(response.status);
       })

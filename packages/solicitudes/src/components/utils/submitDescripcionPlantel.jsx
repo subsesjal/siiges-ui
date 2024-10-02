@@ -77,7 +77,7 @@ export default async function submitDescripcionPlantel(
 
     if (!postResponse.ok) {
       const errorData = await postResponse.json();
-      throw new Error(errorData.message || 'Error fetching the section data');
+      throw new Error(errorData.message || '¡Error al obtener datos!');
     }
 
     setSections((prevSections) => prevSections.map((section) => {

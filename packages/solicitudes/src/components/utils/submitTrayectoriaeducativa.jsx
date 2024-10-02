@@ -79,7 +79,7 @@ async function submitTrayectoriaEducativa(validations, setLoading, setSections, 
     }).then((res) => {
       if (!res.ok) {
         return res.json().then((error) => {
-          throw new Error(error.message || 'Error fetching the section data');
+          throw new Error(error.message || '¡Error al recuperar los datos de la sección!');
         });
       }
       return res.json();

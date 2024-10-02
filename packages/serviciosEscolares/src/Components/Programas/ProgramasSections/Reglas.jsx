@@ -76,7 +76,7 @@ export default function Reglas() {
       });
 
       if (response.statusCode !== 200) {
-        throw new Error(response.errorMessage || 'Error al actualizar las reglas');
+        throw new Error(response.errorMessage || '¡Error al actualizar las reglas!');
       }
 
       setLoading(false);

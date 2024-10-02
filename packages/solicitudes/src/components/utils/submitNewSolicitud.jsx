@@ -20,7 +20,7 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Error submitting the request');
+        throw new Error('¡Error al enviar la solicitud!');
       }
       return response.json();
     })
@@ -37,7 +37,7 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Error fetching the section data');
+            throw new Error('¡Error al recuperar los datos de la sección!');
           }
           return response.json();
         })

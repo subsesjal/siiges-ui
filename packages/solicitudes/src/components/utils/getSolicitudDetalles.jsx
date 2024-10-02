@@ -22,7 +22,7 @@ export default async function getSolicitudDetalles(id, session, setNoti) {
           message: '¡Algo salió mal al cargar la información!',
           type: 'error',
         });
-        throw new Error('Failed to fetch data');
+        throw new Error('¡Error al obtener datos!');
       }
 
       const data = await response.json();

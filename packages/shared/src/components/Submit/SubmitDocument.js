@@ -4,7 +4,7 @@ export default async function SubmitDocument(formData, setUrl, setNoti) {
     const url = process.env.NEXT_PUBLIC_URL;
 
     if (!formData) {
-      throw new Error('No FormData provided.');
+      throw new Error('¡No se proporcionaron datos de formulario!.');
     }
 
     const response = await fetch(`${url}/api/v1/files/`, {
@@ -14,7 +14,7 @@ export default async function SubmitDocument(formData, setUrl, setNoti) {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to upload document: ${response.statusText}`);
+      throw new Error(`¡No se pudo cargar el documento!: ${response.statusText}`);
     }
 
     const data = await response.json();
