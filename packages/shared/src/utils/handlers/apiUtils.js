@@ -42,7 +42,7 @@ const makeCall = async ({
   } catch (error) {
     return {
       statusCode: 500,
-      errorMessage: 'Internal Server Error',
+      errorMessage: '¡Error Interno del Servidor!',
       data: [],
     };
   }

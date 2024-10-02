@@ -42,7 +42,7 @@ function DeleteAsignatura({
         type: 'success',
       });
     } catch (error) {
-      console.error('Deletion error:', error);
+      console.error('¡Error de eliminación!:', error);
       setNoti({ open: true, message: error.toString(), type: 'error' });
     }
   };

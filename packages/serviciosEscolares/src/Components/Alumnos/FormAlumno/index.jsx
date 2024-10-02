@@ -51,7 +51,7 @@ export default function FormAlumno({ type, alumno, setId }) {
     if (name === 'correoPrimario') {
       if (mailValidator(value)) {
         setErrorMail('');
-      } else setErrorMail('El campo Correo no es válido.');
+      } else setErrorMail('¡El campo Correo no es válido!.');
     }
   };
 

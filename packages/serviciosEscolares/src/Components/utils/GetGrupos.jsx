@@ -28,7 +28,7 @@ export default function useGrupos(ciclosEscolarId, gradoId) {
           }
         })
         .catch((error) => {
-          console.error('Error fetching grupos:', error);
+          console.error('¡Error al recuperar grupos!:', error);
         })
         .finally(() => {
           setLoading(false);

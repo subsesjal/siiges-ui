@@ -19,7 +19,7 @@ export default function CiclosEscolares() {
         const ciclosEscolaresData = await getCiclosEscolares(programaId);
         setCiclos(ciclosEscolaresData);
       } catch (error) {
-        console.error('Error fetching ciclos escolares:', error);
+        console.error('¡Error al recuperar ciclos escolares!:', error);
       }
     };
 

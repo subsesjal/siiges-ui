@@ -94,7 +94,7 @@ export default async function submitEvaluacionCurricular(
     console.error('Error:', error);
     setNoti({
       open: true,
-      message: `Hubo un problema: ${error.message}`,
+      message: `¡Hubo un problema!: ${error.message}`,
       type: 'error',
     });
   } finally {

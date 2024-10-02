@@ -81,7 +81,7 @@ function ModalInspecciones({ params: { row } }) {
       newErrors.fechaInspeccion = '¡La fecha de inspección no puede ser anterior a la fecha actual!';
     }
     if (!form.folio) {
-      newErrors.folio = 'Ingrese un folio';
+      newErrors.folio = '¡Por favor, ingrese un número de folio!';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

@@ -15,7 +15,7 @@ export default async function getCiclosEscolares(id) {
     const data = await response.json();
     return data.data || [];
   } catch (error) {
-    console.error('Error fetching ciclos escolares:', error);
+    console.error('¡Error al recuperar ciclos escolares!:', error);
     return [];
   }
 }
