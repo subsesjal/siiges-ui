@@ -3,7 +3,8 @@ import {
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import {
-  SnackAlert, GetFile, Input, InputFile, ButtonStyled,
+  SnackAlert, GetFile, Input, InputFile,
+  ButtonSimple,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -206,11 +207,11 @@ export default function InstitucionFields({
               </Grid>
             </Grid>
             <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
-              <ButtonStyled
+              <ButtonSimple
                 text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-                alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
+                align="right"
                 type="success"
-                onclick={nextPage}
+                onClick={nextPage}
               />
             </Grid>
           </>
@@ -392,9 +393,9 @@ export default function InstitucionFields({
               )}
             </Grid>
             <Grid item xs={12} sx={{ textAlign: 'right', mt: 6 }}>
-              <ButtonStyled
+              <ButtonSimple
                 text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-                alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
+                align="right"
                 type="success"
                 onclick={prevPage}
               />
