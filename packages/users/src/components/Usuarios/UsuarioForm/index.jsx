@@ -9,6 +9,7 @@ import {
   SnackAlert,
   Select,
   useApi,
+  BinarySelect,
 } from '@siiges-ui/shared';
 import {
   handleOnBlur,
@@ -73,6 +74,11 @@ export default function UsuarioForm({ session, accion, usuario }) {
       }, 500);
     }
   }, [data]);
+
+  const userStatus = [
+    { id: 0, nombre: 'Desactivado' },
+    { id: 1, nombre: 'Activado' },
+  ];
 
   return (
     <>
@@ -187,7 +193,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               errorMessage={errorFields.usuario}
             />
           </Grid>
-          {accion === 'crear' && (
+          {accion === 'crear' ? (
             <>
               <Grid item xs={3}>
                 <InputPassword
@@ -223,6 +229,20 @@ export default function UsuarioForm({ session, accion, usuario }) {
                 </Typography>
               </Grid>
             </>
+          ) : (
+            <Grid item xs={3}>
+              <BinarySelect
+                title="Estatus del usuario"
+                options={userStatus}
+                name="estatus"
+                value={form.estatus || 0}
+                onChange={(e) => setForm((prevForm) => ({
+                  ...prevForm,
+                  estatus: e.target.value,
+                }))}
+                required
+              />
+            </Grid>
           )}
         </Grid>
         <ButtonsForm
@@ -263,6 +283,7 @@ UsuarioForm.propTypes = {
   usuario: PropTypes.shape({
     id: PropTypes.number,
     usuario: PropTypes.string,
+    estatus: PropTypes.number,
     actualizado: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     correo: PropTypes.string,
     persona: PropTypes.shape({
