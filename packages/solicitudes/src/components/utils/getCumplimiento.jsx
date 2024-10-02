@@ -34,7 +34,7 @@ export default function useCumplimiento(modalidad, puntuacion) {
           setCumplimiento(data.data || {});
         })
         .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
+          console.error('¡Hubo un problema con la operación de búsqueda!.:', error);
           setNoti({
             open: true,
             message: '¡Algo salió mal al cargar el cumplimiento!',

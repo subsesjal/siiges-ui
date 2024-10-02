@@ -133,7 +133,7 @@ export default function DiligenciasFormModal({
       }
     } else {
       setNoti({
-        message: 'Please correct the errors before submitting.',
+        message: '¡Por favor corrija los errores antes de enviar!.',
         type: 'error',
       });
     }

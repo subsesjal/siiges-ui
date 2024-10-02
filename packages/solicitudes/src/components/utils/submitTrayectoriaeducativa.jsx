@@ -23,7 +23,7 @@ async function submitTrayectoriaEducativa(validations, setLoading, setSections, 
   );
 
   if (!isValid) {
-    console.error('Submission criteria not met. Required fields missing.');
+    console.error('¡No se cumplieron los criterios de envío. Faltan campos obligatorios!.');
     setNoti({
       open: true,
       message: '¡No es posible continuar, falta completar información obligatoria en la sección de Trayectoria Educativa!.',

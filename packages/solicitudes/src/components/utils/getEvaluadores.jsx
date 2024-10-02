@@ -31,7 +31,7 @@ export default function getEvaluadores() {
           setEvaluadores(data.data || []);
         })
         .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
+          console.error('¡Hubo un problema con la operación de búsqueda!:', error);
           setNoti({
             open: true,
             message: '¡Algo salió mal al cargar evaluadores!',

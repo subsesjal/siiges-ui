@@ -46,7 +46,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             setSeguridad(seguridadData);
           }
         } catch (err) {
-          console.error('Error fetching data:', err);
+          console.error('¡Error al obtener datos!:', err);
         }
       }
     };

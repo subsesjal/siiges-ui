@@ -53,7 +53,7 @@ export default function useAsignaturas(programaId) {
 
         .catch((err) => {
           if (isMounted) {
-            console.error('Error fetching asignaturas:', err);
+            console.error('¡Error al recuperar asignaturas!:', err);
             setError(err);
             setLoading(false);
           }

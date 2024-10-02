@@ -56,7 +56,7 @@ export default function ModalAlumnosInscritos({
 
       postAsignaturasAlumno(dataToSend, grupoId, (error) => {
         if (error) {
-          console.error('Failed to enroll the student:', error);
+          console.error('¡No se pudo inscribir al estudiante!:', error);
           setNoti({
             open: true,
             message:
