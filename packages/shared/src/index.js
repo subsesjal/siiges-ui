@@ -65,8 +65,10 @@ import SelectAdd from './components/Select/SelectAdd';
 import InputTime from './components/Input/InputTime';
 import PositionDisplay from './components/PositionDisplay';
 import Subtitle from './components/Subtitle';
+import BinarySelect from './components/Select/BinarySelect';
 
 export {
+  BinarySelect,
   Subtitle,
   PositionDisplay,
   InputTime,
