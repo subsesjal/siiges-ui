@@ -53,7 +53,7 @@ export default function BiografiaBibliografiaModal({
 
         setNoti({
           open: true,
-          message: '¡Documento subido con éxito!',
+          message: '¡Documento cargado con éxito!',
           type: 'success',
         });
 
