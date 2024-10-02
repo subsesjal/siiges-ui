@@ -10,13 +10,13 @@ export default function getAlumnosAcreditacion(asignaturaId, grupoId) {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`¡HTTP error! status: ${response.status}`);
       }
       return response.json();
     })
     .then((data) => data.data)
     .catch((error) => {
-      console.error('Error fetching data: ', error);
+      console.error('¡Error al obtener datos!: ', error);
       return null;
     });
 }
