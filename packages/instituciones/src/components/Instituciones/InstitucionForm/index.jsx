@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import router from 'next/router';
 import Image from 'next/image';
+import { Grid, Typography } from '@mui/material';
 import {
-  Grid, Typography,
-} from '@mui/material';
-import {
-  ButtonStyled, ButtonsForm, SubmitDocument, DefaultModal,
+  ButtonStyled,
+  ButtonsForm,
+  SubmitDocument,
+  DefaultModal,
+  ButtonSimple,
 } from '@siiges-ui/shared';
 import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import InstitucionFields from '../InstitucionFields';
@@ -19,7 +21,12 @@ import {
 import BiografiaBibliografiaModal from '../../utils/BiografiaBibliografiaModal';
 
 export default function InstitucionForm({
-  session, accion, institucion, setLoading, setTitle, setNoti,
+  session,
+  accion,
+  institucion,
+  setLoading,
+  setTitle,
+  setNoti,
 }) {
   const [errorFields, setErrorFields] = useState({});
   const [form, setForm] = useState({});
@@ -49,6 +56,7 @@ export default function InstitucionForm({
       }
     }
   };
+
   const getInstitutionPhoto = async (institucionId) => {
     try {
       const endpoint = '/files/';
@@ -77,6 +85,7 @@ export default function InstitucionForm({
       setImageUrl(undefined);
     }
   };
+
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
     setOpenModalPhoto(true);
@@ -101,10 +110,15 @@ export default function InstitucionForm({
   const handleModalClose = () => {
     setOpenModalPhoto(false);
   };
+
   useEffect(() => {
     setLoading(true);
     if (accion === 'crear' && session.id) {
-      setForm({ usuarioId: session.id, tipoInstitucionId: 1, esNombreAutorizado: false });
+      setForm({
+        usuarioId: session.id,
+        tipoInstitucionId: 1,
+        esNombreAutorizado: false,
+      });
       setTitle('Registrar Institución');
     }
 
@@ -119,6 +133,7 @@ export default function InstitucionForm({
     }
     setLoading(false);
   }, [accion, institucion.id, session.id, setLoading, setTitle]);
+
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
@@ -139,13 +154,15 @@ export default function InstitucionForm({
           style={{ display: 'none' }}
           onChange={handleFileChange}
         />
-        <ButtonStyled
-          text="Cambiar Imagen"
-          alt="Cambiar Imagen"
-          onclick={() => fileInputRef.current.click()}
-        >
-          Cambiar Imagen
-        </ButtonStyled>
+        {institucion
+          && institucion.planteles
+          && institucion.planteles.length > 1 && (
+            <ButtonSimple
+              text="Cambiar Imagen"
+              align="center"
+              onClick={() => fileInputRef.current.click()}
+            />
+        )}
       </Grid>
       <Grid item xs={8}>
         <InstitucionFields
@@ -175,9 +192,7 @@ export default function InstitucionForm({
         setOpen={handleModalClose}
         title="Confirmar cambio de imagen"
       >
-        <Typography>
-          ¿Estás seguro de cambiar la imagen?
-        </Typography>
+        <Typography>¿Estás seguro de cambiar la imagen?</Typography>
         <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
           <Grid item>
             <ButtonStyled
