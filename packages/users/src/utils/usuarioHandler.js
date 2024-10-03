@@ -93,7 +93,7 @@ const errors = {
   repeatContrasena: (form, setError) => setErrorState(
     'repeatContrasena',
     form.repeatContrasena !== form.contrasena
-      ? 'Las contraseñas deben ser iguales'
+      ? '¡Las contraseñas deben ser iguales!'
       : '',
     setError,
   ),

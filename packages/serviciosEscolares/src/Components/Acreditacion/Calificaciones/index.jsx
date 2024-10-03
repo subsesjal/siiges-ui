@@ -34,7 +34,7 @@ export default function Calificaciones({
         } else {
           setNoti({
             open: true,
-            message: 'Error al obtener la calificación mínima.',
+            message: '¡Error al obtener la calificación mínima!.',
             type: 'error',
           });
         }

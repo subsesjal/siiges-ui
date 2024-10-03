@@ -44,7 +44,7 @@ function DiligenciasData({ disabled, id, type }) {
           setDiligenciasRows(rows);
         }
       } catch (err) {
-        console.error('Error fetching data:', err);
+        console.error('¡Error al obtener datos!:', err);
       } finally {
         setIsLoading(false);
       }

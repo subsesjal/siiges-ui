@@ -30,7 +30,7 @@ export default function useDocentes(programaId) {
 
         .catch((err) => {
           if (isMounted) {
-            console.error('Error al recuperar docentes:', err);
+            console.error('¡Error al recuperar docentes!:', err);
             setError(err);
           }
         })

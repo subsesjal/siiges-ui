@@ -28,7 +28,7 @@ export default function useDocente(id) {
 
         .catch((err) => {
           if (isMounted) {
-            console.error('Error fetching asignaturas:', err);
+            console.error('¡Error al recuperar asignaturas!:', err);
           }
         });
     }

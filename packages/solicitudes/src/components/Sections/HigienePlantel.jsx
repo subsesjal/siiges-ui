@@ -45,7 +45,7 @@ export default function HigienePlantel({ disabled }) {
           setLoading(false);
         })
         .catch((error) => {
-          console.error('Error fetching higiene data:', error);
+          console.error('¡Error al obtener datos de higiene!:', error);
           setLoading(false);
         });
     }

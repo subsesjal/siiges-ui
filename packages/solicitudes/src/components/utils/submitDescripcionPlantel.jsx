@@ -15,7 +15,7 @@ async function sendRequest(
 
   if (!response.ok) {
     const errorResponse = await response.json();
-    throw new Error(`HTTP error! status: ${response.status}, message: ${errorResponse.message}`);
+    throw new Error(`¡HTTP error! status: ${response.status}, message: ${errorResponse.message}`);
   }
 
   return response.json();

@@ -54,7 +54,7 @@ export default function DetallesAsignatura({ type }) {
           setAlumnos(alumnosAcreditacion);
         }
       } catch (error) {
-        console.error('Error fetching details', error);
+        console.error('¡Error al obtener detalles!', error);
       }
     };
 

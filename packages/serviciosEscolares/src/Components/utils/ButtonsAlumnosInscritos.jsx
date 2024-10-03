@@ -28,7 +28,7 @@ export default function ButtonsAlumnosInscritos({ id, asignaturas, grupoId }) {
           setSelectedAlumnoAsignaturas(filteredAsignaturas);
         }
         if (error) {
-          console.error('Failed to fetch inscripciones:', error);
+          console.error('¡No se pudieron recuperar las inscripciones!:', error);
           setNoti({
             open: true,
             message:
