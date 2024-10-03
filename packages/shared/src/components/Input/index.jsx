@@ -43,7 +43,7 @@ function Input({
   const handleOnChange = (e) => {
     const newValue = e.target.value;
 
-    if (multiline && newValue.length > 600) {
+    if (multiline && newValue.length > 10000) {
       return;
     }
     if (!multiline && newValue.length > 255) {
