@@ -154,15 +154,6 @@ export default function InstitucionForm({
           style={{ display: 'none' }}
           onChange={handleFileChange}
         />
-        {institucion
-          && institucion.planteles
-          && institucion.planteles.length > 1 && (
-            <ButtonSimple
-              text="Cambiar Imagen"
-              align="center"
-              onClick={() => fileInputRef.current.click()}
-            />
-        )}
       </Grid>
       <Grid item xs={8}>
         <InstitucionFields
