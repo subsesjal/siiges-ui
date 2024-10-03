@@ -396,7 +396,7 @@ export default function InstitucionFields({
                 text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
                 alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
                 type="success"
-                onclick={prevPage}
+                onClick={prevPage}
               />
             </Grid>
           </>
