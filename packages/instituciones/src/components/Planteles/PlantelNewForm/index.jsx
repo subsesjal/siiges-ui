@@ -44,7 +44,7 @@ export default function PlantelNewForm({ plantel }) {
   const sexo = [
     { id: 'masculino', nombre: 'Masculino' },
     { id: 'femenino', nombre: 'Femenino' },
-    { id: 'prefiero no decirlo', nombre: 'Prefiero no decirlo'},
+    { id: 'prefiero no decirlo', nombre: 'Prefiero no decirlo' },
   ];
 
   return (

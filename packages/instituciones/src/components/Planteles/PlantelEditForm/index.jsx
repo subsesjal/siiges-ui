@@ -7,11 +7,16 @@ import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import submitEditPlantel from '../../utils/submitEditPlantel';
 import plantelErrors from '../../utils/plantelErrors';
 import formPlantel from '../../utils/formPlantel';
+import getMunicipios from '../../utils/getMunicipios';
 
 export default function PlantelEditForm({ plantel }) {
-  const [form, setForm] = useState({ domicilio: { estadoId: 14 }, directores: {} });
+  const [form, setForm] = useState({
+    domicilio: { estadoId: 14 },
+    directores: {},
+  });
   const [error, setError] = useState({});
   const [noti, setNoti] = useState({ open: false, message: '', type: '' });
+  const { municipios } = getMunicipios();
 
   const director = plantel.directores[0]?.persona;
 
@@ -110,36 +115,22 @@ export default function PlantelEditForm({ plantel }) {
             />
           </Grid>
           <Grid item xs={3}>
-            <Input
-              label="Municipio"
-              id="municipio"
-              name="municipio"
-              auto="municipio"
-              value={plantel.domicilio.municipio.nombre}
+            <BasicSelect
+              title="Municipio"
+              name="municipioId"
+              value={plantel ? plantel.domicilio.municipioId : ''}
+              options={municipios}
+              onchange={handleOnChange}
+              onblur={handleOnBlur}
+              errorMessage={error.municipioId}
               required
-              errorMessage={error.municipio}
-              onchange={handleOnChange}
-              class="data"
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <Input
-              label="Clave de centro de trabajo"
-              id="claveCentroTrabajo"
-              name="claveCentroTrabajo"
-              auto="claveCentroTrabajo"
-              value={plantel.claveCentroTrabajo}
-              onchange={handleOnChange}
-              class="data"
             />
           </Grid>
           <Grid item xs={3}>
             <BasicSelect
               title="Tipo de inmueble"
               name="tipoInmuebleId"
-              value={plantel
-                ? plantel.tipoInmuebleId
-                : ''}
+              value={plantel ? plantel.tipoInmuebleId : ''}
               options={inmuebles}
               onblur={handleOnBlur}
               onchange={handleOnChange}
@@ -232,6 +223,17 @@ export default function PlantelEditForm({ plantel }) {
           </Grid>
         </Grid>
         <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Input
+              label="Clave de centro de trabajo"
+              id="claveCentroTrabajo"
+              name="claveCentroTrabajo"
+              auto="claveCentroTrabajo"
+              value={plantel.claveCentroTrabajo}
+              onchange={handleOnChange}
+              class="data"
+            />
+          </Grid>
           <Grid item xs={3}>
             <Input
               label="Página Web"
@@ -357,12 +359,10 @@ export default function PlantelEditForm({ plantel }) {
         </Grid>
         <ButtonsForm
           cancel={() => router.back()}
-          confirm={() => submitEditPlantel(
-            {
-              form,
-              setNoti,
-            },
-          )}
+          confirm={() => submitEditPlantel({
+            form,
+            setNoti,
+          })}
         />
       </Grid>
       <SnackAlert
