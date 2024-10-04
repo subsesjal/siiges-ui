@@ -14,7 +14,9 @@ export default function Docentes({ disabled, type }) {
   const { programaId } = useContext(SolicitudContext);
   const [docentesList, setDocentesList] = useState([]);
   const docentesData = useDocentes(programaId);
-  const { docentesTable, loading } = type === 'editar' || type === 'consultar' ? docentesData : { docentesTable: [], loading: false };
+  const { docentesTable, loading } = type === 'editar' || type === 'consultar'
+    ? docentesData
+    : { docentesTable: [], loading: false };
 
   const isSectionDisabled = useSectionDisabled(8);
   const isDisabled = disabled || isSectionDisabled;
@@ -40,18 +42,16 @@ export default function Docentes({ disabled, type }) {
         <Typography variant="h6">Docentes</Typography>
       </Grid>
       <Grid item xs={12}>
-        <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataTable
-            buttonAdd
-            buttonText="Agregar Docente"
-            buttonClick={showModal}
-            buttonDisabled={isDisabled}
-            rows={docentesList}
-            columns={columns(isDisabled, setDocentesList, type)}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-          />
-        </div>
+        <DataTable
+          buttonAdd
+          buttonText="Agregar Docente"
+          buttonClick={showModal}
+          buttonDisabled={isDisabled}
+          rows={docentesList}
+          columns={columns(isDisabled, setDocentesList, type)}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+        />
       </Grid>
       <DocentesModal
         open={modal}
