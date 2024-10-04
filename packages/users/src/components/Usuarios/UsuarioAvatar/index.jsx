@@ -2,13 +2,17 @@ import React, {
   useContext, useState, useEffect, useRef,
 } from 'react';
 import {
-  Context, ButtonStyled, SubmitDocument, DefaultModal,
+  Context,
+  SubmitDocument,
+  DefaultModal,
+  ButtonSimple,
 } from '@siiges-ui/shared';
-import { Typography, Grid } from '@mui/material';
+import { Typography, Grid, IconButton } from '@mui/material';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { useRouter } from 'next/router';
 import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
@@ -86,31 +90,56 @@ export default function UsuarioAvatar({ usuario }) {
 
   return (
     <>
-      {imageUrl ? (
-        <Image
-          alt="avatar"
-          src={imageUrl}
-          quality={100}
-          width="300px"
-          height="300px"
-          style={{
-            zIndex: 1,
-            overflow: 'hidden',
+      <div style={{ position: 'relative', width: '300px', height: '300px' }}>
+        {imageUrl ? (
+          <Image
+            alt="avatar"
+            src={imageUrl}
+            quality={100}
+            width="300px"
+            height="300px"
+            style={{
+              zIndex: 1,
+              overflow: 'hidden',
+              position: 'relative',
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: '300px',
+              height: '300px',
+              backgroundColor: '#ccc',
+              zIndex: 1,
+              overflow: 'hidden',
+              position: 'relative',
+            }}
+          >
+            <span>Imagen no disponible</span>
+          </div>
+        )}
+
+        <IconButton
+          onClick={() => fileInputRef.current.click()}
+          sx={{
+            position: 'absolute',
+            top: '255px',
+            right: '10px',
+            zIndex: 2,
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
           }}
-        />
-      ) : (
-        <div
-          style={{
-            width: '300px',
-            height: '300px',
-            backgroundColor: '#ccc',
-            zIndex: 1,
-            overflow: 'hidden',
-          }}
+          size="small"
         >
-          <span>Imagen no disponible</span>
-        </div>
-      )}
+          <PhotoCameraIcon />
+        </IconButton>
+
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
+      </div>
 
       <Paper
         sx={{
@@ -124,23 +153,6 @@ export default function UsuarioAvatar({ usuario }) {
         <br />
         <Divider sx={{ marginY: 1 }} />
         <Typography variant="p">{rol?.descripcion}</Typography>
-        <Grid container spacing={2} justifyContent="flex-end">
-          <Grid item>
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
-            <ButtonStyled
-              text="Cambiar Foto"
-              alt="Cambiar Foto"
-              onclick={() => fileInputRef.current.click()}
-            >
-              Cambiar imagen
-            </ButtonStyled>
-          </Grid>
-        </Grid>
       </Paper>
 
       <DefaultModal
@@ -148,27 +160,20 @@ export default function UsuarioAvatar({ usuario }) {
         setOpen={handleModalClose}
         title="Confirmar cambio de imagen"
       >
-        <Typography>
-          ¿Estás seguro de cambiar la imagen?
-        </Typography>
+        <Typography>¿Estás seguro de cambiar la imagen?</Typography>
         <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
           <Grid item>
-            <ButtonStyled
+            <ButtonSimple
               text="Cancelar"
-              alt="Cancelar"
-              onclick={handleModalClose}
-            >
-              Cancelar
-            </ButtonStyled>
+              design="cancel"
+              onClick={handleModalClose}
+            />
           </Grid>
           <Grid item>
-            <ButtonStyled
+            <ButtonSimple
               text="Confirmar"
-              alt="Confirmar"
-              onclick={handleUploadClick}
-            >
-              Confirmar
-            </ButtonStyled>
+              onClick={handleUploadClick}
+            />
           </Grid>
         </Grid>
       </DefaultModal>

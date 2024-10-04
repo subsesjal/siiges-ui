@@ -18,12 +18,15 @@ export default function UserProfile() {
       {loading ? (
         <Grid container spacing={2}>
           <Grid item xs={4} sx={{ marginTop: 7 }}>
-            <UsuarioAvatar />
+            <UsuarioAvatar usuario={user} />
           </Grid>
           <UsuarioView usuario={user} />
           <Grid container justifyContent="flex-end" spacing={2}>
             <Grid item>
-              <ButtonSimple onClick={() => router.back()} text="Regresar" />
+              <ButtonSimple onClick={() => router.back()} design="enviar" text="Regresar" />
+            </Grid>
+            <Grid item>
+              <ButtonSimple onClick={() => router.push(`/usuarios/editar/${user.id}`)} text="Editar Perfil" />
             </Grid>
           </Grid>
         </Grid>
