@@ -4,7 +4,7 @@ async function submitTrayectoriaEducativa(validations, setLoading, setSections, 
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
-    form, setForm, setNoti, trayectoriaStatus, setTrayectoriaStatus,
+    form, setNoti, trayectoriaStatus, setTrayectoriaStatus,
   } = validations;
 
   const requiredFields = [
@@ -52,8 +52,6 @@ async function submitTrayectoriaEducativa(validations, setLoading, setSections, 
       throw new Error(`Error ${method === 'POST' ? 'creating' : 'updating'} Trayectoria: ${response.status} ${response.statusText}`);
     }
 
-    const responseData = await response.json();
-
     setLoading(false);
     setNoti({
       open: true,
@@ -63,11 +61,6 @@ async function submitTrayectoriaEducativa(validations, setLoading, setSections, 
 
     if (method === 'POST') {
       setTrayectoriaStatus('edit');
-      setForm((prevForm) => {
-        const updatedForm = { ...prevForm };
-        updatedForm[9] = responseData;
-        return updatedForm;
-      });
     }
 
     await fetch(`${url}/api/v1/solicitudes/${solicitudId}/secciones/9`, {
