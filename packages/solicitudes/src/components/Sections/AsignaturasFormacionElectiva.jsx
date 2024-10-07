@@ -48,18 +48,16 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
         <Typography variant="h6">Asignaturas formación electiva</Typography>
       </Grid>
       <Grid item xs={12}>
-        <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataTable
-            buttonAdd
-            buttonText="Agregar Asignatura"
-            buttonClick={showModal}
-            buttonDisabled={isDisabled}
-            rows={asignaturasFormacionList}
-            columns={tableColumns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-          />
-        </div>
+        <DataTable
+          buttonAdd
+          buttonText="Agregar Asignatura"
+          buttonClick={showModal}
+          buttonDisabled={isDisabled}
+          rows={asignaturasFormacionList}
+          columns={tableColumns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+        />
       </Grid>
       <AsignaturasFormacionCreateModal
         open={modal}
