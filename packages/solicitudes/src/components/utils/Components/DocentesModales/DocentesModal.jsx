@@ -8,6 +8,7 @@ import {
   ButtonSimple,
   InputDate,
   Context,
+  InputNumber,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -29,9 +30,6 @@ const errorDatosDocentes = {
   apellidoPaterno: '¡Primer Apellido inválido!',
   apellidoMaterno: '¡Segundo Apellido inválido!',
   tipoDocente: '¡Seleccione un nivel¡',
-  'persona.nombre': '¡Nombre inválido!',
-  'persona.apellidoPaterno': '¡Primer Apellido inválido!',
-  'persona.apellidoMaterno': '¡Segundo Apellido inválido!',
   asignaturasDocentes: '¡Seleccione una asignatura!',
   tipoContratacion: '¡Seleccione un tipo de contratación!',
   antiguedad: '¡Antigüedad inválida!',
@@ -151,6 +149,114 @@ export default function DocentesModal({
   };
 
   const handleOnSubmit = () => {
+    const requiredFields = [
+      {
+        name: 'tipoDocente',
+        value: formDocentes?.tipoDocente,
+        errorMsg: errorDatosDocentes.tipoDocente,
+      },
+      {
+        name: 'nombre',
+        value: formDocentes?.persona?.nombre,
+        errorMsg: errorDatosDocentes.nombre,
+      },
+      {
+        name: 'apellidoPaterno',
+        value: formDocentes?.persona?.apellidoPaterno,
+        errorMsg: errorDatosDocentes.apellidoPaterno,
+      },
+      {
+        name: 'apellidoMaterno',
+        value: formDocentes?.persona?.apellidoMaterno,
+        errorMsg: errorDatosDocentes.apellidoMaterno,
+      },
+      {
+        name: 'asignaturasDocentes',
+        value: formDocentes?.asignaturasDocentes,
+        errorMsg: errorDatosDocentes.asignaturasDocentes,
+      },
+      {
+        name: 'tipoContratacion',
+        value: formDocentes?.tipoContratacion,
+        errorMsg: errorDatosDocentes.tipoContratacion,
+      },
+      {
+        name: 'antiguedad',
+        value: formDocentes?.antiguedad,
+        errorMsg: errorDatosDocentes.antiguedad,
+      },
+      {
+        name: 'experiencias',
+        value: formDocentes?.experiencias,
+        errorMsg: errorDatosDocentes.experiencias,
+      },
+      {
+        name: 'formacion_1_nivelId',
+        value: formDocentes?.formacionesDocentes?.[0]?.nivelId,
+        errorMsg: errorDatosDocentes.formacion_1_nivelId,
+      },
+      {
+        name: 'formacion_1_nombre',
+        value: formDocentes?.formacionesDocentes?.[0]?.nombre,
+        errorMsg: errorDatosDocentes.formacion_1_nombre,
+      },
+      {
+        name: 'formacion_1_descripcion',
+        value: formDocentes?.formacionesDocentes?.[0]?.descripcion,
+        errorMsg: errorDatosDocentes.formacion_1_descripcion,
+      },
+      {
+        name: 'formacion_1_fechaGraduado',
+        value: formDocentes?.formacionesDocentes?.[0]?.fechaGraduado,
+        errorMsg: errorDatosDocentes.formacion_1_fechaGraduado,
+      },
+      {
+        name: 'formacion_1_institucion',
+        value: formDocentes?.formacionesDocentes?.[0]?.institucion,
+        errorMsg: errorDatosDocentes.formacion_1_institucion,
+      },
+      {
+        name: 'formacion_2_nivelId',
+        value: formDocentes?.formacionesDocentes?.[1]?.nivelId,
+        errorMsg: errorDatosDocentes.formacion_2_nivelId,
+      },
+      {
+        name: 'formacion_2_nombre',
+        value: formDocentes?.formacionesDocentes?.[1]?.nombre,
+        errorMsg: errorDatosDocentes.formacion_2_nombre,
+      },
+      {
+        name: 'formacion_2_descripcion',
+        value: formDocentes?.formacionesDocentes?.[1]?.descripcion,
+        errorMsg: errorDatosDocentes.formacion_2_descripcion,
+      },
+      {
+        name: 'formacion_2_fechaGraduado',
+        value: formDocentes?.formacionesDocentes?.[1]?.fechaGraduado,
+        errorMsg: errorDatosDocentes.formacion_2_fechaGraduado,
+      },
+      {
+        name: 'formacion_2_institucion',
+        value: formDocentes?.formacionesDocentes?.[1]?.institucion,
+        errorMsg: errorDatosDocentes.formacion_2_institucion,
+      },
+    ];
+    let hasError = false;
+
+    requiredFields.forEach(({ name, value, errorMsg }) => {
+      if (!value || (Array.isArray(value) && value.length === 0)) {
+        setError((prevError) => ({
+          ...prevError,
+          [name]: errorMsg,
+        }));
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      return;
+    }
+
     handleCreate(
       formDocentes,
       setFormDocentes,
@@ -196,7 +302,7 @@ export default function DocentesModal({
     <DefaultModal open={open} setOpen={hideModal} title={getTitleByMode()}>
       {currentSection === 1 && (
         <Grid container spacing={2} sx={{ width: '100%' }}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <Select
               title="Tipo de docente"
               name="tipoDocente"
@@ -209,7 +315,7 @@ export default function DocentesModal({
               disabled={isConsultMode}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={8}>
             <Input
               id="nombre"
               label="Nombre(s)"
@@ -254,7 +360,8 @@ export default function DocentesModal({
               disabled={isConsultMode}
             />
           </Grid>
-          <Grid item xs={6}>
+
+          <Grid item xs={12}>
             <Select
               title="Asignaturas para las que se propone"
               name="asignaturasDocentes"
@@ -268,7 +375,7 @@ export default function DocentesModal({
               disabled={isConsultMode}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <Select
               title="Tipo de contratación"
               name="tipoContratacion"
@@ -282,7 +389,7 @@ export default function DocentesModal({
             />
           </Grid>
           <Grid item xs={3}>
-            <Input
+            <InputNumber
               id="antiguedad"
               label="Antigüedad"
               name="antiguedad"
@@ -295,6 +402,13 @@ export default function DocentesModal({
               errorMessage={error.antiguedad}
               disabled={isConsultMode}
             />
+          </Grid>
+          <Grid
+            item
+            xs={3}
+            sx={{ display: 'flex', alignItems: 'center', mt: 1 }}
+          >
+            <Typography>Años</Typography>
           </Grid>
           <Grid item xs={12}>
             <Input
@@ -309,7 +423,7 @@ export default function DocentesModal({
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
-              error={error.experiencias}
+              errorMessage={error.experiencias}
               disabled={isConsultMode}
             />
           </Grid>
@@ -373,6 +487,7 @@ export default function DocentesModal({
               value={formDocentes?.formacionesDocentes[0]?.fechaGraduado || ''}
               onchange={handleOnChange}
               onfocus={handleInputFocus}
+              onblur={handleOnBlur}
               required
               type="datetime"
               errorMessage={error.formacion_1_fechaGraduado}
@@ -450,6 +565,7 @@ export default function DocentesModal({
               value={formDocentes?.formacionesDocentes[1]?.fechaGraduado || ''}
               onchange={handleOnChange}
               onfocus={handleInputFocus}
+              onblur={handleOnBlur}
               required
               type="datetime"
               errorMessage={error.formacion_2_fechaGraduado}
@@ -486,16 +602,16 @@ export default function DocentesModal({
           <Grid
             item
             xs={9}
-            sx={
-            {
+            sx={{
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'center',
               whiteSpace: 'nowrap',
-            }
-          }
+            }}
           >
-            <Typography variant="body1" sx={{ marginRight: 2 }}>Página 1-2</Typography>
+            <Typography variant="body1" sx={{ marginRight: 2 }}>
+              Página 1-2
+            </Typography>
             <Grid item sx={{ marginRight: 2 }}>
               <ButtonSimple
                 text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
@@ -510,16 +626,16 @@ export default function DocentesModal({
           <Grid
             item
             xs={9}
-            sx={
-            {
+            sx={{
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'center',
               whiteSpace: 'nowrap',
-            }
-          }
+            }}
           >
-            <Typography variant="body1" sx={{ marginRight: 2 }}>Página 2-2</Typography>
+            <Typography variant="body1" sx={{ marginRight: 2 }}>
+              Página 2-2
+            </Typography>
 
             <Grid item sx={{ marginRight: 2 }}>
               <ButtonSimple
@@ -541,10 +657,7 @@ export default function DocentesModal({
             )}
           </Grid>
         )}
-
-
       </Grid>
-
     </DefaultModal>
   );
 }

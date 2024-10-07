@@ -2,8 +2,14 @@ const validNumber = /^-?\d*\.?\d+$/;
 
 export default function validateField(form, fieldName, setError, validationRules) {
   const error = {};
+  let value = form[fieldName];
+
+  if (fieldName.includes('.')) {
+    const keys = fieldName.split('.');
+    value = keys.reduce((obj, key) => (obj && obj[key] !== 'undefined' ? obj[key] : ''), form);
+  }
+
   const { message, isNumber, isDate } = validationRules[fieldName];
-  const value = form[fieldName];
 
   if (value === undefined || value === '') {
     error[fieldName] = message;
@@ -15,7 +21,16 @@ export default function validateField(form, fieldName, setError, validationRules
     error[fieldName] = '';
   }
 
-  setError((prevErrors) => ({ ...prevErrors, ...error }));
+  setError((prevErrors) => {
+    const updatedErrors = { ...prevErrors };
+    if (error[fieldName]) {
+      updatedErrors[fieldName] = error[fieldName];
+    } else {
+      delete updatedErrors[fieldName];
+    }
+
+    return updatedErrors;
+  });
 
   return error;
 }
