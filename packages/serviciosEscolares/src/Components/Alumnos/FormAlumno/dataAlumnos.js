@@ -50,6 +50,9 @@ export const mailValidator = (email) => {
   const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   return regex.test(email);
 };
+
+export const curpValidator = (curp) => curp.length === 18;
+
 export const setFormData = (data) => ({
   situacionId: data?.situacionId || 2,
   programaId: data?.alumnoId,

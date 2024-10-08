@@ -1,7 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Grid } from '@mui/material';
-import { Button, Context, DataTable, getData } from '@siiges-ui/shared';
+import {
+  Button,
+  Context,
+  DataTable,
+  getData,
+} from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import columnsInscritosOrdinario from '../../../Tables/columnsInscritosOrdinario';
 import columnsInscritosExtra from '../../../Tables/columnsInscritosExtra';
@@ -39,7 +44,6 @@ export default function Calificaciones({
           });
         }
       } catch (error) {
-        console.error('¡Error al obtener calificación mínima!:', error);
         setNoti({
           open: true,
           message: '¡Error al obtener la calificación mínima!',
@@ -73,9 +77,6 @@ export default function Calificaciones({
             });
           }
         } catch (error) {
-          console.error('¡Error al recargar alumnos!:', error);
-          console.log(asignaturaId);
-          console.log(grupoId);
           setNoti({
             open: true,
             message: '¡Error al actualizar los datos!',
@@ -152,7 +153,7 @@ export default function Calificaciones({
 
     setIsSubmitting(true);
 
-    const calificacionesOrdinarias = calificacionesValidas.filter(c => c.tipo === 1);
+    const calificacionesOrdinarias = calificacionesValidas.filter((c) => c.tipo === 1);
     if (calificacionesOrdinarias.length > 0) {
       await submitCalificaciones(
         calificacionesOrdinarias,
@@ -164,7 +165,9 @@ export default function Calificaciones({
       );
     }
 
-    const calificacionesExtraordinarias = calificacionesValidas.filter(c => c.tipo === 2 || parseFloat(c.calificacion) < calificacionMinima)
+    const calificacionesExtraordinarias = calificacionesValidas.filter(
+      (c) => c.tipo === 2 || parseFloat(c.calificacion) < calificacionMinima,
+    )
       .map((c) => ({
         ...c,
         calificacion: c.tipo === 2 ? c.calificacion : '',

@@ -9,6 +9,7 @@ import {
   campos,
   setAndValidateFormData,
   mailValidator,
+  curpValidator,
   generos,
   nacionalidad,
 } from './dataAlumnos';
@@ -22,8 +23,14 @@ export default function FormAlumno({ type, alumno, setId }) {
   const [formSelect, setFormSelect] = useState({
     situacionId: alumno?.situacionId,
   });
-  const [error, setError] = useState('');
   const [errorMail, setErrorMail] = useState('');
+  const [errorCurp, setErrorCurp] = useState('');
+
+  const getErrorMessage = (campoId) => {
+    if (campoId === 'correoPrimario') return errorMail;
+    if (campoId === 'curp') return errorCurp;
+    return false;
+  };
 
   const findId = (param, search) => {
     const Obj = param.find((n) => n.nombre === alumno[search]);
@@ -51,19 +58,63 @@ export default function FormAlumno({ type, alumno, setId }) {
     if (name === 'correoPrimario') {
       if (mailValidator(value)) {
         setErrorMail('');
-      } else setErrorMail('¡El campo Correo no es válido!.');
+        return true;
+      }
+      setErrorMail('El campo Correo no es válido.');
+      return false;
     }
+
+    if (name === 'curp') {
+      if (curpValidator(value)) {
+        setErrorCurp('');
+        return true;
+      }
+      setErrorCurp('El CURP debe tener 18 caracteres.');
+      return false;
+    }
+
+    if (value === '' || value === undefined) {
+      setNoti({
+        open: true,
+        message: `El campo ${name} es obligatorio.`,
+        type: 'error',
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    validator(name, value);
-    setForm({ ...form, [name]: value.toString().trim() });
-    setError('');
+    const isValid = validator(name, value);
+    if (isValid) {
+      setForm({ ...form, [name]: value.toString().trim() });
+    }
+  };
+
+  const validateFormBeforeSubmit = () => {
+    let isValid = true;
+    campos.forEach((field) => {
+      if (field.type !== 'select' && !form?.[field.id]) {
+        setNoti({
+          open: true,
+          message: `El campo ${field.label} es obligatorio.`,
+          type: 'error',
+        });
+        isValid = false;
+      }
+    });
+    return isValid;
   };
 
   const saveButtonAction = async () => {
     setLoading(true);
+    if (!validateFormBeforeSubmit()) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const dataBody = setAndValidateFormData({ ...form, ...query }).formData;
       let response;
@@ -78,7 +129,6 @@ export default function FormAlumno({ type, alumno, setId }) {
           message: '¡Alumno actualizado con éxito!',
           type: 'success',
         });
-        setLoading(false);
       } else {
         response = await alumnosService({ dataBody, method: 'POST' });
         setId(response.data.id);
@@ -87,13 +137,12 @@ export default function FormAlumno({ type, alumno, setId }) {
           message: '¡Alumno registrado con éxito!',
           type: 'success',
         });
-        setLoading(false);
       }
+      setLoading(false);
     } catch (err) {
-      setError(err.message);
       setNoti({
         open: true,
-        message: '¡Error al registrar alumno!',
+        message: `¡Error al registrar alumno! ${err.message}`,
         type: 'error',
       });
       setLoading(false);
@@ -102,11 +151,6 @@ export default function FormAlumno({ type, alumno, setId }) {
 
   return (
     <div style={{ padding: '20px' }}>
-      {error && (
-        <Typography variant="body2" style={{ color: 'red' }}>
-          {error}
-        </Typography>
-      )}
       <Typography variant="body1">
         ¡Nota importante!. El nombre del alumno se debe registrar tal y como
         aparece en el acta de nacimiento, en mayúsculas y en caso de tener
@@ -123,10 +167,10 @@ export default function FormAlumno({ type, alumno, setId }) {
                 name={campo.id}
                 auto={campo.id}
                 onchange={handleOnChange}
-                value={alumno?.[campo.id]}
+                value={form?.[campo.id] || alumno?.[campo.id]}
                 type={campo.type}
                 disabled={campo.disabled}
-                errorMessage={campo.id === 'correoPrimario' ? errorMail : false}
+                errorMessage={getErrorMessage(campo.id)}
               />
             ) : (
               <Select

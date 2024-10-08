@@ -1,7 +1,7 @@
 import {
   Button, Context, DataTable, Input, getData,
 } from '@siiges-ui/shared';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
@@ -25,6 +25,39 @@ export default function InscripcionesTable({
   const [alumnoData, setAlumnoData] = useState(null);
   const [isAlumnoValido, setIsAlumnoValido] = useState(false);
 
+  const fetchAlumnosInscritos = async () => {
+    try {
+      const result = await getData({ endpoint: `/alumnos/grupos/${grupoId}/inscripcion` });
+      if (result.statusCode === 200) {
+        const alumnosCompletos = result.data.map((alumno) => ({
+          id: alumno.alumnoId,
+          alumnoId: alumno.alumnoId,
+          matricula: alumno.alumno.matricula,
+          persona: alumno.alumno.persona,
+          alumnoAsignaturas: alumno.alumnoAsignaturas,
+          ...alumno.alumno,
+        }));
+        setAlumnosInscritos(alumnosCompletos);
+      } else {
+        setNoti({
+          open: true,
+          message: 'Error al obtener la lista de alumnos inscritos.',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: 'Error al obtener la lista de alumnos inscritos.',
+        type: 'error',
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchAlumnosInscritos();
+  }, [grupoId]);
+
   const handleCheckboxChange = (id, isChecked) => {
     if (isChecked) {
       setSelectedAsignaturas((prev) => [...prev, id]);
@@ -36,7 +69,6 @@ export default function InscripcionesTable({
   const handleBlurMatricula = () => {
     getAlumnoByMatricula(matriculaValue, programaId, async (error, result) => {
       if (error) {
-        console.error('¡Error al buscar al alumno!:', error);
         setNoti({
           open: true,
           message: '¡Algo salió mal al cargar al alumno, revisa la matrícula!',
@@ -74,7 +106,6 @@ export default function InscripcionesTable({
         setAlumnoData(alumnoResult.data);
         setIsAlumnoValido(true);
       } catch (fetchError) {
-        console.error('¡Error al obtener los datos del alumno!:', fetchError);
         setNoti({
           open: true,
           message: '¡Algo salió mal al validar al alumno!',
@@ -115,7 +146,6 @@ export default function InscripcionesTable({
 
       postAsignaturasAlumno(dataToSend, grupoId, (error) => {
         if (error) {
-          console.error('¡No se pudo inscribir al estudiante!:', error);
           setNoti({
             open: true,
             message:
@@ -128,7 +158,7 @@ export default function InscripcionesTable({
             message: '¡Éxito al inscribir el alumno!',
             type: 'success',
           });
-          setAlumnosInscritos((prev) => [...prev, alumnoByMatricula]);
+          fetchAlumnosInscritos();
           setMatriculaValue('');
           setSelectedAsignaturas([]);
         }
@@ -169,7 +199,13 @@ export default function InscripcionesTable({
       <Grid item xs={12}>
         <DataTable
           rows={alumnosInscritos}
-          columns={columnsAlumnosInscritos(asignaturas, grupoId)}
+          getRowId={(row) => row.id}
+          columns={columnsAlumnosInscritos(
+            asignaturas,
+            grupoId,
+            fetchAlumnosInscritos,
+            alumnosInscritos,
+          )}
           title="Alumnos inscritos"
         />
       </Grid>

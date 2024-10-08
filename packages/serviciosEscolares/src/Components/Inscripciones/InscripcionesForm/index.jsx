@@ -90,7 +90,7 @@ export default function InscripcionForm({
       } else {
         const transformedProgramas = data.programas.map((programa) => ({
           id: programa.id,
-          nombre: programa.nombre,
+          nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
           turno: programa.turno,
         }));
         setProgramas(transformedProgramas);
