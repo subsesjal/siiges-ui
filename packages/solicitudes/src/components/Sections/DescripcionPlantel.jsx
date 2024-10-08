@@ -30,17 +30,37 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
       if (plantelesData?.id) {
         try {
           const [nivelesResponse, seguridadResponse] = await Promise.all([
-            getData({ endpoint: `/planteles/${plantelesData.id}/niveles`, query: '' }),
-            getData({ endpoint: `/planteles/${plantelesData.id}/seguridad`, query: '' }),
+            getData({
+              endpoint: `/planteles/${plantelesData.id}/niveles`,
+              query: '',
+            }),
+            getData({
+              endpoint: `/planteles/${plantelesData.id}/seguridad`,
+              query: '',
+            }),
           ]);
+
           if (nivelesResponse && nivelesResponse.data) {
-            const nivelIds = nivelesResponse.data.map((nivel) => nivel.edificioNivelId);
-            setSelectedCheckboxes(nivelIds.map((edificioNivelId) => ({ edificioNivelId })));
+            const nivelIds = nivelesResponse.data.map(
+              (nivel) => nivel.edificioNivelId,
+            );
+            setSelectedCheckboxes(
+              nivelIds.map((edificioNivelId) => ({ edificioNivelId })),
+            );
           }
-          if (seguridadResponse && seguridadResponse.data && seguridadResponse.data.length > 0) {
-            const seguridadData = seguridadResponse.data.map((sec, index) => ({
+
+          if (
+            seguridadResponse
+            && seguridadResponse.data
+            && seguridadResponse.data.length > 0
+          ) {
+            const sortedSeguridadData = seguridadResponse.data.sort(
+              (a, b) => a.seguridadSistemaId - b.seguridadSistemaId,
+            );
+
+            const seguridadData = sortedSeguridadData.map((sec) => ({
               plantelId: plantelesData.id,
-              seguridadSistemaId: index + 1,
+              seguridadSistemaId: sec.seguridadSistemaId,
               cantidad: sec.cantidad || 0,
             }));
             setSeguridad(seguridadData);
@@ -50,6 +70,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
         }
       }
     };
+
     fetchData();
   }, [plantelesData]);
 
