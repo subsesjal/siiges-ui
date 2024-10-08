@@ -31,8 +31,12 @@ function InputDate({
     }
 
     onchange({ target: { name, value: formattedDate } });
-    // Trigger onblur with an artificial event object
-    onblur({ target: { name, value: formattedDate } });
+  };
+
+  const handleOnClose = () => {
+    if (onblur) {
+      onblur({ target: { name, value } });
+    }
   };
 
   return (
@@ -43,6 +47,7 @@ function InputDate({
         name={name}
         onChange={handleDateChange}
         onFocus={onfocus}
+        onClose={handleOnClose}
         disabled={disabled}
         maxDate={dayjs('2100-01-01')}
         minDate={dayjs('1900-01-01')}
@@ -52,7 +57,7 @@ function InputDate({
           textField: {
             disabled,
             required,
-            onBlur: onblur,
+            onBlur: handleOnClose,
             helperText: errorMessage,
             error: !!errorMessage,
             size,
