@@ -63,7 +63,6 @@ export default function Calificaciones({
         try {
           const alumnosActualizados = await getAlumnosAcreditacion(asignaturaId, grupoId);
           if (alumnosActualizados) {
-            console.log(alumnosActualizados);
             setAlumnos(alumnosActualizados);
             setNoti({
               open: true,
