@@ -28,7 +28,7 @@ export default function DatosGenerales({
             sections={section}
             position={position}
             total="3"
-            porcentage={porcentaje}
+            porcentaje={porcentaje}
             nextModule={nextModule}
             id={id}
             next={next}

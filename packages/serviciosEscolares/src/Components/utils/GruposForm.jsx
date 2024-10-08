@@ -27,7 +27,7 @@ export default function GruposForm({ setGrupos, setParametros }) {
         const ciclosEscolaresData = await getCiclosEscolares(query.id);
         setCiclos(ciclosEscolaresData);
       } catch (error) {
-        console.error('Error fetching ciclos escolares:', error);
+        console.error('¡Error al recuperar ciclos escolares!:', error);
       }
     };
 

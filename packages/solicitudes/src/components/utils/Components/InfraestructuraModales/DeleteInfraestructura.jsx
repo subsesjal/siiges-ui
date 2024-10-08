@@ -28,7 +28,7 @@ function DeleteInfraestructura({ modal, hideModal, id }) {
       hideModal();
       setNoti({
         open: true,
-        message: 'Se eliminó exitosamente la infraestructura',
+        message: '¡Se eliminó exitosamente la infraestructura!',
         type: 'success',
       });
     } else {

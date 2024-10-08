@@ -14,7 +14,7 @@ export default function SignIn() {
   const [form, setForm] = useState({ usuario: '', contrasena: '' });
 
   const errors = {
-    usuario: 'Usuario equivocado',
+    usuario: '¡Usuario equivocado!',
     contrasena: '¡Contraseña equivocada!',
   };
 
@@ -45,7 +45,6 @@ export default function SignIn() {
             mt: 3,
             py: 3,
             px: 3,
-            height: '330px',
             width: '320px',
           },
         }}
@@ -108,6 +107,10 @@ export default function SignIn() {
       >
         <Typography variant="body2" style={{ color: '#3b4245' }}>
           &copy; 2024 Secretaría General de Gobierno - Todos los derechos reservados.
+        </Typography>
+        <Typography variant="body2" style={{ color: '#3b4245' }}>
+          Edificio MIND Av. Faro #2350 , Colonia: Verde Valle , CP: 44540, Guadalajara, Jalisco
+          Lunes a Viernes de 09:00:00 a 17:00:00 horas
         </Typography>
         <Typography variant="body2" style={{ color: '#3b4245' }}>
           <Link

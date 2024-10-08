@@ -29,7 +29,7 @@ export default async function submitInstitucion(
 
     if (!patchResponse.ok) {
       const errorData = await patchResponse.json();
-      throw new Error(errorData.message || 'Error submitting the request');
+      throw new Error(errorData.message || '¡Error al enviar la solicitud!');
     }
 
     const data = await patchResponse.json();
@@ -44,7 +44,7 @@ export default async function submitInstitucion(
 
     if (!postResponse.ok) {
       const errorData = await postResponse.json();
-      throw new Error(errorData.message || 'Error fetching the section data');
+      throw new Error(errorData.message || '¡Error al obtener datos!');
     }
 
     setSections((prevSections) => prevSections.map((section) => {

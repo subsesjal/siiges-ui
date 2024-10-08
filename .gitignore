@@ -238,3 +238,6 @@ $RECYCLE.BIN/
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/node,yarn,nextjs,windows,macos,linux
+
+# Ignore yarn.lock and package-lock.json
+package-lock.json

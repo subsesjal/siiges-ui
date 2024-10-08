@@ -43,8 +43,7 @@ function Input({
   const handleOnChange = (e) => {
     const newValue = e.target.value;
 
-    // Limit the input length based on whether it is multiline or not
-    if (multiline && newValue.length > 600) {
+    if (multiline && newValue.length > 10000) {
       return;
     }
     if (!multiline && newValue.length > 255) {

@@ -35,7 +35,7 @@ export default function Infraestructura({ disabled, programaId, type }) {
             setInfraestructuras(response.data);
           }
         } catch (err) {
-          console.error('Error fetching data:', err);
+          console.error('¡Error al obtener datos!:', err);
         }
       };
       fetchData();

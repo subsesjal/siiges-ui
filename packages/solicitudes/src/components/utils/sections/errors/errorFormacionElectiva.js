@@ -10,7 +10,7 @@ export default function errorFormacionElectiva(form, setError, error) {
       ) {
         setError({
           ...error,
-          minimoHorasOptativas: 'Minímo de horas inválido',
+          minimoHorasOptativas: '¡Minímo de horas inválido!',
         });
         return false;
       }
@@ -25,7 +25,7 @@ export default function errorFormacionElectiva(form, setError, error) {
       ) {
         setError({
           ...error,
-          minimoCreditosOptativas: 'Minímo de créditos inválido',
+          minimoCreditosOptativas: '¡Minímo de créditos inválido!',
         });
         return false;
       }

@@ -27,7 +27,7 @@ const makeCall = async ({
     });
 
     if (!response.ok) {
-      const errorData = ERROR_MAPPING[response.status] || { statusCode: response.status, errorMessage: 'Internal Server Error' };
+      const errorData = ERROR_MAPPING[response.status] || { statusCode: response.status, errorMessage: '¡Error Interno del Servidor!' };
       return {
         ...errorData,
         data: [],
@@ -42,7 +42,7 @@ const makeCall = async ({
   } catch (error) {
     return {
       statusCode: 500,
-      errorMessage: 'Internal Server Error',
+      errorMessage: '¡Error Interno del Servidor!',
       data: [],
     };
   }

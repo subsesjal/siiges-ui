@@ -2,17 +2,15 @@ import {
   List, ListItem, ListItemText, Grid, Typography,
 } from '@mui/material';
 import {
-  ButtonSimple,
-  Layout,
-  Title,
-  useApi,
+  ButtonSimple, Layout, Title, useApi, Context, getData,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import GetFile from '@siiges-ui/shared/src/utils/handlers/getFile';
-import { OficioModal } from './utils/oficioModal';
+import OficioModal from '@siiges-ui/solicitudes/src/components/Modal/ModalOficio';
 
+const url = process.env.NEXT_PUBLIC_URL;
 export default function detallesSolicitudes() {
+  const { session, setNoti } = useContext(Context);
   const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
   const showOficioModal = () => setIsOficioModalOpen(true);
   const hideOficioModal = () => setIsOficioModalOpen(false);
@@ -20,32 +18,53 @@ export default function detallesSolicitudes() {
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
   const { data } = useApi({ endpoint: `api/v1/solicitudes/${query.id}/detalles` });
-
   useEffect(() => {
     if (data) {
       setSolicitud(data);
     }
   }, [data]);
+
   const downloadFile = async (type) => {
     try {
       const solicitudId = solicitud?.id;
+      const response = await getData({ endpoint: `/files/?tipoEntidad=SOLICITUD&entidadId=${solicitudId}&tipoDocumento=${type}` });
 
-      GetFile({
-        tipoEntidad: 'SOLICITUD',
-        entidadId: solicitudId,
-        tipoDocumento: type,
-      }, async (url) => {
-        if (!url.startsWith('http')) {
-          // eslint-disable-next-line no-param-reassign
-          url = `http://${url}`;
+      if (response && response.data) {
+        const { ubicacion } = response.data;
+        if (ubicacion && typeof ubicacion === 'string') {
+          const finalUrl = url + ubicacion;
+          if (finalUrl && finalUrl !== 'undefined') {
+            window.open(finalUrl, '_blank');
+          } else {
+            setNoti({
+              open: true,
+              message: '¡Url no válido, intente de nuevo!',
+              type: 'error',
+            });
+          }
+        } else {
+          setNoti({
+            open: true,
+            message: '¡Error al descargar el archivo, intente de nuevo!.',
+            type: 'error',
+          });
         }
-        window.open(url, '_blank');
-      });
+      } else {
+        setNoti({
+          open: true,
+          message: '¡Error al descargar el archivo, intente de nuevo!.',
+          type: 'error',
+        });
+      }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error calling GetFile', error);
+      setNoti({
+        open: true,
+        message: '¡Error al descargar el archivo!',
+        type: 'error',
+      });
     }
   };
+
   return (
     <Layout>
       <Title title="Detalles de la solicitud" />
@@ -101,7 +120,7 @@ export default function detallesSolicitudes() {
             </ListItem>
           </List>
         </Grid>
-        {solicitud.estatusSolicitudId > 8 && (
+        {(solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar') ? (
           <Grid item xs={4}>
             <Typography variant="subtitle1" color="textSecondary">
               RVOE
@@ -112,6 +131,19 @@ export default function detallesSolicitudes() {
               </ListItem>
             </List>
           </Grid>
+        ) : (
+          solicitud.estatusSolicitudId > 8 && (
+            <Grid item xs={4}>
+              <Typography variant="subtitle1" color="textSecondary">
+                RVOE
+              </Typography>
+              <List component="nav">
+                <ListItem button onClick={() => downloadFile('ACUERDO_RVOE')}>
+                  <ListItemText primary="Acuerdo RVOE" />
+                </ListItem>
+              </List>
+            </Grid>
+          )
         )}
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
@@ -150,14 +182,12 @@ export default function detallesSolicitudes() {
           </Grid>
         </Grid>
       </Grid>
-      {solicitud?.id && (
       <OficioModal
         open={isOficioModalOpen}
         hideModal={hideOficioModal}
         downloadFile={downloadFile}
         solicitudId={solicitud.id}
       />
-      )}
     </Layout>
   );
 }

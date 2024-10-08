@@ -18,6 +18,9 @@ export default function BiografiaBibliografiaModal({
   const [disableBiografia, setDisableBiografia] = useState(false);
   const [disableBibliografia, setDisableBibliografia] = useState(false);
   const [disableActa, setDisableActa] = useState(false);
+  const [biografiaUrl, setBiografiaUrl] = useState('');
+  const [bibliografiaUrl, setBibliografiaUrl] = useState('');
+  const [actaUrl, setActaUrl] = useState('');
 
   const router = useRouter();
 
@@ -49,25 +52,28 @@ export default function BiografiaBibliografiaModal({
         formData.append('tipoDocumento', documentType);
         formData.append('file', files[0]);
 
-        await SubmitDocument(formData);
+        const { data: url } = await SubmitDocument(formData);
 
         setNoti({
           open: true,
-          message: 'Documento subido con éxito',
+          message: '¡Documento cargado con éxito!',
           type: 'success',
         });
 
         if (documentType === 'BIOGRAFIA') {
           setDisableBiografia(true);
+          setBiografiaUrl(url);
         } else if (documentType === 'BIBLIOGRAFIA') {
           setDisableBibliografia(true);
+          setBibliografiaUrl(url);
         } else if (documentType === 'ACTA_CONSTITUTIVA') {
           setDisableActa(true);
+          setActaUrl(url);
         }
       } catch (error) {
         setNoti({
           open: true,
-          message: 'Algo salió mal, revise su documento',
+          message: '¡Algo salió mal, revise su documento!',
           type: 'error',
         });
       } finally {
@@ -78,7 +84,7 @@ export default function BiografiaBibliografiaModal({
     } else {
       setNoti({
         open: true,
-        message: 'Ingrese un documento',
+        message: '¡Ingrese un documento!',
         type: 'error',
       });
     }
@@ -93,6 +99,8 @@ export default function BiografiaBibliografiaModal({
             tipoEntidad="RATIFICACION"
             tipoDocumento="BIOGRAFIA"
             id={institucionId}
+            url={biografiaUrl}
+            setUrl={setBiografiaUrl}
             disabled={disableBiografia}
             onclick={() => handleOpenDropzone('BIOGRAFIA')}
           />
@@ -103,6 +111,8 @@ export default function BiografiaBibliografiaModal({
             tipoEntidad="RATIFICACION"
             tipoDocumento="BIBLIOGRAFIA"
             id={institucionId}
+            url={bibliografiaUrl}
+            setUrl={setBibliografiaUrl}
             disabled={disableBibliografia}
             onclick={() => handleOpenDropzone('BIBLIOGRAFIA')}
           />
@@ -113,6 +123,8 @@ export default function BiografiaBibliografiaModal({
             tipoEntidad="INSTITUCION"
             tipoDocumento="ACTA_CONSTITUTIVA"
             id={institucionId}
+            url={actaUrl}
+            setUrl={setActaUrl}
             disabled={disableActa}
             onclick={() => handleOpenDropzone('ACTA_CONSTITUTIVA')}
           />

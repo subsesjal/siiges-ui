@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
 import React, {
   createContext, useEffect, useState, useMemo,
 } from 'react';
@@ -19,6 +18,8 @@ function Provider({ children }) {
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [section, setSection] = useState(findRoute(router.route, session.rol));
 
+  const excludedRoutes = ['/revalidaciones', '/equivalencias']; // Exclude these routes
+
   const removeAuth = () => {
     router.push('/');
     localStorage.removeItem('token');
@@ -31,7 +32,7 @@ function Provider({ children }) {
     if (storedData) {
       setSession(storedData);
       setAuth(true);
-    } else {
+    } else if (!excludedRoutes.includes(router.route)) {
       setShouldRedirect(true);
     }
     if (findRoute(router.route, session.rol)) {

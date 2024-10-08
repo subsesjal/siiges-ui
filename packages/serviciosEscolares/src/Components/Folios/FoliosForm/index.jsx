@@ -134,7 +134,7 @@ export default function FoliosForm({
       } catch (error) {
         setNoti({
           open: true,
-          message: `Error al buscar los planteles: ${error.message}`,
+          message: `¡Error al buscar los planteles!: ${error.message}`,
           type: 'error',
         });
         setPlanteles([]);

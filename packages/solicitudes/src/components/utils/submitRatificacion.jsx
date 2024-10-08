@@ -44,7 +44,7 @@ export default async function submitRatificacion(
 
     if (!ratificacionResponse.ok) {
       const errorData = await ratificacionResponse.json();
-      throw new Error(errorData.message || 'Error submitting the ratificacion');
+      throw new Error(errorData.message || '¡Error al enviar la ratificación!');
     }
 
     // Second request to disable section 11
@@ -58,7 +58,7 @@ export default async function submitRatificacion(
 
     if (!postSectionResponse.ok) {
       const errorData = await postSectionResponse.json();
-      throw new Error(errorData.message || 'Error disabling section 19');
+      throw new Error(errorData.message || '¡Error al desactivar la sección 19!');
     }
 
     setSections((prevSections) => prevSections.map((section) => {

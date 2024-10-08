@@ -35,7 +35,7 @@ export default function submitNewPlantel({
       if (response.ok) {
         return response.json();
       }
-      throw new Error('Error submitting the request');
+      throw new Error('¡Error al enviar la solicitud!');
     })
     .then(
       setNoti({

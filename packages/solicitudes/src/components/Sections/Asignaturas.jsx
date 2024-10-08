@@ -46,19 +46,17 @@ export default function Asignaturas({ disabled, type }) {
         <Typography variant="h6">Asignaturas</Typography>
       </Grid>
       <Grid item xs={12}>
-        <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataTable
-            buttonAdd
-            buttonText="Agregar Asignatura"
-            buttonClick={showModal}
-            buttonDisabled={isDisabled}
-            rows={asignaturasList}
-            columns={tableColumns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            loading={loading}
-          />
-        </div>
+        <DataTable
+          buttonAdd
+          buttonText="Agregar Asignatura"
+          buttonClick={showModal}
+          buttonDisabled={isDisabled}
+          rows={asignaturasList}
+          columns={tableColumns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          loading={loading}
+        />
       </Grid>
       <AsignaturasModal
         open={modal}

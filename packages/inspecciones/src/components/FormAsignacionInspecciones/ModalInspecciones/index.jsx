@@ -32,7 +32,7 @@ const fetchData = async ({
       },
       body: dataBody,
     });
-    if (!response.ok) throw new Error('Network response was not ok');
+    if (!response.ok) throw new Error('¡La respuesta de la red no fue correcta!');
     const { data } = await response.json();
     setLoading(false);
     setNoti({
@@ -76,12 +76,12 @@ function ModalInspecciones({ params: { row } }) {
   const validations = useCallback(() => {
     const newErrors = {};
     if (!form.fechaInspeccion) {
-      newErrors.fechaInspeccion = 'Fecha de inspección no puede ser nula';
+      newErrors.fechaInspeccion = '¡La fecha de inspección no puede ser nula!';
     } else if (dayjs(form.fechaInspeccion).isBefore(dayjs(), 'day')) {
-      newErrors.fechaInspeccion = 'Fecha de inspección no puede ser anterior a la fecha actual';
+      newErrors.fechaInspeccion = '¡La fecha de inspección no puede ser anterior a la fecha actual!';
     }
     if (!form.folio) {
-      newErrors.folio = 'Ingrese un folio';
+      newErrors.folio = '¡Por favor, ingrese un número de folio!';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

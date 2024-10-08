@@ -35,7 +35,7 @@ export default function updateInstitucion(
       if (response.ok) {
         return response.json();
       }
-      throw new Error('Error submitting the request');
+      throw new Error('¡Error al enviar la solicitud!');
     })
     .then((data) => {
       router.push(`/institucion/${data.data.id}/consultarInstitucion`);

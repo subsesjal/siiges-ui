@@ -51,6 +51,17 @@ export default function OrganosColegiados({ type }) {
         <Grid item xs={6} />
         <Grid item xs={4}>
           <InputFile
+            label="Convocatoria"
+            id={1}
+            tipoEntidad="CONVOCATORIA"
+            tipoDocumento="CONVOCATORIA"
+            url={url}
+            setUrl={setUrl}
+            disabled={false}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <InputFile
             label="Orden del Día"
             id={1}
             tipoEntidad="ORDEN_DIA"
@@ -71,17 +82,7 @@ export default function OrganosColegiados({ type }) {
             disabled={false}
           />
         </Grid>
-        <Grid item xs={4}>
-          <InputFile
-            label="Convocatoria"
-            id={1}
-            tipoEntidad="CONVOCATORIA"
-            tipoDocumento="CONVOCATORIA"
-            url={url}
-            setUrl={setUrl}
-            disabled={false}
-          />
-        </Grid>
+
         <Grid item xs={12}>
           <DataTable
             buttonAdd

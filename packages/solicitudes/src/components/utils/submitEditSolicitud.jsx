@@ -26,7 +26,7 @@ export default function submitEditSolicitud(
     .then((response) => {
       if (!response.ok) {
         return response.json().then((error) => {
-          throw new Error(error.message || 'Error submitting the request');
+          throw new Error(error.message || '¡Error al enviar la solicitud!');
         });
       }
       return response.json();
@@ -41,7 +41,7 @@ export default function submitEditSolicitud(
     .then((response) => {
       if (!response.ok) {
         return response.json().then((error) => {
-          throw new Error(error.message || 'Error fetching the section data');
+          throw new Error(error.message || '¡Error al recuperar los datos de la sección!');
         });
       }
       return response.json();

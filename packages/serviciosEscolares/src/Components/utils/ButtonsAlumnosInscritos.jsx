@@ -34,6 +34,7 @@ export default function ButtonsAlumnosInscritos({
         endpoint: `/alumnos/${id}/grupos/${grupoId}/inscripcion`,
       });
 
+
       if (result.statusCode === 200) {
         setNoti({
           open: true,

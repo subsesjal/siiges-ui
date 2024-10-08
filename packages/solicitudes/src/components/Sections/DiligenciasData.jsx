@@ -44,7 +44,7 @@ function DiligenciasData({ disabled, id, type }) {
           setDiligenciasRows(rows);
         }
       } catch (err) {
-        console.error('Error fetching data:', err);
+        console.error('¡Error al obtener datos!:', err);
       } finally {
         setIsLoading(false);
       }
@@ -60,19 +60,17 @@ function DiligenciasData({ disabled, id, type }) {
         <Typography variant="h6">Diligencias</Typography>
       </Grid>
       <Grid item xs={12}>
-        <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataTable
-            buttonAdd
-            buttonText="Agregar Diligencia"
-            buttonClick={showModal}
-            buttonDisabled={isDisabled}
-            rows={diligenciasRows}
-            columns={tableColumns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            loading={isLoading}
-          />
-        </div>
+        <DataTable
+          buttonAdd
+          buttonText="Agregar Diligencia"
+          buttonClick={showModal}
+          buttonDisabled={isDisabled}
+          rows={diligenciasRows}
+          columns={tableColumns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          loading={isLoading}
+        />
       </Grid>
       <DiligenciasFormModal
         open={modal}

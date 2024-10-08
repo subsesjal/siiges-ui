@@ -219,8 +219,8 @@ export default function FoliosData({ type }) {
           open: true,
           message:
             type === 'edit'
-              ? 'Éxito al actualizar la solicitud'
-              : 'Éxito al crear la solicitud, ya puede agregar alumnos',
+              ? '¡Éxito al actualizar la solicitud!'
+              : '¡Éxito al crear la solicitud!, ya puede agregar alumnos',
           type: 'success',
         });
       } else {

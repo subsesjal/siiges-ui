@@ -62,7 +62,7 @@ export default async function submitEvaluacionCurricular(
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Error submitting the request');
+      throw new Error(errorData.message || '¡Error al enviar la solicitud!');
     }
 
     const postSectionResponse = await fetch(`${url}/api/v1/solicitudes/${id}/secciones/21`, {
@@ -75,7 +75,7 @@ export default async function submitEvaluacionCurricular(
 
     if (!postSectionResponse.ok) {
       const errorData = await postSectionResponse.json();
-      throw new Error(errorData.message || 'Error disabling section 21');
+      throw new Error(errorData.message || '¡Error al desactivar la sección 21!');
     }
 
     setSections((prevSections) => prevSections.map((section) => {
@@ -94,7 +94,7 @@ export default async function submitEvaluacionCurricular(
     console.error('Error:', error);
     setNoti({
       open: true,
-      message: `Hubo un problema: ${error.message}`,
+      message: `¡Hubo un problema!: ${error.message}`,
       type: 'error',
     });
   } finally {

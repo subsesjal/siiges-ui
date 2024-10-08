@@ -38,7 +38,7 @@ const handleCreate = async (
         type: 'error',
       });
       setLoading(false);
-      throw new Error('Network error');
+      throw new Error('¡Error de red!');
     }
 
     const data = await response.json();

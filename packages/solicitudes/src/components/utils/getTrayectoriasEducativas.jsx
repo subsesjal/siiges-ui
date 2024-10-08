@@ -26,7 +26,7 @@ export default function useTrayectoriasEducativas(programaId) {
             },
           );
           if (!response.ok) {
-            throw new Error('Failed to fetch data');
+            throw new Error('¡Error al obtener datos!');
           }
           const data = await response.json();
           setTrayectorias(data.data);

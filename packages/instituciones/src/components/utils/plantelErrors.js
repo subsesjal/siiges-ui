@@ -47,7 +47,7 @@ export default function plantelErrors(form, setError, error) {
     },
     municipioId: () => {
       if (form.domicilio.municipioId === undefined || form.domicilio.municipioId === '') {
-        setError({ ...error, municipioId: 'Seleccione un municipio' });
+        setError({ ...error, municipioId: '¡Por favor seleccione un municipio!' });
         return false;
       }
       setError({ ...error, municipioId: '' });
@@ -57,7 +57,7 @@ export default function plantelErrors(form, setError, error) {
       if (form.tipoInmuebleId === undefined || form.tipoInmuebleId === '') {
         setError({
           ...error,
-          tipoInmuebleId: 'Seleccione un tipo de inmueble',
+          tipoInmuebleId: '¡Por favor seleccione un tipo de inmueble!',
         });
         return false;
       }
@@ -154,7 +154,7 @@ export default function plantelErrors(form, setError, error) {
     },
     curp: () => {
       if (form.director.persona.curp === undefined || form.director.persona.curp === '' || form.director.persona.curp.length !== 18) {
-        setError({ ...error, curp: 'Curp debe tener 18 caracteres' });
+        setError({ ...error, curp: '¡La Curp debe contener 18 caracteres!' });
         return false;
       }
       setError({ ...error, curp: '' });

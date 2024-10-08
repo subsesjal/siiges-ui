@@ -85,7 +85,7 @@ export default function InscripcionesTable({
         if (!validacionResult || validacionResult.data.situacionValidacionId !== 1) {
           setNoti({
             open: true,
-            message: 'Este alumno no tiene una validación Auténtica.',
+            message: '¡Este alumno no tiene una validación Auténtica!.',
             type: 'error',
           });
           setIsAlumnoValido(false);
@@ -97,7 +97,7 @@ export default function InscripcionesTable({
         if (!alumnoResult || alumnoResult.data.situacionId !== 1) {
           setNoti({
             open: true,
-            message: 'Este alumno no está Activo.',
+            message: '¡Este alumno no está Activo!.',
             type: 'error',
           });
           setIsAlumnoValido(false);
@@ -132,7 +132,7 @@ export default function InscripcionesTable({
       if (alumnoYaInscrito) {
         setNoti({
           open: true,
-          message: 'Este alumno ya está inscrito en el grupo.',
+          message: '¡Este alumno ya está inscrito en el grupo!.',
           type: 'error',
         });
         return;

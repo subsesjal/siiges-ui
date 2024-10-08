@@ -148,13 +148,13 @@ function SolicitudesActions({ id, estatus }) {
       </Grid>
       <DefaultModal title="Eliminar solicitud" open={openDelete} setOpen={setOpenDelete}>
         <Typography>
-          ¿Está seguro que quiere eliminar esta solicitud?
+          ¿Está seguro de eliminar esta solicitud?
         </Typography>
         <ButtonsForm cancel={() => setOpenDelete(false)} confirm={handleDelete} confirmText="Confirmar" />
       </DefaultModal>
       <DefaultModal title="Descargar solicitud" open={openDownload} setOpen={setOpenDownload}>
         <Typography>
-          ¿Está seguro que quiere descargar esta solicitud con los siguientes comentarios?
+          ¿Está seguro de descargar esta solicitud con los siguientes comentarios?
         </Typography>
         <TextField
           fullWidth
