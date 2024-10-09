@@ -9,11 +9,13 @@ export default function UserForm({
   cancel,
   confirmDisabled,
   confirmText = 'Guardar',
+  justifyContent,
 }) {
   const cancelText = confirmDisabled ? 'Regresar' : 'Cancelar';
+  const align = justifyContent || 'flex-end';
 
   return (
-    <Grid container justifyContent="flex-end" spacing={2}>
+    <Grid container justifyContent={align} spacing={2}>
       <Grid item>
         <ButtonUnstyled className="buttonAdd cancel" onClick={cancel}>
           <Typography variant="body1">{cancelText}</Typography>
@@ -39,8 +41,10 @@ UserForm.propTypes = {
   cancel: PropTypes.func.isRequired,
   confirmDisabled: PropTypes.bool,
   confirmText: PropTypes.string,
+  justifyContent: PropTypes.string,
 };
 UserForm.defaultProps = {
   confirmDisabled: false,
   confirmText: 'Guardar',
+  justifyContent: 'flex-end',
 };
