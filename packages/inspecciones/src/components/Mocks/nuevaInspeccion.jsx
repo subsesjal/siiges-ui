@@ -58,7 +58,7 @@ export const preguntas = [
   // Constancia infejal y protección civil
   {
     id: 7,
-    pregunta: '¿Se cuenta con la constancia de infejal?',
+    pregunta: '¿Se cuenta con la constancia de Infejal?',
     tipoPreguntaId: 1,
     apartadoId: 3,
   },
