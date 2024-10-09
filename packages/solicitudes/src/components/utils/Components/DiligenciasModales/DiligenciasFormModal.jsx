@@ -8,6 +8,7 @@ import {
   validateField,
   InputTime,
   ButtonsForm,
+  Subtitle,
 } from '@siiges-ui/shared';
 import handleEdit from '../../submitEditDiligencias';
 import handleCreate from '../../submitNewDiligencias';
@@ -212,7 +213,7 @@ export default function DiligenciasFormModal({
             disabled={disabled}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={3}>
           <Input
             id="telefono"
             label="Teléfono"
@@ -226,7 +227,7 @@ export default function DiligenciasFormModal({
             disabled={disabled}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={3}>
           <Input
             id="celular"
             label="Celular"
@@ -237,7 +238,10 @@ export default function DiligenciasFormModal({
             disabled={disabled}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12}>
+          <Subtitle>Hora de localización</Subtitle>
+        </Grid>
+        <Grid item xs={6}>
           <InputTime
             id="horaInicio"
             label="Hora Inicio"
@@ -252,7 +256,7 @@ export default function DiligenciasFormModal({
             disabled={disabled}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <InputTime
             id="horaFin"
             label="Hora Fin"
