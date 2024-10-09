@@ -21,6 +21,8 @@ import {
 } from '../../../utils/institucionHandler';
 import BiografiaBibliografiaModal from '../../utils/BiografiaBibliografiaModal';
 
+const domain = process.env.NEXT_PUBLIC_URL;
+
 export default function InstitucionForm({
   session,
   accion,
@@ -65,17 +67,15 @@ export default function InstitucionForm({
       const query = `?tipoEntidad=INSTITUCION&entidadId=${institucionId}&tipoDocumento=LOGOTIPO`;
       const response = await getData({ endpoint, query });
       if (response.statusCode === 200 && response.data?.url) {
-        let { url } = response.data;
-        if (!url.startsWith('http')) {
-          url = `http://${url}`;
-        }
+        const { ubicacion } = response.data;
+        const url = `${domain}${ubicacion}`;
         const imageBlob = await fetch(url).then((res) => res.blob());
         setImageUrl(URL.createObjectURL(imageBlob));
       } else {
-        setImageUrl(null); // Fallback to default
+        setImageUrl(null);
       }
     } catch (error) {
-      setImageUrl(null); // Fallback on error
+      setImageUrl(null);
     }
   };
 
