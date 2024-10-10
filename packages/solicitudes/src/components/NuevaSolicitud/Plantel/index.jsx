@@ -124,7 +124,7 @@ export default function Plantel({
             {renderSection6()}
             <Observaciones
               id={id}
-              section={section + 12}
+              section={section + 13}
               type={type}
             />
           </SectionLayout>

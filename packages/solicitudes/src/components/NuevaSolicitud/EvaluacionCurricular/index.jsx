@@ -20,7 +20,6 @@ export default function EvaluacionCurricular({
   } = pagination(useState, 1);
 
   useEffect(() => {
-    // Determine if the component should be disabled
     const isDisabled = type === 'consultar' || id === undefined;
     setDisabled(isDisabled);
   }, [id, type]);
@@ -50,7 +49,7 @@ export default function EvaluacionCurricular({
             )}
             <Observaciones
               id={id}
-              section={section + 19}
+              section={section + 20}
             />
           </SectionLayout>
         </EvaluacionCurricularProvider>
