@@ -39,7 +39,7 @@ export default function DatosGenerales({
             {section === 3 && <DiligenciasData disabled={isDisabled} id={id} type={type} />}
             <Observaciones
               id={id}
-              section={section + 9}
+              section={section + 10}
               type={type}
             />
           </SectionLayout>
