@@ -27,65 +27,50 @@ const setErrorState = (name, errorMessage, setError) => {
 const errors = {
   nombre: (form, setError) => setErrorState(
     'nombre',
-    !form.persona.nombre
-      ? '¡Nombre inválido1'
-      : '',
+    !form.persona.nombre ? '¡Nombre inválido1' : '',
     setError,
   ),
   apellidoPaterno: (form, setError) => setErrorState(
     'apellidoPaterno',
-    !form.persona.apellidoPaterno
-      ? '¡Primer Apellido inválido!'
-      : '',
+    !form.persona.apellidoPaterno ? '¡Primer Apellido inválido!' : '',
     setError,
   ),
   apellidoMaterno: (form, setError) => setErrorState(
     'apellidoMaterno',
-    !form.persona.apellidoMaterno
-      ? '¡Segundo Apellido inválido!'
-      : '',
+    !form.persona.apellidoMaterno ? '¡Segundo Apellido inválido!' : '',
     setError,
   ),
   rolId: (form, setError) => {
-    setErrorState(
-      'rolId',
-      !form.rolId
-        ? '¡Rol inválido!'
-        : '',
-      setError,
-    );
+    setErrorState('rolId', !form.rolId ? '¡Rol inválido!' : '', setError);
   },
   tituloCargo: (form, setError) => setErrorState(
     'tituloCargo',
-    !form.persona.tituloCargo
-      ? '¡Cargo inválido!'
-      : '',
+    !form.persona.tituloCargo ? '¡Cargo inválido!' : '',
     setError,
   ),
-  correo: (form, setError) => setErrorState(
-    'correo',
-    !form.correo
-      ? '¡Correo inválido!'
-      : '',
-    setError,
-  ),
+  correo: (form, setError) => setErrorState('correo', !form.correo ? '¡Correo inválido!' : '', setError),
   usuario: (form, setError) => setErrorState(
     'usuario',
-    !form.usuario
-      ? '¡Usuario inválido!'
-      : '',
+    !form.usuario ? '¡Usuario inválido!' : '',
     setError,
   ),
   contrasena: (form, setError) => {
     const { contrasena } = form;
     let errorMessage = '';
+    const simbolosPermitidos = /[@#$%^&*()\-_=+[\]{}\\|;:'",<.>/?]/;
 
     if (!contrasena) {
       errorMessage = '¡Contraseña inválida!';
     } else if (contrasena.length < 8 || contrasena.length > 25) {
       errorMessage = '¡La contraseña debe contener entre 8 y 25 caracteres!';
-    } else if (!contrasena.match(/^(?!.* )(?=.*[a-z])(?=.*[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&./])[A-Za-z0-9@$!%*?&./]{8,25}$/)) {
-      errorMessage = '¡La contraseña no cumple con los criterios de seguridad!';
+    } else if (!/[a-z]/.test(contrasena)) {
+      errorMessage = '¡La contraseña debe contener al menos una letra minúscula!';
+    } else if (!/[A-Z]/.test(contrasena)) {
+      errorMessage = '¡La contraseña debe contener al menos una letra mayúscula!';
+    } else if (!/[0-9]/.test(contrasena)) {
+      errorMessage = '¡La contraseña debe contener al menos un dígito!';
+    } else if (!simbolosPermitidos.test(contrasena)) {
+      errorMessage = '¡La contraseña debe contener al menos un símbolo';
     }
 
     setErrorState('contrasena', errorMessage, setError);
@@ -111,9 +96,9 @@ const handleOnChange = (e, { setForm }) => {
   setForm((prevForm) => ({
     ...prevForm,
     ...(name === 'nombre'
-      || name === 'apellidoPaterno'
-      || name === 'apellidoMaterno'
-      || name === 'tituloCargo'
+    || name === 'apellidoPaterno'
+    || name === 'apellidoMaterno'
+    || name === 'tituloCargo'
       ? { persona: { ...prevForm.persona, [name]: value } }
       : { [name]: value }),
   }));
@@ -197,17 +182,27 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
   }, []);
 };
 
-const validateErrorFields = (obj) => Object.keys(obj).every((key) => typeof obj[key] !== 'string' || obj[key].trim() === '');
+const validateErrorFields = (obj) => Object.keys(obj).every(
+  (key) => typeof obj[key] !== 'string' || obj[key].trim() === '',
+);
 
 const submitUsuario = ({
-  accion, form, session, setForm, setEndpoint, setMethod, setNoti, errorFields,
+  accion,
+  form,
+  session,
+  setForm,
+  setEndpoint,
+  setMethod,
+  setNoti,
+  errorFields,
 }) => {
   const { endpoint, method, schema } = DATA_MAPPING[accion](form, session);
 
   if (!validateErrorFields(errorFields)) {
     setNoti({
       open: true,
-      message: '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
+      message:
+        '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
       type: 'error',
     });
 
@@ -223,7 +218,8 @@ const submitUsuario = ({
   if (!valid) {
     setNoti({
       open: true,
-      message: '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
+      message:
+        '¡Revisa que los campos requeridos hayan sido llenados correctamente!',
       type: 'error',
     });
 
@@ -241,13 +237,10 @@ const deleteUsuario = (id, handleDeleteClick) => {
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  fetch(
-    `${url}/api/v1/usuarios/${id}`,
-    {
-      method: 'DELETE',
-      headers: { api_key: apikey, Authorization: `Bearer ${token}` },
-    },
-  ).then(handleDeleteClick(id));
+  fetch(`${url}/api/v1/usuarios/${id}`, {
+    method: 'DELETE',
+    headers: { api_key: apikey, Authorization: `Bearer ${token}` },
+  }).then(handleDeleteClick(id));
 };
 
 export {
