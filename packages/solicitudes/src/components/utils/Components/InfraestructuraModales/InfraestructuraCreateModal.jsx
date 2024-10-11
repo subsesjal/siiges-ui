@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonStyled, Context, Select,
+  DefaultModal, Context, Select,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
@@ -31,6 +32,7 @@ export default function InfraestructuraCreateModal({
   } = useContext(PlantelContext);
 
   const [tipoInstalacion, setTipoInstalacion] = useState('');
+  const [asignaturasDisabled, setAsignaturasDisabled] = useState(false);
 
   useEffect(() => {
     setFormInfraestructuras({});
@@ -65,10 +67,15 @@ export default function InfraestructuraCreateModal({
     const { name, value } = e.target;
     setFormInfraestructuras((prevData) => {
       const newData = { ...prevData };
+
       if (name === 'tipoInstalacionId') {
-        setTipoInstalacion(value); // Actualiza el estado cuando cambia el valor
+        setTipoInstalacion(value);
         if (value === 1) {
           newData.programaId = programaId;
+          setAsignaturasDisabled(false);
+        } else {
+          newData.asignaturasInfraestructura = [0];
+          setAsignaturasDisabled(true);
         }
       }
 
@@ -212,22 +219,12 @@ export default function InfraestructuraCreateModal({
             onblur={handleOnBlur}
             errorMessage={error.asignaturasInfraestructura}
             required
+            value={formInfraestructuras.asignaturasInfraestructura || []}
+            disabled={asignaturasDisabled}
           />
         </Grid>
-        <Grid item>
-          <ButtonStyled
-            text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
-          />
-        </Grid>
-        <Grid item>
-          <ButtonStyled
-            text="Guardar"
-            alt="Guardar"
-            onclick={handleOnSubmit}
-          />
+        <Grid item xs={12}>
+          <ButtonsForm confirm={handleOnSubmit} cancel={hideModal} />
         </Grid>
       </Grid>
     </DefaultModal>
