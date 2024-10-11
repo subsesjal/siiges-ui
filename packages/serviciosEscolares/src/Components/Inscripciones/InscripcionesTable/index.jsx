@@ -28,7 +28,7 @@ export default function InscripcionesTable({
   const fetchAlumnosInscritos = async () => {
     try {
       const result = await getData({ endpoint: `/alumnos/grupos/${grupoId}/inscripcion` });
-      if (result.statusCode === 200) {
+      if (result.statusCode === 200 && result.data.length > 0) {
         const alumnosCompletos = result.data.map((alumno) => ({
           id: alumno.alumnoId,
           alumnoId: alumno.alumnoId,
@@ -39,18 +39,10 @@ export default function InscripcionesTable({
         }));
         setAlumnosInscritos(alumnosCompletos);
       } else {
-        setNoti({
-          open: true,
-          message: 'Error al obtener la lista de alumnos inscritos.',
-          type: 'error',
-        });
+        setAlumnosInscritos([]);
       }
     } catch (error) {
-      setNoti({
-        open: true,
-        message: 'Error al obtener la lista de alumnos inscritos.',
-        type: 'error',
-      });
+      setAlumnosInscritos([]);
     }
   };
 

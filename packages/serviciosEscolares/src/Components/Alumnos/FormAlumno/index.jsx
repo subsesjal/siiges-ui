@@ -96,7 +96,8 @@ export default function FormAlumno({ type, alumno, setId }) {
   const validateFormBeforeSubmit = () => {
     let isValid = true;
     campos.forEach((field) => {
-      if (field.type !== 'select' && !form?.[field.id]) {
+      const value = form?.[field.id] || alumno?.[field.id];
+      if (field.type !== 'select' && (!value || value.trim() === '')) {
         setNoti({
           open: true,
           message: `El campo ${field.label} es obligatorio.`,
