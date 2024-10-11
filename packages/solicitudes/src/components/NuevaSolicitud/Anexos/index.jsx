@@ -17,9 +17,8 @@ export default function Anexos({
   } = pagination(useState, 1);
 
   useEffect(() => {
-    // Update disabled state based on id and type
     const isDisabled = type === 'consultar' || id === undefined;
-    setDisabled(isDisabled); // Debugging line
+    setDisabled(isDisabled);
   }, [id, type]);
 
   return (
