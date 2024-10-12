@@ -33,7 +33,7 @@ export default function ModalCertificado({
   const validateForm = () => {
     const isValid = alumno
       && form.fechaElaboracion
-      && form.fechaTermino;
+      && form.fechaTerminacion;
 
     setDisabled(!isValid);
   };
@@ -49,8 +49,8 @@ export default function ModalCertificado({
         fechaElaboracion: rowData.fechaElaboracion
           ? dayjs(rowData.fechaElaboracion, 'MM/DD/YYYY').format('DD/MM/YYYY')
           : '',
-        fechaTermino: rowData.fechaTermino
-          ? dayjs(rowData.fechaTermino, 'MM/DD/YYYY').format('DD/MM/YYYY')
+        fechaTerminacion: rowData.fechaTerminacion
+          ? dayjs(rowData.fechaTerminacion, 'MM/DD/YYYY').format('DD/MM/YYYY')
           : '',
       });
       setAlumno(rowData.name);
@@ -103,7 +103,7 @@ export default function ModalCertificado({
 
     const formattedForm = {
       ...form,
-      fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
+      fechaTerminacion: dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ'),
       fechaElaboracion: dayjs(form.fechaElaboracion).format(
         'YYYY-MM-DDTHH:mm:ssZ',
       ),
@@ -124,7 +124,7 @@ export default function ModalCertificado({
             newRow = {
               id: response.data.id,
               name: alumno,
-              fechaTermino: dayjs(response.data.fechaTermino).format(
+              fechaTerminacion: dayjs(response.data.fechaTerminacion).format(
                 'DD/MM/YYYY',
               ),
               fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
@@ -135,7 +135,7 @@ export default function ModalCertificado({
             newRow = {
               id: response.data.id,
               name: `${response.data.alumno.persona.nombre} ${response.data.alumno.persona.apellidoPaterno} ${response.data.alumno.persona.apellidoMaterno}`,
-              fechaTermino: dayjs(response.data.fechaTermino).format(
+              fechaTerminacion: dayjs(response.data.fechaTerminacion).format(
                 'DD/MM/YYYY',
               ),
               fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
@@ -211,10 +211,10 @@ export default function ModalCertificado({
         <Grid item xs={6}>
           <InputDate
             label="Fecha de terminación plan de estudios"
-            id="fechaTermino"
-            name="fechaTermino"
+            id="fechaTerminacion"
+            name="fechaTerminacion"
             type="datetime"
-            value={form.fechaTermino || ''}
+            value={form.fechaTerminacion || ''}
             onchange={handleChange}
             required
           />
@@ -247,7 +247,7 @@ ModalCertificado.propTypes = {
   rowData: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
-    fechaTermino: PropTypes.string,
+    fechaTerminacion: PropTypes.string,
     fechaElaboracion: PropTypes.string,
   }),
   title: PropTypes.string.isRequired,

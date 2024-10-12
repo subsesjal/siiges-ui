@@ -19,6 +19,7 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import ButtonsFolios from '../ButtonsFolios';
 import ModalCertificado from './Modal/certificados';
+import ModalTitulo from './Modal/titulos';
 
 const columns = (handleEdit) => [
   {
@@ -331,7 +332,7 @@ export default function FoliosData({ type }) {
               id="folioPago"
               name="folioPago"
               value={formData.folioPago}
-              onchange={handleChange}
+              onChange={handleChange} // Fixed onChange here
               disabled={status === 'consult'}
             />
           </Grid>
@@ -372,16 +373,29 @@ export default function FoliosData({ type }) {
           />
         </Grid>
       </Grid>
-      <ModalCertificado
-        open={open}
-        setOpen={setOpen}
-        type={alumnoType}
-        id={id}
-        programaId={programa}
-        setRows={setRows}
-        rowData={rowData}
-        title="Agregar Alumno"
-      />
+
+      {tipoDocumento === '1' ? (
+        <ModalTitulo
+          open={open}
+          setOpen={setOpen}
+          type={alumnoType}
+          id={id}
+          setRows={setRows}
+          rowData={rowData}
+          programaId={programa}
+        />
+      ) : (
+        <ModalCertificado
+          open={open}
+          setOpen={setOpen}
+          type={alumnoType}
+          id={id}
+          programaId={programa}
+          setRows={setRows}
+          rowData={rowData}
+          title="Agregar Alumno"
+        />
+      )}
     </Box>
   );
 }

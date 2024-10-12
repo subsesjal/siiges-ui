@@ -5,16 +5,50 @@ import {
   DefaultModal,
   Input,
   InputDate,
+  LabelData,
   Select,
   createRecord,
+  getData,
   updateRecord,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
+const modalidadTitulacion = [
+  { id: 1, nombre: 'Por Tesis' },
+  { id: 2, nombre: 'Por Promedio' },
+  { id: 3, nombre: 'Por Estudios de Posgrados' },
+  { id: 4, nombre: 'Por Experiencia Laboral' },
+  { id: 5, nombre: 'Por Ceneval' },
+  { id: 6, nombre: 'Otro' },
+];
+
+const cumplioServicioSocial = [
+  { id: 1, nombre: 'Si' },
+  { id: 2, nombre: 'No' },
+];
+
+const fundamentoLegal = [
+  { id: 1, nombre: 'ART. 52 LRART. 5 CONST' },
+  { id: 2, nombre: 'ART. 55 LRART. 5 CONST' },
+  { id: 3, nombre: 'ART. 91 LRART. 5 CONST' },
+  {
+    id: 4,
+    nombre:
+      'ART. 10 REGLAMENTO PARA LA PRESTACIÓN DEL SERVICIO SOCIAL DE LOS ESTUDIANTES DE LAS INSTITUCIONES DE EDUCACIÓN SUPERIOR EN LA REPÚBLICA MEXICANA',
+  },
+  { id: 5, nombre: 'NO APLICA' },
+];
+
 export default function ModalTitulo({
-  open, setOpen, type, id, setRows, rowData,
+  open,
+  setOpen,
+  type,
+  id,
+  setRows,
+  rowData,
+  programaId,
 }) {
   const [position, setPosition] = useState('first');
   const [form, setForm] = useState({});
@@ -24,7 +58,26 @@ export default function ModalTitulo({
 
   useEffect(() => {
     if (type === 'edit' && rowData) {
-      setForm(rowData);
+      setForm({
+        ...rowData,
+        fechaTermino: dayjs(rowData.fechaTermino).format('YYYY-MM-DD'),
+        fechaElaboracion: dayjs(rowData.fechaElaboracion).format('YYYY-MM-DD'),
+        fechaInicio: rowData.fechaInicio
+          ? dayjs(rowData.fechaInicio).format('YYYY-MM-DD')
+          : '',
+        fechaTerminacion: rowData.fechaTerminacion
+          ? dayjs(rowData.fechaTerminacion).format('YYYY-MM-DD')
+          : '',
+        fechaExpedicion: rowData.fechaExpedicion
+          ? dayjs(rowData.fechaExpedicion).format('YYYY-MM-DD')
+          : '',
+        fechaExamenProfesional: rowData.fechaExamenProfesional
+          ? dayjs(rowData.fechaExamenProfesional).format('YYYY-MM-DD')
+          : '',
+        fechaExencionExamen: rowData.fechaExencionExamen
+          ? dayjs(rowData.fechaExencionExamen).format('YYYY-MM-DD')
+          : '',
+      });
       setAlumno(rowData.name);
       setAlumnoId(rowData.id);
     }
@@ -51,11 +104,28 @@ export default function ModalTitulo({
     const formattedForm = {
       ...form,
       fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
-      fechaElaboracion: dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ'),
+      fechaElaboracion: dayjs(form.fechaElaboracion).format(
+        'YYYY-MM-DDTHH:mm:ssZ',
+      ),
+      fechaInicio: form.fechaInicio
+        ? dayjs(form.fechaInicio).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      fechaTerminacion: form.fechaTerminacion
+        ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      fechaExpedicion: form.fechaExpedicion
+        ? dayjs(form.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      fechaExamenProfesional: form.fechaExamenProfesional
+        ? dayjs(form.fechaExamenProfesional).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      fechaExencionExamen: form.fechaExencionExamen
+        ? dayjs(form.fechaExencionExamen).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
     };
 
     const endpoint = type === 'edit'
-      ? `/solicitudesFolios/${form.id}`
+      ? `/solicitudesFolios/solicitudesFoliosAlumnos/${form.id}`
       : `/solicitudesFolios/${id}/alumnos/${alumnoId}`;
 
     const action = type === 'edit' ? updateRecord : createRecord;
@@ -69,21 +139,32 @@ export default function ModalTitulo({
             newRow = {
               id: response.data.id,
               name: alumno,
-              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+              fechaTermino: dayjs(response.data.fechaTermino).format(
+                'DD/MM/YYYY',
+              ),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
             };
           } else {
             newRow = {
               id: response.data.id,
               name: `${response.data.alumno.persona.nombre} ${response.data.alumno.persona.apellidoPaterno} ${response.data.alumno.persona.apellidoMaterno}`,
-              fechaTermino: dayjs(response.data.fechaTermino).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(response.data.fechaElaboracion).format('DD/MM/YYYY'),
+              fechaTermino: dayjs(response.data.fechaTermino).format(
+                'DD/MM/YYYY',
+              ),
+              fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
+                'DD/MM/YYYY',
+              ),
             };
           }
 
           setNoti({
             open: true,
-            message: type === 'edit' ? 'Registro actualizado exitosamente' : 'Registro creado exitosamente',
+            message:
+              type === 'edit'
+                ? 'Registro actualizado exitosamente'
+                : 'Registro creado exitosamente',
             type: 'success',
           });
 
@@ -113,19 +194,43 @@ export default function ModalTitulo({
   };
 
   const handlePrev = () => {
-    setPosition((prevPosition) => {
-      if (prevPosition === 'last') return 'middle';
-      if (prevPosition === 'middle') return 'first';
-      return 'first';
-    });
+    if (position === 'last') {
+      setPosition('first');
+    }
   };
 
   const handleNext = () => {
-    setPosition((prevPosition) => {
-      if (prevPosition === 'first') return 'middle';
-      if (prevPosition === 'middle') return 'last';
-      return 'last';
-    });
+    if (position === 'first') {
+      setPosition('last');
+    }
+  };
+
+  const handleBlur = (event) => {
+    const { name, value } = event.target;
+    if (name === 'matricula' && value) {
+      setLoading(true);
+      getData({
+        endpoint: `/alumnos/programas/${programaId}?matricula=${value}`,
+      })
+        .then((response) => {
+          if (response.data) {
+            const fullName = `${response.data.persona.nombre} ${response.data.persona.apellidoPaterno} ${response.data.persona.apellidoMaterno}`;
+            setAlumno(fullName);
+            setAlumnoId(response.data.id);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          setNoti({
+            open: true,
+            message: '¡No se encontró el Alumno!',
+            type: 'error',
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   return (
@@ -133,49 +238,37 @@ export default function ModalTitulo({
       <Grid container spacing={2}>
         {position === 'first' && (
           <>
+            <Grid item xs={12}>
+              <Input
+                label="Matrícula"
+                id="matricula"
+                name="matricula"
+                value={form.matricula || ''}
+                onblur={handleBlur}
+                onchange={handleChange}
+              />
+            </Grid>
+            {alumno && (
+              <Grid item xs={12}>
+                <LabelData title="Alumno" subtitle={alumno} />
+              </Grid>
+            )}
             <Grid item xs={6}>
               <Input
                 label="Número de folio de acta de titulación"
                 id="numeroFolio"
                 name="numeroFolio"
                 value={form.numeroFolio || ''}
-                onChange={handleChange}
+                onchange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
-              <Input
-                label="Clave de institución ante DGP"
-                id="claveInstitucion"
-                name="claveInstitucion"
-                value={form.claveInstitucion || ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                label="Clave de carrera ante DGP"
-                id="claveCarrera"
-                name="claveCarrera"
-                value={form.claveCarrera || ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={3}>
               <Input
                 label="Correo del alumno"
                 id="correoAlumno"
                 name="correoAlumno"
                 value={form.correoAlumno || ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Input
-                label="CURP del alumno"
-                id="curpAlumno"
-                name="curpAlumno"
-                value={form.curpAlumno || ''}
-                onChange={handleChange}
+                onchange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
@@ -185,7 +278,7 @@ export default function ModalTitulo({
                 name="fechaInicio"
                 type="datetime"
                 value={form.fechaInicio || ''}
-                onChange={handleChange}
+                onchange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
@@ -195,65 +288,25 @@ export default function ModalTitulo({
                 name="fechaTerminacion"
                 type="datetime"
                 value={form.fechaTerminacion || ''}
-                onChange={handleChange}
-              />
-            </Grid>
-          </>
-        )}
-        {position === 'middle' && (
-          <>
-            <Grid item xs={6}>
-              <Input
-                label="Institución de procedencia"
-                id="institucionProcedencia"
-                name="institucionProcedencia"
-                value={form.institucionProcedencia || ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Select
-                title="Nivel de estudio de antecedente"
-                options={[]}
-                name="nivelEstudios"
-                value={form.nivelEstudios || ''}
-                onChange={handleSelectChange('nivelEstudios')}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Select
-                title="Estado de antecedente"
-                options={[]}
-                name="estadoAntecedente"
-                value={form.estadoAntecedente || ''}
-                onChange={handleSelectChange('estadoAntecedente')}
+                onchange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
               <InputDate
-                label="Fecha de inicio de antecedente"
-                id="fechaInicioAntecedente"
-                name="fechaInicioAntecedente"
-                value={form.fechaInicioAntecedente || ''}
-                onChange={handleChange}
+                label="Fecha de expedición de título"
+                id="fechaExpedicion"
+                name="fechaExpedicion"
+                value={form.fechaExpedicion || ''}
+                onchange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
-              <InputDate
-                label="Fecha de terminación de antecedente"
-                id="fechaTerminacionAntecedente"
-                name="fechaTerminacionAntecedente"
-                value={form.fechaTerminacionAntecedente || ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                label="Número de cédula"
-                id="numeroCedula"
-                name="numeroCedula"
-                value={form.numeroCedula || ''}
-                onChange={handleChange}
+              <Select
+                title="Modalidad de titulación"
+                options={modalidadTitulacion}
+                name="modalidadTitulacion"
+                value={form.modalidadTitulacion || ''}
+                onchange={handleSelectChange('modalidadTitulacion')}
               />
             </Grid>
           </>
@@ -262,56 +315,38 @@ export default function ModalTitulo({
           <>
             <Grid item xs={6}>
               <InputDate
-                label="Fecha de expedición de título"
-                id="fechaExpedicion"
-                name="fechaExpedicion"
-                value={form.fechaExpedicion || ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Select
-                title="Modalidad de titulación"
-                options={[]}
-                name="modalidadTitulacion"
-                value={form.modalidadTitulacion || ''}
-                onChange={handleSelectChange('modalidadTitulacion')}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <InputDate
                 label="Fecha de examen profesional"
                 id="fechaExamenProfesional"
                 name="fechaExamenProfesional"
                 value={form.fechaExamenProfesional || ''}
-                onChange={handleChange}
+                onchange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <InputDate
+                label="Fecha de exención de examen"
+                id="fechaExencionExamen"
+                name="fechaExencionExamen"
+                value={form.fechaExencionExamen || ''}
+                onchange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
               <Select
                 title="Cumplió servicio social"
-                options={[]}
+                options={cumplioServicioSocial}
                 name="cumplioServicioSocial"
                 value={form.cumplioServicioSocial || ''}
-                onChange={handleSelectChange('cumplioServicioSocial')}
+                onchange={handleSelectChange('cumplioServicioSocial')}
               />
             </Grid>
             <Grid item xs={6}>
               <Select
                 title="Fundamento legal de servicio social"
-                options={[]}
+                options={fundamentoLegal}
                 name="fundamentoLegal"
                 value={form.fundamentoLegal || ''}
-                onChange={handleSelectChange('fundamentoLegal')}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Select
-                title="Estados"
-                options={[]}
-                name="estados"
-                value={form.estados || ''}
-                onChange={handleSelectChange('estados')}
+                onchange={handleSelectChange('fundamentoLegal')}
               />
             </Grid>
           </>
@@ -341,10 +376,16 @@ ModalTitulo.propTypes = {
   setRows: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
+  programaId: PropTypes.number.isRequired,
   rowData: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
     fechaTermino: PropTypes.string,
     fechaElaboracion: PropTypes.string,
+    fechaInicio: PropTypes.string,
+    fechaTerminacion: PropTypes.string,
+    fechaExpedicion: PropTypes.string,
+    fechaExamenProfesional: PropTypes.string,
+    fechaExencionExamen: PropTypes.string,
   }),
 };
