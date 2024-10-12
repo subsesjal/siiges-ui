@@ -5,7 +5,11 @@ import { useRouter } from 'next/router';
 import { ButtonsForm, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
 
 export default function ButtonsFolios({
-  confirm, cancel, send, disabled,
+  confirm,
+  cancel,
+  send,
+  disabled,
+  saved,
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -20,12 +24,14 @@ export default function ButtonsFolios({
           <Grid item>
             <ButtonSimple text="Guardar" onClick={confirm} />
           </Grid>
-          <Grid item>
-            <ButtonSimple
-              text="Enviar Solicitud"
-              onClick={() => setOpen(true)}
-            />
-          </Grid>
+          {saved && (
+            <Grid item>
+              <ButtonSimple
+                text="Enviar Solicitud"
+                onClick={() => setOpen(true)}
+              />
+            </Grid>
+          )}
         </>
       )}
       <DefaultModal title="Enviar solicitud" open={open} setOpen={setOpen}>
@@ -37,7 +43,10 @@ export default function ButtonsFolios({
           cancel={() => setOpen(false)}
           confirm={async () => {
             const response = await send();
-            if (response && (response.statusCode === 200 || response.statusCode === 201)) {
+            if (
+              response
+              && (response.statusCode === 200 || response.statusCode === 201)
+            ) {
               setOpen(false);
               router.push('/serviciosEscolares/solicitudesFolios');
             }
@@ -53,4 +62,5 @@ ButtonsFolios.propTypes = {
   cancel: PropTypes.func.isRequired,
   send: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
+  saved: PropTypes.bool.isRequired,
 };

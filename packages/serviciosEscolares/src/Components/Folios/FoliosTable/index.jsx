@@ -48,14 +48,15 @@ function FoliosTable({
 
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
+    const path = status === 'create' ? `/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}` : `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`;
 
     if (tipoDocumento === 1 || tipoDocumento === 2) {
       router.push({
-        pathname: `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`,
+        pathname: path,
         query: {
           tipoDocumento, tipoSolicitud, programa, status,
         },
-      }, `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`);
+      }, path);
     } else {
       setNoti({
         open: true,

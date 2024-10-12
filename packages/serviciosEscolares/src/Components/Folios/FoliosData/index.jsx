@@ -56,6 +56,7 @@ export default function FoliosData({ type }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [rowData, setRowData] = useState({});
   const [alumnoType, setAlumnoType] = useState('create');
   const [formData, setFormData] = useState({
@@ -76,7 +77,11 @@ export default function FoliosData({ type }) {
 
   const router = useRouter();
   const {
-    tipoDocumento, tipoSolicitud, programa, id: editId, status,
+    tipoDocumento,
+    tipoSolicitud,
+    programa,
+    id: editId,
+    status,
   } = router.query;
 
   const tipoSolicitudFolioOptions = [
@@ -121,6 +126,7 @@ export default function FoliosData({ type }) {
             institucion: data.programa?.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
           });
+          setIsSaved(true);
           setId(editId);
           GetFile(
             {
@@ -131,6 +137,13 @@ export default function FoliosData({ type }) {
             setUrl,
           );
         } else {
+          setFormData({
+            tipoDocumentoId: tipoDocumento,
+            tipoSolicitudFolioId: tipoSolicitud,
+            estatusSolicitudFolioId: 1,
+            programaId: data.id,
+            fecha: dayjs(data.fecha),
+          });
           setEtiquetas({
             institucion: data.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.plantel?.claveCentroTrabajo,
@@ -215,6 +228,7 @@ export default function FoliosData({ type }) {
 
       if (response.statusCode === 200 || response.statusCode === 201) {
         setId(response.data.id);
+        setIsSaved(true);
         setNoti({
           open: true,
           message:
@@ -317,7 +331,7 @@ export default function FoliosData({ type }) {
               id="folioPago"
               name="folioPago"
               value={formData.folioPago}
-              onChange={handleChange}
+              onchange={handleChange}
               disabled={status === 'consult'}
             />
           </Grid>
@@ -329,7 +343,7 @@ export default function FoliosData({ type }) {
               tipoEntidad="SOLICITUD_FOLIO"
               url={url}
               setUrl={setUrl}
-              disabled={status === 'consult'}
+              disabled={!isSaved || status === 'consult'}
             />
           </Grid>
         </Grid>
@@ -354,6 +368,7 @@ export default function FoliosData({ type }) {
             cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
             send={handleSend}
             disabled={status === 'consult'}
+            saved={isSaved}
           />
         </Grid>
       </Grid>

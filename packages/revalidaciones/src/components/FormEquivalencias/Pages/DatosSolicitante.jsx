@@ -2,9 +2,48 @@ import { Grid } from '@mui/material';
 import {
   Input, InputDate, Select, Subtitle,
 } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+const domain = process.env.NEXT_PUBLIC_URL;
+
+const estados = [{ id: 14, nombre: 'Jalisco' }, { id: 15, nombre: 'Colima' }];
 
 export default function DatosSolicitante() {
+  const [municipios, setMunicipios] = useState([]);
+  const [estadoId, setEstadoId] = useState(null);
+  const [municipiosDisabled, setMunicipiosDisabled] = useState(true);
+
+  useEffect(() => {
+    const fetchMunicipios = async () => {
+      if (estadoId) {
+        try {
+          const response = await fetch(`${domain}/api/v1/public/municipios/?estadoId=${estadoId}`, {
+            headers: {
+              api_key: apiKey,
+              'Content-Type': 'application/json',
+            },
+          });
+          const data = await response.json();
+          const filteredMunicipios = data.data.filter(
+            (municipio) => municipio.estadoId === estadoId,
+          );
+          setMunicipios(filteredMunicipios);
+        } catch (error) {
+          console.error('Error fetching municipios:', error);
+        }
+      }
+    };
+
+    fetchMunicipios();
+  }, [estadoId]);
+
+  const handleEstadoChange = (event) => {
+    const selectedEstadoId = event.target.value;
+    setEstadoId(selectedEstadoId);
+    setMunicipiosDisabled(!selectedEstadoId);
+  };
+
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
@@ -49,7 +88,7 @@ export default function DatosSolicitante() {
       <Grid item xs={12}>
         <Subtitle>Dirección</Subtitle>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={9}>
         <Input name="calle" id="calle" label="Calle" />
       </Grid>
       <Grid item xs={3}>
@@ -59,7 +98,20 @@ export default function DatosSolicitante() {
         <Input name="colonia" id="colonia" label="Colonia" />
       </Grid>
       <Grid item xs={3}>
-        <Input name="municipio" id="municipio" label="Municipio" />
+        <Select
+          title="Estados"
+          name="estadoId"
+          options={estados}
+          onchange={handleEstadoChange}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Select
+          title="Municipio"
+          name="municipioId"
+          options={municipios}
+          disabled={municipiosDisabled}
+        />
       </Grid>
       <Grid item xs={3}>
         <Input name="codigoPostal" id="codigoPostal" label="Codigo Postal" />
