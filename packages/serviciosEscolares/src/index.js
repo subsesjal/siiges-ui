@@ -38,8 +38,10 @@ import AcreditacionAsignaturas from './Components/Acreditacion/AcreditacionAsign
 import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditacionAsignaturas';
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
 import ButtonsFoliosAdmin from './Components/Folios/ButtonsFoliosAdmin/index';
+import RevalidacionEquivalencias from './Components/RevalidacionesEquivalencias';
 
 export {
+  RevalidacionEquivalencias,
   ButtonsFoliosAdmin,
   Grupos,
   Reglas,
