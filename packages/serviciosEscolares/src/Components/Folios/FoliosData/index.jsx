@@ -332,7 +332,7 @@ export default function FoliosData({ type }) {
               id="folioPago"
               name="folioPago"
               value={formData.folioPago}
-              onChange={handleChange} // Fixed onChange here
+              onchange={handleChange}
               disabled={status === 'consult'}
             />
           </Grid>
