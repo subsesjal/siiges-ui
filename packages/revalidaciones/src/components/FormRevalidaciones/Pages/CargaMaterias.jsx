@@ -68,7 +68,7 @@ export default function CargaMaterias() {
       </Grid>
       <Grid item xs={6}>
         <InputFile
-          label="Antecedente academico revalidado"
+          label="Antecedente académico revalidado"
           id={1}
           tipoDocumento="ANTECEDENTE_ACADEMICO_REVALIDADO"
           tipoEntidad="EQUIVALENCIAS"

@@ -29,7 +29,7 @@ export default function DatosInstitucion() {
       </Grid>
       <Grid item xs={3}>
         <Select
-          title="Grado Academico Procedente"
+          title="Grado Académico Procedente"
           options={[]}
           name="gradoAcademicoProcedente"
         />

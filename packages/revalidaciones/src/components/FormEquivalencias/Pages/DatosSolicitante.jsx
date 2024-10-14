@@ -30,7 +30,7 @@ export default function DatosSolicitante() {
           );
           setMunicipios(filteredMunicipios);
         } catch (error) {
-          console.error('Error fetching municipios:', error);
+          console.error('¡Error al buscar municipios!:', error);
         }
       }
     };
@@ -53,7 +53,7 @@ export default function DatosSolicitante() {
         <Select title="Tipo de Solicitud" options={[]} name="tipoSolicitud" />
       </Grid>
       <Grid item xs={3}>
-        <Select title="Grado Academico" options={[]} name="gradoAcademico" />
+        <Select title="Grado Académico" options={[]} name="gradoAcademico" />
       </Grid>
       <Grid item xs={12}>
         <Subtitle>Datos del Solicitante</Subtitle>
