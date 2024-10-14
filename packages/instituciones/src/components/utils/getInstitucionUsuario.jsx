@@ -30,13 +30,13 @@ export default function useInstitucionUsuario(session) {
           });
 
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`¡Error en el estatus HTTP!: ${response.status}`);
           }
 
           const data = await response.json();
           setInstitucion(data.data);
         } catch (error) {
-          console.error('Fetching institution data failed:', error);
+          console.error('¡Error al recuperar los datos de la institución!:', error);
         }
       }
     }

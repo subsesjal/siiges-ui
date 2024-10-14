@@ -58,7 +58,7 @@ export default function CargaMaterias() {
       </Grid>
       <Grid item xs={6}>
         <InputFile
-          label="Antecedente Academico"
+          label="Antecedente Académico"
           id={1}
           tipoDocumento="ANTECEDENTE_ACADEMICO"
           tipoEntidad="EQUIVALENCIAS"

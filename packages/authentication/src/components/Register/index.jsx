@@ -54,7 +54,7 @@ export default function Register() {
       || formValues.correo.length > 50
       || !correoPattern.test(formValues.correo)
     ) {
-      newErrors.correo = '!¡l correo debe ser válido y tener entre 3 y 50 caracteres!';
+      newErrors.correo = '!Error, el correo debe ser válido y tener entre 3 y 50 caracteres!';
     }
 
     if (!formValues.contrasena) {

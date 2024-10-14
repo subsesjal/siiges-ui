@@ -14,44 +14,44 @@ export default function errorDatosPlanEstudios(form, setError) {
   const errors = {
     nivelId: () => validateField(
       'nivelId',
-      'Seleccione un nivel',
+      '¡Seleccione un nivel!',
       formData.programa?.nivelId !== undefined
           && formData.programa?.nivelId !== '',
     ),
     nombre: () => validateField(
       'nombre',
-      'Nombre del programa es requerido',
+      '¡Nombre del programa es requerido!',
       formData.programa?.nombre !== undefined
           && formData.programa?.nombre !== '',
     ),
     cicloId: () => validateField(
       'cicloId',
-      'Periodo es requerido',
+      '¡Periodo es requerido!',
       formData.programa?.cicloId !== undefined
           && formData.programa?.cicloId !== '',
     ),
     programaTurnos: () => validateField(
       'programaTurnos',
-      'Seleccione al menos un turno',
+      '¡Seleccione al menos un turno!',
       formData.programa?.programaTurnos !== undefined
           && formData.programa?.programaTurnos.length > 0,
     ),
     duracionPeriodos: () => validateField(
       'duracionPeriodos',
-      'Duración del programa es requerida',
+      '¡Duración del programa es requerida!',
       formData.programa?.duracionPeriodos !== undefined
           && formData.programa?.duracionPeriodos !== '',
     ),
     creditos: () => validateField(
       'creditos',
-      'Créditos son requeridos y deben ser un número válido',
+      '¡Créditos son requeridos y deben ser un número válido!',
       formData.programa?.creditos !== undefined
           && formData.programa?.creditos !== ''
           && validNumber.test(formData.programa?.creditos),
     ),
     antecedenteAcademico: () => validateField(
       'antecedenteAcademico',
-      'Nivel previo es requerido',
+      '¡Nivel previo es requerido!',
       formData.programa?.antecedenteAcademico !== undefined
           && formData.programa?.antecedenteAcademico !== '',
     ),
@@ -63,7 +63,7 @@ export default function errorDatosPlanEstudios(form, setError) {
     ),
     objetivosParticulares: () => validateField(
       'objetivosParticulares',
-      'Objetivos particulares son requeridos',
+      '¡Objetivos particulares son requeridos!',
       formData.programa?.objetivosParticulares !== undefined
           && formData.programa?.objetivosParticulares !== '',
     ),

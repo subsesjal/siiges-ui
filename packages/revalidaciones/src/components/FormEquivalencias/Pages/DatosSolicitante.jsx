@@ -30,7 +30,7 @@ export default function DatosSolicitante() {
           );
           setMunicipios(filteredMunicipios);
         } catch (error) {
-          console.error('Error fetching municipios:', error);
+          console.error('¡Error al buscar municipios!:', error);
         }
       }
     };
@@ -53,7 +53,7 @@ export default function DatosSolicitante() {
         <Select title="Tipo de Solicitud" options={[]} name="tipoSolicitud" />
       </Grid>
       <Grid item xs={3}>
-        <Select title="Grado Academico" options={[]} name="gradoAcademico" />
+        <Select title="Grado Académico" options={[]} name="gradoAcademico" />
       </Grid>
       <Grid item xs={12}>
         <Subtitle>Datos del Solicitante</Subtitle>
@@ -92,7 +92,7 @@ export default function DatosSolicitante() {
         <Input name="calle" id="calle" label="Calle" />
       </Grid>
       <Grid item xs={3}>
-        <Input name="numero" id="numero" label="Numero" />
+        <Input name="numero" id="numero" label="Número" />
       </Grid>
       <Grid item xs={3}>
         <Input name="colonia" id="colonia" label="Colonia" />
@@ -114,7 +114,7 @@ export default function DatosSolicitante() {
         />
       </Grid>
       <Grid item xs={3}>
-        <Input name="codigoPostal" id="codigoPostal" label="Codigo Postal" />
+        <Input name="codigoPostal" id="codigoPostal" label="Código Postal" />
       </Grid>
       <Grid item xs={12}>
         <Subtitle>Contacto</Subtitle>
@@ -123,7 +123,7 @@ export default function DatosSolicitante() {
         <Input name="correo" id="correo" label="Correo de Contacto" />
       </Grid>
       <Grid item xs={3}>
-        <Input name="telefono" id="telefono" label="Telefono de Contacto" />
+        <Input name="telefono" id="telefono" label="Teléfono de Contacto" />
       </Grid>
     </Grid>
   );

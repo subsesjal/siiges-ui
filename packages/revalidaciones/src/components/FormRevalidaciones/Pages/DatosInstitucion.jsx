@@ -29,7 +29,7 @@ export default function DatosInstitucion() {
       </Grid>
       <Grid item xs={3}>
         <Select
-          title="Grado Academico Procedente"
+          title="Grado Académico Procedente"
           options={[]}
           name="gradoAcademicoProcedente"
         />
@@ -67,14 +67,14 @@ export default function DatosInstitucion() {
         <Input
           id="telefonoInstitucion"
           name="telefonoInstitucion"
-          label="Telefono de institución"
+          label="Teléfono de institución"
         />
       </Grid>
       <Grid item xs={9}>
         <Input
           id="paginaWeb"
           name="paginaWeb"
-          label="Pagina web de la institución"
+          label="Página web de la institución"
         />
       </Grid>
       <Grid item xs={6}>
