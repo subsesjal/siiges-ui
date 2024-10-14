@@ -92,7 +92,7 @@ export default function DatosSolicitante() {
         <Input name="calle" id="calle" label="Calle" />
       </Grid>
       <Grid item xs={3}>
-        <Input name="numero" id="numero" label="Numero" />
+        <Input name="numero" id="numero" label="Número" />
       </Grid>
       <Grid item xs={3}>
         <Input name="colonia" id="colonia" label="Colonia" />
@@ -114,7 +114,7 @@ export default function DatosSolicitante() {
         />
       </Grid>
       <Grid item xs={3}>
-        <Input name="codigoPostal" id="codigoPostal" label="Codigo Postal" />
+        <Input name="codigoPostal" id="codigoPostal" label="Código Postal" />
       </Grid>
       <Grid item xs={12}>
         <Subtitle>Contacto</Subtitle>
@@ -123,7 +123,7 @@ export default function DatosSolicitante() {
         <Input name="correo" id="correo" label="Correo de Contacto" />
       </Grid>
       <Grid item xs={3}>
-        <Input name="telefono" id="telefono" label="Telefono de Contacto" />
+        <Input name="telefono" id="telefono" label="Teléfono de Contacto" />
       </Grid>
     </Grid>
   );

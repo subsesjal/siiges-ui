@@ -10,7 +10,7 @@ export default function getAlumnosAcreditacion(asignaturaId, grupoId) {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error(`¡HTTP error! status: ${response.status}`);
+        throw new Error(`¡Error en el estatus HTTP!: ${response.status}`);
       }
       return response.json();
     })
