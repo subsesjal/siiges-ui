@@ -15,7 +15,12 @@ export default function BinarySelect({
     <Box sx={{ minWidth: 120, mt: 2 }}>
       <FormControl fullWidth size="small">
         <InputLabel>{title}</InputLabel>
-        <Select label={title} name={name} value={value} onChange={onChange}>
+        <Select
+          label={title}
+          name={name}
+          value={value !== '' ? value : 0}
+          onChange={onChange}
+        >
           {options.map((option) => (
             <MenuItem key={option.id} value={option.id}>
               {option.nombre}
@@ -35,12 +40,13 @@ BinarySelect.propTypes = {
       nombre: PropTypes.string.isRequired,
     }),
   ),
-  value: PropTypes.oneOf([0, 1]).isRequired,
+  value: PropTypes.oneOf([0, 1]),
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
 BinarySelect.defaultProps = {
+  value: 0,
   options: [
     { id: 0, label: 'Option 0' },
     { id: 1, label: 'Option 1' },

@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material';
 import {
+  BinarySelect,
   ButtonsSections,
   Context,
   DefaultModal,
@@ -25,8 +26,8 @@ const modalidadTitulacion = [
 ];
 
 const cumplioServicioSocial = [
+  { id: 0, nombre: 'No' },
   { id: 1, nombre: 'Si' },
-  { id: 2, nombre: 'No' },
 ];
 
 const fundamentoLegal = [
@@ -57,30 +58,25 @@ export default function ModalTitulo({
   const { setNoti, setLoading } = useContext(Context);
 
   useEffect(() => {
-    if (type === 'edit' && rowData) {
-      setForm({
-        ...rowData,
-        fechaTermino: dayjs(rowData.fechaTermino).format('YYYY-MM-DD'),
-        fechaElaboracion: dayjs(rowData.fechaElaboracion).format('YYYY-MM-DD'),
-        fechaInicio: rowData.fechaInicio
-          ? dayjs(rowData.fechaInicio).format('YYYY-MM-DD')
-          : '',
-        fechaTerminacion: rowData.fechaTerminacion
-          ? dayjs(rowData.fechaTerminacion).format('YYYY-MM-DD')
-          : '',
-        fechaExpedicion: rowData.fechaExpedicion
-          ? dayjs(rowData.fechaExpedicion).format('YYYY-MM-DD')
-          : '',
-        fechaExamenProfesional: rowData.fechaExamenProfesional
-          ? dayjs(rowData.fechaExamenProfesional).format('YYYY-MM-DD')
-          : '',
-        fechaExencionExamen: rowData.fechaExencionExamen
-          ? dayjs(rowData.fechaExencionExamen).format('YYYY-MM-DD')
-          : '',
-      });
-      setAlumno(rowData.name);
-      setAlumnoId(rowData.id);
-    }
+    const fetchData = async () => {
+      if (type === 'edit' && rowData) {
+        try {
+          const response = await getData({ endpoint: `/solicitudesFoliosAlumnos/${rowData.id}` });
+          const { data } = response;
+          setForm(data);
+          setAlumno(rowData.name);
+          setAlumnoId(rowData.id);
+        } catch (error) {
+          setNoti({
+            open: true,
+            message: `¡Error al cargar los datos!: ${error.message}`,
+            type: 'error',
+          });
+        }
+      }
+    };
+
+    fetchData();
   }, [type, rowData]);
 
   const handleChange = (event) => {
@@ -103,24 +99,25 @@ export default function ModalTitulo({
 
     const formattedForm = {
       ...form,
-      fechaTermino: dayjs(form.fechaTermino).format('YYYY-MM-DDTHH:mm:ssZ'),
-      fechaElaboracion: dayjs(form.fechaElaboracion).format(
-        'YYYY-MM-DDTHH:mm:ssZ',
-      ),
       fechaInicio: form.fechaInicio
         ? dayjs(form.fechaInicio).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
       fechaTerminacion: form.fechaTerminacion
         ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
+      fechaElaboracion: dayjs(form.fechaElaboracion).format(
+        'YYYY-MM-DDTHH:mm:ssZ',
+      ),
       fechaExpedicion: form.fechaExpedicion
         ? dayjs(form.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
       fechaExamenProfesional: form.fechaExamenProfesional
         ? dayjs(form.fechaExamenProfesional).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
-      fechaExencionExamen: form.fechaExencionExamen
-        ? dayjs(form.fechaExencionExamen).format('YYYY-MM-DDTHH:mm:ssZ')
+      fechaExencionExamenProfesional: form.fechaExencionExamenProfesional
+        ? dayjs(form.fechaExencionExamenProfesional).format(
+          'YYYY-MM-DDTHH:mm:ssZ',
+        )
         : null,
     };
 
@@ -256,18 +253,9 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Input
                 label="Número de folio de acta de titulación"
-                id="numeroFolio"
-                name="numeroFolio"
-                value={form.numeroFolio || ''}
-                onchange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                label="Correo del alumno"
-                id="correoAlumno"
-                name="correoAlumno"
-                value={form.correoAlumno || ''}
+                id="folioActa"
+                name="folioActa"
+                value={form.folioActa || ''}
                 onchange={handleChange}
               />
             </Grid>
@@ -279,6 +267,17 @@ export default function ModalTitulo({
                 type="datetime"
                 value={form.fechaInicio || ''}
                 onchange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <InputDate
+                label="Fecha de elaboración de certificado"
+                id="fechaElaboracion"
+                name="fechaElaboracion"
+                type="datetime"
+                value={form.fechaElaboracion || ''}
+                onchange={handleChange}
+                required
               />
             </Grid>
             <Grid item xs={6}>
@@ -304,9 +303,9 @@ export default function ModalTitulo({
               <Select
                 title="Modalidad de titulación"
                 options={modalidadTitulacion}
-                name="modalidadTitulacion"
-                value={form.modalidadTitulacion || ''}
-                onchange={handleSelectChange('modalidadTitulacion')}
+                name="modalidadTitulacionId"
+                value={form.modalidadTitulacionId || ''}
+                onchange={handleSelectChange('modalidadTitulacionId')}
               />
             </Grid>
           </>
@@ -325,28 +324,28 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <InputDate
                 label="Fecha de exención de examen"
-                id="fechaExencionExamen"
-                name="fechaExencionExamen"
-                value={form.fechaExencionExamen || ''}
+                id="fechaExencionExamenProfesional"
+                name="fechaExencionExamenProfesional"
+                value={form.fechaExencionExamenProfesional || ''}
                 onchange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
-              <Select
+              <BinarySelect
                 title="Cumplió servicio social"
                 options={cumplioServicioSocial}
                 name="cumplioServicioSocial"
                 value={form.cumplioServicioSocial || ''}
-                onchange={handleSelectChange('cumplioServicioSocial')}
+                onChange={handleSelectChange('cumplioServicioSocial')}
               />
             </Grid>
             <Grid item xs={6}>
               <Select
                 title="Fundamento legal de servicio social"
                 options={fundamentoLegal}
-                name="fundamentoLegal"
-                value={form.fundamentoLegal || ''}
-                onchange={handleSelectChange('fundamentoLegal')}
+                name="fundamentoServicioSocialId"
+                value={form.fundamentoServicioSocialId || ''}
+                onchange={handleSelectChange('fundamentoServicioSocialId')}
               />
             </Grid>
           </>
@@ -386,6 +385,6 @@ ModalTitulo.propTypes = {
     fechaTerminacion: PropTypes.string,
     fechaExpedicion: PropTypes.string,
     fechaExamenProfesional: PropTypes.string,
-    fechaExencionExamen: PropTypes.string,
+    fechaExencionExamenProfesional: PropTypes.string,
   }),
 };

@@ -2,6 +2,7 @@ import {
   Grid, Typography, Tabs, Tab, Box, IconButton,
 } from '@mui/material';
 import {
+  ButtonSimple,
   Context,
   createRecord,
   DataTable,
@@ -114,7 +115,7 @@ export default function FoliosData({ type }) {
             folioPago: data.folioPago,
             tipoDocumentoId: data.tipoDocumentoId,
             tipoSolicitudFolioId: data.tipoSolicitudFolioId,
-            estatusSolicitudFolioId: data.estatusSolicitudFolioI,
+            estatusSolicitudFolioId: data.estatusSolicitudFolioId,
             programaId: data.programaId,
             fecha: dayjs(data.fecha),
           });
@@ -198,11 +199,19 @@ export default function FoliosData({ type }) {
     }
   }, [id]);
 
-  const handleEdit = (value) => {
-    const data = rows.find((row) => row.id === value);
-    setAlumnoType('edit');
-    setRowData(data);
-    setOpen(true);
+  const handleEdit = async (value) => {
+    try {
+      setAlumnoType('edit');
+      const alumno = rows.find((row) => row.id === value);
+      setRowData(alumno);
+      setOpen(true);
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `¡Error al cargar los datos!: ${error.message}`,
+        type: 'error',
+      });
+    }
   };
 
   const handleAddAlumno = () => {
@@ -261,12 +270,24 @@ export default function FoliosData({ type }) {
   };
 
   const handleSend = async () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      estatusSolicitudFolioId: 2,
-    }));
+    try {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        estatusSolicitudFolioId: 2,
+      }));
 
-    await handleConfirm();
+      await handleConfirm();
+
+      setOpen(false);
+      router.back();
+    } catch (error) {
+      setOpen(false);
+      setNoti({
+        open: true,
+        message: `Error al enviar la solicitud: ${error}`,
+        type: 'error',
+      });
+    }
   };
 
   const handleChange = (event) => {
@@ -364,16 +385,19 @@ export default function FoliosData({ type }) {
       )}
       <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid item xs={12}>
-          <ButtonsFolios
-            confirm={handleConfirm}
-            cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
-            send={handleSend}
-            disabled={status === 'consult'}
-            saved={isSaved}
-          />
+          {formData.estatusSolicitudFolioId === 2 ? (
+            <ButtonSimple design="error" text="Regresar" onClick={() => router.back()} />
+          ) : (
+            <ButtonsFolios
+              confirm={handleConfirm}
+              cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
+              send={handleSend}
+              disabled={status === 'consult'}
+              saved={isSaved}
+            />
+          )}
         </Grid>
       </Grid>
-
       {tipoDocumento === '1' ? (
         <ModalTitulo
           open={open}
