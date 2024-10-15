@@ -53,7 +53,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
       const findIndexIntitucion = instituciones.findIndex(
         ({ usuarioId }) => usuarioId === session.id,
       );
-      setSelectedInstitucion(instituciones[findIndexIntitucion].id);
+      setSelectedInstitucion(instituciones[findIndexIntitucion].id || '');
     }
   }, [isRepresentante, instituciones]);
 

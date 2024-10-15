@@ -21,10 +21,11 @@ export default function FormAlumno({ type, alumno, setId }) {
   const [form, setForm] = useState();
   const { session, setLoading, setNoti } = useContext(Context);
   const [formSelect, setFormSelect] = useState({
-    situacionId: alumno?.situacionId,
+    situacionId: alumno?.situacionId || 2,
   });
   const [errorMail, setErrorMail] = useState('');
   const [errorCurp, setErrorCurp] = useState('');
+  const ifRepresentantes = (session.rol === 'representante' || session.rol === 'ce_ies');
 
   const getErrorMessage = (campoId) => {
     if (campoId === 'correoPrimario') return errorMail;
@@ -46,10 +47,9 @@ export default function FormAlumno({ type, alumno, setId }) {
         situacionId: alumno.situacionId ? alumno.situacionId : '',
       }));
     }
-    if (session.rol === 'representante' || session.rol === 'ce_ies') {
+    if (ifRepresentantes) {
       setForm((prevForm) => ({
         ...prevForm,
-        situacionId: 2,
       }));
     }
   }, [alumno, session.rol]);
@@ -79,6 +79,19 @@ export default function FormAlumno({ type, alumno, setId }) {
         message: `El campo ${name} es obligatorio.`,
         type: 'error',
       });
+      return false;
+    }
+
+    if (name === 'situacionId' && ifRepresentantes && (value === 1 || value === 3)) {
+      setNoti({
+        open: true,
+        message: 'Solo puede seleccionar Situación: Inactivo o Baja.',
+        type: 'error',
+      });
+      setForm((prevForm) => ({
+        ...prevForm,
+        situacionId: alumno?.situacionId,
+      }));
       return false;
     }
 
@@ -177,15 +190,11 @@ export default function FormAlumno({ type, alumno, setId }) {
               <Select
                 title={campo.label}
                 name={campo.id}
-                value={
-                  campo.id === 'situacionId' && (session.rol === 'representante' || session.rol === 'ce_ies')
-                    ? 2
-                    : formSelect?.[campo.id] || ''
-                }
+                value={formSelect?.[campo.id] || ''}
                 options={campo.options}
-                onChange={handleOnChange}
+                onchange={handleOnChange}
                 disabled={
-                  campo.id === 'situacionId' && (session.rol === 'representante' || session.rol === 'ce_ies')
+                  campo.id === 'situacionId' && !(type === 'edit')
                 }
               />
             )}
