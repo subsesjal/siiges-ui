@@ -30,7 +30,7 @@ const columns = (handleEdit) => [
   },
   { field: 'name', headerName: 'Nombre', width: 250 },
   {
-    field: 'fechaTermino',
+    field: 'fechaTerminacion',
     headerName: 'Fecha de terminación de plan de estudios',
     width: 350,
   },
@@ -61,6 +61,8 @@ export default function FoliosData({ type }) {
   const [isSaved, setIsSaved] = useState(false);
   const [rowData, setRowData] = useState({});
   const [alumnoType, setAlumnoType] = useState('create');
+  const [alumnosData, setAlumnosData] = useState({});
+  const [alumnoResponse, setAlumnoResponse] = useState(true);
   const [formData, setFormData] = useState({
     folioPago: '',
     tipoDocumentoId: '',
@@ -170,7 +172,7 @@ export default function FoliosData({ type }) {
   }, [type, editId]);
 
   useEffect(() => {
-    if (id) {
+    if (id && alumnoResponse) {
       setLoading(true);
       getData({ endpoint: `/solicitudesFolios/${id}/alumnos` })
         .then((response) => {
@@ -178,12 +180,14 @@ export default function FoliosData({ type }) {
             const mappedRows = response.data.map((alumnos) => ({
               id: alumnos.id,
               name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
-              fechaTermino: dayjs(alumnos.fechaTermino).format('DD/MM/YYYY'),
+              fechaTerminacion: dayjs(alumnos.fechaTerminacion).format('DD/MM/YYYY'),
               fechaElaboracion: dayjs(alumnos.fechaElaboracion).format(
                 'DD/MM/YYYY',
               ),
             }));
             setRows(mappedRows);
+            setAlumnosData(response.data);
+            setAlumnoResponse(false);
           }
         })
         .catch((error) => {
@@ -197,12 +201,12 @@ export default function FoliosData({ type }) {
           setLoading(false);
         });
     }
-  }, [id]);
+  }, [id, alumnoResponse]);
 
   const handleEdit = async (value) => {
     try {
       setAlumnoType('edit');
-      const alumno = rows.find((row) => row.id === value);
+      const alumno = alumnosData.find((row) => row.id === value);
       setRowData(alumno);
       setOpen(true);
     } catch (error) {
@@ -404,9 +408,9 @@ export default function FoliosData({ type }) {
           setOpen={setOpen}
           type={alumnoType}
           id={id}
-          setRows={setRows}
           rowData={rowData}
           programaId={programa}
+          setAlumnoResponse={setAlumnoResponse}
         />
       ) : (
         <ModalCertificado
@@ -415,9 +419,9 @@ export default function FoliosData({ type }) {
           type={alumnoType}
           id={id}
           programaId={programa}
-          setRows={setRows}
           rowData={rowData}
           title="Agregar Alumno"
+          setAlumnoResponse={setAlumnoResponse}
         />
       )}
     </Box>

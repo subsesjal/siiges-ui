@@ -20,7 +20,7 @@ export default function ModalCertificado({
   type,
   id,
   programaId,
-  setRows,
+  setAlumnoResponse,
   rowData,
   title,
 }) {
@@ -43,18 +43,14 @@ export default function ModalCertificado({
   }, [form, alumnoId]);
 
   useEffect(() => {
+    console.log(rowData);
     if (type === 'edit' && rowData) {
-      setForm({
-        ...rowData,
-        fechaElaboracion: rowData.fechaElaboracion
-          ? dayjs(rowData.fechaElaboracion, 'MM/DD/YYYY').format('DD/MM/YYYY')
-          : '',
-        fechaTerminacion: rowData.fechaTerminacion
-          ? dayjs(rowData.fechaTerminacion, 'MM/DD/YYYY').format('DD/MM/YYYY')
-          : '',
-      });
-      setAlumno(rowData.name);
-      setAlumnoId(rowData.id);
+      setForm(rowData);
+      if (rowData.alumno) {
+        const fullName = `${rowData.alumno.persona.nombre} ${rowData.alumno.persona.apellidoPaterno} ${rowData.alumno.persona.apellidoMaterno}`;
+        setAlumno(fullName);
+      }
+      setAlumnoId(rowData.alumnoId);
     } else {
       setForm({});
       setAlumno();
@@ -102,7 +98,7 @@ export default function ModalCertificado({
     setLoading(true);
 
     const formattedForm = {
-      ...form,
+      matricula: form.matricula,
       fechaTerminacion: dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ'),
       fechaElaboracion: dayjs(form.fechaElaboracion).format(
         'YYYY-MM-DDTHH:mm:ssZ',
@@ -116,51 +112,27 @@ export default function ModalCertificado({
     const action = type === 'edit' ? updateRecord : createRecord;
 
     action({ data: formattedForm, endpoint })
-      .then((response) => {
-        if (response.data) {
-          let newRow;
-
-          if (type === 'edit') {
-            newRow = {
-              id: response.data.id,
-              name: alumno,
-              fechaTerminacion: dayjs(response.data.fechaTerminacion).format(
-                'DD/MM/YYYY',
-              ),
-              fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
-                'DD/MM/YYYY',
-              ),
-            };
-          } else {
-            newRow = {
-              id: response.data.id,
-              name: `${response.data.alumno.persona.nombre} ${response.data.alumno.persona.apellidoPaterno} ${response.data.alumno.persona.apellidoMaterno}`,
-              fechaTerminacion: dayjs(response.data.fechaTerminacion).format(
-                'DD/MM/YYYY',
-              ),
-              fechaElaboracion: dayjs(response.data.fechaElaboracion).format(
-                'DD/MM/YYYY',
-              ),
-            };
-          }
-
-          setNoti({
-            open: true,
-            message:
+      .then(() => {
+        setNoti({
+          open: true,
+          message:
               type === 'edit'
                 ? 'Registro actualizado exitosamente'
                 : 'Registro creado exitosamente',
-            type: 'success',
-          });
-
-          if (type === 'edit') {
-            setRows((prevRows) => prevRows.map((row) => (row.id === newRow.id ? newRow : row)));
-          } else {
-            setRows((prevRows) => [...prevRows, newRow]);
-          }
-
-          setOpen(false);
-        }
+          type: 'success',
+        });
+        setAlumnoResponse(true);
+        setOpen(false);
+      })
+      .catch((error) => {
+        setNoti({
+          open: true,
+          message: `¡Ocurrió un error inesperado!: ${error}`,
+          type: 'error',
+        });
+      })
+      .finally(() => {
+        setLoading(false);
       })
       .catch((error) => {
         setNoti({
@@ -187,7 +159,7 @@ export default function ModalCertificado({
             label="Matrícula"
             id="matricula"
             name="matricula"
-            value={form.matricula || ''}
+            value={form.alumno?.matricula || ''}
             onblur={handleBlur}
             onchange={handleChange}
           />
@@ -240,15 +212,30 @@ ModalCertificado.defaultProps = {
 ModalCertificado.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  setRows: PropTypes.func.isRequired,
+  setAlumnoResponse: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
   rowData: PropTypes.shape({
+    alumno: PropTypes.shape({
+      id: PropTypes.number,
+      matricula: PropTypes.string,
+      persona: PropTypes.shape({
+        nombre: PropTypes.string,
+        apellidoPaterno: PropTypes.string,
+        apellidoMaterno: PropTypes.string,
+      }),
+    }),
+    alumnoId: PropTypes.number,
     id: PropTypes.number,
     name: PropTypes.string,
-    fechaTerminacion: PropTypes.string,
+    fechaTermino: PropTypes.string,
     fechaElaboracion: PropTypes.string,
+    fechaInicio: PropTypes.string,
+    fechaTerminacion: PropTypes.string,
+    fechaExpedicion: PropTypes.string,
+    fechaExamenProfesional: PropTypes.string,
+    fechaExencionExamenProfesional: PropTypes.string,
   }),
   title: PropTypes.string.isRequired,
 };
