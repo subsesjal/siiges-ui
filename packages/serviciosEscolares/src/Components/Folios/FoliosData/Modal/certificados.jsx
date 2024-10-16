@@ -43,7 +43,6 @@ export default function ModalCertificado({
   }, [form, alumnoId]);
 
   useEffect(() => {
-    console.log(rowData);
     if (type === 'edit' && rowData) {
       setForm(rowData);
       if (rowData.alumno) {
