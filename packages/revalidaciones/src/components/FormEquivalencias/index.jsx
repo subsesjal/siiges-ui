@@ -9,6 +9,7 @@ import NavigationButtons from '../../utils/NavigationButtons';
 
 export default function FormEquivalencias() {
   const [currentPosition, setCurrentPosition] = useState(1);
+  const [form, setForm] = useState({});
   const totalPositions = 4;
 
   const handleNext = () => {
@@ -23,16 +24,48 @@ export default function FormEquivalencias() {
     }
   };
 
+  const handleOnChange = (event) => {
+    const { name, value } = event.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  const handleOnSubmit = () => {
+    console.log('Form submitted:', form);
+  };
+
   const renderCurrentPage = () => {
     switch (currentPosition) {
       case 1:
-        return <DatosSolicitante />;
+        return (
+          <DatosSolicitante
+            form={form}
+            handleOnChange={handleOnChange}
+          />
+        );
       case 2:
-        return <DatosInstitucion />;
+        return (
+          <DatosInstitucion
+            form={form}
+            handleOnChange={handleOnChange}
+          />
+        );
       case 3:
-        return <CargaMaterias />;
+        return (
+          <CargaMaterias
+            form={form}
+            handleOnChange={handleOnChange}
+          />
+        );
       case 4:
-        return <CargaMateriasEquivalentes />;
+        return (
+          <CargaMateriasEquivalentes
+            form={form}
+            handleOnChange={handleOnChange}
+          />
+        );
       default:
         return null;
     }
@@ -41,7 +74,10 @@ export default function FormEquivalencias() {
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
-        <PositionDisplay currentPosition={currentPosition} totalPositions={totalPositions} />
+        <PositionDisplay
+          currentPosition={currentPosition}
+          totalPositions={totalPositions}
+        />
       </Grid>
       <Grid item xs={12}>
         {renderCurrentPage()}
@@ -52,6 +88,7 @@ export default function FormEquivalencias() {
           totalPositions={totalPositions}
           onNext={handleNext}
           onPrevious={handlePrevious}
+          handleOnSubmit={handleOnSubmit}
         />
       </Grid>
     </Grid>

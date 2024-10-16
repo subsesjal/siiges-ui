@@ -1,11 +1,12 @@
 import { Grid } from '@mui/material';
 import { Input, Select, Subtitle } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function DatosInstitucion() {
+export default function DatosInstitucion({ form, handleOnChange }) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
   const [tipoInstitucionId, setTipoInstitucionId] = useState(null);
@@ -77,13 +78,15 @@ export default function DatosInstitucion() {
 
   const handleTipoInstitucionChange = (event) => {
     setTipoInstitucionId(event.target.value);
+    handleOnChange(event);
   };
 
   const handleRvoeOnBlur = (event) => {
+    const acuerdoRvoe = event.target.value;
     if (tipoInstitucionId === 1) {
-      const acuerdoRvoe = event.target.value;
       fetchProgramas(acuerdoRvoe);
     }
+    handleOnChange(event);
   };
 
   return (
@@ -96,16 +99,20 @@ export default function DatosInstitucion() {
           id="nombreInstitucion"
           label="Nombre de la Institución"
           name="nombreInstitucion"
+          value={form.nombreInstitucion || ''}
+          onChange={handleOnChange}
         />
       </Grid>
       <Grid item xs={3}>
-        <Select title="Estado" options={[]} name="estado" />
+        <Select title="Estado" options={[]} name="estado" onChange={handleOnChange} />
       </Grid>
       <Grid item xs={9}>
         <Input
           id="nombreCarrera"
           label="Nombre de la Carrera"
           name="nombreCarrera"
+          value={form.nombreCarrera || ''}
+          onChange={handleOnChange}
         />
       </Grid>
       <Grid item xs={12}>
@@ -116,6 +123,7 @@ export default function DatosInstitucion() {
           title="Tipo de Institución"
           name="tipoInstitucionId"
           options={tipoInstituciones}
+          value={form.tipoInstitucionId || ''}
           onChange={handleTipoInstitucionChange}
         />
       </Grid>
@@ -125,12 +133,16 @@ export default function DatosInstitucion() {
             title="Instituciones"
             options={instituciones}
             name="instituciones"
+            value={form.instituciones || ''}
+            onChange={handleOnChange}
           />
         ) : (
           <Input
             id="instituciones"
             label="Instituciones de Educación Superior"
             name="instituciones"
+            value={form.instituciones || ''}
+            onChange={handleOnChange}
           />
         )}
       </Grid>
@@ -139,12 +151,32 @@ export default function DatosInstitucion() {
           id="rvoe"
           label="RVOE"
           name="acuerdoRvoe"
-          onblur={handleRvoeOnBlur}
+          value={form.acuerdoRvoe || ''}
+          onBlur={handleRvoeOnBlur}
         />
       </Grid>
       <Grid item xs={9}>
-        <Input id="planEstudios" label="Plan de Estudios" name="planEstudios" value={programas.nombre} />
+        <Input
+          id="planEstudios"
+          label="Plan de Estudios"
+          name="planEstudios"
+          value={programas.nombre || form.planEstudios || ''}
+          onChange={handleOnChange}
+        />
       </Grid>
     </Grid>
   );
 }
+
+DatosInstitucion.propTypes = {
+  form: PropTypes.shape({
+    nombreInstitucion: PropTypes.string,
+    estado: PropTypes.string,
+    nombreCarrera: PropTypes.string,
+    tipoInstitucionId: PropTypes.string,
+    instituciones: PropTypes.string,
+    acuerdoRvoe: PropTypes.string,
+    planEstudios: PropTypes.string,
+  }).isRequired,
+  handleOnChange: PropTypes.func.isRequired,
+};

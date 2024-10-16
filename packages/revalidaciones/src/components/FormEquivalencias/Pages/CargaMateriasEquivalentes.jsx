@@ -3,6 +3,7 @@ import {
   ButtonsForm, DataTable, DefaultModal, Input,
 } from '@siiges-ui/shared';
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const columns = [
   {
@@ -27,8 +28,9 @@ const columns = [
   },
 ];
 
-export default function CargaMateriasEquivalentes() {
+export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [open, setOpen] = useState(false);
+
   return (
     <>
       <Grid container spacing={1}>
@@ -48,28 +50,36 @@ export default function CargaMateriasEquivalentes() {
             <Input
               id="materiaAntecedente"
               name="materiaAntecedente"
-              label=" Materias de Antecedente"
+              label="Materias de Antecedente"
+              value={form.materiaAntecedente || ''}
+              onChange={handleOnChange}
             />
           </Grid>
           <Grid item xs={6}>
             <Input
               id="calificacionAntecedente"
               name="calificacionAntecedente"
-              label=" Calificación de Antecedente"
+              label="Calificación de Antecedente"
+              value={form.calificacionAntecedente || ''}
+              onChange={handleOnChange}
             />
           </Grid>
           <Grid item xs={6}>
             <Input
               id="materiaEquivalente"
               name="materiaEquivalente"
-              label=" Materias de Equivalente"
+              label="Materias de Equivalente"
+              value={form.materiaEquivalente || ''}
+              onChange={handleOnChange}
             />
           </Grid>
           <Grid item xs={6}>
             <Input
-              id="materiaEquivalente"
-              name="materiaEquivalente"
-              label=" Materias de Equivalente"
+              id="calificacionEquivalente"
+              name="calificacionEquivalente"
+              label="Calificación de Equivalente"
+              value={form.calificacionEquivalente || ''}
+              onChange={handleOnChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -85,3 +95,13 @@ export default function CargaMateriasEquivalentes() {
     </>
   );
 }
+
+CargaMateriasEquivalentes.propTypes = {
+  form: PropTypes.shape({
+    materiaAntecedente: PropTypes.string,
+    calificacionAntecedente: PropTypes.string,
+    materiaEquivalente: PropTypes.string,
+    calificacionEquivalente: PropTypes.string,
+  }).isRequired,
+  handleOnChange: PropTypes.func.isRequired,
+};
