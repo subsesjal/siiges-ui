@@ -19,7 +19,7 @@ export default function CalificacionInput({
         value={value}
         variant="standard"
         disabled={disabled}
-        onchange={handleChange}
+        onChange={handleChange}
       />
     </div>
   );

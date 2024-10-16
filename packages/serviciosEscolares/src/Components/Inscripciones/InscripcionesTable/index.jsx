@@ -165,7 +165,7 @@ export default function InscripcionesTable({
           label="Matrícula"
           name="matricula"
           value={matriculaValue}
-          onchange={(e) => setMatriculaValue(e.target.value)}
+          onChange={(e) => setMatriculaValue(e.target.value)}
           onblur={handleBlurMatricula}
         />
       </Grid>

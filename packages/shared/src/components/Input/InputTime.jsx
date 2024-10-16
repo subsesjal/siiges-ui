@@ -9,7 +9,7 @@ function InputTime({
   value,
   label,
   name,
-  onchange,
+  onChange,
   onfocus,
   onblur,
   errorMessage,
@@ -20,9 +20,9 @@ function InputTime({
   const handleDateChange = (newDate) => {
     if (newDate) {
       const formattedDate = newDate.toDate();
-      onchange({ target: { name, value: formattedDate } });
+      onChange({ target: { name, value: formattedDate } });
     } else {
-      onchange({ target: { name, value: null } });
+      onChange({ target: { name, value: null } });
     }
   };
 
@@ -57,7 +57,7 @@ InputTime.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
   size: PropTypes.string,
-  onchange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   onfocus: PropTypes.func,
   onblur: PropTypes.func,
   errorMessage: PropTypes.string,

@@ -164,7 +164,7 @@ export default function Register() {
             id="usuario"
             name="usuario"
             value={formValues.usuario}
-            onchange={handleInputChange}
+            onChange={handleInputChange}
             size="normal"
             required
             errorMessage={errors.usuario}
@@ -174,7 +174,7 @@ export default function Register() {
             id="correo"
             name="correo"
             value={formValues.correo}
-            onchange={handleInputChange}
+            onChange={handleInputChange}
             size="normal"
             required
             errorMessage={errors.correo}
@@ -185,7 +185,7 @@ export default function Register() {
             name="contrasena"
             type="contrasena"
             value={formValues.contrasena}
-            onchange={handleInputChange}
+            onChange={handleInputChange}
             size="normal"
             required
             errorMessage={errors.contrasena}
@@ -196,7 +196,7 @@ export default function Register() {
             name="recontrasena"
             type="contrasena"
             value={formValues.recontrasena}
-            onchange={handleInputChange}
+            onChange={handleInputChange}
             size="normal"
             required
             errorMessage={errors.recontrasena}

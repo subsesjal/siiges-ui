@@ -52,7 +52,7 @@ export default function CiclosEscolaresModal({
             label="Nombre de ciclo escolar"
             name="nombre"
             auto="nombre"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             value={form?.nombre}
           />
         </Grid>
@@ -62,7 +62,7 @@ export default function CiclosEscolaresModal({
             label="Descripción"
             name="descripcion"
             auto="descripcion"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             value={form?.descripcion}
           />
         </Grid>

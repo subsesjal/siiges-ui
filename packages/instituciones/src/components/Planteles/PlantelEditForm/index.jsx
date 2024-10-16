@@ -53,7 +53,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="calle"
               value={plantel.domicilio.calle}
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.calle}
               class="data"
@@ -67,7 +67,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="numeroExterior"
               value={plantel.domicilio.numeroExterior}
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.numeroExterior}
               class="data"
@@ -80,7 +80,7 @@ export default function PlantelEditForm({ plantel }) {
               name="numeroInterior"
               auto="numeroInterior"
               value={plantel.domicilio.numeroInterior}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -94,7 +94,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="colonia"
               value={plantel.domicilio.colonia}
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.colonia}
               class="data"
@@ -108,7 +108,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="codigoPostal"
               value={plantel.domicilio.codigoPostal}
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.codigoPostal}
               class="data"
@@ -120,7 +120,7 @@ export default function PlantelEditForm({ plantel }) {
               name="municipioId"
               value={plantel ? plantel.domicilio.municipioId : ''}
               options={municipios}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.municipioId}
               required
@@ -133,7 +133,7 @@ export default function PlantelEditForm({ plantel }) {
               value={plantel ? plantel.tipoInmuebleId : ''}
               options={inmuebles}
               onblur={handleOnBlur}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
             />
           </Grid>
         </Grid>
@@ -149,7 +149,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="correo1"
               value={plantel.correo1}
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo1}
               class="data"
@@ -163,7 +163,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="correo2"
               value={plantel.correo2}
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo2}
               class="data"
@@ -176,7 +176,7 @@ export default function PlantelEditForm({ plantel }) {
               name="correo3"
               auto="correo3"
               value={plantel.correo3}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -190,7 +190,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="telefono1"
               value={plantel.telefono1}
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.telefono1}
               class="data"
@@ -204,7 +204,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="telefono2"
               value={plantel.telefono2}
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.telefono2}
               class="data"
@@ -217,7 +217,7 @@ export default function PlantelEditForm({ plantel }) {
               name="telefono3"
               auto="telefono3"
               value={plantel.telefono3}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -230,7 +230,7 @@ export default function PlantelEditForm({ plantel }) {
               name="claveCentroTrabajo"
               auto="claveCentroTrabajo"
               value={plantel.claveCentroTrabajo}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -241,7 +241,7 @@ export default function PlantelEditForm({ plantel }) {
               name="paginaWeb"
               auto="paginaWeb"
               value={plantel.paginaWeb}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -252,7 +252,7 @@ export default function PlantelEditForm({ plantel }) {
               name="redesSociales"
               auto="redesSociales"
               value={plantel.redesSociales}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -268,7 +268,7 @@ export default function PlantelEditForm({ plantel }) {
               name="nombre"
               auto="nombre"
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               value={director?.nombre}
               errorMessage={error.nombre}
@@ -283,7 +283,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="apellidoPaterno"
               required
               value={director?.apellidoPaterno}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
               class="data"
@@ -297,7 +297,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="apellidoMaterno"
               required
               value={director?.apellidoMaterno}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
               class="data"
@@ -311,7 +311,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="nacionalidad"
               required
               value={director?.nacionalidad}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
               class="data"
@@ -323,7 +323,7 @@ export default function PlantelEditForm({ plantel }) {
               id="curp"
               name="curp"
               auto="curp"
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               value={director?.curp}
               class="data"
             />
@@ -336,7 +336,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="genero"
               required
               value={director?.sexo}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
               class="data"
@@ -350,7 +350,7 @@ export default function PlantelEditForm({ plantel }) {
               auto="correoPrimario"
               required
               value={director?.correoPrimario}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
               class="data"

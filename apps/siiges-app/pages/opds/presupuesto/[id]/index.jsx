@@ -116,7 +116,7 @@ export default function presupuesto() {
             title="Periodo"
             options={periodData}
             value={periodo}
-            onchange={(event) => setPeriodo(event.target.value || '')}
+            onChange={(event) => setPeriodo(event.target.value || '')}
             name="periodo"
           />
         </Grid>
@@ -126,7 +126,7 @@ export default function presupuesto() {
             options={sessionData}
             name="sesion"
             value={sesion}
-            onchange={(event) => setSesion(event.target.value || '')}
+            onChange={(event) => setSesion(event.target.value || '')}
           />
         </Grid>
         <Grid item xs={4}>
@@ -135,7 +135,7 @@ export default function presupuesto() {
             options={anio}
             name="ano"
             value={fecha}
-            onchange={(event) => setFecha(event.target.value || '')}
+            onChange={(event) => setFecha(event.target.value || '')}
           />
         </Grid>
         <Grid item xs={12}>
@@ -180,7 +180,7 @@ export default function presupuesto() {
                 label="Estatal"
                 id="cantidadEstatal"
                 auto="cantidadEstatal"
-                onchange={(e) => updateForm(e.target.name, e.target.value)}
+                onChange={(e) => updateForm(e.target.name, e.target.value)}
               />
             </Grid>
             <Grid item xs={4}>
@@ -190,7 +190,7 @@ export default function presupuesto() {
                 label="Federal"
                 id="cantidadFederal"
                 auto="cantidadFederal"
-                onchange={(e) => updateForm(e.target.name, e.target.value)}
+                onChange={(e) => updateForm(e.target.name, e.target.value)}
               />
             </Grid>
             <Grid item xs={4}>
@@ -200,7 +200,7 @@ export default function presupuesto() {
                 label="Total"
                 id="total"
                 auto="total"
-                onchange={(e) => updateForm(e.target.name, e.target.value)}
+                onChange={(e) => updateForm(e.target.name, e.target.value)}
                 disabled
               />
             </Grid>

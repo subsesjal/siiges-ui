@@ -13,7 +13,7 @@ function Input({
   value,
   size,
   errorMessage,
-  onchange,
+  onChange,
   onblur,
   onfocus,
   variant,
@@ -60,7 +60,7 @@ function Input({
     }
 
     setInput(newValue);
-    onchange({
+    onChange({
       target: {
         name,
         value: formattedValue,
@@ -110,7 +110,7 @@ Input.defaultProps = {
   required: false,
   disabled: false,
   variant: 'outlined',
-  onchange: () => {},
+  onChange: () => {},
   onblur: () => {},
   onfocus: () => {},
   multiline: false,
@@ -123,7 +123,7 @@ Input.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  onchange: PropTypes.func,
+  onChange: PropTypes.func,
   onblur: PropTypes.func,
   required: PropTypes.bool,
   onfocus: PropTypes.func,

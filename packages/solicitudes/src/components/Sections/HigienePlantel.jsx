@@ -91,7 +91,7 @@ export default function HigienePlantel({ disabled }) {
             name="hombresAlumnos"
             auto="hombresAlumnos"
             value={form[3][0]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 0)}
+            onChange={(e) => handleOnChange(e, 0)}
             disabled={isDisabled}
           />
         </Grid>
@@ -102,7 +102,7 @@ export default function HigienePlantel({ disabled }) {
             name="mujeresAlumnos"
             auto="mujeresAlumnos"
             value={form[3][1]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 1)}
+            onChange={(e) => handleOnChange(e, 1)}
             disabled={isDisabled}
           />
         </Grid>
@@ -120,7 +120,7 @@ export default function HigienePlantel({ disabled }) {
             name="hombresDocentes"
             auto="hombresDocentes"
             value={form[3][2]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 2)}
+            onChange={(e) => handleOnChange(e, 2)}
             disabled={isDisabled}
           />
         </Grid>
@@ -131,7 +131,7 @@ export default function HigienePlantel({ disabled }) {
             name="mujeresDocentes"
             auto="mujeresDocentes"
             value={form[3][3]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 3)}
+            onChange={(e) => handleOnChange(e, 3)}
             disabled={isDisabled}
           />
         </Grid>
@@ -147,7 +147,7 @@ export default function HigienePlantel({ disabled }) {
             name="personasLimpieza"
             auto="personasLimpieza"
             value={form[3][4]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 4)}
+            onChange={(e) => handleOnChange(e, 4)}
             disabled={isDisabled}
           />
         </Grid>
@@ -158,7 +158,7 @@ export default function HigienePlantel({ disabled }) {
             name="cestosBasura"
             auto="cestosBasura"
             value={form[3][5]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 5)}
+            onChange={(e) => handleOnChange(e, 5)}
             disabled={isDisabled}
           />
         </Grid>
@@ -174,7 +174,7 @@ export default function HigienePlantel({ disabled }) {
             name="numeroAulas"
             auto="numeroAulas"
             value={form[3][6]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 6)}
+            onChange={(e) => handleOnChange(e, 6)}
             disabled={isDisabled}
           />
         </Grid>
@@ -185,7 +185,7 @@ export default function HigienePlantel({ disabled }) {
             name="butacasAula"
             auto="butacasAula"
             value={form[3][7]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 7)}
+            onChange={(e) => handleOnChange(e, 7)}
             disabled={isDisabled}
           />
         </Grid>
@@ -201,7 +201,7 @@ export default function HigienePlantel({ disabled }) {
             name="ventanasAbrenPorAula"
             auto="ventanasAbrenPorAula"
             value={form[3][8]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 8)}
+            onChange={(e) => handleOnChange(e, 8)}
             disabled={isDisabled}
           />
         </Grid>
@@ -212,7 +212,7 @@ export default function HigienePlantel({ disabled }) {
             name="ventiladores"
             auto="ventiladores"
             value={form[3][9]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 9)}
+            onChange={(e) => handleOnChange(e, 9)}
             disabled={isDisabled}
           />
         </Grid>
@@ -223,7 +223,7 @@ export default function HigienePlantel({ disabled }) {
             name="aireAcondicionado"
             auto="aireAcondicionado"
             value={form[3][10]?.cantidad || ''}
-            onchange={(e) => handleOnChange(e, 10)}
+            onChange={(e) => handleOnChange(e, 10)}
             disabled={isDisabled}
           />
         </Grid>

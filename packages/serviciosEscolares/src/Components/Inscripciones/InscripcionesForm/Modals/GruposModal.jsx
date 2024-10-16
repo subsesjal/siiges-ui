@@ -75,7 +75,7 @@ export default function GruposModal({
             id="grupo"
             label="Grupo"
             name="grupo"
-            onchange={handleFormGrupoOnChange}
+            onChange={handleFormGrupoOnChange}
           />
         </Grid>
         <Grid item xs={8}>
@@ -85,7 +85,7 @@ export default function GruposModal({
             options={turnos || []}
             value=""
             textValue
-            onchange={handleFormGrupoOnChange}
+            onChange={handleFormGrupoOnChange}
           />
         </Grid>
         <Grid item xs={12}>

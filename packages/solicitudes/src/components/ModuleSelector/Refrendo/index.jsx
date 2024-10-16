@@ -61,7 +61,7 @@ function Refrendo() {
             name="options"
             options={options}
             value={option}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>

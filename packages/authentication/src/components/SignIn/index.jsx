@@ -69,7 +69,7 @@ export default function SignIn() {
             name="usuario"
             auto="usuario"
             size="normal"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             errorMessage={errorMessages.usuario}
           />
           <InputPassword
@@ -79,7 +79,7 @@ export default function SignIn() {
             auto="contrasena"
             type="contrasena"
             size="normal"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             errorMessage={errorMessages.contrasena}
           />
           <Box

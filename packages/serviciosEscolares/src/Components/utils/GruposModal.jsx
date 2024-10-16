@@ -90,7 +90,7 @@ export default function GruposModal({
             label="Descripción"
             name="descripcion"
             auto="descripcion"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             value={data?.descripcion}
           />
         </Grid>
@@ -99,7 +99,7 @@ export default function GruposModal({
             title="Turno"
             value={data?.turnoId}
             options={turnos}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             id="turnoId"
             name="turnoId"
           />
@@ -110,7 +110,7 @@ export default function GruposModal({
             label="Generación"
             name="generacion"
             auto="generacion"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             value={data?.generacion}
           />
         </Grid>
@@ -120,7 +120,7 @@ export default function GruposModal({
             label="Fecha de inicio de generación"
             name="generacionFechaInicio"
             auto="generacionFechaInicio"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             type="date"
             value={data?.generacionFechaInicio}
           />
@@ -131,7 +131,7 @@ export default function GruposModal({
             label="Fecha de fin de generación"
             name="generacionFechaFin"
             auto="generacionFechaFin"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             type="date"
             value={data?.generacionFechaFin}
           />

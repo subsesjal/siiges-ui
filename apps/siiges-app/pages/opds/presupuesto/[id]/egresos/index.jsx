@@ -69,7 +69,7 @@ export default function Egresos() {
               name="tipoPeriodo"
               value={recursos}
               options={presupuestosData}
-              onchange={(event) => setRecursos(event.target.value || '')}
+              onChange={(event) => setRecursos(event.target.value || '')}
             />
           </Grid>
           <Grid item xs={12}>

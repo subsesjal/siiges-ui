@@ -25,7 +25,7 @@ function InputPassword({
   size,
   required,
   errorMessage,
-  onchange,
+  onChange,
   onblur,
 }) {
   const initialValues = {
@@ -37,7 +37,7 @@ function InputPassword({
   const [input, setInput] = useState(value);
   const handleOnChange = (e) => {
     setInput(e.target.value);
-    onchange(e);
+    onChange(e);
   };
 
   return (
@@ -73,7 +73,7 @@ function InputPassword({
 }
 
 InputPassword.defaultProps = {
-  onchange: () => {},
+  onChange: () => {},
   onblur: () => {},
   value: '',
   errorMessage: '',
@@ -88,7 +88,7 @@ InputPassword.propTypes = {
   name: PropTypes.string.isRequired,
   auto: PropTypes.string.isRequired,
   required: PropTypes.bool,
-  onchange: PropTypes.func,
+  onChange: PropTypes.func,
   value: PropTypes.string,
   errorMessage: PropTypes.string,
   size: PropTypes.string,

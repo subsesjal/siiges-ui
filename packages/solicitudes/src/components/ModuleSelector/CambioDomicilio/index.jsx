@@ -73,7 +73,7 @@ function ChangeAddress() {
             name="programa"
             value={programaSelect}
             options={programaData || []}
-            onchange={(event) => {
+            onChange={(event) => {
               setProgramaSelect(event.target.value || '');
               setPlantelData([]);
             }}
@@ -85,7 +85,7 @@ function ChangeAddress() {
             name="plantel"
             value={plantelSelect}
             options={plantelData || []}
-            onchange={(event) => setPlantelSelect(event.target.value || '')}
+            onChange={(event) => setPlantelSelect(event.target.value || '')}
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>

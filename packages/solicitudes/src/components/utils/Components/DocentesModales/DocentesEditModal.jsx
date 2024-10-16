@@ -144,7 +144,7 @@ export default function DocentesEditModal({
               name="tipoDocente"
               value={formDocentes.tipoDocente}
               options={tiposDocentes}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.tipoDocente}
               required
@@ -158,7 +158,7 @@ export default function DocentesEditModal({
               name="nombre"
               auto="nombre"
               value={formDocentes.persona?.nombre}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -173,7 +173,7 @@ export default function DocentesEditModal({
               name="apellidoPaterno"
               auto="apellidoPaterno"
               value={formDocentes.persona?.apellidoPaterno}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -188,7 +188,7 @@ export default function DocentesEditModal({
               name="apellidoMaterno"
               auto="apellidoMaterno"
               value={formDocentes.persona?.apellidoMaterno}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -209,7 +209,7 @@ export default function DocentesEditModal({
               name="nivelUltimoGrado"
               value={formDocentes.nivelUltimoGrado}
               options={nivel}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nivelUltimoGrado}
               textValue
@@ -224,7 +224,7 @@ export default function DocentesEditModal({
               name="nombreUltimoGrado"
               auto="nombreUltimoGrado"
               value={formDocentes.nombreUltimoGrado}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -238,7 +238,7 @@ export default function DocentesEditModal({
               name="documentoPresentadoUltimoGrado"
               value={formDocentes.documentoPresentadoUltimoGrado}
               options={documentosPresentados}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.documentoPresentadoUltimoGrado}
               textValue
@@ -259,7 +259,7 @@ export default function DocentesEditModal({
               name="nivelPenultimoGrado"
               value={formDocentes.nivelPenultimoGrado}
               options={nivel}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nivelPenultimoGrado}
               textValue
@@ -274,7 +274,7 @@ export default function DocentesEditModal({
               name="nombrePenultimoGrado"
               auto="nombrePenultimoGrado"
               value={formDocentes.nombrePenultimoGrado}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -288,7 +288,7 @@ export default function DocentesEditModal({
               name="documentoPresentadoPenultimoGrado"
               value={formDocentes.documentoPresentadoPenultimoGrado}
               options={documentosPresentados}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.documentoPresentadoPenultimoGrado}
               textValue
@@ -303,7 +303,7 @@ export default function DocentesEditModal({
               name="asignaturasDocentes"
               value={formDocentes.asignaturasDocentes}
               options={asignaturas.asignaturas}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.asignaturasDocentes}
               required
@@ -316,7 +316,7 @@ export default function DocentesEditModal({
               name="tipoContratacion"
               value={formDocentes.tipoContratacion}
               options={tipoContratacion}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.tipoContratacion}
               required
@@ -330,7 +330,7 @@ export default function DocentesEditModal({
               name="antiguedad"
               auto="antiguedad"
               value={formDocentes.antiguedad}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -345,7 +345,7 @@ export default function DocentesEditModal({
               name="totalHorasIndependiente"
               auto="totalHorasIndependiente"
               value={formDocentes.totalHorasIndependiente}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required

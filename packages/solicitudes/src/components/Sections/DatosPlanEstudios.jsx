@@ -103,7 +103,7 @@ export default function DatosPlanEstudios({ disabled }) {
             name="nivelId"
             options={nivel}
             value={form[1].programa?.nivelId || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.nivelId}
@@ -117,7 +117,7 @@ export default function DatosPlanEstudios({ disabled }) {
             label="Nombre del programa de estudio"
             name="nombre"
             auto="nombre"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             value={form[1].programa?.nombre || ''}
@@ -142,7 +142,7 @@ export default function DatosPlanEstudios({ disabled }) {
             name="cicloId"
             value={form[1].programa?.cicloId || ''}
             options={periodo}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.cicloId}
@@ -157,7 +157,7 @@ export default function DatosPlanEstudios({ disabled }) {
             options={turno}
             multiple
             value={form[1].programa?.programaTurnos || []}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.programaTurnos}
@@ -171,7 +171,7 @@ export default function DatosPlanEstudios({ disabled }) {
             label="Duración del programa"
             name="duracionPeriodos"
             auto="duracionPeriodos"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             value={form[1].programa?.duracionPeriodos || ''}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -190,7 +190,7 @@ export default function DatosPlanEstudios({ disabled }) {
             name="creditos"
             auto="creditos"
             value={form[1].programa?.creditos}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.creditos}
@@ -204,7 +204,7 @@ export default function DatosPlanEstudios({ disabled }) {
             name="antecedenteAcademico"
             options={antecedenteAcademico}
             value={form[1].programa?.antecedenteAcademico || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.antecedenteAcademico}

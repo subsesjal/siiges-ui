@@ -158,7 +158,7 @@ export default function DatosProyectoForm({ type }) {
             label="Nombre"
             id="nombre"
             auto="nombre"
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
             disabled={disabled}
           />
         </Grid>
@@ -169,7 +169,7 @@ export default function DatosProyectoForm({ type }) {
             label="Monto Autorizado"
             id="montoAutorizado"
             auto="montoAutorizado"
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
             disabled={disabled}
           />
         </Grid>
@@ -180,7 +180,7 @@ export default function DatosProyectoForm({ type }) {
             label="Monto Contratado"
             id="montoContratado"
             auto="montoContratado"
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
             disabled={disabled}
           />
         </Grid>
@@ -192,7 +192,7 @@ export default function DatosProyectoForm({ type }) {
             id="montoEjercido"
             auto="montoEjercido"
             disabled={disabled}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={9}>
@@ -203,7 +203,7 @@ export default function DatosProyectoForm({ type }) {
             id="acciones"
             auto="acciones"
             disabled={disabled}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={6}>
@@ -214,7 +214,7 @@ export default function DatosProyectoForm({ type }) {
             id="porcentajeDeAvance"
             auto="porcentajeDeAvance"
             disabled={disabled}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={3}>
@@ -226,7 +226,7 @@ export default function DatosProyectoForm({ type }) {
             auto="fechaRealInicio"
             disabled={disabled}
             type="date"
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={3}>
@@ -237,7 +237,7 @@ export default function DatosProyectoForm({ type }) {
             id="fechaRealFin"
             auto="fechaRealFin"
             disabled={disabled}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
             type="date"
           />
         </Grid>
@@ -248,7 +248,7 @@ export default function DatosProyectoForm({ type }) {
             label="Observaciones"
             id="observaciones"
             auto="observaciones"
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
             multiline
             maxRows={4}
             rows={4}
@@ -265,7 +265,7 @@ export default function DatosProyectoForm({ type }) {
             label="Número de Contrato"
             id="numeroDeContrato"
             auto="numeroDeContrato"
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
             disabled={disabled}
           />
         </Grid>
@@ -276,7 +276,7 @@ export default function DatosProyectoForm({ type }) {
             label="Fecha de Inicio"
             id="fechaInicio"
             auto="fechaInicio"
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
             disabled={disabled}
             type="date"
           />
@@ -290,7 +290,7 @@ export default function DatosProyectoForm({ type }) {
             auto="fechaFin"
             disabled={disabled}
             type="date"
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -301,7 +301,7 @@ export default function DatosProyectoForm({ type }) {
             id="contratista"
             auto="contratista"
             disabled={disabled}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>

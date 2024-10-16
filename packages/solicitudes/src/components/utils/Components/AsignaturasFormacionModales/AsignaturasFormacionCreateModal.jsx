@@ -105,7 +105,7 @@ export default function AsignaturasFormacionCreateModal({
             name="nombre"
             auto="nombre"
             value={formAsignaturasFormacion.nombre || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -119,7 +119,7 @@ export default function AsignaturasFormacionCreateModal({
             name="clave"
             auto="clave"
             value={formAsignaturasFormacion.clave || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -133,7 +133,7 @@ export default function AsignaturasFormacionCreateModal({
             name="creditos"
             auto="creditos"
             value={formAsignaturasFormacion.creditos || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -147,7 +147,7 @@ export default function AsignaturasFormacionCreateModal({
             name="academia"
             auto="academia"
             value={formAsignaturasFormacion.academia || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -160,7 +160,7 @@ export default function AsignaturasFormacionCreateModal({
             name="seriacion"
             value={formAsignaturasFormacion.seriacion || ''}
             options={asignaturasTotalList || []}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             textValue
           />
         </Grid>
@@ -171,7 +171,7 @@ export default function AsignaturasFormacionCreateModal({
             name="horasDocente"
             auto="horasDocente"
             value={formAsignaturasFormacion.horasDocente || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -185,7 +185,7 @@ export default function AsignaturasFormacionCreateModal({
             name="horasIndependiente"
             auto="horasIndependiente"
             value={formAsignaturasFormacion.horasIndependiente || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required

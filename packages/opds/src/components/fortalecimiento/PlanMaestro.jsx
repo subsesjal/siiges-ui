@@ -107,7 +107,7 @@ export default function PlanMaestro({ type }) {
         name={id + value}
         value={form[id + value]}
         auto={id}
-        onchange={(e) => updateForm(e.target.name, e.target.value)}
+        onChange={(e) => updateForm(e.target.name, e.target.value)}
       />
     </Grid>
   );

@@ -87,7 +87,7 @@ export default function RevalidacionEquivalencias() {
           name="tipoConsulta"
           options={tipoConsulta}
           title="Tipo de Consulta"
-          onchange={handleTipoConsultaChange}
+          onChange={handleTipoConsultaChange}
         />
       </Grid>
       {tipoConsultaId && (

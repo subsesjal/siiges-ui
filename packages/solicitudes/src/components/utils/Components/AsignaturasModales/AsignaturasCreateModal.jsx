@@ -96,7 +96,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             name="gradoId"
             value=""
             options={selectedGrade}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.gradoId}
             required
@@ -108,7 +108,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             name="areaId"
             value=""
             options={area}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.areaId}
             required
@@ -120,7 +120,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             label="Nombre(s)"
             name="nombre"
             auto="nombre"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -133,7 +133,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             label="Clave"
             name="clave"
             auto="clave"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -146,7 +146,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             label="Créditos"
             name="creditos"
             auto="creditos"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -159,7 +159,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             label="Academia"
             name="academia"
             auto="academia"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -172,7 +172,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             name="seriacion"
             value=""
             options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             textValue
           />
         </Grid>
@@ -183,7 +183,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             label="Horas docente"
             name="horasDocente"
             auto="horasDocente"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required
@@ -196,7 +196,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
             label="Horas independiente"
             name="horasIndependiente"
             auto="horasIndependiente"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             required

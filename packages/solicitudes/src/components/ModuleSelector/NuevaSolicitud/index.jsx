@@ -76,7 +76,7 @@ function NewRequest() {
             name="modalidad"
             value=""
             options={modalidades}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.modalidad}
             required
@@ -88,7 +88,7 @@ function NewRequest() {
             name="plantel"
             value=""
             options={plantelesData}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.plantel}
             required

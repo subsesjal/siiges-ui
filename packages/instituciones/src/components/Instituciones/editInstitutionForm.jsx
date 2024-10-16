@@ -49,7 +49,7 @@ export default function EditInstitutionForm({
               auto="nombreInstitucion"
               required
               class="data"
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               errorMessage={error.nombre}
               value={data?.nombre}
             />
@@ -62,7 +62,7 @@ export default function EditInstitutionForm({
               auto="razonSocial"
               required
               class="data"
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               errorMessage={error.razonSocial}
               value={data?.razonSocial}
             />
@@ -125,7 +125,7 @@ export default function EditInstitutionForm({
               name="nombreRector"
               auto="nombre"
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -135,7 +135,7 @@ export default function EditInstitutionForm({
               id="apellidoPaterno"
               name="apellidoPaterno"
               auto="apellidoPaterno"
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               required
               class="data"
             />
@@ -146,7 +146,7 @@ export default function EditInstitutionForm({
               id="apellidoMaterno"
               name="apellidoMaterno"
               auto="apellidoMaterno"
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               required
               class="data"
             />
@@ -157,7 +157,7 @@ export default function EditInstitutionForm({
               id="nacionalidad"
               name="nacionalidad"
               auto="nacionalidad"
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               required
               class="data"
             />
@@ -169,7 +169,7 @@ export default function EditInstitutionForm({
               name="curp"
               auto="curp"
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -180,7 +180,7 @@ export default function EditInstitutionForm({
               name="genero"
               auto="genero"
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>
@@ -191,7 +191,7 @@ export default function EditInstitutionForm({
               name="correo"
               auto="correo"
               required
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               class="data"
             />
           </Grid>

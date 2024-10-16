@@ -88,7 +88,7 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.mapaCurricular}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             helperText={error.mapaCurricular}
@@ -105,7 +105,7 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.flexibilidadCurricular}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             helperText={error.flexibilidadCurricular}
@@ -122,7 +122,7 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.lineasGeneracionAplicacionConocimiento}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             helperText={error.lineasGeneracionAplicacionConocimiento}
@@ -139,7 +139,7 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.actualizacion}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             helperText={error.actualizacion}
@@ -156,7 +156,7 @@ export default function Curricula({ disabled, type }) {
             multiline
             sx={{ width: '100%' }}
             value={form[5].programa?.conveniosVinculacion}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             helperText={error.conveniosVinculacion}
