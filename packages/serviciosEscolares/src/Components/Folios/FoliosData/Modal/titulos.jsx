@@ -204,7 +204,7 @@ export default function ModalTitulo({
                 name="matricula"
                 value={form.alumno?.matricula || ''}
                 onblur={handleBlur}
-                onchange={handleChange}
+                onChange={handleChange}
               />
             </Grid>
             {alumno && (
@@ -218,7 +218,7 @@ export default function ModalTitulo({
                 id="folioActa"
                 name="folioActa"
                 value={form.folioActa || ''}
-                onchange={handleChange}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
@@ -228,7 +228,7 @@ export default function ModalTitulo({
                 name="fechaInicio"
                 type="datetime"
                 value={form.fechaInicio || ''}
-                onchange={handleChange}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
@@ -238,7 +238,7 @@ export default function ModalTitulo({
                 name="fechaElaboracion"
                 type="datetime"
                 value={form.fechaElaboracion || ''}
-                onchange={handleChange}
+                onChange={handleChange}
                 required
               />
             </Grid>
@@ -249,7 +249,7 @@ export default function ModalTitulo({
                 name="fechaTerminacion"
                 type="datetime"
                 value={form.fechaTerminacion || ''}
-                onchange={handleChange}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
@@ -258,7 +258,7 @@ export default function ModalTitulo({
                 id="fechaExpedicion"
                 name="fechaExpedicion"
                 value={form.fechaExpedicion || ''}
-                onchange={handleChange}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
@@ -267,7 +267,7 @@ export default function ModalTitulo({
                 options={modalidadTitulacion}
                 name="modalidadTitulacionId"
                 value={form.modalidadTitulacionId || ''}
-                onchange={handleSelectChange('modalidadTitulacionId')}
+                onChange={handleSelectChange('modalidadTitulacionId')}
               />
             </Grid>
           </>
@@ -280,7 +280,7 @@ export default function ModalTitulo({
                 id="fechaExamenProfesional"
                 name="fechaExamenProfesional"
                 value={form.fechaExamenProfesional || ''}
-                onchange={handleChange}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
@@ -289,7 +289,7 @@ export default function ModalTitulo({
                 id="fechaExencionExamenProfesional"
                 name="fechaExencionExamenProfesional"
                 value={form.fechaExencionExamenProfesional || ''}
-                onchange={handleChange}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
@@ -307,7 +307,7 @@ export default function ModalTitulo({
                 options={fundamentoLegal}
                 name="fundamentoServicioSocialId"
                 value={form.fundamentoServicioSocialId || ''}
-                onchange={handleSelectChange('fundamentoServicioSocialId')}
+                onChange={handleSelectChange('fundamentoServicioSocialId')}
               />
             </Grid>
           </>

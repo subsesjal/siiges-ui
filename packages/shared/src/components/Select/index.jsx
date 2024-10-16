@@ -13,7 +13,7 @@ export default function BasicSelect({
   value: propValue,
   disabled,
   name,
-  onchange,
+  onChange,
   onfocus,
   multiple,
   onblur,
@@ -29,7 +29,7 @@ export default function BasicSelect({
 
   const handleOnChange = (e) => {
     setOption(e.target.value);
-    onchange(e);
+    onChange(e);
   };
 
   return (
@@ -83,7 +83,7 @@ BasicSelect.defaultProps = {
   disabled: false,
   textValue: false,
   errorMessage: '',
-  onchange: () => { },
+  onChange: () => { },
   onblur: () => { },
   onfocus: () => { },
 };
@@ -107,7 +107,7 @@ BasicSelect.propTypes = {
   disabled: PropTypes.bool,
   textValue: PropTypes.bool,
   errorMessage: PropTypes.string,
-  onchange: PropTypes.func,
+  onChange: PropTypes.func,
   onblur: PropTypes.func,
   onfocus: PropTypes.func,
 };

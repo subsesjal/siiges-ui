@@ -170,7 +170,7 @@ export default function FoliosForm({
           name="instituciones"
           value={selectedInstitucion}
           options={instituciones || []}
-          onchange={(event) => setSelectedInstitucion(event.target.value)}
+          onChange={(event) => setSelectedInstitucion(event.target.value)}
           disabled={!isAdmin && isRepresentante}
         />
       </Grid>
@@ -180,7 +180,7 @@ export default function FoliosForm({
           name="planteles"
           value={selectedPlantel}
           options={planteles || []}
-          onchange={handlePlantelChange}
+          onChange={handlePlantelChange}
           disabled={!isAdmin && !selectedInstitucion}
         />
       </Grid>
@@ -190,7 +190,7 @@ export default function FoliosForm({
           name="programas"
           value={selectedPrograma}
           options={programas || []}
-          onchange={handleProgramaChange}
+          onChange={handleProgramaChange}
           disabled={!isAdmin && !selectedPlantel}
         />
       </Grid>
@@ -199,7 +199,7 @@ export default function FoliosForm({
           title="Tipo de documento"
           name="documento"
           options={documentos || []}
-          onchange={handleDocumentoChange}
+          onChange={handleDocumentoChange}
           disabled={!isAdmin && !selectedPrograma}
         />
       </Grid>
@@ -208,7 +208,7 @@ export default function FoliosForm({
           title="Tipo de solicitud"
           name="solicitud"
           options={solicitudes || []}
-          onchange={handleSolicitudChange}
+          onChange={handleSolicitudChange}
           disabled={!isAdmin && !selectedPrograma}
         />
       </Grid>
@@ -219,7 +219,7 @@ export default function FoliosForm({
             name="estatus"
             multiple
             options={estatus || []}
-            onchange={handleStatusChange}
+            onChange={handleStatusChange}
           />
         </Grid>
       )}

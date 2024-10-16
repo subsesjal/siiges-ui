@@ -160,7 +160,7 @@ export default function ModalCertificado({
             name="matricula"
             value={form.alumno?.matricula || ''}
             onblur={handleBlur}
-            onchange={handleChange}
+            onChange={handleChange}
           />
         </Grid>
         {alumno && (
@@ -175,7 +175,7 @@ export default function ModalCertificado({
             name="fechaElaboracion"
             type="datetime"
             value={form.fechaElaboracion || ''}
-            onchange={handleChange}
+            onChange={handleChange}
             required
           />
         </Grid>
@@ -186,7 +186,7 @@ export default function ModalCertificado({
             name="fechaTerminacion"
             type="datetime"
             value={form.fechaTerminacion || ''}
-            onchange={handleChange}
+            onChange={handleChange}
             required
           />
         </Grid>

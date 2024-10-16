@@ -305,7 +305,7 @@ export default function InscripcionForm({
             name="instituciones"
             value={selectedInstitucion}
             options={instituciones || []}
-            onchange={(event) => handleInstitucionChange(event.target.value)}
+            onChange={(event) => handleInstitucionChange(event.target.value)}
             disabled={isRepresentante}
           />
         </Grid>
@@ -315,7 +315,7 @@ export default function InscripcionForm({
             name="planteles"
             value={selectedPlantel}
             options={planteles || []}
-            onchange={handlePlantelChange}
+            onChange={handlePlantelChange}
             disabled={!selectedInstitucion}
           />
         </Grid>
@@ -325,7 +325,7 @@ export default function InscripcionForm({
             name="programas"
             value={selectedPrograma}
             options={programas || []}
-            onchange={handleProgramaChange}
+            onChange={handleProgramaChange}
             disabled={!selectedPlantel}
           />
         </Grid>
@@ -335,7 +335,7 @@ export default function InscripcionForm({
             name="ciclosEscolares"
             value={selectedCicloEscolar}
             options={ciclosEscolares || []}
-            onchange={handleCicloEscolarChange}
+            onChange={handleCicloEscolarChange}
             disabled={!selectedPrograma}
             onAddClick={() => {
               setOpen(true);
@@ -348,7 +348,7 @@ export default function InscripcionForm({
             name="grados"
             value={selectedGrado}
             options={grados || []}
-            onchange={handleGradoChange}
+            onChange={handleGradoChange}
             disabled={!selectedCicloEscolar}
           />
         </Grid>
@@ -358,7 +358,7 @@ export default function InscripcionForm({
             name="Grupos"
             value={selectedGrupo}
             options={grupos || []}
-            onchange={handleGrupoChange}
+            onChange={handleGrupoChange}
             disabled={!selectedGrado}
             onAddClick={() => {
               setOpenGrupos(true);

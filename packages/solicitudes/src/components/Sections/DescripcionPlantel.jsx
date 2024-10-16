@@ -130,7 +130,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="tipoInmuebleId"
             options={options}
             value={plantelesData?.tipoInmuebleId}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             required
             disabled={isDisabled}
           />
@@ -142,7 +142,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="dimensiones"
             auto="dimensiones"
             value={plantelesData?.dimensiones}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             required
             disabled={isDisabled}
           />
@@ -182,7 +182,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="recubrimientosPlasticos"
             auto="recubrimientosPlasticos"
             value={seguridad[0]?.cantidad}
-            onchange={(e) => handleOnChangeSeguridad(e, 0)}
+            onChange={(e) => handleOnChangeSeguridad(e, 0)}
             required
             disabled={isDisabled}
           />
@@ -192,7 +192,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="alarmaIncendiosTerremotos"
             auto="alarmaIncendiosTerremotos"
             value={seguridad[1]?.cantidad}
-            onchange={(e) => handleOnChangeSeguridad(e, 1)}
+            onChange={(e) => handleOnChangeSeguridad(e, 1)}
             required
             disabled={isDisabled}
           />
@@ -202,7 +202,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="senalamientosEvacuacion"
             auto="senalamientosEvacuacion"
             value={seguridad[2]?.cantidad}
-            onchange={(e) => handleOnChangeSeguridad(e, 2)}
+            onChange={(e) => handleOnChangeSeguridad(e, 2)}
             required
             disabled={isDisabled}
           />
@@ -212,7 +212,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="botiquin"
             auto="botiquin"
             value={seguridad[3]?.cantidad}
-            onchange={(e) => handleOnChangeSeguridad(e, 3)}
+            onChange={(e) => handleOnChangeSeguridad(e, 3)}
             required
             disabled={isDisabled}
           />
@@ -222,7 +222,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="escalerasEmergencia"
             auto="escalerasEmergencia"
             value={seguridad[4]?.cantidad}
-            onchange={(e) => handleOnChangeSeguridad(e, 4)}
+            onChange={(e) => handleOnChangeSeguridad(e, 4)}
             required
             disabled={isDisabled}
           />
@@ -232,7 +232,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="areaSeguridad"
             auto="areaSeguridad"
             value={seguridad[5]?.cantidad}
-            onchange={(e) => handleOnChangeSeguridad(e, 5)}
+            onChange={(e) => handleOnChangeSeguridad(e, 5)}
             required
             disabled={isDisabled}
           />
@@ -242,7 +242,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="extintores"
             auto="extintores"
             value={seguridad[6]?.cantidad}
-            onchange={(e) => handleOnChangeSeguridad(e, 6)}
+            onChange={(e) => handleOnChangeSeguridad(e, 6)}
             required
             disabled={isDisabled}
           />
@@ -252,7 +252,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
             name="puntosReunionEvacuacion"
             auto="puntosReunionEvacuacion"
             value={seguridad[7]?.cantidad}
-            onchange={(e) => handleOnChangeSeguridad(e, 7)}
+            onChange={(e) => handleOnChangeSeguridad(e, 7)}
             required
             disabled={isDisabled}
           />

@@ -63,7 +63,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.domicilio.calle
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.calle}
               required
@@ -78,7 +78,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.domicilio.numeroExterior
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.numeroExterior}
               required
@@ -93,7 +93,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.domicilio.numeroInterior
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
             />
           </Grid>
         </Grid>
@@ -107,7 +107,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.domicilio.colonia
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.colonia}
               required
@@ -122,7 +122,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.domicilio.codigoPostal
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.codigoPostal}
               required
@@ -136,7 +136,7 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.domicilio.municipioId
                 : ''}
               options={municipios}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.municipioId}
               required
@@ -151,7 +151,7 @@ export default function PlantelNewForm({ plantel }) {
                 : ''}
               options={inmuebles}
               onblur={handleOnBlur}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               errorMessage={error.tipoInmuebleId}
               required
             />
@@ -170,7 +170,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.correo1
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo1}
               required
@@ -185,7 +185,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.correo2
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo2}
               required
@@ -200,7 +200,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.correo3
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correo3}
             />
@@ -216,7 +216,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.telefono1
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.telefono1}
               required
@@ -231,7 +231,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.telefono2
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.telefono2}
               required
@@ -246,7 +246,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.telefono3
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
             />
           </Grid>
         </Grid>
@@ -260,7 +260,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.claveCentroTrabajo
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.claveCentroTrabajo}
               required
@@ -275,7 +275,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.paginaWeb
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
             />
           </Grid>
           <Grid item xs={3}>
@@ -287,7 +287,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.redesSociales
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
             />
           </Grid>
         </Grid>
@@ -304,7 +304,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.directores[0]?.persona.nombre
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nombre}
               required
@@ -319,7 +319,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.directores[0]?.persona.apellidoPaterno
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.apellidoPaterno}
               required
@@ -334,7 +334,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.directores[0]?.persona.apellidoMaterno
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.apellidoMaterno}
               required
@@ -349,7 +349,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.directores[0]?.persona.nacionalidad
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.nacionalidad}
               required
@@ -364,7 +364,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.directores[0]?.persona.curp
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               errorMessage={error.curp}
               onblur={handleOnBlur}
               required
@@ -378,7 +378,7 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.directores[0]?.persona.sexo
                 : ''}
               options={sexo}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.sexo}
               required
@@ -393,7 +393,7 @@ export default function PlantelNewForm({ plantel }) {
               value={plantel
                 ? plantel.directores[0]?.persona.correoPrimario
                 : ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.correoPrimario}
               required

@@ -140,7 +140,7 @@ export default function ValidacionForm({
           name="instituciones"
           value={selectedInstitucion}
           options={instituciones || []}
-          onchange={handleInstitucionChange}
+          onChange={handleInstitucionChange}
           disabled={isRepresentante}
         />
       </Grid>
@@ -150,7 +150,7 @@ export default function ValidacionForm({
           name="planteles"
           value={selectedPlantel}
           options={planteles || []}
-          onchange={handlePlantelChange}
+          onChange={handlePlantelChange}
           disabled={!selectedInstitucion}
         />
       </Grid>
@@ -160,7 +160,7 @@ export default function ValidacionForm({
           name="programas"
           value={selectedPrograma}
           options={programas || []}
-          onchange={handleProgramaChange}
+          onChange={handleProgramaChange}
         />
       </Grid>
     </Grid>

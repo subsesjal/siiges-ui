@@ -137,7 +137,7 @@ export default function InfraestructuraCreateModal({
             name="tipoInstalacionId"
             value={tipoInstalacion}
             options={instalacion}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.tipoInstalacionId}
             required
@@ -149,7 +149,7 @@ export default function InfraestructuraCreateModal({
             label="Nombre"
             name="nombre"
             auto="nombre"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.nombre}
@@ -162,7 +162,7 @@ export default function InfraestructuraCreateModal({
             label="Capacidad"
             name="capacidad"
             auto="capacidad"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.capacidad}
@@ -175,7 +175,7 @@ export default function InfraestructuraCreateModal({
             label="Metros cuadrados"
             name="metros"
             auto="metros"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.metros}
@@ -188,7 +188,7 @@ export default function InfraestructuraCreateModal({
             label="Ubicación"
             name="ubicacion"
             auto="ubicacion"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             errorMessage={error.ubicacion}
             required
           />
@@ -201,7 +201,7 @@ export default function InfraestructuraCreateModal({
             rows={4}
             multiline
             sx={{ width: '100%' }}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             helperText={error.recursos}
@@ -215,7 +215,7 @@ export default function InfraestructuraCreateModal({
             name="asignaturasInfraestructura"
             multiple
             options={adjustedAsignaturasOptions}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.asignaturasInfraestructura}
             required

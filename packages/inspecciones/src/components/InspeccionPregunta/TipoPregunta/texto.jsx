@@ -32,7 +32,7 @@ export default function Texto({
       label=""
       multiline
       rows={2}
-      onchange={handleChange}
+      onChange={handleChange}
       sx={{ marginTop: 0 }}
       value={respuesta}
     />

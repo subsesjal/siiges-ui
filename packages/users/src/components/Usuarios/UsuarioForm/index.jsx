@@ -92,7 +92,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               auto="nombre"
               value={usuario && usuario.persona ? usuario.persona.nombre : null}
               required
-              onchange={(e) => handleOnChange(e, { form, setForm })}
+              onChange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={errorFields.nombre}
             />
@@ -109,7 +109,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   : null
               }
               required
-              onchange={(e) => handleOnChange(e, { form, setForm })}
+              onChange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={errorFields.apellidoPaterno}
             />
@@ -126,7 +126,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   : null
               }
               required
-              onchange={(e) => handleOnChange(e, { form, setForm })}
+              onChange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={errorFields.apellidoMaterno}
             />
@@ -143,7 +143,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   : ''
               }
               required
-              onchange={(e) => handleOnChange(e, { form, setForm })}
+              onChange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError, isRequired: true })}
               errorMessage={errorFields.rolId}
             />
@@ -159,7 +159,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               value={
                 usuario && usuario.persona ? usuario.persona.tituloCargo : null
               }
-              onchange={(e) => handleOnChange(e, { form, setForm })}
+              onChange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={errorFields.tituloCargo}
             />
@@ -172,7 +172,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               auto="correo"
               value={usuario && usuario.correo ? usuario.correo : null}
               required
-              onchange={(e) => handleOnChange(e, { form, setForm })}
+              onChange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={errorFields.correo}
             />
@@ -188,7 +188,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               auto="usuario"
               value={usuario && usuario.usuario ? usuario.usuario : null}
               required
-              onchange={(e) => handleOnChange(e, { form, setForm })}
+              onChange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError })}
               errorMessage={errorFields.usuario}
             />
@@ -202,7 +202,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   name="contrasena"
                   auto="contrasena"
                   required
-                  onchange={(e) => handleOnChange(e, { form, setForm })}
+                  onChange={(e) => handleOnChange(e, { form, setForm })}
                   onblur={(e) => handleOnBlur(e, { form, setError })}
                   errorMessage={errorFields.contrasena}
                 />
@@ -214,7 +214,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                   name="repeatContrasena"
                   auto="repeatContrasena"
                   required
-                  onchange={(e) => handleOnChange(e, { form, setForm })}
+                  onChange={(e) => handleOnChange(e, { form, setForm })}
                   onblur={(e) => handleOnBlur(e, { form, setError })}
                   errorMessage={errorFields.repeatContrasena}
                 />

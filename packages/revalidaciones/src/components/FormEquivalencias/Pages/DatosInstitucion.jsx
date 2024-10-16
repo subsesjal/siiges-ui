@@ -116,7 +116,7 @@ export default function DatosInstitucion() {
           title="Tipo de Institución"
           name="tipoInstitucionId"
           options={tipoInstituciones}
-          onchange={handleTipoInstitucionChange}
+          onChange={handleTipoInstitucionChange}
         />
       </Grid>
       <Grid item xs={9}>

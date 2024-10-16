@@ -91,7 +91,7 @@ export default function Solicitudes() {
           name="options"
           options={options}
           value=""
-          onchange={handleOnChange}
+          onChange={handleOnChange}
         />
       )}
       <Divider sx={{ mt: 2 }} />

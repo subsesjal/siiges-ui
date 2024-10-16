@@ -96,7 +96,7 @@ export default function ModalAcuerdos({
             name="estatus"
             value={form.status || ''}
             options={statusOptions}
-            onchange={(e) => updateForm(
+            onChange={(e) => updateForm(
               'estatus',
               statusOptions.find((options) => options.id === e.target.value)
                 .nombre,
@@ -123,7 +123,7 @@ export default function ModalAcuerdos({
             type="date"
             auto="fecha"
             value={form.fecha}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={7} />

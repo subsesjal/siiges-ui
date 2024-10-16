@@ -49,7 +49,7 @@ function InstitucionData({ id, disabled }) {
             label="Razón social"
             name="razonSocial"
             auto="razonSocial"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             value={institucion?.razonSocial}
             disabled={isDisabled}
           />
@@ -60,7 +60,7 @@ function InstitucionData({ id, disabled }) {
             label="Nombre de la institución"
             name="nombre"
             auto="nombre"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             value={institucion.nombre}
             disabled={isDisabled}
           />
@@ -75,7 +75,7 @@ function InstitucionData({ id, disabled }) {
             sx={{ width: '100%' }}
             value={institucion.historia}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -87,7 +87,7 @@ function InstitucionData({ id, disabled }) {
             sx={{ width: '100%' }}
             value={institucion?.vision}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -99,7 +99,7 @@ function InstitucionData({ id, disabled }) {
             sx={{ width: '100%' }}
             value={institucion?.mision}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -111,7 +111,7 @@ function InstitucionData({ id, disabled }) {
             sx={{ width: '100%' }}
             value={institucion?.valoresInstitucionales}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>

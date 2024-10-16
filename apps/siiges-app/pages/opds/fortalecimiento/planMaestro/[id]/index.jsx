@@ -61,7 +61,7 @@ export default function PlanMaestro() {
             name="tipoPeriodo"
             value={periodo}
             options={periodData}
-            onchange={(event) => setPeriodo(event.target.value || '')}
+            onChange={(event) => setPeriodo(event.target.value || '')}
           />
         </Grid>
         <Grid item xs={6}>
@@ -70,7 +70,7 @@ export default function PlanMaestro() {
             name="tipoSesion"
             value={session}
             options={sessionData}
-            onchange={(event) => setSession(event.target.value || '')}
+            onChange={(event) => setSession(event.target.value || '')}
           />
         </Grid>
         <Grid item xs={12}>

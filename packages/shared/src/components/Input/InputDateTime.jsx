@@ -9,7 +9,7 @@ function InputDateTime({
   value,
   label,
   name,
-  onchange,
+  onChange,
   onfocus,
   onblur,
   errorMessage,
@@ -20,7 +20,7 @@ function InputDateTime({
     const isValidDate = newDate && dayjs(newDate).isValid();
     const formattedDate = isValidDate ? newDate.toISOString() : '';
 
-    onchange({ target: { name, value: formattedDate } });
+    onChange({ target: { name, value: formattedDate } });
   };
 
   return (
@@ -56,7 +56,7 @@ InputDateTime.propTypes = {
     .isRequired,
   label: PropTypes.string,
   name: PropTypes.string,
-  onchange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   onfocus: PropTypes.func,
   onblur: PropTypes.func,
   errorMessage: PropTypes.string,

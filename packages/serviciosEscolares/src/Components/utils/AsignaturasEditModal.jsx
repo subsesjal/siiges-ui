@@ -105,7 +105,7 @@ export default function AsignaturasEditModal({
             name="gradoId"
             value={formAsignaturas.gradoId}
             options={selectedGrade}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.gradoId}
             required
@@ -118,7 +118,7 @@ export default function AsignaturasEditModal({
             name="areaId"
             value={formAsignaturas.areaId}
             options={area}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.areaId}
             required
@@ -132,7 +132,7 @@ export default function AsignaturasEditModal({
             name="nombre"
             auto="nombre"
             value={formAsignaturas.nombre}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             disabled={edit === 'Consultar Asignatura'}
@@ -146,7 +146,7 @@ export default function AsignaturasEditModal({
             name="clave"
             auto="clave"
             value={formAsignaturas.clave}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             disabled={edit === 'Consultar Asignatura'}
@@ -160,7 +160,7 @@ export default function AsignaturasEditModal({
             name="creditos"
             auto="creditos"
             value={formAsignaturas.creditos}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             disabled={edit === 'Consultar Asignatura'}
@@ -174,7 +174,7 @@ export default function AsignaturasEditModal({
             name="academia"
             auto="academia"
             value={formAsignaturas.academia}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             disabled={edit === 'Consultar Asignatura'}
@@ -187,7 +187,7 @@ export default function AsignaturasEditModal({
             name="seriacion"
             value={formAsignaturas.seriacion || ''}
             options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             textValue
           />
         </Grid>
@@ -198,7 +198,7 @@ export default function AsignaturasEditModal({
             name="horasDocente"
             auto="horasDocente"
             value={formAsignaturas.horasDocente}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             disabled={edit === 'Consultar Asignatura'}
@@ -212,7 +212,7 @@ export default function AsignaturasEditModal({
             name="horasIndependiente"
             auto="horasIndependiente"
             value={formAsignaturas.horasIndependiente}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             disabled={edit === 'Consultar Asignatura'}

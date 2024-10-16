@@ -118,7 +118,7 @@ export default function InstitucionFields({
                 id="nombreInstitucion"
                 name="nombreInstitucion"
                 required
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.nombreInstitucion}
                 value={institucion?.nombre}
@@ -130,7 +130,7 @@ export default function InstitucionFields({
                 id="razonSocial"
                 name="razonSocial"
                 required
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.razonSocial}
                 value={institucion?.razonSocial}
@@ -145,7 +145,7 @@ export default function InstitucionFields({
                 rows={4}
                 multiline
                 sx={{ width: '100%' }}
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.historia}
                 value={institucion?.historia}
@@ -160,7 +160,7 @@ export default function InstitucionFields({
                 rows={4}
                 multiline
                 sx={{ width: '100%' }}
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.vision}
                 value={institucion?.vision}
@@ -175,7 +175,7 @@ export default function InstitucionFields({
                 rows={4}
                 multiline
                 sx={{ width: '100%' }}
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.mision}
                 value={institucion?.mision}
@@ -190,7 +190,7 @@ export default function InstitucionFields({
                 rows={4}
                 multiline
                 sx={{ width: '100%' }}
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.valoresInstitucionales}
                 value={institucion?.valoresInstitucionales}
@@ -213,7 +213,7 @@ export default function InstitucionFields({
                 id="nombreRector"
                 name="nombreRector"
                 required
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.nombreRector}
                 value={institucion?.rector?.persona?.nombre}
@@ -225,7 +225,7 @@ export default function InstitucionFields({
                 id="apellidoPaterno"
                 name="apellidoPaterno"
                 required
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.apellidoPaterno}
                 value={institucion?.rector?.persona?.apellidoPaterno}
@@ -238,7 +238,7 @@ export default function InstitucionFields({
                 name="apellidoMaterno"
                 auto="apellidoMaterno"
                 required
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.apellidoMaterno}
                 value={institucion?.rector?.persona?.apellidoMaterno}
@@ -250,7 +250,7 @@ export default function InstitucionFields({
                 id="celular"
                 name="celular"
                 auto="celular"
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onBlur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.celular}
                 value={institucion?.rector?.persona?.celular}
@@ -262,7 +262,7 @@ export default function InstitucionFields({
                 id="telefono"
                 name="telefono"
                 auto="telefono"
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onBlur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.telefono}
                 value={institucion?.rector?.persona?.telefono}
@@ -274,7 +274,7 @@ export default function InstitucionFields({
                 id="curp"
                 name="curp"
                 auto="curp"
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.curp}
                 value={institucion?.rector?.persona?.curp}
@@ -286,7 +286,7 @@ export default function InstitucionFields({
                 id="correoPrimario"
                 name="correoPrimario"
                 auto="correoPrimario"
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.correoPrimario}
                 value={institucion?.rector?.persona?.correoPrimario}
@@ -304,7 +304,7 @@ export default function InstitucionFields({
                 id="nombrePropuesto1"
                 name="nombrePropuesto1"
                 required
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.nombrePropuesto1}
                 value={ratificacionesNombre[0]?.nombrePropuesto1 || ''}
@@ -316,7 +316,7 @@ export default function InstitucionFields({
                 id="nombrePropuesto2"
                 name="nombrePropuesto2"
                 required
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.nombrePropuesto2}
                 value={ratificacionesNombre[0]?.nombrePropuesto2 || ''}
@@ -328,7 +328,7 @@ export default function InstitucionFields({
                 id="nombrePropuesto3"
                 name="nombrePropuesto3"
                 required
-                onchange={(e) => handleOnChange(e, { form, setForm })}
+                onChange={(e) => handleOnChange(e, { form, setForm })}
                 onblur={(e) => handleOnBlur(e, { form, setError })}
                 errorMessage={errors.nombrePropuesto3}
                 value={ratificacionesNombre[0]?.nombrePropuesto3 || ''}

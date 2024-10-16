@@ -511,7 +511,7 @@ export default function RecepcionFormatos() {
               label="Fecha de recepción de la solicitud"
               value=""
               type="datetime"
-              onchange={handleInputChange}
+              onChange={handleInputChange}
               onblur={handleOnBlur}
               errorMessage={errors.fechaRecepcion}
               required
@@ -523,7 +523,7 @@ export default function RecepcionFormatos() {
               id="oficioAdmisorio"
               label="Número de oficio admisorio"
               value=""
-              onchange={handleInputChange}
+              onChange={handleInputChange}
               onblur={handleOnBlur}
               errorMessage={errors.oficioAdmisorio}
               required

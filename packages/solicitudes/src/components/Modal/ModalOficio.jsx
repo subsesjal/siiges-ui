@@ -59,7 +59,7 @@ export default function oficioModal({
             name="oficioNumber"
             type="number"
             value={oficioNumber}
-            onchange={handleChange}
+            onChange={handleChange}
             required
           />
         </Grid>
@@ -70,7 +70,7 @@ export default function oficioModal({
             name="fechaEfecto"
             type="date"
             value={fechaEfecto}
-            onchange={handleChange}
+            onChange={handleChange}
             required
           />
         </Grid>

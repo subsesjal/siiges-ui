@@ -180,7 +180,7 @@ export default function FormAlumno({ type, alumno, setId }) {
                 label={campo.label}
                 name={campo.id}
                 auto={campo.id}
-                onchange={handleOnChange}
+                onChange={handleOnChange}
                 value={form?.[campo.id] || alumno?.[campo.id]}
                 type={campo.type}
                 disabled={campo.disabled}
@@ -192,7 +192,7 @@ export default function FormAlumno({ type, alumno, setId }) {
                 name={campo.id}
                 value={formSelect?.[campo.id] || ''}
                 options={campo.options}
-                onchange={handleOnChange}
+                onChange={handleOnChange}
                 disabled={
                   campo.id === 'situacionId' && !(type === 'edit')
                 }

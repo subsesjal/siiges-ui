@@ -118,7 +118,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             name="fecha"
             type="datetime"
             value={form.fecha}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             disabled={isDisabled}
@@ -132,7 +132,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             name="evaluadorId"
             value={form.evaluadorId || ''}
             options={evaluadoresData}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.evaluadorId}
@@ -146,7 +146,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             label="Cumplimiento numérico"
             name="numero"
             value={form.numero}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.numero}
@@ -180,7 +180,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
             label="Valoración cualitativa"
             name="valoracion"
             value={form.valoracion}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             multiline

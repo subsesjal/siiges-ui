@@ -308,7 +308,7 @@ export default function DocentesModal({
               name="tipoDocente"
               value={formDocentes?.tipoDocente || ''}
               options={tiposDocentes}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.tipoDocente}
               required
@@ -322,7 +322,7 @@ export default function DocentesModal({
               name="nombre"
               auto="nombre"
               value={formDocentes?.persona?.nombre || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -337,7 +337,7 @@ export default function DocentesModal({
               name="apellidoPaterno"
               auto="apellidoPaterno"
               value={formDocentes?.persona?.apellidoPaterno || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -352,7 +352,7 @@ export default function DocentesModal({
               name="apellidoMaterno"
               auto="apellidoMaterno"
               value={formDocentes?.persona?.apellidoMaterno || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -368,7 +368,7 @@ export default function DocentesModal({
               multiple
               value={formDocentes.asignaturasDocentes || []}
               options={asignaturasTotal}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.asignaturasDocentes}
               required
@@ -381,7 +381,7 @@ export default function DocentesModal({
               name="tipoContratacion"
               value={formDocentes?.tipoContratacion || ''}
               options={tipoContratacion}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.tipoContratacion}
               required
@@ -395,7 +395,7 @@ export default function DocentesModal({
               name="antiguedad"
               auto="antiguedad"
               value={formDocentes?.antiguedad || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -419,7 +419,7 @@ export default function DocentesModal({
               rows={4}
               multiline
               sx={{ width: '100%' }}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -443,7 +443,7 @@ export default function DocentesModal({
               name="formacion_1_nivelId"
               value={formDocentes?.formacionesDocentes[0]?.nivelId || ''}
               options={nivel}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.formacion_1_nivelId}
               required
@@ -456,7 +456,7 @@ export default function DocentesModal({
               label="Nombre del grado"
               name="formacion_1_nombre"
               value={formDocentes?.formacionesDocentes[0]?.nombre || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -471,7 +471,7 @@ export default function DocentesModal({
               name="formacion_1_descripcion"
               value={formDocentes?.formacionesDocentes[0]?.descripcion || ''}
               options={documentosPresentados}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.formacion_1_descripcion}
               textValue
@@ -485,7 +485,7 @@ export default function DocentesModal({
               label="Fecha de Graduado"
               name="formacion_1_fechaGraduado"
               value={formDocentes?.formacionesDocentes[0]?.fechaGraduado || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onfocus={handleInputFocus}
               onblur={handleOnBlur}
               required
@@ -501,7 +501,7 @@ export default function DocentesModal({
               label="Nombre de la Institución"
               name="formacion_1_institucion"
               value={formDocentes?.formacionesDocentes[0]?.institucion || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -521,7 +521,7 @@ export default function DocentesModal({
               name="formacion_2_nivelId"
               value={formDocentes?.formacionesDocentes[1]?.nivelId || ''}
               options={nivel}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.formacion_2_nivelId}
               required
@@ -534,7 +534,7 @@ export default function DocentesModal({
               label="Nombre del grado"
               name="formacion_2_nombre"
               value={formDocentes?.formacionesDocentes[1]?.nombre || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required
@@ -549,7 +549,7 @@ export default function DocentesModal({
               name="formacion_2_descripcion"
               value={formDocentes?.formacionesDocentes[1]?.descripcion || ''}
               options={documentosPresentados}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               errorMessage={error.formacion_2_descripcion}
               textValue
@@ -563,7 +563,7 @@ export default function DocentesModal({
               label="Fecha de Graduado"
               name="formacion_2_fechaGraduado"
               value={formDocentes?.formacionesDocentes[1]?.fechaGraduado || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onfocus={handleInputFocus}
               onblur={handleOnBlur}
               required
@@ -579,7 +579,7 @@ export default function DocentesModal({
               label="Nombre de la Institución"
               name="formacion_2_institucion"
               value={formDocentes?.formacionesDocentes[1]?.institucion || ''}
-              onchange={handleOnChange}
+              onChange={handleOnChange}
               onblur={handleOnBlur}
               onfocus={handleInputFocus}
               required

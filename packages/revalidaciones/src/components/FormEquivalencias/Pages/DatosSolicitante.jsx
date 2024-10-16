@@ -82,7 +82,7 @@ export default function DatosSolicitante() {
         <InputDate
           label="Fecha de Nacimiento"
           name="fechaNacimiento"
-          onchange={() => {}}
+          onChange={() => {}}
         />
       </Grid>
       <Grid item xs={12}>
@@ -102,7 +102,7 @@ export default function DatosSolicitante() {
           title="Estados"
           name="estadoId"
           options={estados}
-          onchange={handleEstadoChange}
+          onChange={handleEstadoChange}
         />
       </Grid>
       <Grid item xs={3}>

@@ -91,7 +91,7 @@ export default function InstitucionesAledanasCreateModal({
             label="Nombre(s)"
             name="nombre"
             auto="nombre"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.nombre}
@@ -105,7 +105,7 @@ export default function InstitucionesAledanasCreateModal({
             name="tiempo"
             auto="tiempo"
             type="time"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.tiempo}

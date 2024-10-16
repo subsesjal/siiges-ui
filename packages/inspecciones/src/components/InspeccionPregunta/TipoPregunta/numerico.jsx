@@ -30,7 +30,7 @@ export default function Numerico({
       name={pregunta.pregunta}
       auto={pregunta.pregunta}
       label=""
-      onchange={handleChange}
+      onChange={handleChange}
       value={respuesta || ''}
       sx={{ marginTop: 0 }}
     />

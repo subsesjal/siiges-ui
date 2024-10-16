@@ -40,7 +40,7 @@ export default function DatosSolicitante() {
         <InputDate
           label="Fecha de Nacimiento"
           name="fechaNacimiento"
-          onchange={() => {}}
+          onChange={() => {}}
         />
       </Grid>
       <Grid item xs={12}>

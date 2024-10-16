@@ -158,7 +158,7 @@ export default function InfraestructuraEditModal({
             name="tipoInstalacionId"
             value={formInfraestructuras.tipoInstalacionId}
             options={instalacion}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.tipoInstalacionId}
             required
@@ -172,7 +172,7 @@ export default function InfraestructuraEditModal({
             name="nombre"
             auto="nombre"
             value={formInfraestructuras.nombre}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.nombre}
@@ -187,7 +187,7 @@ export default function InfraestructuraEditModal({
             name="capacidad"
             auto="capacidad"
             value={formInfraestructuras.capacidad}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.capacidad}
@@ -202,7 +202,7 @@ export default function InfraestructuraEditModal({
             name="metros"
             auto="metros"
             value={formInfraestructuras.metros}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.metros}
@@ -217,7 +217,7 @@ export default function InfraestructuraEditModal({
             name="ubicacion"
             auto="ubicacion"
             value={formInfraestructuras.ubicacion}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             errorMessage={error.ubicacion}
             required
             disabled={disabled}
@@ -232,7 +232,7 @@ export default function InfraestructuraEditModal({
             multiline
             sx={{ width: '100%' }}
             value={formInfraestructuras.recursos}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             helperText={error.recursos}
@@ -248,7 +248,7 @@ export default function InfraestructuraEditModal({
             multiple
             value={formInfraestructuras.asignaturasInfraestructura || []}
             options={asignaturasTotal}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.asignaturasInfraestructura}
             required

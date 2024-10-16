@@ -130,7 +130,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
           name="instituciones"
           value={selectedInstitucion}
           options={instituciones || []}
-          onchange={(event) => setSelectedInstitucion(event.target.value)}
+          onChange={(event) => setSelectedInstitucion(event.target.value)}
           disabled={isRepresentante}
         />
       </Grid>
@@ -140,7 +140,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
           name="planteles"
           value={selectedPlantel}
           options={planteles || []}
-          onchange={handlePlantelChange}
+          onChange={handlePlantelChange}
           disabled={!selectedInstitucion}
         />
       </Grid>
@@ -150,7 +150,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
           name="programas"
           value={selectedPrograma}
           options={programas || []}
-          onchange={handleProgramaChange}
+          onChange={handleProgramaChange}
         />
       </Grid>
     </Grid>

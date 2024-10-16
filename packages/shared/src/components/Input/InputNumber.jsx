@@ -14,7 +14,7 @@ function InputNumber({
   value,
   size,
   errorMessage,
-  onchange,
+  onChange,
   onblur,
   onfocus,
   negative,
@@ -36,7 +36,7 @@ function InputNumber({
 
     if (numberRegex.test(newValue)) {
       setInput(newValue);
-      onchange({
+      onChange({
         target: {
           name,
           value: floatValue,
@@ -59,7 +59,7 @@ function InputNumber({
     const newValue = currentValue + 1;
     if (max !== null && newValue > max) return;
     setInput(newValue);
-    onchange({
+    onChange({
       target: {
         name,
         value: newValue,
@@ -72,7 +72,7 @@ function InputNumber({
     const newValue = currentValue - 1;
     if (min !== null && newValue < min) return;
     setInput(newValue);
-    onchange({
+    onChange({
       target: {
         name,
         value: newValue,
@@ -123,7 +123,7 @@ InputNumber.defaultProps = {
   auto: '',
   required: false,
   disabled: false,
-  onchange: () => {},
+  onChange: () => {},
   onblur: () => {},
   onfocus: () => {},
   negative: false,
@@ -136,7 +136,7 @@ InputNumber.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  onchange: PropTypes.func,
+  onChange: PropTypes.func,
   onblur: PropTypes.func,
   required: PropTypes.bool,
   onfocus: PropTypes.func,

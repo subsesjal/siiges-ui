@@ -57,7 +57,7 @@ export default function GruposForm({ setGrupos, setParametros }) {
           name="ciclosEscolares"
           value={selectedCicloEscolar}
           options={ciclos || []}
-          onchange={(event) => setSelectedCicloEscolar(event.target.value)}
+          onChange={(event) => setSelectedCicloEscolar(event.target.value)}
         />
       </Grid>
       <Grid item xs={6}>
@@ -66,7 +66,7 @@ export default function GruposForm({ setGrupos, setParametros }) {
           name="grados"
           value={selectedGrado}
           options={grados || []}
-          onchange={(e) => setSelectedGrado(e.target.value)}
+          onChange={(e) => setSelectedGrado(e.target.value)}
           disabled={!selectedCicloEscolar}
         />
       </Grid>

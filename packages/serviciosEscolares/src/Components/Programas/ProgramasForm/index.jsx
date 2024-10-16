@@ -90,7 +90,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           name="instituciones"
           value={selectedInstitucion}
           options={instituciones}
-          onchange={(event) => setSelectedInstitucion(event.target.value)}
+          onChange={(event) => setSelectedInstitucion(event.target.value)}
           disabled={isRepresentante}
         />
       </Grid>
@@ -100,7 +100,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           name="planteles"
           value={selectedPlantel}
           options={planteles || []}
-          onchange={(event) => setSelectedPlantel(event.target.value)}
+          onChange={(event) => setSelectedPlantel(event.target.value)}
           disabled={isPlantelesDisabled}
         />
       </Grid>

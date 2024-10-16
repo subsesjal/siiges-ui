@@ -223,7 +223,7 @@ export default function DatosInstitucion({ alumno }) {
           name="nombreInstitucionEmisora"
           id="nombreInstitucionEmisora"
           value={form.nombreInstitucionEmisora}
-          onchange={handleChange}
+          onChange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.nombreInstitucionEmisora}
           required
@@ -235,7 +235,7 @@ export default function DatosInstitucion({ alumno }) {
           name="estadoId"
           options={estadosMexico}
           value={form.estadoId}
-          onchange={handleSelectChange('estadoId')}
+          onChange={handleSelectChange('estadoId')}
           onblur={handleBlur}
           errorMessage={errors.estadoId}
           required
@@ -247,7 +247,7 @@ export default function DatosInstitucion({ alumno }) {
           name="claveCentroTrabajoEmisor"
           id="claveCentroTrabajoEmisor"
           value={form.claveCentroTrabajoEmisor}
-          onchange={handleChange}
+          onChange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.claveCentroTrabajoEmisor}
           required
@@ -259,7 +259,7 @@ export default function DatosInstitucion({ alumno }) {
           name="nivelId"
           options={nivelEstudios}
           value={form.nivelId}
-          onchange={handleSelectChange('nivelId')}
+          onChange={handleSelectChange('nivelId')}
           onblur={handleBlur}
           errorMessage={errors.nivelId}
           required
@@ -271,7 +271,7 @@ export default function DatosInstitucion({ alumno }) {
           name="fechaInicioAntecedente"
           id="fechaInicioAntecedente"
           value={form.fechaInicioAntecedente}
-          onchange={handleChange}
+          onChange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.fechaInicioAntecedente}
           type="datetime"
@@ -284,7 +284,7 @@ export default function DatosInstitucion({ alumno }) {
           name="fechaFinAntecedente"
           id="fechaFinAntecedente"
           value={form.fechaFinAntecedente}
-          onchange={handleChange}
+          onChange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.fechaFinAntecedente}
           type="datetime"
@@ -297,7 +297,7 @@ export default function DatosInstitucion({ alumno }) {
           name="folio"
           id="folio"
           value={form.folio}
-          onchange={handleChange}
+          onChange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.folio}
           required
@@ -309,7 +309,7 @@ export default function DatosInstitucion({ alumno }) {
           name="fechaExpedicion"
           id="fechaExpedicion"
           value={form.fechaExpedicion}
-          onchange={handleChange}
+          onChange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.fechaExpedicion}
           type="datetime"
@@ -323,7 +323,7 @@ export default function DatosInstitucion({ alumno }) {
             name="situacionValidacionId"
             options={situacionDocumento}
             value={form.situacionValidacionId}
-            onchange={handleSelectChange('situacionValidacionId')}
+            onChange={handleSelectChange('situacionValidacionId')}
             onblur={handleBlur}
             errorMessage={errors.situacionValidacionId}
             required
@@ -337,7 +337,7 @@ export default function DatosInstitucion({ alumno }) {
           name="tipoValidacionId"
           options={tipoValidacion}
           value={form.tipoValidacionId}
-          onchange={handleSelectChange('tipoValidacionId')}
+          onChange={handleSelectChange('tipoValidacionId')}
           onblur={handleBlur}
           errorMessage={errors.tipoValidacionId}
           required
@@ -349,7 +349,7 @@ export default function DatosInstitucion({ alumno }) {
           name="fechaValidacion"
           id="fechaValidacion"
           value={form.fechaValidacion}
-          onchange={handleChange}
+          onChange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.fechaValidacion}
           required

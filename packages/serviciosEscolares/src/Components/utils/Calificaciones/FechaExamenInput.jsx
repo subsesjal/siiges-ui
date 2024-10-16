@@ -24,7 +24,7 @@ export default function FechaExamenInput({
         value={value}
         variant="standard"
         disabled={disabled}
-        onchange={handleChange}
+        onChange={handleChange}
       />
     </div>
   );

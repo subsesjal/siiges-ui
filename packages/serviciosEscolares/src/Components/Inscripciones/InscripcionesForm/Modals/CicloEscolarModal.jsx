@@ -99,7 +99,7 @@ export default function CicloEscolarModal({
             options={nombresCiclos || []}
             value=""
             textValue
-            onchange={handleFormCicloOnChange}
+            onChange={handleFormCicloOnChange}
           />
         </Grid>
         <Grid item xs={8}>
@@ -107,7 +107,7 @@ export default function CicloEscolarModal({
             id="descripcion"
             label="Descripción"
             name="descripcion"
-            onchange={handleFormCicloOnChange}
+            onChange={handleFormCicloOnChange}
           />
         </Grid>
         <Grid item xs={12}>

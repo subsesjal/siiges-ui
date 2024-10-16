@@ -149,7 +149,7 @@ export default function DiligenciasFormModal({
             label="Nombre(s)"
             name="nombre"
             auto="nombre"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             errorMessage={error.nombre}
@@ -163,7 +163,7 @@ export default function DiligenciasFormModal({
             label="Primer Apellido"
             name="apellidoPaterno"
             auto="apellidoPaterno"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             errorMessage={error.apellidoPaterno}
@@ -177,7 +177,7 @@ export default function DiligenciasFormModal({
             label="Segundo Apellido"
             name="apellidoMaterno"
             auto="apellidoMaterno"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             errorMessage={error.apellidoMaterno}
@@ -191,7 +191,7 @@ export default function DiligenciasFormModal({
             label="Cargo"
             name="tituloCargo"
             auto="tituloCargo"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             errorMessage={error.tituloCargo}
@@ -205,7 +205,7 @@ export default function DiligenciasFormModal({
             label="Correo"
             name="correoPrimario"
             auto="correoPrimario"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             errorMessage={error.correoPrimario}
@@ -219,7 +219,7 @@ export default function DiligenciasFormModal({
             label="Teléfono"
             name="telefono"
             auto="telefono"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             errorMessage={error.telefono}
@@ -233,7 +233,7 @@ export default function DiligenciasFormModal({
             label="Celular"
             name="celular"
             auto="celular"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             value={formDiligencias?.persona?.celular ?? ''}
             disabled={disabled}
           />
@@ -248,7 +248,7 @@ export default function DiligenciasFormModal({
             name="horaInicio"
             auto="horaInicio"
             type="time"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             errorMessage={error.horaInicio}
@@ -263,7 +263,7 @@ export default function DiligenciasFormModal({
             name="horaFin"
             auto="horaFin"
             type="time"
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             required
             errorMessage={error.horaFin}

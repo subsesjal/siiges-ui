@@ -83,7 +83,7 @@ export default function DatosPlantel({
             name="plantelId"
             options={plantelesSelect}
             value={plantelId || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             disabled={isDisabled}
           />
         </Grid>

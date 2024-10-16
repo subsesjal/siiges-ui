@@ -9,7 +9,7 @@ function InputDate({
   value,
   label,
   name,
-  onchange,
+  onChange,
   onfocus,
   onblur,
   errorMessage,
@@ -30,7 +30,7 @@ function InputDate({
       }
     }
 
-    onchange({ target: { name, value: formattedDate } });
+    onChange({ target: { name, value: formattedDate } });
   };
 
   const handleOnClose = () => {
@@ -74,7 +74,7 @@ InputDate.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
   size: PropTypes.string,
-  onchange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   onfocus: PropTypes.func,
   onblur: PropTypes.func,
   errorMessage: PropTypes.string,

@@ -87,7 +87,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="nombre"
             value={user?.persona?.nombre}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={6}>
@@ -98,7 +98,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="apellidoPaterno"
             value={user?.persona?.apellidoPaterno}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={6}>
@@ -109,7 +109,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="apellidoMaterno"
             value={user?.persona?.apellidoMaterno}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={6}>
@@ -120,7 +120,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="nacionalidad"
             value={user?.persona?.nacionalidad}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={6}>
@@ -131,7 +131,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="calle"
             value={user?.persona?.domicilio?.calle}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -142,7 +142,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="numeroExterior"
             value={user?.persona?.domicilio?.numeroExterior}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -153,7 +153,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="numeroInterior"
             value={user?.persona?.domicilio?.numeroInterior}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={6}>
@@ -164,7 +164,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="colonia"
             value={user?.persona?.domicilio?.colonia}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -175,7 +175,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="codigoPostal"
             value={user?.persona?.domicilio?.codigoPostal}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -184,7 +184,7 @@ function RepresentanteLegalData({ id, disabled }) {
             name="municipioId"
             value={user?.persona?.domicilio?.municipio?.id}
             options={municipios}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             disabled={isDisabled}
           />
         </Grid>
@@ -196,7 +196,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="correo"
             value={user?.correo}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -207,7 +207,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="telefono"
             value={user?.persona?.telefono}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -218,7 +218,7 @@ function RepresentanteLegalData({ id, disabled }) {
             auto="celular"
             value={user?.persona?.celular}
             disabled={isDisabled}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
           />
         </Grid>
         <Grid item xs={12}>

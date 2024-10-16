@@ -161,7 +161,7 @@ function ModalInspecciones({ params: { row } }) {
                 name="fechaInspeccion"
                 auto="fechaInspeccion"
                 type="datetime"
-                onchange={handleOnChange}
+                onChange={handleOnChange}
                 errorMessage={errors.fechaInspeccion}
                 required
               />
@@ -172,7 +172,7 @@ function ModalInspecciones({ params: { row } }) {
                 label="Folio"
                 name="folio"
                 auto="folio"
-                onchange={handleOnChange}
+                onChange={handleOnChange}
                 errorMessage={errors.folio}
                 value={form.folio}
               />

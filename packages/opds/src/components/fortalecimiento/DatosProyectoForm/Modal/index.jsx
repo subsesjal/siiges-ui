@@ -25,7 +25,7 @@ function Modal({
             name="nombre"
             label="Nombre"
             id={`nombre-${id}`}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={3}>
@@ -33,7 +33,7 @@ function Modal({
             name="cantidad"
             label="Cantidad"
             id={`cantidad-${id}`}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
         <Grid item xs={3}>
@@ -41,7 +41,7 @@ function Modal({
             name="metrosCuadrados"
             label="Metros Cuadrados"
             id={`metrosCuadrados-${id}`}
-            onchange={(e) => updateForm(e.target.name, e.target.value)}
+            onChange={(e) => updateForm(e.target.name, e.target.value)}
           />
         </Grid>
       </Grid>

@@ -92,7 +92,7 @@ export default function InstitucionAledanaEditModal({
             name="nombre"
             auto="nombre"
             value={formInstitucionesAledanas.nombre || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.nombre}
@@ -107,7 +107,7 @@ export default function InstitucionAledanaEditModal({
             auto="tiempo"
             type="time"
             value={formInstitucionesAledanas.tiempo || ''}
-            onchange={handleOnChange}
+            onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.tiempo}

@@ -13,7 +13,7 @@ export default function SelectAdd({
   value: propValue,
   disabled,
   name,
-  onchange,
+  onChange,
   onfocus,
   multiple,
   onblur,
@@ -30,7 +30,7 @@ export default function SelectAdd({
 
   const handleOnChange = (e) => {
     setOption(e.target.value);
-    onchange(e);
+    onChange(e);
   };
 
   return (
@@ -107,7 +107,7 @@ SelectAdd.defaultProps = {
   disabled: false,
   textValue: false,
   errorMessage: '',
-  onchange: () => {},
+  onChange: () => {},
   onblur: () => {},
   onfocus: () => {},
   onAddClick: () => {},
@@ -134,7 +134,7 @@ SelectAdd.propTypes = {
   disabled: PropTypes.bool,
   textValue: PropTypes.bool,
   errorMessage: PropTypes.string,
-  onchange: PropTypes.func,
+  onChange: PropTypes.func,
   onblur: PropTypes.func,
   onfocus: PropTypes.func,
   onAddClick: PropTypes.func,
