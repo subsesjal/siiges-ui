@@ -2,6 +2,7 @@ import {
   Grid, Typography, Tabs, Tab, Box, IconButton,
 } from '@mui/material';
 import {
+  ButtonSimple,
   Context,
   createRecord,
   DataTable,
@@ -29,7 +30,7 @@ const columns = (handleEdit) => [
   },
   { field: 'name', headerName: 'Nombre', width: 250 },
   {
-    field: 'fechaTermino',
+    field: 'fechaTerminacion',
     headerName: 'Fecha de terminación de plan de estudios',
     width: 350,
   },
@@ -60,6 +61,8 @@ export default function FoliosData({ type }) {
   const [isSaved, setIsSaved] = useState(false);
   const [rowData, setRowData] = useState({});
   const [alumnoType, setAlumnoType] = useState('create');
+  const [alumnosData, setAlumnosData] = useState({});
+  const [alumnoResponse, setAlumnoResponse] = useState(true);
   const [formData, setFormData] = useState({
     folioPago: '',
     tipoDocumentoId: '',
@@ -114,7 +117,7 @@ export default function FoliosData({ type }) {
             folioPago: data.folioPago,
             tipoDocumentoId: data.tipoDocumentoId,
             tipoSolicitudFolioId: data.tipoSolicitudFolioId,
-            estatusSolicitudFolioId: data.estatusSolicitudFolioI,
+            estatusSolicitudFolioId: data.estatusSolicitudFolioId,
             programaId: data.programaId,
             fecha: dayjs(data.fecha),
           });
@@ -169,7 +172,7 @@ export default function FoliosData({ type }) {
   }, [type, editId]);
 
   useEffect(() => {
-    if (id) {
+    if (id && alumnoResponse) {
       setLoading(true);
       getData({ endpoint: `/solicitudesFolios/${id}/alumnos` })
         .then((response) => {
@@ -177,12 +180,14 @@ export default function FoliosData({ type }) {
             const mappedRows = response.data.map((alumnos) => ({
               id: alumnos.id,
               name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
-              fechaTermino: dayjs(alumnos.fechaTermino).format('DD/MM/YYYY'),
+              fechaTerminacion: dayjs(alumnos.fechaTerminacion).format('DD/MM/YYYY'),
               fechaElaboracion: dayjs(alumnos.fechaElaboracion).format(
                 'DD/MM/YYYY',
               ),
             }));
             setRows(mappedRows);
+            setAlumnosData(response.data);
+            setAlumnoResponse(false);
           }
         })
         .catch((error) => {
@@ -196,13 +201,21 @@ export default function FoliosData({ type }) {
           setLoading(false);
         });
     }
-  }, [id]);
+  }, [id, alumnoResponse]);
 
-  const handleEdit = (value) => {
-    const data = rows.find((row) => row.id === value);
-    setAlumnoType('edit');
-    setRowData(data);
-    setOpen(true);
+  const handleEdit = async (value) => {
+    try {
+      setAlumnoType('edit');
+      const alumno = alumnosData.find((row) => row.id === value);
+      setRowData(alumno);
+      setOpen(true);
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `¡Error al cargar los datos!: ${error.message}`,
+        type: 'error',
+      });
+    }
   };
 
   const handleAddAlumno = () => {
@@ -261,12 +274,24 @@ export default function FoliosData({ type }) {
   };
 
   const handleSend = async () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      estatusSolicitudFolioId: 2,
-    }));
+    try {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        estatusSolicitudFolioId: 2,
+      }));
 
-    await handleConfirm();
+      await handleConfirm();
+
+      setOpen(false);
+      router.back();
+    } catch (error) {
+      setOpen(false);
+      setNoti({
+        open: true,
+        message: `Error al enviar la solicitud: ${error}`,
+        type: 'error',
+      });
+    }
   };
 
   const handleChange = (event) => {
@@ -364,25 +389,28 @@ export default function FoliosData({ type }) {
       )}
       <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid item xs={12}>
-          <ButtonsFolios
-            confirm={handleConfirm}
-            cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
-            send={handleSend}
-            disabled={status === 'consult'}
-            saved={isSaved}
-          />
+          {formData.estatusSolicitudFolioId === 2 ? (
+            <ButtonSimple design="error" text="Regresar" onClick={() => router.back()} />
+          ) : (
+            <ButtonsFolios
+              confirm={handleConfirm}
+              cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
+              send={handleSend}
+              disabled={status === 'consult'}
+              saved={isSaved}
+            />
+          )}
         </Grid>
       </Grid>
-
       {tipoDocumento === '1' ? (
         <ModalTitulo
           open={open}
           setOpen={setOpen}
           type={alumnoType}
           id={id}
-          setRows={setRows}
           rowData={rowData}
           programaId={programa}
+          setAlumnoResponse={setAlumnoResponse}
         />
       ) : (
         <ModalCertificado
@@ -391,9 +419,9 @@ export default function FoliosData({ type }) {
           type={alumnoType}
           id={id}
           programaId={programa}
-          setRows={setRows}
           rowData={rowData}
           title="Agregar Alumno"
+          setAlumnoResponse={setAlumnoResponse}
         />
       )}
     </Box>

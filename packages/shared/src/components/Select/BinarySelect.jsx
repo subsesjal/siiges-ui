@@ -11,12 +11,26 @@ export default function BinarySelect({
   name,
   onChange,
 }) {
+  let normalizedValue = value;
+  if (typeof value === 'boolean') {
+    normalizedValue = value ? 1 : 0;
+  } else if (value === '') {
+    normalizedValue = 0;
+  }
+
+  const sortedOptions = [...options].sort((a, b) => b.id - a.id);
+
   return (
     <Box sx={{ minWidth: 120, mt: 2 }}>
       <FormControl fullWidth size="small">
         <InputLabel>{title}</InputLabel>
-        <Select label={title} name={name} value={value} onChange={onChange}>
-          {options.map((option) => (
+        <Select
+          label={title}
+          name={name}
+          value={normalizedValue !== '' ? normalizedValue : 0}
+          onChange={onChange}
+        >
+          {sortedOptions.map((option) => (
             <MenuItem key={option.id} value={option.id}>
               {option.nombre}
             </MenuItem>
@@ -34,15 +48,12 @@ BinarySelect.propTypes = {
       id: PropTypes.oneOf([0, 1]).isRequired,
       nombre: PropTypes.string.isRequired,
     }),
-  ),
-  value: PropTypes.oneOf([0, 1]).isRequired,
+  ).isRequired,
+  value: PropTypes.oneOfType([PropTypes.oneOf([0, 1]), PropTypes.bool]),
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
 BinarySelect.defaultProps = {
-  options: [
-    { id: 0, label: 'Option 0' },
-    { id: 1, label: 'Option 1' },
-  ],
+  value: 0,
 };
