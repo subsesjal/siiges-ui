@@ -26,6 +26,7 @@ export default function NavigationButtons({
   totalPositions,
   onNext,
   onPrevious,
+  handleOnSubmit,
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -97,7 +98,7 @@ export default function NavigationButtons({
               cancel={() => {
                 setOpen(false);
               }}
-              confirm={() => {}}
+              confirm={handleOnSubmit}
             />
           </Grid>
         </Grid>
@@ -111,4 +112,5 @@ NavigationButtons.propTypes = {
   totalPositions: PropTypes.number.isRequired,
   onNext: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
+  handleOnSubmit: PropTypes.func.isRequired,
 };

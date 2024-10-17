@@ -19,6 +19,7 @@ export default function InputFile({
   tipoDocumento,
   url,
   setUrl,
+  onChange,
   disabled,
 }) {
   const [files, setFiles] = useState([]);
@@ -28,6 +29,7 @@ export default function InputFile({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const handleSave = async () => {
     try {
       if (files.length === 0) {
@@ -54,6 +56,15 @@ export default function InputFile({
       });
     } finally {
       setOpen(false);
+    }
+  };
+
+  const handleFileSave = async () => {
+    if (onChange) {
+      onChange(files);
+      setOpen(false);
+    } else {
+      await handleSave();
     }
   };
 
@@ -105,7 +116,7 @@ export default function InputFile({
         filesLimit={1}
         showPreviews
         onChange={(newFiles) => setFiles(newFiles)}
-        onSave={handleSave}
+        onSave={handleFileSave}
         maxFileSize={5000000}
         onClose={handleClose}
       />
@@ -115,15 +126,19 @@ export default function InputFile({
 
 InputFile.defaultProps = {
   url: '',
+  setUrl: () => {},
+  id: null,
   disabled: false,
+  onChange: null,
 };
 
 InputFile.propTypes = {
   label: PropTypes.string.isRequired,
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   tipoDocumento: PropTypes.string.isRequired,
   tipoEntidad: PropTypes.string.isRequired,
   url: PropTypes.string,
-  setUrl: PropTypes.func.isRequired,
+  setUrl: PropTypes.func,
+  onChange: PropTypes.func,
   disabled: PropTypes.bool,
 };

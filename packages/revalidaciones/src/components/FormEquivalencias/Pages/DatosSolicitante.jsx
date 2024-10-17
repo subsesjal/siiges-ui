@@ -8,9 +8,22 @@ import PropTypes from 'prop-types';
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-const estados = [{ id: 14, nombre: 'Jalisco' }, { id: 15, nombre: 'Colima' }];
+const tipoSolicitudes = [
+  { id: 1, nombre: 'Parcial' },
+  { id: 2, nombre: 'Total' },
+  { id: 3, nombre: 'Duplicado' },
+];
 
-export default function DatosSolicitante({ form, handleOnChange }) {
+const grados = [
+  { id: 1, nombre: 'Doctorado' },
+  { id: 2, nombre: 'Especialidad' },
+  { id: 3, nombre: 'Licenciatura' },
+  { id: 4, nombre: 'Maestría' },
+  { id: 5, nombre: 'Profesional Asociado' },
+  { id: 6, nombre: 'Técnico Superior Universitario' },
+];
+
+export default function DatosSolicitante({ form, handleOnChange, estados }) {
   const [municipios, setMunicipios] = useState([]);
   const [estadoId, setEstadoId] = useState(null);
   const [municipiosDisabled, setMunicipiosDisabled] = useState(true);
@@ -19,12 +32,15 @@ export default function DatosSolicitante({ form, handleOnChange }) {
     const fetchMunicipios = async () => {
       if (estadoId) {
         try {
-          const response = await fetch(`${domain}/api/v1/public/municipios/?estadoId=${estadoId}`, {
-            headers: {
-              api_key: apiKey,
-              'Content-Type': 'application/json',
+          const response = await fetch(
+            `${domain}/api/v1/public/municipios/?estadoId=${estadoId}`,
+            {
+              headers: {
+                api_key: apiKey,
+                'Content-Type': 'application/json',
+              },
             },
-          });
+          );
           const data = await response.json();
           const filteredMunicipios = data.data.filter(
             (municipio) => municipio.estadoId === parseInt(estadoId, 10),
@@ -54,7 +70,7 @@ export default function DatosSolicitante({ form, handleOnChange }) {
       <Grid item xs={3}>
         <Select
           title="Tipo de Solicitud"
-          options={[]}
+          options={tipoSolicitudes}
           name="tipoSolicitud"
           onChange={handleOnChange}
         />
@@ -62,7 +78,7 @@ export default function DatosSolicitante({ form, handleOnChange }) {
       <Grid item xs={3}>
         <Select
           title="Grado Académico"
-          options={[]}
+          options={grados}
           name="gradoAcademico"
           onChange={handleOnChange}
         />
@@ -214,4 +230,10 @@ DatosSolicitante.propTypes = {
     telefono: PropTypes.string,
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,
+  estados: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      nombre: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
