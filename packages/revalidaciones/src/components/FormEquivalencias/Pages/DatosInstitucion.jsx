@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function DatosInstitucion({ form, handleOnChange }) {
+export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
   const [tipoInstitucionId, setTipoInstitucionId] = useState(null);
@@ -104,7 +104,7 @@ export default function DatosInstitucion({ form, handleOnChange }) {
         />
       </Grid>
       <Grid item xs={3}>
-        <Select title="Estado" options={[]} name="estado" onChange={handleOnChange} />
+        <Select title="Estado" options={estados} name="estado" onChange={handleOnChange} />
       </Grid>
       <Grid item xs={9}>
         <Input
@@ -179,4 +179,10 @@ DatosInstitucion.propTypes = {
     planEstudios: PropTypes.string,
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,
+  estados: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      nombre: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
