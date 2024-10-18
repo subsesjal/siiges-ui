@@ -37,7 +37,6 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
             nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
           }));
           setPlanteles(transformedPlanteles);
-          console.log(data.planteles);
           setIsPlantelesDisabled(false);
         }
       });
