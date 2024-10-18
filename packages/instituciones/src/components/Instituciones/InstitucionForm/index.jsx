@@ -139,19 +139,21 @@ export default function InstitucionForm({
             height="300px"
             style={{ zIndex: 1, overflow: 'hidden' }}
           />
-          <IconButton
-            onClick={() => fileInputRef.current.click()}
-            sx={{
-              position: 'absolute',
-              top: '255px',
-              right: '10px',
-              zIndex: 2,
-              backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            }}
-            size="small"
-          >
-            <PhotoCameraIcon />
-          </IconButton>
+          {accion !== 'crear' && (
+            <IconButton
+              onClick={() => fileInputRef.current.click()}
+              sx={{
+                position: 'absolute',
+                top: '255px',
+                right: '10px',
+                zIndex: 2,
+                backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              }}
+              size="small"
+            >
+              <PhotoCameraIcon />
+            </IconButton>
+          )}
 
           <input
             type="file"
