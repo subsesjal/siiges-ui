@@ -26,11 +26,11 @@ export default function ProgramasPDF() {
           <Button
             fullWidth
             variant="outlined"
-            startIcon={
+            startIcon={(
               <DescriptionIcon
                 style={{ color: hoveredIndex === index ? 'white' : 'black' }}
               />
-            }
+            )}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
             sx={{
