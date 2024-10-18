@@ -3,7 +3,8 @@ import ButtonsProgramas from '../Components/utils/ButtonProgramas';
 
 const columnsProgramas = [
   { field: 'id', headerName: 'ID', width: 80 },
-  { field: 'nombre', headerName: 'Programa', width: 900 },
+  { field: 'nombre', headerName: 'Programa', width: 650 },
+  { field: 'acuerdoRvoe', headerName: 'RVOE', width: 220 },
   {
     field: 'actions',
     headerName: 'Acciones',
