@@ -15,6 +15,7 @@ export default function ProgramasData() {
     .replace(/ /g, ' ')
     .replace('.', '')
     .replace(/-([a-z])/, (x) => `-${x[1].toUpperCase()}`);
+
   const dataSections = [
     {
       titles: [
@@ -56,16 +57,17 @@ export default function ProgramasData() {
         sx={{ mt: 2 }}
         columnSpacing={{ xs: 1, sm: 2, md: 3 }}
       >
-        {dataSections.map((section, sectionIndex) => (
-          <Grid item xs={12} md={6} key={sectionIndex}>
+        {dataSections.map((section) => (
+          <Grid item xs={12} md={6} key={section.titles.join('-')}>
             {section.titles.map((title, index) => (
-              <div style={{ marginBottom: '6px' }}>
+              <div style={{ marginBottom: '6px' }} key={title}>
                 <Typography
-                  key={index}
                   variant="h7"
                   style={{ fontWeight: 'bold' }}
                 >
-                  {title}:{' '}
+                  {title}
+                  :
+                  {' '}
                   <span style={{ fontWeight: 'normal' }}>
                     {section.subtitles[index]}
                   </span>
@@ -76,7 +78,7 @@ export default function ProgramasData() {
           </Grid>
         ))}
       </Grid>
-      <ProgramasPDF />
+      <ProgramasPDF id={query.id} />
     </>
   );
 }
