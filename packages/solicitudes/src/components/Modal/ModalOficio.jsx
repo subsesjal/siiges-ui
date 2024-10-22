@@ -30,6 +30,7 @@ export default function oficioModal({
 
     const formattedDate = new Date(fechaEfecto).toISOString();
     const dataRvoe = {
+      estatusSolicitudId: 11,
       programa: {
         fechaSurteEfecto: formattedDate,
         acuerdoRvoe: String(oficioNumber),
