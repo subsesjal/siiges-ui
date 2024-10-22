@@ -1,40 +1,61 @@
 import { useState, useEffect } from 'react';
 import { getToken } from '@siiges-ui/shared';
 
-export default function useGrupos(ciclosEscolarId, gradoId) {
+export default function useGrupos(ciclosEscolarId, gradoId, fetchGrupos, setFetchGrupos) {
   const [grupos, setGrupos] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (ciclosEscolarId && gradoId) {
+    let isMounted = true;
+
+    const fetchGroupData = async () => {
       const token = getToken();
       const apikey = process.env.NEXT_PUBLIC_API_KEY;
       const url = process.env.NEXT_PUBLIC_URL;
 
+      if (!apikey || !url) {
+        console.error('API key or URL not defined in environment variables');
+        return;
+      }
+
       setLoading(true);
 
-      fetch(
-        `${url}/api/v1/grupos/ciclosEscolares/${ciclosEscolarId}/grados/${gradoId}`,
-        {
-          headers: { api_key: apikey, Authorization: `Bearer ${token}` },
-        },
-      )
-        .then((response) => response.json())
-        .then((data) => {
+      try {
+        const response = await fetch(
+          `${url}/api/v1/grupos/ciclosEscolares/${ciclosEscolarId}/grados/${gradoId}`,
+          {
+            headers: { api_key: apikey, Authorization: `Bearer ${token}` },
+          },
+        );
+        const data = await response.json();
+
+        if (isMounted) {
           if (data.data !== undefined) {
             setGrupos(data.data);
           } else {
             setGrupos([]);
           }
-        })
-        .catch((error) => {
+        }
+      } catch (error) {
+        if (isMounted) {
           console.error('¡Error al recuperar grupos!:', error);
-        })
-        .finally(() => {
+        }
+      } finally {
+        if (isMounted) {
           setLoading(false);
-        });
+          setFetchGrupos(false);
+        }
+      }
+    };
+
+    if (ciclosEscolarId && gradoId && fetchGrupos) {
+      fetchGroupData();
     }
-  }, [ciclosEscolarId, gradoId]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [ciclosEscolarId, gradoId, fetchGrupos, setFetchGrupos]);
 
   return { grupos, loading };
 }

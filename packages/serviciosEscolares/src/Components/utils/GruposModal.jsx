@@ -24,7 +24,7 @@ export default function GruposModal({
   type,
   data,
   params,
-  fetchGrupos,
+  setFetchGrupos,
 }) {
   const title = type === 'new' ? 'Agregar Grupo' : 'Editar Grupo';
   const { setNoti, setLoading } = useContext(Context);
@@ -47,9 +47,7 @@ export default function GruposModal({
           message: '¡Grupo creado con éxito!',
           type: 'success',
         });
-        if (fetchGrupos) {
-          fetchGrupos(params.gradoId);
-        }
+        setFetchGrupos(true);
       }
 
       setOpen(false);
@@ -149,10 +147,6 @@ export default function GruposModal({
   );
 }
 
-GruposModal.defaultProps = {
-  fetchGrupos: () => {},
-};
-
 GruposModal.propTypes = {
   type: PropTypes.string.isRequired,
   params: PropTypes.shape({
@@ -162,7 +156,7 @@ GruposModal.propTypes = {
   }).isRequired,
   setOpen: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  fetchGrupos: PropTypes.func,
+  setFetchGrupos: PropTypes.func.isRequired,
   data: PropTypes.shape({
     id: PropTypes.number,
     cicloEscolarId: PropTypes.number,

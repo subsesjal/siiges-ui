@@ -9,10 +9,17 @@ export default function Grupos() {
   const [open, setOpen] = useState(false);
   const [grupos, setGrupos] = useState([]);
   const [parametros, setParametros] = useState([]);
+  const [fetchGrupos, setFetchGrupos] = useState(true);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <GruposForm setGrupos={setGrupos} setParametros={setParametros} />
+        <GruposForm
+          setGrupos={setGrupos}
+          setParametros={setParametros}
+          fetchGrupos={fetchGrupos}
+          setFetchGrupos={setFetchGrupos}
+        />
       </Grid>
       <Grid item xs={12}>
         {parametros.cicloEscolarId && (
@@ -36,6 +43,7 @@ export default function Grupos() {
         type="new"
         data={grupos}
         params={parametros}
+        setFetchGrupos={setFetchGrupos}
       />
     </Grid>
   );
