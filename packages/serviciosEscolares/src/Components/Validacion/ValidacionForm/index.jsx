@@ -44,7 +44,7 @@ export default function ValidacionForm({
           apellidoMaterno: alumno.persona.apellidoMaterno,
           nombre: alumno.persona.nombre,
           situacion: alumno.situacion.nombre,
-          estatus: alumno.validacion,
+          estatus: alumno.validacion?.situacionValidacion?.nombre,
         }));
         setAlumnos(transformedAlumnos);
       }
