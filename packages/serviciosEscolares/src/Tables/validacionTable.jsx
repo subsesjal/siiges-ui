@@ -8,6 +8,7 @@ const columnsValidacion = (programa, institucion) => [
   { field: 'apellidoMaterno', headerName: 'Segundo Apellido', width: 200 },
   { field: 'nombre', headerName: 'Nombre', width: 200 },
   { field: 'situacion', headerName: 'Situación', width: 200 },
+  { field: 'estatus', headerName: 'Estatus', width: 200 },
   {
     field: 'actions',
     headerName: 'Acciones',
