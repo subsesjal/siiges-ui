@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Typography, Grid } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { Context, GetFile } from '@siiges-ui/shared';
+
+const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 const placeholderPdfFiles = [
   { title: 'FDP01' },
@@ -17,22 +21,50 @@ const placeholderPdfFiles = [
   { title: 'FDA06' },
 ];
 
-export default function ProgramasPDF() {
+export default function ProgramasPDF({ id: entidadId }) {
+  const { setNoti, setLoading } = useContext(Context);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const tipoEntidad = 'SOLICITUD';
+
+  const handleDownload = (tipoDocumento) => {
+    setLoading(true);
+    GetFile(
+      {
+        entidadId,
+        tipoDocumento,
+        tipoEntidad,
+      },
+      (result, error) => {
+        if (error) {
+          setNoti({
+            open: true,
+            message: `No se encontró el archivo: ${error}`,
+            type: 'error',
+          });
+        } else {
+          const fileUrl = `${baseUrl}${result}`;
+          window.open(fileUrl, '_blank');
+        }
+        setLoading(false);
+      },
+    );
+  };
+
   return (
     <Grid container spacing={2} sx={{ marginTop: 1 }}>
       {placeholderPdfFiles.map((pdf, index) => (
-        <Grid item xs={6} key={index}>
+        <Grid item xs={6} key={pdf.title}>
           <Button
             fullWidth
             variant="outlined"
-            startIcon={
+            startIcon={(
               <DescriptionIcon
                 style={{ color: hoveredIndex === index ? 'white' : 'black' }}
               />
-            }
+            )}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
+            onClick={() => handleDownload(pdf.title)}
             sx={{
               color: 'black',
               borderColor: 'black',
@@ -53,3 +85,7 @@ export default function ProgramasPDF() {
     </Grid>
   );
 }
+
+ProgramasPDF.propTypes = {
+  id: PropTypes.string.isRequired,
+};

@@ -7,7 +7,9 @@ import useGrupos from '../Programas/ProgramasSections/useGrupos';
 import getCiclosEscolares from './getCiclosEscolares';
 import getGrados from './GetGrados';
 
-export default function GruposForm({ setGrupos, setParametros }) {
+export default function GruposForm({
+  setGrupos, setParametros, fetchGrupos, setFetchGrupos,
+}) {
   const router = useRouter();
   const { query } = router;
   const [selectedCicloEscolar, setSelectedCicloEscolar] = useState('');
@@ -16,11 +18,12 @@ export default function GruposForm({ setGrupos, setParametros }) {
   const turnos = [null, 'Matutino', 'Vespertino', 'Nocturno', 'Mixto'];
   const { grados } = getGrados(query.id);
 
-  const { grupos } = useGrupos(selectedCicloEscolar, selectedGrado);
+  const { grupos } = useGrupos(selectedCicloEscolar, selectedGrado, fetchGrupos, setFetchGrupos);
   const getGradoNameFunction = (id) => {
     const gradoNombre = grados.find((grado) => grado.id === id);
     return gradoNombre?.nombre;
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,7 +36,7 @@ export default function GruposForm({ setGrupos, setParametros }) {
 
     fetchData();
   }, []);
-  // Cuando los grupos cambien debido al custom hook, actualizamos el estado que se pasa como prop
+
   useEffect(() => {
     setGrupos(
       grupos?.map((grupo) => ({
@@ -95,4 +98,6 @@ GruposForm.propTypes = {
     generacionFechaInicio: PropTypes.string,
     generacionFechaFin: PropTypes.string,
   }).isRequired,
+  fetchGrupos: PropTypes.bool.isRequired,
+  setFetchGrupos: PropTypes.func.isRequired,
 };
