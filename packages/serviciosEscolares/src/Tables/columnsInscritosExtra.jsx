@@ -1,6 +1,6 @@
 import React from 'react';
 import FechaExamenInput from '../Components/utils/Calificaciones/FechaExamenInput';
-import CalificacionInput from '../Components/utils/Calificaciones/CalificacionInput';
+import CalificacionExtraInput from '../Components/utils/Calificaciones/CalificacionExtraInput';
 
 const columnsInscritosExtra = (
   disabled,
@@ -34,7 +34,7 @@ const columnsInscritosExtra = (
         || !isExtraordinarioEnabled(params.row.id)
         || params.row.situacionId === 3;
       return (
-        <CalificacionInput
+        <CalificacionExtraInput
           id={params.id}
           value={calificacion}
           disabled={isDisabled}
