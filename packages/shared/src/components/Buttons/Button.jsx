@@ -6,6 +6,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import { Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import DownloadIcon from '@mui/icons-material/Download';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import '../../styles/buttons/ButtonAdd.css';
@@ -29,6 +30,8 @@ export default function Button({
         return <ArrowBackIosNewIcon />;
       case 'people':
         return <PeopleIcon />;
+      case 'download':
+        return <DownloadIcon />;
       default:
         return <AddIcon />;
     }

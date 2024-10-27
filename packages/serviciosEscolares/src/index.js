@@ -39,6 +39,7 @@ import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditaci
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
 import ButtonsFoliosAdmin from './Components/Folios/ButtonsFoliosAdmin/index';
 import RevalidacionEquivalencias from './Components/RevalidacionesEquivalencias';
+import HistorialTable from './Components/Alumnos/HistorialTable';
 
 export {
   RevalidacionEquivalencias,
@@ -82,4 +83,5 @@ export {
   ActionsAcreditacionAsignaturas,
   columnsInstitucionesAutorizadas,
   ButtonsInstitucionesAutorizadas,
+  HistorialTable,
 };
