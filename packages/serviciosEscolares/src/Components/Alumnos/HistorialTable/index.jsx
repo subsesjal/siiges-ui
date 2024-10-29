@@ -1,32 +1,25 @@
 import React from 'react';
-import { Button, DataTable } from '@siiges-ui/shared';
+import { DataTable } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import historialColumns from '../../../Tables/historialAlumnosTable';
 
 export default function HistorialTable({ alumno }) {
-  const rows = alumno.map((record) => ({
-    id: record.alumnoId,
-    ciclo: record.grupo.cicloEscolar.nombre,
-    clave: record.asignatura.clave,
-    seriacion: record.asignatura.seriacion || 'N/A',
-    asignatura: record.asignatura.nombre,
-    tipo: record.tipo === 1 ? 'Ordinario' : 'Extraordinario',
-    calificacion: record.calificacion,
-    fechaExamen: record.fechaExamen,
-  }));
+  const rows = alumno
+    ?.sort((a, b) => a.asignaturaId - b.asignaturaId || a.tipo - b.tipo)
+    .map((record) => ({
+      id: record.id,
+      ciclo: record.grupo.cicloEscolar.nombre,
+      clave: record.asignatura.clave,
+      seriacion: record.asignatura.seriacion || 'N/A',
+      asignatura: record.asignatura.nombre,
+      tipo: record.tipo === 1 ? 'Ordinario' : 'Extraordinario',
+      calificacion: record.calificacion,
+      fechaExamen: record.fechaExamen,
+    })) || [];
 
   return (
     <Grid container sx={{ marginTop: 2 }}>
-      <Grid item xs={12}>
-        <Button
-          text="Descargar"
-          type="download"
-          onClick={() => {
-            // Acción de descarga, por ahora sin funcionalidad
-          }}
-        />
-      </Grid>
       <DataTable
         rows={rows}
         columns={historialColumns}
@@ -37,5 +30,23 @@ export default function HistorialTable({ alumno }) {
 }
 
 HistorialTable.propTypes = {
-  alumno: PropTypes.arrayOf(PropTypes.object).isRequired,
+  alumno: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      alumnoId: PropTypes.number.isRequired,
+      grupo: PropTypes.shape({
+        cicloEscolar: PropTypes.shape({
+          nombre: PropTypes.string.isRequired,
+        }).isRequired,
+      }).isRequired,
+      asignatura: PropTypes.shape({
+        clave: PropTypes.string.isRequired,
+        seriacion: PropTypes.string,
+        nombre: PropTypes.string.isRequired,
+      }).isRequired,
+      tipo: PropTypes.number.isRequired,
+      calificacion: PropTypes.string.isRequired,
+      fechaExamen: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
