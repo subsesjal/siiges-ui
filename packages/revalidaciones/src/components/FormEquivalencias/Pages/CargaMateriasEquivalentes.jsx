@@ -30,17 +30,46 @@ const columns = [
 
 export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [open, setOpen] = useState(false);
+  const [materiaAntecedente, setMateriaAntecedente] = useState('');
+  const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
+  const [materiaEquivalente, setMateriaEquivalente] = useState('');
+  const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
+
+  const handleConfirm = () => {
+    // Add the current inputs to `asignaturaAntecedente` and `asignaturaEquivalente` arrays
+    handleOnChange(
+      { target: { name: 'asignaturaAntecedente', value: [...form.asignaturaAntecedente, { nombre: materiaAntecedente, calificacion: calificacionAntecedente }] } },
+      [],
+    );
+    handleOnChange(
+      { target: { name: 'asignaturaEquivalente', value: [...form.asignaturaEquivalente, { nombre: materiaEquivalente, calificacion: calificacionEquivalente }] } },
+      [],
+    );
+
+    // Close modal and reset input fields
+    setOpen(false);
+    setMateriaAntecedente('');
+    setCalificacionAntecedente('');
+    setMateriaEquivalente('');
+    setCalificacionEquivalente('');
+  };
 
   return (
     <>
       <Grid container spacing={1}>
         <DataTable
           buttonAdd
-          buttonClick={() => {
-            setOpen(true);
-          }}
+          buttonClick={() => setOpen(true)}
           buttonText="Carga de Materia"
-          rows={[]}
+          rows={
+            form.asignaturaAntecedente.concat(form.asignaturaEquivalente).map((item, index) => ({
+              id: index,
+              materiasAntecedente: item.nombre,
+              calificacionAntecedente: item.calificacion,
+              materiasEquivalentes: item.nombre,
+              calificacionEquivalente: item.calificacion,
+            }))
+          }
           columns={columns}
         />
       </Grid>
@@ -51,8 +80,8 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
               id="materiaAntecedente"
               name="materiaAntecedente"
               label="Materias de Antecedente"
-              value={form.materiaAntecedente || ''}
-              onChange={handleOnChange}
+              value={materiaAntecedente}
+              onChange={(e) => setMateriaAntecedente(e.target.value)}
             />
           </Grid>
           <Grid item xs={6}>
@@ -60,8 +89,8 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
               id="calificacionAntecedente"
               name="calificacionAntecedente"
               label="Calificación de Antecedente"
-              value={form.calificacionAntecedente || ''}
-              onChange={handleOnChange}
+              value={calificacionAntecedente}
+              onChange={(e) => setCalificacionAntecedente(e.target.value)}
             />
           </Grid>
           <Grid item xs={6}>
@@ -69,8 +98,8 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
               id="materiaEquivalente"
               name="materiaEquivalente"
               label="Materias de Equivalente"
-              value={form.materiaEquivalente || ''}
-              onChange={handleOnChange}
+              value={materiaEquivalente}
+              onChange={(e) => setMateriaEquivalente(e.target.value)}
             />
           </Grid>
           <Grid item xs={6}>
@@ -78,16 +107,14 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
               id="calificacionEquivalente"
               name="calificacionEquivalente"
               label="Calificación de Equivalente"
-              value={form.calificacionEquivalente || ''}
-              onChange={handleOnChange}
+              value={calificacionEquivalente}
+              onChange={(e) => setCalificacionEquivalente(e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
             <ButtonsForm
-              confirm={() => {}}
-              cancel={() => {
-                setOpen(false);
-              }}
+              confirm={handleConfirm}
+              cancel={() => setOpen(false)}
             />
           </Grid>
         </Grid>
@@ -98,10 +125,18 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
 
 CargaMateriasEquivalentes.propTypes = {
   form: PropTypes.shape({
-    materiaAntecedente: PropTypes.string,
-    calificacionAntecedente: PropTypes.string,
-    materiaEquivalente: PropTypes.string,
-    calificacionEquivalente: PropTypes.string,
+    asignaturaAntecedente: PropTypes.arrayOf(
+      PropTypes.shape({
+        nombre: PropTypes.string,
+        calificacion: PropTypes.string,
+      }),
+    ),
+    asignaturaEquivalente: PropTypes.arrayOf(
+      PropTypes.shape({
+        nombre: PropTypes.string,
+        calificacion: PropTypes.string,
+      }),
+    ),
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,
 };
