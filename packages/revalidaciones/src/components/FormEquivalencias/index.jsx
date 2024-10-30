@@ -14,7 +14,45 @@ export default function FormEquivalencias() {
   const { setNoti } = useContext(Context);
   const [currentPosition, setCurrentPosition] = useState(1);
   const [filesData, setFilesData] = useState({});
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({
+    tipoTramiteId: null,
+    estatusSolicitudRevEquivId: 1,
+    fecha: new Date().toISOString().split('T')[0],
+    interesado: {
+      persona: {
+        domicilio: {
+          calle: '',
+          numeroExterior: '',
+          numeroInterior: '',
+          colonia: '',
+          codigoPostal: '',
+          municipioId: '',
+          estadoId: '',
+        },
+        nombre: '',
+        apellidoPaterno: '',
+        apellidoMaterno: '',
+        telefono: '',
+        curp: '',
+        correoPrincipal: '',
+      },
+      institucionProcedencia: {
+        tipoInstitucionId: '',
+        nombre: '',
+        estadoId: '',
+        nombreCarrera: '',
+      },
+      institucionDestino: {
+        tipoInstitucionId: '',
+        programaId: '',
+        nombre: '',
+        acuerdoRvoe: '',
+        nombreCarrera: '',
+      },
+    },
+    asignaturaAntecedente: [],
+    asignaturaEquivalente: [],
+  });
   const [estados, setEstados] = useState([]);
   const totalPositions = 4;
 
@@ -49,12 +87,24 @@ export default function FormEquivalencias() {
     }
   };
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event, path = []) => {
     const { name, value } = event.target;
-    setForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
+
+    setForm((prevForm) => {
+      const updateNestedValue = (obj, nestedPath) => {
+        if (nestedPath.length === 0) {
+          return { ...obj, [name]: value };
+        }
+
+        const [firstKey, ...restPath] = nestedPath;
+        return {
+          ...obj,
+          [firstKey]: updateNestedValue(obj[firstKey] || {}, restPath),
+        };
+      };
+
+      return updateNestedValue(prevForm, path);
+    });
   };
 
   const handleOnSubmit = async () => {
@@ -64,11 +114,7 @@ export default function FormEquivalencias() {
       formData.append(key, filesData[key]);
     });
 
-    const data = {
-      ...form,
-    };
-
-    formData.append('DATA', JSON.stringify(data));
+    formData.append('DATA', JSON.stringify(form));
 
     try {
       const response = await fetch(`${domain}/api/v1/public/solicitudesRevEquiv/`, {
@@ -119,16 +165,15 @@ export default function FormEquivalencias() {
       case 3:
         return (
           <CargaMaterias
-            form={form}
-            handleOnChange={handleOnChange}
-            setFilesData={setFilesData} // Pasar la función para actualizar los archivos
+            filesData={filesData}
+            setFilesData={setFilesData}
           />
         );
       case 4:
         return (
           <CargaMateriasEquivalentes
             form={form}
-            handleOnChange={handleOnChange}
+            handleOnChange={(e) => handleOnChange(e, [])}
           />
         );
       default:
