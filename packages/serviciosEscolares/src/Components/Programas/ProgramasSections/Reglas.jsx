@@ -25,16 +25,16 @@ export default function Reglas() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const response = await getData({ endpoint: `/programas/${query.id}` });
+      const response = await getData({ endpoint: `/solicitudes/${query.id}` });
 
       if (response.statusCode === 200) {
-        const data = response.data || {};
+        const { data } = response || {};
         setForm({
           id: query.id || '',
-          calificacionMinima: data.calificacionMinima || '',
-          calificacionMaxima: data.calificacionMaxima || '',
-          calificacionAprobatoria: data.calificacionAprobatoria || '',
-          calificacionDecimal: data.calificacionDecimal ? '1' : '2',
+          calificacionMinima: data.programa.calificacionMinima || '',
+          calificacionMaxima: data.programa.calificacionMaxima || '',
+          calificacionAprobatoria: data.programa.calificacionAprobatoria || '',
+          calificacionDecimal: data.programa.calificacionDecimal ? '1' : '2',
         });
       } else {
         setNoti({
