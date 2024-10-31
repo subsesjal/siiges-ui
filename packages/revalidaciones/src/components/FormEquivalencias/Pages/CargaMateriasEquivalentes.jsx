@@ -36,7 +36,6 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
 
   const handleConfirm = () => {
-    // Add the current inputs to `asignaturaAntecedente` and `asignaturaEquivalente` arrays
     handleOnChange(
       { target: { name: 'asignaturaAntecedente', value: [...form.asignaturaAntecedente, { nombre: materiaAntecedente, calificacion: calificacionAntecedente }] } },
       [],
@@ -46,7 +45,6 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
       [],
     );
 
-    // Close modal and reset input fields
     setOpen(false);
     setMateriaAntecedente('');
     setCalificacionAntecedente('');

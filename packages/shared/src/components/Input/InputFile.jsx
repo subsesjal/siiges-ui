@@ -8,6 +8,7 @@ import {
 import { DropzoneDialog } from 'mui-file-dropzone';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import fileToFormData from '../Submit/FileToFormData';
 import SubmitDocument from '../Submit/SubmitDocument';
 import { Context } from '../../utils/handlers/context';
@@ -21,6 +22,7 @@ export default function InputFile({
   setUrl,
   onChange,
   disabled,
+  isUploaded,
 }) {
   const [files, setFiles] = useState([]);
   const { setNoti } = useContext(Context);
@@ -92,17 +94,23 @@ export default function InputFile({
             <Button onClick={handleOpen} disabled={disabled} variant="text">
               <AttachFileIcon />
             </Button>
-            {url && (
-              <Link href={`${domain}${url}`} passHref legacyBehavior>
-                <Button
-                  component="a"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="text"
-                >
-                  <FileOpenIcon />
-                </Button>
-              </Link>
+            {isUploaded ? (
+              <Button variant="text">
+                <CheckCircleIcon color="success" />
+              </Button>
+            ) : (
+              url && (
+                <Link href={`${domain}${url}`} passHref legacyBehavior>
+                  <Button
+                    component="a"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="text"
+                  >
+                    <FileOpenIcon />
+                  </Button>
+                </Link>
+              )
             )}
           </ButtonGroup>
         </Grid>
@@ -130,6 +138,7 @@ InputFile.defaultProps = {
   id: null,
   disabled: false,
   onChange: null,
+  isUploaded: false,
 };
 
 InputFile.propTypes = {
@@ -141,4 +150,5 @@ InputFile.propTypes = {
   setUrl: PropTypes.func,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
+  isUploaded: PropTypes.bool,
 };

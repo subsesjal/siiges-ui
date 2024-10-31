@@ -136,8 +136,8 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           <Select
             title="Instituciones"
             options={instituciones}
-            name="nombre"
-            value={form.institucionDestino?.nombre || ''}
+            name="programaId"
+            value={form.institucionDestino?.programaId || ''}
             onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
           />
         ) : (
@@ -181,6 +181,7 @@ DatosInstitucion.propTypes = {
     }),
     institucionDestino: PropTypes.shape({
       tipoInstitucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       nombre: PropTypes.string,
       acuerdoRvoe: PropTypes.string,
       nombreCarrera: PropTypes.string,

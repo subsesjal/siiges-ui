@@ -37,14 +37,14 @@ export default function FormEquivalencias() {
         correoPrincipal: '',
       },
       institucionProcedencia: {
-        tipoInstitucionId: '',
+        tipoInstitucionId: 1,
         nombre: '',
         estadoId: '',
         nombreCarrera: '',
       },
       institucionDestino: {
         tipoInstitucionId: '',
-        programaId: '',
+        programaId: 1,
         nombre: '',
         acuerdoRvoe: '',
         nombreCarrera: '',
