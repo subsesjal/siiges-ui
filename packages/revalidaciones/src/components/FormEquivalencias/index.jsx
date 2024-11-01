@@ -111,7 +111,12 @@ export default function FormEquivalencias() {
     const formData = new FormData();
 
     Object.keys(filesData).forEach((key) => {
-      formData.append(key, filesData[key]);
+      const archivoAdjunto = filesData[key].formData.get('archivoAdjunto');
+      if (archivoAdjunto) {
+        formData.append(key, archivoAdjunto);
+      } else {
+        console.error(`No se encontró el archivo para ${key}`);
+      }
     });
 
     formData.append('DATA', JSON.stringify(form));

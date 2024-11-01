@@ -29,11 +29,11 @@ export default function CargaMaterias({ filesData, setFilesData }) {
         <InputFile
           label="CURP"
           id="curp"
-          tipoDocumento="CURP"
+          tipoDocumento="ARCHIVO_CURP"
           tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('CURP')}
-          onChange={(files) => handleFileChange(files, 'CURP')}
-          isUploaded={isFileUploaded('CURP')}
+          url={formatUrl('ARCHIVO_CURP')}
+          onChange={(files) => handleFileChange(files, 'ARCHIVO_CURP')}
+          isUploaded={isFileUploaded('ARCHIVO_CURP')}
         />
       </Grid>
       <Grid item xs={6}>
@@ -51,33 +51,33 @@ export default function CargaMaterias({ filesData, setFilesData }) {
         <InputFile
           label="Acta de Nacimiento"
           id="actaNacimiento"
-          tipoDocumento="ACTA_NACIMIENTO"
+          tipoDocumento="ARCHIVO_NACIMIENTO"
           tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('ACTA_NACIMIENTO')}
-          onChange={(files) => handleFileChange(files, 'ACTA_NACIMIENTO')}
-          isUploaded={isFileUploaded('ACTA_NACIMIENTO')}
+          url={formatUrl('ARCHIVO_NACIMIENTO')}
+          onChange={(files) => handleFileChange(files, 'ARCHIVO_NACIMIENTO')}
+          isUploaded={isFileUploaded('ARCHIVO_NACIMIENTO')}
         />
       </Grid>
       <Grid item xs={6}>
         <InputFile
           label="Copia de Resolución"
           id="copiaResolucion"
-          tipoDocumento="COPIA_RESOLUCION"
+          tipoDocumento="RESOLUCION"
           tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('COPIA_RESOLUCION')}
-          onChange={(files) => handleFileChange(files, 'COPIA_RESOLUCION')}
-          isUploaded={isFileUploaded('COPIA_RESOLUCION')}
+          url={formatUrl('RESOLUCION')}
+          onChange={(files) => handleFileChange(files, 'RESOLUCION')}
+          isUploaded={isFileUploaded('RESOLUCION')}
         />
       </Grid>
       <Grid item xs={6}>
         <InputFile
           label="Certificado Parcial/Total"
           id="certificadoParcialTotal"
-          tipoDocumento="CERTIFICADO_PARCIAL_TOTAL"
+          tipoDocumento="ARCHIVO_CERTIFICADO"
           tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('CERTIFICADO_PARCIAL_TOTAL')}
-          onChange={(files) => handleFileChange(files, 'CERTIFICADO_PARCIAL_TOTAL')}
-          isUploaded={isFileUploaded('CERTIFICADO_PARCIAL_TOTAL')}
+          url={formatUrl('ARCHIVO_CERTIFICADO')}
+          onChange={(files) => handleFileChange(files, 'ARCHIVO_CERTIFICADO')}
+          isUploaded={isFileUploaded('ARCHIVO_CERTIFICADO')}
         />
       </Grid>
       <Grid item xs={6}>
@@ -95,33 +95,33 @@ export default function CargaMaterias({ filesData, setFilesData }) {
         <InputFile
           label="Programa de Estudio Autorizado"
           id="programaEstudioAutorizado"
-          tipoDocumento="PROGRAMA_ESTUDIO_AUTORIZADO"
+          tipoDocumento="PROGRAMA_AUTORIZADO"
           tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('PROGRAMA_ESTUDIO_AUTORIZADO')}
-          onChange={(files) => handleFileChange(files, 'PROGRAMA_ESTUDIO_AUTORIZADO')}
-          isUploaded={isFileUploaded('PROGRAMA_ESTUDIO_AUTORIZADO')}
+          url={formatUrl('PROGRAMA_AUTORIZADO')}
+          onChange={(files) => handleFileChange(files, 'PROGRAMA_AUTORIZADO')}
+          isUploaded={isFileUploaded('PROGRAMA_AUTORIZADO')}
         />
       </Grid>
       <Grid item xs={6}>
         <InputFile
           label="Propuesta de Equivalencia"
           id="propuestaEquivalencia"
-          tipoDocumento="PROPUESTA_EQUIVALENCIA"
+          tipoDocumento="PROPUESTA"
           tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('PROPUESTA_EQUIVALENCIA')}
-          onChange={(files) => handleFileChange(files, 'PROPUESTA_EQUIVALENCIA')}
-          isUploaded={isFileUploaded('PROPUESTA_EQUIVALENCIA')}
+          url={formatUrl('PROPUESTA')}
+          onChange={(files) => handleFileChange(files, 'PROPUESTA')}
+          isUploaded={isFileUploaded('PROPUESTA')}
         />
       </Grid>
       <Grid item xs={6}>
         <InputFile
           label="Pago de Equivalencia"
           id="pagoEquivalencia"
-          tipoDocumento="PAGO_EQUIVALENCIA"
+          tipoDocumento="COMPROBANTE_PAGO_TRAMITE"
           tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('PAGO_EQUIVALENCIA')}
-          onChange={(files) => handleFileChange(files, 'PAGO_EQUIVALENCIA')}
-          isUploaded={isFileUploaded('PAGO_EQUIVALENCIA')}
+          url={formatUrl('COMPROBANTE_PAGO_TRAMITE')}
+          onChange={(files) => handleFileChange(files, 'COMPROBANTE_PAGO_TRAMITE')}
+          isUploaded={isFileUploaded('COMPROBANTE_PAGO_TRAMITE')}
         />
       </Grid>
     </Grid>
