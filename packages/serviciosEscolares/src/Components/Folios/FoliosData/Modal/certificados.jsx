@@ -23,24 +23,22 @@ export default function ModalCertificado({
   setAlumnoResponse,
   rowData,
   title,
+  disabled,
 }) {
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
   const [alumnoId, setAlumnoId] = useState(null);
-  const [disabled, setDisabled] = useState(true);
+  const [disabledButton, setDisabledButton] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
 
   const validateForm = () => {
-    const isValid = alumno
-      && form.fechaElaboracion
-      && form.fechaTerminacion;
-
-    setDisabled(!isValid);
+    const isValid = alumno && form.fechaElaboracion && form.fechaTerminacion;
+    setDisabledButton(!isValid || disabled);
   };
 
   useEffect(() => {
     validateForm();
-  }, [form, alumnoId]);
+  }, [form, alumno, disabled]);
 
   useEffect(() => {
     if (type === 'edit' && rowData) {
@@ -52,8 +50,8 @@ export default function ModalCertificado({
       setAlumnoId(rowData.alumnoId);
     } else {
       setForm({});
-      setAlumno();
-      setAlumnoId();
+      setAlumno(null);
+      setAlumnoId(null);
     }
   }, [type, rowData]);
 
@@ -93,15 +91,13 @@ export default function ModalCertificado({
     }
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setLoading(true);
 
     const formattedForm = {
       matricula: form.matricula,
       fechaTerminacion: dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ'),
-      fechaElaboracion: dayjs(form.fechaElaboracion).format(
-        'YYYY-MM-DDTHH:mm:ssZ',
-      ),
+      fechaElaboracion: dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ'),
     };
 
     const endpoint = type === 'edit'
@@ -110,39 +106,26 @@ export default function ModalCertificado({
 
     const action = type === 'edit' ? updateRecord : createRecord;
 
-    action({ data: formattedForm, endpoint })
-      .then(() => {
-        setNoti({
-          open: true,
-          message:
-              type === 'edit'
-                ? 'Registro actualizado exitosamente'
-                : 'Registro creado exitosamente',
-          type: 'success',
-        });
-        setAlumnoResponse(true);
-        setOpen(false);
-      })
-      .catch((error) => {
-        setNoti({
-          open: true,
-          message: `¡Ocurrió un error inesperado!: ${error}`,
-          type: 'error',
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        setNoti({
-          open: true,
-          message: `¡Ocurrió un error inesperado!: ${error}`,
-          type: 'error',
-        });
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      await action({ data: formattedForm, endpoint });
+      setNoti({
+        open: true,
+        message: type === 'edit'
+          ? 'Registro actualizado exitosamente'
+          : 'Registro creado exitosamente',
+        type: 'success',
       });
+      setAlumnoResponse(true);
+      setOpen(false);
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `¡Ocurrió un error inesperado!: ${error.message}`,
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -158,9 +141,10 @@ export default function ModalCertificado({
             label="Matrícula"
             id="matricula"
             name="matricula"
-            value={form.alumno?.matricula || ''}
-            onblur={handleBlur}
+            value={form.matricula || ''}
+            onBlur={handleBlur}
             onChange={handleChange}
+            disabled={disabled}
           />
         </Grid>
         {alumno && (
@@ -177,6 +161,7 @@ export default function ModalCertificado({
             value={form.fechaElaboracion || ''}
             onChange={handleChange}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={6}>
@@ -188,12 +173,13 @@ export default function ModalCertificado({
             value={form.fechaTerminacion || ''}
             onChange={handleChange}
             required
+            disabled={disabled}
           />
         </Grid>
         <Grid item xs={12}>
           <ButtonsForm
             confirm={handleConfirm}
-            confirmDisabled={disabled}
+            confirmDisabled={disabledButton}
             cancel={handleCancel}
           />
         </Grid>
@@ -206,10 +192,12 @@ ModalCertificado.defaultProps = {
   id: null,
   programaId: null,
   rowData: {},
+  disabled: false,
 };
 
 ModalCertificado.propTypes = {
   open: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   setOpen: PropTypes.func.isRequired,
   setAlumnoResponse: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,

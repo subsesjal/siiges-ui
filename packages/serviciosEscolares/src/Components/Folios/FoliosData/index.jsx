@@ -15,6 +15,7 @@ import {
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
+import ArticleIcon from '@mui/icons-material/Article';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
@@ -22,7 +23,7 @@ import ButtonsFolios from '../ButtonsFolios';
 import ModalCertificado from './Modal/certificados';
 import ModalTitulo from './Modal/titulos';
 
-const columns = (handleEdit) => [
+const columns = (handleEdit, handleConsult, status) => [
   {
     field: 'id',
     headerName: 'ID',
@@ -44,21 +45,29 @@ const columns = (handleEdit) => [
     headerName: 'Acciones',
     width: 150,
     renderCell: (params) => (
-      <IconButton onClick={() => handleEdit(params.row.id)}>
-        <EditIcon />
-      </IconButton>
+      <div>
+        <IconButton onClick={() => handleConsult(params.row.id)}>
+          <ArticleIcon />
+        </IconButton>
+        {status !== 'consult' && (
+          <IconButton onClick={() => handleEdit(params.row.id)}>
+            <EditIcon />
+          </IconButton>
+        )}
+      </div>
     ),
   },
 ];
 
 export default function FoliosData({ type }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, loading, setLoading } = useContext(Context);
   const [url, setUrl] = useState(null);
   const [id, setId] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [rowData, setRowData] = useState({});
   const [alumnoType, setAlumnoType] = useState('create');
   const [alumnosData, setAlumnosData] = useState({});
@@ -208,6 +217,23 @@ export default function FoliosData({ type }) {
       setAlumnoType('edit');
       const alumno = alumnosData.find((row) => row.id === value);
       setRowData(alumno);
+      setDisabled(false);
+      setOpen(true);
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `¡Error al cargar los datos!: ${error.message}`,
+        type: 'error',
+      });
+    }
+  };
+
+  const handleConsult = async (value) => {
+    try {
+      setAlumnoType('edit');
+      const alumno = alumnosData.find((row) => row.id === value);
+      setRowData(alumno);
+      setDisabled(true);
       setOpen(true);
     } catch (error) {
       setNoti({
@@ -227,16 +253,20 @@ export default function FoliosData({ type }) {
     setTabIndex(newValue);
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = async (data = formData) => {
+    if (loading) return;
+
     setLoading(true);
     try {
+      const requestData = isSaved ? data : formData;
+
       const response = type === 'edit'
         ? await updateRecord({
-          data: formData,
+          data: requestData,
           endpoint: `/solicitudesFolios/${id}`,
         })
         : await createRecord({
-          data: formData,
+          data: requestData,
           endpoint: '/solicitudesFolios',
         });
 
@@ -260,14 +290,12 @@ export default function FoliosData({ type }) {
           type: 'error',
         });
       }
-      return response;
     } catch (error) {
       setNoti({
         open: true,
         message: `¡Error al procesar la solicitud!: ${error.message}`,
         type: 'error',
       });
-      return { statusCode: 500, message: error.message };
     } finally {
       setLoading(false);
     }
@@ -275,15 +303,14 @@ export default function FoliosData({ type }) {
 
   const handleSend = async () => {
     try {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
+      const updatedFormData = {
+        ...formData,
         estatusSolicitudFolioId: 2,
-      }));
+      };
 
-      await handleConfirm();
-
-      setOpen(false);
+      await handleConfirm(updatedFormData);
       router.back();
+      setOpen(false);
     } catch (error) {
       setOpen(false);
       setNoti({
@@ -378,11 +405,12 @@ export default function FoliosData({ type }) {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <DataTable
-              buttonAdd
+              buttonAdd={status !== 'consult'}
               buttonClick={handleAddAlumno}
               buttonText="Agregar Alumnos"
+              title="Alumnos"
               rows={rows}
-              columns={columns(handleEdit)}
+              columns={columns(handleEdit, handleConsult, status)}
             />
           </Grid>
         </Grid>
@@ -393,7 +421,7 @@ export default function FoliosData({ type }) {
             <ButtonSimple design="error" text="Regresar" onClick={() => router.back()} />
           ) : (
             <ButtonsFolios
-              confirm={handleConfirm}
+              save={handleConfirm}
               cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
               send={handleSend}
               disabled={status === 'consult'}
@@ -411,6 +439,7 @@ export default function FoliosData({ type }) {
           rowData={rowData}
           programaId={programa}
           setAlumnoResponse={setAlumnoResponse}
+          disabled={disabled}
         />
       ) : (
         <ModalCertificado
@@ -422,6 +451,7 @@ export default function FoliosData({ type }) {
           rowData={rowData}
           title="Agregar Alumno"
           setAlumnoResponse={setAlumnoResponse}
+          disabled={disabled}
         />
       )}
     </Box>

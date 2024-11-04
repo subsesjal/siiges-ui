@@ -50,6 +50,7 @@ export default function ModalTitulo({
   rowData,
   programaId,
   setAlumnoResponse,
+  disabled,
 }) {
   const [position, setPosition] = useState('first');
   const [form, setForm] = useState({});
@@ -205,6 +206,7 @@ export default function ModalTitulo({
                 value={form.alumno?.matricula || ''}
                 onblur={handleBlur}
                 onChange={handleChange}
+                disabled={disabled}
               />
             </Grid>
             {alumno && (
@@ -219,6 +221,7 @@ export default function ModalTitulo({
                 name="folioActa"
                 value={form.folioActa || ''}
                 onChange={handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -229,6 +232,7 @@ export default function ModalTitulo({
                 type="datetime"
                 value={form.fechaInicio || ''}
                 onChange={handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -240,6 +244,7 @@ export default function ModalTitulo({
                 value={form.fechaElaboracion || ''}
                 onChange={handleChange}
                 required
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -250,6 +255,7 @@ export default function ModalTitulo({
                 type="datetime"
                 value={form.fechaTerminacion || ''}
                 onChange={handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -259,6 +265,7 @@ export default function ModalTitulo({
                 name="fechaExpedicion"
                 value={form.fechaExpedicion || ''}
                 onChange={handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -268,6 +275,7 @@ export default function ModalTitulo({
                 name="modalidadTitulacionId"
                 value={form.modalidadTitulacionId || ''}
                 onChange={handleSelectChange('modalidadTitulacionId')}
+                disabled={disabled}
               />
             </Grid>
           </>
@@ -281,6 +289,7 @@ export default function ModalTitulo({
                 name="fechaExamenProfesional"
                 value={form.fechaExamenProfesional || ''}
                 onChange={handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -290,6 +299,7 @@ export default function ModalTitulo({
                 name="fechaExencionExamenProfesional"
                 value={form.fechaExencionExamenProfesional || ''}
                 onChange={handleChange}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -299,6 +309,7 @@ export default function ModalTitulo({
                 name="cumplioServicioSocial"
                 value={form.cumplioServicioSocial || ''}
                 onChange={handleSelectChange('cumplioServicioSocial')}
+                disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -308,6 +319,7 @@ export default function ModalTitulo({
                 name="fundamentoServicioSocialId"
                 value={form.fundamentoServicioSocialId || ''}
                 onChange={handleSelectChange('fundamentoServicioSocialId')}
+                disabled={disabled}
               />
             </Grid>
           </>
@@ -317,6 +329,7 @@ export default function ModalTitulo({
             prev={handlePrev}
             next={handleNext}
             confirm={handleConfirm}
+            confirmDisabled={disabled}
             cancel={handleCancel}
             position={position}
           />
@@ -333,6 +346,7 @@ ModalTitulo.defaultProps = {
 
 ModalTitulo.propTypes = {
   open: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   setAlumnoResponse: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
