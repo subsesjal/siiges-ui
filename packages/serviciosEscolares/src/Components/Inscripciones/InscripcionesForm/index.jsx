@@ -69,11 +69,13 @@ export default function InscripcionForm({
         });
         setPlanteles([]);
       } else {
-        const transformedPlanteles = data.planteles.map((plantel) => ({
-          id: plantel.id,
-          nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
-        }));
-        setPlanteles(transformedPlanteles);
+        const sortedPlanteles = data.planteles
+          .map((plantel) => ({
+            id: plantel.id,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        setPlanteles(sortedPlanteles);
       }
     });
   };
@@ -88,12 +90,14 @@ export default function InscripcionForm({
         });
         setProgramas([]);
       } else {
-        const transformedProgramas = data.programas.map((programa) => ({
-          id: programa.id,
-          nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
-          turno: programa.turno,
-        }));
-        setProgramas(transformedProgramas);
+        const sortedProgramas = data.programas
+          .map((programa) => ({
+            id: programa.id,
+            nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
+            turno: programa.turno,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        setProgramas(sortedProgramas);
       }
     });
   };
@@ -304,7 +308,7 @@ export default function InscripcionForm({
             title="Instituciones"
             name="instituciones"
             value={selectedInstitucion}
-            options={instituciones || []}
+            options={instituciones?.sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
             onChange={(event) => handleInstitucionChange(event.target.value)}
             disabled={isRepresentante}
           />

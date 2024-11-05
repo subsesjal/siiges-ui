@@ -12,7 +12,7 @@ import getAlumnosByPrograma from '@siiges-ui/instituciones/src/utils/getAlumnosB
 export default function ValidacionForm({
   setInstitucion, setAlumnos, setPrograma, setLoading,
 }) {
-  const { instituciones } = getInstituciones({
+  const { instituciones: fetchedInstituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,
     setLoading,
@@ -20,12 +20,22 @@ export default function ValidacionForm({
 
   const { setNoti, session } = useContext(Context);
 
+  const [instituciones, setInstituciones] = useState([]);
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [planteles, setPlanteles] = useState([]);
   const [selectedPlantel, setSelectedPlantel] = useState('');
   const [programas, setProgramas] = useState([]);
   const [selectedPrograma, setSelectedPrograma] = useState('');
   const isRepresentante = session.rol === 'representante';
+
+  useEffect(() => {
+    if (fetchedInstituciones?.length) {
+      const sortedInstituciones = [...fetchedInstituciones].sort(
+        (a, b) => a.nombre.localeCompare(b.nombre),
+      );
+      setInstituciones(sortedInstituciones);
+    }
+  }, [fetchedInstituciones]);
 
   const fetchAlumnos = (programaId) => {
     getAlumnosByPrograma(programaId, (error, data) => {
@@ -83,11 +93,14 @@ export default function ValidacionForm({
         });
         setProgramas([]);
       } else {
-        const transformedProgramas = data.programas.map((programa) => ({
-          id: programa.id,
-          nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
-        }));
-        setProgramas(transformedProgramas);
+        const sortedProgramas = data.programas
+          .map((programa) => ({
+            id: programa.id,
+            nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+        setProgramas(sortedProgramas);
       }
     });
   };
@@ -112,11 +125,14 @@ export default function ValidacionForm({
         });
         setPlanteles([]);
       } else {
-        const transformedPlanteles = data.planteles.map((plantel) => ({
-          id: plantel.id,
-          nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
-        }));
-        setPlanteles(transformedPlanteles);
+        const sortedPlanteles = data.planteles
+          .map((plantel) => ({
+            id: plantel.id,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+        setPlanteles(sortedPlanteles);
       }
     });
   };

@@ -16,6 +16,9 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
     tipoInstitucionId: 1,
     setLoading,
   });
+  const institucionesOrdenadas = instituciones?.slice().sort(
+    (a, b) => a.nombre.localeCompare(b.nombre),
+  ) || [];
 
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
@@ -32,10 +35,13 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           setPlanteles([]);
           setIsPlantelesDisabled(true);
         } else {
-          const transformedPlanteles = data.planteles.map((plantel) => ({
-            id: plantel.id,
-            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
-          }));
+          const transformedPlanteles = data.planteles
+            .map((plantel) => ({
+              id: plantel.id,
+              nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+            }))
+            .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
           setPlanteles(transformedPlanteles);
           setIsPlantelesDisabled(false);
         }
@@ -75,12 +81,13 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
   }, [selectedInstitucion, selectedPlantel]);
 
   useEffect(() => {
-    if (isRepresentante && instituciones?.length) {
-      const findIndexIntitucion = instituciones
+    if (isRepresentante && institucionesOrdenadas.length) {
+      const findIndexIntitucion = institucionesOrdenadas
         .findIndex(({ usuarioId }) => usuarioId === session.id);
-      setSelectedInstitucion(instituciones[findIndexIntitucion]?.id);
+      setSelectedInstitucion(institucionesOrdenadas[findIndexIntitucion]?.id);
     }
-  }, [isRepresentante, instituciones]);
+  }, [isRepresentante, institucionesOrdenadas]);
+
   return (
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={6}>
@@ -88,7 +95,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           title="Instituciones"
           name="instituciones"
           value={selectedInstitucion}
-          options={instituciones}
+          options={institucionesOrdenadas}
           onChange={(event) => setSelectedInstitucion(event.target.value)}
           disabled={isRepresentante}
         />
