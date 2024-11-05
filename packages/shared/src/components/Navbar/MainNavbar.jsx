@@ -67,7 +67,7 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
               fontSize: '1rem',
             }}
           >
-            <b>SIIGES</b>
+            <b>SIGES</b>
           </Typography>
           {menuDown && (
             <div style={{ position: 'relative' }}>
