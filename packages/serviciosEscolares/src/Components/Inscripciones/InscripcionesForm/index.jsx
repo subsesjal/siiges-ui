@@ -57,6 +57,7 @@ export default function InscripcionForm({
   const [labelTurno, setLabelTurno] = useState('');
   const [labelCicloEscolar, setLabelCicloEscolar] = useState('');
   const [formCicloEscolar, setFormCicloEscolar] = useState();
+  const [fetchoGrupos, setFetchGrupos] = useState(false);
   const isRepresentante = session.rol === 'representante';
 
   const fetchPlanteles = (institucionId) => {
@@ -402,7 +403,7 @@ export default function InscripcionForm({
         setOpen={setOpenGrupos}
         type="new"
         params={params}
-        fetchGrupos={fetchGrupos}
+        setFetchGrupos={setFetchGrupos}
       />
     </>
   );
