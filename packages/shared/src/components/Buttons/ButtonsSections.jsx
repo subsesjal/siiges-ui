@@ -3,13 +3,13 @@ import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-
 import '../../styles/buttons/ButtonAdd.css';
 
 export default function ButtonsSections({
   prev,
   next,
   confirm,
+  confirmDisabled,
   cancel,
   position,
 }) {
@@ -55,11 +55,13 @@ export default function ButtonsSections({
                   <NavigateNextIcon style={{ transform: 'rotate(180deg)' }} />
                 </ButtonUnstyled>
               </Grid>
+              {!confirmDisabled && (
               <Grid item>
                 <ButtonUnstyled className="buttonAdd guardar" onClick={confirm}>
                   <Typography variant="body1">{confirmText}</Typography>
                 </ButtonUnstyled>
               </Grid>
+              )}
             </>
           )}
         </Grid>
@@ -68,10 +70,15 @@ export default function ButtonsSections({
   );
 }
 
+ButtonsSections.defaultProps = {
+  confirmDisabled: false,
+};
+
 ButtonsSections.propTypes = {
   confirm: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
   position: PropTypes.string.isRequired,
+  confirmDisabled: PropTypes.bool,
 };

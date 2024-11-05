@@ -1,38 +1,35 @@
 import React, { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import { ButtonsForm, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
 
 export default function ButtonsFolios({
-  confirm,
+  save,
   cancel,
   send,
   disabled,
   saved,
 }) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
   return (
     <Grid container justifyContent="flex-end" spacing={2}>
       <Grid item>
-        <ButtonSimple text="Cancelar" onClick={cancel} design="cancel" />
+        <ButtonSimple text="Regresar" onClick={cancel} design="cancel" />
       </Grid>
       {!disabled && (
-        <>
+        !saved ? (
           <Grid item>
-            <ButtonSimple text="Guardar" onClick={confirm} />
+            <ButtonSimple text="Guardar" onClick={save} />
           </Grid>
-          {saved && (
-            <Grid item>
-              <ButtonSimple
-                text="Enviar Solicitud"
-                onClick={() => setOpen(true)}
-              />
-            </Grid>
-          )}
-        </>
+        ) : (
+          <Grid item>
+            <ButtonSimple
+              text="Enviar Solicitud"
+              onClick={() => setOpen(true)}
+            />
+          </Grid>
+        )
       )}
       <DefaultModal title="Enviar solicitud" open={open} setOpen={setOpen}>
         <Typography sx={{ mb: 2 }}>
@@ -48,7 +45,6 @@ export default function ButtonsFolios({
               && (response.statusCode === 200 || response.statusCode === 201)
             ) {
               setOpen(false);
-              router.push('/serviciosEscolares/solicitudesFolios');
             }
           }}
         />
@@ -58,7 +54,7 @@ export default function ButtonsFolios({
 }
 
 ButtonsFolios.propTypes = {
-  confirm: PropTypes.func.isRequired,
+  save: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   send: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,

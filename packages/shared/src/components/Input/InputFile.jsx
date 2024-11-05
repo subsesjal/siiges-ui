@@ -116,11 +116,12 @@ export default function InputFile({
 InputFile.defaultProps = {
   url: '',
   disabled: false,
+  id: null,
 };
 
 InputFile.propTypes = {
   label: PropTypes.string.isRequired,
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   tipoDocumento: PropTypes.string.isRequired,
   tipoEntidad: PropTypes.string.isRequired,
   url: PropTypes.string,

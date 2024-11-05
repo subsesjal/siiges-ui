@@ -2,7 +2,6 @@ import { Grid, IconButton } from '@mui/material';
 import { DataTable } from '@siiges-ui/shared';
 import React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
-import SendIcon from '@mui/icons-material/Send';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
@@ -31,14 +30,9 @@ const columns = [
       };
 
       return (
-        <>
-          <IconButton onClick={handleAddClick}>
-            <ArticleIcon />
-          </IconButton>
-          <IconButton>
-            <SendIcon />
-          </IconButton>
-        </>
+        <IconButton onClick={handleAddClick}>
+          <ArticleIcon />
+        </IconButton>
       );
     },
   },
@@ -52,8 +46,6 @@ export default function AdminTable({
   plantel,
   solicitudes,
 }) {
-  // Map the solicitudes data to match the structure required by the DataTable
-
   const mappedSolicitudes = solicitudes.map((solicitud) => ({
     id: solicitud.id,
     folioSolicitud: solicitud.folioSolicitud,
@@ -70,7 +62,6 @@ export default function AdminTable({
       : '',
   }));
 
-  // Apply filters to the mappedSolicitudes array
   const filteredSolicitudes = mappedSolicitudes.filter((solicitud) => {
     const matchesTipoDocumento = !tipoDocumento || solicitud.tipoDocumentoId === tipoDocumento;
     const matchesTipoSolicitud = !tipoSolicitud || solicitud.tipoSolicitudFolioId === tipoSolicitud;
@@ -108,11 +99,11 @@ AdminTable.propTypes = {
   plantel: PropTypes.string,
   solicitudes: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      folioSolicitud: PropTypes.string.isRequired,
-      programaNombre: PropTypes.string.isRequired,
-      estatusSolicitudFolioNombre: PropTypes.string.isRequired,
-      plantelNombre: PropTypes.string.isRequired,
+      id: PropTypes.number,
+      folioSolicitud: PropTypes.string,
+      programaNombre: PropTypes.string,
+      estatusSolicitudFolioNombre: PropTypes.string,
+      plantelNombre: PropTypes.string,
     }),
   ).isRequired,
 };

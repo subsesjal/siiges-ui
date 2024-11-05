@@ -41,11 +41,12 @@ export default function SnackAlert({
 SnackAlert.defaultProps = {
   open: false,
   mensaje: '',
+  type: 'info',
 };
 
 SnackAlert.propTypes = {
   open: PropTypes.bool,
-  type: PropTypes.oneOf(['error', 'warning', 'info', 'success']).isRequired,
+  type: PropTypes.oneOf(['error', 'warning', 'info', 'success']),
   mensaje: PropTypes.string,
   close: PropTypes.func.isRequired,
 };

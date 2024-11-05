@@ -20,9 +20,13 @@ function LabelData({ title, subtitle }) {
   );
 }
 
+LabelData.defaultProps = {
+  subtitle: null,
+};
+
 LabelData.propTypes = {
   title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string.isRequired,
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default LabelData;
