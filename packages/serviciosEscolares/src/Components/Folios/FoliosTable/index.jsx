@@ -95,8 +95,8 @@ function FoliosTable({
 
 FoliosTable.propTypes = {
   tipoDocumento: PropTypes.number.isRequired,
-  tipoSolicitud: PropTypes.string.isRequired,
-  programa: PropTypes.string.isRequired,
+  tipoSolicitud: PropTypes.number.isRequired,
+  programa: PropTypes.number.isRequired,
   plantel: PropTypes.string.isRequired,
   solicitudes: PropTypes.arrayOf(
     PropTypes.shape({

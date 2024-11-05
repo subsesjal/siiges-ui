@@ -67,7 +67,7 @@ Button.defaultProps = {
 
 Button.propTypes = {
   text: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['user', 'add', 'edit']),
+  type: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   align: PropTypes.string,

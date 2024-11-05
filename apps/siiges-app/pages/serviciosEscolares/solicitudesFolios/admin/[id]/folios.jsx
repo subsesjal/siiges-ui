@@ -28,6 +28,7 @@ export default function Folios() {
   });
   const [tabIndex, setTabIndex] = useState(0);
   const [observaciones, setObservaciones] = useState('');
+  const [estatus, setEstatus] = useState();
   const [alumnosRows, setAlumnosRows] = useState([]);
 
   const router = useRouter();
@@ -53,8 +54,8 @@ export default function Folios() {
             institucion: data.programa?.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
           });
+          setEstatus(data.estatusSolicitudFolioId);
 
-          // Fetch alumnos if solicitudFolio exists
           const alumnosResponse = await getData({
             endpoint: `/solicitudesFolios/${id}/alumnos`,
           });
@@ -64,6 +65,10 @@ export default function Folios() {
               id: res.id,
               nombre: `${res.alumno.persona.nombre} ${res.alumno.persona.apellidoPaterno} ${res.alumno.persona.apellidoMaterno}`,
               matricula: res.alumno.matricula,
+              folio: res.folioDocumentoAlumno?.folioDocumento,
+              foja: res.folioDocumentoAlumno?.foja?.nombre,
+              libro: res.folioDocumentoAlumno?.libro?.nombre,
+              envio: res.folioDocumentoAlumno?.envioExitoso ? 'Enviado' : 'Pendiente',
               fechaElaboracion: dayjs(res.fechaElaboracion).format(
                 'DD/MM/YYYY',
               ),
@@ -130,16 +135,22 @@ export default function Folios() {
     if (id) {
       setLoading(true);
       try {
+        const endpoint = estatus === 3
+          ? `/solicitudesFolios/${id}/envioTitulacion`
+          : `/solicitudesFolios/${id}/asignacionFolios`;
+
         const response = await createRecord({
           data: {},
-          endpoint: `/solicitudesFolios/${id}/asignacionFolios`,
+          endpoint,
         });
+
         if (response.statusCode === 201) {
           setNoti({
             open: true,
             message: '¡Folios asignados con éxito!',
             type: 'success',
           });
+          router.back();
         } else {
           throw new Error(response.message || '¡Error al asignar los folios!');
         }
@@ -161,6 +172,10 @@ export default function Folios() {
     },
     { field: 'nombre', headerName: 'Nombre', width: 320 },
     { field: 'matricula', headerName: 'Matrícula', width: 150 },
+    { field: 'folio', headerName: 'Folio', width: 200 },
+    { field: 'envio', headerName: 'Estatus de envio', width: 200 },
+    { field: 'foja', headerName: 'Foja', width: 200 },
+    { field: 'libro', headerName: 'Libro', width: 200 },
     {
       field: 'fechaElaboracion',
       headerName: 'Fecha de Elaboración',
@@ -254,6 +269,7 @@ export default function Folios() {
           <ButtonsFoliosAdmin
             observaciones={handleObservacionesSubmit}
             folios={handleFoliosSubmit}
+            estatus={estatus}
           />
         </Grid>
       </Grid>

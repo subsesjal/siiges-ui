@@ -108,6 +108,12 @@ export default function FoliosData({ type }) {
   )?.label || 'Desconocido';
 
   useEffect(() => {
+    if (type === 'edit') {
+      setIsSaved(true);
+    }
+  }, [type]);
+
+  useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -260,11 +266,10 @@ export default function FoliosData({ type }) {
     try {
       const requestData = isSaved ? data : formData;
 
-      const response = type === 'edit'
-        ? await updateRecord({
-          data: requestData,
-          endpoint: `/solicitudesFolios/${id}`,
-        })
+      const response = isSaved ? await updateRecord({
+        data: requestData,
+        endpoint: `/solicitudesFolios/${id}`,
+      })
         : await createRecord({
           data: requestData,
           endpoint: '/solicitudesFolios',
@@ -458,6 +463,10 @@ export default function FoliosData({ type }) {
   );
 }
 
+FoliosData.defaultProps = {
+  type: null,
+};
+
 FoliosData.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
 };

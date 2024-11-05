@@ -342,6 +342,7 @@ export default function ModalTitulo({
 ModalTitulo.defaultProps = {
   id: null,
   rowData: {},
+  programaId: null,
 };
 
 ModalTitulo.propTypes = {
@@ -351,7 +352,7 @@ ModalTitulo.propTypes = {
   setAlumnoResponse: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
-  programaId: PropTypes.number.isRequired,
+  programaId: PropTypes.number,
   rowData: PropTypes.shape({
     alumno: PropTypes.shape({
       id: PropTypes.number,

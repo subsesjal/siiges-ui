@@ -4,8 +4,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
-export default function ButtonsFoliosAdmin({ observaciones, folios }) {
+export default function ButtonsFoliosAdmin({ observaciones, folios, estatus }) {
   const router = useRouter();
+
+  const buttonFolios = estatus !== 3 ? 'Generar Folios' : 'Envio Titulación';
   return (
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={6}>
@@ -23,7 +25,7 @@ export default function ButtonsFoliosAdmin({ observaciones, folios }) {
             <ButtonSimple text="Enviar observaciones" onClick={observaciones} />
           </Grid>
           <Grid item>
-            <ButtonSimple text="Generar folios" onClick={folios} />
+            <ButtonSimple text={buttonFolios} onClick={folios} />
           </Grid>
         </Grid>
       </Grid>
@@ -34,4 +36,5 @@ export default function ButtonsFoliosAdmin({ observaciones, folios }) {
 ButtonsFoliosAdmin.propTypes = {
   observaciones: PropTypes.func.isRequired,
   folios: PropTypes.func.isRequired,
+  estatus: PropTypes.number.isRequired,
 };
