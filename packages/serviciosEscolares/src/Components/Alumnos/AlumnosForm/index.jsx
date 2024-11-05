@@ -78,10 +78,13 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
         });
         setProgramas([]);
       } else {
-        const transformedProgramas = data.programas.map((programa) => ({
-          id: programa.id,
-          nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
-        }));
+        const transformedProgramas = data.programas
+          .map((programa) => ({
+            id: programa.id,
+            nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
         setProgramas(transformedProgramas);
       }
     });
@@ -107,10 +110,13 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
         });
         setPlanteles([]);
       } else {
-        const transformedPlanteles = data.planteles.map((plantel) => ({
-          id: plantel.id,
-          nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
-        }));
+        const transformedPlanteles = data.planteles
+          .map((plantel) => ({
+            id: plantel.id,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
         setPlanteles(transformedPlanteles);
       }
     });
@@ -129,7 +135,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
           title="Instituciones"
           name="instituciones"
           value={selectedInstitucion}
-          options={instituciones || []}
+          options={instituciones?.slice().sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
           onChange={(event) => setSelectedInstitucion(event.target.value)}
           disabled={isRepresentante}
         />
