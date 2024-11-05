@@ -33,7 +33,7 @@ export default function Navbar() {
               fontSize: '1rem',
             }}
           >
-            <b>SIIGES</b>
+            <b>SIGES</b>
           </Typography>
           <Link href="/autenticacion/preRegistro">
             <Button
