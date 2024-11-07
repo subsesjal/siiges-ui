@@ -197,6 +197,13 @@ export default function InscripcionForm({
     }
   }, [isRepresentante, instituciones]);
 
+  useEffect(() => {
+    if (fetchoGrupos) {
+      fetchGrupos(selectedGrado);
+      setFetchGrupos(false);
+    }
+  }, [fetchoGrupos, selectedGrado]);
+
   const handlePlantelChange = (event) => {
     const plantelId = event.target.value;
     setSelectedPlantel(plantelId);
