@@ -32,9 +32,7 @@ export default function Navbar() {
               textAlign: 'left',
               fontSize: '1rem',
             }}
-          >
-            <b>SIGES</b>
-          </Typography>
+          />
           <Link href="/autenticacion/preRegistro">
             <Button
               variant="outlined"
