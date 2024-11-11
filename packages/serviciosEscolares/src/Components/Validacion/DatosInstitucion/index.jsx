@@ -21,6 +21,8 @@ export default function DatosInstitucion({ alumno }) {
   const { setNoti, session, setLoading } = useContext(Context);
   const [url, setUrl] = useState();
   const [formSent, setFormSent] = useState(false);
+  const [openDropzone, setOpenDropzone] = useState(false);
+  const [cancelText, setCancelText] = useState();
   const [disabled, setDisabled] = useState(true);
   const [form, setForm] = useState({
     nombreInstitucionEmisora: '',
@@ -46,6 +48,12 @@ export default function DatosInstitucion({ alumno }) {
     tipoEntidad: 'ALUMNO',
     tipoDocumento: 'ARCHIVO_VALIDACION_ALUMNO',
   };
+
+  useEffect(() => {
+    if (formSent) {
+      setCancelText('Regresar');
+    }
+  }, [formSent]);
 
   useEffect(() => {
     if (alumno) {
@@ -189,6 +197,7 @@ export default function DatosInstitucion({ alumno }) {
             message: '¡Datos guardados correctamente!',
             type: 'success',
           });
+          setOpenDropzone(true);
         } else {
           throw new Error('¡La API no obtuvo éxito!');
         }
@@ -372,13 +381,15 @@ export default function DatosInstitucion({ alumno }) {
               url={url}
               setUrl={setUrl}
               disabled={false}
+              title="Suba su archivo de validación"
+              openDropzone={openDropzone}
               required
             />
           </Grid>
         </>
       )}
       <Grid item xs={12}>
-        <ButtonsForm confirm={handleConfirm} cancel={() => router.back()} />
+        <ButtonsForm confirm={handleConfirm} cancel={() => router.back()} cancelText={cancelText} />
       </Grid>
     </Grid>
   );
