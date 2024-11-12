@@ -12,8 +12,8 @@ export default function ButtonsValidacion({
   return (
     <Stack direction="row" spacing={1}>
       {id && (
-        <Link href={linkUrl}>
-          <IconButton aria-label="Validar Alumno">
+        <Link href={linkUrl} passHref>
+          <IconButton aria-label="Validar Alumno en misma pestaña" component="a">
             <PlaylistAddCheckIcon />
           </IconButton>
         </Link>

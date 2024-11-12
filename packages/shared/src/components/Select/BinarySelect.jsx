@@ -10,6 +10,7 @@ export default function BinarySelect({
   value,
   name,
   onChange,
+  disabled,
 }) {
   let normalizedValue = value;
   if (typeof value === 'boolean') {
@@ -29,6 +30,7 @@ export default function BinarySelect({
           name={name}
           value={normalizedValue !== '' ? normalizedValue : 0}
           onChange={onChange}
+          disabled={disabled}
         >
           {sortedOptions.map((option) => (
             <MenuItem key={option.id} value={option.id}>
@@ -52,8 +54,10 @@ BinarySelect.propTypes = {
   value: PropTypes.oneOfType([PropTypes.oneOf([0, 1]), PropTypes.bool]),
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };
 
 BinarySelect.defaultProps = {
   value: 0,
+  disabled: false,
 };

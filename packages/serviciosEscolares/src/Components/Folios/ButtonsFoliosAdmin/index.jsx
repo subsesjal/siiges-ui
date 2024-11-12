@@ -24,9 +24,11 @@ export default function ButtonsFoliosAdmin({ observaciones, folios, estatus }) {
           <Grid item>
             <ButtonSimple text="Enviar observaciones" onClick={observaciones} />
           </Grid>
+          {estatus !== 7 && (
           <Grid item>
             <ButtonSimple text={buttonFolios} onClick={folios} />
           </Grid>
+          )}
         </Grid>
       </Grid>
     </Grid>
