@@ -66,9 +66,7 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
               textAlign: 'left',
               fontSize: '1rem',
             }}
-          >
-            <b>SIIGES</b>
-          </Typography>
+          />
           {menuDown && (
             <div style={{ position: 'relative' }}>
               <IconButton color="inherit" onClick={handleClick}>

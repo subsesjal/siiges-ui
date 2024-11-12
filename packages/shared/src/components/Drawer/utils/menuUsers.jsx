@@ -112,7 +112,7 @@ const panelMenuOptions = (rol) => [
   },
   {
     userId: 2,
-    text: 'Otros Tramites',
+    text: 'Otros Trámites',
     icon: <MoreHorizIcon />,
     type: 'dropdown',
     options: [

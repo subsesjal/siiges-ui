@@ -57,6 +57,7 @@ export default function InscripcionForm({
   const [labelTurno, setLabelTurno] = useState('');
   const [labelCicloEscolar, setLabelCicloEscolar] = useState('');
   const [formCicloEscolar, setFormCicloEscolar] = useState();
+  const [fetchoGrupos, setFetchGrupos] = useState(false);
   const isRepresentante = session.rol === 'representante';
 
   const fetchPlanteles = (institucionId) => {
@@ -69,11 +70,13 @@ export default function InscripcionForm({
         });
         setPlanteles([]);
       } else {
-        const transformedPlanteles = data.planteles.map((plantel) => ({
-          id: plantel.id,
-          nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
-        }));
-        setPlanteles(transformedPlanteles);
+        const sortedPlanteles = data.planteles
+          .map((plantel) => ({
+            id: plantel.id,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        setPlanteles(sortedPlanteles);
       }
     });
   };
@@ -88,12 +91,14 @@ export default function InscripcionForm({
         });
         setProgramas([]);
       } else {
-        const transformedProgramas = data.programas.map((programa) => ({
-          id: programa.id,
-          nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
-          turno: programa.turno,
-        }));
-        setProgramas(transformedProgramas);
+        const sortedProgramas = data.programas
+          .map((programa) => ({
+            id: programa.id,
+            nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
+            turno: programa.turno,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        setProgramas(sortedProgramas);
       }
     });
   };
@@ -191,6 +196,13 @@ export default function InscripcionForm({
       handleInstitucionChange(instituciones[findIndexIntitucion].id);
     }
   }, [isRepresentante, instituciones]);
+
+  useEffect(() => {
+    if (fetchoGrupos) {
+      fetchGrupos(selectedGrado);
+      setFetchGrupos(false);
+    }
+  }, [fetchoGrupos, selectedGrado]);
 
   const handlePlantelChange = (event) => {
     const plantelId = event.target.value;
@@ -304,7 +316,7 @@ export default function InscripcionForm({
             title="Instituciones"
             name="instituciones"
             value={selectedInstitucion}
-            options={instituciones || []}
+            options={instituciones?.sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
             onChange={(event) => handleInstitucionChange(event.target.value)}
             disabled={isRepresentante}
           />
@@ -398,7 +410,7 @@ export default function InscripcionForm({
         setOpen={setOpenGrupos}
         type="new"
         params={params}
-        fetchGrupos={fetchGrupos}
+        setFetchGrupos={setFetchGrupos}
       />
     </>
   );

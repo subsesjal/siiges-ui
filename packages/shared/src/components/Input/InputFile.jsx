@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import '../../styles/Inputs/InputFile.css';
@@ -23,6 +23,8 @@ export default function InputFile({
   onChange,
   disabled,
   isUploaded,
+  title,
+  openDropzone,
 }) {
   const [files, setFiles] = useState([]);
   const { setNoti } = useContext(Context);
@@ -83,6 +85,12 @@ export default function InputFile({
     justifyContent: 'flex-end',
   };
 
+  useEffect(() => {
+    if (openDropzone) {
+      handleOpen();
+    }
+  }, [openDropzone]);
+
   return (
     <>
       <Grid container style={gridStyle}>
@@ -118,7 +126,7 @@ export default function InputFile({
       <DropzoneDialog
         open={open}
         dropzoneText="Arrastre un archivo aquí, o haga clic"
-        dialogTitle="Subir archivo"
+        dialogTitle={title}
         submitButtonText="Aceptar"
         cancelButtonText="Cancelar"
         filesLimit={1}
@@ -139,6 +147,9 @@ InputFile.defaultProps = {
   disabled: false,
   onChange: null,
   isUploaded: false,
+  openDropzone: false,
+  id: null,
+  title: 'Subir archivo',
 };
 
 InputFile.propTypes = {
@@ -151,4 +162,6 @@ InputFile.propTypes = {
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
   isUploaded: PropTypes.bool,
+  openDropzone: PropTypes.bool,
+  title: PropTypes.string,
 };
