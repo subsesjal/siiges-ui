@@ -1,28 +1,26 @@
 import { Grid } from '@mui/material';
 import { Input, Select, Subtitle } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function DatosInstitucion() {
+export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
-  const [tipoInstitucionId, setTipoInstitucionId] = useState(null);
   const [instituciones, setInstituciones] = useState([]);
+  const [tipoInstitucionId, setTipoInstitucionId] = useState(form.institucionDestino?.tipoInstitucionId || '');
 
   useEffect(() => {
     const fetchTipoInstituciones = async () => {
       try {
-        const response = await fetch(
-          `${domain}/api/v1/public/instituciones/tipoInstituciones`,
-          {
-            headers: {
-              api_key: apiKey,
-              'Content-Type': 'application/json',
-            },
+        const response = await fetch(`${domain}/api/v1/public/instituciones/tipoInstituciones`, {
+          headers: {
+            api_key: apiKey,
+            'Content-Type': 'application/json',
           },
-        );
+        });
         const data = await response.json();
         setTipoInstituciones(data.data);
       } catch (error) {
@@ -76,14 +74,17 @@ export default function DatosInstitucion() {
   }, [tipoInstitucionId]);
 
   const handleTipoInstitucionChange = (event) => {
-    setTipoInstitucionId(event.target.value);
+    const selectedTipoInstitucionId = event.target.value;
+    setTipoInstitucionId(selectedTipoInstitucionId);
+    handleOnChange(event, ['interesado', 'institucionDestino']);
   };
 
   const handleRvoeOnBlur = (event) => {
+    const acuerdoRvoe = event.target.value;
     if (tipoInstitucionId === 1) {
-      const acuerdoRvoe = event.target.value;
       fetchProgramas(acuerdoRvoe);
     }
+    handleOnChange(event, ['interesado', 'institucionDestino']);
   };
 
   return (
@@ -95,17 +96,27 @@ export default function DatosInstitucion() {
         <Input
           id="nombreInstitucion"
           label="Nombre de la Institución"
-          name="nombreInstitucion"
+          name="nombre"
+          value={form.institucionProcedencia?.nombre || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
       <Grid item xs={3}>
-        <Select title="Estado" options={[]} name="estado" />
+        <Select
+          title="Estado"
+          options={estados}
+          name="estadoId"
+          value={form.institucionProcedencia?.estadoId || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
+        />
       </Grid>
       <Grid item xs={9}>
         <Input
           id="nombreCarrera"
           label="Nombre de la Carrera"
           name="nombreCarrera"
+          value={form.institucionProcedencia?.nombreCarrera || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
       <Grid item xs={12}>
@@ -116,6 +127,7 @@ export default function DatosInstitucion() {
           title="Tipo de Institución"
           name="tipoInstitucionId"
           options={tipoInstituciones}
+          value={tipoInstitucionId}
           onChange={handleTipoInstitucionChange}
         />
       </Grid>
@@ -124,13 +136,17 @@ export default function DatosInstitucion() {
           <Select
             title="Instituciones"
             options={instituciones}
-            name="instituciones"
+            name="programaId"
+            value={form.institucionDestino?.programaId || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
           />
         ) : (
           <Input
-            id="instituciones"
+            id="institucionNombre"
             label="Instituciones de Educación Superior"
-            name="instituciones"
+            name="nombre"
+            value={form.institucionDestino?.nombre || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
           />
         )}
       </Grid>
@@ -139,12 +155,43 @@ export default function DatosInstitucion() {
           id="rvoe"
           label="RVOE"
           name="acuerdoRvoe"
-          onblur={handleRvoeOnBlur}
+          value={form.institucionDestino?.acuerdoRvoe || ''}
+          onBlur={handleRvoeOnBlur}
         />
       </Grid>
       <Grid item xs={9}>
-        <Input id="planEstudios" label="Plan de Estudios" name="planEstudios" value={programas.nombre} />
+        <Input
+          id="nombreCarreraDestino"
+          label="Nombre de la Carrera (Destino)"
+          name="nombreCarrera"
+          value={programas.nombre || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+        />
       </Grid>
     </Grid>
   );
 }
+
+DatosInstitucion.propTypes = {
+  form: PropTypes.shape({
+    institucionProcedencia: PropTypes.shape({
+      nombre: PropTypes.string,
+      estadoId: PropTypes.string,
+      nombreCarrera: PropTypes.string,
+    }),
+    institucionDestino: PropTypes.shape({
+      tipoInstitucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      nombre: PropTypes.string,
+      acuerdoRvoe: PropTypes.string,
+      nombreCarrera: PropTypes.string,
+    }),
+  }).isRequired,
+  handleOnChange: PropTypes.func.isRequired,
+  estados: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      nombre: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+};

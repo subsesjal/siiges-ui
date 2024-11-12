@@ -8,6 +8,7 @@ import {
 import { DropzoneDialog } from 'mui-file-dropzone';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import fileToFormData from '../Submit/FileToFormData';
 import SubmitDocument from '../Submit/SubmitDocument';
 import { Context } from '../../utils/handlers/context';
@@ -19,7 +20,9 @@ export default function InputFile({
   tipoDocumento,
   url,
   setUrl,
+  onChange,
   disabled,
+  isUploaded,
   title,
   openDropzone,
 }) {
@@ -30,6 +33,7 @@ export default function InputFile({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const handleSave = async () => {
     try {
       if (files.length === 0) {
@@ -56,6 +60,15 @@ export default function InputFile({
       });
     } finally {
       setOpen(false);
+    }
+  };
+
+  const handleFileSave = async () => {
+    if (onChange) {
+      onChange(files);
+      setOpen(false);
+    } else {
+      await handleSave();
     }
   };
 
@@ -89,17 +102,23 @@ export default function InputFile({
             <Button onClick={handleOpen} disabled={disabled} variant="text">
               <AttachFileIcon />
             </Button>
-            {url && (
-              <Link href={`${domain}${url}`} passHref legacyBehavior>
-                <Button
-                  component="a"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="text"
-                >
-                  <FileOpenIcon />
-                </Button>
-              </Link>
+            {isUploaded ? (
+              <Button variant="text">
+                <CheckCircleIcon color="success" />
+              </Button>
+            ) : (
+              url && (
+                <Link href={`${domain}${url}`} passHref legacyBehavior>
+                  <Button
+                    component="a"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="text"
+                  >
+                    <FileOpenIcon />
+                  </Button>
+                </Link>
+              )
             )}
           </ButtonGroup>
         </Grid>
@@ -113,7 +132,7 @@ export default function InputFile({
         filesLimit={1}
         showPreviews
         onChange={(newFiles) => setFiles(newFiles)}
-        onSave={handleSave}
+        onSave={handleFileSave}
         maxFileSize={5000000}
         onClose={handleClose}
       />
@@ -123,7 +142,11 @@ export default function InputFile({
 
 InputFile.defaultProps = {
   url: '',
+  setUrl: () => {},
+  id: null,
   disabled: false,
+  onChange: null,
+  isUploaded: false,
   openDropzone: false,
   id: null,
   title: 'Subir archivo',
@@ -135,8 +158,10 @@ InputFile.propTypes = {
   tipoDocumento: PropTypes.string.isRequired,
   tipoEntidad: PropTypes.string.isRequired,
   url: PropTypes.string,
-  setUrl: PropTypes.func.isRequired,
+  setUrl: PropTypes.func,
+  onChange: PropTypes.func,
   disabled: PropTypes.bool,
+  isUploaded: PropTypes.bool,
   openDropzone: PropTypes.bool,
   title: PropTypes.string,
 };
