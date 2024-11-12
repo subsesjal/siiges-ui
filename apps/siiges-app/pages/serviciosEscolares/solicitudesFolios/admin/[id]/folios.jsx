@@ -184,8 +184,17 @@ export default function Folios() {
     { field: 'fechaTermino', headerName: 'Fecha de Termino', width: 300 },
   ];
 
+  let title = 'Consultar solicitud';
+  if (estatus === 2) {
+    title = 'Revisar Solicitud';
+  } else if (estatus === 3) {
+    title = 'Envío de Solicitud a Titulación';
+  } else if (estatus === 4) {
+    title = 'Atender Observaciones de Solicitud';
+  }
+
   return (
-    <Layout title="Consultar solicitud">
+    <Layout title={title}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Grid container justifyContent="flex-end">
@@ -254,6 +263,7 @@ export default function Folios() {
           </Grid>
         )}
 
+        {estatus !== 3 && (
         <Grid item xs={12}>
           <Input
             id="observaciones"
@@ -265,6 +275,7 @@ export default function Folios() {
             onChange={handleObservacionesChange}
           />
         </Grid>
+        )}
         <Grid item xs={12}>
           <ButtonsFoliosAdmin
             observaciones={handleObservacionesSubmit}
