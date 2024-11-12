@@ -2,6 +2,8 @@ import { Grid, IconButton } from '@mui/material';
 import { DataTable } from '@siiges-ui/shared';
 import React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
@@ -29,9 +31,16 @@ const columns = [
         );
       };
 
+      let IconComponent = ArticleIcon;
+      if (params.row.estatusSolicitudFolioId === 2) {
+        IconComponent = HourglassEmptyIcon;
+      } else if (params.row.estatusSolicitudFolioId === 3) {
+        IconComponent = CheckCircleIcon;
+      }
+
       return (
         <IconButton onClick={handleAddClick}>
-          <ArticleIcon />
+          <IconComponent />
         </IconButton>
       );
     },
@@ -46,21 +55,23 @@ export default function AdminTable({
   plantel,
   solicitudes,
 }) {
-  const mappedSolicitudes = solicitudes.map((solicitud) => ({
-    id: solicitud.id,
-    folioSolicitud: solicitud.folioSolicitud,
-    programaId: solicitud.programa.id,
-    tipoDocumentoId: solicitud.tipoDocumentoId,
-    tipoSolicitudFolioId: solicitud.tipoSolicitudFolioId,
-    estatusSolicitudFolioId: solicitud.estatusSolicitudFolioId,
-    programaNombre: solicitud.programa ? solicitud.programa.nombre : '',
-    estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio
-      ? solicitud.estatusSolicitudFolio.nombre
-      : '',
-    plantelNombre: solicitud.programa.plantel
-      ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
-      : '',
-  }));
+  const mappedSolicitudes = solicitudes
+    .filter((solicitud) => solicitud.estatusSolicitudFolioId !== 1)
+    .map((solicitud) => ({
+      id: solicitud.id,
+      folioSolicitud: solicitud.folioSolicitud,
+      programaId: solicitud.programa.id,
+      tipoDocumentoId: solicitud.tipoDocumentoId,
+      tipoSolicitudFolioId: solicitud.tipoSolicitudFolioId,
+      estatusSolicitudFolioId: solicitud.estatusSolicitudFolioId,
+      programaNombre: solicitud.programa ? solicitud.programa.nombre : '',
+      estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio
+        ? solicitud.estatusSolicitudFolio.nombre
+        : '',
+      plantelNombre: solicitud.programa.plantel
+        ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
+        : '',
+    }));
 
   const filteredSolicitudes = mappedSolicitudes.filter((solicitud) => {
     const matchesTipoDocumento = !tipoDocumento || solicitud.tipoDocumentoId === tipoDocumento;

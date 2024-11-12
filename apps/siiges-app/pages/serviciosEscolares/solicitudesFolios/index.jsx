@@ -15,7 +15,7 @@ export default function SolicitudesFolios() {
   const [programa, setPrograma] = useState(null);
   const [plantel, setPlantel] = useState(null);
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const isAdmin = session.rol === 'admin';
+  const isAdmin = session.rol === 'admin' || session.rol === 'ce_sicyt';
 
   const fetchData = async () => {
     try {

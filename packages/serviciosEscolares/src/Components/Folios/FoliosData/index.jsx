@@ -30,16 +30,22 @@ const columns = (handleEdit, handleConsult, status) => [
     hide: true,
   },
   { field: 'name', headerName: 'Nombre', width: 250 },
+  { field: 'matricula', headerName: 'Matricula', width: 250 },
   {
     field: 'fechaTerminacion',
-    headerName: 'Fecha de terminación de plan de estudios',
-    width: 350,
+    headerName: 'Terminación de plan de estudios',
+    width: 250,
   },
   {
-    field: 'fechaElaboracion',
-    headerName: 'Fecha de elaboración de certificado',
-    width: 350,
+    field: 'fechaInicio',
+    headerName: 'Inicio de Plan de Estudios',
+    width: 250,
   },
+  { field: 'fundamento', headerName: 'Fundamento S.S.', width: 250 },
+  { field: 'folio', headerName: 'Folio', width: 250 },
+  { field: 'foja', headerName: 'Foja', width: 250 },
+  { field: 'libro', headerName: 'Libro', width: 250 },
+  { field: 'titulacion', headerName: 'Titulacion', width: 250 },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -57,6 +63,27 @@ const columns = (handleEdit, handleConsult, status) => [
       </div>
     ),
   },
+];
+
+const fundamentoLegal = [
+  { id: 1, nombre: 'ART. 52 LRART. 5 CONST' },
+  { id: 2, nombre: 'ART. 55 LRART. 5 CONST' },
+  { id: 3, nombre: 'ART. 91 LRART. 5 CONST' },
+  {
+    id: 4,
+    nombre:
+      'ART. 10 REGLAMENTO PARA LA PRESTACIÓN DEL SERVICIO SOCIAL DE LOS ESTUDIANTES DE LAS INSTITUCIONES DE EDUCACIÓN SUPERIOR EN LA REPÚBLICA MEXICANA',
+  },
+  { id: 5, nombre: 'NO APLICA' },
+];
+
+const modalidadTitulacion = [
+  { id: 1, nombre: 'Por Tesis' },
+  { id: 2, nombre: 'Por Promedio' },
+  { id: 3, nombre: 'Por Estudios de Posgrados' },
+  { id: 4, nombre: 'Por Experiencia Laboral' },
+  { id: 5, nombre: 'Por Ceneval' },
+  { id: 6, nombre: 'Otro' },
 ];
 
 export default function FoliosData({ type }) {
@@ -192,14 +219,29 @@ export default function FoliosData({ type }) {
       getData({ endpoint: `/solicitudesFolios/${id}/alumnos` })
         .then((response) => {
           if (response.data) {
-            const mappedRows = response.data.map((alumnos) => ({
-              id: alumnos.id,
-              name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
-              fechaTerminacion: dayjs(alumnos.fechaTerminacion).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(alumnos.fechaElaboracion).format(
-                'DD/MM/YYYY',
-              ),
-            }));
+            const mappedRows = response.data.map((alumnos) => {
+              const fundamentoObj = fundamentoLegal.find(
+                (f) => f.id === alumnos.fundamentoServicioSocialId,
+              );
+
+              const titulacionObj = modalidadTitulacion.find(
+                (t) => t.id === alumnos.modalidadTitulacionId,
+              );
+
+              return {
+                id: alumnos.id,
+                name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
+                matricula: alumnos.alumno.matricula,
+                fechaTerminacion: dayjs(alumnos.fechaTerminacion).format('DD/MM/YYYY'),
+                fechaInicio: dayjs(alumnos.fechaInicio).format('DD/MM/YYYY'),
+                fundamento: fundamentoObj ? fundamentoObj.nombre : 'Desconocido',
+                folio: alumnos.folioDocumentoAlumno?.folioDocumento,
+                foja: alumnos.folioDocumentoAlumno?.foja?.nombre,
+                libro: alumnos.folioDocumentoAlumno?.libro?.nombre,
+                titulacion: titulacionObj ? titulacionObj.nombre : 'Desconocido',
+              };
+            });
+
             setRows(mappedRows);
             setAlumnosData(response.data);
             setAlumnoResponse(false);
