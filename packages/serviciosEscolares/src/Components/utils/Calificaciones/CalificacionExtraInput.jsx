@@ -16,7 +16,7 @@ export default function CalificacionInput({
   const handleInputChange = (event, newInputValue) => {
     const newValue = newInputValue.toUpperCase().trim();
 
-    if (/^\d+$/.test(newValue) || opcionesValidas.includes(newValue)) {
+    if (/^\d*\.?\d*$/.test(newValue) || opcionesValidas.includes(newValue)) {
       setInputValue(newValue);
       updateCalificaciones(id, newValue);
     } else if (newValue === '') {
