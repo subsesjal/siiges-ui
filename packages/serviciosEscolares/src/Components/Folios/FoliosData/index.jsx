@@ -30,7 +30,7 @@ const columns = (handleEdit, handleConsult, status) => [
     hide: true,
   },
   { field: 'name', headerName: 'Nombre', width: 250 },
-  { field: 'matricula', headerName: 'Matricula', width: 250 },
+  { field: 'matricula', headerName: 'Matrícula', width: 250 },
   {
     field: 'fechaTerminacion',
     headerName: 'Terminación de plan de estudios',

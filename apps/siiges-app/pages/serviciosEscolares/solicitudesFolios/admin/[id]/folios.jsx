@@ -181,7 +181,7 @@ export default function Folios() {
       headerName: 'Fecha de Elaboración',
       width: 300,
     },
-    { field: 'fechaTermino', headerName: 'Fecha de Termino', width: 300 },
+    { field: 'fechaTermino', headerName: 'Fecha de Término', width: 300 },
   ];
 
   let title = 'Consultar solicitud';

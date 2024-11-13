@@ -1,7 +1,7 @@
 const columns = [
   { field: 'tipoContrato', headerName: 'Tipo de contrato', width: 200 },
   { field: 'name', headerName: 'Nombre', width: 200 },
-  { field: 'terminosCondiciones', headerName: 'Terminos y condiciones', width: 200 },
+  { field: 'terminosCondiciones', headerName: 'Términos y condiciones', width: 200 },
   { field: 'usuariosCubiertos', headerName: 'Usuarios cubiertos', width: 200 },
   { field: 'vigencia', headerName: 'Vigencia', width: 200 },
   { field: 'actions', headerName: 'Acciones' },
