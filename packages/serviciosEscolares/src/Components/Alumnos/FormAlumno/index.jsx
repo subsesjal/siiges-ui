@@ -60,7 +60,7 @@ export default function FormAlumno({ type, alumno, setId }) {
         setErrorMail('');
         return true;
       }
-      setErrorMail('El campo Correo no es válido.');
+      setErrorMail('¡El campo Correo no es válido!.');
       return false;
     }
 
@@ -69,7 +69,7 @@ export default function FormAlumno({ type, alumno, setId }) {
         setErrorCurp('');
         return true;
       }
-      setErrorCurp('El CURP debe tener 18 caracteres.');
+      setErrorCurp('¡El CURP debe tener 18 caracteres!.');
       return false;
     }
 

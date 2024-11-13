@@ -12,7 +12,7 @@ export default function CargaMaterias({ filesData, setFilesData }) {
         [name]: { formData, url: URL.createObjectURL(files[0]) },
       }));
     } catch (error) {
-      console.error('Error al procesar el archivo:', error);
+      console.error('¡Error al procesar el archivo!:', error);
     }
   };
 
