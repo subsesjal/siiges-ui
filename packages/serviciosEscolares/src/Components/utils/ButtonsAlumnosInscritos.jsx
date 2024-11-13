@@ -46,7 +46,7 @@ export default function ButtonsAlumnosInscritos({
       } else {
         setNoti({
           open: true,
-          message: result.errorMessage || 'Error al eliminar el alumno.',
+          message: result.errorMessage || '¡Error al eliminar el alumno!.',
           type: 'error',
         });
       }

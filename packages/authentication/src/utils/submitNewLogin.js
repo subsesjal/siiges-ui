@@ -14,7 +14,7 @@ function submitNewLogin(form, errors, setErrorMessages, activateAuth, setLoading
         }
         if (response.status === 404) {
           setErrorMessages({ usuario: errors.usuario });
-          throw new Error('¡No se encontro!');
+          throw new Error('¡No se encontró!');
         }
         if (response.status === 401) {
           setErrorMessages({ contrasena: errors.contrasena });

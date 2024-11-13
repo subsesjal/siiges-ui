@@ -131,7 +131,7 @@ export default function FormEquivalencias() {
       });
 
       if (!response.ok) {
-        throw new Error('Error al enviar el formulario');
+        throw new Error('¡Error al enviar el formulario!');
       }
 
       setNoti({
@@ -143,7 +143,7 @@ export default function FormEquivalencias() {
       console.error('¡Error al enviar el formulario!', error);
       setNoti({
         open: true,
-        message: 'Ocurrió un error al enviar la solicitud, intente de nuevo',
+        message: '¡Ocurrió un error al enviar la solicitud, intente de nuevo!',
         type: 'error',
       });
     }
