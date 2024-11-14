@@ -1,4 +1,4 @@
-import { Button, DataTable } from '@siiges-ui/shared';
+import { DataTable } from '@siiges-ui/shared';
 import React from 'react';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -9,16 +9,12 @@ export default function AlumnosTable({ alumnos, programa }) {
   const router = useRouter();
   return (
     <Grid container sx={{ marginTop: 2 }}>
-      <Grid item xs={12}>
-        <Button
-          text="Agregar Alumno"
-          type="add"
-          onClick={() => {
-            router.push(`/serviciosEscolares/alumnos/${programa}/NuevoAlumno`);
-          }}
-        />
-      </Grid>
       <DataTable
+        buttonAdd
+        buttonText="Agregar Alumno"
+        buttonClick={() => {
+          router.push(`/serviciosEscolares/alumnos/${programa}/NuevoAlumno`);
+        }}
         rows={alumnos}
         columns={columnsAlumnos}
         title="Tabla de alumnos"

@@ -6,8 +6,8 @@ import React, { useState, useEffect, useContext } from 'react';
 
 export default function ProgramasForm({ setProgramas, setLoading }) {
   const { setNoti, session } = useContext(Context);
-  const [selectedInstitucion, setSelectedInstitucion] = useState('');
-  const [selectedPlantel, setSelectedPlantel] = useState('');
+  const [selectedInstitucion, setSelectedInstitucion] = useState(() => localStorage.getItem('selectedInstitucion') || '');
+  const [selectedPlantel, setSelectedPlantel] = useState(() => localStorage.getItem('selectedPlantel') || '');
   const [planteles, setPlanteles] = useState([]);
   const [isPlantelesDisabled, setIsPlantelesDisabled] = useState(true);
 
@@ -22,6 +22,18 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
 
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
+
+  useEffect(() => {
+    if (selectedInstitucion) {
+      localStorage.setItem('selectedInstitucion', selectedInstitucion);
+    }
+  }, [selectedInstitucion]);
+
+  useEffect(() => {
+    if (selectedPlantel) {
+      localStorage.setItem('selectedPlantel', selectedPlantel);
+    }
+  }, [selectedPlantel]);
 
   useEffect(() => {
     if (selectedInstitucion) {

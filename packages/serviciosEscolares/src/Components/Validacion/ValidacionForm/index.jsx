@@ -19,13 +19,12 @@ export default function ValidacionForm({
   });
 
   const { setNoti, session } = useContext(Context);
-
   const [instituciones, setInstituciones] = useState([]);
-  const [selectedInstitucion, setSelectedInstitucion] = useState('');
+  const [selectedInstitucion, setSelectedInstitucion] = useState(() => localStorage.getItem('validacion_selectedInstitucion') || '');
   const [planteles, setPlanteles] = useState([]);
-  const [selectedPlantel, setSelectedPlantel] = useState('');
+  const [selectedPlantel, setSelectedPlantel] = useState(() => localStorage.getItem('validacion_selectedPlantel') || '');
   const [programas, setProgramas] = useState([]);
-  const [selectedPrograma, setSelectedPrograma] = useState('');
+  const [selectedPrograma, setSelectedPrograma] = useState(() => localStorage.getItem('validacion_selectedPrograma') || '');
   const isRepresentante = session.rol === 'representante';
 
   useEffect(() => {
@@ -61,26 +60,25 @@ export default function ValidacionForm({
     });
   };
 
-  useEffect(() => {
-    if (isRepresentante && instituciones?.length) {
-      const findIndexIntitucion = instituciones.findIndex(
-        ({ usuarioId }) => usuarioId === session.id,
-      );
-      const institucionId = instituciones[findIndexIntitucion].id;
-      setSelectedInstitucion(institucionId);
-      setInstitucion(institucionId);
-    }
-  }, [isRepresentante, instituciones]);
-
-  const handleProgramaChange = (event) => {
-    const programaId = event.target.value;
-    setPrograma(programaId);
-    setSelectedPrograma(programaId);
-    if (programaId) {
-      fetchAlumnos(programaId);
-    } else {
-      setAlumnos([]);
-    }
+  const fetchPlanteles = (institucionId) => {
+    getPlantelesByInstitucion(institucionId, (error, data) => {
+      if (error) {
+        setNoti({
+          open: true,
+          message: `¡Error al obtener planteles!: ${error.message}`,
+          type: 'error',
+        });
+        setPlanteles([]);
+      } else {
+        const sortedPlanteles = data.planteles
+          .map((plantel) => ({
+            id: plantel.id,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+          }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        setPlanteles(sortedPlanteles);
+      }
+    });
   };
 
   const fetchProgramas = (plantelId) => {
@@ -99,55 +97,63 @@ export default function ValidacionForm({
             nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
           }))
           .sort((a, b) => a.nombre.localeCompare(b.nombre));
-
         setProgramas(sortedProgramas);
       }
     });
   };
 
-  const handlePlantelChange = (event) => {
-    const plantelId = event.target.value;
-    setSelectedPlantel(plantelId);
-    if (plantelId) {
-      fetchProgramas(plantelId);
-    } else {
-      setProgramas([]);
-    }
-  };
-
-  const fetchPlanteles = (institucionId) => {
-    getPlantelesByInstitucion(institucionId, (error, data) => {
-      if (error) {
-        setNoti({
-          open: true,
-          message: `¡Error al obtener planteles!: ${error.message}`,
-          type: 'error',
-        });
-        setPlanteles([]);
-      } else {
-        const sortedPlanteles = data.planteles
-          .map((plantel) => ({
-            id: plantel.id,
-            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
-          }))
-          .sort((a, b) => a.nombre.localeCompare(b.nombre));
-
-        setPlanteles(sortedPlanteles);
-      }
-    });
-  };
-
-  useEffect(() => {
-    if (selectedInstitucion) {
-      fetchPlanteles(selectedInstitucion);
-    } else setPlanteles([]);
-  }, [selectedInstitucion]);
-
   const handleInstitucionChange = (event) => {
     const institucionId = event.target.value;
     setSelectedInstitucion(institucionId);
     setInstitucion(institucionId);
+    localStorage.setItem('validacion_selectedInstitucion', institucionId);
+    setPlanteles([]);
+    setProgramas([]);
+    setAlumnos([]);
+    fetchPlanteles(institucionId);
   };
+
+  const handlePlantelChange = (event) => {
+    const plantelId = event.target.value;
+    setSelectedPlantel(plantelId);
+    localStorage.setItem('validacion_selectedPlantel', plantelId);
+    setProgramas([]);
+    setAlumnos([]);
+    fetchProgramas(plantelId);
+  };
+
+  const handleProgramaChange = (event) => {
+    const programaId = event.target.value;
+    setPrograma(programaId);
+    setSelectedPrograma(programaId);
+    localStorage.setItem('validacion_selectedPrograma', programaId);
+    fetchAlumnos(programaId);
+  };
+
+  useEffect(() => {
+    if (isRepresentante && instituciones?.length) {
+      const institucionId = instituciones.find(
+        ({ usuarioId }) => usuarioId === session.id,
+      )?.id;
+      if (institucionId) {
+        setSelectedInstitucion(institucionId);
+        setInstitucion(institucionId);
+        fetchPlanteles(institucionId);
+      }
+    }
+  }, [isRepresentante, instituciones]);
+
+  useEffect(() => {
+    if (selectedPlantel) {
+      fetchProgramas(selectedPlantel);
+    }
+  }, [selectedPlantel]);
+
+  useEffect(() => {
+    if (selectedPrograma) {
+      fetchAlumnos(selectedPrograma);
+    }
+  }, [selectedPrograma]);
 
   return (
     <Grid container spacing={2} alignItems="center">
@@ -178,6 +184,7 @@ export default function ValidacionForm({
           value={selectedPrograma}
           options={programas || []}
           onChange={handleProgramaChange}
+          disabled={!selectedPlantel}
         />
       </Grid>
     </Grid>
