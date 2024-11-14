@@ -2,7 +2,13 @@ import React from 'react';
 import FechaExamenInput from '../Components/utils/Calificaciones/FechaExamenInput';
 import CalificacionInput from '../Components/utils/Calificaciones/CalificacionInput';
 
-const columnsInscritosOrdinario = (disabled, updateCalificaciones) => [
+const columnsInscritosOrdinario = (
+  disabled,
+  updateCalificaciones,
+  calificacionMinima,
+  calificacionMaxima,
+  calificacionDecimal,
+) => [
   {
     field: 'matricula',
     headerName: 'Matrícula',
@@ -33,6 +39,9 @@ const columnsInscritosOrdinario = (disabled, updateCalificaciones) => [
           value={calificacion}
           disabled={isDisabled}
           updateCalificaciones={updateCalificaciones}
+          calificacionMinima={calificacionMinima}
+          calificacionMaxima={calificacionMaxima}
+          calificacionDecimal={calificacionDecimal}
         />
       );
     },

@@ -7,9 +7,15 @@ export default function CalificacionInput({
   value,
   disabled,
   updateCalificaciones,
+  calificacionMinima,
+  calificacionMaxima,
+  calificacionDecimal,
 }) {
   const handleChange = (e) => {
-    updateCalificaciones(id, e.target.value, 'calificacion');
+    const newValue = e.target.value;
+    if (newValue < calificacionMinima || newValue > calificacionMaxima) return;
+    if (!calificacionDecimal && newValue.includes('.')) return;
+    updateCalificaciones(id, newValue, 'calificacion');
   };
 
   return (
@@ -34,4 +40,7 @@ CalificacionInput.propTypes = {
   disabled: PropTypes.bool.isRequired,
   value: PropTypes.string,
   updateCalificaciones: PropTypes.func.isRequired,
+  calificacionMinima: PropTypes.number.isRequired,
+  calificacionMaxima: PropTypes.number.isRequired,
+  calificacionDecimal: PropTypes.bool.isRequired,
 };

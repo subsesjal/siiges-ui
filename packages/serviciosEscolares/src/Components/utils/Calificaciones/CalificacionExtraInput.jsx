@@ -4,11 +4,14 @@ import { Autocomplete, TextField, Box } from '@mui/material';
 
 const opcionesValidas = ['NS', 'NP', 'RC', 'SD'];
 
-export default function CalificacionInput({
+export default function CalificacionExtraInput({
   id,
   value,
   disabled,
   updateCalificaciones,
+  calificacionMinima,
+  calificacionMaxima,
+  calificacionDecimal,
 }) {
   const [inputValue, setInputValue] = useState(value);
   const [autoValue, setAutoValue] = useState(value);
@@ -16,9 +19,25 @@ export default function CalificacionInput({
   const handleInputChange = (event, newInputValue) => {
     const newValue = newInputValue.toUpperCase().trim();
 
-    if (/^\d*\.?\d*$/.test(newValue) || opcionesValidas.includes(newValue)) {
+    // Validar opciones válidas
+    if (opcionesValidas.includes(newValue)) {
       setInputValue(newValue);
       updateCalificaciones(id, newValue);
+      return;
+    }
+
+    // Validar si es un número dentro del rango y formato adecuado
+    if (/^\d*\.?\d*$/.test(newValue) && !isNaN(newValue)) {
+      const numericValue = parseFloat(newValue);
+
+      if (
+        numericValue >= calificacionMinima
+        && numericValue <= calificacionMaxima
+        && (calificacionDecimal || Number.isInteger(numericValue))
+      ) {
+        setInputValue(newValue);
+        updateCalificaciones(id, newValue);
+      }
     } else if (newValue === '') {
       setInputValue('');
       updateCalificaciones(id, '');
@@ -54,13 +73,16 @@ export default function CalificacionInput({
   );
 }
 
-CalificacionInput.defaultProps = {
+CalificacionExtraInput.defaultProps = {
   value: '',
 };
 
-CalificacionInput.propTypes = {
+CalificacionExtraInput.propTypes = {
   id: PropTypes.number.isRequired,
   disabled: PropTypes.bool.isRequired,
   value: PropTypes.string,
   updateCalificaciones: PropTypes.func.isRequired,
+  calificacionMinima: PropTypes.number.isRequired,
+  calificacionMaxima: PropTypes.number.isRequired,
+  calificacionDecimal: PropTypes.bool.isRequired,
 };
