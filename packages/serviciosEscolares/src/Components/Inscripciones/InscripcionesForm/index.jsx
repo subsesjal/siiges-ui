@@ -20,6 +20,8 @@ import getAsignaturas from '@siiges-ui/instituciones/src/utils/getAsignaturas';
 import CicloEscolarModal from './Modals/CicloEscolarModal';
 import GruposModal from '../../utils/GruposModal';
 
+const LOCAL_STORAGE_KEY = 'inscripcionFormState';
+
 export default function InscripcionForm({
   setAsignaturas,
   setProgramaId,
@@ -38,7 +40,7 @@ export default function InscripcionForm({
 
   const isRepresentante = session.rol === 'representante';
 
-  const [state, setState] = useState({
+  const initialState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {
     selectedInstitucion: '',
     selectedPlantel: '',
     selectedPrograma: '',
@@ -55,15 +57,12 @@ export default function InscripcionForm({
     labelGrupo: '',
     labelTurno: '',
     labelCicloEscolar: '',
-  });
+  };
+
+  const [state, setState] = useState(initialState);
 
   const [fetchGruposTrigger, setFetchGruposTrigger] = useState(false);
 
-  const resetDependentFields = (fieldsToReset) => {
-    setState((prevState) => ({ ...prevState, ...fieldsToReset }));
-  };
-
-  // Fetch Functions
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
       if (error) {
@@ -107,141 +106,126 @@ export default function InscripcionForm({
     });
   };
 
-  const fetchCiclosEscolares = async (programaId) => {
-    try {
-      const { ciclosEscolares } = await getCiclosEscolares(programaId);
-      setState((prevState) => ({ ...prevState, ciclosEscolares }));
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: `¡Error al obtener ciclos escolares!: ${error.message}`,
-        type: 'error',
-      });
-    }
+  const fetchCiclosEscolares = (programaId) => {
+    getCiclosEscolares(programaId, (error, data) => {
+      if (error) {
+        setNoti({
+          open: true,
+          message: `¡Error al obtener ciclos escolares!: ${error.message}`,
+          type: 'error',
+        });
+        setState((prevState) => ({ ...prevState, ciclosEscolares: [] }));
+      } else {
+        setState((prevState) => ({ ...prevState, ciclosEscolares: data.ciclosEscolares }));
+      }
+    });
   };
 
-  const fetchGrados = async () => {
-    try {
-      const { grados } = await getGrados(state.selectedPrograma);
-      const filteredGrados = grados.filter((grado) => {
-        const nombre = grado.nombre.toLowerCase();
-        return nombre !== 'optativa' && nombre !== 'optativas';
-      });
-      setState((prevState) => ({ ...prevState, grados: filteredGrados }));
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: `¡Error al obtener grados!: ${error.message}`,
-        type: 'error',
-      });
-    }
+  const fetchGrados = () => {
+    getGrados(state.selectedPrograma, (error, data) => {
+      if (error) {
+        setNoti({
+          open: true,
+          message: `¡Error al obtener grados!: ${error.message}`,
+          type: 'error',
+        });
+        setState((prevState) => ({ ...prevState, grados: [] }));
+      } else {
+        const filteredGrados = data.grados.filter((grado) => {
+          const nombre = grado.nombre.toLowerCase();
+          return nombre !== 'optativa' && nombre !== 'optativas';
+        });
+        setState((prevState) => ({ ...prevState, grados: filteredGrados }));
+      }
+    });
   };
 
-  const fetchGrupos = async (gradoId) => {
-    try {
-      const { grupos } = await getGrupos(gradoId, state.selectedCicloEscolar);
-      const transformedGrupos = grupos.map((grupo) => ({
-        id: grupo.id,
-        nombre: grupo.descripcion,
-        turnoId: grupo.turnoId,
-      }));
-      setState((prevState) => ({ ...prevState, grupos: transformedGrupos }));
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: `¡Error al obtener grupos!: ${error.message}`,
-        type: 'error',
-      });
-    }
+  const fetchGrupos = (gradoId) => {
+    getGrupos(gradoId, state.selectedCicloEscolar, (error, data) => {
+      if (error) {
+        setNoti({
+          open: true,
+          message: `¡Error al obtener grupos!: ${error.message}`,
+          type: 'error',
+        });
+        setState((prevState) => ({ ...prevState, grupos: [] }));
+      } else {
+        const transformedGrupos = data.grupos.map((grupo) => ({
+          id: grupo.id,
+          nombre: grupo.descripcion,
+          turnoId: grupo.turnoId,
+        }));
+        setState((prevState) => ({ ...prevState, grupos: transformedGrupos }));
+      }
+    });
   };
 
-  const fetchAsignaturas = async (gradoId) => {
-    try {
-      const { asignaturas } = await getAsignaturas(gradoId, state.selectedPrograma);
-      setAsignaturas(asignaturas);
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: `¡Error al obtener asignaturas!: ${error.message}`,
-        type: 'error',
-      });
-      setAsignaturas([]);
-    }
+  const fetchAsignaturas = (gradoId) => {
+    getAsignaturas(gradoId, state.selectedPrograma, (error, data) => {
+      if (error) {
+        setNoti({
+          open: true,
+          message: `¡Error al obtener asignaturas!: ${error.message}`,
+          type: 'error',
+        });
+        setAsignaturas([]);
+      } else {
+        setAsignaturas(data.asignaturas);
+      }
+    });
   };
 
-  // Event Handlers
-  const handleInstitucionChange = async (institucionId) => {
-    resetDependentFields({
+  const handleInstitucionChange = (institucionId) => {
+    setState((prevState) => ({
+      ...prevState,
       selectedInstitucion: institucionId,
       selectedPlantel: '',
-      programas: [],
-      selectedPrograma: '',
-      ciclosEscolares: [],
-      selectedCicloEscolar: '',
-      grados: [],
-      selectedGrado: '',
-      grupos: [],
-      selectedGrupo: '',
-    });
-    if (institucionId) await fetchPlanteles(institucionId);
+    }));
+    if (institucionId) fetchPlanteles(institucionId);
   };
 
-  const handlePlantelChange = async (plantelId) => {
-    resetDependentFields({
+  const handlePlantelChange = (plantelId) => {
+    setState((prevState) => ({
+      ...prevState,
       selectedPlantel: plantelId,
       selectedPrograma: '',
-      ciclosEscolares: [],
-      selectedCicloEscolar: '',
-      grados: [],
-      selectedGrado: '',
-      grupos: [],
-      selectedGrupo: '',
-    });
-    if (plantelId) await fetchProgramas(plantelId);
+    }));
+    if (plantelId) fetchProgramas(plantelId);
   };
 
-  const handleProgramaChange = async (programaId) => {
+  const handleProgramaChange = (programaId) => {
     const selectedProgramaObj = state.programas.find((programa) => programa.id === programaId);
-    resetDependentFields({
+    setState((prevState) => ({
+      ...prevState,
       selectedPrograma: programaId,
       labelPrograma: selectedProgramaObj ? selectedProgramaObj.nombre : '',
-      ciclosEscolares: [],
-      selectedCicloEscolar: '',
-      grados: [],
-      selectedGrado: '',
-      grupos: [],
-      selectedGrupo: '',
-    });
+    }));
     if (programaId) {
-      await fetchCiclosEscolares(programaId);
+      fetchCiclosEscolares(programaId);
       setProgramaId(programaId);
     }
   };
 
-  const handleCicloEscolarChange = async (cicloEscolarId) => {
+  const handleCicloEscolarChange = (cicloEscolarId) => {
     const selectedCicloObj = state.ciclosEscolares.find((ciclo) => ciclo.id === cicloEscolarId);
-    resetDependentFields({
+    setState((prevState) => ({
+      ...prevState,
       selectedCicloEscolar: cicloEscolarId,
       labelCicloEscolar: selectedCicloObj ? selectedCicloObj.nombre : '',
-      grados: [],
-      selectedGrado: '',
-      grupos: [],
-      selectedGrupo: '',
-    });
-    if (cicloEscolarId) await fetchGrados();
+    }));
+    if (cicloEscolarId) fetchGrados();
   };
 
-  const handleGradoChange = async (gradoId) => {
+  const handleGradoChange = (gradoId) => {
     const selectedGradoObj = state.grados.find((grado) => grado.id === gradoId);
-    resetDependentFields({
+    setState((prevState) => ({
+      ...prevState,
       selectedGrado: gradoId,
       labelGrado: selectedGradoObj ? selectedGradoObj.nombre : '',
-      grupos: [],
-      selectedGrupo: '',
-    });
+    }));
     if (gradoId) {
-      await fetchGrupos(gradoId);
-      await fetchAsignaturas(gradoId);
+      fetchGrupos(gradoId);
+      fetchAsignaturas(gradoId);
     }
   };
 
@@ -257,7 +241,6 @@ export default function InscripcionForm({
     setGrupoId(grupoId);
   };
 
-  // useEffect for automatic institution selection if representative
   useEffect(() => {
     if (isRepresentante && instituciones?.length) {
       const institution = instituciones.find(({ usuarioId }) => usuarioId === session.id);
@@ -265,7 +248,6 @@ export default function InscripcionForm({
     }
   }, [isRepresentante, instituciones]);
 
-  // useEffect for fetching groups when triggered
   useEffect(() => {
     if (fetchGruposTrigger) {
       fetchGrupos(state.selectedGrado);
@@ -292,7 +274,7 @@ export default function InscripcionForm({
             name="planteles"
             value={state.selectedPlantel}
             options={state.planteles || []}
-            onChange={handlePlantelChange}
+            onChange={(event) => handlePlantelChange(event.target.value)}
             disabled={!state.selectedInstitucion}
           />
         </Grid>
@@ -302,7 +284,7 @@ export default function InscripcionForm({
             name="programas"
             value={state.selectedPrograma}
             options={state.programas || []}
-            onChange={handleProgramaChange}
+            onChange={(event) => handleProgramaChange(event.target.value)}
             disabled={!state.selectedPlantel}
           />
         </Grid>
@@ -312,7 +294,7 @@ export default function InscripcionForm({
             name="ciclosEscolares"
             value={state.selectedCicloEscolar}
             options={state.ciclosEscolares || []}
-            onChange={handleCicloEscolarChange}
+            onChange={(event) => handleCicloEscolarChange(event.target.value)}
             disabled={!state.selectedPrograma}
             onAddClick={() => {
               setOpen(true);
@@ -325,7 +307,7 @@ export default function InscripcionForm({
             name="grados"
             value={state.selectedGrado}
             options={state.grados || []}
-            onChange={handleGradoChange}
+            onChange={(event) => handleGradoChange(event.target.value)}
             disabled={!state.selectedCicloEscolar}
           />
         </Grid>
@@ -335,7 +317,7 @@ export default function InscripcionForm({
             name="Grupos"
             value={state.selectedGrupo}
             options={state.grupos || []}
-            onChange={handleGrupoChange}
+            onChange={(event) => handleGrupoChange(event.target.value)}
             disabled={!state.selectedGrado}
             onAddClick={() => {
               setOpenGrupos(true);
