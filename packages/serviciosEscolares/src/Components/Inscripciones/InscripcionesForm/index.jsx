@@ -63,6 +63,10 @@ export default function InscripcionForm({
 
   const [fetchGruposTrigger, setFetchGruposTrigger] = useState(false);
 
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+  }, [state]);
+
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
       if (error) {
@@ -179,7 +183,6 @@ export default function InscripcionForm({
     setState((prevState) => ({
       ...prevState,
       selectedInstitucion: institucionId,
-      selectedPlantel: '',
     }));
     if (institucionId) fetchPlanteles(institucionId);
   };
@@ -188,7 +191,6 @@ export default function InscripcionForm({
     setState((prevState) => ({
       ...prevState,
       selectedPlantel: plantelId,
-      selectedPrograma: '',
     }));
     if (plantelId) fetchProgramas(plantelId);
   };
