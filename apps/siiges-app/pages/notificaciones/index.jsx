@@ -44,7 +44,7 @@ function ModalState() {
 
 export default function Notificaciones() {
   const { session } = useContext(Context);
-  const { rol } = session;
+  const { rol, id } = session;
   const [rows, setRows] = useState([]);
 
   const {
@@ -53,7 +53,8 @@ export default function Notificaciones() {
 
   useEffect(() => {
     const fetchNotificaciones = async () => {
-      const response = await getData({ endpoint: '/notificaciones' });
+      const endpoint = rol === 'admin' ? '/notificaciones' : `/notificaciones/usuarios/${id}`;
+      const response = await getData({ endpoint });
       if (response.statusCode === 200) {
         const formattedRows = response.data.map((notificacion) => ({
           id: notificacion.id,
@@ -71,11 +72,12 @@ export default function Notificaciones() {
     };
 
     fetchNotificaciones();
-  }, [rol]);
+  }, [rol, id]);
 
   const commonColumns = [
     { field: 'asunto', headerName: 'Asunto', width: 300 },
-    { field: 'notificacion', headerName: 'Notificación', width: 650 },
+    { field: 'notificacion', headerName: 'Notificación', width: 400 },
+    { field: 'estatus', headerName: 'Estatus', width: 250 },
     {
       field: 'actions',
       headerName: 'Acciones',
