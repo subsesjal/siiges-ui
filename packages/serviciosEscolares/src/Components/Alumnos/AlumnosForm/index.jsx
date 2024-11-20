@@ -15,14 +15,14 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
     tipoInstitucionId: 1,
     setLoading,
   });
-
   const { setNoti, session } = useContext(Context);
 
-  const [selectedInstitucion, setSelectedInstitucion] = useState('');
+  const [selectedInstitucion, setSelectedInstitucion] = useState(() => localStorage.getItem('alumnos_selectedInstitucion') || '');
+  const [selectedPlantel, setSelectedPlantel] = useState(() => localStorage.getItem('alumnos_selectedPlantel') || '');
+  const [selectedPrograma, setSelectedPrograma] = useState(() => localStorage.getItem('alumnos_selectedPrograma') || '');
+
   const [planteles, setPlanteles] = useState([]);
-  const [selectedPlantel, setSelectedPlantel] = useState('');
   const [programas, setProgramas] = useState([]);
-  const [selectedPrograma, setSelectedPrograma] = useState('');
   const isRepresentante = session.rol === 'representante';
 
   const fetchAlumnos = (programaId) => {
@@ -127,6 +127,26 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
       fetchPlanteles(selectedInstitucion);
     } else setPlanteles([]);
   }, [selectedInstitucion]);
+
+  useEffect(() => {
+    if (selectedInstitucion) {
+      localStorage.setItem('alumnos_selectedInstitucion', selectedInstitucion);
+    }
+  }, [selectedInstitucion]);
+
+  useEffect(() => {
+    if (selectedPlantel) {
+      localStorage.setItem('alumnos_selectedPlantel', selectedPlantel);
+      fetchProgramas(selectedPlantel);
+    }
+  }, [selectedPlantel]);
+
+  useEffect(() => {
+    if (selectedPrograma) {
+      localStorage.setItem('alumnos_selectedPrograma', selectedPrograma);
+      fetchAlumnos(selectedPrograma);
+    }
+  }, [selectedPrograma]);
 
   return (
     <Grid container spacing={2} alignItems="center">
