@@ -47,11 +47,6 @@ export default function InscripcionForm({
     selectedCicloEscolar: '',
     selectedGrado: '',
     selectedGrupo: '',
-    ciclosEscolares: [],
-    planteles: [],
-    programas: [],
-    grados: [],
-    grupos: [],
     labelPrograma: '',
     labelGrado: '',
     labelGrupo: '',
@@ -60,6 +55,13 @@ export default function InscripcionForm({
   };
 
   const [state, setState] = useState(initialState);
+  const [arrays, setArrays] = useState({
+    planteles: [],
+    programas: [],
+    ciclosEscolares: [],
+    grados: [],
+    grupos: [],
+  });
 
   const [fetchGruposTrigger, setFetchGruposTrigger] = useState(false);
 
@@ -75,7 +77,7 @@ export default function InscripcionForm({
           message: `¡Error al obtener planteles!: ${error.message}`,
           type: 'error',
         });
-        setState((prevState) => ({ ...prevState, planteles: [] }));
+        setArrays((prevState) => ({ ...prevState, planteles: [] }));
       } else {
         const sortedPlanteles = data.planteles
           .map((plantel) => ({
@@ -83,7 +85,7 @@ export default function InscripcionForm({
             nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
           }))
           .sort((a, b) => a.nombre.localeCompare(b.nombre));
-        setState((prevState) => ({ ...prevState, planteles: sortedPlanteles }));
+        setArrays((prevState) => ({ ...prevState, planteles: sortedPlanteles }));
       }
     });
   };
@@ -96,7 +98,7 @@ export default function InscripcionForm({
           message: `¡Error al obtener programas!: ${error.message}`,
           type: 'error',
         });
-        setState((prevState) => ({ ...prevState, programas: [] }));
+        setArrays((prevState) => ({ ...prevState, programas: [] }));
       } else {
         const sortedProgramas = data.programas
           .map((programa) => ({
@@ -105,7 +107,7 @@ export default function InscripcionForm({
             turno: programa.turno,
           }))
           .sort((a, b) => a.nombre.localeCompare(b.nombre));
-        setState((prevState) => ({ ...prevState, programas: sortedProgramas }));
+        setArrays((prevState) => ({ ...prevState, programas: sortedProgramas }));
       }
     });
   };
@@ -118,9 +120,9 @@ export default function InscripcionForm({
           message: `¡Error al obtener ciclos escolares!: ${error.message}`,
           type: 'error',
         });
-        setState((prevState) => ({ ...prevState, ciclosEscolares: [] }));
+        setArrays((prevState) => ({ ...prevState, ciclosEscolares: [] }));
       } else {
-        setState((prevState) => ({ ...prevState, ciclosEscolares: data.ciclosEscolares }));
+        setArrays((prevState) => ({ ...prevState, ciclosEscolares: data.ciclosEscolares }));
       }
     });
   };
@@ -133,13 +135,13 @@ export default function InscripcionForm({
           message: `¡Error al obtener grados!: ${error.message}`,
           type: 'error',
         });
-        setState((prevState) => ({ ...prevState, grados: [] }));
+        setArrays((prevState) => ({ ...prevState, grados: [] }));
       } else {
         const filteredGrados = data.grados.filter((grado) => {
           const nombre = grado.nombre.toLowerCase();
           return nombre !== 'optativa' && nombre !== 'optativas';
         });
-        setState((prevState) => ({ ...prevState, grados: filteredGrados }));
+        setArrays((prevState) => ({ ...prevState, grados: filteredGrados }));
       }
     });
   };
@@ -152,14 +154,14 @@ export default function InscripcionForm({
           message: `¡Error al obtener grupos!: ${error.message}`,
           type: 'error',
         });
-        setState((prevState) => ({ ...prevState, grupos: [] }));
+        setArrays((prevState) => ({ ...prevState, grupos: [] }));
       } else {
         const transformedGrupos = data.grupos.map((grupo) => ({
           id: grupo.id,
           nombre: grupo.descripcion,
           turnoId: grupo.turnoId,
         }));
-        setState((prevState) => ({ ...prevState, grupos: transformedGrupos }));
+        setArrays((prevState) => ({ ...prevState, grupos: transformedGrupos }));
       }
     });
   };
@@ -196,7 +198,7 @@ export default function InscripcionForm({
   };
 
   const handleProgramaChange = (programaId) => {
-    const selectedProgramaObj = state.programas.find((programa) => programa.id === programaId);
+    const selectedProgramaObj = arrays.programas.find((programa) => programa.id === programaId);
     setState((prevState) => ({
       ...prevState,
       selectedPrograma: programaId,
@@ -209,7 +211,7 @@ export default function InscripcionForm({
   };
 
   const handleCicloEscolarChange = (cicloEscolarId) => {
-    const selectedCicloObj = state.ciclosEscolares.find((ciclo) => ciclo.id === cicloEscolarId);
+    const selectedCicloObj = arrays.ciclosEscolares.find((ciclo) => ciclo.id === cicloEscolarId);
     setState((prevState) => ({
       ...prevState,
       selectedCicloEscolar: cicloEscolarId,
@@ -219,7 +221,7 @@ export default function InscripcionForm({
   };
 
   const handleGradoChange = (gradoId) => {
-    const selectedGradoObj = state.grados.find((grado) => grado.id === gradoId);
+    const selectedGradoObj = arrays.grados.find((grado) => grado.id === gradoId);
     setState((prevState) => ({
       ...prevState,
       selectedGrado: gradoId,
@@ -232,7 +234,7 @@ export default function InscripcionForm({
   };
 
   const handleGrupoChange = (grupoId) => {
-    const selectedGrupoObj = state.grupos.find((grupo) => grupo.id === grupoId);
+    const selectedGrupoObj = arrays.grupos.find((grupo) => grupo.id === grupoId);
     const turno = getTurnoById(selectedGrupoObj.turnoId, 'nombre');
     setState((prevState) => ({
       ...prevState,
@@ -257,6 +259,47 @@ export default function InscripcionForm({
     }
   }, [fetchGruposTrigger, state.selectedGrado]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (state.selectedInstitucion) {
+          await fetchPlanteles(state.selectedInstitucion);
+        }
+        if (state.selectedPlantel) {
+          await fetchProgramas(state.selectedPlantel);
+        }
+        if (state.selectedPrograma) {
+          await fetchCiclosEscolares(state.selectedPrograma);
+          setProgramaId(state.selectedPrograma);
+        }
+        if (state.selectedCicloEscolar) {
+          await fetchGrados();
+        }
+        if (state.selectedGrado) {
+          await fetchGrupos(state.selectedGrado);
+          await fetchAsignaturas(state.selectedGrado);
+        }
+        if (state.selectedGrupo) {
+          setGrupoId(state.selectedGrupo);
+        }
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: `¡Error al cargar datos: ${error.message}`,
+          type: 'error',
+        });
+      }
+    };
+
+    fetchData();
+  }, [
+    state.selectedInstitucion,
+    state.selectedPlantel,
+    state.selectedPrograma,
+    state.selectedCicloEscolar,
+    state.selectedGrado,
+  ]);
+
   return (
     <>
       <Grid container spacing={2} alignItems="center">
@@ -275,7 +318,7 @@ export default function InscripcionForm({
             title="Planteles"
             name="planteles"
             value={state.selectedPlantel}
-            options={state.planteles || []}
+            options={arrays.planteles || []}
             onChange={(event) => handlePlantelChange(event.target.value)}
             disabled={!state.selectedInstitucion}
           />
@@ -285,7 +328,7 @@ export default function InscripcionForm({
             title="Programas"
             name="programas"
             value={state.selectedPrograma}
-            options={state.programas || []}
+            options={arrays.programas || []}
             onChange={(event) => handleProgramaChange(event.target.value)}
             disabled={!state.selectedPlantel}
           />
@@ -295,7 +338,7 @@ export default function InscripcionForm({
             title="Ciclos Escolares"
             name="ciclosEscolares"
             value={state.selectedCicloEscolar}
-            options={state.ciclosEscolares || []}
+            options={arrays.ciclosEscolares || []}
             onChange={(event) => handleCicloEscolarChange(event.target.value)}
             disabled={!state.selectedPrograma}
             onAddClick={() => {
@@ -308,7 +351,7 @@ export default function InscripcionForm({
             title="Grados"
             name="grados"
             value={state.selectedGrado}
-            options={state.grados || []}
+            options={arrays.grados || []}
             onChange={(event) => handleGradoChange(event.target.value)}
             disabled={!state.selectedCicloEscolar}
           />
@@ -318,7 +361,7 @@ export default function InscripcionForm({
             title="Grupos"
             name="Grupos"
             value={state.selectedGrupo}
-            options={state.grupos || []}
+            options={arrays.grupos || []}
             onChange={(event) => handleGrupoChange(event.target.value)}
             disabled={!state.selectedGrado}
             onAddClick={() => {
