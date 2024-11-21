@@ -31,6 +31,12 @@ export default function ModalCertificado({
   const [disabledButton, setDisabledButton] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
 
+  useEffect(() => {
+    if (open && type === 'create') {
+      setForm({});
+    }
+  }, [open]);
+
   const validateForm = () => {
     const isValid = alumno && form.fechaElaboracion && form.fechaTerminacion;
     setDisabledButton(!isValid || disabled);
@@ -107,16 +113,31 @@ export default function ModalCertificado({
     const action = type === 'edit' ? updateRecord : createRecord;
 
     try {
-      await action({ data: formattedForm, endpoint });
-      setNoti({
-        open: true,
-        message: type === 'edit'
-          ? 'Registro actualizado exitosamente'
-          : 'Registro creado exitosamente',
-        type: 'success',
-      });
-      setAlumnoResponse(true);
-      setOpen(false);
+      const response = await action({ data: formattedForm, endpoint });
+
+      if (response.statusCode === 201) {
+        setNoti({
+          open: true,
+          message: type === 'edit'
+            ? 'Registro actualizado exitosamente'
+            : 'Registro creado exitosamente',
+          type: 'success',
+        });
+        setAlumnoResponse(true);
+        setOpen(false);
+      } else if (response.statusCode === 409) {
+        setNoti({
+          open: true,
+          message: 'El alumno que intentó agregar aún no está validado',
+          type: 'error',
+        });
+      } else {
+        setNoti({
+          open: true,
+          message: `¡Ocurrió un error inesperado! Código de error: ${response.statusCode}`,
+          type: 'error',
+        });
+      }
     } catch (error) {
       setNoti({
         open: true,
@@ -142,7 +163,7 @@ export default function ModalCertificado({
             id="matricula"
             name="matricula"
             value={form.matricula || ''}
-            onBlur={handleBlur}
+            onblur={handleBlur}
             onChange={handleChange}
             disabled={disabled}
           />
