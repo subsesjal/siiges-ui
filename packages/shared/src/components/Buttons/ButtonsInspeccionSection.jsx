@@ -1,11 +1,11 @@
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useRouter } from 'next/router';
 
 import '../../styles/buttons/ButtonAdd.css';
+import ButtonSimple from './ButtonSimple';
 
 export default function ButtonsInspeccionSection({
   prev,
@@ -21,32 +21,29 @@ export default function ButtonsInspeccionSection({
   return (
     <Grid container justifyContent="space-between" spacing={2}>
       <Grid item>
-        <ButtonUnstyled
-          className="buttonAdd cancel"
+        <ButtonSimple
+          design="cancel"
           onClick={() => router.back()}
-        >
-          <Typography variant="body1">Cancelar</Typography>
-        </ButtonUnstyled>
+          text="Cancelar"
+        />
       </Grid>
       <Grid item>
         <Grid container justifyContent="flex-end" spacing={2}>
           {!isStartPosition && (
             <Grid item>
-              <ButtonUnstyled className="buttonAdd guardar" onClick={prev}>
+              <ButtonSimple onClick={prev}>
                 <NavigateNextIcon style={{ transform: 'rotate(180deg)' }} />
-              </ButtonUnstyled>
+              </ButtonSimple>
             </Grid>
           )}
           <Grid item>
-            <ButtonUnstyled className="buttonAdd guardar" onClick={confirm}>
-              <Typography variant="body1">{confirmText}</Typography>
-            </ButtonUnstyled>
+            <ButtonSimple onClick={confirm} text={confirmText} />
           </Grid>
           {!isEndPosition && (
             <Grid item>
-              <ButtonUnstyled className="buttonAdd guardar" onClick={next}>
+              <ButtonSimple className="buttonAdd guardar" onClick={next}>
                 <NavigateNextIcon />
-              </ButtonUnstyled>
+              </ButtonSimple>
             </Grid>
           )}
         </Grid>

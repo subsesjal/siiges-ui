@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { ButtonStyled, Input, DataTable } from '@siiges-ui/shared';
+import { ButtonSimple, Input, DataTable } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import columns from '../Mocks/inspectores';
@@ -100,7 +100,7 @@ export default function FormAsignacionInspecciones({ solicitud }) {
         />
       </Grid>
       <Grid item xs={12} sx={{ textAlign: 'right', margin: 2 }}>
-        <ButtonStyled text="Terminar" alt="Confirmar" />
+        <ButtonSimple text="Terminar" alt="Confirmar" />
       </Grid>
     </Grid>
   );

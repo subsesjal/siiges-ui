@@ -1,9 +1,13 @@
 import { Grid, TextField, Typography } from '@mui/material';
 import {
-  ButtonSimple, Input, LabelData, Layout, Select, useApi,
+  ButtonSimple,
+  Input,
+  LabelData,
+  Layout,
+  Select,
+  useApi,
 } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { useRouter } from 'next/router';
 import { sessionData, periodData } from '@siiges-ui/opds/src/utils/constants';
 
@@ -19,7 +23,6 @@ export default function presupuesto() {
   const [enableText, setEnableText] = useState(true);
   const [form, setForm] = useState({});
 
-  // API parameters state
   const [path, setPath] = useState();
   const [method, setMethod] = useState('GET');
   const [body, setBody] = useState(null);
@@ -238,20 +241,17 @@ export default function presupuesto() {
         )}
         <Grid container justifyContent="flex-end" spacing={2} marginTop={1}>
           <Grid item>
-            <ButtonUnstyled
-              className="buttonAdd cancel"
+            <ButtonSimple
+              text="Cancelar"
+              design="cancel"
               onClick={() => router.back()}
-            >
-              Cancelar
-            </ButtonUnstyled>
+            />
           </Grid>
           <Grid item>
-            <ButtonUnstyled
-              className="buttonAdd guardar"
+            <ButtonSimple
+              text="Guardar"
               onClick={() => enableText && createPresupuesto()}
-            >
-              Guardar
-            </ButtonUnstyled>
+            />
           </Grid>
         </Grid>
       </Grid>

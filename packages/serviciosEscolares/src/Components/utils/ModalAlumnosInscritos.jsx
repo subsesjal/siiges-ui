@@ -1,5 +1,5 @@
 import {
-  ButtonStyled,
+  ButtonSimple,
   Context,
   DataTable,
   DefaultModal,
@@ -104,28 +104,25 @@ export default function ModalAlumnosInscritos({
       <Grid container justifyContent="flex-end" marginTop={2}>
         {title === 'Consultar Alumno' ? (
           <Grid item xs={2}>
-            <ButtonStyled
+            <ButtonSimple
               text="Cerrar"
-              alt="Cerrar"
-              onclick={() => setOpen(false)}
+              onClick={() => setOpen(false)}
             />
           </Grid>
         ) : (
           <>
             <Grid item xs={2}>
-              <ButtonStyled
+              <ButtonSimple
                 text="Cancelar"
-                alt="Cancelar"
-                design="error"
-                onclick={() => setOpen(false)}
+                design="cancel"
+                onClick={() => setOpen(false)}
               />
             </Grid>
             {selectedAsignaturas.length > 0 && (
               <Grid item xs={2}>
-                <ButtonStyled
+                <ButtonSimple
                   text="Confirmar"
-                  alt="Confirmar"
-                  onclick={handleInscribirAlumno}
+                  onClick={handleInscribirAlumno}
                 />
               </Grid>
             )}

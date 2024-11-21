@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
-  Context, DefaultModal, ButtonStyled, deleteRecord,
+  Context, DefaultModal, ButtonSimple, deleteRecord,
 } from '@siiges-ui/shared';
 import ModalAlumnosInscritos from './ModalAlumnosInscritos';
 
@@ -33,7 +33,6 @@ export default function ButtonsAlumnosInscritos({
       const result = await deleteRecord({
         endpoint: `/alumnos/${id}/grupos/${grupoId}/inscripcion`,
       });
-
 
       if (result.statusCode === 200) {
         setNoti({
@@ -143,18 +142,16 @@ export default function ButtonsAlumnosInscritos({
             </Box>
             <Box display="flex" justifyContent="flex-end" marginTop={2}>
               <Box sx={{ marginRight: 2 }}>
-                <ButtonStyled
+                <ButtonSimple
                   text="Cancelar"
-                  alt="Cancelar"
-                  design="error"
-                  onclick={() => setOpenDeleteModal(false)}
+                  design="cancel"
+                  onClick={() => setOpenDeleteModal(false)}
                 />
               </Box>
               <Box>
-                <ButtonStyled
+                <ButtonSimple
                   text="Confirmar"
-                  alt="Confirmar"
-                  onclick={handleDeleteConfirm}
+                  onClick={handleDeleteConfirm}
                 />
               </Box>
             </Box>

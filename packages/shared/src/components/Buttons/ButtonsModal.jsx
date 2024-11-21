@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import '../../styles/buttons/ButtonAdd.css';
+import ButtonSimple from './ButtonSimple';
 
 export default function ButtonsModal({ confirm, cancel, edit }) {
   const [cancelText, setCancelText] = useState('Regresar');
@@ -14,15 +14,11 @@ export default function ButtonsModal({ confirm, cancel, edit }) {
   return (
     <Grid container justifyContent="flex-end" spacing={2}>
       <Grid item>
-        <ButtonUnstyled className="buttonAdd cancel" onClick={cancel}>
-          {cancelText}
-        </ButtonUnstyled>
+        <ButtonSimple design="cancel" onClick={cancel} text={cancelText} />
       </Grid>
       {edit && (
         <Grid item>
-          <ButtonUnstyled className="buttonAdd guardar" onClick={confirm}>
-            Guardar
-          </ButtonUnstyled>
+          <ButtonSimple onClick={confirm} text="Guardar" />
         </Grid>
       )}
     </Grid>

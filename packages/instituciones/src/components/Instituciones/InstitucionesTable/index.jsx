@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import {
-  DataTable, DefaultModal, ButtonStyled,
+  DataTable, DefaultModal, ButtonSimple,
 } from '@siiges-ui/shared';
 import institucionesColumns from '../../Tables/institucionesColumns';
-// import { deleteInstitucion } from '../../../utils/institucionHandler';
 
 const formattedRows = (instituciones) => instituciones.map((institucion) => ({
   id: institucion.id,
@@ -65,29 +64,25 @@ export default function InstitucionesTable({ instituciones, session }) {
         </Typography>
         <Grid container spacing={2} justifyContent="flex-end">
           <Grid item>
-            <ButtonStyled
+            <ButtonSimple
               text="Cancelar"
               alt="Cancelar"
-              onclick={hideModal}
+              onClick={hideModal}
             >
               Cancelar
-            </ButtonStyled>
+            </ButtonSimple>
           </Grid>
           <Grid item>
-            <ButtonStyled
+            <ButtonSimple
               text="Confirmar"
               alt="Confirmar"
               design="error"
-              onclick={() => {
+              onClick={() => {
                 hideModal();
-                /* deleteInstitucion(
-                  modalId.id,
-                  handleDeleteClick,
-                ); */
               }}
             >
               Confirmar
-            </ButtonStyled>
+            </ButtonSimple>
           </Grid>
         </Grid>
       </DefaultModal>

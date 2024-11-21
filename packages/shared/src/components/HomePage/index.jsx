@@ -162,7 +162,7 @@ function HomePage() {
             <Typography fontSize={25}>Avances Académicos</Typography>
             <Button
               text="Avances"
-              onclick={handleButtonClick}
+              onClick={handleButtonClick}
               type="people"
               align="center"
             />

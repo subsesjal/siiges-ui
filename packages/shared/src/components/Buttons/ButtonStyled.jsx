@@ -1,14 +1,13 @@
 import React from 'react';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import PropTypes from 'prop-types';
 import '../../styles/buttons/ButtonStyle.css';
+import ButtonSimple from './ButtonSimple';
 
 export default function ButtonStyled({
   text,
-  alt,
   type,
   design,
-  onclick,
+  onClick,
   icon,
   align,
 }) {
@@ -18,11 +17,11 @@ export default function ButtonStyled({
     right: 'flex-end',
   }[align];
   return (
-    <ButtonUnstyled
+    <ButtonSimple
       className={`buttonaction button${design}`}
-      onClick={() => onclick()}
+      onClick={() => onClick()}
       type={type}
-      justifycontent={justifycontent}
+      align={justifycontent}
     >
       <div
         style={{
@@ -38,14 +37,12 @@ export default function ButtonStyled({
         )}
         <span className="text">{text}</span>
       </div>
-      <span className="text">{text}</span>
-      <span>{alt}</span>
-    </ButtonUnstyled>
+    </ButtonSimple>
   );
 }
 
 ButtonStyled.defaultProps = {
-  onclick: () => {},
+  onClick: () => {},
   design: 'normal',
   type: 'button',
   align: 'left',
@@ -54,10 +51,9 @@ ButtonStyled.defaultProps = {
 
 ButtonStyled.propTypes = {
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  alt: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   type: PropTypes.string,
   align: PropTypes.string,
   design: PropTypes.string,
-  onclick: PropTypes.func,
+  onClick: PropTypes.func,
   icon: PropTypes.element,
 };

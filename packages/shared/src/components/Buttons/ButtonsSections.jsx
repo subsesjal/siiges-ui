@@ -1,9 +1,9 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import '../../styles/buttons/ButtonAdd.css';
+import ButtonSimple from './ButtonSimple';
 
 export default function ButtonsSections({
   prev,
@@ -21,46 +21,44 @@ export default function ButtonsSections({
   return (
     <Grid container justifyContent="space-between" spacing={2}>
       <Grid item>
-        <ButtonUnstyled className="buttonAdd cancel" onClick={cancel}>
-          <Typography variant="body1">Cancelar</Typography>
-        </ButtonUnstyled>
+        <ButtonSimple design="cancel" onClick={cancel} text="Cancelar" />
       </Grid>
       <Grid item>
         <Grid container justifyContent="flex-end" spacing={2}>
           {isStartPosition && (
             <Grid item>
-              <ButtonUnstyled className="buttonAdd guardar" onClick={next}>
+              <ButtonSimple onClick={next}>
                 <NavigateNextIcon />
-              </ButtonUnstyled>
+              </ButtonSimple>
             </Grid>
           )}
           {isMidPosition && (
             <>
               <Grid item>
-                <ButtonUnstyled className="buttonAdd guardar" onClick={prev}>
+                <ButtonSimple onClick={prev}>
                   <NavigateNextIcon style={{ transform: 'rotate(180deg)' }} />
-                </ButtonUnstyled>
+                </ButtonSimple>
               </Grid>
               <Grid item>
-                <ButtonUnstyled className="buttonAdd guardar" onClick={next}>
+                <ButtonSimple onClick={next}>
                   <NavigateNextIcon />
-                </ButtonUnstyled>
+                </ButtonSimple>
               </Grid>
             </>
           )}
           {isEndPosition && (
             <>
               <Grid item>
-                <ButtonUnstyled className="buttonAdd guardar" onClick={prev}>
+                <ButtonSimple onClick={prev}>
                   <NavigateNextIcon style={{ transform: 'rotate(180deg)' }} />
-                </ButtonUnstyled>
+                </ButtonSimple>
               </Grid>
               {!confirmDisabled && (
-              <Grid item>
-                <ButtonUnstyled className="buttonAdd guardar" onClick={confirm}>
-                  <Typography variant="body1">{confirmText}</Typography>
-                </ButtonUnstyled>
-              </Grid>
+                <Grid item>
+                  <ButtonSimple onClick={confirm}>
+                    <Typography variant="body1">{confirmText}</Typography>
+                  </ButtonSimple>
+                </Grid>
               )}
             </>
           )}

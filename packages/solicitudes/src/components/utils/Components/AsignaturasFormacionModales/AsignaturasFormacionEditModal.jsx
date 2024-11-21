@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import {
   DefaultModal,
-  ButtonStyled,
+  ButtonSimple,
   validateField,
   Context,
 } from '@siiges-ui/shared';
@@ -215,19 +215,17 @@ export default function AsignaturasFormacionEditModal({
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
         <Grid item xs={2}>
-          <ButtonStyled
+          <ButtonSimple
             text={cancelButtonText}
-            alt={cancelButtonText}
-            design="error"
-            onclick={hideModal}
+            design="cancel"
+            onClick={hideModal}
           />
         </Grid>
         {edit !== 'Consultar Asignatura' && (
           <Grid item xs={2}>
-            <ButtonStyled
+            <ButtonSimple
               text="Guardar"
-              alt="Guardar"
-              onclick={handleOnSubmit}
+              onClick={handleOnSubmit}
             />
           </Grid>
         )}

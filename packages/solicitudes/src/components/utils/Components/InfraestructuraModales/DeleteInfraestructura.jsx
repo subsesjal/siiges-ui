@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonStyled,
+  ButtonSimple,
   Context,
   DefaultModal,
   deleteRecord,
@@ -19,7 +19,6 @@ function DeleteInfraestructura({ modal, hideModal, id }) {
     const response = await deleteRecord({ endpoint });
 
     if (response.statusCode === 200) {
-      // Update the infraestructuras array by filtering out the deleted item
       setInfraestructuras((prevInfraestructuras) => prevInfraestructuras.filter(
         (infraestructura) => infraestructura.id !== id,
       ));
@@ -46,18 +45,16 @@ function DeleteInfraestructura({ modal, hideModal, id }) {
       <Typography>¿Desea eliminar esta Infraestructura?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
+            design="cancel"
+            onClick={hideModal}
           />
         </Grid>
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Confirmar"
-            alt="Confirmar"
-            onclick={handleDelete}
+            onClick={handleDelete}
           />
         </Grid>
       </Grid>
