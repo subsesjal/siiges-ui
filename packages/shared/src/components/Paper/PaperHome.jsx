@@ -3,7 +3,6 @@ import { Typography, Stack } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';
 import '../../styles/Home/PaperHome.css';
-/* import ButtonStyled from '../Buttons/ButtonStyled'; */
 import Button from '../Buttons/Button';
 
 export default function PaperHome({ title, text }) {
@@ -17,7 +16,7 @@ export default function PaperHome({ title, text }) {
         {text}
       </Typography>
       <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2, ml: -1 }}>
-        <Button text="Botón" />
+        <Button text="Leer noticia" align="right" type="consult" />
       </Stack>
     </Paper>
   );

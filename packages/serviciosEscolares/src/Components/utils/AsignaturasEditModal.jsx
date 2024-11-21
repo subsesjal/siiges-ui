@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonStyled, validateField,
+  DefaultModal, ButtonSimple, validateField,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -222,19 +222,17 @@ export default function AsignaturasEditModal({
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
         <Grid item xs={2}>
-          <ButtonStyled
+          <ButtonSimple
             text={cancelButtonText}
-            alt={cancelButtonText}
-            design="error"
-            onclick={hideModal}
+            design="cancel"
+            onClick={hideModal}
           />
         </Grid>
         {edit !== 'Consultar Asignatura' && (
           <Grid item xs={2}>
-            <ButtonStyled
+            <ButtonSimple
               text="Guardar"
-              alt="Guardar"
-              onclick={handleOnSubmit}
+              onClick={handleOnSubmit}
             />
           </Grid>
         )}
@@ -261,7 +259,7 @@ AsignaturasEditModal.propTypes = {
     horasIndependiente: PropTypes.number,
   }).isRequired,
   programaId: PropTypes.number.isRequired,
-  asignaturasList: PropTypes.array.isRequired,
+  asignaturasList: PropTypes.arrayOf(PropTypes.string).isRequired,
   setAsignaturasList: PropTypes.func.isRequired,
   setNoti: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,

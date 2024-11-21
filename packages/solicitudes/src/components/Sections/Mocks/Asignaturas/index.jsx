@@ -1,7 +1,6 @@
 import React from 'react';
 import AsignaturasButtons from '../../../utils/Components/AsignaturasButtons';
 
-// Create a mapping of gradoId to nombre
 const createGradoMap = (grados) => {
   const gradoMap = {};
 

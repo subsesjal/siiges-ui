@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   ActionButtons,
-  ButtonStyled,
+  ButtonSimple,
   DataTable,
   DefaultModal,
 } from '@siiges-ui/shared';
@@ -119,20 +119,18 @@ export default function Planteles({ planteles, institucionId, session }) {
               <Typography>¿Desea eliminar este plantel?</Typography>
               <Grid container spacing={2} justifyContent="flex-end">
                 <Grid item>
-                  <ButtonStyled
+                  <ButtonSimple
                     text="Cancelar"
-                    alt="Cancelar"
-                    onclick={hideModal}
+                    design="cancel"
+                    onClick={hideModal}
                   >
                     Cancelar
-                  </ButtonStyled>
+                  </ButtonSimple>
                 </Grid>
                 <Grid item>
-                  <ButtonStyled
+                  <ButtonSimple
                     text="Confirmar"
-                    alt="Confirmar"
-                    design="error"
-                    onclick={() => {
+                    onClick={() => {
                       hideModal();
                       deletePlantel(
                         institucionId,
@@ -142,7 +140,7 @@ export default function Planteles({ planteles, institucionId, session }) {
                     }}
                   >
                     Confirmar
-                  </ButtonStyled>
+                  </ButtonSimple>
                 </Grid>
               </Grid>
             </DefaultModal>

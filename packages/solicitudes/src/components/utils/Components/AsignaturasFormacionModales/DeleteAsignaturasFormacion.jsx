@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { ButtonStyled, DefaultModal } from '@siiges-ui/shared';
+import { ButtonSimple, DefaultModal } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -10,19 +10,18 @@ export default function DeleteAsignaturaFormacion({ modal, hideModal, id }) {
       <Typography>¿Desea eliminar esta asignatura de formación electiva?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
+            design="cancel"
+            onClick={hideModal}
           >
             Cancelar
-          </ButtonStyled>
+          </ButtonSimple>
         </Grid>
         <Grid item>
-          <ButtonStyled text="Confirmar" alt="Confirmar" onclick={() => {}}>
+          <ButtonSimple text="Confirmar" onClick={() => {}}>
             Confirmar
-          </ButtonStyled>
+          </ButtonSimple>
         </Grid>
       </Grid>
     </DefaultModal>

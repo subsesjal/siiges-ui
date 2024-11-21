@@ -18,11 +18,11 @@ function Provider({ children }) {
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [section, setSection] = useState(findRoute(router.route, session.rol));
 
-  const excludedRoutes = ['/revalidaciones', '/equivalencias']; // Exclude these routes
+  const excludedRoutes = ['/revalidaciones', '/equivalencias'];
 
   const removeAuth = () => {
     router.push('/');
-    localStorage.removeItem('token');
+    localStorage.clear();
     setSession({});
     setAuth(false);
   };

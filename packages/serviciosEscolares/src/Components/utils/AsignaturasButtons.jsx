@@ -81,7 +81,7 @@ export default function AsignaturasButtons({
 AsignaturasButtons.propTypes = {
   id: PropTypes.number.isRequired,
   programaId: PropTypes.number.isRequired,
-  asignaturasList: PropTypes.array.isRequired,
+  asignaturasList: PropTypes.arrayOf(PropTypes.string).isRequired,
   setAsignaturasList: PropTypes.func.isRequired,
   setNoti: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,

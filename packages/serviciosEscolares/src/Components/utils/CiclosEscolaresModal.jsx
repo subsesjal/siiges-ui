@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonStyled,
+  ButtonSimple,
   DefaultModal,
   Input,
   LabelData,
@@ -69,18 +69,16 @@ export default function CiclosEscolaresModal({
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
         <Grid item xs={2}>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={() => setOpen(false)}
+            design="cancel"
+            onClick={() => setOpen(false)}
           />
         </Grid>
         <Grid item xs={2}>
-          <ButtonStyled
+          <ButtonSimple
             text="Confirmar"
-            alt="Confirmar"
-            onclick={() => {
+            onClick={() => {
               pathCiclosEscolares(form);
             }}
           />

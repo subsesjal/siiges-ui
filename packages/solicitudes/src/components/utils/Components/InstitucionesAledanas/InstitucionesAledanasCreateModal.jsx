@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonStyled, Context, Input,
+  DefaultModal, ButtonSimple, Context, Input,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import errorDatosInstitucionAledanas from '../../sections/errors/errorDatosInstitucionAledanas';
@@ -113,18 +113,16 @@ export default function InstitucionesAledanasCreateModal({
           />
         </Grid>
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
+            design="cancel"
+            onClick={hideModal}
           />
         </Grid>
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Guardar"
-            alt="Guardar"
-            onclick={handleOnSubmit}
+            onClick={handleOnSubmit}
           />
         </Grid>
       </Grid>

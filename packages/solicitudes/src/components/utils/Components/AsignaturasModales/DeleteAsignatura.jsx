@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonStyled,
+  ButtonSimple,
   Context,
   DefaultModal,
   getToken,
@@ -51,19 +51,14 @@ function DeleteAsignatura({
       <Typography>¿Desea eliminar esta asignatura?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
-          >
-            Cancelar
-          </ButtonStyled>
+            design="cancel"
+            onClick={hideModal}
+          />
         </Grid>
         <Grid item>
-          <ButtonStyled text="Confirmar" alt="Confirmar" onclick={handleDelete}>
-            Confirmar
-          </ButtonStyled>
+          <ButtonSimple text="Confirmar" onClick={handleDelete} />
         </Grid>
       </Grid>
     </DefaultModal>

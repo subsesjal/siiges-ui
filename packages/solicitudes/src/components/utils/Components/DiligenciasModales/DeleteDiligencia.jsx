@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonStyled, Context, DefaultModal, deleteRecord,
+  ButtonSimple, Context, DefaultModal, deleteRecord,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
@@ -41,18 +41,16 @@ function DeleteDiligencia({ modal, hideModal, id }) {
       <Typography>¿Desea eliminar esta diligencia?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
+            design="cancel"
+            onClick={hideModal}
           />
         </Grid>
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Confirmar"
-            alt="Confirmar"
-            onclick={handleDelete}
+            onClick={handleDelete}
           />
         </Grid>
       </Grid>

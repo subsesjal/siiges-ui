@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
   Grid, TextField, Typography,
 } from '@mui/material';
-import { DefaultModal, ButtonStyled, validateField } from '@siiges-ui/shared';
+import { DefaultModal, ButtonSimple, validateField } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -374,21 +374,19 @@ export default function DocentesEditModal({
       )}
       <Grid container sx={{ mt: 2 }}>
         <Grid item xs={8}>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={handleModalClose}
+            design="cancel"
+            onClick={handleModalClose}
           />
         </Grid>
         {currentSection === 1 && (
           <>
             <Grid item xs={2} />
             <Grid item xs={2}>
-              <ButtonStyled
+              <ButtonSimple
                 text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-                alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-                onclick={handleNextSection}
+                onClick={handleNextSection}
               />
             </Grid>
           </>
@@ -396,17 +394,15 @@ export default function DocentesEditModal({
         {currentSection === 2 && (
           <>
             <Grid item xs={2}>
-              <ButtonStyled
+              <ButtonSimple
                 text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-                alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-                onclick={handlePreviousSection}
+                onClick={handlePreviousSection}
               />
             </Grid>
             <Grid item xs={2}>
-              <ButtonStyled
+              <ButtonSimple
                 text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-                alt={<ArrowForwardIosIcon sx={{ height: 14 }} />}
-                onclick={handleNextSection}
+                onClick={handleNextSection}
               />
             </Grid>
           </>
@@ -414,17 +410,15 @@ export default function DocentesEditModal({
         {currentSection === 3 && (
           <>
             <Grid item xs={2}>
-              <ButtonStyled
+              <ButtonSimple
                 text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-                alt={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
-                onclick={handlePreviousSection}
+                onClick={handlePreviousSection}
               />
             </Grid>
             <Grid item xs={2}>
-              <ButtonStyled
+              <ButtonSimple
                 text="Confirmar"
-                alt="Confirmar"
-                onclick={handleOnSubmit}
+                onClick={handleOnSubmit}
               />
             </Grid>
           </>

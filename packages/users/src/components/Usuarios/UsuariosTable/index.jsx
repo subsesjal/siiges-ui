@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
-  DataTable, formattedDate, DefaultModal, ButtonStyled,
+  DataTable, formattedDate, DefaultModal, ButtonSimple,
 } from '@siiges-ui/shared';
 import { commonColumns, adminColumns } from '../../Tables/usuariosTable';
 import { deleteUsuario } from '../../../utils/usuarioHandler';
@@ -83,29 +83,23 @@ export default function UsuariosTable({ usuarios, session }) {
         </Typography>
         <Grid container spacing={2} justifyContent="flex-end">
           <Grid item>
-            <ButtonStyled
+            <ButtonSimple
               text="Cancelar"
-              alt="Cancelar"
-              onclick={hideModal}
-            >
-              Cancelar
-            </ButtonStyled>
+              design="cancel"
+              onClick={hideModal}
+            />
           </Grid>
           <Grid item>
-            <ButtonStyled
+            <ButtonSimple
               text="Confirmar"
-              alt="Confirmar"
-              design="error"
-              onclick={() => {
+              onClick={() => {
                 hideModal();
                 deleteUsuario(
                   modalId.id,
                   handleDeleteClick,
                 );
               }}
-            >
-              Confirmar
-            </ButtonStyled>
+            />
           </Grid>
         </Grid>
       </DefaultModal>

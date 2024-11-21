@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonStyled, Context } from '@siiges-ui/shared';
+import { DefaultModal, ButtonSimple, Context } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
 import handleCreate from '../../submitNewAsignaturas';
@@ -40,7 +40,6 @@ export default function AsignaturasFormacionCreateModal({
       setErrors(errorsAsignatura);
     }
 
-    // Set the default value for gradoId to 25
     setFormAsignaturasFormacion((prevForm) => ({
       ...prevForm,
       gradoId: 25,
@@ -195,23 +194,21 @@ export default function AsignaturasFormacionCreateModal({
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
         <Grid item xs={2}>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
+            design="cancel"
+            onClick={hideModal}
           >
             Cancelar
-          </ButtonStyled>
+          </ButtonSimple>
         </Grid>
         <Grid item xs={2}>
-          <ButtonStyled
+          <ButtonSimple
             text="Guardar"
-            alt="Guardar"
-            onclick={handleOnSubmit}
+            onClick={handleOnSubmit}
           >
             Confirmar
-          </ButtonStyled>
+          </ButtonSimple>
         </Grid>
       </Grid>
     </DefaultModal>

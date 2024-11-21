@@ -1,17 +1,17 @@
 import React from 'react';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import PropTypes from 'prop-types';
+import { Button, Grid, Typography } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PeopleIcon from '@mui/icons-material/People';
-import { Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DownloadIcon from '@mui/icons-material/Download';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import SearchIcon from '@mui/icons-material/Search';
 
 import '../../styles/buttons/ButtonAdd.css';
 
-export default function Button({
+export default function ButtonBaseIcons({
   text, onClick, type, disabled, align,
 }) {
   const justifyContent = {
@@ -32,6 +32,8 @@ export default function Button({
         return <PeopleIcon />;
       case 'download':
         return <DownloadIcon />;
+      case 'consult':
+        return <SearchIcon />;
       default:
         return <AddIcon />;
     }
@@ -42,33 +44,36 @@ export default function Button({
   return (
     <Grid container justifyContent={justifyContent}>
       <Grid item>
-        <ButtonUnstyled
+        <Button
           className={buttonClass}
           onClick={onClick}
           disabled={disabled}
+          variant="text"
+          startIcon={renderIcon()}
         >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {renderIcon()}
-            &nbsp;&nbsp;
-            <Typography variant="body1">{text}</Typography>
-          </div>
-        </ButtonUnstyled>
+          <Typography
+            variant="body1"
+            style={{ textTransform: 'none' }}
+          >
+            {text}
+          </Typography>
+        </Button>
       </Grid>
     </Grid>
   );
 }
 
-Button.defaultProps = {
+ButtonBaseIcons.defaultProps = {
   onClick: () => {},
   type: 'user',
   disabled: false,
   align: 'left',
 };
 
-Button.propTypes = {
+ButtonBaseIcons.propTypes = {
   text: PropTypes.string.isRequired,
   type: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
-  align: PropTypes.string,
+  align: PropTypes.oneOf(['left', 'center', 'right']),
 };

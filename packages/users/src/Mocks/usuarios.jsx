@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActionButtons, ButtonStyled, DefaultModal } from '@siiges-ui/shared';
+import { ActionButtons, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
 import { Grid, Typography } from '@mui/material';
 import deleteUser from '../utils/deleteUser';
 
@@ -49,25 +49,19 @@ const columns = [
             <Typography>¿Desea eliminar este usuario?</Typography>
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
-                <ButtonStyled
+                <ButtonSimple
                   text="Cancelar"
-                  alt="Cancelar"
-                  onclick={hideModal}
-                >
-                  Cancelar
-                </ButtonStyled>
+                  design="cancel"
+                  onClick={hideModal}
+                />
               </Grid>
               <Grid item>
-                <ButtonStyled
+                <ButtonSimple
                   text="Confirmar"
-                  alt="Confirmar"
-                  design="error"
-                  onclick={() => {
+                  onClick={() => {
                     deleteUser(params.id);
                   }}
-                >
-                  Confirmar
-                </ButtonStyled>
+                />
               </Grid>
             </Grid>
           </DefaultModal>

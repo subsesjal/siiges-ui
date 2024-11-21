@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
   DefaultModal,
-  ButtonStyled,
+  ButtonSimple,
   validateField,
   Context,
 } from '@siiges-ui/shared';
@@ -206,18 +206,16 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
         <Grid item xs={2}>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
+            design="cancel"
+            onClick={hideModal}
           />
         </Grid>
         <Grid item xs={2}>
-          <ButtonStyled
+          <ButtonSimple
             text="Guardar"
-            alt="Guardar"
-            onclick={handleOnSubmit}
+            onClick={handleOnSubmit}
           />
         </Grid>
       </Grid>

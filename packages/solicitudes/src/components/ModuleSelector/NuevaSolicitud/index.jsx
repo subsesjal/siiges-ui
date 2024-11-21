@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
-import { ButtonStyled, Context, useApi } from '@siiges-ui/shared';
+import { ButtonSimple, Context, useApi } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import formData from '../../utils/sections/forms/formData';
 import errorDatosNuevaSolicitud from '../../utils/sections/errors/errorDatosNuevaSolicitud';
@@ -96,7 +96,7 @@ function NewRequest() {
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
           <div style={{ height: '100%' }}>
-            <ButtonStyled onclick={submit} text="Crear" alt="Crear" />
+            <ButtonSimple onClick={submit} text="Crear" />
           </div>
         </Grid>
       </Grid>

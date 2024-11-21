@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
 import {
-  ButtonStyled, Select, useApi, Context,
+  ButtonSimple, Select, useApi, Context,
 } from '@siiges-ui/shared';
 
 function Refrendo() {
@@ -65,7 +65,7 @@ function Refrendo() {
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
-          <ButtonStyled text="Crear" onclick={() => handleOnClick()} />
+          <ButtonSimple text="Crear" onClick={() => handleOnClick()} />
         </Grid>
       </Grid>
     </Grid>

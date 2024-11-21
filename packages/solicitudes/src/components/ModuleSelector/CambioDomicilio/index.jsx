@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
-  ButtonStyled, Context, Select, useApi,
+  ButtonSimple, Context, Select, useApi,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState, useContext } from 'react';
 
@@ -89,7 +89,7 @@ function ChangeAddress() {
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
-          <ButtonStyled text="Crear" onclick={() => handleOnClick()} />
+          <ButtonSimple text="Crear" onClick={() => handleOnClick()} />
         </Grid>
       </Grid>
     </Grid>

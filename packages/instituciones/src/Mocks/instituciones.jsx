@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActionButtons, ButtonStyled, DefaultModal } from '@siiges-ui/shared';
+import { ActionButtons, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
 import { Grid, Typography } from '@mui/material';
 import deleteInstitucion from '../utils/deleteInstitucion';
 
@@ -48,25 +48,23 @@ const columns = [
             <Typography>¿Desea eliminar esta institución?</Typography>
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
-                <ButtonStyled
+                <ButtonSimple
                   text="Cancelar"
-                  alt="Cancelar"
-                  onclick={hideModal}
+                  design="cancel"
+                  onClick={hideModal}
                 >
                   Cancelar
-                </ButtonStyled>
+                </ButtonSimple>
               </Grid>
               <Grid item>
-                <ButtonStyled
+                <ButtonSimple
                   text="Confirmar"
-                  alt="Confirmar"
-                  design="error"
-                  onclick={() => {
+                  onClick={() => {
                     deleteInstitucion(params.id);
                   }}
                 >
                   Confirmar
-                </ButtonStyled>
+                </ButtonSimple>
               </Grid>
             </Grid>
           </DefaultModal>

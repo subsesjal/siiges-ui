@@ -102,7 +102,7 @@ export default function BiografiaBibliografiaModal({
             url={biografiaUrl}
             setUrl={setBiografiaUrl}
             disabled={disableBiografia}
-            onclick={() => handleOpenDropzone('BIOGRAFIA')}
+            onClick={() => handleOpenDropzone('BIOGRAFIA')}
           />
         </Grid>
         <Grid item xs={12}>
@@ -114,7 +114,7 @@ export default function BiografiaBibliografiaModal({
             url={bibliografiaUrl}
             setUrl={setBibliografiaUrl}
             disabled={disableBibliografia}
-            onclick={() => handleOpenDropzone('BIBLIOGRAFIA')}
+            onClick={() => handleOpenDropzone('BIBLIOGRAFIA')}
           />
         </Grid>
         <Grid item xs={12}>
@@ -126,7 +126,7 @@ export default function BiografiaBibliografiaModal({
             url={actaUrl}
             setUrl={setActaUrl}
             disabled={disableActa}
-            onclick={() => handleOpenDropzone('ACTA_CONSTITUTIVA')}
+            onClick={() => handleOpenDropzone('ACTA_CONSTITUTIVA')}
           />
         </Grid>
 

@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonStyled, Context, DefaultModal, deleteRecord,
+  ButtonSimple, Context, DefaultModal, deleteRecord,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
@@ -12,10 +12,9 @@ function DeleteDocentes({
 
   const deleteDocente = () => {
     setLoading(true);
-    const endpoint = `/docentes/${id}`; // Replace with your actual endpoint
+    const endpoint = `/docentes/${id}`;
     deleteRecord({ endpoint })
-      .then((response) => {
-        console.log('Record deleted:', response);
+      .then(() => {
         setNoti({
           open: true,
           message: '¡Docente eliminado con éxito!',
@@ -40,23 +39,17 @@ function DeleteDocentes({
       <Typography>¿Desea eliminar a este/a docente?</Typography>
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Cancelar"
-            alt="Cancelar"
-            design="error"
-            onclick={hideModal}
-          >
-            Cancelar
-          </ButtonStyled>
+            design="cancel"
+            onClick={hideModal}
+          />
         </Grid>
         <Grid item>
-          <ButtonStyled
+          <ButtonSimple
             text="Confirmar"
-            alt="Confirmar"
-            onclick={deleteDocente}
-          >
-            Confirmar
-          </ButtonStyled>
+            onClick={deleteDocente}
+          />
         </Grid>
       </Grid>
     </DefaultModal>

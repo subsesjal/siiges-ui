@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Grid } from '@mui/material';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+import { Typography, Grid, Button } from '@mui/material';
 import '../../styles/buttons/ButtonAdd.css';
 
 export default function ButtonSimple({
-  text, onClick, align, design,
+  text, onClick, align, design, children,
 }) {
   const justifyContent = {
     left: 'flex-start',
@@ -16,9 +15,16 @@ export default function ButtonSimple({
   return (
     <Grid container justifyContent={justifyContent}>
       <Grid item>
-        <ButtonUnstyled className={`buttonAdd ${design}`} onClick={onClick}>
-          <Typography variant="body1">{text}</Typography>
-        </ButtonUnstyled>
+        <Button
+          onClick={onClick}
+          className={`buttonAdd ${design}`}
+          variant="text"
+        >
+          <Typography variant="body1" style={{ textTransform: 'none' }}>
+            {text}
+          </Typography>
+          {children}
+        </Button>
       </Grid>
     </Grid>
   );
@@ -28,6 +34,7 @@ ButtonSimple.defaultProps = {
   align: 'left',
   design: 'guardar',
   onClick: () => {},
+  children: null,
 };
 
 ButtonSimple.propTypes = {
@@ -35,4 +42,5 @@ ButtonSimple.propTypes = {
   text: PropTypes.string.isRequired,
   design: PropTypes.string,
   align: PropTypes.oneOf(['left', 'center', 'right']),
+  children: PropTypes.node,
 };
