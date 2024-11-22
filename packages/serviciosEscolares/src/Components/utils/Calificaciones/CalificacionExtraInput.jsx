@@ -25,9 +25,8 @@ export default function CalificacionExtraInput({
       return;
     }
 
-    if (/^\d*\.?\d*$/.test(newValue)) {
-      const numericValue = parseFloat(newValue);
-
+    const numericValue = parseFloat(newValue);
+    if (!Number.isNaN(numericValue)) {
       if (numericValue >= calificacionMinima && numericValue <= calificacionMaxima) {
         updateCalificaciones(id, newValue);
       }
@@ -39,6 +38,11 @@ export default function CalificacionExtraInput({
   };
 
   const handleBlur = () => {
+    if (opcionesValidas.includes(inputValue)) {
+      updateCalificaciones(id, inputValue);
+      return;
+    }
+
     const numericValue = parseFloat(inputValue);
 
     if (!Number.isNaN(numericValue)) {
