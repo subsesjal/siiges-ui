@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 
 export default function Reglas() {
   const { setNoti, setLoading } = useContext(Context);
+  const [idProg, setIdProg] = useState();
   const router = useRouter();
   const { query } = router;
 
@@ -29,6 +30,7 @@ export default function Reglas() {
 
       if (response.statusCode === 200) {
         const { data } = response || {};
+        setIdProg(data.id);
         setForm({
           id: query.id || '',
           calificacionMinima: data.programa.calificacionMinima || '',
@@ -72,7 +74,7 @@ export default function Reglas() {
     try {
       const response = await updateRecord({
         data: dataBody,
-        endpoint: `/solicitudes/${query.id}`,
+        endpoint: `/solicitudes/${idProg}`,
       });
 
       if (response.statusCode !== 200) {

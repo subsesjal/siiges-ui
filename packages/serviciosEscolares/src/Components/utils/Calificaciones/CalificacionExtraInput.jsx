@@ -18,27 +18,46 @@ export default function CalificacionExtraInput({
 
   const handleInputChange = (event, newInputValue) => {
     const newValue = newInputValue.toUpperCase().trim();
+    setInputValue(newValue);
 
-    // Validar opciones válidas
     if (opcionesValidas.includes(newValue)) {
-      setInputValue(newValue);
       updateCalificaciones(id, newValue);
       return;
     }
 
-    // Validar si es un número dentro del rango y formato adecuado
-    if (/^\d*\.?\d*$/.test(newValue) && !isNaN(newValue)) {
+    if (/^\d*\.?\d*$/.test(newValue)) {
       const numericValue = parseFloat(newValue);
 
-      if (
-        numericValue >= calificacionMinima
-        && numericValue <= calificacionMaxima
-        && (calificacionDecimal || Number.isInteger(numericValue))
-      ) {
-        setInputValue(newValue);
+      if (numericValue >= calificacionMinima && numericValue <= calificacionMaxima) {
         updateCalificaciones(id, newValue);
       }
-    } else if (newValue === '') {
+    }
+
+    if (newValue === '') {
+      updateCalificaciones(id, '');
+    }
+  };
+
+  const handleBlur = () => {
+    const numericValue = parseFloat(inputValue);
+
+    if (!Number.isNaN(numericValue)) {
+      let correctedValue = numericValue;
+
+      if (!calificacionDecimal) {
+        correctedValue = numericValue % 1 <= 0.5
+          ? Math.floor(numericValue)
+          : Math.ceil(numericValue);
+      }
+      if (correctedValue < calificacionMinima) {
+        correctedValue = calificacionMinima;
+      } else if (correctedValue > calificacionMaxima) {
+        correctedValue = calificacionMaxima;
+      }
+
+      setInputValue(correctedValue.toString());
+      updateCalificaciones(id, correctedValue.toString());
+    } else {
       setInputValue('');
       updateCalificaciones(id, '');
     }
@@ -59,6 +78,7 @@ export default function CalificacionExtraInput({
         onInputChange={handleInputChange}
         onChange={handleChange}
         fullWidth
+        disabled={disabled}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -66,6 +86,7 @@ export default function CalificacionExtraInput({
             fullWidth
             disabled={disabled}
             sx={{ maxWidth: '100%' }}
+            onBlur={handleBlur}
           />
         )}
       />
