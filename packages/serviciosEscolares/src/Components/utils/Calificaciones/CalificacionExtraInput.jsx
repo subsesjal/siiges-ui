@@ -28,7 +28,7 @@ export default function CalificacionExtraInput({
     const numericValue = parseFloat(newValue);
     if (!Number.isNaN(numericValue)) {
       if (numericValue >= calificacionMinima && numericValue <= calificacionMaxima) {
-        updateCalificaciones(id, newValue);
+        updateCalificaciones(id, newValue, 'calificacion');
       }
     }
 
@@ -60,10 +60,10 @@ export default function CalificacionExtraInput({
       }
 
       setInputValue(correctedValue.toString());
-      updateCalificaciones(id, correctedValue.toString());
+      updateCalificaciones(id, correctedValue.toString(), 'calificacion');
     } else {
       setInputValue('');
-      updateCalificaciones(id, '');
+      updateCalificaciones(id, '', 'calificacion');
     }
   };
 
@@ -100,6 +100,9 @@ export default function CalificacionExtraInput({
 
 CalificacionExtraInput.defaultProps = {
   value: '',
+  calificacionMinima: 0,
+  calificacionMaxima: 100,
+  calificacionDecimal: true,
 };
 
 CalificacionExtraInput.propTypes = {
@@ -107,7 +110,7 @@ CalificacionExtraInput.propTypes = {
   disabled: PropTypes.bool.isRequired,
   value: PropTypes.string,
   updateCalificaciones: PropTypes.func.isRequired,
-  calificacionMinima: PropTypes.number.isRequired,
-  calificacionMaxima: PropTypes.number.isRequired,
-  calificacionDecimal: PropTypes.bool.isRequired,
+  calificacionMinima: PropTypes.number,
+  calificacionMaxima: PropTypes.number,
+  calificacionDecimal: PropTypes.bool,
 };

@@ -6,6 +6,9 @@ const columnsInscritosExtra = (
   disabled,
   updateCalificaciones,
   isExtraordinarioEnabled,
+  calificacionMinima,
+  calificacionMaxima,
+  calificacionDecimal,
 ) => [
   {
     field: 'matricula',
@@ -39,6 +42,9 @@ const columnsInscritosExtra = (
           value={calificacion}
           disabled={isDisabled}
           updateCalificaciones={(alumnoId, newValue) => updateCalificaciones(alumnoId, newValue, 'calificacion', 2)}
+          calificacionMinima={calificacionMinima}
+          calificacionMaxima={calificacionMaxima}
+          calificacionDecimal={calificacionDecimal}
         />
       );
     },
