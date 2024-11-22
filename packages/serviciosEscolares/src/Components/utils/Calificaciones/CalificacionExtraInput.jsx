@@ -4,24 +4,66 @@ import { Autocomplete, TextField, Box } from '@mui/material';
 
 const opcionesValidas = ['NS', 'NP', 'RC', 'SD'];
 
-export default function CalificacionInput({
+export default function CalificacionExtraInput({
   id,
   value,
   disabled,
   updateCalificaciones,
+  calificacionMinima,
+  calificacionMaxima,
+  calificacionDecimal,
 }) {
   const [inputValue, setInputValue] = useState(value);
   const [autoValue, setAutoValue] = useState(value);
 
   const handleInputChange = (event, newInputValue) => {
     const newValue = newInputValue.toUpperCase().trim();
+    setInputValue(newValue);
 
-    if (/^\d*\.?\d*$/.test(newValue) || opcionesValidas.includes(newValue)) {
-      setInputValue(newValue);
+    if (opcionesValidas.includes(newValue)) {
       updateCalificaciones(id, newValue);
-    } else if (newValue === '') {
-      setInputValue('');
+      return;
+    }
+
+    const numericValue = parseFloat(newValue);
+    if (!Number.isNaN(numericValue)) {
+      if (numericValue >= calificacionMinima && numericValue <= calificacionMaxima) {
+        updateCalificaciones(id, newValue, 'calificacion');
+      }
+    }
+
+    if (newValue === '') {
       updateCalificaciones(id, '');
+    }
+  };
+
+  const handleBlur = () => {
+    if (opcionesValidas.includes(inputValue)) {
+      updateCalificaciones(id, inputValue);
+      return;
+    }
+
+    const numericValue = parseFloat(inputValue);
+
+    if (!Number.isNaN(numericValue)) {
+      let correctedValue = numericValue;
+
+      if (!calificacionDecimal) {
+        correctedValue = numericValue % 1 <= 0.5
+          ? Math.floor(numericValue)
+          : Math.ceil(numericValue);
+      }
+      if (correctedValue < calificacionMinima) {
+        correctedValue = calificacionMinima;
+      } else if (correctedValue > calificacionMaxima) {
+        correctedValue = calificacionMaxima;
+      }
+
+      setInputValue(correctedValue.toString());
+      updateCalificaciones(id, correctedValue.toString(), 'calificacion');
+    } else {
+      setInputValue('');
+      updateCalificaciones(id, '', 'calificacion');
     }
   };
 
@@ -40,6 +82,7 @@ export default function CalificacionInput({
         onInputChange={handleInputChange}
         onChange={handleChange}
         fullWidth
+        disabled={disabled}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -47,6 +90,7 @@ export default function CalificacionInput({
             fullWidth
             disabled={disabled}
             sx={{ maxWidth: '100%' }}
+            onBlur={handleBlur}
           />
         )}
       />
@@ -54,13 +98,19 @@ export default function CalificacionInput({
   );
 }
 
-CalificacionInput.defaultProps = {
+CalificacionExtraInput.defaultProps = {
   value: '',
+  calificacionMinima: 0,
+  calificacionMaxima: 100,
+  calificacionDecimal: true,
 };
 
-CalificacionInput.propTypes = {
+CalificacionExtraInput.propTypes = {
   id: PropTypes.number.isRequired,
   disabled: PropTypes.bool.isRequired,
   value: PropTypes.string,
   updateCalificaciones: PropTypes.func.isRequired,
+  calificacionMinima: PropTypes.number,
+  calificacionMaxima: PropTypes.number,
+  calificacionDecimal: PropTypes.bool,
 };

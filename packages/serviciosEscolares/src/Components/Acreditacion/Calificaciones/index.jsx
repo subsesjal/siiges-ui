@@ -26,34 +26,41 @@ export default function Calificaciones({
   const [calificaciones, setCalificaciones] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [response, setResponse] = useState();
+  const [calificacionAprobatoria, setCalificacionAprobatoria] = useState(null);
   const [calificacionMinima, setCalificacionMinima] = useState(null);
+  const [calificacionMaxima, setCalificacionMaxima] = useState(null);
+  const [calificacionDecimal, setCalificacionDecimal] = useState(false);
+
   const { setNoti } = useContext(Context);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchCalificacionMinima = async () => {
+    const fetchCalificacion = async () => {
       try {
         const result = await getData({ endpoint: `/programas/${programaId}` });
         if (result.statusCode === 200) {
-          setCalificacionMinima(result.data.calificacionAprobatoria);
+          setCalificacionAprobatoria(result.data.calificacionAprobatoria);
+          setCalificacionMinima(result.data.calificacionMinima);
+          setCalificacionMaxima(result.data.calificacionMaxima);
+          setCalificacionDecimal(result.data.calificacionDecimal);
         } else {
           setNoti({
             open: true,
-            message: '¡Error al obtener la calificación mínima!.',
+            message: '¡Error al obtener los datos de calificación!',
             type: 'error',
           });
         }
       } catch (error) {
         setNoti({
           open: true,
-          message: '¡Error al obtener la calificación mínima!',
+          message: '¡Error al obtener los datos de calificación!',
           type: 'error',
         });
       }
     };
 
     if (programaId) {
-      fetchCalificacionMinima();
+      fetchCalificacion();
     }
   }, [programaId]);
 
@@ -130,7 +137,7 @@ export default function Calificaciones({
     if (calificacionesValidas.length === 0) {
       setNoti({
         open: true,
-        message: '¡No hay calificaciones válidas para subir!',
+        message: '¡Calificación inválida, revisa las reglas del programa!',
         type: 'error',
       });
       return;
@@ -166,7 +173,7 @@ export default function Calificaciones({
     }
 
     const calificacionesExtraordinarias = calificacionesValidas.filter(
-      (c) => c.tipo === 2 || parseFloat(c.calificacion) < calificacionMinima,
+      (c) => c.tipo === 2 || parseFloat(c.calificacion) < calificacionAprobatoria,
     )
       .map((c) => ({
         ...c,
@@ -188,8 +195,21 @@ export default function Calificaciones({
   };
 
   const columns = mode === 'Ordinarias'
-    ? columnsInscritosOrdinario(disabled, updateCalificaciones)
-    : columnsInscritosExtra(disabled, updateCalificaciones, isExtraordinarioEnabled);
+    ? columnsInscritosOrdinario(
+      disabled,
+      updateCalificaciones,
+      calificacionMinima,
+      calificacionMaxima,
+      calificacionDecimal,
+    )
+    : columnsInscritosExtra(
+      disabled,
+      updateCalificaciones,
+      isExtraordinarioEnabled,
+      calificacionMinima,
+      calificacionMaxima,
+      calificacionDecimal,
+    );
 
   return (
     <Grid container spacing={2}>

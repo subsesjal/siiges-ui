@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 
 export default function Reglas() {
   const { setNoti, setLoading } = useContext(Context);
+  const [idSolicitud, setIdSolicitud] = useState();
   const router = useRouter();
   const { query } = router;
 
@@ -29,6 +30,7 @@ export default function Reglas() {
 
       if (response.statusCode === 200) {
         const { data } = response || {};
+        setIdSolicitud(data.id);
         setForm({
           id: query.id || '',
           calificacionMinima: data.programa.calificacionMinima || '',
@@ -72,12 +74,8 @@ export default function Reglas() {
     try {
       const response = await updateRecord({
         data: dataBody,
-        endpoint: `/solicitudes/${query.id}`,
+        endpoint: `/solicitudes/${idSolicitud}`,
       });
-
-      if (response.statusCode !== 200) {
-        throw new Error(response.errorMessage || '¡Error al actualizar las reglas!');
-      }
 
       setLoading(false);
       setNoti({
