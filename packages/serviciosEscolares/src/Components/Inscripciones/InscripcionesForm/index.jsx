@@ -40,21 +40,30 @@ export default function InscripcionForm({
 
   const isRepresentante = session.rol === 'representante';
 
-  const initialState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {
-    selectedInstitucion: '',
-    selectedPlantel: '',
-    selectedPrograma: '',
-    selectedCicloEscolar: '',
-    selectedGrado: '',
-    selectedGrupo: '',
-    labelPrograma: '',
-    labelGrado: '',
-    labelGrupo: '',
-    labelTurno: '',
-    labelCicloEscolar: '',
-  };
+  const initialState = typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_KEY)
+    ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+    : {
+      selectedInstitucion: '',
+      selectedPlantel: '',
+      selectedPrograma: '',
+      selectedCicloEscolar: '',
+      selectedGrado: '',
+      selectedGrupo: '',
+      labelPrograma: '',
+      labelGrado: '',
+      labelGrupo: '',
+      labelTurno: '',
+      labelCicloEscolar: '',
+    };
 
   const [state, setState] = useState(initialState);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+    }
+  }, [state]);
+
   const [arrays, setArrays] = useState({
     planteles: [],
     programas: [],
@@ -64,10 +73,6 @@ export default function InscripcionForm({
   });
 
   const [fetchGruposTrigger, setFetchGruposTrigger] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
-  }, [state]);
 
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {

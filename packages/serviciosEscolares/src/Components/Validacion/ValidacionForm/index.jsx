@@ -20,12 +20,22 @@ export default function ValidacionForm({
 
   const { setNoti, session } = useContext(Context);
   const [instituciones, setInstituciones] = useState([]);
-  const [selectedInstitucion, setSelectedInstitucion] = useState(() => localStorage.getItem('validacion_selectedInstitucion') || '');
+
+  const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('validacion_selectedInstitucion')
+    ? localStorage.getItem('validacion_selectedInstitucion')
+    : ''));
+
   const [planteles, setPlanteles] = useState([]);
-  const [selectedPlantel, setSelectedPlantel] = useState(() => localStorage.getItem('validacion_selectedPlantel') || '');
+  const [selectedPlantel, setSelectedPlantel] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('validacion_selectedPlantel')
+    ? localStorage.getItem('validacion_selectedPlantel')
+    : ''));
+
   const [programas, setProgramas] = useState([]);
-  const [selectedPrograma, setSelectedPrograma] = useState(() => localStorage.getItem('validacion_selectedPrograma') || '');
-  const isRepresentante = session.rol === 'representante';
+  const [selectedPrograma, setSelectedPrograma] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('validacion_selectedPrograma')
+    ? localStorage.getItem('validacion_selectedPrograma')
+    : ''));
+
+  const isRepresentante = session?.rol === 'representante';
 
   useEffect(() => {
     if (fetchedInstituciones?.length) {
@@ -102,11 +112,25 @@ export default function ValidacionForm({
     });
   };
 
+  useEffect(() => {
+    if (selectedInstitucion) {
+      fetchPlanteles(selectedInstitucion);
+    }
+    if (selectedPlantel) {
+      fetchProgramas(selectedPlantel);
+    }
+    if (selectedPrograma) {
+      fetchAlumnos(selectedPrograma);
+    }
+  }, [selectedInstitucion, selectedPlantel, selectedPrograma]);
+
   const handleInstitucionChange = (event) => {
     const institucionId = event.target.value;
     setSelectedInstitucion(institucionId);
     setInstitucion(institucionId);
-    localStorage.setItem('validacion_selectedInstitucion', institucionId);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('validacion_selectedInstitucion', institucionId);
+    }
     setPlanteles([]);
     setProgramas([]);
     setAlumnos([]);
@@ -116,7 +140,9 @@ export default function ValidacionForm({
   const handlePlantelChange = (event) => {
     const plantelId = event.target.value;
     setSelectedPlantel(plantelId);
-    localStorage.setItem('validacion_selectedPlantel', plantelId);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('validacion_selectedPlantel', plantelId);
+    }
     setProgramas([]);
     setAlumnos([]);
     fetchProgramas(plantelId);
@@ -126,7 +152,9 @@ export default function ValidacionForm({
     const programaId = event.target.value;
     setPrograma(programaId);
     setSelectedPrograma(programaId);
-    localStorage.setItem('validacion_selectedPrograma', programaId);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('validacion_selectedPrograma', programaId);
+    }
     fetchAlumnos(programaId);
   };
 
@@ -142,18 +170,6 @@ export default function ValidacionForm({
       }
     }
   }, [isRepresentante, instituciones]);
-
-  useEffect(() => {
-    if (selectedPlantel) {
-      fetchProgramas(selectedPlantel);
-    }
-  }, [selectedPlantel]);
-
-  useEffect(() => {
-    if (selectedPrograma) {
-      fetchAlumnos(selectedPrograma);
-    }
-  }, [selectedPrograma]);
 
   return (
     <Grid container spacing={2} alignItems="center">

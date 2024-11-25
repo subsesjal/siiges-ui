@@ -6,8 +6,15 @@ import React, { useState, useEffect, useContext } from 'react';
 
 export default function ProgramasForm({ setProgramas, setLoading }) {
   const { setNoti, session } = useContext(Context);
-  const [selectedInstitucion, setSelectedInstitucion] = useState(() => localStorage.getItem('selectedInstitucion') || '');
-  const [selectedPlantel, setSelectedPlantel] = useState(() => localStorage.getItem('selectedPlantel') || '');
+
+  const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('selectedInstitucion')
+    ? localStorage.getItem('selectedInstitucion')
+    : ''));
+
+  const [selectedPlantel, setSelectedPlantel] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('selectedPlantel')
+    ? localStorage.getItem('selectedPlantel')
+    : ''));
+
   const [planteles, setPlanteles] = useState([]);
   const [isPlantelesDisabled, setIsPlantelesDisabled] = useState(true);
 
@@ -24,16 +31,11 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
   const isRepresentante = roles.includes(session.rol);
 
   useEffect(() => {
-    if (selectedInstitucion) {
+    if (typeof window !== 'undefined') {
       localStorage.setItem('selectedInstitucion', selectedInstitucion);
-    }
-  }, [selectedInstitucion]);
-
-  useEffect(() => {
-    if (selectedPlantel) {
       localStorage.setItem('selectedPlantel', selectedPlantel);
     }
-  }, [selectedPlantel]);
+  }, [selectedInstitucion, selectedPlantel]);
 
   useEffect(() => {
     if (selectedInstitucion) {
@@ -62,6 +64,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
       setPlanteles([]);
       setIsPlantelesDisabled(true);
     }
+
     if (selectedPlantel) {
       getProgramas(selectedPlantel, (error, data) => {
         if (error) {
@@ -78,6 +81,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
               type: 'error',
             });
           }
+          setProgramas([]);
         } else {
           if (data.programas.length === 0) {
             setNoti({
@@ -94,9 +98,10 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
 
   useEffect(() => {
     if (isRepresentante && institucionesOrdenadas.length) {
-      const findIndexIntitucion = institucionesOrdenadas
-        .findIndex(({ usuarioId }) => usuarioId === session.id);
-      setSelectedInstitucion(institucionesOrdenadas[findIndexIntitucion]?.id);
+      const findIndexInstitucion = institucionesOrdenadas.findIndex(
+        ({ usuarioId }) => usuarioId === session.id,
+      );
+      setSelectedInstitucion(institucionesOrdenadas[findIndexInstitucion]?.id || '');
     }
   }, [isRepresentante, institucionesOrdenadas]);
 
