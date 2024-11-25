@@ -17,9 +17,17 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
   });
   const { setNoti, session } = useContext(Context);
 
-  const [selectedInstitucion, setSelectedInstitucion] = useState(() => localStorage.getItem('alumnos_selectedInstitucion') || '');
-  const [selectedPlantel, setSelectedPlantel] = useState(() => localStorage.getItem('alumnos_selectedPlantel') || '');
-  const [selectedPrograma, setSelectedPrograma] = useState(() => localStorage.getItem('alumnos_selectedPrograma') || '');
+  const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('alumnos_selectedInstitucion')
+    ? localStorage.getItem('alumnos_selectedInstitucion')
+    : ''));
+
+  const [selectedPlantel, setSelectedPlantel] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('alumnos_selectedPlantel')
+    ? localStorage.getItem('alumnos_selectedPlantel')
+    : ''));
+
+  const [selectedPrograma, setSelectedPrograma] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('alumnos_selectedPrograma')
+    ? localStorage.getItem('alumnos_selectedPrograma')
+    : ''));
 
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
@@ -50,10 +58,10 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
 
   useEffect(() => {
     if (isRepresentante && instituciones?.length) {
-      const findIndexIntitucion = instituciones.findIndex(
+      const findIndexInstitucion = instituciones.findIndex(
         ({ usuarioId }) => usuarioId === session.id,
       );
-      setSelectedInstitucion(instituciones[findIndexIntitucion]?.id || '');
+      setSelectedInstitucion(instituciones[findIndexInstitucion]?.id || '');
     }
   }, [isRepresentante, instituciones]);
 
@@ -125,25 +133,27 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
   useEffect(() => {
     if (selectedInstitucion) {
       fetchPlanteles(selectedInstitucion);
-    } else setPlanteles([]);
-  }, [selectedInstitucion]);
-
-  useEffect(() => {
-    if (selectedInstitucion) {
-      localStorage.setItem('alumnos_selectedInstitucion', selectedInstitucion);
+    } else {
+      setPlanteles([]);
     }
   }, [selectedInstitucion]);
 
   useEffect(() => {
-    if (selectedPlantel) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('alumnos_selectedInstitucion', selectedInstitucion);
       localStorage.setItem('alumnos_selectedPlantel', selectedPlantel);
+      localStorage.setItem('alumnos_selectedPrograma', selectedPrograma);
+    }
+  }, [selectedInstitucion, selectedPlantel, selectedPrograma]);
+
+  useEffect(() => {
+    if (selectedPlantel) {
       fetchProgramas(selectedPlantel);
     }
   }, [selectedPlantel]);
 
   useEffect(() => {
     if (selectedPrograma) {
-      localStorage.setItem('alumnos_selectedPrograma', selectedPrograma);
       fetchAlumnos(selectedPrograma);
     }
   }, [selectedPrograma]);
@@ -177,6 +187,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
           value={selectedPrograma}
           options={programas || []}
           onChange={handleProgramaChange}
+          disabled={!selectedPlantel}
         />
       </Grid>
     </Grid>

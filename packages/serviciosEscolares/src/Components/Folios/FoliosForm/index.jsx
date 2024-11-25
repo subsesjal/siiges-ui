@@ -31,13 +31,15 @@ export default function FoliosForm({
   const isRepresentante = session?.rol === 'representante';
   const isAdmin = session?.rol === 'admin';
 
-  const initialState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {
-    selectedInstitucion: '',
-    selectedPlantel: '',
-    selectedPrograma: '',
-    selectedDocumento: '',
-    selectedSolicitud: '',
-  };
+  const initialState = typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_KEY)
+    ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+    : {
+      selectedInstitucion: '',
+      selectedPlantel: '',
+      selectedPrograma: '',
+      selectedDocumento: '',
+      selectedSolicitud: '',
+    };
 
   const [state, setState] = useState(initialState);
   const [arrays, setArrays] = useState({
@@ -46,7 +48,9 @@ export default function FoliosForm({
   });
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+    }
   }, [state]);
 
   useEffect(() => {
