@@ -47,7 +47,7 @@ export default function SolicitudesFolios() {
   };
 
   useEffect(() => {
-    const shouldFetchData = isAdmin || (tipoSolicitud && tipoDocumento);
+    const shouldFetchData = isAdmin || (tipoSolicitud && tipoDocumento && programa);
 
     if (shouldFetchData) {
       fetchData();

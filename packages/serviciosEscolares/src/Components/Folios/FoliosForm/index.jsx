@@ -190,6 +190,12 @@ export default function FoliosForm({
     }
   }, [state.selectedSolicitud]);
 
+  useEffect(() => {
+    if (state.selectedPrograma) {
+      setPrograma(state.selectedPrograma);
+    }
+  }, [state.selectedPrograma]);
+
   const documentos = [
     { id: 1, nombre: 'Títulos' },
     { id: 2, nombre: 'Certificados' },
