@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Layout, DataTable, Context, DefaultModal, getData,
+  Layout, DataTable, Context, DefaultModal, getData, ButtonSimple,
 } from '@siiges-ui/shared';
 import {
   Divider, IconButton, Typography, Grid, CircularProgress,
@@ -18,7 +18,6 @@ function ModalState() {
     setModal(true);
     setLoading(true);
 
-    // Obtener los detalles de la notificación
     const response = await getData({ endpoint: `/notificaciones/${id}` });
     if (response.statusCode === 200) {
       setModalData(response.data);
@@ -123,6 +122,11 @@ export default function Notificaciones() {
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="h6">{`Notificación: ${modalData.data}`}</Typography>
+              </Grid>
+              <Grid container spacing={2} sx={{ justifyContent: 'flex-end', mt: 2 }}>
+                <Grid item>
+                  <ButtonSimple onClick={hideModal} design="enviar" text="Regresar" />
+                </Grid>
               </Grid>
             </Grid>
           )
