@@ -2,8 +2,10 @@ import { Grid, IconButton } from '@mui/material';
 import { DataTable } from '@siiges-ui/shared';
 import React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import SendIcon from '@mui/icons-material/Send';
+import DoneIcon from '@mui/icons-material/Done';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
@@ -33,9 +35,13 @@ const columns = [
 
       let IconComponent = ArticleIcon;
       if (params.row.estatusSolicitudFolioId === 2) {
-        IconComponent = HourglassEmptyIcon;
+        IconComponent = VisibilityIcon;
       } else if (params.row.estatusSolicitudFolioId === 3) {
-        IconComponent = CheckCircleIcon;
+        IconComponent = SendIcon;
+      } else if (params.row.estatusSolicitudFolioId === 7) {
+        IconComponent = DoneIcon;
+      } else if (params.row.estatusSolicitudFolioId === 6) {
+        IconComponent = DoneAllIcon;
       }
 
       return (
