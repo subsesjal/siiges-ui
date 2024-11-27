@@ -26,7 +26,8 @@ const columns = (handleEdit, handleConsultar) => [
         <IconButton onClick={() => handleConsultar(params.row.id)}>
           <ArticleIcon />
         </IconButton>
-        {params.row.estatusSolicitudFolioNombre !== 'REVISION' && (
+        {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA'
+          || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (
           <IconButton onClick={() => handleEdit(params.row.id)}>
             <EditIcon />
           </IconButton>
