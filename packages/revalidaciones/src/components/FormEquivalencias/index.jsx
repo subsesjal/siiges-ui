@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { Context, PositionDisplay } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import DatosSolicitante from './Pages/DatosSolicitante';
 import DatosInstitucion from './Pages/DatosInstitucion';
 import CargaMaterias from './Pages/CargaMaterias';
@@ -12,6 +13,7 @@ const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function FormEquivalencias() {
   const { setNoti } = useContext(Context);
+  const router = useRouter();
   const [currentPosition, setCurrentPosition] = useState(1);
   const [filesData, setFilesData] = useState({});
   const [form, setForm] = useState({
@@ -139,6 +141,7 @@ export default function FormEquivalencias() {
         message: 'Se envió la solicitud con éxito',
         type: 'success',
       });
+      router.reload();
     } catch (error) {
       console.error('¡Error al enviar el formulario!', error);
       setNoti({

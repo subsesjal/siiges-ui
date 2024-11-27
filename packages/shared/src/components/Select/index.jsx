@@ -1,12 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { FormHelperText } from '@mui/material';
+import {
+  FormHelperText,
+  InputAdornment,
+  ListSubheader,
+  TextField,
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
+const containsText = (text, searchText) => text.toLowerCase().indexOf(
+  searchText.toLowerCase(),
+) > -1;
 export default function BasicSelect({
   title,
   options,
@@ -22,6 +31,12 @@ export default function BasicSelect({
   textValue,
 }) {
   const [option, setOption] = useState(propValue);
+
+  const [searchText, setSearchText] = useState('');
+  const displayedOptions = useMemo(
+    () => options.filter((optionValue) => containsText(optionValue.nombre || '', searchText)),
+    [searchText, options],
+  );
 
   useEffect(() => {
     setOption(propValue);
@@ -52,16 +67,41 @@ export default function BasicSelect({
           onChange={handleOnChange}
           onBlur={onblur}
           onFocus={onfocus}
+          onClose={() => setSearchText('')}
           multiple={multiple}
           error={!!errorMessage}
           disabled={disabled}
+          MenuProps={{ autoFocus: false }}
           displayEmpty
         >
+          <ListSubheader>
+            <TextField
+              size="small"
+              autoFocus
+              placeholder="Escriba para buscar..."
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key !== 'Escape') {
+                  e.stopPropagation();
+                }
+              }}
+            />
+          </ListSubheader>
+          {!multiple && (
           <MenuItem value="" disabled={!multiple}>
             <em />
           </MenuItem>
-          {options
-            && options.map((opcion) => (
+          )}
+          {displayedOptions
+            && displayedOptions.map((opcion) => (
               <MenuItem
                 key={opcion.id}
                 value={textValue ? opcion.nombre : opcion.id}
@@ -83,9 +123,9 @@ BasicSelect.defaultProps = {
   disabled: false,
   textValue: false,
   errorMessage: '',
-  onChange: () => { },
-  onblur: () => { },
-  onfocus: () => { },
+  onChange: () => {},
+  onblur: () => {},
+  onfocus: () => {},
 };
 
 BasicSelect.propTypes = {
@@ -99,7 +139,9 @@ BasicSelect.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    ),
   ]),
   name: PropTypes.string.isRequired,
   required: PropTypes.bool,
