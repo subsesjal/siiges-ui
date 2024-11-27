@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid, IconButton, TextField, Typography,
@@ -20,24 +20,41 @@ function DataTable({
   const [searchText, setSearchText] = useState('');
   const [filteredRows, setFilteredRows] = useState(rows);
   const [loading, setLoading] = useState(true);
-  const [sortModel] = useState([
-    { field: 'id', sort: 'desc' },
-  ]);
+  const [sortModel] = useState([{ field: 'id', sort: 'desc' }]);
 
   useEffect(() => {
-    if (rows.length >= 0) {
-      setLoading(false);
-    }
+    setLoading(false);
     setFilteredRows(rows);
   }, [rows]);
 
+  // Custom debounce implementation
+  const debounce = (func, delay) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+
+  // Debounced search function
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      const filteredData = rows.filter(
+        (row) => Object.values(row || {}).some(
+          (data) => data?.toString().toLowerCase().includes(value),
+        ),
+      );
+      setFilteredRows(value ? filteredData : rows);
+    }, 300),
+    [rows],
+  );
+
   const handleSearch = (event) => {
-    const value = event.target.value.trim().toLowerCase();
+    const value = event.target.value.toLowerCase();
     setSearchText(value);
-    const filteredData = rows.filter(
-      (row) => Object.values(row).some((data) => data.toString().toLowerCase().includes(value)),
-    );
-    setFilteredRows(value ? filteredData : rows);
+    debouncedSearch(value);
   };
 
   return (
@@ -66,7 +83,6 @@ function DataTable({
             type="text"
             name="filter"
             autoComplete="filter"
-            autoFocus
             size="small"
             sx={{ mt: 2 }}
             value={searchText}
@@ -83,10 +99,10 @@ function DataTable({
       </Grid>
       <div style={{ height: 400, width: '100%', marginTop: 15 }}>
         <DataGrid
-          localeText={{ noRowsLabel: 'No hay registros' }}
+          localeText={{ noRowsLabel: loading ? 'Cargando...' : 'No hay registros' }}
           loading={loading}
           rows={filteredRows}
-          columns={columns}
+          columns={columns || []}
           pageSize={5}
           rowsPerPageOptions={[5]}
           sortModel={sortModel}
@@ -108,7 +124,13 @@ DataTable.defaultProps = {
 DataTable.propTypes = {
   title: PropTypes.string,
   rows: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      field: PropTypes.string.isRequired,
+      headerName: PropTypes.string.isRequired,
+      width: PropTypes.number,
+    }),
+  ).isRequired,
   buttonAdd: PropTypes.bool,
   buttonDisabled: PropTypes.bool,
   buttonText: PropTypes.string,
@@ -116,4 +138,4 @@ DataTable.propTypes = {
   buttonClick: PropTypes.func,
 };
 
-export default DataTable;
+export default React.memo(DataTable);
