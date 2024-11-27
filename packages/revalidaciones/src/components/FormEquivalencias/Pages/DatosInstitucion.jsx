@@ -81,6 +81,7 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
 
   const handleRvoeOnBlur = (event) => {
     const acuerdoRvoe = event.target.value;
+    console.log(acuerdoRvoe);
     if (tipoInstitucionId === 1) {
       fetchProgramas(acuerdoRvoe);
     }
@@ -156,7 +157,7 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           label="RVOE"
           name="acuerdoRvoe"
           value={form.institucionDestino?.acuerdoRvoe || ''}
-          onBlur={handleRvoeOnBlur}
+          onblur={handleRvoeOnBlur}
         />
       </Grid>
       <Grid item xs={9}>
@@ -166,6 +167,7 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           name="nombreCarrera"
           value={programas.nombre || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+          disabled={tipoInstitucionId === 1}
         />
       </Grid>
     </Grid>
