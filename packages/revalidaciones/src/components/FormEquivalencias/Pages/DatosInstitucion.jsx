@@ -81,7 +81,6 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
 
   const handleRvoeOnBlur = (event) => {
     const acuerdoRvoe = event.target.value;
-    console.log(acuerdoRvoe);
     if (tipoInstitucionId === 1) {
       fetchProgramas(acuerdoRvoe);
     }
