@@ -4,7 +4,7 @@ import { Context, Select } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-export default function BecasForm({ setBecas, setInstitucion }) {
+export default function BecasForm({ setBecas, setInstitucion, type }) {
   const { setLoading, setNoti, session } = useContext(Context);
   const [state, setState] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -140,6 +140,33 @@ export default function BecasForm({ setBecas, setInstitucion }) {
     }
   };
 
+  const fetchServicioSocial = async () => {
+    setLoading(true);
+    try {
+      const data = await mockFetch([
+        {
+          id: 1,
+          folio: 'LI2021306',
+          fechaReporte: 'Negocios Digitales\nMIXTA',
+          estatus: 'RVOE ENTREGADO',
+          rvoe: 'ESLIXXXXX',
+        },
+        {
+          id: 2,
+          folio: 'LI2021307',
+          fechaReporte: 'Ingeniería en Software\nPRESENCIAL',
+          estatus: 'RVOE PENDIENTE',
+          rvoe: 'ESLIYYYYY',
+        },
+      ]);
+      setBecas(data);
+    } catch (error) {
+      setNoti({ severity: 'error', message: 'Error fetching Servicio Social' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     persistState();
   }, [state]);
@@ -170,7 +197,11 @@ export default function BecasForm({ setBecas, setInstitucion }) {
 
   useEffect(() => {
     if (state.selectedCiclo) {
-      fetchBecas();
+      if (type !== 'servicioSocial') {
+        fetchBecas();
+      } else {
+        fetchServicioSocial();
+      }
       setInstitucion(state);
     }
   }, [state.selectedCiclo]);
@@ -259,7 +290,12 @@ export default function BecasForm({ setBecas, setInstitucion }) {
   );
 }
 
+BecasForm.defaultProps = {
+  type: null,
+};
+
 BecasForm.propTypes = {
   setBecas: PropTypes.func.isRequired,
   setInstitucion: PropTypes.func.isRequired,
+  type: PropTypes.string,
 };
