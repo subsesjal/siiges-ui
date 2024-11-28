@@ -1,22 +1,22 @@
 import { Grid, Typography, IconButton } from '@mui/material';
 import {
-  ButtonsModal, Context, DataTable, DefaultModal, Input, LabelData,
+  ButtonsForm, Context, DataTable, DefaultModal, getData, Input, LabelData,
+  Select,
 } from '@siiges-ui/shared';
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getAlumnoByMatricula } from '@siiges-ui/instituciones';
 
 export default function AsignarBecas({ type }) {
   const router = useRouter();
-  const { setNoti } = useContext(Context);
+  const { setNoti, setLoading } = useContext(Context);
   const [open, setOpen] = useState(false);
   const [institucion, setInstitucion] = useState(null);
-  const [matriculaValue, setMatriculaValue] = useState('');
-  const [alumnoByMatricula, setAlumnoByMatricula] = useState();
-  const programaId = 1;
+  const [form, setForm] = useState({});
+  const [alumno, setAlumno] = useState(null);
+  const programaId = 8;
 
   useEffect(() => {
     if (router.query.institucion) {
@@ -68,19 +68,54 @@ export default function AsignarBecas({ type }) {
     },
   ];
 
-  const handleBlurMatricula = () => {
-    getAlumnoByMatricula(matriculaValue, programaId, async (error, result) => {
-      if (error) {
+  const handleBlur = async (event) => {
+    const { name, value } = event.target;
+    if (name === 'matricula' && value) {
+      setLoading(true);
+      try {
+        const response = await getData({
+          endpoint: `/alumnos/programas/${programaId}?matricula=${value}`,
+        });
+        if (response.data) {
+          const fullName = `${response.data.persona.nombre} ${response.data.persona.apellidoPaterno} ${response.data.persona.apellidoMaterno}`;
+          setAlumno(fullName);
+          setForm((prevForm) => ({
+            ...prevForm,
+            alumnoId: response.data.id,
+          }));
+        }
+      } catch (error) {
+        console.error(error);
         setNoti({
           open: true,
-          message: '¡Algo salió mal al cargar al alumno, revisa la matrícula!',
+          message: '¡No se encontró el Alumno!',
           type: 'error',
         });
-        return;
+      } finally {
+        setLoading(false);
       }
+    }
+  };
 
-      setAlumnoByMatricula(result.alumnos);
-    });
+  const selectOptions = {
+    tipoBeca: [
+      { id: 1, label: 'Académica' },
+      { id: 2, label: 'Deportiva' },
+    ],
+    porcentajeBeca: [
+      { id: 1, label: '25%' },
+      { id: 2, label: '50%' },
+      { id: 3, label: '75%' },
+      { id: 4, label: '100%' },
+    ],
+    vigente: [
+      { id: 1, label: 'Sí' },
+      { id: 2, label: 'No' },
+    ],
+    estadoBeca: [
+      { id: 1, label: 'Activa' },
+      { id: 2, label: 'Inactiva' },
+    ],
   };
 
   return (
@@ -91,14 +126,14 @@ export default function AsignarBecas({ type }) {
       <Grid item xs={4}>
         <LabelData
           title="Institución"
-          subtitle={institucion?.selectedInstitucion || 'Universidad Enrique Díaz de León'}
+          subtitle={institucion?.selectedInstitucion || 'N/A'}
         />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="RVOE" subtitle={institucion?.selectedRvoe || 'ABCD1234567'} />
+        <LabelData title="RVOE" subtitle={institucion?.selectedRvoe || 'N/A'} />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="Plantel" subtitle="ABCD1234567" />
+        <LabelData title="Plantel" subtitle="N/A" />
       </Grid>
       <Grid item xs={12}>
         <DataTable
@@ -113,28 +148,49 @@ export default function AsignarBecas({ type }) {
           columns={columns}
         />
       </Grid>
-      <Grid item>
-        <DefaultModal open={open} setOpen={setOpen} title="Asignacion de Beca">
+      <DefaultModal open={open} setOpen={setOpen} title="Asignacion de Beca">
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <Input
               label="Matrícula"
+              id="matricula"
               name="matricula"
-              value={matriculaValue}
-              onChange={(e) => setMatriculaValue(e.target.value)}
-              onblur={handleBlurMatricula}
+              value={form.matricula || ''}
+              onblur={handleBlur}
+              onChange={(event) => setForm(
+                (prev) => ({ ...prev, [event.target.name]: event.target.value }),
+              )}
             />
           </Grid>
-          <ButtonsModal
-            confirm={() => {
-              console.log('Confirmed');
-              setOpen(false);
-            }}
-            cancel={() => {
-              setOpen(false);
-            }}
-          />
-        </DefaultModal>
-      </Grid>
+          {alumno && (
+            <Grid item xs={12}>
+              <LabelData title="Alumno" subtitle={alumno} />
+            </Grid>
+          )}
+          {Object.keys(selectOptions).map((key) => (
+            <Grid item xs={3} key={key}>
+              <Select
+                title={key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                name={key}
+                options={selectOptions[key]}
+                onChange={(event) => setForm(
+                  (prev) => ({ ...prev, [event.target.name]: event.target.value }),
+                )}
+              />
+            </Grid>
+          ))}
+        </Grid>
+        <ButtonsForm
+          confirmDisabled={!form.alumnoId}
+          confirm={() => {
+            console.log('Confirmed');
+            setOpen(false);
+          }}
+          cancel={() => {
+            setOpen(false);
+          }}
+        />
+      </DefaultModal>
     </Grid>
   );
 }
