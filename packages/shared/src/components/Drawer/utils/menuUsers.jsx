@@ -121,8 +121,12 @@ const panelMenuOptions = (rol) => [
         route: '/serviciosEscolares/revalidacionEquivalencias',
       },
       {
-        text: 'Becas y Servicio Social',
-        route: '/serviciosEscolares/becasServicioSocial',
+        text: 'Becas',
+        route: '/serviciosEscolares/becas',
+      },
+      {
+        text: 'Servicio Social',
+        route: '/serviciosEscolares/servicioSocial',
       },
       {
         text: 'Solicitud de Folios',
