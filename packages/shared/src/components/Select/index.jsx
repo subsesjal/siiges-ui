@@ -13,9 +13,8 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-const containsText = (text, searchText) => text.toLowerCase().indexOf(
-  searchText.toLowerCase(),
-) > -1;
+const containsText = (text = '', searchText = '') => text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) > -1;
+
 export default function BasicSelect({
   title,
   options,
