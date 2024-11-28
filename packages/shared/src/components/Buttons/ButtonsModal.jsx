@@ -4,12 +4,19 @@ import PropTypes from 'prop-types';
 import '../../styles/buttons/ButtonAdd.css';
 import ButtonSimple from './ButtonSimple';
 
-export default function ButtonsModal({ confirm, cancel, edit }) {
+export default function ButtonsModal({
+  confirm, cancel, edit, eliminate,
+}) {
   const [cancelText, setCancelText] = useState('Regresar');
+  const [confirmText, setConfirmText] = useState('Regresar');
 
   useEffect(() => {
     setCancelText(edit ? 'Cancelar' : 'Regresar');
   }, [edit]);
+
+  useEffect(() => {
+    setConfirmText(eliminate ? 'Eliminar' : 'Guardar');
+  }, [eliminate]);
 
   return (
     <Grid container justifyContent="flex-end" spacing={2}>
@@ -18,7 +25,7 @@ export default function ButtonsModal({ confirm, cancel, edit }) {
       </Grid>
       {edit && (
         <Grid item>
-          <ButtonSimple onClick={confirm} text="Guardar" />
+          <ButtonSimple onClick={confirm} text={confirmText} />
         </Grid>
       )}
     </Grid>
@@ -27,10 +34,12 @@ export default function ButtonsModal({ confirm, cancel, edit }) {
 
 ButtonsModal.defaultProps = {
   edit: true,
+  eliminate: false,
 };
 
 ButtonsModal.propTypes = {
   confirm: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   edit: PropTypes.bool,
+  eliminate: PropTypes.bool,
 };
