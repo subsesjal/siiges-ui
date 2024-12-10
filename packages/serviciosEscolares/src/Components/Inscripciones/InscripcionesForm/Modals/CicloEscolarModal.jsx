@@ -7,17 +7,17 @@ import {
   Select,
   createRecord,
 } from '@siiges-ui/shared';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function CicloEscolarModal({
   open,
   setOpen,
-  formCicloEscolar,
-  setFormCicloEscolar,
+  programaId,
   fetchCiclosEscolares,
 }) {
   const { setNoti } = useContext(Context);
+  const [formCicloEscolar, setFormCicloEscolar] = useState({ programaId: programaId.programaId });
   const nombresCiclos = [
     { id: 1, nombre: '2015A' },
     { id: 2, nombre: '2015B' },
@@ -97,10 +97,11 @@ export default function CicloEscolarModal({
             title="Nombre"
             name="nombre"
             options={nombresCiclos || []}
-            value=""
+            value={formCicloEscolar.nombre || ''}
             textValue
             onChange={handleFormCicloOnChange}
           />
+
         </Grid>
         <Grid item xs={8}>
           <Input
@@ -126,11 +127,6 @@ export default function CicloEscolarModal({
 CicloEscolarModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  formCicloEscolar: PropTypes.shape({
-    programaId: PropTypes.number.isRequired,
-    nombre: PropTypes.string,
-    descripcion: PropTypes.string,
-  }).isRequired,
-  setFormCicloEscolar: PropTypes.func.isRequired,
+  programaId: PropTypes.number.isRequired,
   fetchCiclosEscolares: PropTypes.func.isRequired,
 };

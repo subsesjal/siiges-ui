@@ -398,8 +398,7 @@ export default function InscripcionForm({
       <CicloEscolarModal
         open={open}
         setOpen={setOpen}
-        formCicloEscolar={{ programaId: state.selectedPrograma }}
-        setFormCicloEscolar={(data) => setState((prevState) => ({ ...prevState, ...data }))}
+        programaId={{ programaId: state.selectedPrograma }}
         fetchCiclosEscolares={fetchCiclosEscolares}
       />
       <GruposModal
