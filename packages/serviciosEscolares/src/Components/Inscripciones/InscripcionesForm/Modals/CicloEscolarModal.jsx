@@ -7,7 +7,7 @@ import {
   Select,
   createRecord,
 } from '@siiges-ui/shared';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function CicloEscolarModal({
@@ -17,7 +17,16 @@ export default function CicloEscolarModal({
   fetchCiclosEscolares,
 }) {
   const { setNoti } = useContext(Context);
-  const [formCicloEscolar, setFormCicloEscolar] = useState({ programaId: programaId.programaId });
+  const [formCicloEscolar, setFormCicloEscolar] = useState({});
+  useEffect(() => {
+    if (programaId) {
+      setFormCicloEscolar((prevForm) => ({
+        ...prevForm,
+        programaId: programaId.programaId,
+      }));
+    }
+  }, [programaId, setFormCicloEscolar]);
+
   const nombresCiclos = [
     { id: 1, nombre: '2015A' },
     { id: 2, nombre: '2015B' },

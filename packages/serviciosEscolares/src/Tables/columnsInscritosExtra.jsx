@@ -9,6 +9,7 @@ const columnsInscritosExtra = (
   calificacionMinima,
   calificacionMaxima,
   calificacionDecimal,
+  fechaExamenes,
 ) => [
   {
     field: 'matricula',
@@ -56,10 +57,11 @@ const columnsInscritosExtra = (
     headerName: 'Fecha de examen',
     width: 220,
     renderCell: (params) => {
-      const fechaExamen = params.row.calificaciones[1]?.fechaExamen || '';
       const isDisabled = disabled
         || !isExtraordinarioEnabled(params.row.id)
-        || params.row.situacionId === 3;
+        || params.row.situacionId === 3 || params.row.situacionId === 4;
+
+      const fechaExamen = !isDisabled && fechaExamenes ? fechaExamenes : params.row.calificaciones[0]?.fechaExamen || '';
       return (
         <FechaExamenInput
           id={params.id}
