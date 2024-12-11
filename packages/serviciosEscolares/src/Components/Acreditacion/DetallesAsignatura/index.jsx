@@ -90,7 +90,7 @@ export default function DetallesAsignatura({ type }) {
                 <Tabs
                   value={value}
                   onChange={handleChange}
-                  aria-label="Asignatura details tabs"
+                  aria-label="Asignaturas tabs"
                 >
                   <Tab label="Calificaciones Ordinarias" />
                   <Tab label="Calificaciones Extraordinarios" />

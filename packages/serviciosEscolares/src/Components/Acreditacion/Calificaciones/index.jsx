@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import {
   Button,
   Context,
   DataTable,
   getData,
+  InputDate,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import columnsInscritosOrdinario from '../../../Tables/columnsInscritosOrdinario';
@@ -26,6 +27,7 @@ export default function Calificaciones({
   const [calificaciones, setCalificaciones] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [response, setResponse] = useState();
+  const [fechaExamenes, setFechaExamenes] = useState('');
   const [calificacionAprobatoria, setCalificacionAprobatoria] = useState(null);
   const [calificacionMinima, setCalificacionMinima] = useState(null);
   const [calificacionMaxima, setCalificacionMaxima] = useState(null);
@@ -68,14 +70,12 @@ export default function Calificaciones({
     if (response) {
       const reloadAlumnos = async () => {
         try {
-          const alumnosActualizados = await getAlumnosAcreditacion(asignaturaId, grupoId);
+          const alumnosActualizados = await getAlumnosAcreditacion(
+            asignaturaId,
+            grupoId,
+          );
           if (alumnosActualizados) {
             setAlumnos(alumnosActualizados);
-            setNoti({
-              open: true,
-              message: '¡Datos actualizados correctamente!',
-              type: 'success',
-            });
           } else {
             setNoti({
               open: true,
@@ -100,7 +100,12 @@ export default function Calificaciones({
     return alumno && alumno.calificaciones.length === 2;
   };
 
-  const updateCalificaciones = (alumnoId, newValue, fieldToUpdate, tipo = 1) => {
+  const updateCalificaciones = (
+    alumnoId,
+    newValue,
+    fieldToUpdate,
+    tipo = 1,
+  ) => {
     setCalificaciones((prevCalificaciones) => {
       const existingIndex = prevCalificaciones.findIndex(
         (c) => c.alumnoId === alumnoId && c.tipo === tipo,
@@ -124,14 +129,21 @@ export default function Calificaciones({
   };
 
   const handleSubmit = async () => {
-    const calificacionesValidas = calificaciones.filter((c) => {
-      const alumno = alumnos.find((a) => a.id === c.alumnoId);
-      return alumno && alumno.situacionId === 1 && c.calificacion.trim() !== '';
-    });
+    const alumnosById = new Map(alumnos.map((a) => [a.id, a]));
 
-    const calificacionesInvalidas = calificaciones.filter((c) => {
-      const alumno = alumnos.find((a) => a.id === c.alumnoId);
-      return alumno && alumno.situacionId !== 1;
+    const calificacionesValidas = [];
+    const calificacionesInvalidas = [];
+
+    calificaciones.forEach((c) => {
+      const alumno = alumnosById.get(c.alumnoId);
+
+      if (alumno) {
+        if (alumno.situacionId === 1 && (c.calificacion?.trim() || '') !== '') {
+          calificacionesValidas.push(c);
+        } else {
+          calificacionesInvalidas.push({ ...c, alumno });
+        }
+      }
     });
 
     if (calificacionesValidas.length === 0) {
@@ -143,55 +155,61 @@ export default function Calificaciones({
       return;
     }
 
-    if (calificacionesInvalidas.length > 0) {
-      const alumnosInvalidos = calificacionesInvalidas.map((c) => {
-        const alumno = alumnos.find((a) => a.id === c.alumnoId);
-        return alumno.persona.nombre;
-      }).join(', ');
-
-      setTimeout(() => {
-        setNoti({
-          open: true,
-          message: `¡No se pueden subir calificaciones para los alumnos debido a su situación!: ${alumnosInvalidos}.`,
-          type: 'error',
-        });
-      }, 3500);
-    }
-
     setIsSubmitting(true);
 
-    const calificacionesOrdinarias = calificacionesValidas.filter((c) => c.tipo === 1);
-    if (calificacionesOrdinarias.length > 0) {
-      await submitCalificaciones(
-        calificacionesOrdinarias,
-        setNoti,
-        grupoId,
-        asignaturaId,
-        1,
-        setResponse,
-      );
-    }
+    try {
+      const calificacionesOrdinarias = calificacionesValidas.filter((c) => c.tipo === 1);
+      if (calificacionesOrdinarias.length > 0) {
+        await submitCalificaciones(
+          calificacionesOrdinarias,
+          setNoti,
+          grupoId,
+          asignaturaId,
+          1,
+          setResponse,
+        );
+      }
 
-    const calificacionesExtraordinarias = calificacionesValidas.filter(
-      (c) => c.tipo === 2 || parseFloat(c.calificacion) < calificacionAprobatoria,
-    )
-      .map((c) => ({
+      const calificacionesExtraordinarias = calificacionesValidas
+        .filter((c) => c.tipo === 2 || parseFloat(c.calificacion) < calificacionAprobatoria)
+        .map((c) => ({
+          ...c,
+          calificacion: c.tipo === 2 ? c.calificacion : '',
+          tipo: 2,
+        }));
+
+      if (calificacionesExtraordinarias.length > 0) {
+        await submitCalificaciones(
+          calificacionesExtraordinarias,
+          setNoti,
+          grupoId,
+          asignaturaId,
+          2,
+          setResponse,
+        );
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `Error al procesar las calificaciones: ${error.message}`,
+        type: 'error',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (fechaExamenes) {
+      setCalificaciones((prevCalificaciones) => prevCalificaciones.map((c) => ({
         ...c,
-        calificacion: c.tipo === 2 ? c.calificacion : '',
-        tipo: 2,
-      }));
-
-    if (calificacionesExtraordinarias.length > 0) {
-      await submitCalificaciones(
-        calificacionesExtraordinarias,
-        setNoti,
-        grupoId,
-        asignaturaId,
-        2,
-        setResponse,
-      );
+        fechaExamen: fechaExamenes,
+      })));
     }
-    setIsSubmitting(false);
+  }, [fechaExamenes]);
+
+  const handleFechaExamenesChange = (newValue) => {
+    setFechaExamenes(newValue);
   };
 
   const columns = mode === 'Ordinarias'
@@ -201,6 +219,7 @@ export default function Calificaciones({
       calificacionMinima,
       calificacionMaxima,
       calificacionDecimal,
+      fechaExamenes,
     )
     : columnsInscritosExtra(
       disabled,
@@ -209,10 +228,19 @@ export default function Calificaciones({
       calificacionMinima,
       calificacionMaxima,
       calificacionDecimal,
+      fechaExamenes,
     );
 
   return (
     <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <InputDate
+          label="Fecha de Examenes General"
+          name="fechaExamenes"
+          onChange={(event) => handleFechaExamenesChange(event.target.value)}
+          value=""
+        />
+      </Grid>
       <Grid item xs={12}>
         <DataTable title={labelAsignatura} rows={alumnos} columns={columns} />
       </Grid>
@@ -227,14 +255,13 @@ export default function Calificaciones({
       </Grid>
       {!disabled && (
         <Grid item xs={9}>
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-            <Button
-              text={isSubmitting ? 'Cargando...' : 'Cargar Calificaciones'}
-              type="edit"
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-            />
-          </Box>
+          <Button
+            text={isSubmitting ? 'Cargando...' : 'Cargar Calificaciones'}
+            type="edit"
+            align="right"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          />
         </Grid>
       )}
     </Grid>

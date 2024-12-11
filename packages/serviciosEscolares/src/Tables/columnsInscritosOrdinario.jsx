@@ -8,6 +8,7 @@ const columnsInscritosOrdinario = (
   calificacionMinima,
   calificacionMaxima,
   calificacionDecimal,
+  fechaExamenes,
 ) => [
   {
     field: 'matricula',
@@ -32,7 +33,7 @@ const columnsInscritosOrdinario = (
     width: 220,
     renderCell: (params) => {
       const calificacion = params.row.calificaciones[0]?.calificacion || '';
-      const isDisabled = disabled || params.row.situacionId === 3;
+      const isDisabled = disabled || params.row.situacionId === 3 || params.row.situacionId === 4;
       return (
         <CalificacionInput
           id={params.id}
@@ -53,8 +54,9 @@ const columnsInscritosOrdinario = (
     headerName: 'Fecha de examen',
     width: 220,
     renderCell: (params) => {
-      const fechaExamen = params.row.calificaciones[0]?.fechaExamen || '';
-      const isDisabled = disabled || params.row.situacionId === 3;
+      const isDisabled = disabled || params.row.situacionId === 3 || params.row.situacionId === 4;
+      const fechaExamen = !isDisabled && fechaExamenes ? fechaExamenes : params.row.calificaciones[0]?.fechaExamen || '';
+
       return (
         <FechaExamenInput
           id={params.id}

@@ -25,6 +25,8 @@ export default function InscripcionesTable({
   const [alumnoData, setAlumnoData] = useState(null);
   const [isAlumnoValido, setIsAlumnoValido] = useState(false);
 
+  const allIds = asignaturas.map((asignatura) => asignatura.id);
+
   const fetchAlumnosInscritos = async () => {
     try {
       const result = await getData({ endpoint: `/alumnos/grupos/${grupoId}/inscripcion` });
@@ -55,6 +57,14 @@ export default function InscripcionesTable({
       setSelectedAsignaturas((prev) => [...prev, id]);
     } else {
       setSelectedAsignaturas((prev) => prev.filter((aId) => aId !== id));
+    }
+  };
+
+  const handleSelectAll = (isChecked) => {
+    if (isChecked) {
+      setSelectedAsignaturas([...allIds]);
+    } else {
+      setSelectedAsignaturas([]);
     }
   };
 
@@ -175,6 +185,8 @@ export default function InscripcionesTable({
           columns={columnsAsignaturas(
             handleCheckboxChange,
             selectedAsignaturas,
+            allIds,
+            handleSelectAll,
           )}
           title="Tabla de asignaturas"
         />
