@@ -128,7 +128,7 @@ export default function ModalCertificado({
       } else if (response.statusCode === 409) {
         setNoti({
           open: true,
-          message: 'El alumno que intentó agregar aún no está validado',
+          message: '¡El alumno que intentó agregar aún no está validado!',
           type: 'error',
         });
       } else {

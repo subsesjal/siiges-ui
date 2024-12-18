@@ -38,7 +38,7 @@ export default function ProgramasPDF({ id: entidadId }) {
         if (error) {
           setNoti({
             open: true,
-            message: `No se encontró el archivo: ${error}`,
+            message: `¡No se encontró el archivo!: ${error}`,
             type: 'error',
           });
         } else {
