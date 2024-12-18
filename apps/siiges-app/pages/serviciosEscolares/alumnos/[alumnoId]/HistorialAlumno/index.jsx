@@ -1,4 +1,4 @@
-import { Layout, getData } from '@siiges-ui/shared';
+import { ButtonSimple, Layout, getData } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -33,7 +33,12 @@ export default function HistorialAlumno() {
   return (
     <Layout title="Historial Académico del Alumno">
       <Grid container>
-        <HistorialAcademico alumno={alumno} historial={historial} />
+        <Grid item xs={12}>
+          <HistorialAcademico alumno={alumno} historial={historial} />
+        </Grid>
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <ButtonSimple onClick={() => { router.back(); }} text="Regresar" align="right" design="enviar" />
+        </Grid>
       </Grid>
     </Layout>
   );
