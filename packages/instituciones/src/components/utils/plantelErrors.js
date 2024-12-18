@@ -38,7 +38,7 @@ export default function plantelErrors(form, setError, error) {
       if (!String(form.domicilio.codigoPostal).match(validNumber)) {
         setError({
           ...error,
-          codigoPostal: 'Ingrese solo números',
+          codigoPostal: '¡Ingrese solo números!',
         });
         return false;
       }

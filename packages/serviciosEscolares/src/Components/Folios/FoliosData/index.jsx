@@ -362,7 +362,7 @@ export default function FoliosData({ type }) {
       setOpen(false);
       setNoti({
         open: true,
-        message: `Error al enviar la solicitud: ${error}`,
+        message: `¡Error al enviar la solicitud!: ${error}`,
         type: 'error',
       });
     }

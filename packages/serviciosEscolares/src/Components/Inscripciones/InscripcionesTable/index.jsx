@@ -122,7 +122,7 @@ export default function InscripcionesTable({
     if (!alumnoValidacion || !alumnoData) {
       setNoti({
         open: true,
-        message: 'El alumno no cumple con los requisitos de validación y estado.',
+        message: '¡El alumno no cumple con los requisitos de validación y estado!.',
         type: 'error',
       });
       return;
