@@ -123,17 +123,6 @@ export default function GruposModal({
             value={data?.generacionFechaInicio}
           />
         </Grid>
-        <Grid item xs={6}>
-          <InputDate
-            id="generacionFechaFin"
-            label="Fecha de fin de generación"
-            name="generacionFechaFin"
-            auto="generacionFechaFin"
-            onChange={handleOnChange}
-            type="date"
-            value={data?.generacionFechaFin}
-          />
-        </Grid>
         <Grid item xs={12} sx={{ mt: 2 }}>
           <ButtonsForm
             confirm={() => {
