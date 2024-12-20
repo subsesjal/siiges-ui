@@ -14,7 +14,7 @@ export default function useGrupos(ciclosEscolarId, gradoId, fetchGrupos, setFetc
       const url = process.env.NEXT_PUBLIC_URL;
 
       if (!apikey || !url) {
-        console.error('API key or URL not defined in environment variables');
+        console.error('¡Clave API o URL no definida en las variables de entorno!');
         return;
       }
 

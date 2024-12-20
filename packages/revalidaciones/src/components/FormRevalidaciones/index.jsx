@@ -125,7 +125,7 @@ export default function FormRevalidaciones() {
       if (archivoAdjunto) {
         formData.append(key, archivoAdjunto);
       } else {
-        console.error(`No se encontró el archivo para ${key}`);
+        console.error(`¡No se encontró el archivo para ${key}!`);
       }
     });
 

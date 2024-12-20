@@ -85,7 +85,7 @@ export default function FormAlumno({ type, alumno, setId }) {
     if (name === 'situacionId' && ifRepresentantes && (value === 1 || value === 3)) {
       setNoti({
         open: true,
-        message: 'Solo puede seleccionar Situación: Inactivo o Baja.',
+        message: '¡Solo puede seleccionar Situación: Inactivo o Baja.!',
         type: 'error',
       });
       setForm((prevForm) => ({

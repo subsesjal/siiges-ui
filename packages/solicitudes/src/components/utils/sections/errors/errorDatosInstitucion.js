@@ -19,7 +19,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       ) {
         setError({
           ...error,
-          nombreInstitucion: 'Nombre de institución inválido',
+          nombreInstitucion: '¡Nombre de institución inválido!',
         });
         return false;
       }
@@ -31,7 +31,7 @@ export default function errorDatosInstitucion(form, setError, error) {
         formData.programa?.historia === undefined
         || formData.programa?.historia === ''
       ) {
-        setError({ ...error, historia: 'Historia inválida' });
+        setError({ ...error, historia: '¡Historia inválida!' });
         return false;
       }
       setError({ ...error, historia: '' });
@@ -42,7 +42,7 @@ export default function errorDatosInstitucion(form, setError, error) {
         formData.programa?.vision === undefined
         || formData.programa?.vision === ''
       ) {
-        setError({ ...error, vision: 'Visión inválida' });
+        setError({ ...error, vision: '¡Visión inválida!' });
         return false;
       }
       setError({ ...error, vision: '' });
@@ -52,7 +52,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       if (formData.mision === undefined || formData.mision === '') {
         setError({
           ...error,
-          mision: 'Misión inválida',
+          mision: '¡Misión inválida!',
         });
         return false;
       }
@@ -66,7 +66,7 @@ export default function errorDatosInstitucion(form, setError, error) {
       ) {
         setError({
           ...error,
-          valoresInstitucionales: 'Valores institucionales inválidos',
+          valoresInstitucionales: '¡Valores institucionales inválidos!',
         });
         return false;
       }
