@@ -2,17 +2,17 @@ import React from 'react';
 import ButtonsValidacion from '../Components/utils/ButtonValidacion';
 
 const columnsValidacion = (programa, institucion) => [
-  { field: 'id', headerName: 'ID', width: 60 },
+  { field: 'id', headerName: 'ID', width: 100 },
   { field: 'matricula', headerName: 'Matrícula', width: 150 },
   { field: 'apellidoPaterno', headerName: 'Primer Apellido', width: 200 },
   { field: 'apellidoMaterno', headerName: 'Segundo Apellido', width: 200 },
   { field: 'nombre', headerName: 'Nombre', width: 200 },
-  { field: 'situacion', headerName: 'Situación', width: 200 },
-  { field: 'estatus', headerName: 'Estatus', width: 200 },
+  { field: 'situacion', headerName: 'Situación', width: 120 },
+  { field: 'estatus', headerName: 'Estatus', width: 120 },
   {
     field: 'actions',
     headerName: 'Acciones',
-    width: 150,
+    width: 100,
     renderCell: (params) => (
       <ButtonsValidacion
         id={params.id}
