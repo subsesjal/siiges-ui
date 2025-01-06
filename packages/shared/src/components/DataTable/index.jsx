@@ -4,7 +4,7 @@ import {
   Grid, IconButton, TextField, Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, esES } from '@mui/x-data-grid';
 import Button from '../Buttons/Button';
 
 function DataTable({
@@ -21,13 +21,13 @@ function DataTable({
   const [filteredRows, setFilteredRows] = useState(rows);
   const [loading, setLoading] = useState(true);
   const [sortModel] = useState([{ field: 'id', sort: 'desc' }]);
+  const [pageSize, setPageSize] = useState(10); // Default page size
 
   useEffect(() => {
     setLoading(false);
     setFilteredRows(rows);
   }, [rows]);
 
-  // Custom debounce implementation
   const debounce = (func, delay) => {
     let timeout;
     return (...args) => {
@@ -38,7 +38,6 @@ function DataTable({
     };
   };
 
-  // Debounced search function
   const debouncedSearch = useCallback(
     debounce((value) => {
       const filteredData = rows.filter(
@@ -57,9 +56,16 @@ function DataTable({
     debouncedSearch(value);
   };
 
+  const localeText = {
+    ...esES.components.MuiDataGrid.defaultProps.localeText,
+    noRowsLabel: 'No hay registros',
+    rowsPerPage: 'Filas por página:',
+    footerRowSelected: (count) => (count !== 1 ? `${count.toLocaleString()} filas seleccionadas` : `${count.toLocaleString()} fila seleccionada`),
+  };
+
   return (
     <>
-      <Grid container>
+      <Grid container alignItems="center" spacing={2}>
         <Grid item xs={9} sx={{ mt: 2 }}>
           {buttonAdd ? (
             <Button
@@ -99,13 +105,18 @@ function DataTable({
       </Grid>
       <div style={{ height: 400, width: '100%', marginTop: 15 }}>
         <DataGrid
-          localeText={{ noRowsLabel: loading ? 'Cargando...' : 'No hay registros' }}
+          localeText={localeText}
           loading={loading}
           rows={filteredRows}
           columns={columns || []}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          sortModel={sortModel}
+          pageSize={pageSize}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          initialState={{
+            sorting: {
+              sortModel,
+            },
+          }}
         />
       </div>
     </>
