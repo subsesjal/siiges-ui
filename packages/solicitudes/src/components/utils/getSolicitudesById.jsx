@@ -46,11 +46,6 @@ export default function getSolicitudesById(id) {
       })
         .then((response) => {
           if (!response.ok) {
-            setNoti({
-              open: true,
-              message: '¡Algo salió mal al cargar la información!',
-              type: 'error',
-            });
             throw new Error('¡Error al obtener datos!');
           }
           return response.json();
