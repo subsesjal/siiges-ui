@@ -27,7 +27,6 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
     .then((data) => {
       setId(data.data.id);
       setProgramaId(data.data.programa.id);
-      // Send another petition to the specific section endpoint
       return fetch(`${url}/api/v1/solicitudes/${data.data.id}/secciones/1`, {
         method: 'POST',
         headers: {
@@ -42,7 +41,6 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
           return response.json();
         })
         .then(() => {
-          // Update the section state
           setSections((prevSections) => prevSections.map((section) => {
             if (section.id === 1) {
               return { ...section, disabled: true };

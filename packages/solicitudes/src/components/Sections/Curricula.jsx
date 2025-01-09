@@ -21,7 +21,6 @@ export default function Curricula({ disabled, type }) {
 
   const fileData = [
     'MAPA_CURRICULAR',
-    'REGLAS_ACADEMICAS',
     'ASIGNATURAS_DETALLE',
     'PROPUESTA_HEMEROGRAFICA',
   ].map((tipoDocumento) => ({
@@ -79,23 +78,7 @@ export default function Curricula({ disabled, type }) {
         <Typography variant="h6">Currícula</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
-        <Grid item xs={12}>
-          <Input
-            id="mapaCurricular"
-            name="mapaCurricular"
-            label="Mapa curricular"
-            rows={4}
-            multiline
-            sx={{ width: '100%' }}
-            value={form[5].programa?.mapaCurricular}
-            onChange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
-            helperText={error.mapaCurricular}
-            error={!!error.mapaCurricular}
-            disabled={isDisabled}
-          />
-        </Grid>
+        {form[1].programa?.duracionPeriodos && (
         <Grid item xs={12}>
           <Input
             id="flexibilidadCurricular"
@@ -113,23 +96,7 @@ export default function Curricula({ disabled, type }) {
             disabled={isDisabled}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Input
-            id="lineasGeneracionAplicacionConocimiento"
-            name="lineasGeneracionAplicacionConocimiento"
-            label="Líneas de generación del conocimiento"
-            rows={4}
-            multiline
-            sx={{ width: '100%' }}
-            value={form[5].programa?.lineasGeneracionAplicacionConocimiento}
-            onChange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
-            helperText={error.lineasGeneracionAplicacionConocimiento}
-            error={!!error.lineasGeneracionAplicacionConocimiento}
-            disabled={isDisabled}
-          />
-        </Grid>
+        )}
         <Grid item xs={12}>
           <Input
             id="actualizacion"
@@ -178,22 +145,11 @@ export default function Curricula({ disabled, type }) {
         <Grid item xs={9}>
           <InputFile
             tipoEntidad="PROGRAMA"
-            tipoDocumento="REGLAS_ACADEMICAS"
-            id={id}
-            label="Reglas de operación de las academias"
-            url={fileURLs[1]}
-            setUrl={(url) => handleFileLoaded(1, url)}
-            disabled={isDisabled}
-          />
-        </Grid>
-        <Grid item xs={9}>
-          <InputFile
-            tipoEntidad="PROGRAMA"
             tipoDocumento="ASIGNATURAS_DETALLE"
             id={id}
             label="Asignaturas a detalle"
             url={fileURLs[2]}
-            setUrl={(url) => handleFileLoaded(2, url)}
+            setUrl={(url) => handleFileLoaded(1, url)}
             disabled={isDisabled}
           />
         </Grid>
@@ -204,7 +160,7 @@ export default function Curricula({ disabled, type }) {
             id={id}
             label="Propuesta hemerobibliográfica"
             url={fileURLs[3]}
-            setUrl={(url) => handleFileLoaded(3, url)}
+            setUrl={(url) => handleFileLoaded(2, url)}
             disabled={isDisabled}
           />
         </Grid>
