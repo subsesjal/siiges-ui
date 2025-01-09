@@ -159,20 +159,6 @@ export default function AsignaturasFormacionEditModal({
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
-            id="academia"
-            label="Academia"
-            name="academia"
-            auto="academia"
-            value={rowItem.academia}
-            onChange={handleOnChange}
-            onblur={handleOnBlur}
-            required
-            disabled={edit === 'Consultar Asignatura'}
-            errorMessage={error.academia}
-          />
-        </Grid>
-        <Grid item xs={12}>
           <BasicSelect
             title="Seriación"
             name="seriacion"

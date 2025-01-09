@@ -140,20 +140,6 @@ export default function AsignaturasFormacionCreateModal({
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
-            id="academia"
-            label="Academia"
-            name="academia"
-            auto="academia"
-            value={formAsignaturasFormacion.academia || ''}
-            onChange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
-            required
-            errorMessage={error.academia}
-          />
-        </Grid>
-        <Grid item xs={12}>
           <BasicSelect
             title="Seriación"
             name="seriacion"
@@ -198,17 +184,13 @@ export default function AsignaturasFormacionCreateModal({
             text="Cancelar"
             design="cancel"
             onClick={hideModal}
-          >
-            Cancelar
-          </ButtonSimple>
+          />
         </Grid>
         <Grid item xs={2}>
           <ButtonSimple
             text="Guardar"
             onClick={handleOnSubmit}
-          >
-            Confirmar
-          </ButtonSimple>
+          />
         </Grid>
       </Grid>
     </DefaultModal>

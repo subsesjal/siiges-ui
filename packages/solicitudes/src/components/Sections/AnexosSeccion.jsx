@@ -17,7 +17,6 @@ export default function AnexosSeccion({ disabled, id, type }) {
     'COMPROBANTE_TELEFONO',
     'PROYECTO_VINCULACION',
     'PLAN_MEJORA',
-    'FORMA_MIGRATORIA',
     'PROGRAMA_SUPERACION',
   ].map((tipoDocumento) => ({
     entidadId: id,
@@ -67,8 +66,15 @@ export default function AnexosSeccion({ disabled, id, type }) {
             url={fileURLs[0] || ''}
             setUrl={(url) => handleFileLoaded(0, url)}
             disabled={isDisabled}
-            label="Identificación oficial con fotografía de la persona física, o acta constitutiva de la persona moral y poder de su Representante Legal"
+            label="Identificación oficial con fotografía"
           />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="subtitle2">
+            En el caso de ser persona física anexar la
+            Identificación oficial, en el caso de contar con razón social o persona moral
+            anexar el acta constitutiva junto con su Identificación oficial.
+          </Typography>
         </Grid>
         <Grid item xs={12}>
           <InputFile
@@ -167,17 +173,6 @@ export default function AnexosSeccion({ disabled, id, type }) {
             setUrl={(url) => handleFileLoaded(9, url)}
             disabled={isDisabled}
             label="Plan de mejora"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="FORMA_MIGRATORIA"
-            id={id}
-            url={fileURLs[10] || ''}
-            setUrl={(url) => handleFileLoaded(10, url)}
-            disabled={isDisabled}
-            label="Formas de migratorias de los profesores"
           />
         </Grid>
         <Grid item xs={12}>
