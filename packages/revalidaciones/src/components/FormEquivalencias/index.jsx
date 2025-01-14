@@ -45,15 +45,14 @@ export default function FormEquivalencias() {
         nombreCarrera: '',
       },
       institucionDestino: {
-        tipoInstitucionId: '',
-        programaId: 1,
+        tipoInstitucionId: 1,
+        programaId: '',
         nombre: '',
         acuerdoRvoe: '',
         nombreCarrera: '',
       },
     },
-    asignaturaAntecedente: [],
-    asignaturaEquivalente: [],
+    asignaturasAntecedentesEquivalentes: [],
   });
   const [estados, setEstados] = useState([]);
   const totalPositions = 4;

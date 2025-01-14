@@ -30,18 +30,28 @@ const columns = [
 
 export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [open, setOpen] = useState(false);
-  const [materiaAntecedente, setMateriaAntecedente] = useState('');
+  const [nombreAsignaturaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
-  const [materiaEquivalente, setMateriaEquivalente] = useState('');
+  const [nombreAsignaturaEquivalente, setMateriaEquivalente] = useState('');
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
 
   const handleConfirm = () => {
     handleOnChange(
-      { target: { name: 'asignaturaAntecedente', value: [...form.asignaturaAntecedente, { nombre: materiaAntecedente, calificacion: calificacionAntecedente }] } },
-      [],
-    );
-    handleOnChange(
-      { target: { name: 'asignaturaEquivalente', value: [...form.asignaturaEquivalente, { nombre: materiaEquivalente, calificacion: calificacionEquivalente }] } },
+      {
+        target: {
+          name: 'asignaturasAntecedentesEquivalentes',
+          value: [
+            ...form.asignaturasAntecedentesEquivalentes,
+            {
+              asignaturaId: 1,
+              nombreAsignaturaEquivalente,
+              calificacionEquivalente,
+              nombreAsignaturaAntecedente,
+              calificacionAntecedente,
+            },
+          ],
+        },
+      },
       [],
     );
 
@@ -59,15 +69,13 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
           buttonAdd
           buttonClick={() => setOpen(true)}
           buttonText="Carga de Materia"
-          rows={
-            form.asignaturaAntecedente.concat(form.asignaturaEquivalente).map((item, index) => ({
-              id: index,
-              materiasAntecedente: item.nombre,
-              calificacionAntecedente: item.calificacion,
-              materiasEquivalentes: item.nombre,
-              calificacionEquivalente: item.calificacion,
-            }))
-          }
+          rows={form.asignaturasAntecedentesEquivalentes.map((item, index) => ({
+            id: index,
+            materiasAntecedente: item.nombreAsignaturaAntecedente,
+            calificacionAntecedente: item.calificacionAntecedente,
+            materiasEquivalentes: item.nombreAsignaturaEquivalente,
+            calificacionEquivalente: item.calificacionEquivalente,
+          }))}
           columns={columns}
         />
       </Grid>
@@ -75,10 +83,10 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <Input
-              id="materiaAntecedente"
-              name="materiaAntecedente"
+              id="nombreAsignaturaAntecedente"
+              name="nombreAsignaturaAntecedente"
               label="Materias de Antecedente"
-              value={materiaAntecedente}
+              value={nombreAsignaturaAntecedente}
               onChange={(e) => setMateriaAntecedente(e.target.value)}
             />
           </Grid>
@@ -93,10 +101,10 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
           </Grid>
           <Grid item xs={6}>
             <Input
-              id="materiaEquivalente"
-              name="materiaEquivalente"
+              id="nombreAsignaturaEquivalente"
+              name="nombreAsignaturaEquivalente"
               label="Materias de Equivalente"
-              value={materiaEquivalente}
+              value={nombreAsignaturaEquivalente}
               onChange={(e) => setMateriaEquivalente(e.target.value)}
             />
           </Grid>
@@ -123,16 +131,13 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
 
 CargaMateriasEquivalentes.propTypes = {
   form: PropTypes.shape({
-    asignaturaAntecedente: PropTypes.arrayOf(
+    asignaturasAntecedentesEquivalentes: PropTypes.arrayOf(
       PropTypes.shape({
-        nombre: PropTypes.string,
-        calificacion: PropTypes.string,
-      }),
-    ),
-    asignaturaEquivalente: PropTypes.arrayOf(
-      PropTypes.shape({
-        nombre: PropTypes.string,
-        calificacion: PropTypes.string,
+        asignaturaId: PropTypes.number,
+        nombreAsignaturaEquivalente: PropTypes.string,
+        calificacionEquivalente: PropTypes.string,
+        nombreAsignaturaAntecedente: PropTypes.string,
+        calificacionAntecedente: PropTypes.string,
       }),
     ),
   }).isRequired,
