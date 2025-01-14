@@ -191,7 +191,7 @@ export default function Calificaciones({
     } catch (error) {
       setNoti({
         open: true,
-        message: `Error al procesar las calificaciones: ${error.message}`,
+        message: `¡Error al procesar las calificaciones!: ${error.message}`,
         type: 'error',
       });
     } finally {

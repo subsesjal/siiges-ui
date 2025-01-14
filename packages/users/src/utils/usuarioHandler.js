@@ -27,7 +27,7 @@ const setErrorState = (name, errorMessage, setError) => {
 const errors = {
   nombre: (form, setError) => setErrorState(
     'nombre',
-    !form.persona.nombre ? '¡Nombre inválido1' : '',
+    !form.persona.nombre ? '¡Nombre inválido!' : '',
     setError,
   ),
   apellidoPaterno: (form, setError) => setErrorState(
