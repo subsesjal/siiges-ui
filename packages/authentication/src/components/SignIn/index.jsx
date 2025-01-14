@@ -106,7 +106,7 @@ export default function SignIn() {
         }}
       >
         <Typography variant="body2" style={{ color: '#3b4245' }}>
-          &copy; 2024 Secretaría General de Gobierno - Todos los derechos reservados.
+          &copy; 2025 Secretaría General de Gobierno - Todos los derechos reservados.
         </Typography>
         <Typography variant="body2" style={{ color: '#3b4245' }}>
           Edificio MIND Av. Faro #2350 , Colonia: Verde Valle , CP: 44540, Guadalajara, Jalisco
