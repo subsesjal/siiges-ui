@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
+  Divider,
   Grid, IconButton, Paper, Typography,
 } from '@mui/material';
 import {
@@ -103,55 +104,41 @@ export default function RevalidacionEquivalencias() {
       </Grid>
       {tipoConsultaId && (
         <>
-          <Grid item xs={4}>
-            <Paper sx={{ m: 2, height: 300 }} elevation={3}>
-              <Typography variant="h4" sx={{ pt: 3, textAlign: 'center' }}>Recibidas</Typography>
-              <Typography
-                variant="h2"
-                sx={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: 'calc(100% - 110px)',
-                }}
-              >
-                {count.recibidas}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={4}>
-            <Paper sx={{ m: 2, height: 300 }} elevation={3}>
-              <Typography variant="h4" sx={{ pt: 3, textAlign: 'center' }}>En Proceso</Typography>
-              <Typography
-                variant="h2"
-                sx={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: 'calc(100% - 110px)',
-                }}
-              >
-                {count.proceso}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={4}>
-            <Paper sx={{ m: 2, height: 300 }} elevation={3}>
-              <Typography variant="h4" sx={{ pt: 3, textAlign: 'center' }}>Expedidas</Typography>
-              <Typography
-                variant="h2"
-                sx={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: 'calc(100% - 110px)',
-                }}
-              >
-                {count.expedidas}
-              </Typography>
+          <Grid item xs={12}>
+            <Paper sx={{ p: 1, height: 90 }} elevation={3}>
+              <Grid container>
+                <Grid item xs={12}>
+                  <Typography variant="h6">
+                    Estadisticas de
+                    {' '}
+                    {tipoConsultaId === 1 ? 'Revalidaciones' : 'Equivalencias'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Divider sx={{ mb: 1 }} />
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="h7">
+                    Recibidas:
+                    {' '}
+                    {count.recibidas}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="h7">
+                    En proceso:
+                    {' '}
+                    {count.proceso}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="h7">
+                    Expedidas:
+                    {' '}
+                    {count.expedidas}
+                  </Typography>
+                </Grid>
+              </Grid>
             </Paper>
           </Grid>
           <Grid item xs={12}>
