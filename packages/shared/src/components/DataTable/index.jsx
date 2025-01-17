@@ -75,7 +75,7 @@ function DataTable({
               type={buttonType}
             />
           ) : (
-            <Typography variant="h7" sx={{ fontWeight: 'bold' }}>
+            <Typography variant="h6">
               {title}
             </Typography>
           )}
