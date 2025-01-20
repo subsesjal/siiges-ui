@@ -13,7 +13,9 @@ function LoginLayout({ children }) {
       <Grid alignItems="center" justifyContent="center">
         <Grid item xs={3} sx={{ textAlign: 'center' }}>
           <Navbar />
-          <Logo />
+          <Grid sx={{ margin: '20px' }}>
+            <Logo />
+          </Grid>
           <Header />
           {children}
         </Grid>

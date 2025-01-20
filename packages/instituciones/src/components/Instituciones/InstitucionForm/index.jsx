@@ -211,7 +211,7 @@ export default function InstitucionForm({
             <ButtonSimple
               text="Confirmar"
               alt="Confirmar"
-              onClick={handleUploadClick} // Fixed typo
+              onClick={handleUploadClick}
             />
           </Grid>
         </Grid>
