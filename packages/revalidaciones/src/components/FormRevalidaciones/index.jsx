@@ -38,7 +38,7 @@ export default function FormRevalidaciones() {
         apellidoMaterno: '',
         telefono: '',
         curp: '',
-        correoPrincipal: '',
+        correoPrimario: '',
       },
       institucionProcedencia: {
         tipoInstitucionId: 1,
@@ -48,14 +48,12 @@ export default function FormRevalidaciones() {
       },
       institucionDestino: {
         tipoInstitucionId: '',
-        programaId: 1,
+        programaId: '',
         nombre: '',
         acuerdoRvoe: '',
         nombreCarrera: '',
       },
     },
-    asignaturaAntecedente: [],
-    asignaturaEquivalente: [],
   });
 
   useEffect(() => {
