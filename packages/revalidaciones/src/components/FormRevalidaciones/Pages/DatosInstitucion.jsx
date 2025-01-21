@@ -1,9 +1,8 @@
-/* eslint-disable max-len */
 import { Grid } from '@mui/material';
 import {
   Input, InputDate, Select, Subtitle,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
@@ -14,81 +13,39 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const [programas, setProgramas] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
   const [grados, setGrados] = useState([]);
-  const [tipoInstitucionId, setTipoInstitucionId] = useState(form.institucionDestino?.tipoInstitucionId || '');
+  const [tipoInstitucionId, setTipoInstitucionId] = useState(
+    form.institucionDestino?.tipoInstitucionId || '',
+  );
+
+  const fetchData = async (url, setState) => {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          api_key: apiKey,
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      setState(data.data);
+    } catch (error) {
+      console.error(`Error fetching data from ${url}:`, error);
+    }
+  };
 
   useEffect(() => {
-    const fetchTipoInstituciones = async () => {
-      try {
-        const response = await fetch(`${domain}/api/v1/public/instituciones/tipoInstituciones`, {
-          headers: {
-            api_key: apiKey,
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await response.json();
-        setTipoInstituciones(data.data);
-      } catch (error) {
-        console.error('Error fetching tipo de instituciones:', error);
-      }
-    };
-    const fetchGrados = async () => {
-      try {
-        const response = await fetch(`${domain}/api/v1/public/grados/`, {
-          headers: {
-            api_key: apiKey,
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await response.json();
-        setGrados(data.data);
-      } catch (error) {
-        console.error('Error fetching grados:', error);
-      }
-    };
-
-    fetchGrados();
-    fetchTipoInstituciones();
+    fetchData(
+      `${domain}/api/v1/public/instituciones/tipoInstituciones`,
+      setTipoInstituciones,
+    );
+    fetchData(`${domain}/api/v1/public/grados/`, setGrados);
   }, []);
 
-  const fetchInstituciones = async () => {
-    try {
-      const response = await fetch(
-        `${domain}/api/v1/public/instituciones?tipoInstitucionId=${tipoInstitucionId}`,
-        {
-          headers: {
-            api_key: apiKey,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      const data = await response.json();
-      setInstituciones(data.data);
-    } catch (error) {
-      console.error('Error fetching instituciones:', error);
-    }
-  };
-
-  const fetchProgramas = async (acuerdoRvoe) => {
-    try {
-      const response = await fetch(
-        `${domain}/api/v1/public/programas?acuerdoRvoe=${acuerdoRvoe}`,
-        {
-          headers: {
-            api_key: apiKey,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      const data = await response.json();
-      setProgramas(data.data);
-    } catch (error) {
-      console.error('Error fetching Programas:', error);
-    }
-  };
-
   useEffect(() => {
-    if (tipoInstitucionId === 1) {
-      fetchInstituciones();
+    if (tipoInstitucionId) {
+      fetchData(
+        `${domain}/api/v1/public/instituciones?tipoInstitucionId=${tipoInstitucionId}`,
+        setInstituciones,
+      );
     }
   }, [tipoInstitucionId]);
 
@@ -101,37 +58,75 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const handleRvoeOnBlur = (event) => {
     const acuerdoRvoe = event.target.value;
     if (tipoInstitucionId === 1) {
-      fetchProgramas(acuerdoRvoe);
+      fetchData(
+        `${domain}/api/v1/public/programas?acuerdoRvoe=${acuerdoRvoe}`,
+        setProgramas,
+      );
     }
     handleOnChange(event, ['interesado', 'institucionDestino']);
   };
 
+  const renderInstitucionField = useMemo(() => {
+    if (tipoInstitucionId === 1) {
+      return (
+        <Select
+          title="Instituciones"
+          options={instituciones}
+          name="institucionId"
+          value={form.institucionDestino?.institucionId || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+        />
+      );
+    }
+    return (
+      <Input
+        id="institucionNombre"
+        label="Instituciones de Educación Superior"
+        name="nombre"
+        value={form.institucionDestino?.nombre || ''}
+        onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+      />
+    );
+  }, [
+    tipoInstitucionId,
+    instituciones,
+    form.institucionDestino,
+    handleOnChange,
+  ]);
+
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={2}>
       <Grid item xs={12}>
         <Subtitle>Datos de la Institución de procedencia</Subtitle>
       </Grid>
-      <Grid item xs={6}>
-        <Input
-          id="nombreInstitucion"
-          label="Nombre de la Institución"
-          name="nombre"
-          value={form.institucionProcedencia?.nombre || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <Input
-          id="nombreCarrera"
-          label="Nombre de la Carrera"
-          name="nombreCarrera"
-          value={form.institucionProcedencia?.nombreCarrera || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
-        />
-      </Grid>
+      {[
+        {
+          id: 'nombreInstitucion',
+          label: 'Nombre de la Institución',
+          name: 'nombre',
+          value: form.institucionProcedencia?.nombre,
+        },
+        {
+          id: 'nombreCarrera',
+          label: 'Nombre de la Carrera',
+          name: 'nombreCarrera',
+          value: form.institucionProcedencia?.nombreCarrera,
+        },
+      ].map((field) => (
+        <Grid item xs={6} key={field.id}>
+          <Input
+            id={field.id}
+            label={field.label}
+            name={field.name}
+            value={field.value || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
+          />
+        </Grid>
+      ))}
+
       <Grid item xs={4}>
         <Select
-          title="Grado Academico Procedente"
+          title="Grado Académico Procedente"
           options={grados}
           name="gradoAcademicoProcedente"
           value={form.institucionProcedencia?.gradoAcademicoProcedente || ''}
@@ -158,113 +153,56 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
       </Grid>
       <Grid item xs={4}>
         <Select
-          title="Pais"
+          title="País"
           options={estados}
           name="paisId"
           value={form.institucionProcedencia?.paisId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
+
       <Grid item xs={12}>
-        <Subtitle>En caso de no contar con apostilla proporcionar datos de la universidad para verificación de autenticidad</Subtitle>
-      </Grid>
-      <Grid item xs={6}>
-        <Input
-          id="telefonoInstitucion"
-          label="Telefono de la Institución"
-          name="telefonoInstitucion"
-          value={form.institucionProcedencia?.telefonoInstitucion || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <Input
-          id="paginaWebInstitucion"
-          label="Pagina web de la Institución"
-          name="paginaWebInstitucion"
-          value={form.institucionProcedencia?.paginaWebInstitucion || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <Input
-          id="correoInstitucion"
-          label="Telefono de la Institución"
-          name="correoInstitucion"
-          value={form.institucionProcedencia?.correoInstitucion || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <Subtitle>Deseo Revalidar mis estudios como</Subtitle>
-      </Grid>
-      <Grid item xs={6}>
-        <Input
-          id="intitucionDestino"
-          label="Institución de Educación Superior"
-          name="intitucionDestino"
-          value={form.institucionDestino?.institucionDestino || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-        />
+        <Subtitle>Datos de la Institución de destino</Subtitle>
       </Grid>
       <Grid item xs={4}>
         <Select
-          title="Grado Academico Destino"
+          title="Tipo de Institución"
+          name="tipoInstitucionId"
+          options={tipoInstituciones}
+          value={tipoInstitucionId}
+          onChange={handleTipoInstitucionChange}
+        />
+      </Grid>
+      <Grid item xs={8}>
+        {renderInstitucionField}
+      </Grid>
+      <Grid item xs={4}>
+        <Select
+          title="Grado Académico Destino"
           options={grados}
           name="gradoAcademicoDestino"
           value={form.institucionDestino?.gradoAcademicoDestino || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={8}>
         <Input
-          id="planEstudios"
+          id="programaId"
           label="Plan de Estudios"
-          name="planEstudios"
-          value={form.institucionDestino?.planEstudios || ''}
+          name="programaId"
+          value={form.institucionDestino?.programaId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
         />
       </Grid>
-      {form.tipoTramiteId === 1 && (
+      {tipoInstitucionId === 1 && (
       <>
-        <Grid item xs={12}>
-          <Subtitle>Datos de la Institución de destino</Subtitle>
-        </Grid>
-        <Grid item xs={3}>
-          <Select
-            title="Tipo de Institución"
-            name="tipoInstitucionId"
-            options={tipoInstituciones}
-            value={tipoInstitucionId}
-            onChange={handleTipoInstitucionChange}
-          />
-        </Grid>
-        <Grid item xs={9}>
-          {tipoInstitucionId === 1 ? (
-            <Select
-              title="Instituciones"
-              options={instituciones}
-              name="programaId"
-              value={form.institucionDestino?.programaId || ''}
-              onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-            />
-          ) : (
-            <Input
-              id="institucionNombre"
-              label="Instituciones de Educación Superior"
-              name="nombre"
-              value={form.institucionDestino?.nombre || ''}
-              onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-            />
-          )}
-        </Grid>
         <Grid item xs={3}>
           <Input
             id="rvoe"
             label="RVOE"
             name="acuerdoRvoe"
             value={form.institucionDestino?.acuerdoRvoe || ''}
-            onblur={handleRvoeOnBlur}
+            onBlur={handleRvoeOnBlur}
           />
         </Grid>
         <Grid item xs={9}>
@@ -285,10 +223,10 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
 
 DatosInstitucion.propTypes = {
   form: PropTypes.shape({
-    tipoTramiteId: PropTypes.number,
+    tipoTramiteId: PropTypes.number.isRequired,
     institucionProcedencia: PropTypes.shape({
       nombre: PropTypes.string,
-      paisId: PropTypes.string,
+      paisId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       nombreCarrera: PropTypes.string,
       gradoAcademicoProcedente: PropTypes.string,
       anoFinalizacionCarrera: PropTypes.string,
@@ -299,11 +237,11 @@ DatosInstitucion.propTypes = {
     }),
     institucionDestino: PropTypes.shape({
       tipoInstitucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      institucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       nombre: PropTypes.string,
       acuerdoRvoe: PropTypes.string,
       nombreCarrera: PropTypes.string,
-      institucionDestino: PropTypes.string,
       gradoAcademicoDestino: PropTypes.string,
       planEstudios: PropTypes.string,
     }),
