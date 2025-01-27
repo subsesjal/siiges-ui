@@ -40,6 +40,7 @@ export default function InstitucionForm({
   const fileInputRef = useRef(null);
   const [openModalPhoto, setOpenModalPhoto] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(true);
+  const initialized = useRef(false);
 
   const handleConfirm = async () => {
     const success = await submitInstitucion({
@@ -105,26 +106,29 @@ export default function InstitucionForm({
   };
 
   useEffect(() => {
-    const initializeForm = async () => {
-      setLoading(true);
-      if (accion === 'crear' && session.id) {
-        setForm({
-          usuarioId: session.id,
-          tipoInstitucionId: 1,
-          esNombreAutorizado: false,
-        });
-        setTitle('Registrar Institución');
-      } else if (accion === 'editar' && institucion.id) {
-        setForm({ id: institucion.id });
-        setTitle('Modificar Institución');
-        await getInstitutionPhoto(institucion.id);
-      } else {
-        router.back();
-      }
-      setLoading(false);
-    };
+    if (!initialized.current) {
+      const initializeForm = async () => {
+        setLoading(true);
+        if (accion === 'crear' && session.id) {
+          setForm({
+            usuarioId: session.id,
+            tipoInstitucionId: 1,
+            esNombreAutorizado: false,
+          });
+          setTitle('Registrar Institución');
+        } else if (accion === 'editar' && institucion.id) {
+          setForm(institucion);
+          setTitle('Modificar Institución');
+          await getInstitutionPhoto(institucion.id);
+        } else {
+          router.back();
+        }
+        setLoading(false);
+      };
 
-    initializeForm();
+      initializeForm();
+      initialized.current = true;
+    }
   }, [accion, institucion.id, session.id, setLoading, setTitle]);
 
   return (
