@@ -24,6 +24,9 @@ export default function Navbar() {
               <LogoWhite />
             </IconButton>
           </Link>
+          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            SIGES
+          </Typography>
           <Typography
             variant="h6"
             component="div"

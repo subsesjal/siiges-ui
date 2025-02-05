@@ -26,11 +26,12 @@ const domain = process.env.NEXT_PUBLIC_URL;
 export default function InstitucionForm({
   session,
   accion,
-  institucion,
+  institucion: initialInstitucion,
   setLoading,
   setTitle,
   setNoti,
 }) {
+  const [institucion, setInstitucion] = useState(initialInstitucion || {});
   const [errorFields, setErrorFields] = useState({});
   const [form, setForm] = useState({});
   const [openModal, setOpenModal] = useState(false);
@@ -40,6 +41,7 @@ export default function InstitucionForm({
   const fileInputRef = useRef(null);
   const [openModalPhoto, setOpenModalPhoto] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(true);
+  const initialized = useRef(false);
 
   const handleConfirm = async () => {
     const success = await submitInstitucion({
@@ -105,27 +107,31 @@ export default function InstitucionForm({
   };
 
   useEffect(() => {
-    const initializeForm = async () => {
-      setLoading(true);
-      if (accion === 'crear' && session.id) {
-        setForm({
-          usuarioId: session.id,
-          tipoInstitucionId: 1,
-          esNombreAutorizado: false,
-        });
-        setTitle('Registrar Institución');
-      } else if (accion === 'editar' && institucion.id) {
-        setForm({ id: institucion.id });
-        setTitle('Modificar Institución');
-        await getInstitutionPhoto(institucion.id);
-      } else {
-        router.back();
-      }
-      setLoading(false);
-    };
+    if (!initialized.current) {
+      const initializeForm = async () => {
+        setLoading(true);
+        if (accion === 'crear' && session.id) {
+          setForm({
+            usuarioId: session.id,
+            tipoInstitucionId: 1,
+            esNombreAutorizado: false,
+          });
+          setTitle('Registrar Institución');
+        } else if (accion === 'editar' && initialInstitucion.id) {
+          setForm(initialInstitucion);
+          setInstitucion(initialInstitucion);
+          setTitle('Modificar Institución');
+          await getInstitutionPhoto(initialInstitucion.id);
+        } else {
+          router.back();
+        }
+        setLoading(false);
+      };
 
-    initializeForm();
-  }, [accion, institucion.id, session.id, setLoading, setTitle]);
+      initializeForm();
+      initialized.current = true;
+    }
+  }, [accion, initialInstitucion, session.id, setLoading, setTitle]);
 
   return (
     <Grid container>
@@ -211,7 +217,7 @@ export default function InstitucionForm({
             <ButtonSimple
               text="Confirmar"
               alt="Confirmar"
-              onClick={handleUploadClick} // Fixed typo
+              onClick={handleUploadClick}
             />
           </Grid>
         </Grid>

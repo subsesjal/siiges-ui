@@ -2,7 +2,7 @@
 .buttonAdd {
   appearance: none;
   background-color: transparent;
-  border: 1px solid #F99A2C;
+  border: 1px solid #FF8300;
   color: #18181a;
   font-size: 15px;
   line-height: 15px;
@@ -34,7 +34,7 @@
 
 .buttonAdd:hover {
   color: #fff;
-  background-color: #F99A2C;
+  background-color: #FF8300;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
@@ -54,11 +54,11 @@
 }
 
 .buttonAdd.guardar {
-  border-color: #0072ce;
+  border-color: #74C8D2;
 }
 
 .buttonAdd.guardar:hover {
-  background-color: #0072ce;
+  background-color: #74C8D2;
 }
 
 .buttonAdd.guardar:disabled {
@@ -69,10 +69,10 @@
 }
 
 .buttonAdd.enviar {
-  border-color: orange;
+  border-color: #FF8300;
 }
 
 .buttonAdd.enviar:hover {
-  background-color: orange;
+  background-color: #FF8300;
 }
 
