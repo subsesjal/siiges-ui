@@ -49,7 +49,6 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           setPlanteles([]);
           setIsPlantelesDisabled(true);
         } else {
-          console.log(data.planteles);
           const transformedPlanteles = data.planteles
             .map((plantel) => ({
               id: plantel.id,
