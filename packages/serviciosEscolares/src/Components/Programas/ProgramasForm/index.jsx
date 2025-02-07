@@ -52,7 +52,7 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
           const transformedPlanteles = data.planteles
             .map((plantel) => ({
               id: plantel.id,
-              nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+              nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior} ${plantel.claveCentroTrabajo}`,
             }))
             .sort((a, b) => a.nombre.localeCompare(b.nombre));
 
