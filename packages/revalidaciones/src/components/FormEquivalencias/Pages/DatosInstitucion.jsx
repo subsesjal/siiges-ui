@@ -65,11 +65,11 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
       setProgramas(data.data);
       setRvoeError('');
       if (!response.ok) {
-        setRvoeError('RVOE invalido');
+        setRvoeError('RVOE inválido');
       }
     } catch (error) {
       console.error('Error fetching Programas:', error);
-      setRvoeError('RVOE invalido');
+      setRvoeError('RVOE inválido');
     }
   };
 
