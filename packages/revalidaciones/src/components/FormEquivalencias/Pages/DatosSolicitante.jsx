@@ -114,7 +114,7 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
       <Grid item xs={3}>
         <Input
           id="apellidoPaterno"
-          label="Apellido Paterno"
+          label="Primer Apellido"
           name="apellidoPaterno"
           value={form.interesado.persona.apellidoPaterno || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
@@ -123,7 +123,7 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
       <Grid item xs={3}>
         <Input
           id="apellidoMaterno"
-          label="Apellido Materno"
+          label="Segundo Apellido"
           name="apellidoMaterno"
           value={form.interesado.persona.apellidoMaterno || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
