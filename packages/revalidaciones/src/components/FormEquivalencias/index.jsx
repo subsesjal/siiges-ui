@@ -30,13 +30,16 @@ export default function FormEquivalencias() {
           codigoPostal: '',
           municipioId: '',
           estadoId: '',
+          sexo: '',
         },
         nombre: '',
         apellidoPaterno: '',
         apellidoMaterno: '',
         telefono: '',
+        celular: '',
+        nacionalidad: '',
         curp: '',
-        correoPrincipal: '',
+        correoPrimario: '',
       },
       institucionProcedencia: {
         tipoInstitucionId: 1,
@@ -51,8 +54,8 @@ export default function FormEquivalencias() {
         acuerdoRvoe: '',
         nombreCarrera: '',
       },
+      asignaturasAntecedentesEquivalentes: [],
     },
-    asignaturasAntecedentesEquivalentes: [],
   });
   const [estados, setEstados] = useState([]);
   const totalPositions = 4;
@@ -180,7 +183,7 @@ export default function FormEquivalencias() {
         return (
           <CargaMateriasEquivalentes
             form={form}
-            handleOnChange={(e) => handleOnChange(e, [])}
+            handleOnChange={handleOnChange}
           />
         );
       default:
