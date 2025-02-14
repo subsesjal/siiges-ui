@@ -36,25 +36,27 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
 
   const handleConfirm = () => {
+    // Create the new entry
+    const newEntry = {
+      asignaturaId: 1, // You might want to dynamically generate this ID
+      nombreAsignaturaEquivalente,
+      calificacionEquivalente,
+      nombreAsignaturaAntecedente,
+      calificacionAntecedente,
+    };
+
+    // Update the form state with the new entry
     handleOnChange(
       {
         target: {
           name: 'asignaturasAntecedentesEquivalentes',
-          value: [
-            ...form.asignaturasAntecedentesEquivalentes,
-            {
-              asignaturaId: 1,
-              nombreAsignaturaEquivalente,
-              calificacionEquivalente,
-              nombreAsignaturaAntecedente,
-              calificacionAntecedente,
-            },
-          ],
+          value: [...form.interesado.asignaturasAntecedentesEquivalentes, newEntry],
         },
       },
-      [],
+      ['interesado'], // Correct path to update the nested state
     );
 
+    // Reset the form and close the modal
     setOpen(false);
     setMateriaAntecedente('');
     setCalificacionAntecedente('');
@@ -69,7 +71,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
           buttonAdd
           buttonClick={() => setOpen(true)}
           buttonText="Carga de Materia"
-          rows={form.asignaturasAntecedentesEquivalentes.map((item, index) => ({
+          rows={form.interesado.asignaturasAntecedentesEquivalentes.map((item, index) => ({
             id: index,
             materiasAntecedente: item.nombreAsignaturaAntecedente,
             calificacionAntecedente: item.calificacionAntecedente,
@@ -131,15 +133,17 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
 
 CargaMateriasEquivalentes.propTypes = {
   form: PropTypes.shape({
-    asignaturasAntecedentesEquivalentes: PropTypes.arrayOf(
-      PropTypes.shape({
-        asignaturaId: PropTypes.number,
-        nombreAsignaturaEquivalente: PropTypes.string,
-        calificacionEquivalente: PropTypes.string,
-        nombreAsignaturaAntecedente: PropTypes.string,
-        calificacionAntecedente: PropTypes.string,
-      }),
-    ),
+    interesado: PropTypes.shape({
+      asignaturasAntecedentesEquivalentes: PropTypes.arrayOf(
+        PropTypes.shape({
+          asignaturaId: PropTypes.number,
+          nombreAsignaturaEquivalente: PropTypes.string,
+          calificacionEquivalente: PropTypes.string,
+          nombreAsignaturaAntecedente: PropTypes.string,
+          calificacionAntecedente: PropTypes.string,
+        }),
+      ),
+    }),
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,
 };
