@@ -54,7 +54,7 @@ export default function FoliosForm({
   }, [state]);
 
   useEffect(() => {
-    if (isRepresentante && instituciones?.length) {
+    if (!isAdmin && instituciones?.length) {
       const findIndexIntitucion = instituciones.findIndex(
         ({ usuarioId }) => usuarioId === session.id,
       );

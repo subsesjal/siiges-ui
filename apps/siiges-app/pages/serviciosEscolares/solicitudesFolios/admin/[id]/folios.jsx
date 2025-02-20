@@ -1,5 +1,6 @@
 import {
   Grid, Typography, Tabs, Tab,
+  IconButton,
 } from '@mui/material';
 import {
   Context,
@@ -12,6 +13,7 @@ import {
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import ArticleIcon from '@mui/icons-material/Article';
 import { ButtonsFoliosAdmin } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 
@@ -166,7 +168,7 @@ export default function Folios() {
     }
   };
 
-  const alumnosColumns = [
+  const alumnosColumns = (handleConsult) => [
     {
       field: 'id', headerName: 'ID', width: 100, hide: true,
     },
@@ -182,6 +184,16 @@ export default function Folios() {
       width: 300,
     },
     { field: 'fechaTermino', headerName: 'Fecha de Término', width: 300 },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      width: 150,
+      renderCell: (params) => (
+        <IconButton onClick={() => handleConsult(params.row.id)}>
+          <ArticleIcon />
+        </IconButton>
+      ),
+    },
   ];
 
   let title = 'Consultar solicitud';
