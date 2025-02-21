@@ -14,7 +14,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ArticleIcon from '@mui/icons-material/Article';
-import { ButtonsFoliosAdmin } from '@siiges-ui/serviciosescolares';
+import { ButtonsFoliosAdmin, ModalCertificado, ModalTitulo } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 
 export default function Folios() {
@@ -32,6 +32,11 @@ export default function Folios() {
   const [observaciones, setObservaciones] = useState('');
   const [estatus, setEstatus] = useState();
   const [alumnosRows, setAlumnosRows] = useState([]);
+  const [alumnoData, setAlumnoData] = useState({});
+  const [rowData, setRowData] = useState({});
+  const [disabled, setDisabled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [tipoDocumento, setTipoDocumento] = useState();
 
   const router = useRouter();
   const { id } = router.query;
@@ -57,6 +62,7 @@ export default function Folios() {
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
           });
           setEstatus(data.estatusSolicitudFolioId);
+          setTipoDocumento(data.tipoDocumentoId);
 
           const alumnosResponse = await getData({
             endpoint: `/solicitudesFolios/${id}/alumnos`,
@@ -78,6 +84,7 @@ export default function Folios() {
             }));
 
             setAlumnosRows(mappedAlumnos);
+            setAlumnoData(alumnosResponse.data);
           }
         } catch (error) {
           setNoti({
@@ -168,7 +175,22 @@ export default function Folios() {
     }
   };
 
-  const alumnosColumns = (handleConsult) => [
+  const handleConsult = async (value) => {
+    try {
+      const alumno = alumnoData.find((row) => row.id === value);
+      setRowData(alumno);
+      setDisabled(true);
+      setOpen(true);
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `¡Error al cargar los datos!: ${error.message}`,
+        type: 'error',
+      });
+    }
+  };
+
+  const alumnosColumns = [
     {
       field: 'id', headerName: 'ID', width: 100, hide: true,
     },
@@ -200,7 +222,7 @@ export default function Folios() {
   if (estatus === 2) {
     title = 'Revisar Solicitud';
   } else if (estatus === 3) {
-    title = 'Envío de Solicitud a Titulación';
+    title = `Envío de Solicitud a ${etiquetas.tipoDocumento}`;
   } else if (estatus === 4) {
     title = 'Atender Observaciones de Solicitud';
   }
@@ -266,13 +288,37 @@ export default function Folios() {
         )}
 
         {tabIndex === 1 && (
-          <Grid item xs={12}>
-            <DataTable
-              title="Alumnos"
-              rows={alumnosRows}
-              columns={alumnosColumns}
-            />
-          </Grid>
+          <>
+            <Grid item xs={12}>
+              <DataTable
+                title="Alumnos"
+                rows={alumnosRows}
+                columns={alumnosColumns}
+              />
+            </Grid>
+            {tipoDocumento === 1 ? (
+              <ModalTitulo
+                open={open}
+                setOpen={setOpen}
+                type="consult"
+                id={id}
+                rowData={rowData}
+                setAlumnoResponse={() => {}}
+                disabled={disabled}
+              />
+            ) : (
+              <ModalCertificado
+                open={open}
+                setOpen={setOpen}
+                type="consult"
+                id={id}
+                rowData={rowData}
+                title="Agregar Alumno"
+                setAlumnoResponse={() => {}}
+                disabled={disabled}
+              />
+            )}
+          </>
         )}
 
         {estatus !== 3 && (
@@ -290,6 +336,7 @@ export default function Folios() {
         )}
         <Grid item xs={12}>
           <ButtonsFoliosAdmin
+            tipoDocumento={etiquetas.tipoDocumento}
             observaciones={handleObservacionesSubmit}
             folios={handleFoliosSubmit}
             estatus={estatus}
