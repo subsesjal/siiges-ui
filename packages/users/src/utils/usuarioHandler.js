@@ -120,6 +120,10 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
           id: '12',
           nombre: 'Control escolar IES',
         },
+        {
+          id: '19',
+          nombre: 'Becas IES',
+        },
       ]);
     }
 
