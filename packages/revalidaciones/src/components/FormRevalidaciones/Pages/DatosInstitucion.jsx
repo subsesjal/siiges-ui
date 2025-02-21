@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function DatosInstitucion({ form, handleOnChange, estados }) {
+export default function DatosInstitucion({ form, handleOnChange, paises }) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
@@ -128,8 +128,8 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
         <Select
           title="Grado Académico Procedente"
           options={grados}
-          name="gradoAcademicoProcedente"
-          value={form.institucionProcedencia?.gradoAcademicoProcedente || ''}
+          name="nivelAcademicoProcedente"
+          value={form.institucionProcedencia?.nivelAcademicoProcedente || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
@@ -154,7 +154,7 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
       <Grid item xs={4}>
         <Select
           title="País"
-          options={estados}
+          options={paises}
           name="paisId"
           value={form.institucionProcedencia?.paisId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
@@ -180,8 +180,8 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
         <Select
           title="Grado Académico Destino"
           options={grados}
-          name="gradoAcademicoDestino"
-          value={form.institucionDestino?.gradoAcademicoDestino || ''}
+          name="nivelAcademicoDestino"
+          value={form.institucionDestino?.nivelAcademicoDestino || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
         />
       </Grid>
@@ -228,7 +228,7 @@ DatosInstitucion.propTypes = {
       nombre: PropTypes.string,
       paisId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       nombreCarrera: PropTypes.string,
-      gradoAcademicoProcedente: PropTypes.string,
+      nivelAcademicoProcedente: PropTypes.string,
       anoFinalizacionCarrera: PropTypes.string,
       anoInicioCarrera: PropTypes.string,
       telefonoInstitucion: PropTypes.string,
@@ -242,12 +242,12 @@ DatosInstitucion.propTypes = {
       nombre: PropTypes.string,
       acuerdoRvoe: PropTypes.string,
       nombreCarrera: PropTypes.string,
-      gradoAcademicoDestino: PropTypes.string,
+      nivelAcademicoDestino: PropTypes.string,
       planEstudios: PropTypes.string,
     }),
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,
-  estados: PropTypes.arrayOf(
+  paises: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       nombre: PropTypes.string.isRequired,
