@@ -177,6 +177,10 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
           id: '17',
           nombre: 'Capturista OPD',
         },
+        {
+          id: '20',
+          nombre: 'Becas  SICYT',
+        },
       ]);
     }
   }, []);
