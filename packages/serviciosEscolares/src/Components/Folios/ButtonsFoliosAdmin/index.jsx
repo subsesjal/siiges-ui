@@ -4,10 +4,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
-export default function ButtonsFoliosAdmin({ observaciones, folios, estatus }) {
+export default function ButtonsFoliosAdmin({
+  observaciones, folios, estatus, tipoDocumento,
+}) {
   const router = useRouter();
 
   const buttonFolios = estatus !== 3 ? 'Generar Folios' : 'Envio Titulación';
+
+  const shouldRenderButtonFolios = !(estatus === 3 && tipoDocumento === 'Certificado');
+
   return (
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={6}>
@@ -27,7 +32,7 @@ export default function ButtonsFoliosAdmin({ observaciones, folios, estatus }) {
             <ButtonSimple text="Enviar observaciones" onClick={observaciones} />
           </Grid>
           )}
-          {estatus !== 7 && (
+          {estatus !== 7 && shouldRenderButtonFolios && (
           <Grid item>
             <ButtonSimple text={buttonFolios} onClick={folios} />
           </Grid>
@@ -42,4 +47,5 @@ ButtonsFoliosAdmin.propTypes = {
   observaciones: PropTypes.func.isRequired,
   folios: PropTypes.func.isRequired,
   estatus: PropTypes.number.isRequired,
+  tipoDocumento: PropTypes.string.isRequired,
 };
