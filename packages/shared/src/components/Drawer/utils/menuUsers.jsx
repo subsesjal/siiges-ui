@@ -233,6 +233,22 @@ const optionsMenuFilter = {
       key: 'solicitudes',
     },
   ],
+  becas_ies: [
+    {
+      text: 'Becas académicas',
+      icon: <DescriptionIcon />,
+      route: '/solicitudesBecas',
+      key: 'solicitudesBecas',
+    },
+  ],
+  becas_sicyt: [
+    {
+      text: 'Becas académicas',
+      icon: <DescriptionIcon />,
+      route: '/solicitudesBecas',
+      key: 'solicitudesBecas',
+    },
+  ],
 };
 
 const getOptionsRoles = (rol) => options.filter(({ roles }) => roles.includes(rol));
