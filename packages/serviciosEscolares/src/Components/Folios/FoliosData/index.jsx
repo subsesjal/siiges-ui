@@ -484,7 +484,7 @@ export default function FoliosData({ type }) {
           type={alumnoType}
           id={id}
           rowData={rowData}
-          programaId={programa}
+          programaId={formData.programaId}
           setAlumnoResponse={setAlumnoResponse}
           disabled={disabled}
         />
@@ -494,7 +494,7 @@ export default function FoliosData({ type }) {
           setOpen={setOpen}
           type={alumnoType}
           id={id}
-          programaId={programa}
+          programaId={formData.programaId}
           rowData={rowData}
           title="Agregar Alumno"
           setAlumnoResponse={setAlumnoResponse}

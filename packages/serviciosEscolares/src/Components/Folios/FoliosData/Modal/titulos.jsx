@@ -59,7 +59,7 @@ export default function ModalTitulo({
   const { setNoti, setLoading } = useContext(Context);
 
   useEffect(() => {
-    if (type === 'edit' && rowData) {
+    if (type !== 'create' && rowData) {
       setForm(rowData);
       if (rowData.alumno) {
         const fullName = `${rowData.alumno.persona.nombre} ${rowData.alumno.persona.apellidoPaterno} ${rowData.alumno.persona.apellidoMaterno}`;
