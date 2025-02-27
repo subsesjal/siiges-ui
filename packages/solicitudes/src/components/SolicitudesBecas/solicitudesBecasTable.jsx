@@ -17,6 +17,7 @@ export default function SolicitudesBecasTable() {
   const handleEditClick = (row) => console.log('Editar', row);
   const handleDeleteClick = (row) => console.log('Borrar', row);
 
+  
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
     { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 150 },
