@@ -8,6 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+
 export default function SolicitudesBecasTable() {
   const { loading, setLoading } = useContext(Context);
   const [data, setData] = useState(mockRows);
