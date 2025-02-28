@@ -21,7 +21,6 @@ import InscripcionForm from './Components/Inscripciones/InscripcionesForm';
 import submitCalificaciones from './Components/utils/submitCalificaciones';
 import Calificaciones from './Components/Acreditacion/Calificaciones/index';
 import ValidacionTable from './Components/Validacion/ValidacionTable/index';
-import BecasComponent from './Components/BecasServiciosSociales/Becas/index';
 import ModalAlumnosInscritos from './Components/utils/ModalAlumnosInscritos';
 import DatosInstitucion from './Components/Validacion/DatosInstitucion/index';
 import ButtonsFoliosAdmin from './Components/Folios/ButtonsFoliosAdmin/index';
@@ -43,7 +42,7 @@ import AcreditacionAsignaturas from './Components/Acreditacion/AcreditacionAsign
 import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditacionAsignaturas';
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
 import ServicioSocialComponent from './Components/BecasServiciosSociales/ServiciosSociales/index';
-import SolicitudesBecasTable from './Components/BecasServiciosSociales/Becas/SolicitudesBecasTable/index';
+import BecasComponents from './Components/BecasServiciosSociales/Becas/index';
 
 export {
   Grupos,
@@ -62,7 +61,6 @@ export {
   getGrupoById,
   ProgramasForm,
   ProgramasData,
-  BecasComponent,
   Calificaciones,
   ProgramasTable,
   ValidacionForm,
@@ -91,5 +89,5 @@ export {
   columnsInstitucionesAutorizadas,
   ButtonsInstitucionesAutorizadas,
   HistorialTable,
-  SolicitudesBecasTable,
+  BecasComponents,
 };

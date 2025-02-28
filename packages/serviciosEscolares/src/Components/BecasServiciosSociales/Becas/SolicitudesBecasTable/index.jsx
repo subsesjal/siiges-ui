@@ -17,11 +17,11 @@ export default function SolicitudesBecasTable() {
   const handleDeleteClick = (row) => console.log('Borrar', row);
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 150 },
-    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 150 },
-    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 150 },
+    // { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
     { field: 'programaId', headerName: 'Programa', width: 150 },
-    { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 150 },
+    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 200 },
+    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 200 },
     { field: 'createdAt', headerName: 'Fecha de solicitud', width: 200 },
     {
       field: 'acciones',
@@ -50,12 +50,11 @@ export default function SolicitudesBecasTable() {
         if (response.data) {
           const mappedRows = response.data.map((becas) => ({
             id: becas.id,
-            estatusSolicitudBecaId: becas.estatusSolicitudBecaId,
-            cicloEscolarId: becas.cicloEscolarId,
-            programaId: becas.programaId,
             folioSolicitud: becas.folioSolicitud,
-            createdAt: becas.createdAt,
-            fechaElaboracion: dayjs(becas.fechaElaboracion).format('DD/MM/YYYY'),
+            programaId: becas.programa.cicloId,
+            cicloEscolarId: becas.cicloEscolar.nombre,
+            estatusSolicitudBecaId: becas.estatusSolicitudBeca.nombre,
+            createdAt: dayjs(becas.createdAt).format('DD/MM/YYYY'),
           }));
           setData(mappedRows);
         }
