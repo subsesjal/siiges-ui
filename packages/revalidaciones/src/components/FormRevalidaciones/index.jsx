@@ -54,11 +54,12 @@ export default function FormRevalidaciones() {
         acuerdoRvoe: '',
         nombreCarrera: '',
       },
+      asignaturasAntecedentesEquivalentes: [],
     },
   });
 
   useEffect(() => {
-    if (form.tipoTramiteId === 1) {
+    if ([1, 2, 3].includes(form.tipoTramiteId)) {
       setTotalPositions(4);
     } else {
       setTotalPositions(3);
@@ -187,7 +188,7 @@ export default function FormRevalidaciones() {
       case 3:
         return <CargaMaterias filesData={filesData} setFilesData={setFilesData} />;
       case 4:
-        return form.tipoTramiteId === 1 ? (
+        return [1, 2, 3].includes(form.tipoTramiteId) ? (
           <CargaMateriasEquivalentes form={form} handleOnChange={handleOnChange} />
         ) : null;
       default:
@@ -210,6 +211,7 @@ export default function FormRevalidaciones() {
           onNext={handleNext}
           onPrevious={handlePrevious}
           handleOnSubmit={handleOnSubmit}
+          title="Revalidaciones"
         />
       </Grid>
     </Grid>

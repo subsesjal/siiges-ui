@@ -17,7 +17,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
     form.institucionDestino?.tipoInstitucionId || '',
   );
 
-  const fetchData = async (url, setState) => {
+  const fetchData = async (url, setState, mapper = null, filterFirst = false) => {
     try {
       const response = await fetch(url, {
         headers: {
@@ -26,18 +26,39 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
         },
       });
       const data = await response.json();
-      setState(data.data);
+
+      let transformedData = data.data;
+
+      if (filterFirst) {
+        transformedData = transformedData.slice(1);
+      }
+
+      if (mapper) {
+        transformedData = transformedData.map(mapper);
+      }
+
+      setState(transformedData);
     } catch (error) {
       console.error(`Error fetching data from ${url}:`, error);
     }
   };
+
+  const mapNivelesData = (item) => ({
+    id: item.id,
+    nombre: item.descripcion,
+  });
 
   useEffect(() => {
     fetchData(
       `${domain}/api/v1/public/instituciones/tipoInstituciones`,
       setTipoInstituciones,
     );
-    fetchData(`${domain}/api/v1/public/grados/`, setGrados);
+    fetchData(
+      `${domain}/api/v1/public/niveles/`,
+      setGrados,
+      mapNivelesData,
+      true,
+    );
   }, []);
 
   useEffect(() => {
@@ -126,7 +147,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
 
       <Grid item xs={4}>
         <Select
-          title="Grado Académico Procedente"
+          title="Nivel Académico Procedente"
           options={grados}
           name="nivelAcademicoProcedente"
           value={form.institucionProcedencia?.nivelAcademicoProcedente || ''}
@@ -178,7 +199,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
       </Grid>
       <Grid item xs={4}>
         <Select
-          title="Grado Académico Destino"
+          title="Nivel Académico Destino"
           options={grados}
           name="nivelAcademicoDestino"
           value={form.institucionDestino?.nivelAcademicoDestino || ''}
@@ -223,7 +244,6 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
 
 DatosInstitucion.propTypes = {
   form: PropTypes.shape({
-    tipoTramiteId: PropTypes.number.isRequired,
     institucionProcedencia: PropTypes.shape({
       nombre: PropTypes.string,
       paisId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
