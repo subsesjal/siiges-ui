@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout } from '@siiges-ui/shared';
-import { SolicitudesBecasTable } from '@siiges-ui/solicitudes';
+import { SolicitudesBecasTable } from '@siiges-ui/serviciosescolares';
 
 export default function SolicitudesDeBecas() {
   return (
@@ -9,5 +9,3 @@ export default function SolicitudesDeBecas() {
     </Layout>
   );
 }
-
-

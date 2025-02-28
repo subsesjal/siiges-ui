@@ -43,6 +43,7 @@ import AcreditacionAsignaturas from './Components/Acreditacion/AcreditacionAsign
 import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditacionAsignaturas';
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
 import ServicioSocialComponent from './Components/BecasServiciosSociales/ServiciosSociales/index';
+import SolicitudesBecasTable from './Components/BecasServiciosSociales/Becas/SolicitudesBecasTable/index';
 
 export {
   Grupos,
@@ -90,4 +91,5 @@ export {
   columnsInstitucionesAutorizadas,
   ButtonsInstitucionesAutorizadas,
   HistorialTable,
+  SolicitudesBecasTable,
 };
