@@ -232,7 +232,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           <Input
             id="nombreCarreraDestino"
             label="Nombre de la Carrera (Destino)"
-            name="nombreCarrera"
+            name="programaId"
             value={programas.nombre || ''}
             onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
             disabled={tipoInstitucionId === 1}
