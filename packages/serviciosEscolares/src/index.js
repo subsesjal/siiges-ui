@@ -63,6 +63,7 @@ export {
   ProgramasData,
   BecasComponent,
   Calificaciones,
+  HistorialTable,
   ProgramasTable,
   ValidacionForm,
   InscripcionForm,
@@ -89,5 +90,4 @@ export {
   ActionsAcreditacionAsignaturas,
   columnsInstitucionesAutorizadas,
   ButtonsInstitucionesAutorizadas,
-  HistorialTable,
 };

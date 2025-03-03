@@ -197,7 +197,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
       <Grid item xs={8}>
         {renderInstitucionField}
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <Select
           title="Nivel Académico Destino"
           options={grados}
@@ -206,15 +206,17 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
         />
       </Grid>
-      <Grid item xs={8}>
-        <Input
-          id="programaId"
-          label="Plan de Estudios"
-          name="programaId"
-          value={form.institucionDestino?.programaId || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-        />
-      </Grid>
+      {tipoInstitucionId !== 1 && (
+        <Grid item xs={9}>
+          <Input
+            id="nombreCarrera"
+            label="Plan de Estudios"
+            name="nombreCarrera"
+            value={form.institucionDestino?.nombreCarrera || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+          />
+        </Grid>
+      )}
       {tipoInstitucionId === 1 && (
       <>
         <Grid item xs={3}>
@@ -226,7 +228,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
             onBlur={handleRvoeOnBlur}
           />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={6}>
           <Input
             id="nombreCarreraDestino"
             label="Nombre de la Carrera (Destino)"
