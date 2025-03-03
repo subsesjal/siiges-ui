@@ -118,7 +118,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Subtitle>Datos de la Institución de procedencia xddddxdxdxdxd</Subtitle>
+        <Subtitle>Datos de la Institución de procedencia</Subtitle>
       </Grid>
       {[
         {
