@@ -4,7 +4,7 @@ import { BecasComponents } from '@siiges-ui/serviciosescolares';
 
 export default function SolicitudesDeBecas() {
   return (
-    <Layout title="Solicitudes de becas">
+    <Layout title="Solicitudes de Becas Académicas">
       <BecasComponents.SolicitudesBecasTable />
     </Layout>
   );

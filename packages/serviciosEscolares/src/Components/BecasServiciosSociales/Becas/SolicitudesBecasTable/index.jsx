@@ -17,7 +17,6 @@ export default function SolicitudesBecasTable() {
   const handleDeleteClick = (row) => console.log('Borrar', row);
 
   const columns = [
-    // { field: 'id', headerName: 'ID', width: 150 },
     { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
     { field: 'programaId', headerName: 'Programa', width: 150 },
     { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 200 },
