@@ -27,6 +27,7 @@ export default function NavigationButtons({
   onNext,
   onPrevious,
   handleOnSubmit,
+  title,
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -85,7 +86,7 @@ export default function NavigationButtons({
           </Grid>
         )}
       </Grid>
-      <DefaultModal title="Equivalencias" open={open} setOpen={setOpen}>
+      <DefaultModal title={title} open={open} setOpen={setOpen}>
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Typography>
@@ -107,10 +108,15 @@ export default function NavigationButtons({
   );
 }
 
+NavigationButtons.defaultProps = {
+  title: 'Equivalencias',
+};
+
 NavigationButtons.propTypes = {
   currentPosition: PropTypes.number.isRequired,
   totalPositions: PropTypes.number.isRequired,
   onNext: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
+  title: PropTypes.string,
 };

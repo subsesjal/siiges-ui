@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function DatosInstitucion({ form, handleOnChange, estados }) {
+export default function DatosInstitucion({ form, handleOnChange, paises }) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
@@ -17,7 +17,7 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
     form.institucionDestino?.tipoInstitucionId || '',
   );
 
-  const fetchData = async (url, setState) => {
+  const fetchData = async (url, setState, mapper = null, filterFirst = false) => {
     try {
       const response = await fetch(url, {
         headers: {
@@ -26,18 +26,39 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
         },
       });
       const data = await response.json();
-      setState(data.data);
+
+      let transformedData = data.data;
+
+      if (filterFirst) {
+        transformedData = transformedData.slice(1);
+      }
+
+      if (mapper) {
+        transformedData = transformedData.map(mapper);
+      }
+
+      setState(transformedData);
     } catch (error) {
       console.error(`Error fetching data from ${url}:`, error);
     }
   };
+
+  const mapNivelesData = (item) => ({
+    id: item.id,
+    nombre: item.descripcion,
+  });
 
   useEffect(() => {
     fetchData(
       `${domain}/api/v1/public/instituciones/tipoInstituciones`,
       setTipoInstituciones,
     );
-    fetchData(`${domain}/api/v1/public/grados/`, setGrados);
+    fetchData(
+      `${domain}/api/v1/public/niveles/`,
+      setGrados,
+      mapNivelesData,
+      true,
+    );
   }, []);
 
   useEffect(() => {
@@ -126,10 +147,10 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
 
       <Grid item xs={4}>
         <Select
-          title="Grado Académico Procedente"
+          title="Nivel Académico Procedente"
           options={grados}
-          name="gradoAcademicoProcedente"
-          value={form.institucionProcedencia?.gradoAcademicoProcedente || ''}
+          name="nivelAcademicoProcedente"
+          value={form.institucionProcedencia?.nivelAcademicoProcedente || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
@@ -154,7 +175,7 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
       <Grid item xs={4}>
         <Select
           title="País"
-          options={estados}
+          options={paises}
           name="paisId"
           value={form.institucionProcedencia?.paisId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
@@ -176,24 +197,26 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
       <Grid item xs={8}>
         {renderInstitucionField}
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <Select
-          title="Grado Académico Destino"
+          title="Nivel Académico Destino"
           options={grados}
-          name="gradoAcademicoDestino"
-          value={form.institucionDestino?.gradoAcademicoDestino || ''}
+          name="nivelAcademicoDestino"
+          value={form.institucionDestino?.nivelAcademicoDestino || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
         />
       </Grid>
-      <Grid item xs={8}>
-        <Input
-          id="programaId"
-          label="Plan de Estudios"
-          name="programaId"
-          value={form.institucionDestino?.programaId || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-        />
-      </Grid>
+      {tipoInstitucionId !== 1 && (
+        <Grid item xs={9}>
+          <Input
+            id="nombreCarrera"
+            label="Plan de Estudios"
+            name="nombreCarrera"
+            value={form.institucionDestino?.nombreCarrera || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+          />
+        </Grid>
+      )}
       {tipoInstitucionId === 1 && (
       <>
         <Grid item xs={3}>
@@ -205,11 +228,11 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
             onBlur={handleRvoeOnBlur}
           />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={6}>
           <Input
             id="nombreCarreraDestino"
             label="Nombre de la Carrera (Destino)"
-            name="nombreCarrera"
+            name="programaId"
             value={programas.nombre || ''}
             onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
             disabled={tipoInstitucionId === 1}
@@ -223,12 +246,11 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
 
 DatosInstitucion.propTypes = {
   form: PropTypes.shape({
-    tipoTramiteId: PropTypes.number.isRequired,
     institucionProcedencia: PropTypes.shape({
       nombre: PropTypes.string,
       paisId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       nombreCarrera: PropTypes.string,
-      gradoAcademicoProcedente: PropTypes.string,
+      nivelAcademicoProcedente: PropTypes.string,
       anoFinalizacionCarrera: PropTypes.string,
       anoInicioCarrera: PropTypes.string,
       telefonoInstitucion: PropTypes.string,
@@ -242,12 +264,12 @@ DatosInstitucion.propTypes = {
       nombre: PropTypes.string,
       acuerdoRvoe: PropTypes.string,
       nombreCarrera: PropTypes.string,
-      gradoAcademicoDestino: PropTypes.string,
+      nivelAcademicoDestino: PropTypes.string,
       planEstudios: PropTypes.string,
     }),
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,
-  estados: PropTypes.arrayOf(
+  paises: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       nombre: PropTypes.string.isRequired,

@@ -9,9 +9,9 @@ const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
 const tipoSolicitudes = [
-  { id: 1, nombre: 'Parcial' },
-  { id: 2, nombre: 'Total' },
-  { id: 3, nombre: 'Duplicado' },
+  { id: 3, nombre: 'Parcial' },
+  { id: 4, nombre: 'Total' },
+  { id: 6, nombre: 'Duplicado' },
 ];
 
 const grados = [

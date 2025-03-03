@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm, DataTable, DefaultModal, Input,
+  ButtonsForm, Context, DataTable, DefaultModal, Input,
 } from '@siiges-ui/shared';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const columns = [
@@ -30,22 +30,22 @@ const columns = [
 
 export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [open, setOpen] = useState(false);
+  const { setLoading, setNoti } = useContext(Context);
   const [nombreAsignaturaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
   const [nombreAsignaturaEquivalente, setMateriaEquivalente] = useState('');
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
+  const [rows, setRows] = useState([]);
 
   const handleConfirm = () => {
-    // Create the new entry
     const newEntry = {
-      asignaturaId: 1, // You might want to dynamically generate this ID
+      asignaturaId: 1,
       nombreAsignaturaEquivalente,
       calificacionEquivalente,
       nombreAsignaturaAntecedente,
       calificacionAntecedente,
     };
 
-    // Update the form state with the new entry
     handleOnChange(
       {
         target: {
@@ -53,16 +53,37 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
           value: [...form.interesado.asignaturasAntecedentesEquivalentes, newEntry],
         },
       },
-      ['interesado'], // Correct path to update the nested state
+      ['interesado'],
     );
 
-    // Reset the form and close the modal
     setOpen(false);
     setMateriaAntecedente('');
     setCalificacionAntecedente('');
     setMateriaEquivalente('');
     setCalificacionEquivalente('');
   };
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/public/asignaturas/programas/${form.interesado.institucionDestino.programaId}`)
+      .then((response) => {
+        if (response.data) {
+          setRows(response.data);
+        }
+      })
+      .catch((error) => {
+        setNoti({
+          open: true,
+          message: `¡Ocurrió un error inesperado!: ${error}`,
+          type: 'error',
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [form.interesado.institucionDestino.programaId]);
+
+  console.log(rows);
 
   return (
     <>
@@ -143,6 +164,9 @@ CargaMateriasEquivalentes.propTypes = {
           calificacionAntecedente: PropTypes.string,
         }),
       ),
+      institucionDestino: PropTypes.shape({
+        programaId: PropTypes.number,
+      }),
     }),
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,

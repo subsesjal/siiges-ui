@@ -18,6 +18,7 @@ export default function FormRevalidaciones() {
   const router = useRouter();
   const [filesData, setFilesData] = useState({});
   const [estados, setEstados] = useState([]);
+  const [paises, setPaises] = useState([]);
   const [form, setForm] = useState({
     tipoTramiteId: null,
     estatusSolicitudRevEquivId: 2,
@@ -53,11 +54,12 @@ export default function FormRevalidaciones() {
         acuerdoRvoe: '',
         nombreCarrera: '',
       },
+      asignaturasAntecedentesEquivalentes: [],
     },
   });
 
   useEffect(() => {
-    if (form.tipoTramiteId === 1) {
+    if ([1, 2, 3].includes(form.tipoTramiteId)) {
       setTotalPositions(4);
     } else {
       setTotalPositions(3);
@@ -81,6 +83,25 @@ export default function FormRevalidaciones() {
     };
 
     fetchEstados();
+  }, []);
+
+  useEffect(() => {
+    const fetchPaises = async () => {
+      try {
+        const response = await fetch(`${domain}/api/v1/public/paises/`, {
+          headers: {
+            api_key: apiKey,
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        setPaises(data.data);
+      } catch (error) {
+        console.error('¡Error al buscar Paises!:', error);
+      }
+    };
+
+    fetchPaises();
   }, []);
 
   const handleNext = () => {
@@ -163,11 +184,11 @@ export default function FormRevalidaciones() {
       case 1:
         return <DatosSolicitante form={form} handleOnChange={handleOnChange} estados={estados} />;
       case 2:
-        return <DatosInstitucion form={form} handleOnChange={handleOnChange} estados={estados} />;
+        return <DatosInstitucion form={form} handleOnChange={handleOnChange} paises={paises} />;
       case 3:
         return <CargaMaterias filesData={filesData} setFilesData={setFilesData} />;
       case 4:
-        return form.tipoTramiteId === 1 ? (
+        return [1, 2, 3].includes(form.tipoTramiteId) ? (
           <CargaMateriasEquivalentes form={form} handleOnChange={handleOnChange} />
         ) : null;
       default:
@@ -190,6 +211,7 @@ export default function FormRevalidaciones() {
           onNext={handleNext}
           onPrevious={handlePrevious}
           handleOnSubmit={handleOnSubmit}
+          title="Revalidaciones"
         />
       </Grid>
     </Grid>
