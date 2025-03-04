@@ -104,7 +104,7 @@ export default function FoliosForm({
       } else if (data?.planteles?.length) {
         const transformedPlanteles = data.planteles.map((plantel) => ({
           id: plantel.id,
-          nombre: `${plantel.domicilio?.calle || ''} ${plantel.domicilio?.numeroExterior || ''}`.trim(),
+          nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior} | CCT: ${plantel.claveCentroTrabajo}`,
         }));
         setArrays((prevState) => ({ ...prevState, planteles: transformedPlanteles }));
       }

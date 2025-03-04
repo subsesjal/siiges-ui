@@ -83,7 +83,7 @@ export default function ValidacionForm({
         const sortedPlanteles = data.planteles
           .map((plantel) => ({
             id: plantel.id,
-            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior} | CCT: ${plantel.claveCentroTrabajo}`,
           }))
           .sort((a, b) => a.nombre.localeCompare(b.nombre));
         setPlanteles(sortedPlanteles);

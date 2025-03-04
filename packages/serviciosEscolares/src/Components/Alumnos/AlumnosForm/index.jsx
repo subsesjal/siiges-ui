@@ -121,7 +121,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
         const transformedPlanteles = data.planteles
           .map((plantel) => ({
             id: plantel.id,
-            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior} | CCT: ${plantel.claveCentroTrabajo}`,
           }))
           .sort((a, b) => a.nombre.localeCompare(b.nombre));
 
