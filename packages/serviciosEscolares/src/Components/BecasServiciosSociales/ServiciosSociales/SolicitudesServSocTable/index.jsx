@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PropTypes from 'prop-types';
 
-export default function SolicitudesServSocTable({ data, tableEnabled }) {
+export default function SolicitudServSocTable({ data, tableEnabled }) {
   const { loading } = useContext(Context);
 
   const handleViewClick = (row) => console.log('Consultar', row);
@@ -53,7 +53,7 @@ export default function SolicitudesServSocTable({ data, tableEnabled }) {
   );
 }
 
-SolicitudesServSocTable.propTypes = {
+SolicitudServSocTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

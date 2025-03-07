@@ -9,7 +9,7 @@ import {
 } from '@siiges-ui/instituciones';
 import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
-export default function ServicioSocialForm({ setSolicitudes, setLoading, setTableEnabled }) {
+export default function SolicitudServSocFilter({ setSolicitudes, setLoading, setTableEnabled }) {
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,
@@ -146,7 +146,7 @@ export default function ServicioSocialForm({ setSolicitudes, setLoading, setTabl
   );
 }
 
-ServicioSocialForm.propTypes = {
+SolicitudServSocFilter.propTypes = {
   setSolicitudes: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
   setTableEnabled: PropTypes.func.isRequired,

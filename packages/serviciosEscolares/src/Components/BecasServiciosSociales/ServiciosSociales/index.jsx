@@ -1,7 +1,7 @@
-import SolicitudesServSocTable from './SolicitudesServSocTable';
-import SolicitudesServSocForm from './SolicitudesServSocForm';
+import SolicitudServSocTable from './SolicitudesServSocTable';
+import SolicitudServSocFilter from './SolicitudServSocFilter';
 
 export default {
-  SolicitudesServSocTable,
-  SolicitudesServSocForm,
+  SolicitudServSocTable,
+  SolicitudServSocFilter,
 };

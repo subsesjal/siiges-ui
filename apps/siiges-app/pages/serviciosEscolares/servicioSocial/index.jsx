@@ -5,18 +5,18 @@ import { ServicioSocialComponent } from '@siiges-ui/serviciosescolares';
 
 export default function ServicioSocial() {
   const [solicitudes, setSolicitudes] = useState([]);
-  const { loading, setLoading } = useContext(Context);
+  const { setLoading } = useContext(Context);
   const [tableEnabled, setTableEnabled] = useState(false);
 
   return (
-    <Layout title="Servicio Social" loading={loading}>
-      <ServicioSocialComponent.SolicitudesServSocForm
+    <Layout title="Servicio Social">
+      <ServicioSocialComponent.SolicitudServSocFilter
         setSolicitudes={setSolicitudes}
         setLoading={setLoading}
         setTableEnabled={setTableEnabled}
       />
       <Divider sx={{ marginTop: 2 }} />
-      <ServicioSocialComponent.SolicitudesServSocTable
+      <ServicioSocialComponent.SolicitudServSocTable
         data={solicitudes}
         tableEnabled={tableEnabled}
       />
