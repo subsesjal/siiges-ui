@@ -1,9 +1,9 @@
 import SolicitudesBecasTable from './SolicitudesBecasTable';
 import BecasTable from './utils/BecasTable';
-import SolicitudesBecasForm from './SolicitudesBecasForm';
+import SolicitudesBecasFilter from './SolicitudesBecasFilter';
 
 export default {
   SolicitudesBecasTable,
   BecasTable,
-  SolicitudesBecasForm,
+  SolicitudesBecasFilter,
 };
