@@ -1,7 +1,7 @@
-import React from 'react';
+import SolicitudesServSocTable from './SolicitudesServSocTable';
+import SolicitudesServSocForm from './SolicitudesServSocForm';
 
-export default function ServicioSocial() {
-  return (
-    <div>Servicio Social</div>
-  );
-}
+export default {
+  SolicitudesServSocTable,
+  SolicitudesServSocForm,
+};
