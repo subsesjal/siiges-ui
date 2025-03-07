@@ -33,7 +33,7 @@ export default function BasicSelect({
 
   const [searchText, setSearchText] = useState('');
   const displayedOptions = useMemo(
-    () => options.filter((optionValue) => containsText(optionValue.nombre || '', searchText)),
+    () => options?.filter((optionValue) => containsText(optionValue.nombre || '', searchText)),
     [searchText, options],
   );
 
