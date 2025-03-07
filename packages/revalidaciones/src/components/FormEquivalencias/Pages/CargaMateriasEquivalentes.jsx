@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import {
   ButtonsForm, DataTable, DefaultModal, Input,
 } from '@siiges-ui/shared';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const columns = [
@@ -34,6 +34,21 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
   const [nombreAsignaturaEquivalente, setMateriaEquivalente] = useState('');
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    if (form?.interesado?.asignaturasAntecedentesEquivalentes) {
+      setRows(
+        form.interesado.asignaturasAntecedentesEquivalentes.map((item, index) => ({
+          id: index,
+          materiasAntecedente: item.nombreAsignaturaAntecedente,
+          calificacionAntecedente: item.calificacionAntecedente,
+          materiasEquivalentes: item.nombreAsignaturaEquivalente,
+          calificacionEquivalente: item.calificacionEquivalente,
+        })),
+      );
+    }
+  }, [form]);
 
   const handleConfirm = () => {
     const newEntry = {
@@ -68,13 +83,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
           buttonAdd
           buttonClick={() => setOpen(true)}
           buttonText="Carga de Materia"
-          rows={form.interesado.asignaturasAntecedentesEquivalentes?.map((item, index) => ({
-            id: index,
-            materiasAntecedente: item.nombreAsignaturaAntecedente,
-            calificacionAntecedente: item.calificacionAntecedente,
-            materiasEquivalentes: item.nombreAsignaturaEquivalente,
-            calificacionEquivalente: item.calificacionEquivalente,
-          }))}
+          rows={rows}
           columns={columns}
         />
       </Grid>

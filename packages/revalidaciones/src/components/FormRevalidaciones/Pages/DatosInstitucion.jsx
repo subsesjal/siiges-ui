@@ -8,7 +8,9 @@ import PropTypes from 'prop-types';
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function DatosInstitucion({ form, handleOnChange, paises }) {
+export default function DatosInstitucion({
+  form, handleOnChange, paises, setNextDisabled, validateFields,
+}) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
@@ -16,6 +18,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
   const [tipoInstitucionId, setTipoInstitucionId] = useState(
     form.interesado?.institucionDestino?.tipoInstitucionId || '',
   );
+  const [touched, setTouched] = useState({});
 
   const fetchData = async (url, setState, mapper = null, filterFirst = false) => {
     try {
@@ -70,10 +73,20 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
     }
   }, [tipoInstitucionId]);
 
+  const handleChange = (e, path) => {
+    const { name } = e.target;
+    handleOnChange(e, path);
+
+    setTouched((prevTouched) => ({
+      ...prevTouched,
+      [name]: true,
+    }));
+  };
+
   const handleTipoInstitucionChange = (event) => {
     const selectedTipoInstitucionId = event.target.value;
     setTipoInstitucionId(selectedTipoInstitucionId);
-    handleOnChange(event, ['interesado', 'institucionDestino']);
+    handleChange(event, ['interesado', 'institucionDestino']);
   };
 
   const handleRvoeOnBlur = (event) => {
@@ -84,8 +97,46 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
         setProgramas,
       );
     }
-    handleOnChange(event, ['interesado', 'institucionDestino']);
+    handleChange(event, ['interesado', 'institucionDestino']);
   };
+
+  const validateField = (value, required, fieldName) => (
+    touched[fieldName] && required && !value ? 'Este campo es requerido' : ''
+  );
+
+  useEffect(() => {
+    if (validateFields) {
+      // List of all required fields and their paths in the form object
+      const requiredFields = [
+        { path: ['interesado', 'institucionProcedencia', 'nombre'], value: form.interesado?.institucionProcedencia?.nombre },
+        { path: ['interesado', 'institucionProcedencia', 'nombreCarrera'], value: form.interesado?.institucionProcedencia?.nombreCarrera },
+        { path: ['interesado', 'institucionProcedencia', 'nivelId'], value: form.interesado?.institucionProcedencia?.nivelId },
+        { path: ['interesado', 'institucionProcedencia', 'paisId'], value: form.interesado?.institucionProcedencia?.paisId },
+        { path: ['interesado', 'institucionDestino', 'tipoInstitucionId'], value: tipoInstitucionId },
+        { path: ['interesado', 'institucionDestino', 'nivelId'], value: form.interesado?.institucionDestino?.nivelId },
+      ];
+
+      // Check if any required field is empty
+      const isAnyFieldEmpty = requiredFields.some((field) => {
+        if (Array.isArray(field.value)) {
+          return field.value.length === 0;
+        }
+        return !field.value;
+      });
+
+      // Disable or enable the "Next" button based on validation
+      setNextDisabled(isAnyFieldEmpty);
+
+      // Mark all fields as touched to show validation messages
+      if (isAnyFieldEmpty) {
+        const newTouched = {};
+        requiredFields.forEach((field) => {
+          newTouched[field.path[field.path.length - 1]] = true;
+        });
+        setTouched(newTouched);
+      }
+    }
+  }, [validateFields, form, tipoInstitucionId, setNextDisabled]);
 
   const renderInstitucionField = useMemo(() => {
     if (tipoInstitucionId === 1) {
@@ -95,7 +146,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           options={instituciones}
           name="institucionId"
           value={form.interesado?.institucionDestino?.institucionId || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+          onChange={(e) => handleChange(e, ['interesado', 'institucionDestino'])}
         />
       );
     }
@@ -105,7 +156,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
         label="Instituciones de Educación Superior"
         name="nombre"
         value={form.interesado?.institucionDestino?.nombre || ''}
-        onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+        onChange={(e) => handleChange(e, ['interesado', 'institucionDestino'])}
       />
     );
   }, [
@@ -140,7 +191,9 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
             label={field.label}
             name={field.name}
             value={field.value || ''}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
+            onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
+            required
+            errorMessage={validateField(field.value, true, field.name)}
           />
         </Grid>
       ))}
@@ -149,9 +202,11 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
         <Select
           title="Nivel Académico Procedente"
           options={grados}
-          name="nivelAcademicoProcedente"
-          value={form.interesado?.institucionProcedencia?.nivelAcademicoProcedente || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
+          name="nivelId"
+          value={form.interesado?.institucionProcedencia?.nivelId || ''}
+          onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
+          required
+          errorMessage={validateField(form.interesado?.institucionProcedencia?.nivelId, true, 'nivelId')}
         />
       </Grid>
       <Grid item xs={4}>
@@ -160,7 +215,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           label="Año de Finalización de la Carrera"
           name="anoFinalizacionCarrera"
           value={form.interesado?.institucionProcedencia?.anoFinalizacionCarrera || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
+          onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
       <Grid item xs={4}>
@@ -169,7 +224,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           label="Año de Inicio de Realización de Estudios"
           name="anoInicioCarrera"
           value={form.interesado?.institucionProcedencia?.anoInicioCarrera || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
+          onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
       <Grid item xs={4}>
@@ -178,7 +233,9 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           options={paises}
           name="paisId"
           value={form.interesado?.institucionProcedencia?.paisId || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
+          onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
+          required
+          errorMessage={validateField(form.interesado?.institucionProcedencia?.paisId, true, 'paisId')}
         />
       </Grid>
 
@@ -192,6 +249,8 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           options={tipoInstituciones}
           value={tipoInstitucionId}
           onChange={handleTipoInstitucionChange}
+          required
+          errorMessage={validateField(tipoInstitucionId, true, 'tipoInstitucionId')}
         />
       </Grid>
       <Grid item xs={8}>
@@ -201,9 +260,11 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
         <Select
           title="Nivel Académico Destino"
           options={grados}
-          name="nivelAcademicoDestino"
-          value={form.interesado?.institucionDestino?.nivelAcademicoDestino || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+          name="nivelId"
+          value={form.interesado?.institucionDestino?.nivelId || ''}
+          onChange={(e) => handleChange(e, ['interesado', 'institucionDestino'])}
+          required
+          errorMessage={validateField(form.interesado?.institucionDestino?.nivelId, true, 'nivelId')}
         />
       </Grid>
       {tipoInstitucionId !== 1 && (
@@ -213,7 +274,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
             label="Plan de Estudios"
             name="nombreCarrera"
             value={form.interesado?.institucionDestino?.nombreCarrera || ''}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+            onChange={(e) => handleChange(e, ['interesado', 'institucionDestino'])}
           />
         </Grid>
       )}
@@ -234,7 +295,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
             label="Nombre de la Carrera (Destino)"
             name="programaId"
             value={programas.nombre || ''}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+            onChange={(e) => handleChange(e, ['interesado', 'institucionDestino'])}
             disabled={tipoInstitucionId === 1}
           />
         </Grid>
@@ -251,7 +312,7 @@ DatosInstitucion.propTypes = {
         nombre: PropTypes.string,
         paisId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         nombreCarrera: PropTypes.string,
-        nivelAcademicoProcedente: PropTypes.number,
+        nivelId: PropTypes.number,
         anoFinalizacionCarrera: PropTypes.string,
         anoInicioCarrera: PropTypes.string,
         telefonoInstitucion: PropTypes.string,
@@ -265,7 +326,7 @@ DatosInstitucion.propTypes = {
         nombre: PropTypes.string,
         acuerdoRvoe: PropTypes.string,
         nombreCarrera: PropTypes.string,
-        nivelAcademicoDestino: PropTypes.number,
+        nivelId: PropTypes.number,
         planEstudios: PropTypes.string,
       }),
     }),
@@ -277,4 +338,6 @@ DatosInstitucion.propTypes = {
       nombre: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  setNextDisabled: PropTypes.func.isRequired,
+  validateFields: PropTypes.bool.isRequired,
 };
