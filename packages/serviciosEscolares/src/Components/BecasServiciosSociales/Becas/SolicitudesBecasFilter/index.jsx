@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
 import getBecasByPrograma from '@siiges-ui/instituciones/src/utils/getProgramas';
 
-export default function SolicitudesBecasFilter({ setBecas, setPrograma, setLoading }) {
+export default function SolicitudesBecasForm({ setBecas, setPrograma }) {
+  const { setNoti, session, setLoading } = useContext(Context);
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,
     setLoading,
   });
-  const { setNoti, session } = useContext(Context);
 
   const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('solicitudesBecas_selectedInstitucion')
     ? localStorage.getItem('becas_selectedInstitucion')
@@ -192,8 +192,7 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setLoadi
   );
 }
 
-SolicitudesBecasFilter.propTypes = {
+SolicitudesBecasForm.propTypes = {
   setBecas: PropTypes.func.isRequired,
   setPrograma: PropTypes.func.isRequired,
-  setLoading: PropTypes.func.isRequired,
 };
