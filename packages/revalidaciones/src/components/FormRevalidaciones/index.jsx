@@ -77,6 +77,14 @@ export default function FormRevalidaciones() {
       }));
     } else {
       setTotalPositions(3);
+
+      setForm((prevForm) => {
+        const { asignaturasAntecedentesEquivalentes, ...restInteresado } = prevForm.interesado;
+        return {
+          ...prevForm,
+          interesado: restInteresado,
+        };
+      });
     }
   }, [form.tipoTramiteId]);
 

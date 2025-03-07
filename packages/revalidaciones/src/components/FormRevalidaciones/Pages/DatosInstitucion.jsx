@@ -106,17 +106,15 @@ export default function DatosInstitucion({
 
   useEffect(() => {
     if (validateFields) {
-      // List of all required fields and their paths in the form object
       const requiredFields = [
         { path: ['interesado', 'institucionProcedencia', 'nombre'], value: form.interesado?.institucionProcedencia?.nombre },
         { path: ['interesado', 'institucionProcedencia', 'nombreCarrera'], value: form.interesado?.institucionProcedencia?.nombreCarrera },
         { path: ['interesado', 'institucionProcedencia', 'nivelId'], value: form.interesado?.institucionProcedencia?.nivelId },
         { path: ['interesado', 'institucionProcedencia', 'paisId'], value: form.interesado?.institucionProcedencia?.paisId },
         { path: ['interesado', 'institucionDestino', 'tipoInstitucionId'], value: tipoInstitucionId },
-        { path: ['interesado', 'institucionDestino', 'nivelId'], value: form.interesado?.institucionDestino?.nivelId },
+        { path: ['interesado', 'institucionDestino', 'nivelId'], value: form.interesado?.institucionDestino?.nivel },
       ];
 
-      // Check if any required field is empty
       const isAnyFieldEmpty = requiredFields.some((field) => {
         if (Array.isArray(field.value)) {
           return field.value.length === 0;
@@ -124,10 +122,8 @@ export default function DatosInstitucion({
         return !field.value;
       });
 
-      // Disable or enable the "Next" button based on validation
       setNextDisabled(isAnyFieldEmpty);
 
-      // Mark all fields as touched to show validation messages
       if (isAnyFieldEmpty) {
         const newTouched = {};
         requiredFields.forEach((field) => {
@@ -260,11 +256,11 @@ export default function DatosInstitucion({
         <Select
           title="Nivel Académico Destino"
           options={grados}
-          name="nivelId"
-          value={form.interesado?.institucionDestino?.nivelId || ''}
+          name="nivel"
+          value={form.interesado?.institucionDestino?.nivel || ''}
           onChange={(e) => handleChange(e, ['interesado', 'institucionDestino'])}
           required
-          errorMessage={validateField(form.interesado?.institucionDestino?.nivelId, true, 'nivelId')}
+          errorMessage={validateField(form.interesado?.institucionDestino?.nivel, true, 'nivel')}
         />
       </Grid>
       {tipoInstitucionId !== 1 && (
@@ -326,7 +322,7 @@ DatosInstitucion.propTypes = {
         nombre: PropTypes.string,
         acuerdoRvoe: PropTypes.string,
         nombreCarrera: PropTypes.string,
-        nivelId: PropTypes.number,
+        nivel: PropTypes.string,
         planEstudios: PropTypes.string,
       }),
     }),
