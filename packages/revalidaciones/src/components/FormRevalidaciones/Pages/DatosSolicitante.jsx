@@ -14,6 +14,12 @@ const tipoSolicitudes = [
   { id: 6, nombre: 'Duplicado' },
 ];
 
+const sexo = [
+  { id: 1, nombre: 'Masculino' },
+  { id: 2, nombre: 'Femenino' },
+  { id: 3, nombre: 'Otro' },
+];
+
 const grados = [
   { id: 1, nombre: 'Doctorado' },
   { id: 2, nombre: 'Especialidad' },
@@ -87,7 +93,16 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
       <Grid item xs={12}>
         <Subtitle>Datos del Solicitante</Subtitle>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
+        <Input
+          id="curp"
+          label="CURP"
+          name="curp"
+          value={form.interesado.persona.curp || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+        />
+      </Grid>
+      <Grid item xs={3}>
         <Input
           id="nombre"
           label="Nombre"
@@ -96,7 +111,7 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <Input
           id="apellidoPaterno"
           label="Primer Apellido"
@@ -105,12 +120,31 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <Input
           id="apellidoMaterno"
           label="Segundo Apellido"
           name="apellidoMaterno"
           value={form.interesado.persona.apellidoMaterno || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Input
+          id="nacionalidad"
+          label="Nacionalidad"
+          name="nacionalidad"
+          value={form.interesado.persona.nacionalidad || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Select
+          id="sexo"
+          title="Sexo"
+          options={sexo}
+          name="sexo"
+          value={form.interesado.persona.sexo || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
         />
       </Grid>
@@ -205,6 +239,8 @@ DatosSolicitante.propTypes = {
       persona: PropTypes.shape({
         curp: PropTypes.string,
         nombre: PropTypes.string,
+        nacionalidad: PropTypes.string,
+        sexo: PropTypes.number,
         apellidoPaterno: PropTypes.string,
         apellidoMaterno: PropTypes.string,
         fechaNacimiento: PropTypes.string,
@@ -214,8 +250,8 @@ DatosSolicitante.propTypes = {
           calle: PropTypes.string,
           numeroExterior: PropTypes.string,
           colonia: PropTypes.string,
-          estadoId: PropTypes.string,
-          municipioId: PropTypes.string,
+          estadoId: PropTypes.number,
+          municipioId: PropTypes.number,
           codigoPostal: PropTypes.string,
         }),
       }),

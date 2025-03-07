@@ -14,7 +14,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
   const [instituciones, setInstituciones] = useState([]);
   const [grados, setGrados] = useState([]);
   const [tipoInstitucionId, setTipoInstitucionId] = useState(
-    form.institucionDestino?.tipoInstitucionId || '',
+    form.interesado?.institucionDestino?.tipoInstitucionId || '',
   );
 
   const fetchData = async (url, setState, mapper = null, filterFirst = false) => {
@@ -94,7 +94,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           title="Instituciones"
           options={instituciones}
           name="institucionId"
-          value={form.institucionDestino?.institucionId || ''}
+          value={form.interesado?.institucionDestino?.institucionId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
         />
       );
@@ -104,14 +104,14 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
         id="institucionNombre"
         label="Instituciones de Educación Superior"
         name="nombre"
-        value={form.institucionDestino?.nombre || ''}
+        value={form.interesado?.institucionDestino?.nombre || ''}
         onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
       />
     );
   }, [
     tipoInstitucionId,
     instituciones,
-    form.institucionDestino,
+    form.interesado.institucionDestino,
     handleOnChange,
   ]);
 
@@ -125,13 +125,13 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           id: 'nombreInstitucion',
           label: 'Nombre de la Institución',
           name: 'nombre',
-          value: form.institucionProcedencia?.nombre,
+          value: form.interesado?.institucionProcedencia?.nombre,
         },
         {
           id: 'nombreCarrera',
           label: 'Nombre de la Carrera',
           name: 'nombreCarrera',
-          value: form.institucionProcedencia?.nombreCarrera,
+          value: form.interesado?.institucionProcedencia?.nombreCarrera,
         },
       ].map((field) => (
         <Grid item xs={6} key={field.id}>
@@ -150,7 +150,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           title="Nivel Académico Procedente"
           options={grados}
           name="nivelAcademicoProcedente"
-          value={form.institucionProcedencia?.nivelAcademicoProcedente || ''}
+          value={form.interesado?.institucionProcedencia?.nivelAcademicoProcedente || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
@@ -159,7 +159,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           id="anoFinalizacionCarrera"
           label="Año de Finalización de la Carrera"
           name="anoFinalizacionCarrera"
-          value={form.institucionProcedencia?.anoFinalizacionCarrera || ''}
+          value={form.interesado?.institucionProcedencia?.anoFinalizacionCarrera || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
@@ -168,7 +168,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           id="anoInicioCarrera"
           label="Año de Inicio de Realización de Estudios"
           name="anoInicioCarrera"
-          value={form.institucionProcedencia?.anoInicioCarrera || ''}
+          value={form.interesado?.institucionProcedencia?.anoInicioCarrera || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
@@ -177,7 +177,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           title="País"
           options={paises}
           name="paisId"
-          value={form.institucionProcedencia?.paisId || ''}
+          value={form.interesado?.institucionProcedencia?.paisId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
@@ -202,7 +202,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
           title="Nivel Académico Destino"
           options={grados}
           name="nivelAcademicoDestino"
-          value={form.institucionDestino?.nivelAcademicoDestino || ''}
+          value={form.interesado?.institucionDestino?.nivelAcademicoDestino || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
         />
       </Grid>
@@ -212,7 +212,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
             id="nombreCarrera"
             label="Plan de Estudios"
             name="nombreCarrera"
-            value={form.institucionDestino?.nombreCarrera || ''}
+            value={form.interesado?.institucionDestino?.nombreCarrera || ''}
             onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
           />
         </Grid>
@@ -224,7 +224,7 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
             id="rvoe"
             label="RVOE"
             name="acuerdoRvoe"
-            value={form.institucionDestino?.acuerdoRvoe || ''}
+            value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
             onBlur={handleRvoeOnBlur}
           />
         </Grid>
@@ -246,26 +246,28 @@ export default function DatosInstitucion({ form, handleOnChange, paises }) {
 
 DatosInstitucion.propTypes = {
   form: PropTypes.shape({
-    institucionProcedencia: PropTypes.shape({
-      nombre: PropTypes.string,
-      paisId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      nombreCarrera: PropTypes.string,
-      nivelAcademicoProcedente: PropTypes.string,
-      anoFinalizacionCarrera: PropTypes.string,
-      anoInicioCarrera: PropTypes.string,
-      telefonoInstitucion: PropTypes.string,
-      paginaWebInstitucion: PropTypes.string,
-      correoInstitucion: PropTypes.string,
-    }),
-    institucionDestino: PropTypes.shape({
-      tipoInstitucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      institucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      nombre: PropTypes.string,
-      acuerdoRvoe: PropTypes.string,
-      nombreCarrera: PropTypes.string,
-      nivelAcademicoDestino: PropTypes.string,
-      planEstudios: PropTypes.string,
+    interesado: PropTypes.shape({
+      institucionProcedencia: PropTypes.shape({
+        nombre: PropTypes.string,
+        paisId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        nombreCarrera: PropTypes.string,
+        nivelAcademicoProcedente: PropTypes.number,
+        anoFinalizacionCarrera: PropTypes.string,
+        anoInicioCarrera: PropTypes.string,
+        telefonoInstitucion: PropTypes.string,
+        paginaWebInstitucion: PropTypes.string,
+        correoInstitucion: PropTypes.string,
+      }),
+      institucionDestino: PropTypes.shape({
+        tipoInstitucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        institucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        nombre: PropTypes.string,
+        acuerdoRvoe: PropTypes.string,
+        nombreCarrera: PropTypes.string,
+        nivelAcademicoDestino: PropTypes.number,
+        planEstudios: PropTypes.string,
+      }),
     }),
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,

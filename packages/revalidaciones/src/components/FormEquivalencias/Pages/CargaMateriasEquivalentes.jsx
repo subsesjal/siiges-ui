@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm, Context, DataTable, DefaultModal, Input,
+  ButtonsForm, DataTable, DefaultModal, Input,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const columns = [
@@ -30,12 +30,10 @@ const columns = [
 
 export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [open, setOpen] = useState(false);
-  const { setLoading, setNoti } = useContext(Context);
   const [nombreAsignaturaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
   const [nombreAsignaturaEquivalente, setMateriaEquivalente] = useState('');
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
-  const [rows, setRows] = useState([]);
 
   const handleConfirm = () => {
     const newEntry = {
@@ -63,28 +61,6 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
     setCalificacionEquivalente('');
   };
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`/public/asignaturas/programas/${form.interesado.institucionDestino.programaId}`)
-      .then((response) => {
-        if (response.data) {
-          setRows(response.data);
-        }
-      })
-      .catch((error) => {
-        setNoti({
-          open: true,
-          message: `¡Ocurrió un error inesperado!: ${error}`,
-          type: 'error',
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [form.interesado.institucionDestino.programaId]);
-
-  console.log(rows);
-
   return (
     <>
       <Grid container spacing={1}>
@@ -92,7 +68,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
           buttonAdd
           buttonClick={() => setOpen(true)}
           buttonText="Carga de Materia"
-          rows={form.interesado.asignaturasAntecedentesEquivalentes.map((item, index) => ({
+          rows={form.interesado.asignaturasAntecedentesEquivalentes?.map((item, index) => ({
             id: index,
             materiasAntecedente: item.nombreAsignaturaAntecedente,
             calificacionAntecedente: item.calificacionAntecedente,

@@ -38,13 +38,17 @@ export default function FormRevalidaciones() {
         apellidoPaterno: '',
         apellidoMaterno: '',
         telefono: '',
+        sexo: '',
+        nacionalidad: '',
+        celular: '',
         curp: '',
         correoPrimario: '',
       },
       institucionProcedencia: {
         tipoInstitucionId: 1,
         nombre: '',
-        estadoId: '',
+        estadoId: null,
+        nivelId: '',
         nombreCarrera: '',
       },
       institucionDestino: {
@@ -52,9 +56,9 @@ export default function FormRevalidaciones() {
         programaId: '',
         nombre: '',
         acuerdoRvoe: '',
+        nivel: '',
         nombreCarrera: '',
       },
-      asignaturasAntecedentesEquivalentes: [],
     },
   });
 
