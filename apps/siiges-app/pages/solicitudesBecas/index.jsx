@@ -9,7 +9,7 @@ export default function SolicitudesDeBecas() {
   const [loading, setLoading] = useState(true);
   return (
     <Layout title="Solicitudes de Becas Académicas" loading={loading}>
-      <BecasComponents.SolicitudesBecasForm setBecas={setBecas} setPrograma={setPrograma} setLoading={setLoading} />
+      <BecasComponents.SolicitudesBecasFilter setBecas={setBecas} setPrograma={setPrograma} setLoading={setLoading} />
       <Divider sx={{ marginTop: 2 }} />
       {becas && <BecasComponents.SolicitudesBecasTable becas={becas} programa={programa} />}
     </Layout>
