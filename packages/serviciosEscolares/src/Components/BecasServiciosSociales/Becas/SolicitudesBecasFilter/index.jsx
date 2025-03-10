@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
 import getBecasByPrograma from '@siiges-ui/instituciones/src/utils/getProgramas';
 
-export default function SolicitudesBecasForm({ setBecas, setPrograma }) {
+export default function SolicitudesBecasForm({ setBecas, setPrograma, setInstitucion }) {
   const { setNoti, session, setLoading } = useContext(Context);
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -115,6 +115,7 @@ export default function SolicitudesBecasForm({ setBecas, setPrograma }) {
         });
         setPlanteles([]);
       } else {
+        setInstitucion(institucionId);
         const transformedPlanteles = data.planteles
           .map((plantel) => ({
             id: plantel.id,
@@ -195,4 +196,5 @@ export default function SolicitudesBecasForm({ setBecas, setPrograma }) {
 SolicitudesBecasForm.propTypes = {
   setBecas: PropTypes.func.isRequired,
   setPrograma: PropTypes.func.isRequired,
+  setInstitucion: PropTypes.func.isRequired,
 };
