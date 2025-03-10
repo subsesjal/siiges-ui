@@ -45,6 +45,7 @@ export default function FormEquivalencias() {
         tipoInstitucionId: 1,
         nombre: '',
         estadoId: '',
+        nivelId: null,
         nombreCarrera: '',
       },
       institucionDestino: {
@@ -53,6 +54,7 @@ export default function FormEquivalencias() {
         nombre: '',
         acuerdoRvoe: '',
         nombreCarrera: '',
+        nivel: '',
       },
       asignaturasAntecedentesEquivalentes: [],
     },

@@ -29,7 +29,7 @@ export default function CargaMaterias({ filesData, setFilesData }) {
     { label: 'Titulo, diploma o grado académico', key: 'TITULO_DIPLOMA_GRADOACADEMICO' },
     { label: 'Certificado / Notas', key: 'CERTIFICADO_NOTAS' },
     { label: 'Plan y programa de estudio/Pensum', key: 'PLAN_PROGRAMAESTUDIO_PENSUM' },
-    { label: 'Cedula profesional', key: 'CEDULA_PROFESIONAL' },
+    { label: 'Cédula profesional', key: 'CEDULA_PROFESIONAL' },
     { label: 'Antecedente académico revalidado', key: 'ANTECEDENTE_ACADEMICO_REVALIDADO' },
     { label: 'Comprobante de pago', key: 'COMPROBANTE_PAGO' },
     { label: 'Traducción al español', key: 'TRADUCCION_ESPANOL' },
