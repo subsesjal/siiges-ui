@@ -1,5 +1,6 @@
 import { Divider, Grid, Typography } from '@mui/material';
 import {
+  BinarySelect,
   ButtonsForm,
   Context,
   GetFile,
@@ -41,6 +42,7 @@ export default function DatosInstitucion({ alumno }) {
     tipoValidacionId: '',
   });
   const [errors, setErrors] = useState({});
+  const [editionDisabled, setEditionDisabled] = useState(false);
   const router = useRouter();
 
   const fileData = {
@@ -48,6 +50,11 @@ export default function DatosInstitucion({ alumno }) {
     tipoEntidad: 'ALUMNO',
     tipoDocumento: 'ARCHIVO_VALIDACION_ALUMNO',
   };
+
+  const estatusOptions = [
+    { id: 0, nombre: 'Habilitar' },
+    { id: 1, nombre: 'Deshabilitar' },
+  ];
 
   useEffect(() => {
     if (formSent) {
@@ -102,8 +109,12 @@ export default function DatosInstitucion({ alumno }) {
   useEffect(() => {
     if (session.rol === 'admin' || session.rol === 'ce_sicyt') {
       setDisabled(false);
+    } else if (form.estatus === 0 || form.estatus === '0') {
+      setEditionDisabled(false);
+    } else {
+      setEditionDisabled(true);
     }
-  }, [session]);
+  }, [session, form.estatus]);
 
   const situacionDocumento = [
     { id: 1, nombre: 'Auténtico' },
@@ -175,10 +186,17 @@ export default function DatosInstitucion({ alumno }) {
       try {
         let response;
         const endpoint = `/alumnos/${alumno.id}/validaciones`;
-        const data = {
+        let data = {
           ...form,
           archivoValidacion: url,
         };
+
+        if (session.rol === 'representante' || session.rol === 'ce_ies') {
+          data = {
+            ...data,
+            estatus: 1,
+          };
+        }
 
         if (!formSent) {
           response = await createRecord({ data, endpoint });
@@ -218,6 +236,8 @@ export default function DatosInstitucion({ alumno }) {
       });
     }
   };
+
+  console.log(form);
 
   return (
     <Grid container spacing={2}>
@@ -364,6 +384,18 @@ export default function DatosInstitucion({ alumno }) {
           required
         />
       </Grid>
+      {!disabled && (
+        <Grid item xs={4}>
+          <BinarySelect
+            title="Habilitar Edicion"
+            name="estatus"
+            options={estatusOptions}
+            value={form.estatus}
+            onChange={handleSelectChange('estatus')}
+            onblur={handleBlur}
+          />
+        </Grid>
+      )}
       {formSent && (
         <>
           <Grid item xs={12}>
@@ -389,7 +421,12 @@ export default function DatosInstitucion({ alumno }) {
         </>
       )}
       <Grid item xs={12}>
-        <ButtonsForm confirm={handleConfirm} cancel={() => router.back()} cancelText={cancelText} />
+        <ButtonsForm
+          confirm={handleConfirm}
+          confirmDisabled={editionDisabled}
+          cancel={() => router.back()}
+          cancelText={cancelText}
+        />
       </Grid>
     </Grid>
   );

@@ -25,14 +25,12 @@ export default function serviciosEscolares() {
       loading={loading}
     >
       <Grid container>
-        {loading ? (
+        {loading && (
           <DataTable
             rows={rows}
             columns={columns}
             title="Tabla de instituciones"
           />
-        ) : (
-          <div />
         )}
       </Grid>
     </Layout>
