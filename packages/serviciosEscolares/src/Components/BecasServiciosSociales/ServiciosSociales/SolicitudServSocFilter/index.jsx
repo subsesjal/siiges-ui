@@ -31,7 +31,7 @@ export default function SolicitudServSocFilter({ setSolicitudes, setLoading, set
 
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
-  const isAdmin = session.rol === 'admin';
+  const isRepresentante = session.rol === 'representante';
 
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
@@ -119,7 +119,7 @@ export default function SolicitudServSocFilter({ setSolicitudes, setLoading, set
           value={selectedInstitucion}
           options={instituciones?.slice().sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
           onChange={(event) => setSelectedInstitucion(event.target.value)}
-          disabled={!isAdmin}
+          disabled={!isRepresentante}
         />
       </Grid>
       <Grid item xs={4}>
