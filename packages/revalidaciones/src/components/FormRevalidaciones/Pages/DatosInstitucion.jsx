@@ -4,8 +4,8 @@ import {
 } from '@siiges-ui/shared';
 import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import fetchData from '../../../utils/FetchData';
 
-const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function DatosInstitucion({
@@ -19,32 +19,6 @@ export default function DatosInstitucion({
     form.interesado?.institucionDestino?.tipoInstitucionId || '',
   );
   const [touched, setTouched] = useState({});
-
-  const fetchData = async (url, setState, mapper = null, filterFirst = false) => {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          api_key: apiKey,
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-
-      let transformedData = data.data;
-
-      if (filterFirst) {
-        transformedData = transformedData.slice(1);
-      }
-
-      if (mapper) {
-        transformedData = transformedData.map(mapper);
-      }
-
-      setState(transformedData);
-    } catch (error) {
-      console.error(`Error fetching data from ${url}:`, error);
-    }
-  };
 
   const mapNivelesData = (item) => ({
     id: item.id,

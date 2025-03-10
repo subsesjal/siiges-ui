@@ -2,52 +2,43 @@ import { Grid } from '@mui/material';
 import { Input, Select, Subtitle } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import fetchData from '../../../utils/FetchData';
 
-const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
+  const [grados, setGrados] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
-  const [tipoInstitucionId, setTipoInstitucionId] = useState(form.interesado?.institucionDestino?.tipoInstitucionId || '');
+  const [tipoInstitucionId, setTipoInstitucionId] = useState(
+    form.interesado?.institucionDestino?.tipoInstitucionId || '',
+  );
   const [rvoeError, setRvoeError] = useState('');
 
-  useEffect(() => {
-    const fetchTipoInstituciones = async () => {
-      try {
-        const response = await fetch(`${domain}/api/v1/public/instituciones/tipoInstituciones`, {
-          headers: {
-            api_key: apiKey,
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await response.json();
-        setTipoInstituciones(data.data);
-      } catch (error) {
-        console.error('Error fetching tipo de instituciones:', error);
-      }
-    };
+  const mapNivelesData = (item) => ({
+    id: item.id,
+    nombre: item.descripcion,
+  });
 
-    fetchTipoInstituciones();
+  useEffect(() => {
+    fetchData(
+      `${domain}/api/v1/public/instituciones/tipoInstituciones`,
+      setTipoInstituciones,
+    );
+    fetchData(
+      `${domain}/api/v1/public/niveles/`,
+      setGrados,
+      mapNivelesData,
+      true,
+    );
   }, []);
 
   const fetchInstituciones = async () => {
-    try {
-      const response = await fetch(
-        `${domain}/api/v1/public/instituciones?tipoInstitucionId=${tipoInstitucionId}`,
-        {
-          headers: {
-            api_key: apiKey,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      const data = await response.json();
-      setInstituciones(data.data);
-    } catch (error) {
-      console.error('Error fetching instituciones:', error);
-    }
+    fetchData(
+      `${domain}/api/v1/public/instituciones?tipoInstitucionId=${tipoInstitucionId}`,
+      setInstituciones,
+    );
   };
 
   const fetchProgramas = async (acuerdoRvoe) => {
@@ -56,7 +47,7 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
         `${domain}/api/v1/public/programas?acuerdoRvoe=${acuerdoRvoe}`,
         {
           headers: {
-            api_key: apiKey,
+            api_key: process.env.NEXT_PUBLIC_API_KEY,
             'Content-Type': 'application/json',
           },
         },
@@ -116,7 +107,16 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
         />
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={4}>
+        <Select
+          title="Nivel Académico Procedente"
+          options={grados}
+          name="nivelId"
+          value={form.interesado?.institucionProcedencia?.nivelId || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
+        />
+      </Grid>
+      <Grid item xs={8}>
         <Input
           id="nombreCarrera"
           label="Nombre de la Carrera"
@@ -133,7 +133,10 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           title="Tipo de Institución"
           name="tipoInstitucionId"
           options={tipoInstituciones}
-          value={form.interesado?.institucionDestino?.tipoInstitucionId || tipoInstitucionId}
+          value={
+            form.interesado?.institucionDestino?.tipoInstitucionId
+            || tipoInstitucionId
+          }
           onChange={handleTipoInstitucionChange}
         />
       </Grid>
@@ -157,16 +160,25 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
         )}
       </Grid>
       <Grid item xs={3}>
+        <Select
+          title="Nivel Académico Destino"
+          options={grados}
+          name="nivel"
+          value={form.interesado?.institucionDestino?.nivel || ''}
+          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+        />
+      </Grid>
+      <Grid item xs={3}>
         <Input
           id="rvoe"
           label="RVOE"
           name="acuerdoRvoe"
           value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
-          onblur={handleRvoeOnBlur}
+          onBlur={handleRvoeOnBlur}
           errorMessage={rvoeError}
         />
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={6}>
         <Input
           id="nombreCarreraDestino"
           label="Nombre de la Carrera (Destino)"
@@ -186,12 +198,17 @@ DatosInstitucion.propTypes = {
       institucionProcedencia: PropTypes.shape({
         nombre: PropTypes.string,
         estadoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        nivelId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         nombreCarrera: PropTypes.string,
       }),
       institucionDestino: PropTypes.shape({
-        tipoInstitucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        tipoInstitucionId: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.number,
+        ]),
         programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         nombre: PropTypes.string,
+        nivel: PropTypes.string,
         acuerdoRvoe: PropTypes.string,
         nombreCarrera: PropTypes.string,
       }),
