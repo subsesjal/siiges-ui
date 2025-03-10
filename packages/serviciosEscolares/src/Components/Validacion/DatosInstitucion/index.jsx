@@ -237,8 +237,6 @@ export default function DatosInstitucion({ alumno }) {
     }
   };
 
-  console.log(form);
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
