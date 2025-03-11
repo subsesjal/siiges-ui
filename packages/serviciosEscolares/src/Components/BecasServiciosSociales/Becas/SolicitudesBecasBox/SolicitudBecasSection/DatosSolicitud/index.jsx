@@ -5,7 +5,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { fetchCiclosData } from '../../../utils';
 
 export default function DatosSolicitud({
-  programa, setReqData, reqData,
+  programa, setReqData, formData,
 }) {
   const { setNoti, setLoading } = useContext(Context);
   const [ciclos, setCiclos] = useState([]);
@@ -37,7 +37,7 @@ export default function DatosSolicitud({
           <Select
             title="Ciclos Escolares"
             name="cicloEscolarId"
-            value={reqData?.cicloEscolarId}
+            value={formData?.cicloEscolarId}
             options={ciclos}
             onChange={handleChange}
           />
@@ -48,7 +48,7 @@ export default function DatosSolicitud({
 }
 
 DatosSolicitud.defaultProps = {
-  reqData: {} || null,
+  formData: {} || null,
 };
 
 DatosSolicitud.propTypes = {
@@ -56,7 +56,7 @@ DatosSolicitud.propTypes = {
   programa: PropTypes.shape({
     id: PropTypes.number,
   }).isRequired,
-  reqData: PropTypes.shape({
+  formData: PropTypes.shape({
     cicloEscolarId: PropTypes.number,
   }),
 };
