@@ -115,6 +115,7 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
         });
         setPlanteles([]);
       } else {
+        setInstitucion(institucionId);
         const transformedPlanteles = data.planteles
           .map((plantel) => ({
             id: plantel.id,
@@ -195,4 +196,5 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
 SolicitudesBecasFilter.propTypes = {
   setBecas: PropTypes.func.isRequired,
   setPrograma: PropTypes.func.isRequired,
+  setInstitucion: PropTypes.func.isRequired,
 };

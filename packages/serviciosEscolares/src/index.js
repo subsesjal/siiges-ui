@@ -41,7 +41,7 @@ import AsignarBecas from './Components/BecasServiciosSociales/Becas/utils/Asigna
 import AcreditacionAsignaturas from './Components/Acreditacion/AcreditacionAsignaturas.jsx';
 import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditacionAsignaturas';
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
-import ServicioSocialComponent from './Components/BecasServiciosSociales/ServiciosSociales/index';
+import ServicioSocialComponents from './Components/BecasServiciosSociales/ServiciosSociales/index';
 import BecasComponents from './Components/BecasServiciosSociales/Becas/index';
 
 export {
@@ -84,7 +84,7 @@ export {
   getAlumnosAcreditacion,
   ActionsAlumnosInscritos,
   AcreditacionAsignaturas,
-  ServicioSocialComponent,
+  ServicioSocialComponents,
   RevalidacionEquivalencias,
   ActionsAcreditacionAsignaturas,
   columnsInstitucionesAutorizadas,
