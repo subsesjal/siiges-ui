@@ -47,7 +47,7 @@ export default function SolicitudesBecasBox({ type }) {
   }, [type]);
 
   const handleTabChange = (event, newValue) => {
-    setIsSaved((prev) => !prev);
+    /* setIsSaved((prev) => !prev); */
     setTabIndex(newValue);
   };
 
@@ -57,6 +57,14 @@ export default function SolicitudesBecasBox({ type }) {
 
     return properties.every((prop) => data[prop] && typeof data[prop] === 'object' && Object.keys(data[prop]).length > 0);
   };
+
+  useEffect(() => {
+    if (tabIndex === 1) {
+      setIsSaved(true);
+    } else {
+      setIsSaved(false);
+    }
+  }, [tabIndex]);
 
   return (
     <Box sx={{ width: '100%' }}>

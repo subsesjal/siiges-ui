@@ -19,7 +19,7 @@ const columns = [
   { field: 'id', headerName: 'ID', hide: true },
   { field: 'name', headerName: 'Nombre', width: 300 },
   { field: 'grade', headerName: 'Grado', width: 100 },
-  { field: 'modalidad', headerName: 'Modalidad', width: 300 },
+  { field: 'estatus', headerName: 'Estatus del alumno', width: 300 },
   { field: 'tipoSolicitud', headerName: 'Tipo de solicitud', width: 300 },
   {
     field: 'actions',
@@ -87,9 +87,9 @@ export default function AlumnosSection({ programa, solicitudId }) {
 
       const mappedRows = data.data.map((row) => ({
         id: row.id,
-        name: row.alumno?.persona?.nombre || '',
+        name: `${row.alumno?.persona?.nombre} ${row.alumno?.persona?.apellidoPaterno} ${row.alumno?.persona?.apellidoMaterno}` || '',
         grade: row.grado?.nombre || '',
-        modalidad: row.modalidad || '',
+        estatus: estatusAlumnos.find((estatus) => estatus.id === row.estatusAlumnoBecaId)?.nombre || '',
         tipoSolicitud: row.tipoAlumnoBeca?.descripcion || '',
       }));
       setRows(mappedRows);
@@ -173,7 +173,14 @@ export default function AlumnosSection({ programa, solicitudId }) {
       });
 
       if (response.statusCode === 200 || response.statusCode === 201) {
-        setRows((prevRows) => [...prevRows, response.data]);
+        const newRow = {
+          id: response.data.id,
+          name: alumno.nombre,
+          grade: grados.find((grado) => grado.id === form.gradoId)?.nombre || '',
+          estatus: estatusAlumnos.find((estatus) => estatus.id === form.estatusAlumnoBecaId)?.nombre || '',
+          tipoSolicitud: tiposAlumnos.find((tipo) => tipo.id === form.tipoAlumnoBecaId)?.nombre || '',
+        };
+        setRows((prevRows) => [...prevRows, newRow]);
         setNoti({
           open: true,
           message: '¡Alumno agregado correctamente!',
