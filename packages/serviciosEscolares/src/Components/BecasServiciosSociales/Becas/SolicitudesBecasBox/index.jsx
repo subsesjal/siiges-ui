@@ -6,7 +6,9 @@ import { useRouter } from 'next/router';
 import SolicitudBecasSection from './SolicitudBecasSection';
 import AlumnosSection from './AlumnosSection';
 import ButtonsBox from './ButtonsBox';
-import { fetchProgramaPlantelData, handleSaveSolicitud, fetchSolicitudData } from '../utils';
+import {
+  fetchProgramaPlantelData, handleSaveSolicitud, fetchSolicitudData, handleUpdateSolicitud,
+} from '../utils';
 
 export default function SolicitudesBecasBox({ type }) {
   const EN_CAPTURA = 1;
@@ -17,6 +19,7 @@ export default function SolicitudesBecasBox({ type }) {
   const [data, setData] = useState({});
   const [solicitudId, setSolicitudId] = useState('');
   const [reqData, setReqData] = useState({});
+  const [formData, setFormData] = useState({});
   const [isSaved, setIsSaved] = useState(false);
 
   const router = useRouter();
@@ -33,7 +36,7 @@ export default function SolicitudesBecasBox({ type }) {
 
     if (solicitudBecasId && type !== 'crear') {
       setSolicitudId(solicitudBecasId);
-      fetchSolicitudData(setNoti, setLoading, setReqData, solicitudBecasId);
+      fetchSolicitudData(setNoti, setLoading, setFormData, solicitudBecasId);
     } else {
       setReqData({
         programaId: programa,
@@ -68,7 +71,7 @@ export default function SolicitudesBecasBox({ type }) {
         programa={data?.programa}
         plantel={data?.plantel}
         setReqData={setReqData}
-        reqData={reqData}
+        formData={formData}
       />
       )}
       {tabIndex === ALUMNOS && hasValidProperties(['programa', 'plantel']) && (
@@ -85,6 +88,12 @@ export default function SolicitudesBecasBox({ type }) {
           setSolicitudId,
           reqData,
           setTabIndex,
+        )}
+        update={() => handleUpdateSolicitud(
+          setNoti,
+          setLoading,
+          reqData,
+          solicitudId,
         )}
         isSaved={isSaved}
         solicitudId={solicitudId}

@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { ButtonsForm, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
+import {
+  updateRecord,
+} from '../../utils';
 
 export default function ButtonsFolios({
   save,
   cancel,
-  send,
+  update,
   isSaved,
   solicitudId,
 }) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
   return (
     <Grid container justifyContent="flex-end" spacing={2}>
       <Grid item>
@@ -23,7 +29,7 @@ export default function ButtonsFolios({
       )}
       { (!isSaved && solicitudId) && (
         <Grid item>
-          <ButtonSimple text="Guardar" onClick={send} />
+          <ButtonSimple text="Guardar" onClick={update} />
         </Grid>
       )}
       { isSaved && (
@@ -42,11 +48,15 @@ export default function ButtonsFolios({
         <ButtonsForm
           cancel={() => setOpen(false)}
           confirm={async () => {
-            const response = await send();
+            const response = await updateRecord({
+              data: { estatusSolicitudBecaId: 2 },
+              endpoint: `/solicitudesBecas/${solicitudId}`,
+            });
             if (
               response
               && (response.statusCode === 200 || response.statusCode === 201)
             ) {
+              router.back();
               setOpen(false);
             }
           }}
@@ -59,7 +69,7 @@ export default function ButtonsFolios({
 ButtonsFolios.propTypes = {
   save: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
-  send: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
   isSaved: PropTypes.bool.isRequired,
   solicitudId: PropTypes.bool.isRequired,
 };

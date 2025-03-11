@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getData, createRecord } from '@siiges-ui/shared';
+import { getData, createRecord, updateRecord } from '@siiges-ui/shared';
 
 const fetchSolicitudesData = (setNoti, setLoading, setData) => {
   getData({ endpoint: '/solicitudesBecas/' })
@@ -82,11 +82,11 @@ const fetchCiclosData = async (setNoti, setLoading, setCiclos, programaId) => {
   }
 };
 
-const fetchSolicitudData = async (setNoti, setLoading, setReqData, solicitudId) => {
+const fetchSolicitudData = async (setNoti, setLoading, setFormData, solicitudId) => {
   try {
     const { data } = await getData({ endpoint: `/solicitudesBecas/${solicitudId}` });
 
-    setReqData(data);
+    setFormData(data);
   } catch (error) {
     setNoti({
       open: true,
@@ -153,15 +153,97 @@ const handleSaveSolicitud = async (
   }
 };
 
+const handleUpdateSolicitud = async (
+  setNoti,
+  setLoading,
+  reqData,
+  solicitudId,
+) => {
+  setLoading(true);
+  try {
+    if (!solicitudId) {
+      return;
+    }
+    const response = await updateRecord({
+      data: reqData,
+      endpoint: `/solicitudesBecas/${solicitudId}`,
+    });
+
+    if (response.statusCode === 200 || response.statusCode === 201) {
+      setNoti({
+        open: true,
+        message: '¡Éxito al actualizar la solicitud!',
+        type: 'success',
+      });
+    } else {
+      setNoti({
+        open: true,
+        message:
+          response.message
+          || '¡Error al procesar la solicitud, revise que los campos estén correctos!',
+        type: 'error',
+      });
+    }
+  } catch (error) {
+    setNoti({
+      open: true,
+      message: `¡Error al procesar la solicitud!: ${error.message}`,
+      type: 'error',
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleSendSolicitud = async (
+  setNoti,
+  setLoading,
+  reqData,
+  router,
+  solicitudId,
+) => async (estatusSolicitudBecaId, setOpen) => {
+  setLoading(true);
+  try {
+    const updatedFormData = {
+      ...reqData,
+      estatusSolicitudBecaId,
+    };
+
+    const response = await updateRecord({
+      data: updatedFormData,
+      endpoint: `/solicitudesBecas/${solicitudId}`,
+    });
+    if (response.statusCode === 200 || response.statusCode === 201) {
+      router.back();
+      setNoti({
+        open: true,
+        message: '¡Éxito al actualizar la solicitud!',
+        type: 'success',
+      });
+      setOpen(false);
+    }
+  } catch (error) {
+    setOpen(false);
+    setNoti({
+      open: true,
+      message: `¡Error al enviar la solicitud!: ${error}`,
+      type: 'error',
+    });
+  }
+};
+
 const handleEditClick = (id, query, router) => navigateTo(id, 'editar', query, router);
 const handleViewClick = (id, query, router) => navigateTo(id, 'consultar', query, router);
 const handleCreateClick = (query, router) => navigateTo(null, 'crear', query, router);
 
 export {
+  updateRecord,
   handleViewClick,
   handleEditClick,
   handleCreateClick,
   handleSaveSolicitud,
+  handleUpdateSolicitud,
+  handleSendSolicitud,
   fetchSolicitudesData,
   fetchProgramaPlantelData,
   fetchPlantelData,
