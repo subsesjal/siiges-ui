@@ -45,7 +45,7 @@ export default function SolicitudesBecasTable() {
           const mappedRows = response.data.map((becas) => ({
             id: becas.id,
             folioSolicitud: becas.folioSolicitud,
-            programaId: becas.programa.cicloId,
+            programa: becas.programa.nombre,
             cicloEscolarId: becas.cicloEscolar.nombre,
             estatusSolicitudBecaId: becas.estatusSolicitudBeca.nombre,
             createdAt: dayjs(becas.createdAt).format('DD/MM/YYYY'),
@@ -63,9 +63,9 @@ export default function SolicitudesBecasTable() {
 
   const columns = [
     { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
-    { field: 'programaId', headerName: 'Programa', width: 150 },
-    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 200 },
-    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 200 },
+    { field: 'programa', headerName: 'Programa', width: 250 },
+    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 100 },
+    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 150 },
     { field: 'createdAt', headerName: 'Fecha de solicitud', width: 200 },
     {
       field: 'acciones',
