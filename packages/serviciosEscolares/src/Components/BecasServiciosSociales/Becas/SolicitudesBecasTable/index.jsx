@@ -20,9 +20,9 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
 
   const columns = [
     { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
-    { field: 'programaId', headerName: 'Programa', width: 150 },
-    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 200 },
-    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 200 },
+    { field: 'programa', headerName: 'Programa', width: 250 },
+    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 100 },
+    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 150 },
     { field: 'createdAt', headerName: 'Fecha de solicitud', width: 200 },
     {
       field: 'acciones',

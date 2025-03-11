@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
 import getBecasByPrograma from '@siiges-ui/instituciones/src/utils/getProgramas';
 
-export default function SolicitudesBecasForm({ setBecas, setPrograma, setInstitucion }) {
+export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
   const { setNoti, session, setLoading } = useContext(Context);
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -165,7 +165,7 @@ export default function SolicitudesBecasForm({ setBecas, setPrograma, setInstitu
           value={selectedInstitucion}
           options={instituciones?.slice().sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
           onChange={(event) => setSelectedInstitucion(event.target.value)}
-          disabled={isRepresentante}
+          disabled={isRepresentante || !!selectedInstitucion}
         />
       </Grid>
       <Grid item xs={4}>
@@ -193,7 +193,7 @@ export default function SolicitudesBecasForm({ setBecas, setPrograma, setInstitu
   );
 }
 
-SolicitudesBecasForm.propTypes = {
+SolicitudesBecasFilter.propTypes = {
   setBecas: PropTypes.func.isRequired,
   setPrograma: PropTypes.func.isRequired,
   setInstitucion: PropTypes.func.isRequired,
