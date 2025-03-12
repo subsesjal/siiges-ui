@@ -110,7 +110,14 @@ export default function AlumnosSection({ programa, solicitudId }) {
         const data = await getData({
           endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos/${alumnoId}`,
         });
-        setForm(data.data);
+        setForm({
+          gradoId: data.data.gradoId || '',
+          porcentajeBeca: data.data.porcentajeBeca || '',
+          estatusAlumnoBecaId: data.data.estatusAlumnoBecaId || '',
+          tipoAlumnoBecaId: data.data.tipoAlumnoBecaId || '',
+          promedio: data.data.promedio || '',
+        });
+
         setAlumno({
           id: data.data.alumnoId,
           nombre: `${data.data.alumno?.persona?.nombre} ${data.data.alumno?.persona?.apellidoPaterno} ${data.data.alumno?.persona?.apellidoMaterno}`,
@@ -228,6 +235,8 @@ export default function AlumnosSection({ programa, solicitudId }) {
         });
         setOpen(false);
         setForm({});
+        setAlumno({});
+        setType('create');
         setErrors({
           matricula: '',
           gradoId: '',
