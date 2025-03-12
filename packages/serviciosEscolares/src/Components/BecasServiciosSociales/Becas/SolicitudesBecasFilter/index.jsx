@@ -35,6 +35,7 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
   const isIes = session.rol === 'becas_ies';
+  const isRepresentante = session.rol === 'representante';
 
   const fetchSolicitudesBecas = (programaId) => {
     getBecasByPrograma(programaId, (error, data) => {
@@ -62,23 +63,25 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
   };
 
   useEffect(() => {
-    if (isIes && instituciones?.length) {
+    if (!instituciones?.length) return;
+
+    const findInstitutionById = (id) => instituciones.find(({ usuarioId }) => usuarioId === id)?.id || '';
+
+    if (isIes) {
       const fetchData = async () => {
         try {
-          const response = await getData({ endpoint: `/usuarios/${session.id}/usuarios` });
-          console.log(response.data);
-
-          const findIndexInstitucion = instituciones.findIndex(
-            ({ usuarioId }) => usuarioId === session.id,
-          );
-          setSelectedInstitucion(instituciones[findIndexInstitucion]?.id || '');
+          const response = await getData({ endpoint: `/usuarios/secundario/${session.id}` });
+          setSelectedInstitucion(findInstitutionById(response.data.id));
         } catch (error) {
           console.error('Error fetching users:', error);
+          setSelectedInstitucion('');
         }
       };
       fetchData();
+    } else if (isRepresentante) {
+      setSelectedInstitucion(findInstitutionById(session.id));
     }
-  }, [isIes, instituciones, session.id]);
+  }, [isIes, isRepresentante, instituciones, session.id]);
 
   const handleProgramaChange = (event) => {
     const programaId = event.target.value;
@@ -193,7 +196,6 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
               .sort((a, b) => a.nombre.localeCompare(b.nombre)) || []
           }
           onChange={(event) => setSelectedInstitucion(event.target.value)}
-          disabled={isIes || !!selectedInstitucion}
         />
       </Grid>
       <Grid item xs={4}>
