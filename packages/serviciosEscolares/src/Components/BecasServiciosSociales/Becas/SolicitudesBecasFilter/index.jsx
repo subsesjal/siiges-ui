@@ -2,10 +2,15 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import { Select, Context } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
+import {
+  getInstituciones,
+  // getInstitucionUsuario,
+  getPlantelesByInstitucion,
+  getProgramas,
+} from '@siiges-ui/instituciones';
 import getBecasByPrograma from '@siiges-ui/instituciones/src/utils/getProgramas';
 
-export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
+export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInstitucion }) {
   const { setNoti, session, setLoading } = useContext(Context);
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -27,7 +32,7 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
 
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
-  const isRepresentante = session.rol === 'representante';
+  const isIes = session.rol === 'becas_ies';
 
   const fetchSolicitudesBecas = (programaId) => {
     getBecasByPrograma(programaId, (error, data) => {
@@ -54,13 +59,13 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
     });
   };
   useEffect(() => {
-    if (isRepresentante && instituciones?.length) {
+    if (isIes && instituciones?.length) {
       const findIndexInstitucion = instituciones.findIndex(
         ({ usuarioId }) => usuarioId === session.id,
       );
       setSelectedInstitucion(instituciones[findIndexInstitucion]?.id || '');
     }
-  }, [isRepresentante, instituciones]);
+  }, [isIes, instituciones]);
 
   const handleProgramaChange = (event) => {
     const programaId = event.target.value;
@@ -119,7 +124,7 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
         const transformedPlanteles = data.planteles
           .map((plantel) => ({
             id: plantel.id,
-            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior}`,
+            nombre: `${plantel.domicilio.calle} ${plantel.domicilio.numeroExterior} | CCT: ${plantel.claveCentroTrabajo}`,
           }))
           .sort((a, b) => a.nombre.localeCompare(b.nombre));
 
@@ -135,12 +140,26 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
       setPlanteles([]);
     }
   }, [selectedInstitucion]);
+  // const fetchInstitucionByUsuario = (usuarioId) => {
+  //   getInstitucionUsuario(usuarioId, (error) => {
+  //     if (error) {
+  //       setNoti({
+  //         open: true,
+  //         message: `¡Error al obtener usuario de beca!: ${error.message}`,
+  //         type: 'error',
+  //       });
+  //     } else {}
+  //   });
+  // };
+  // useEffect(() => {
+  //   fetchInstitucionByUsuario(session.id);
+  // }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('solicitudesBecas_selectedInstitucion', selectedInstitucion);
-      localStorage.setItem('solicitudesBecas_selectedPlantel', selectedPlantel);
-      localStorage.setItem('solicitudesBecas_selectedPrograma', selectedPrograma);
+      localStorage.setItem('becas_selectedInstitucion', selectedInstitucion);
+      localStorage.setItem('becas_selectedPlantel', selectedPlantel);
+      localStorage.setItem('becas_selectedPrograma', selectedPrograma);
     }
   }, [selectedInstitucion, selectedPlantel, selectedPrograma]);
 
@@ -155,7 +174,6 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
       fetchSolicitudesBecas(selectedPrograma);
     }
   }, [selectedPrograma]);
-
   return (
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={4}>
@@ -165,7 +183,6 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
           value={selectedInstitucion}
           options={instituciones?.slice().sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
           onChange={(event) => setSelectedInstitucion(event.target.value)}
-          disabled={isRepresentante || !!selectedInstitucion}
         />
       </Grid>
       <Grid item xs={4}>
