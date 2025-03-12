@@ -3,6 +3,7 @@ import {
   ButtonsForm,
   Context,
   createRecord,
+  updateRecord,
   DataTable,
   DefaultModal,
   getData,
@@ -15,7 +16,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const columns = [
+const columns = (setType, setOpen, setAlumnoId) => [
   { field: 'id', headerName: 'ID', hide: true },
   { field: 'name', headerName: 'Nombre', width: 300 },
   { field: 'grade', headerName: 'Grado', width: 100 },
@@ -28,7 +29,9 @@ const columns = [
       <>
         <IconButton
           onClick={() => {
-            console.log(params);
+            setType('edit');
+            setOpen(true);
+            setAlumnoId(params.id);
           }}
         >
           <EditIcon />
@@ -64,6 +67,8 @@ const tiposAlumnos = [
 export default function AlumnosSection({ programa, solicitudId }) {
   const { setLoading, setNoti } = useContext(Context);
   const [alumno, setAlumno] = useState({});
+  const [alumnoId, setAlumnoId] = useState(null);
+  const [type, setType] = useState('create');
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState([]);
   const [form, setForm] = useState({});
@@ -74,6 +79,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
     porcentajeBeca: '',
     estatusAlumnoBecaId: '',
     tipoAlumnoBecaId: '',
+    promedio: '',
   });
 
   useEffect(() => {
@@ -97,6 +103,25 @@ export default function AlumnosSection({ programa, solicitudId }) {
     };
     fetchData();
   }, [solicitudId]);
+
+  useEffect(() => {
+    if (type === 'edit' && alumnoId) {
+      const fetchData = async () => {
+        const data = await getData({
+          endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos/${alumnoId}`,
+        });
+        setForm(data.data);
+        setAlumno({
+          id: data.data.alumnoId,
+          nombre: `${data.data.alumno?.persona?.nombre} ${data.data.alumno?.persona?.apellidoPaterno} ${data.data.alumno?.persona?.apellidoMaterno}`,
+          estatus: data.data.estatusAlumnoBecaId,
+          correo: data.data.alumno?.persona?.correoPrimario,
+          telefono: data.data.alumno?.persona?.telefono,
+        });
+      };
+      fetchData();
+    }
+  }, [type, alumnoId]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -154,6 +179,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
       porcentajeBeca: !form.porcentajeBeca ? 'El porcentaje es requerido' : '',
       estatusAlumnoBecaId: !form.estatusAlumnoBecaId ? 'El estatus es requerido' : '',
       tipoAlumnoBecaId: !form.tipoAlumnoBecaId ? 'El tipo de beca es requerido' : '',
+      promedio: !form.promedio ? 'El promedio es requerido' : '',
     };
 
     setErrors(newErrors);
@@ -162,15 +188,23 @@ export default function AlumnosSection({ programa, solicitudId }) {
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) {
+    if (!validateForm() && type !== 'edit') {
       return;
     }
 
     try {
-      const response = await createRecord({
-        endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos`,
-        data: form,
-      });
+      let response;
+      if (type === 'create') {
+        response = await createRecord({
+          endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos`,
+          data: form,
+        });
+      } else if (type === 'edit') {
+        response = await updateRecord({
+          endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos/${alumnoId}`,
+          data: form,
+        });
+      }
 
       if (response.statusCode === 200 || response.statusCode === 201) {
         const newRow = {
@@ -180,10 +214,16 @@ export default function AlumnosSection({ programa, solicitudId }) {
           estatus: estatusAlumnos.find((estatus) => estatus.id === form.estatusAlumnoBecaId)?.nombre || '',
           tipoSolicitud: tiposAlumnos.find((tipo) => tipo.id === form.tipoAlumnoBecaId)?.nombre || '',
         };
-        setRows((prevRows) => [...prevRows, newRow]);
+
+        if (type === 'create') {
+          setRows((prevRows) => [...prevRows, newRow]);
+        } else if (type === 'edit') {
+          setRows((prevRows) => prevRows.map((row) => (row.id === alumnoId ? newRow : row)));
+        }
+
         setNoti({
           open: true,
-          message: '¡Alumno agregado correctamente!',
+          message: `¡Alumno ${type === 'create' ? 'agregado' : 'actualizado'} correctamente!`,
           type: 'success',
         });
         setOpen(false);
@@ -198,7 +238,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
       } else {
         setNoti({
           open: true,
-          message: response.errorMessage || '¡Error al agregar el alumno!',
+          message: response.errorMessage || `¡Error al ${type === 'create' ? 'agregar' : 'actualizar'} el alumno!`,
           type: 'error',
         });
       }
@@ -206,7 +246,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
       console.error(error);
       setNoti({
         open: true,
-        message: '¡Error al agregar el alumno!',
+        message: `¡Error al ${type === 'create' ? 'agregar' : 'actualizar'} el alumno!`,
         type: 'error',
       });
     }
@@ -237,27 +277,31 @@ export default function AlumnosSection({ programa, solicitudId }) {
           buttonAdd
           buttonText="Agregar Alumno"
           buttonClick={() => {
+            setType('create');
             setOpen(true);
+            setForm({});
           }}
           rows={rows}
-          columns={columns}
+          columns={columns(setType, setOpen, setAlumnoId)}
         />
       </Grid>
       <DefaultModal title="Asignación de beca" open={open} setOpen={setOpen}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Input
-              label="Matrícula"
-              id="matricula"
-              name="matricula"
-              value={form.matricula || ''}
-              onblur={handleBlur}
-              onChange={handleChange}
-              required
-              errorMessage={errors.matricula}
-            />
-          </Grid>
-          {alumno.nombre && (
+          {type === 'create' && (
+            <Grid item xs={12}>
+              <Input
+                label="Matrícula"
+                id="matricula"
+                name="matricula"
+                value={form.matricula || ''}
+                onblur={handleBlur}
+                onChange={handleChange}
+                required
+                errorMessage={errors.matricula}
+              />
+            </Grid>
+          )}
+          {(alumno.nombre || type === 'edit') && (
             <>
               <Grid item xs={9}>
                 <LabelData title="Alumno" subtitle={alumno.nombre} />
@@ -280,6 +324,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   name="gradoId"
                   options={grados}
                   onChange={handleChange}
+                  value={form.gradoId || ''}
                   required
                   errorMessage={errors.gradoId}
                 />
@@ -290,6 +335,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   label="Promedio"
                   name="promedio"
                   onChange={handleChange}
+                  value={form.promedio || ''}
                   required
                   errorMessage={errors.promedio}
                 />
@@ -301,6 +347,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   textValue
                   options={porcentajesOptions}
                   onChange={handleChange}
+                  value={form.porcentajeBeca || ''}
                   required
                   errorMessage={errors.porcentajeBeca}
                 />
@@ -311,6 +358,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   name="estatusAlumnoBecaId"
                   options={estatusAlumnos}
                   onChange={handleChange}
+                  value={form.estatusAlumnoBecaId || ''}
                   required
                   errorMessage={errors.estatusAlumnoBecaId}
                 />
@@ -321,6 +369,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   name="tipoAlumnoBecaId"
                   options={tiposAlumnos}
                   onChange={handleChange}
+                  value={form.tipoAlumnoBecaId || ''}
                   required
                   errorMessage={errors.tipoAlumnoBecaId}
                 />
