@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
 import getBecasByPrograma from '@siiges-ui/instituciones/src/utils/getProgramas';
 
-export default function SolicitudesBecasFilter({ setBecas, setPrograma }) {
+export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInstitucion }) {
   const { setNoti, session, setLoading } = useContext(Context);
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
