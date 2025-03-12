@@ -8,7 +8,7 @@ const fetchSolicitudesData = (setNoti, setLoading, setData) => {
         const mappedRows = response.data.map((becas) => ({
           id: becas.id,
           folioSolicitud: becas.folioSolicitud,
-          programaId: becas.programa.cicloId,
+          programa: becas.programa.nombre,
           cicloEscolarId: becas.cicloEscolar.nombre,
           estatusSolicitudBecaId: becas.estatusSolicitudBeca.nombre,
           createdAt: dayjs(becas.createdAt).format('DD/MM/YYYY'),
