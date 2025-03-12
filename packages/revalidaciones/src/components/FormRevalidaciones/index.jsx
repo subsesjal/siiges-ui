@@ -19,6 +19,8 @@ export default function FormRevalidaciones() {
   const [filesData, setFilesData] = useState({});
   const [estados, setEstados] = useState([]);
   const [paises, setPaises] = useState([]);
+  const [nextDisabled, setNextDisabled] = useState(true);
+  const [validateFields, setValidateFields] = useState(false);
   const [form, setForm] = useState({
     tipoTramiteId: null,
     estatusSolicitudRevEquivId: 2,
@@ -38,13 +40,17 @@ export default function FormRevalidaciones() {
         apellidoPaterno: '',
         apellidoMaterno: '',
         telefono: '',
+        sexo: '',
+        nacionalidad: '',
+        celular: '',
         curp: '',
         correoPrimario: '',
       },
       institucionProcedencia: {
         tipoInstitucionId: 1,
         nombre: '',
-        estadoId: '',
+        estadoId: null,
+        nivelId: '',
         nombreCarrera: '',
       },
       institucionDestino: {
@@ -52,17 +58,33 @@ export default function FormRevalidaciones() {
         programaId: '',
         nombre: '',
         acuerdoRvoe: '',
+        nivel: '',
         nombreCarrera: '',
       },
-      asignaturasAntecedentesEquivalentes: [],
     },
   });
 
   useEffect(() => {
     if ([1, 2, 3].includes(form.tipoTramiteId)) {
       setTotalPositions(4);
+
+      setForm((prevForm) => ({
+        ...prevForm,
+        interesado: {
+          ...prevForm.interesado,
+          asignaturasAntecedentesEquivalentes: [],
+        },
+      }));
     } else {
       setTotalPositions(3);
+
+      setForm((prevForm) => {
+        const { asignaturasAntecedentesEquivalentes, ...restInteresado } = prevForm.interesado;
+        return {
+          ...prevForm,
+          interesado: restInteresado,
+        };
+      });
     }
   }, [form.tipoTramiteId]);
 
@@ -105,8 +127,11 @@ export default function FormRevalidaciones() {
   }, []);
 
   const handleNext = () => {
-    if (currentPosition < totalPositions) {
-      setCurrentPosition((prevPosition) => prevPosition + 1);
+    setValidateFields(true);
+    if (!nextDisabled) {
+      if (currentPosition < totalPositions) {
+        setCurrentPosition((prevPosition) => prevPosition + 1);
+      }
     }
   };
 
@@ -151,13 +176,16 @@ export default function FormRevalidaciones() {
     formData.append('DATA', JSON.stringify(form));
 
     try {
-      const response = await fetch(`${domain}/api/v1/public/solicitudesRevEquiv/`, {
-        method: 'POST',
-        headers: {
-          api_key: apiKey,
+      const response = await fetch(
+        `${domain}/api/v1/public/solicitudesRevEquiv/`,
+        {
+          method: 'POST',
+          headers: {
+            api_key: apiKey,
+          },
+          body: formData,
         },
-        body: formData,
-      });
+      );
 
       if (!response.ok) {
         throw new Error('¡Error al enviar el formulario!');
@@ -182,14 +210,35 @@ export default function FormRevalidaciones() {
   const renderCurrentPage = () => {
     switch (currentPosition) {
       case 1:
-        return <DatosSolicitante form={form} handleOnChange={handleOnChange} estados={estados} />;
+        return (
+          <DatosSolicitante
+            form={form}
+            handleOnChange={handleOnChange}
+            estados={estados}
+            validateFields={validateFields}
+            setNextDisabled={setNextDisabled}
+          />
+        );
       case 2:
-        return <DatosInstitucion form={form} handleOnChange={handleOnChange} paises={paises} />;
+        return (
+          <DatosInstitucion
+            form={form}
+            handleOnChange={handleOnChange}
+            paises={paises}
+            validateFields={validateFields}
+            setNextDisabled={setNextDisabled}
+          />
+        );
       case 3:
-        return <CargaMaterias filesData={filesData} setFilesData={setFilesData} />;
+        return (
+          <CargaMaterias filesData={filesData} setFilesData={setFilesData} />
+        );
       case 4:
         return [1, 2, 3].includes(form.tipoTramiteId) ? (
-          <CargaMateriasEquivalentes form={form} handleOnChange={handleOnChange} />
+          <CargaMateriasEquivalentes
+            form={form}
+            handleOnChange={handleOnChange}
+          />
         ) : null;
       default:
         return null;
@@ -199,7 +248,10 @@ export default function FormRevalidaciones() {
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
-        <PositionDisplay currentPosition={currentPosition} totalPositions={totalPositions} />
+        <PositionDisplay
+          currentPosition={currentPosition}
+          totalPositions={totalPositions}
+        />
       </Grid>
       <Grid item xs={12}>
         {renderCurrentPage()}
