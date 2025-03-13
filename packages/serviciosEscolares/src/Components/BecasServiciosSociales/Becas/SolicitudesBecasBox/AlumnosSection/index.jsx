@@ -323,7 +323,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
               />
             </Grid>
           )}
-          {(alumno.nombre && (type === 'edit' || type === 'consult')) && (
+          {(alumno.nombre || (type === 'edit' || type === 'consult')) && (
             <>
               <Grid item xs={9}>
                 <LabelData title="Alumno" subtitle={alumno.nombre} />
