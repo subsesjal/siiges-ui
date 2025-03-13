@@ -13,6 +13,7 @@ export default function ButtonsFolios({
   update,
   isSaved,
   solicitudId,
+  saveIsDisabled,
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -22,17 +23,17 @@ export default function ButtonsFolios({
       <Grid item>
         <ButtonSimple text="Regresar" onClick={cancel} design="cancel" />
       </Grid>
-      { (!isSaved && !solicitudId) && (
+      { (!saveIsDisabled && (!isSaved && !solicitudId)) && (
         <Grid item>
           <ButtonSimple text="Guardar" onClick={save} />
         </Grid>
       )}
-      { (!isSaved && solicitudId) && (
+      { (!saveIsDisabled && (!isSaved && solicitudId)) && (
         <Grid item>
           <ButtonSimple text="Guardar" onClick={update} />
         </Grid>
       )}
-      { isSaved && (
+      { !saveIsDisabled && isSaved && (
       <Grid item>
         <ButtonSimple
           text="Enviar Solicitud"
@@ -72,4 +73,5 @@ ButtonsFolios.propTypes = {
   update: PropTypes.func.isRequired,
   isSaved: PropTypes.bool.isRequired,
   solicitudId: PropTypes.bool.isRequired,
+  saveIsDisabled: PropTypes.bool.isRequired,
 };

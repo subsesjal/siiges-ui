@@ -6,7 +6,7 @@ import DatosPlantel from './DatosPlantel';
 import DatosSolicitud from './DatosSolicitud';
 
 export default function SolicitudBecasSection({
-  programa, plantel, setReqData, formData,
+  programa, plantel, setReqData, formData, disabled,
 }) {
   return (
     <Grid container spacing={2} sx={{ m: 1 }}>
@@ -20,6 +20,7 @@ export default function SolicitudBecasSection({
         programa={programa}
         setReqData={setReqData}
         formData={formData}
+        disabled={disabled}
       />
     </Grid>
   );
@@ -34,4 +35,5 @@ SolicitudBecasSection.propTypes = {
   programa: PropTypes.shape({}).isRequired,
   formData: PropTypes.shape({}),
   plantel: PropTypes.shape({}).isRequired,
+  disabled: PropTypes.bool.isRequired,
 };

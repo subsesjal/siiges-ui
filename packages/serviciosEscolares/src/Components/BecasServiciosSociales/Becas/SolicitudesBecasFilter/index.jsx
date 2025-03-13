@@ -196,6 +196,7 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
               .sort((a, b) => a.nombre.localeCompare(b.nombre)) || []
           }
           onChange={(event) => setSelectedInstitucion(event.target.value)}
+          disabled={isIes && selectedInstitucion}
         />
       </Grid>
       <Grid item xs={4}>

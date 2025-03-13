@@ -5,7 +5,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { fetchCiclosData } from '../../../utils';
 
 export default function DatosSolicitud({
-  programa, setReqData, formData,
+  programa, setReqData, formData, disabled,
 }) {
   const { setNoti, setLoading } = useContext(Context);
   const [ciclos, setCiclos] = useState([]);
@@ -40,6 +40,7 @@ export default function DatosSolicitud({
             value={formData?.cicloEscolarId}
             options={ciclos}
             onChange={handleChange}
+            disabled={disabled}
           />
         </Grid>
       </Grid>
@@ -53,6 +54,7 @@ DatosSolicitud.defaultProps = {
 
 DatosSolicitud.propTypes = {
   setReqData: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
   programa: PropTypes.shape({
     id: PropTypes.number,
   }).isRequired,

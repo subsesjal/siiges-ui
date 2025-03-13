@@ -13,13 +13,14 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
   } = useContext(Context);
   const [data, setData] = useState([]);
   const router = useRouter();
+  const isBecasSicyt = session.rol === 'becas_sicyt';
 
   useEffect(() => {
     setLoading(true);
     fetchSolicitudesData(setNoti, setLoading, (fetchedData) => {
       setData(fetchedData);
 
-      if (session.rol === 'becas_sicyt') {
+      if (isBecasSicyt) {
         const filtered = fetchedData.filter(
           (item) => item.estatusSolicitudBecaId === 'EN REVISION',
         );
@@ -32,7 +33,7 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
 
   const columns = [
     { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
-    { field: 'programaId', headerName: 'Programa', width: 250 },
+    { field: 'programa', headerName: 'Programa', width: 250 },
     { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 100 },
     { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 150 },
     { field: 'createdAt', headerName: 'Fecha de solicitud', width: 200 },
@@ -55,11 +56,11 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
   return (
     <div>
       <DataTable
-        title="Lista de solicitudes"
+        title="Lista de Solicitudes de Becas"
         rows={data || []}
         columns={columns}
         loading={loading}
-        buttonAdd
+        buttonAdd={!isBecasSicyt}
         buttonText="Agregar Solicitud"
         buttonClick={() => handleCreateClick({ programa, institucion }, router)}
       />
