@@ -109,12 +109,26 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
         grade: row.grado?.nombre || '',
         estatus: estatusAlumnos.find((estatus) => estatus.id === row.estatusAlumnoBecaId)?.nombre || '',
         tipoSolicitud: row.tipoAlumnoBeca?.descripcion || '',
+        porcentajeBeca: row.porcentajeBeca || 0,
       }));
       setRows(mappedRows);
       setGrados(gradosList.data);
     };
     fetchData();
   }, [solicitudId]);
+
+  const counts = {
+    cien: rows.filter((row) => row.porcentajeBeca === 100).length,
+    setentaCinco: rows.filter((row) => row.porcentajeBeca === 75).length,
+    cincuenta: rows.filter((row) => row.porcentajeBeca === 50).length,
+    veinticinco: rows.filter((row) => row.porcentajeBeca === 25).length,
+    otros: rows.filter(
+      (row) => row.porcentajeBeca !== 100
+        && row.porcentajeBeca !== 75
+        && row.porcentajeBeca !== 50
+        && row.porcentajeBeca !== 25,
+    ).length,
+  };
 
   useEffect(() => {
     if ((type === 'edit' || type === 'consult') && alumnoId) {
@@ -235,6 +249,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
           grade: grados.find((grado) => grado.id === form.gradoId)?.nombre || '',
           estatus: estatusAlumnos.find((estatus) => estatus.id === form.estatusAlumnoBecaId)?.nombre || '',
           tipoSolicitud: tiposAlumnos.find((tipo) => tipo.id === form.tipoAlumnoBecaId)?.nombre || '',
+          porcentajeBeca: response.data.porcentajeBeca,
         };
 
         if (type === 'create') {
@@ -282,19 +297,19 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
         <Typography variant="h6">Datos de las Becas Otorgadas</Typography>
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="# de Becas Otorgadas 100%" subtitle="50" />
+        <LabelData title="# de Becas Otorgadas 100%" subtitle={counts.cien} />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="# de Becas Otorgadas 75%" subtitle="50" />
+        <LabelData title="# de Becas Otorgadas 75%" subtitle={counts.setentaCinco} />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="# de Becas Otorgadas 50%" subtitle="50" />
+        <LabelData title="# de Becas Otorgadas 50%" subtitle={counts.cincuenta} />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="# de Becas Otorgadas 25%" subtitle="50" />
+        <LabelData title="# de Becas Otorgadas 25%" subtitle={counts.veinticinco} />
       </Grid>
       <Grid item xs={4}>
-        <LabelData title="# de Becas Otorgadas Otros %" subtitle="50" />
+        <LabelData title="# de Becas Otorgadas Otros %" subtitle={counts.otros} />
       </Grid>
       <Grid item xs={12}>
         <DataTable
