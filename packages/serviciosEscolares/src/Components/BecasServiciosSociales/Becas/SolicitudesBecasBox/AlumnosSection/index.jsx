@@ -22,7 +22,7 @@ const columns = (setType, setOpen, setAlumnoId, disabled) => [
   { field: 'grade', headerName: 'Grado', width: 200 },
   { field: 'estatus', headerName: 'Estatus del alumno', width: 160 },
   { field: 'tipoSolicitud', headerName: 'Tipo de solicitud', width: 140 },
-  { field: 'porcentajeBeca', headerName: 'Porcentaje de beca', width: 160 },
+  { field: 'porcentajeBeca', headerName: 'Porcentaje de beca %', width: 180 },
   { field: 'promedio', headerName: 'Promedio', width: 100 },
   {
     field: 'actions',
@@ -87,6 +87,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
   const [rows, setRows] = useState([]);
   const [form, setForm] = useState({});
   const [grados, setGrados] = useState([]);
+  const [porcentajes, setPorcentajes] = useState([]);
   const [errors, setErrors] = useState({
     matricula: '',
     gradoId: '',
@@ -111,9 +112,15 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
         grade: row.grado?.nombre || '',
         estatus: estatusAlumnos.find((estatus) => estatus.id === row.estatusAlumnoBecaId)?.nombre || '',
         tipoSolicitud: row.tipoAlumnoBeca?.descripcion || '',
-        porcentajeBeca: row.porcentajeBeca || 0,
+        porcentajeBeca: `${row.porcentajeBeca || 0} %`,
         promedio: row.promedio || 0,
       }));
+
+      const mappedPorcentajes = data.data.map((row) => ({
+        porcentajeBeca: row.porcentajeBeca || 0,
+      }));
+
+      setPorcentajes(mappedPorcentajes);
       setRows(mappedRows);
       setGrados(gradosList.data);
     };
@@ -121,11 +128,11 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
   }, [solicitudId]);
 
   const counts = {
-    cien: rows.filter((row) => row.porcentajeBeca === 100).length,
-    setentaCinco: rows.filter((row) => row.porcentajeBeca === 75).length,
-    cincuenta: rows.filter((row) => row.porcentajeBeca === 50).length,
-    veinticinco: rows.filter((row) => row.porcentajeBeca === 25).length,
-    otros: rows.filter(
+    cien: porcentajes.filter((row) => row.porcentajeBeca === 100).length,
+    setentaCinco: porcentajes.filter((row) => row.porcentajeBeca === 75).length,
+    cincuenta: porcentajes.filter((row) => row.porcentajeBeca === 50).length,
+    veinticinco: porcentajes.filter((row) => row.porcentajeBeca === 25).length,
+    otros: porcentajes.filter(
       (row) => row.porcentajeBeca !== 100
         && row.porcentajeBeca !== 75
         && row.porcentajeBeca !== 50
