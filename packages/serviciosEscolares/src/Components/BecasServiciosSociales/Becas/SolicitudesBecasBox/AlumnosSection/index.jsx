@@ -11,12 +11,15 @@ import {
   LabelData,
   Select,
   InputSearch,
+  deleteRecord,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
+import React, {
+  useEffect, useState, useContext, useCallback,
+} from 'react';
 import { Visibility, Edit, Delete } from '@mui/icons-material';
 
-const columns = (setType, setOpen, setAlumnoId, disabled) => [
+const columns = (setType, setOpen, setAlumnoId, disabled, setOpenDelete) => [
   { field: 'id', headerName: 'ID', hide: true },
   { field: 'name', headerName: 'Nombre', width: 300 },
   { field: 'grade', headerName: 'Grado', width: 200 },
@@ -39,7 +42,12 @@ const columns = (setType, setOpen, setAlumnoId, disabled) => [
           >
             <Edit />
           </IconButton>
-          <IconButton onClick={() => {}}>
+          <IconButton
+            onClick={() => {
+              setAlumnoId(params.row.id);
+              setOpenDelete(true);
+            }}
+          >
             <Delete />
           </IconButton>
         </>
@@ -84,6 +92,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
   const [alumnoId, setAlumnoId] = useState(null);
   const [type, setType] = useState('create');
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [rows, setRows] = useState([]);
   const [form, setForm] = useState({});
   const [grados, setGrados] = useState([]);
@@ -97,35 +106,38 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
     promedio: '',
   });
 
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    const data = await getData({
+      endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos`,
+    });
+    const gradosList = await getData({
+      endpoint: '/grados',
+    });
+
+    const mappedRows = data.data.map((row) => ({
+      id: row.id,
+      name: `${row.alumno?.persona?.nombre} ${row.alumno?.persona?.apellidoPaterno} ${row.alumno?.persona?.apellidoMaterno}` || '',
+      grade: row.grado?.nombre || '',
+      estatus: estatusAlumnos.find((estatus) => estatus.id === row.estatusAlumnoBecaId)?.nombre || '',
+      tipoSolicitud: row.tipoAlumnoBeca?.descripcion || '',
+      porcentajeBeca: `${row.porcentajeBeca || 0} %`,
+      promedio: row.promedio || 0,
+    }));
+
+    const mappedPorcentajes = data.data.map((row) => ({
+      porcentajeBeca: row.porcentajeBeca || 0,
+    }));
+
+    setPorcentajes(mappedPorcentajes);
+    setRows(mappedRows);
+    setGrados(gradosList.data);
+    setLoading(false);
+  }, [solicitudId, setLoading]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getData({
-        endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos`,
-      });
-      const gradosList = await getData({
-        endpoint: '/grados',
-      });
-
-      const mappedRows = data.data.map((row) => ({
-        id: row.id,
-        name: `${row.alumno?.persona?.nombre} ${row.alumno?.persona?.apellidoPaterno} ${row.alumno?.persona?.apellidoMaterno}` || '',
-        grade: row.grado?.nombre || '',
-        estatus: estatusAlumnos.find((estatus) => estatus.id === row.estatusAlumnoBecaId)?.nombre || '',
-        tipoSolicitud: row.tipoAlumnoBeca?.descripcion || '',
-        porcentajeBeca: `${row.porcentajeBeca || 0} %`,
-        promedio: row.promedio || 0,
-      }));
-
-      const mappedPorcentajes = data.data.map((row) => ({
-        porcentajeBeca: row.porcentajeBeca || 0,
-      }));
-
-      setPorcentajes(mappedPorcentajes);
-      setRows(mappedRows);
-      setGrados(gradosList.data);
-    };
     fetchData();
-  }, [solicitudId]);
+  }, [fetchData]);
 
   const counts = {
     cien: porcentajes.filter((row) => row.porcentajeBeca === 100).length,
@@ -142,7 +154,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
 
   useEffect(() => {
     if ((type === 'edit' || type === 'consult') && alumnoId) {
-      const fetchData = async () => {
+      const fetchAlumnoData = async () => {
         const data = await getData({
           endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos/${alumnoId}`,
         });
@@ -163,7 +175,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
           telefono: data.data.alumno?.persona?.telefono,
         });
       };
-      fetchData();
+      fetchAlumnoData();
     } else {
       setForm({});
       setAlumno({});
@@ -302,6 +314,39 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
     }
   };
 
+  const handleDeleteConfirm = async () => {
+    if (!alumnoId) return;
+
+    try {
+      const response = await deleteRecord({
+        endpoint: `/solicitudesBecas/solicitudesBecasAlumnos/${alumnoId}`,
+      });
+
+      if (response.statusCode === 200 || response.statusCode === 204) {
+        setNoti({
+          open: true,
+          message: '¡Alumno eliminado correctamente!',
+          type: 'success',
+        });
+        setOpenDelete(false);
+        fetchData();
+      } else {
+        setNoti({
+          open: true,
+          message: response.errorMessage || '¡Error al eliminar el alumno!',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      setNoti({
+        open: true,
+        message: '¡Error al eliminar el alumno!',
+        type: 'error',
+      });
+    }
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -333,7 +378,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
             setForm({});
           }}
           rows={rows}
-          columns={columns(setType, setOpen, setAlumnoId, disabled)}
+          columns={columns(setType, setOpen, setAlumnoId, disabled, setOpenDelete)}
         />
       </Grid>
       <DefaultModal title="Asignación de beca" open={open} setOpen={setOpen}>
@@ -441,6 +486,10 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
             </>
           )}
         </Grid>
+      </DefaultModal>
+      <DefaultModal title="Eliminar Alumno" open={openDelete} setOpen={setOpenDelete}>
+        <Typography>¿Desea quitar este alumno de esta solicitud?</Typography>
+        <ButtonsForm confirm={handleDeleteConfirm} confirmText="Eliminar" cancel={() => { setOpenDelete(false); }} />
       </DefaultModal>
     </Grid>
   );

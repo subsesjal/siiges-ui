@@ -15,11 +15,9 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
   const router = useRouter();
   const isBecasSicyt = session.rol === 'becas_sicyt';
 
-  useEffect(() => {
+  const fetchData = async () => {
     setLoading(true);
     fetchSolicitudesData(setNoti, setLoading, (fetchedData) => {
-      setData(fetchedData);
-
       if (isBecasSicyt) {
         const filtered = fetchedData.filter(
           (item) => item.estatusSolicitudBecaId !== 'EN CAPTURA',
@@ -29,13 +27,21 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
         setData(fetchedData);
       }
     });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [session.rol]);
 
+  const onDeleteSuccess = () => {
+    fetchData();
+  };
+
   const columns = [
-    { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
-    { field: 'programa', headerName: 'Programa', width: 200 },
-    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 150 },
-    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 250 },
+    { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 180 },
+    { field: 'programa', headerName: 'Programa', width: 260 },
+    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 120 },
+    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 150 },
     { field: 'createdAt', headerName: 'Fecha de solicitud', width: 200 },
     {
       field: 'acciones',
@@ -49,6 +55,7 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
           estatusSolicitudBecaId={params.row.estatusSolicitudBecaId}
           router={router}
           isBecasSicyt={isBecasSicyt}
+          onDeleteSuccess={onDeleteSuccess}
         />
       ),
     },
