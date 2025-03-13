@@ -119,7 +119,7 @@ export default function SolicitudesBecasBox({ type }) {
           setIsSaved={setIsSaved}
           saveIsDisabled={disabled}
         />
-      ) : <ButtonsReviewBox router={router} solicitudId={solicitudId} />}
+      ) : <ButtonsReviewBox router={router} solicitudId={solicitudId} formData={formData} />}
     </Box>
   );
 }

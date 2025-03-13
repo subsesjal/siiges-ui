@@ -22,7 +22,7 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
 
       if (isBecasSicyt) {
         const filtered = fetchedData.filter(
-          (item) => item.estatusSolicitudBecaId === 'EN REVISION',
+          (item) => item.estatusSolicitudBecaId !== 'EN CAPTURA',
         );
         setData(filtered);
       } else {
@@ -33,9 +33,9 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
 
   const columns = [
     { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
-    { field: 'programa', headerName: 'Programa', width: 250 },
-    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 100 },
-    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 150 },
+    { field: 'programa', headerName: 'Programa', width: 200 },
+    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 150 },
+    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 250 },
     { field: 'createdAt', headerName: 'Fecha de solicitud', width: 200 },
     {
       field: 'acciones',
@@ -48,6 +48,7 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
           institucion={institucion}
           estatusSolicitudBecaId={params.row.estatusSolicitudBecaId}
           router={router}
+          isBecasSicyt={isBecasSicyt}
         />
       ),
     },
