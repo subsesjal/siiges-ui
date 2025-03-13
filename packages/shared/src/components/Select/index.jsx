@@ -145,7 +145,7 @@ BasicSelect.propTypes = {
   name: PropTypes.string.isRequired,
   required: PropTypes.bool,
   multiple: PropTypes.bool,
-  disabled: PropTypes.bool,
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
   textValue: PropTypes.bool,
   errorMessage: PropTypes.string,
   onChange: PropTypes.func,

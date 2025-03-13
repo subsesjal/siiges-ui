@@ -1,8 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Select, Context } from '@siiges-ui/shared';
+import { Select, Context, getData } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
+import {
+  getInstituciones,
+  getPlantelesByInstitucion,
+  getProgramas,
+} from '@siiges-ui/instituciones';
 import getBecasByPrograma from '@siiges-ui/instituciones/src/utils/getProgramas';
 
 export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInstitucion }) {
@@ -13,20 +17,24 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
     setLoading,
   });
 
-  const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('solicitudesBecas_selectedInstitucion')
+  const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined'
+    && localStorage.getItem('solicitudesBecas_selectedInstitucion')
     ? localStorage.getItem('becas_selectedInstitucion')
     : ''));
 
-  const [selectedPlantel, setSelectedPlantel] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('solicitudesBecas_selectedPlantel')
+  const [selectedPlantel, setSelectedPlantel] = useState(() => (typeof window !== 'undefined'
+    && localStorage.getItem('solicitudesBecas_selectedPlantel')
     ? localStorage.getItem('becas_selectedPlantel')
     : ''));
 
-  const [selectedPrograma, setSelectedPrograma] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('solicitudesBecas_selectedPrograma')
+  const [selectedPrograma, setSelectedPrograma] = useState(() => (typeof window !== 'undefined'
+    && localStorage.getItem('solicitudesBecas_selectedPrograma')
     ? localStorage.getItem('becas_selectedPrograma')
     : ''));
 
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
+  const isIes = session.rol === 'becas_ies';
   const isRepresentante = session.rol === 'representante';
 
   const fetchSolicitudesBecas = (programaId) => {
@@ -53,14 +61,27 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
       }
     });
   };
+
   useEffect(() => {
-    if (isRepresentante && instituciones?.length) {
-      const findIndexInstitucion = instituciones.findIndex(
-        ({ usuarioId }) => usuarioId === session.id,
-      );
-      setSelectedInstitucion(instituciones[findIndexInstitucion]?.id || '');
+    if (!instituciones?.length) return;
+
+    const findInstitutionById = (id) => instituciones.find(({ usuarioId }) => usuarioId === id)?.id || '';
+
+    if (isIes) {
+      const fetchData = async () => {
+        try {
+          const response = await getData({ endpoint: `/usuarios/secundario/${session.id}` });
+          setSelectedInstitucion(findInstitutionById(response.data.id));
+        } catch (error) {
+          console.error('Error fetching users:', error);
+          setSelectedInstitucion('');
+        }
+      };
+      fetchData();
+    } else if (isRepresentante) {
+      setSelectedInstitucion(findInstitutionById(session.id));
     }
-  }, [isRepresentante, instituciones]);
+  }, [isIes, isRepresentante, instituciones, session.id]);
 
   const handleProgramaChange = (event) => {
     const programaId = event.target.value;
@@ -138,9 +159,15 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('solicitudesBecas_selectedInstitucion', selectedInstitucion);
+      localStorage.setItem(
+        'solicitudesBecas_selectedInstitucion',
+        selectedInstitucion,
+      );
       localStorage.setItem('solicitudesBecas_selectedPlantel', selectedPlantel);
-      localStorage.setItem('solicitudesBecas_selectedPrograma', selectedPrograma);
+      localStorage.setItem(
+        'solicitudesBecas_selectedPrograma',
+        selectedPrograma,
+      );
     }
   }, [selectedInstitucion, selectedPlantel, selectedPrograma]);
 
@@ -163,9 +190,13 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
           title="Instituciones"
           name="instituciones"
           value={selectedInstitucion}
-          options={instituciones?.slice().sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
+          options={
+            instituciones
+              ?.slice()
+              .sort((a, b) => a.nombre.localeCompare(b.nombre)) || []
+          }
           onChange={(event) => setSelectedInstitucion(event.target.value)}
-          disabled={isRepresentante || !!selectedInstitucion}
+          disabled={isIes && selectedInstitucion}
         />
       </Grid>
       <Grid item xs={4}>
@@ -188,7 +219,6 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
           disabled={!selectedPlantel}
         />
       </Grid>
-
     </Grid>
   );
 }

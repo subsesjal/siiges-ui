@@ -13,33 +13,44 @@ import {
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useContext } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Visibility, Edit, Delete } from '@mui/icons-material';
 
-const columns = (setType, setOpen, setAlumnoId) => [
+const columns = (setType, setOpen, setAlumnoId, disabled) => [
   { field: 'id', headerName: 'ID', hide: true },
   { field: 'name', headerName: 'Nombre', width: 300 },
-  { field: 'grade', headerName: 'Grado', width: 100 },
-  { field: 'estatus', headerName: 'Estatus del alumno', width: 300 },
-  { field: 'tipoSolicitud', headerName: 'Tipo de solicitud', width: 300 },
+  { field: 'grade', headerName: 'Grado', width: 300 },
+  { field: 'estatus', headerName: 'Estatus del alumno', width: 200 },
+  { field: 'tipoSolicitud', headerName: 'Tipo de solicitud', width: 200 },
   {
     field: 'actions',
     headerName: 'Acciones',
     renderCell: (params) => (
-      <>
+      !disabled ? (
+        <>
+          <IconButton
+            onClick={() => {
+              setType('edit');
+              setOpen(true);
+              setAlumnoId(params.row.id);
+            }}
+          >
+            <Edit />
+          </IconButton>
+          <IconButton onClick={() => {}}>
+            <Delete />
+          </IconButton>
+        </>
+      ) : (
         <IconButton
           onClick={() => {
-            setType('edit');
+            setType('consult');
             setOpen(true);
-            setAlumnoId(params.id);
+            setAlumnoId(params.row.id);
           }}
         >
-          <EditIcon />
+          <Visibility />
         </IconButton>
-        <IconButton onClick={() => {}}>
-          <DeleteIcon />
-        </IconButton>
-      </>
+      )
     ),
   },
 ];
@@ -64,7 +75,7 @@ const tiposAlumnos = [
   { id: 2, nombre: 'Refrendo' },
 ];
 
-export default function AlumnosSection({ programa, solicitudId }) {
+export default function AlumnosSection({ programa, solicitudId, disabled }) {
   const { setLoading, setNoti } = useContext(Context);
   const [alumno, setAlumno] = useState({});
   const [alumnoId, setAlumnoId] = useState(null);
@@ -105,11 +116,12 @@ export default function AlumnosSection({ programa, solicitudId }) {
   }, [solicitudId]);
 
   useEffect(() => {
-    if (type === 'edit' && alumnoId) {
+    if ((type === 'edit' || type === 'consult') && alumnoId) {
       const fetchData = async () => {
         const data = await getData({
           endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos/${alumnoId}`,
         });
+
         setForm({
           gradoId: data.data.gradoId || '',
           porcentajeBeca: data.data.porcentajeBeca || '',
@@ -283,7 +295,8 @@ export default function AlumnosSection({ programa, solicitudId }) {
       </Grid>
       <Grid item xs={12}>
         <DataTable
-          buttonAdd
+          title="Lista de Alumnos asignados a Becas"
+          buttonAdd={!disabled}
           buttonText="Agregar Alumno"
           buttonClick={() => {
             setType('create');
@@ -291,7 +304,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
             setForm({});
           }}
           rows={rows}
-          columns={columns(setType, setOpen, setAlumnoId)}
+          columns={columns(setType, setOpen, setAlumnoId, disabled)}
         />
       </Grid>
       <DefaultModal title="Asignación de beca" open={open} setOpen={setOpen}>
@@ -310,7 +323,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
               />
             </Grid>
           )}
-          {(alumno.nombre || type === 'edit') && (
+          {(alumno.nombre && (type === 'edit' || type === 'consult')) && (
             <>
               <Grid item xs={9}>
                 <LabelData title="Alumno" subtitle={alumno.nombre} />
@@ -336,6 +349,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   value={form.gradoId || ''}
                   required
                   errorMessage={errors.gradoId}
+                  disabled={disabled}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -347,6 +361,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   value={form.promedio || ''}
                   required
                   errorMessage={errors.promedio}
+                  disabled={disabled}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -359,6 +374,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   value={form.porcentajeBeca || ''}
                   required
                   errorMessage={errors.porcentajeBeca}
+                  disabled={disabled}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -370,6 +386,7 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   value={form.estatusAlumnoBecaId || ''}
                   required
                   errorMessage={errors.estatusAlumnoBecaId}
+                  disabled={disabled}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -381,10 +398,15 @@ export default function AlumnosSection({ programa, solicitudId }) {
                   value={form.tipoAlumnoBecaId || ''}
                   required
                   errorMessage={errors.tipoAlumnoBecaId}
+                  disabled={disabled}
                 />
               </Grid>
               <Grid item xs={12}>
-                <ButtonsForm confirm={handleSubmit} cancel={() => setOpen(false)} />
+                <ButtonsForm
+                  confirm={handleSubmit}
+                  confirmDisabled={disabled}
+                  cancel={() => setOpen(false)}
+                />
               </Grid>
             </>
           )}
@@ -396,5 +418,6 @@ export default function AlumnosSection({ programa, solicitudId }) {
 
 AlumnosSection.propTypes = {
   solicitudId: PropTypes.number.isRequired,
+  disabled: PropTypes.bool.isRequired,
   programa: PropTypes.shape({ id: PropTypes.number }).isRequired,
 };

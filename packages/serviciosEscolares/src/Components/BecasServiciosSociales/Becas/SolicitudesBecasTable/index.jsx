@@ -1,22 +1,35 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context, DataTable } from '@siiges-ui/shared';
-import { IconButton } from '@mui/material';
-import { Visibility, Edit, Delete } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import {
-  handleEditClick, handleViewClick, handleCreateClick, fetchSolicitudesData,
+  handleCreateClick, fetchSolicitudesData,
 } from '../utils';
+import SolicitudesBecasTableButtons from '../utils/SolicitudesBecasTableButtons';
 
 export default function SolicitudesBecasTable({ programa, institucion }) {
-  const { loading, setLoading, setNoti } = useContext(Context);
+  const {
+    loading, setLoading, setNoti, session,
+  } = useContext(Context);
   const [data, setData] = useState([]);
   const router = useRouter();
+  const isBecasSicyt = session.rol === 'becas_sicyt';
 
   useEffect(() => {
     setLoading(true);
-    fetchSolicitudesData(setNoti, setLoading, setData);
-  }, []);
+    fetchSolicitudesData(setNoti, setLoading, (fetchedData) => {
+      setData(fetchedData);
+
+      if (isBecasSicyt) {
+        const filtered = fetchedData.filter(
+          (item) => item.estatusSolicitudBecaId === 'EN REVISION',
+        );
+        setData(filtered);
+      } else {
+        setData(fetchedData);
+      }
+    });
+  }, [session.rol]);
 
   const columns = [
     { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
@@ -29,17 +42,13 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
       headerName: 'Acciones',
       width: 200,
       renderCell: (params) => (
-        <>
-          <IconButton onClick={() => handleViewClick(params.row.id, { programa, institucion }, router)} title="Consultar">
-            <Visibility />
-          </IconButton>
-          <IconButton onClick={() => handleEditClick(params.row.id, { programa, institucion }, router)} title="Editar">
-            <Edit />
-          </IconButton>
-          <IconButton onClick={() => ''} title="Borrar">
-            <Delete />
-          </IconButton>
-        </>
+        <SolicitudesBecasTableButtons
+          id={params.row.id}
+          programa={programa}
+          institucion={institucion}
+          estatusSolicitudBecaId={params.row.estatusSolicitudBecaId}
+          router={router}
+        />
       ),
     },
   ];
@@ -47,11 +56,11 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
   return (
     <div>
       <DataTable
-        title="Lista de solicitudes"
+        title="Lista de Solicitudes de Becas"
         rows={data || []}
         columns={columns}
         loading={loading}
-        buttonAdd
+        buttonAdd={!isBecasSicyt}
         buttonText="Agregar Solicitud"
         buttonClick={() => handleCreateClick({ programa, institucion }, router)}
       />
@@ -60,6 +69,6 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
 }
 
 SolicitudesBecasTable.propTypes = {
-  programa: PropTypes.func.isRequired,
-  institucion: PropTypes.func.isRequired,
+  programa: PropTypes.number.isRequired,
+  institucion: PropTypes.number.isRequired,
 };

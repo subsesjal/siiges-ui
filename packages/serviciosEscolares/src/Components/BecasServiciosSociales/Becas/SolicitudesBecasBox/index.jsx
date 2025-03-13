@@ -9,6 +9,7 @@ import ButtonsBox from './ButtonsBox';
 import {
   fetchProgramaPlantelData, handleSaveSolicitud, fetchSolicitudData, handleUpdateSolicitud,
 } from '../utils';
+import ButtonsReviewBox from './ButtonsReviewBox';
 
 export default function SolicitudesBecasBox({ type }) {
   const EN_CAPTURA = 1;
@@ -21,11 +22,13 @@ export default function SolicitudesBecasBox({ type }) {
   const [reqData, setReqData] = useState({});
   const [formData, setFormData] = useState({});
   const [isSaved, setIsSaved] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const router = useRouter();
   const { programa, institucion, solicitudBecasId } = router.query;
 
   const validateData = {
+    consultar: () => (!programa || !institucion) && router.back(),
     crear: () => (!programa || !institucion) && router.back(),
     editar: () => (!programa || !institucion || !solicitudBecasId) && router.back(),
   };
@@ -43,6 +46,11 @@ export default function SolicitudesBecasBox({ type }) {
         estatusSolicitudBecaId: EN_CAPTURA,
         usuarioId: session.id,
       });
+    }
+    if (type === 'consultar') {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
     }
   }, [type]);
 
@@ -80,33 +88,38 @@ export default function SolicitudesBecasBox({ type }) {
         plantel={data?.plantel}
         setReqData={setReqData}
         formData={formData}
+        disabled={disabled}
       />
       )}
       {tabIndex === ALUMNOS && hasValidProperties(['programa', 'plantel']) && (
       <AlumnosSection
         programa={data?.programa}
         solicitudId={solicitudId}
+        disabled={disabled}
       />
       )}
-      <ButtonsBox
-        cancel={() => router.push('/solicitudesBecas')}
-        save={() => handleSaveSolicitud(
-          setNoti,
-          setLoading,
-          setSolicitudId,
-          reqData,
-          setTabIndex,
-        )}
-        update={() => handleUpdateSolicitud(
-          setNoti,
-          setLoading,
-          reqData,
-          solicitudId,
-        )}
-        isSaved={isSaved}
-        solicitudId={solicitudId}
-        setIsSaved={setIsSaved}
-      />
+      {session.rol !== 'becas_sicyt' ? (
+        <ButtonsBox
+          cancel={() => router.push('/solicitudesBecas')}
+          save={() => handleSaveSolicitud(
+            setNoti,
+            setLoading,
+            setSolicitudId,
+            reqData,
+            setTabIndex,
+          )}
+          update={() => handleUpdateSolicitud(
+            setNoti,
+            setLoading,
+            reqData,
+            solicitudId,
+          )}
+          isSaved={isSaved}
+          solicitudId={solicitudId}
+          setIsSaved={setIsSaved}
+          saveIsDisabled={disabled}
+        />
+      ) : <ButtonsReviewBox router={router} solicitudId={solicitudId} />}
     </Box>
   );
 }
