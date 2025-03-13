@@ -67,8 +67,10 @@ import PositionDisplay from './components/PositionDisplay';
 import Subtitle from './components/Subtitle';
 import BinarySelect from './components/Select/BinarySelect';
 import NavigationButtons from './components/Buttons/NavigationButtons';
+import InputSearch from './components/Input/InputSearch';
 
 export {
+  InputSearch,
   NavigationButtons,
   BinarySelect,
   Subtitle,

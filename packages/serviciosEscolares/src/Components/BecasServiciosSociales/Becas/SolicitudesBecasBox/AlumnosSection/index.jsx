@@ -10,6 +10,7 @@ import {
   Input,
   LabelData,
   Select,
+  InputSearch,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useContext } from 'react';
@@ -139,6 +140,9 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
         });
       };
       fetchData();
+    } else {
+      setForm({});
+      setAlumno({});
     }
   }, [type, alumnoId]);
 
@@ -154,12 +158,11 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
     }));
   };
 
-  const handleBlur = (event) => {
-    const { name, value } = event.target;
-    if (name === 'matricula' && value) {
+  const handleSearch = () => {
+    if (form.matricula) {
       setLoading(true);
       getData({
-        endpoint: `/alumnos/programas/${programa.id}?matricula=${value}`,
+        endpoint: `/alumnos/programas/${programa.id}?matricula=${form.matricula}`,
       })
         .then((response) => {
           if (response.data) {
@@ -311,12 +314,13 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
         <Grid container spacing={2}>
           {type === 'create' && (
             <Grid item xs={12}>
-              <Input
+              <InputSearch
                 label="Matrícula"
                 id="matricula"
                 name="matricula"
                 value={form.matricula || ''}
-                onblur={handleBlur}
+                onBlur={handleSearch}
+                onClickButton={handleSearch}
                 onChange={handleChange}
                 required
                 errorMessage={errors.matricula}
