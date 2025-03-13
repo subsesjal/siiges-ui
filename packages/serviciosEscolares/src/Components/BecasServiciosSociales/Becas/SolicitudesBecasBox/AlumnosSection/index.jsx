@@ -19,9 +19,11 @@ import { Visibility, Edit, Delete } from '@mui/icons-material';
 const columns = (setType, setOpen, setAlumnoId, disabled) => [
   { field: 'id', headerName: 'ID', hide: true },
   { field: 'name', headerName: 'Nombre', width: 300 },
-  { field: 'grade', headerName: 'Grado', width: 300 },
-  { field: 'estatus', headerName: 'Estatus del alumno', width: 200 },
-  { field: 'tipoSolicitud', headerName: 'Tipo de solicitud', width: 200 },
+  { field: 'grade', headerName: 'Grado', width: 200 },
+  { field: 'estatus', headerName: 'Estatus del alumno', width: 160 },
+  { field: 'tipoSolicitud', headerName: 'Tipo de solicitud', width: 140 },
+  { field: 'porcentajeBeca', headerName: 'Porcentaje de beca', width: 160 },
+  { field: 'promedio', headerName: 'Promedio', width: 100 },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -110,6 +112,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
         estatus: estatusAlumnos.find((estatus) => estatus.id === row.estatusAlumnoBecaId)?.nombre || '',
         tipoSolicitud: row.tipoAlumnoBeca?.descripcion || '',
         porcentajeBeca: row.porcentajeBeca || 0,
+        promedio: row.promedio || 0,
       }));
       setRows(mappedRows);
       setGrados(gradosList.data);
@@ -250,6 +253,7 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
           estatus: estatusAlumnos.find((estatus) => estatus.id === form.estatusAlumnoBecaId)?.nombre || '',
           tipoSolicitud: tiposAlumnos.find((tipo) => tipo.id === form.tipoAlumnoBecaId)?.nombre || '',
           porcentajeBeca: response.data.porcentajeBeca,
+          promedio: response.data.promedio,
         };
 
         if (type === 'create') {
