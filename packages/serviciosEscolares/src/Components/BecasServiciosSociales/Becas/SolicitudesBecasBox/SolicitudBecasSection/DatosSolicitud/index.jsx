@@ -24,20 +24,22 @@ export default function DatosSolicitud({
   }, [programa.id, setNoti, setLoading]);
 
   useEffect(() => {
-    GetFile(fileData, (url, error) => {
-      if (error) {
-        setNoti({
-          open: true,
-          message: '¡Error al obtener el archivo!',
-          type: 'error',
-        });
-        console.error(error);
-      } else {
-        const fullUrl = url.startsWith('http://') || url.startsWith('https://') ? url : `http://${url}`;
-        setFileUrl(fullUrl);
-      }
-    });
-  }, []);
+    if (formData.estatusSolicitudBecaId === 3) {
+      GetFile(fileData, (url, error) => {
+        if (error) {
+          setNoti({
+            open: true,
+            message: '¡Error al obtener el archivo!',
+            type: 'error',
+          });
+          console.error(error);
+        } else {
+          const fullUrl = url.startsWith('http://') || url.startsWith('https://') ? url : `http://${url}`;
+          setFileUrl(fullUrl);
+        }
+      });
+    }
+  }, [formData.estatusSolicitudBecaId]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -65,9 +67,11 @@ export default function DatosSolicitud({
         />
       </Grid>
       <Grid item xs={3.7} />
+      {formData.estatusSolicitudBecaId === 3 && (
       <Grid item xs={4} sx={{ mt: 2 }}>
         <ButtonFile url={fileUrl}>Archivo de resolución de Becas</ButtonFile>
       </Grid>
+      )}
       {formData.observaciones && (
         <Grid item xs={12} sx={{ mr: 3 }}>
           <Input
@@ -96,6 +100,7 @@ DatosSolicitud.propTypes = {
     id: PropTypes.number,
   }).isRequired,
   formData: PropTypes.shape({
+    estatusSolicitudBecaId: PropTypes.number,
     id: PropTypes.number,
     cicloEscolarId: PropTypes.number,
     observaciones: PropTypes.string,
