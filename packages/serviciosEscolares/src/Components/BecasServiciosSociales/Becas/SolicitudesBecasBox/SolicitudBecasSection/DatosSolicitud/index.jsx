@@ -7,6 +7,8 @@ import {
 import React, { useContext, useState, useEffect } from 'react';
 import { fetchCiclosData } from '../../../utils';
 
+const baseUrl = process.env.NEXT_PUBLIC_URL;
+
 export default function DatosSolicitud({
   programa, setReqData, formData, disabled,
 }) {
@@ -34,8 +36,7 @@ export default function DatosSolicitud({
           });
           console.error(error);
         } else {
-          const fullUrl = url.startsWith('http://') || url.startsWith('https://') ? url : `http://${url}`;
-          setFileUrl(fullUrl);
+          setFileUrl(`${baseUrl}${url}`);
         }
       });
     }
