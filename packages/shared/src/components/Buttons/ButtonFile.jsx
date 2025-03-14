@@ -10,6 +10,7 @@ export default function ButtonFile({ url, children }) {
       size="small"
       sx={{
         width: '100%',
+        height: '40px',
         color: 'black',
         borderColor: 'black',
         '&:hover': {
@@ -26,8 +27,7 @@ export default function ButtonFile({ url, children }) {
   );
 }
 
-// Prop validation
 ButtonFile.propTypes = {
-  url: PropTypes.string.isRequired, // url must be a string and is required
+  url: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
 };

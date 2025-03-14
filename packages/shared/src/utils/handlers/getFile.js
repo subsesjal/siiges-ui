@@ -17,7 +17,7 @@ export default function GetFile(fileData, callback) {
       return response.json();
     })
     .then((data) => {
-      callback(data.data ? data.data.ubicacion : null, null);
+      callback(data.data ? data.data.url : null, null);
     })
     .catch((error) => {
       callback(null, error);
