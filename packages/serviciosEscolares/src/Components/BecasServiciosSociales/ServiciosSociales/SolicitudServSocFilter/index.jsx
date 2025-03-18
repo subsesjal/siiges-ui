@@ -31,7 +31,7 @@ export default function SolicitudServSocFilter({ setSolicitudes, setLoading, set
 
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
-  const isRepresentante = session.rol === 'representante';
+  const isRepresentante = session.rol === 'admin';
 
   const fetchPlanteles = (institucionId) => {
     getPlantelesByInstitucion(institucionId, (error, data) => {
