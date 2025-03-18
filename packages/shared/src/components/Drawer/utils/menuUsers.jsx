@@ -120,10 +120,10 @@ const panelMenuOptions = (rol) => [
         text: 'Revalidación y Equivalencias',
         route: '/serviciosEscolares/revalidacionEquivalencias',
       },
-      {
+      /* {
         text: 'Becas',
-        route: '/serviciosEscolares/becas',
-      },
+        route: '/solicitudesBecas',
+      }, */
       {
         text: 'Servicio Social',
         route: '/serviciosEscolares/servicioSocial',

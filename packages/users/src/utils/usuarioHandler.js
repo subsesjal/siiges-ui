@@ -57,7 +57,7 @@ const errors = {
   contrasena: (form, setError) => {
     const { contrasena } = form;
     let errorMessage = '';
-    const simbolosPermitidos = /[@#$%^&*()\-_=+[\]{}\\|;:'",<.>/?]/;
+    const simbolosPermitidos = /[@#$%^&*()\-_=+[\]{}\\|;:'",<.>/?!]/;
 
     if (!contrasena) {
       errorMessage = '¡Contraseña inválida!';

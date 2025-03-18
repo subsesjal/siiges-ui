@@ -1,88 +1,62 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getData, deleteData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import { Context, DataTable } from '@siiges-ui/shared';
-import dayjs from 'dayjs';
-import { IconButton } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import {
+  handleCreateClick, fetchSolicitudesData,
+} from '../utils';
+import SolicitudesBecasTableButtons from '../utils/SolicitudesBecasTableButtons';
 
-export default function SolicitudesBecasTable() {
-  const { loading, setLoading } = useContext(Context);
+export default function SolicitudesBecasTable({ programa, institucion }) {
+  const {
+    loading, setLoading, setNoti, session,
+  } = useContext(Context);
   const [data, setData] = useState([]);
   const router = useRouter();
+  const isBecasSicyt = session.rol === 'becas_sicyt';
 
-  const handleViewClick = (row) => {
-    alert(`Detalles de la solicitud:\nFolio: ${row.folioSolicitud}\nPrograma: ${row.programaId}\nEstatus: ${row.estatusSolicitudBecaId}`);
-  };
-
-  const handleEditClick = (row) => {
-    router.push(`/editar-solicitud/${row.id}`);
-  };
-
-  const handleDeleteClick = async (row) => {
-    const confirmDelete = window.confirm(`¿Estás seguro de eliminar la solicitud con folio ${row.folioSolicitud}?`);
-    if (confirmDelete) {
-      setLoading(true);
-      try {
-        await deleteData({ endpoint: `/solicitudesBecas/${row.id}` });
-        setData((prevData) => prevData.filter((item) => item.id !== row.id));
-        alert('Solicitud eliminada con éxito.');
-      } catch (error) {
-        alert(`Error al eliminar la solicitud: ${error.message}`);
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    setLoading(true);
+    fetchSolicitudesData(setNoti, setLoading, (fetchedData) => {
+      if (isBecasSicyt) {
+        const filtered = fetchedData.filter(
+          (item) => item.estatusSolicitudBecaId !== 'EN CAPTURA',
+        );
+        setData(filtered);
+      } else {
+        setData(fetchedData);
       }
-    }
+    });
   };
 
   useEffect(() => {
-    setLoading(true);
-    getData({ endpoint: '/solicitudesBecas/' })
-      .then((response) => {
-        if (response.data) {
-          const mappedRows = response.data.map((becas) => ({
-            id: becas.id,
-            folioSolicitud: becas.folioSolicitud,
-            programaId: becas.programa.cicloId,
-            cicloEscolarId: becas.cicloEscolar.nombre,
-            estatusSolicitudBecaId: becas.estatusSolicitudBeca.nombre,
-            createdAt: dayjs(becas.createdAt).format('DD/MM/YYYY'),
-          }));
-          setData(mappedRows);
-        }
-      })
-      .catch((error) => {
-        alert(`¡Ocurrió un error inesperado!: ${error.message}`);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    fetchData();
+  }, [session.rol]);
+
+  const onDeleteSuccess = () => {
+    fetchData();
+  };
 
   const columns = [
-    { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
-    { field: 'programaId', headerName: 'Programa', width: 150 },
-    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 200 },
-    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 200 },
+    { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 180 },
+    { field: 'programa', headerName: 'Programa', width: 260 },
+    { field: 'cicloEscolarId', headerName: 'Ciclo Escolar', width: 120 },
+    { field: 'estatusSolicitudBecaId', headerName: 'Estatus', width: 150 },
     { field: 'createdAt', headerName: 'Fecha de solicitud', width: 200 },
     {
       field: 'acciones',
       headerName: 'Acciones',
       width: 200,
       renderCell: (params) => (
-        <>
-          <IconButton onClick={() => handleViewClick(params.row)} title="Consultar">
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton onClick={() => handleEditClick(params.row)} title="Editar">
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDeleteClick(params.row)} title="Borrar">
-            <DeleteIcon />
-          </IconButton>
-        </>
+        <SolicitudesBecasTableButtons
+          id={params.row.id}
+          programa={programa}
+          institucion={institucion}
+          estatusSolicitudBecaId={params.row.estatusSolicitudBecaId}
+          router={router}
+          isBecasSicyt={isBecasSicyt}
+          onDeleteSuccess={onDeleteSuccess}
+        />
       ),
     },
   ];
@@ -90,15 +64,19 @@ export default function SolicitudesBecasTable() {
   return (
     <div>
       <DataTable
-        title="Lista de solicitudes"
+        title="Lista de Solicitudes de Becas"
         rows={data || []}
         columns={columns}
         loading={loading}
-        buttonAdd
+        buttonAdd={!isBecasSicyt}
         buttonText="Agregar Solicitud"
-        buttonClick={() => router.push('/crear-solicitud')}
-        buttonType="primary"
+        buttonClick={() => handleCreateClick({ programa, institucion }, router)}
       />
     </div>
   );
 }
+
+SolicitudesBecasTable.propTypes = {
+  programa: PropTypes.number.isRequired,
+  institucion: PropTypes.number.isRequired,
+};
