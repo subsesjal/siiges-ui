@@ -33,12 +33,6 @@ function InputDate({
     onChange({ target: { name, value: formattedDate } });
   };
 
-  const handleOnClose = () => {
-    if (onblur) {
-      onblur({ target: { name, value } });
-    }
-  };
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -47,7 +41,6 @@ function InputDate({
         name={name}
         onChange={handleDateChange}
         onFocus={onfocus}
-        onClose={handleOnClose}
         disabled={disabled}
         maxDate={dayjs('2100-01-01')}
         minDate={dayjs('1900-01-01')}
@@ -57,7 +50,7 @@ function InputDate({
           textField: {
             disabled,
             required,
-            onBlur: handleOnClose,
+            onBlur: onblur,
             helperText: errorMessage,
             error: !!errorMessage,
             size,
