@@ -124,10 +124,10 @@ const panelMenuOptions = (rol) => [
         text: 'Becas',
         route: '/solicitudesBecas',
       }, */
-      {
+      /* {
         text: 'Servicio Social',
         route: '/serviciosEscolares/servicioSocial',
-      },
+      }, */
       {
         text: 'Solicitud de Folios',
         route: '/serviciosEscolares/solicitudesFolios',
@@ -242,6 +242,22 @@ const optionsMenuFilter = {
     },
   ],
   becas_sicyt: [
+    {
+      text: 'Becas académicas',
+      icon: <DescriptionIcon />,
+      route: '/solicitudesBecas',
+      key: 'solicitudesBecas',
+    },
+  ],
+  serv_soc_ies: [
+    {
+      text: 'Becas académicas',
+      icon: <DescriptionIcon />,
+      route: '/solicitudesBecas',
+      key: 'solicitudesBecas',
+    },
+  ],
+  serv_soc_sicyt: [
     {
       text: 'Becas académicas',
       icon: <DescriptionIcon />,
