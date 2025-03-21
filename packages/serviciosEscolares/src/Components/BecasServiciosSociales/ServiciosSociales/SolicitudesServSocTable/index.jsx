@@ -8,6 +8,7 @@ import { handleCreateClick } from '../utils';
 export default function SolicitudServSocTable({ solicitudes, programa, institucion }) {
   const { loading, session } = useContext(Context);
   const router = useRouter();
+  const isIes = session.rol === 'serv_soc_ies';
   const isAdmin = session.rol === 'admin';
 
   const columns = [
@@ -38,7 +39,7 @@ export default function SolicitudServSocTable({ solicitudes, programa, instituci
       rows={solicitudes || []}
       columns={columns}
       loading={loading}
-      buttonAdd={isAdmin}
+      buttonAdd={isIes}
       buttonText="Agregar Solicitud"
       buttonClick={() => handleCreateClick({ programa, institucion }, router)}
     />
