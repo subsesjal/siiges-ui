@@ -253,16 +253,16 @@ const optionsMenuFilter = {
     {
       text: 'Becas académicas',
       icon: <DescriptionIcon />,
-      route: '/solicitudesBecas',
-      key: 'solicitudesBecas',
+      route: '/serviciosEscolares/servicioSocial',
+      key: 'servicioSocial',
     },
   ],
   serv_soc_sicyt: [
     {
       text: 'Becas académicas',
       icon: <DescriptionIcon />,
-      route: '/solicitudesBecas',
-      key: 'solicitudesBecas',
+      route: '/serviciosEscolares/servicioSocial',
+      key: 'servicioSocial',
     },
   ],
 };
