@@ -124,6 +124,10 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
           id: '19',
           nombre: 'Becas IES',
         },
+        {
+          id: '21',
+          nombre: 'Servicio Social IES',
+        },
       ]);
     }
 
@@ -183,7 +187,11 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
         },
         {
           id: '20',
-          nombre: 'Becas  SICYT',
+          nombre: 'Becas SICYT',
+        },
+        {
+          id: '22',
+          nombre: 'Servicio Social SICYT',
         },
       ]);
     }
