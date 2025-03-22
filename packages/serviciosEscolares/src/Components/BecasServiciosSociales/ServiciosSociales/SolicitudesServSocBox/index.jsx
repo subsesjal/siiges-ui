@@ -1,5 +1,5 @@
 import {
-  Tabs, Tab, Box, Typography,
+  Tabs, Tab, Box,
 } from '@mui/material';
 import { Context } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
@@ -11,6 +11,7 @@ import ButtonsReviewBox from './ButtonsReviewBox';
 import {
   fetchProgramaPlantelData, fetchSolicitudData, handleSaveSolicitud, handleUpdateSolicitud,
 } from '../utils';
+import AlumnosServicioSection from './AlumnosServicioSection';
 
 export default function SolicitudesServSocBox({ type }) {
   const EN_CAPTURA = 1;
@@ -98,11 +99,13 @@ export default function SolicitudesServSocBox({ type }) {
         />
       )}
       {tabIndex === ALUMNOS && hasValidProperties(['programa', 'plantel']) && (
-        <Box sx={{ padding: 2 }}>
-          <Typography variant="h6">Alumnos</Typography>
-        </Box>
+        <AlumnosServicioSection
+          programa={data?.programa}
+          solicitudId={solicitudId}
+          disabled={disabled}
+        />
       )}
-      {session.rol === 'admin' ? (
+      {session.rol === 'serv_soc_ies' ? (
         <ButtonsBox
           cancel={() => router.push('/serviciosEscolares/servicioSocial')}
           save={() => handleSaveSolicitud(
