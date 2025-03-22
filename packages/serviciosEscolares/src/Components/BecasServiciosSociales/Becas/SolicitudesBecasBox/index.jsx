@@ -7,7 +7,11 @@ import SolicitudBecasSection from './SolicitudBecasSection';
 import AlumnosSection from './AlumnosSection';
 import ButtonsBox from './ButtonsBox';
 import {
-  fetchProgramaPlantelData, handleSaveSolicitud, fetchSolicitudData, handleUpdateSolicitud,
+  fetchProgramaPlantelData,
+  handleSaveSolicitud,
+  fetchSolicitudData,
+  handleUpdateSolicitud,
+  fetchUsuarioData,
 } from '../utils';
 import ButtonsReviewBox from './ButtonsReviewBox';
 
@@ -19,6 +23,7 @@ export default function SolicitudesBecasBox({ type }) {
   const [tabIndex, setTabIndex] = useState(DATOS_SOLICTUD);
   const [data, setData] = useState({});
   const [solicitudId, setSolicitudId] = useState('');
+  const [usuario, setUsuario] = useState('');
   const [reqData, setReqData] = useState({});
   const [formData, setFormData] = useState({});
   const [isSaved, setIsSaved] = useState(false);
@@ -39,14 +44,16 @@ export default function SolicitudesBecasBox({ type }) {
 
     if (solicitudBecasId && type !== 'crear') {
       setSolicitudId(solicitudBecasId);
-      fetchSolicitudData(setNoti, setLoading, setFormData, solicitudBecasId);
+      fetchSolicitudData(setNoti, setLoading, setFormData, setUsuario, solicitudBecasId);
     } else {
+      fetchUsuarioData(setNoti, setLoading, setUsuario, session.id);
       setReqData({
         programaId: programa,
         estatusSolicitudBecaId: EN_CAPTURA,
         usuarioId: session.id,
       });
     }
+
     if (type === 'consultar') {
       setDisabled(true);
     } else {
@@ -55,7 +62,6 @@ export default function SolicitudesBecasBox({ type }) {
   }, [type]);
 
   const handleTabChange = (event, newValue) => {
-    /* setIsSaved((prev) => !prev); */
     setTabIndex(newValue);
   };
 
@@ -86,6 +92,7 @@ export default function SolicitudesBecasBox({ type }) {
       <SolicitudBecasSection
         programa={data?.programa}
         plantel={data?.plantel}
+        usuario={usuario}
         setReqData={setReqData}
         formData={formData}
         disabled={disabled}

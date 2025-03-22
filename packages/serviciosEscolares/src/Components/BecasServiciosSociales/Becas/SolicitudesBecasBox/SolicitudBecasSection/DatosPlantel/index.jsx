@@ -61,59 +61,6 @@ export default function DatosPlantel({ plantel }) {
         </Grid>
       </Grid>
       <Typography variant="h6" sx={{ mt: 5 }}>
-        Datos Generales del Plantel
-      </Typography>
-      <Grid
-        container
-        rowSpacing={1}
-        sx={{ my: 3 }}
-        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-      >
-        <Grid item xs>
-          <List>
-            <ListTitle text="Correo institucional" />
-            <ListTitle text="Correo de contacto" />
-            <ListTitle text="Correo secundario" />
-          </List>
-        </Grid>
-        <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-        <Grid item xs>
-          <List>
-            <ListSubtitle margin={3.5} text={plantel.correo1} />
-            <ListSubtitle margin={3.5} text={plantel.correo2} />
-            <ListSubtitle margin={3.5} text={plantel.correo3} />
-          </List>
-        </Grid>
-        <Grid item xs>
-          <List>
-            <ListTitle text="Teléfono 1" />
-            <ListTitle text="Teléfono 2" />
-            <ListTitle text="Teléfono 3" />
-          </List>
-        </Grid>
-        <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-        <Grid item xs>
-          <List>
-            <ListSubtitle text={plantel.telefono1} />
-            <ListSubtitle text={plantel.telefono2} />
-            <ListSubtitle text={plantel.telefono3} />
-          </List>
-        </Grid>
-        <Grid item xs>
-          <List>
-            <ListTitle text="Página web" />
-            <ListTitle text="Redes sociales" />
-          </List>
-        </Grid>
-        <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-        <Grid item xs>
-          <List>
-            <ListSubtitle text={plantel.paginaWeb} />
-            <ListSubtitle text={plantel.redesSociales} />
-          </List>
-        </Grid>
-      </Grid>
-      <Typography variant="h6" sx={{ mt: 5 }}>
         Datos del Director
       </Typography>
       <Grid
