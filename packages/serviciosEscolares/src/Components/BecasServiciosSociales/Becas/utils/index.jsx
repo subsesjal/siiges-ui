@@ -83,10 +83,27 @@ const fetchCiclosData = async (setNoti, setLoading, setCiclos, programaId) => {
   }
 };
 
-const fetchSolicitudData = async (setNoti, setLoading, setFormData, solicitudId) => {
+const fetchUsuarioData = async (setNoti, setLoading, setUsuario, usuarioId) => {
+  try {
+    const { data } = await getData({ endpoint: `/usuarios/${usuarioId}` });
+
+    setUsuario(data);
+  } catch (error) {
+    setNoti({
+      open: true,
+      message: `¡Error al cargar el usuario!: ${error.message}`,
+      type: 'error',
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
+const fetchSolicitudData = async (setNoti, setLoading, setFormData, setUsuario, solicitudId) => {
   try {
     const { data } = await getData({ endpoint: `/solicitudesBecas/${solicitudId}` });
 
+    setUsuario(data.usuario);
     setFormData(data);
   } catch (error) {
     setNoti({
@@ -250,4 +267,5 @@ export {
   fetchPlantelData,
   fetchCiclosData,
   fetchSolicitudData,
+  fetchUsuarioData,
 };
