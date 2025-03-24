@@ -251,7 +251,7 @@ const optionsMenuFilter = {
   ],
   serv_soc_ies: [
     {
-      text: 'Becas académicas',
+      text: 'Servicio Social',
       icon: <DescriptionIcon />,
       route: '/serviciosEscolares/servicioSocial',
       key: 'servicioSocial',
@@ -259,7 +259,7 @@ const optionsMenuFilter = {
   ],
   serv_soc_sicyt: [
     {
-      text: 'Becas académicas',
+      text: 'Servicio Social',
       icon: <DescriptionIcon />,
       route: '/serviciosEscolares/servicioSocial',
       key: 'servicioSocial',

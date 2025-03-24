@@ -98,18 +98,23 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
     gradoId: '',
     modalidadId: '',
     sectorId: '',
-    dimencionId: '',
+    dimensionId: '',
     ejeId: '',
     lugarReceptor: '',
+    fechaInicio: '',
+    fechaTermino: '',
   });
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     const data = await getData({
-      endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos`,
+      endpoint: `/solicitudesServicioSocial/${solicitudId}/solicitudesServicioSocialAlumno`,
     });
     const gradosList = await getData({
       endpoint: '/grados',
+    });
+    const dimensionesList = await getData({
+      endpoint: '/solicitudesServicioSocial/dimensionesServicioSocial',
     });
 
     const mappedRows = data.data.map((row) => ({
@@ -124,17 +129,33 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
     setRows(mappedRows);
     setGrados(gradosList.data);
     setLoading(false);
+    setDimensiones(dimensionesList.data);
   }, [solicitudId, setLoading]);
+
+  const fetchEjes = useCallback(async () => {
+    setLoading(true);
+    const ejesList = await getData({
+      endpoint: `/solicitudesServicioSocial/ejesServicioSocial/${form.dimencionId}`,
+    });
+
+    setEjes(ejesList);
+  }, [form.dimencionId]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   useEffect(() => {
+    if (form.dimencionId) {
+      fetchEjes();
+    }
+  }, [form.dimencionId]);
+
+  useEffect(() => {
     if ((type === 'edit' || type === 'consult') && alumnoId) {
       const fetchAlumnoData = async () => {
         const data = await getData({
-          endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos/${alumnoId}`,
+          endpoint: `/solicitudesServicioSocial/${solicitudId}/solicitudesServicioSocialAlumno/${alumnoId}`,
         });
 
         setForm({
@@ -166,10 +187,12 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
       ...prevForm,
       [name]: value,
     }));
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: '',
-    }));
+    if (errors[name]) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: '',
+      }));
+    }
   };
 
   const handleSearch = () => {
@@ -212,10 +235,13 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
     const newErrors = {
       matricula: !form.matricula ? 'La matrícula es requerida' : '',
       gradoId: !form.gradoId ? 'El grado es requerido' : '',
-      porcentajeBeca: !form.porcentajeBeca ? 'El porcentaje es requerido' : '',
-      estatusAlumnoBecaId: !form.estatusAlumnoBecaId ? 'El estatus es requerido' : '',
-      tipoAlumnoBecaId: !form.tipoAlumnoBecaId ? 'El tipo de beca es requerido' : '',
-      promedio: !form.promedio ? 'El promedio es requerido' : '',
+      modalidadId: !form.modalidadId ? 'La modalidad es requerida' : '',
+      sectorId: !form.sectorId ? 'El sector es requerido' : '',
+      dimensionId: !form.dimensionId ? 'La dimension es requerida' : '',
+      ejeId: !form.ejeId ? 'El eje es requerido' : '',
+      lugarReceptor: !form.lugarReceptor ? 'El Lugar receptor es requerido' : '',
+      fechaInicio: !form.fechaInicio ? 'La Fecha de inicio es requerida' : '',
+      fechaTermino: !form.fechaTermino ? 'La Fecha de termino es requerida' : '',
     };
 
     setErrors(newErrors);
@@ -327,7 +353,7 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <DataTable
-          title="Lista de Alumnos asignados a Becas"
+          title="Lista de Alumnos asignados a Servicio Social"
           buttonAdd={!disabled}
           buttonText="Agregar Alumno"
           buttonClick={() => {
@@ -339,7 +365,7 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
           columns={columns(setType, setOpen, setAlumnoId, disabled, setOpenDelete)}
         />
       </Grid>
-      <DefaultModal title="Asignación de beca" open={open} setOpen={setOpen}>
+      <DefaultModal title="Asignación de Servicio Social" open={open} setOpen={setOpen}>
         <Grid container spacing={2}>
           {type === 'create' && (
             <Grid item xs={12}>
