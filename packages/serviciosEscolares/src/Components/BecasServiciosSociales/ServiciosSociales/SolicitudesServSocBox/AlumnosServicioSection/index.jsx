@@ -96,10 +96,10 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
   const [errors, setErrors] = useState({
     matricula: '',
     gradoId: '',
-    modalidadId: '',
-    sectorId: '',
+    modalidadServicioSocialId: '',
+    sectorServicioSocialId: '',
     dimensionId: '',
-    ejeId: '',
+    ejeServicioSocialId: '',
     lugarReceptor: '',
     fechaInicio: '',
     fechaTermino: '',
@@ -135,21 +135,22 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
   const fetchEjes = useCallback(async () => {
     setLoading(true);
     const ejesList = await getData({
-      endpoint: `/solicitudesServicioSocial/ejesServicioSocial/${form.dimencionId}`,
+      endpoint: `/solicitudesServicioSocial/ejesServicioSocial?dimensionServicioSocialId=${form.dimensionId}`,
     });
 
-    setEjes(ejesList);
-  }, [form.dimencionId]);
+    setLoading(false);
+    setEjes(ejesList.data);
+  }, [form.dimensionId]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   useEffect(() => {
-    if (form.dimencionId) {
+    if (form.dimensionId) {
       fetchEjes();
     }
-  }, [form.dimencionId]);
+  }, [form.dimensionId]);
 
   useEffect(() => {
     if ((type === 'edit' || type === 'consult') && alumnoId) {
@@ -159,11 +160,16 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
         });
 
         setForm({
+          matricula: data.data.alumno?.matricula || '',
+          alumnoId: data.data.alumnoId || '',
           gradoId: data.data.gradoId || '',
-          porcentajeBeca: data.data.porcentajeBeca || '',
-          estatusAlumnoBecaId: data.data.estatusAlumnoBecaId || '',
-          tipoAlumnoBecaId: data.data.tipoAlumnoBecaId || '',
-          promedio: data.data.promedio || '',
+          modalidadServicioSocialId: data.data.modalidadServicioSocialId || '',
+          sectorServicioSocialId: data.data.sectorServicioSocialId || '',
+          dimensionId: data.data.ejeServicioSocial?.dimensionServicioSocialId || '',
+          ejeServicioSocialId: data.data.ejeServicioSocialId || '',
+          lugarReceptor: data.data.lugarReceptor || '',
+          fechaInicio: data.data.fechaInicio || '',
+          fechaTermino: data.data.fechaTermino || '',
         });
 
         setAlumno({
@@ -235,10 +241,10 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
     const newErrors = {
       matricula: !form.matricula ? 'La matrícula es requerida' : '',
       gradoId: !form.gradoId ? 'El grado es requerido' : '',
-      modalidadId: !form.modalidadId ? 'La modalidad es requerida' : '',
-      sectorId: !form.sectorId ? 'El sector es requerido' : '',
+      modalidadServicioSocialId: !form.modalidadServicioSocialId ? 'La modalidad es requerida' : '',
+      sectorServicioSocialId: !form.sectorServicioSocialId ? 'El sector es requerido' : '',
       dimensionId: !form.dimensionId ? 'La dimension es requerida' : '',
-      ejeId: !form.ejeId ? 'El eje es requerido' : '',
+      ejeServicioSocialId: !form.ejeServicioSocialId ? 'El eje es requerido' : '',
       lugarReceptor: !form.lugarReceptor ? 'El Lugar receptor es requerido' : '',
       fechaInicio: !form.fechaInicio ? 'La Fecha de inicio es requerida' : '',
       fechaTermino: !form.fechaTermino ? 'La Fecha de termino es requerida' : '',
@@ -249,16 +255,23 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
     return Object.values(newErrors).every((error) => !error);
   };
 
+  console.log(form);
+
   const handleSubmit = async () => {
     if (!validateForm() && type !== 'edit') {
       return;
     }
 
+    setForm((prevForm) => ({
+      ...prevForm,
+      programaId: programa.id,
+    }));
+
     try {
       let response;
       if (type === 'create') {
         response = await createRecord({
-          endpoint: `/solicitudesBecas/${solicitudId}/solicitudesBecasAlumnos`,
+          endpoint: `/solicitudesServicioSocial/${solicitudId}/solicitudesServicioSocialAlumno`,
           data: form,
         });
       } else if (type === 'edit') {
@@ -414,48 +427,48 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
               <Grid item xs={4}>
                 <Select
                   title="Modalidad"
-                  name="modalidadId"
+                  name="modalidadServicioSocialId"
                   options={modalidades}
                   onChange={handleChange}
-                  value={form.modalidadId || ''}
+                  value={form.modalidadServicioSocialId || ''}
                   required
-                  errorMessage={errors.modalidadId}
+                  errorMessage={errors.modalidadServicioSocialId}
                   disabled={disabled}
                 />
               </Grid>
               <Grid item xs={4}>
                 <Select
                   title="Sector"
-                  name="sectorId"
+                  name="sectorServicioSocialId"
                   options={sectores}
                   onChange={handleChange}
-                  value={form.sectorId || ''}
+                  value={form.sectorServicioSocialId || ''}
                   required
-                  errorMessage={errors.sectorId}
+                  errorMessage={errors.sectorServicioSocialId}
                   disabled={disabled}
                 />
               </Grid>
               <Grid item xs={4}>
                 <Select
                   title="Dimensión"
-                  name="dimencionId"
+                  name="dimensionId"
                   options={dimensiones}
                   onChange={handleChange}
-                  value={form.dimencionId || ''}
+                  value={form.dimensionId || ''}
                   required
-                  errorMessage={errors.dimencionId}
+                  errorMessage={errors.dimensionId}
                   disabled={disabled}
                 />
               </Grid>
               <Grid item xs={4}>
                 <Select
                   title="Eje"
-                  name="ejeId"
+                  name="ejeServicioSocialId"
                   options={ejes}
                   onChange={handleChange}
-                  value={form.ejeId || ''}
+                  value={form.ejeServicioSocialId || ''}
                   required
-                  errorMessage={errors.ejeId}
+                  errorMessage={errors.ejeServicioSocialId}
                   disabled={disabled}
                 />
               </Grid>
