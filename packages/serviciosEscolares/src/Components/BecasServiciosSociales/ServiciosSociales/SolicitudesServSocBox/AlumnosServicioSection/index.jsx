@@ -121,9 +121,11 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
       id: row.id,
       name: `${row.alumno?.persona?.nombre} ${row.alumno?.persona?.apellidoPaterno} ${row.alumno?.persona?.apellidoMaterno}` || '',
       grade: row.grado?.nombre || '',
-      tipoSolicitud: row.tipoAlumnoBeca?.descripcion || '',
-      porcentajeBeca: `${row.porcentajeBeca || 0} %`,
-      promedio: row.promedio || 0,
+      modalidad: row.modalidadServicioSocial?.nombre || '',
+      sector: row.sectorServicioSocial?.nombre || '',
+      eje: row.ejeServicioSocial?.descripcion || '',
+      dimension: `${row.ejeServicioSocial?.dimensionServicioSocial?.nombre || 0} %`,
+      lugar: row.lugarReceptor || 0,
     }));
 
     setRows(mappedRows);
@@ -255,8 +257,6 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
     return Object.values(newErrors).every((error) => !error);
   };
 
-  console.log(form);
-
   const handleSubmit = async () => {
     if (!validateForm() && type !== 'edit') {
       return;
@@ -284,10 +284,13 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
       if (response.statusCode === 200 || response.statusCode === 201) {
         const newRow = {
           id: response.data.id,
-          name: alumno.nombre,
-          grade: grados.find((grado) => grado.id === form.gradoId)?.nombre || '',
-          porcentajeBeca: response.data.porcentajeBeca,
-          promedio: response.data.promedio,
+          name: `${response.data.alumno?.persona?.nombre} ${response.data.alumno?.persona?.apellidoPaterno} ${response.data.alumno?.persona?.apellidoMaterno}` || '',
+          grade: response.data.grado?.nombre || '',
+          modalidad: response.data.modalidadServicioSocial?.nombre || '',
+          sector: response.data.sectorServicioSocial?.nombre || '',
+          eje: response.data.ejeServicioSocial?.descripcion || '',
+          dimension: `${response.data.ejeServicioSocial?.dimensionServicioSocial?.nombre || 0} %`,
+          lugar: response.data.lugarReceptor || 0,
         };
 
         if (type === 'create') {
@@ -528,7 +531,10 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
 }
 
 AlumnosServicioSection.propTypes = {
-  solicitudId: PropTypes.number.isRequired,
+  solicitudId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
   disabled: PropTypes.bool.isRequired,
   programa: PropTypes.shape({ id: PropTypes.number }).isRequired,
 };
