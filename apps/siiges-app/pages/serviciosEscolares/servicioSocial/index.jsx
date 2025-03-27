@@ -20,6 +20,7 @@ export default function ServicioSocial() {
       <Divider sx={{ marginTop: 2 }} />
       {tableEnabled && (
         <ServicioSocialComponents.SolicitudServSocTable
+          setSolicitudes={setSolicitudes}
           solicitudes={solicitudes}
           programa={programa}
           institucion={institucion}

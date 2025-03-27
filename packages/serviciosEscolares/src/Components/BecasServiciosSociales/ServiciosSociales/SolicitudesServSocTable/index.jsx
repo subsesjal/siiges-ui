@@ -5,11 +5,17 @@ import PropTypes from 'prop-types';
 import SolicitudesServSocTableButtons from '../utils/SolicitudesServSocTableButtons';
 import { handleCreateClick } from '../utils';
 
-export default function SolicitudServSocTable({ solicitudes, programa, institucion }) {
+export default function SolicitudServSocTable({
+  solicitudes, programa, institucion, setSolicitudes,
+}) {
   const { loading, session } = useContext(Context);
   const router = useRouter();
   const isIes = session.rol === 'serv_soc_ies';
   const isAdmin = session.rol === 'admin';
+
+  const onDeleteSuccess = (id) => {
+    setSolicitudes((prevSolicitudes) => prevSolicitudes.filter((solicitud) => solicitud.id !== id));
+  };
 
   const columns = [
     { field: 'folioSolicitud', headerName: 'Folio de solicitud', width: 200 },
@@ -28,6 +34,7 @@ export default function SolicitudServSocTable({ solicitudes, programa, instituci
           estatusSolicitudId={params.row.estatusSolicitudServicioSocial.nombre}
           router={router}
           isAdmin={isAdmin}
+          onDeleteSuccess={onDeleteSuccess}
         />
       ),
     },
@@ -47,6 +54,7 @@ export default function SolicitudServSocTable({ solicitudes, programa, instituci
 }
 
 SolicitudServSocTable.propTypes = {
+  setSolicitudes: PropTypes.func.isRequired,
   solicitudes: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
