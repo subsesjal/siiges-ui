@@ -44,11 +44,12 @@ export default function SolicitudesServSocBox({ type }) {
       fetchSolicitudData(setNoti, setLoading, setFormData, id);
     } else {
       setReqData({
+        usuarioId: session.id,
         programaId: programa,
         estatusSolicitudServicioSocialId: EN_CAPTURA,
         domicilio: {
           municipioId: null,
-          estadoId: null,
+          estadoId: 14,
           calle: '',
           numeroExterior: '',
           numeroInterior: '',

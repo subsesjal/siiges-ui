@@ -337,7 +337,7 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
 
     try {
       const response = await deleteRecord({
-        endpoint: `/solicitudesBecas/solicitudesBecasAlumnos/${alumnoId}`,
+        endpoint: `/solicitudesServicioSocial/solicitudesServicioSocialAlumno/${alumnoId}`,
       });
 
       if (response.statusCode === 200 || response.statusCode === 204) {
