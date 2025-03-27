@@ -31,7 +31,7 @@ export default function SolicitudesServSocTableButtons({
           message: '¡Solicitud eliminada correctamente!',
           type: 'success',
         });
-        onDeleteSuccess();
+        onDeleteSuccess(id);
       } else {
         setNoti({
           open: true,
@@ -40,6 +40,7 @@ export default function SolicitudesServSocTableButtons({
         });
       }
     } catch (error) {
+      console.error(error);
       setNoti({
         open: true,
         message: '¡Error al eliminar la solicitud!',
