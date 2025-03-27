@@ -40,7 +40,6 @@ export default function SolicitudesServSocTableButtons({
         });
       }
     } catch (error) {
-      console.error(error);
       setNoti({
         open: true,
         message: '¡Error al eliminar la solicitud!',
