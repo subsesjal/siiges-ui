@@ -20,7 +20,7 @@ export default function SolicitudesServSocTableButtons({
 }) {
   const { setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
-  const isEnRevision = estatusSolicitudId === 'EN REVISIÓN' || estatusSolicitudId === 'EN CAPTURA';
+  const isEnRevision = estatusSolicitudId === 'EN REVISIÓN' || estatusSolicitudId === 'LISTA PARA ENTREGA' || estatusSolicitudId === 'CANCELADA';
 
   const handleDeleteClick = useCallback(async () => {
     try {

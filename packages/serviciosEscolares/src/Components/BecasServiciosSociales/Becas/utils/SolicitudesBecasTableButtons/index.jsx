@@ -20,7 +20,7 @@ export default function SolicitudesBecasTableButtons({
 }) {
   const { setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
-  const isEnRevision = estatusSolicitudBecaId === 'EN REVISION' || estatusSolicitudBecaId === 'PROCESADA';
+  const isEnRevision = estatusSolicitudBecaId === 'EN REVISION' || estatusSolicitudBecaId === 'PROCESADA' || estatusSolicitudBecaId === 'CANCELADA';
 
   const handleDeleteClick = useCallback(async () => {
     try {

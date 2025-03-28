@@ -35,7 +35,7 @@ export default function ButtonsReviewBox({
 
   const handleCancel = useCallback(() => {
     const payload = {
-      estatusSolicitudServicioSocialId: 5,
+      estatusSolicitudServicioSocialId: 4,
       observaciones: form.observaciones,
     };
     handleUpdateSolicitud(setNoti, setLoading, payload, solicitudId);

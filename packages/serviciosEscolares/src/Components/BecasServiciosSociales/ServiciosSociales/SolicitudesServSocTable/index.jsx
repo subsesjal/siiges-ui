@@ -11,7 +11,7 @@ export default function SolicitudServSocTable({
   const { loading, session } = useContext(Context);
   const router = useRouter();
   const isIes = session.rol === 'serv_soc_ies';
-  const isAdmin = session.rol === 'admin';
+  const isAdmin = session.rol === 'serv_soc_sicyt';
 
   const onDeleteSuccess = (id) => {
     setSolicitudes((prevSolicitudes) => prevSolicitudes.filter((solicitud) => solicitud.id !== id));
@@ -31,7 +31,7 @@ export default function SolicitudServSocTable({
           id={params.row.id}
           programa={programa}
           institucion={institucion}
-          estatusSolicitudId={params.row.estatusSolicitudServicioSocial.nombre}
+          estatusSolicitudId={params.row.estatusSolicitudServicioSocial}
           router={router}
           isAdmin={isAdmin}
           onDeleteSuccess={onDeleteSuccess}
