@@ -1,5 +1,5 @@
 import React, {
-  useContext, useState, useEffect, useRef,
+  useContext, useState, useRef,
 } from 'react';
 import {
   Context,
@@ -13,51 +13,14 @@ import Image from 'next/image';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import { useRouter } from 'next/router';
-import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function UsuarioAvatar({ usuario }) {
-  const router = useRouter();
-  const { session } = useContext(Context);
+  const { session, avatarUrl, refreshAvatar } = useContext(Context);
   const { persona = undefined, rol = undefined } = usuario || {};
   const fullName = `${persona?.nombre} ${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`;
-  const [imageUrl, setImageUrl] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const fileInputRef = useRef(null);
-
-  const getProfilePhoto = async () => {
-    try {
-      const endpoint = '/files/';
-      const query = `?tipoEntidad=PERSONA&entidadId=${session.id}&tipoDocumento=FOTOGRAFIA_PERSONA`;
-      const response = await getData({ endpoint, query });
-      if (response.statusCode === 200 && response.data) {
-        let { url } = response.data;
-        if (url) {
-          if (!url.startsWith('http')) {
-            url = `http://${url}`;
-          }
-          const response2 = await fetch(url);
-          if (!response2.ok) {
-            throw new Error('¡La respuesta de la red no fue correcta!');
-          }
-          const blob = await response2.blob();
-          const imageObjectUrl = URL.createObjectURL(blob);
-          setImageUrl(imageObjectUrl);
-        } else {
-          setImageUrl(undefined);
-        }
-      } else {
-        setImageUrl(undefined);
-      }
-    } catch (error) {
-      setImageUrl(undefined);
-    }
-  };
-
-  useEffect(() => {
-    getProfilePhoto();
-  }, [session]);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -77,7 +40,7 @@ export default function UsuarioAvatar({ usuario }) {
     try {
       await SubmitDocument(formData);
     } catch (error) {
-      router.reload();
+      refreshAvatar();
     } finally {
       setOpenModal(false);
       setSelectedFile(null);
@@ -91,10 +54,10 @@ export default function UsuarioAvatar({ usuario }) {
   return (
     <>
       <div style={{ position: 'relative', width: '300px', height: '300px' }}>
-        {imageUrl ? (
+        {avatarUrl ? (
           <Image
             alt="avatar"
-            src={imageUrl}
+            src={avatarUrl}
             quality={100}
             width="300px"
             height="300px"

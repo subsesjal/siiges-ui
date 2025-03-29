@@ -31,8 +31,12 @@ export default function ActionButtons({ consultar, editar, eliminar }) {
   );
 }
 
+ActionButtons.defaultProps = {
+  eliminar: () => {},
+};
+
 ActionButtons.propTypes = {
   editar: PropTypes.string.isRequired,
   consultar: PropTypes.string.isRequired,
-  eliminar: PropTypes.func.isRequired,
+  eliminar: PropTypes.func,
 };
