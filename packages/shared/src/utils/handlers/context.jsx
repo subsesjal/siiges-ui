@@ -52,14 +52,11 @@ function Provider({ children }) {
 
       const data = await response.json();
 
-      console.log('Image fetched');
-
       if (data.data?.ubicacion) {
         const url = `${domain}${data.data.ubicacion}`;
         const imageResponse = await fetch(url);
         const blob = await imageResponse.blob();
 
-        // Convert blob to base64
         const base64Data = await new Promise((resolve) => {
           const reader = new FileReader();
           reader.onloadend = () => resolve(reader.result);
