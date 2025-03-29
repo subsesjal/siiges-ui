@@ -41,6 +41,7 @@ export default function Solicitudes() {
         folio: solicitud.folio,
         studyPlan: solicitud.programa?.nombre,
         estatusSolicitudId: solicitud.estatusSolicitud?.nombre,
+        institucion: solicitud?.programa?.plantel?.institucion?.nombre,
         plantel: `${solicitud.programa?.plantel?.domicilio?.calle} #${solicitud.programa?.plantel?.domicilio?.numeroExterior}`,
         actions: 'Actions Placeholder',
       }));
