@@ -8,8 +8,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
     '&::after': {
       position: 'absolute',
-      top: -1,
-      left: -1,
+      top: 0,
+      left: 0,
       width: '100%',
       height: '100%',
       borderRadius: '50%',
@@ -20,7 +20,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
   '@keyframes ripple': {
     '0%': {
-      transform: 'scale(.8)',
+      transform: 'scale(.1)',
       opacity: 1,
     },
     '100%': {
