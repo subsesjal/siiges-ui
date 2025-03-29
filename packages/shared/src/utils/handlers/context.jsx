@@ -31,6 +31,8 @@ function Provider({ children }) {
       return null;
     }
 
+    const storageKey = getAvatarStorageKey(userId);
+
     try {
       const endpoint = `${domain}/api/v1/files/`;
       const query = `?tipoEntidad=PERSONA&entidadId=${userId}&tipoDocumento=FOTOGRAFIA_PERSONA`;
@@ -50,15 +52,28 @@ function Provider({ children }) {
 
       const data = await response.json();
 
-      if (data.data?.url) {
-        localStorage.setItem(getAvatarStorageKey(userId), data.data?.url);
-        return data.data?.url;
+      console.log('Image fetched');
+
+      if (data.data?.ubicacion) {
+        const url = `${domain}${data.data.ubicacion}`;
+        const imageResponse = await fetch(url);
+        const blob = await imageResponse.blob();
+
+        // Convert blob to base64
+        const base64Data = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        });
+
+        localStorage.setItem(storageKey, base64Data);
+        return base64Data;
       }
 
-      localStorage.setItem(getAvatarStorageKey(userId), 'no-image');
+      localStorage.setItem(storageKey, 'no-image');
       return null;
     } catch (error) {
-      localStorage.setItem(getAvatarStorageKey(userId), 'no-image');
+      localStorage.setItem(storageKey, 'no-image');
       return null;
     }
   };
@@ -69,21 +84,8 @@ function Provider({ children }) {
     const storageKey = getAvatarStorageKey(userId);
     const cachedAvatar = localStorage.getItem(storageKey);
 
-    if (cachedAvatar === 'no-image') return null;
-    if (cachedAvatar) {
-      try {
-        const test = await fetch(cachedAvatar, {
-          method: 'HEAD',
-          headers: {
-            api_key: apiKey,
-            Authorization: `Bearer ${session.token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        if (test.ok) return cachedAvatar;
-      } catch {
-        // jaja, ESTA MAL!!!
-      }
+    if (cachedAvatar && cachedAvatar !== 'no-image') {
+      return cachedAvatar;
     }
 
     return fetchAvatar(userId);
