@@ -39,9 +39,9 @@ export default function Solicitudes() {
         id: solicitud.id,
         estatus: solicitud.estatusSolicitudId,
         folio: solicitud.folio,
-        studyPlan: solicitud.programa.nombre,
-        estatusSolicitudId: solicitud.estatusSolicitud.nombre,
-        plantel: `${solicitud.programa.plantel.domicilio.calle} #${solicitud.programa.plantel.domicilio.numeroExterior}`,
+        studyPlan: solicitud.programa?.nombre,
+        estatusSolicitudId: solicitud.estatusSolicitud?.nombre,
+        plantel: `${solicitud.programa?.plantel?.domicilio?.calle} #${solicitud.programa?.plantel?.domicilio?.numeroExterior}`,
         actions: 'Actions Placeholder',
       }));
 
