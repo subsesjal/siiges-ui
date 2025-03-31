@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useMemo, useState,
 } from 'react';
 import { Grid, Typography, TextField } from '@mui/material';
-import { Input } from '@siiges-ui/shared';
+import { ButtonSimple, DefaultModal, Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import PropTypes from 'prop-types';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
@@ -13,6 +13,7 @@ import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function DatosPlanEstudios({ disabled }) {
   const [initialValues, setInitialValues] = useState({});
+  const [open, setOpen] = useState(true);
 
   const {
     form, setForm, error, setError, setErrors, modalidad,
@@ -252,6 +253,11 @@ export default function DatosPlanEstudios({ disabled }) {
           />
         </Grid>
       </Grid>
+      <DefaultModal title="Recordatorio" open={open} setOpen={setOpen}>
+        Estimada Institución, recuerda que la fecha oficial de recepción de la solicitud será al
+        momento de la entrega de la documentación en físico
+        <ButtonSimple onClick={() => { setOpen(false); }} text="Entendido" align="right" />
+      </DefaultModal>
     </Grid>
   );
 }
