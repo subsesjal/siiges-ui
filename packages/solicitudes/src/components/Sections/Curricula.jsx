@@ -9,7 +9,7 @@ import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function Curricula({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
-  const [fileURLs, setFileURLs] = useState([null, null, null, null]);
+  const [fileURLs, setFileURLs] = useState([null, null, null]);
   const {
     form, setForm, error, setError, id,
   } = useContext(SolicitudContext);
@@ -148,7 +148,7 @@ export default function Curricula({ disabled, type }) {
             tipoDocumento="ASIGNATURAS_DETALLE"
             id={id}
             label="Asignaturas a detalle"
-            url={fileURLs[2]}
+            url={fileURLs[1]}
             setUrl={(url) => handleFileLoaded(1, url)}
             disabled={isDisabled}
           />
@@ -159,7 +159,7 @@ export default function Curricula({ disabled, type }) {
             tipoDocumento="PROPUESTA_HEMEROGRAFICA"
             id={id}
             label="Propuesta hemerobibliográfica"
-            url={fileURLs[3]}
+            url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
             disabled={isDisabled}
           />
