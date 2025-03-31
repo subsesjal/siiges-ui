@@ -126,7 +126,7 @@ export default function ButtonSection({
   const validateNewSolicitud = () => {
     if (newSubmit) {
       if (type !== 'editar') {
-        submitNewSolicitud(validations, setNewSubmit, setLoading, setSections);
+        submitNewSolicitud(validations, setNewSubmit, setLoading, setSections, router);
       } else {
         submitEditSolicitud(validations, currentSection, id, setLoading, setSections);
       }

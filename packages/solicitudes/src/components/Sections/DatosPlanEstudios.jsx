@@ -11,9 +11,15 @@ import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
-export default function DatosPlanEstudios({ disabled }) {
+export default function DatosPlanEstudios({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (type !== 'editar' && type !== 'consultar') {
+      setOpen(true);
+    }
+  }, []);
 
   const {
     form, setForm, error, setError, setErrors, modalidad,
@@ -262,6 +268,11 @@ export default function DatosPlanEstudios({ disabled }) {
   );
 }
 
+DatosPlanEstudios.defaultProps = {
+  type: null,
+};
+
 DatosPlanEstudios.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  type: PropTypes.string,
 };
