@@ -1,6 +1,6 @@
 import { getToken } from '@siiges-ui/shared';
 
-function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) {
+function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections, router) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
@@ -48,6 +48,7 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections) 
             return section;
           }));
           setNewSubmit(false);
+          router.push(`/solicitudes/detallesSolicitudes/${data.data.id}/editarSolicitud`);
           setTimeout(() => {
             setLoading(false);
             setNoti({
