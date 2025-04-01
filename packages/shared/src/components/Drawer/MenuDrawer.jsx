@@ -13,10 +13,10 @@ import Link from 'next/link';
 import userRol from './utils/userRol';
 import DropdownButton from '../Select/DropdownButton';
 
-const drawerWidth = 240;
+const drawerWidth = 320;
 
 const openedMixin = (theme) => ({
-  marginTop: '67px',
+  marginTop: '69px',
   width: drawerWidth,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -26,7 +26,7 @@ const openedMixin = (theme) => ({
 });
 
 const closedMixin = (theme) => ({
-  marginTop: '67px',
+  marginTop: '69px',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,

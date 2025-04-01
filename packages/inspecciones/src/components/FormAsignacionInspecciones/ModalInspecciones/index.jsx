@@ -53,7 +53,7 @@ const fetchData = async ({
   }
 };
 
-function ModalInspecciones({ params: { row } }) {
+function ModalInspecciones({ params: { row }, solicitud }) {
   const { setNoti, setLoading } = useContext(Context);
   const [open, setOpen] = useState(false);
   const [inspector, setInspector] = useState({});
@@ -144,8 +144,11 @@ function ModalInspecciones({ params: { row } }) {
                   padding: 3,
                 }}
               >
-                Está por asignar Maestría Psicología Jurídica Criminología y
-                Ciencias Forenses a Inspector
+                Está por asignar
+                {' '}
+                {solicitud.nombre}
+                {' '}
+                a Inspector
                 {' '}
                 {inspector.nombre}
                 {' '}
@@ -196,6 +199,9 @@ ModalInspecciones.propTypes = {
       realizadas: PropTypes.string.isRequired,
       programaId: PropTypes.number.isRequired,
     }).isRequired,
+  }).isRequired,
+  solicitud: PropTypes.shape({
+    nombre: PropTypes.string,
   }).isRequired,
 };
 

@@ -11,13 +11,11 @@ export default function InspeccionesTable() {
   const [inspeccionesdata, setInspeccionesData] = useState([]);
 
   const columns = getColumns();
-  const mapSolicitudesToRows = (solicitudes, inspeccionesdata) => solicitudes.map((solicitud) => {
-    // Busca la inspección correspondiente en inspeccionesdata basada en programaId
+  const mapSolicitudesToRows = (solicitudes) => solicitudes.map((solicitud) => {
     const inspeccionEncontrada = inspeccionesdata.find(
       (inspeccion) => inspeccion.programaId === solicitud.id,
     );
 
-    // Verifica si la fechaAsignada no es vacía o null para definir isAssigned
     const isAssigned = inspeccionEncontrada && inspeccionEncontrada.fechaAsignada !== '';
 
     return {
@@ -37,7 +35,6 @@ export default function InspeccionesTable() {
       const response = await getData({ endpoint });
 
       if (response.statusCode === 200 && response.data) {
-        // const formattedRows = mapSolicitudesToRows(response.data);
         setInspeccionesData(response.data);
       } else {
         setInspeccionesData([]);
@@ -53,7 +50,7 @@ export default function InspeccionesTable() {
       setInspecciones(formattedRows);
     }
     fetchInspecciones();
-  }, [loading, solicitudesInspecciones, inspeccionesdata]);
+  }, [solicitudesInspecciones]);
 
   return (
     <Grid container spacing={2}>

@@ -94,7 +94,7 @@ export default function FormAsignacionInspecciones({ solicitud }) {
         <DataTable
           title="Inspectores"
           rows={inspecciones}
-          columns={columns}
+          columns={columns(solicitud)}
           pageSize={5}
           rowsPerPageOptions={[5]}
         />
