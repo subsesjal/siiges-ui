@@ -148,7 +148,6 @@ InputFile.defaultProps = {
   onChange: null,
   isUploaded: false,
   openDropzone: false,
-  id: null,
   title: 'Subir archivo',
 };
 
