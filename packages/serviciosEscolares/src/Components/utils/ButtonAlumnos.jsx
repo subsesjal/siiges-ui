@@ -10,13 +10,13 @@ export default function ButtonsAlumnos({ id, url }) {
     <Stack direction="row" spacing={1}>
       {id && (
         <>
-          <Link href={`/serviciosEscolares/alumnos/${id}/HistorialAlumno`}>
-            <IconButton aria-label="Historial Académico del Alumno">
+          <Link href={`/serviciosEscolares/alumnos/${id}/HistorialAlumno`} passHref>
+            <IconButton aria-label="Historial Académico del Alumno" component="a">
               <SearchIcon />
             </IconButton>
           </Link>
-          <Link href={url}>
-            <IconButton aria-label="Editar Alumno">
+          <Link href={url} passHref>
+            <IconButton aria-label="Editar Alumno" component="a">
               <EditIcon />
             </IconButton>
           </Link>
