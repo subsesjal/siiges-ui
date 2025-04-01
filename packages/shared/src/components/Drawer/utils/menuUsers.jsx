@@ -175,7 +175,7 @@ const panelMenuOptions = (rol) => [
 const optionsMenuFilter = {
   jefe_inspector: [
     {
-      text: 'Inspección',
+      text: 'Asignación de Inspecciones',
       icon: <SearchIcon />,
       route: '/inspecciones',
       key: 'inspecciones',
