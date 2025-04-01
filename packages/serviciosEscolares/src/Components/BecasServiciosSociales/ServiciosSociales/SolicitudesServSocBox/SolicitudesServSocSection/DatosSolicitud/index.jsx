@@ -1,17 +1,45 @@
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  Select, Context, Input,
+  Select, Context, Input, GetFile, InputFile,
 } from '@siiges-ui/shared';
 import React, { useContext, useState, useEffect } from 'react';
 import getMunicipios from '@siiges-ui/instituciones/src/components/utils/getMunicipios';
 import { fetchCiclosData } from '../../../utils';
 
+const baseUrl = process.env.NEXT_PUBLIC_URL;
+
 export default function DatosSolicitud({
-  programa, setReqData, formData, disabled,
+  programa,
+  setReqData,
+  formData,
+  disabled,
 }) {
   const { setNoti, setLoading } = useContext(Context);
   const [ciclos, setCiclos] = useState([]);
+  const [fileUrl, setFileUrl] = useState(null);
+  const fileData = {
+    entidadId: formData.id,
+    tipoEntidad: 'SOLICITUD_SERV_SOC',
+    tipoDocumento: 'ACTA_COMITE_SERV_SOC',
+  };
+
+  useEffect(() => {
+    if (formData.estatusSolicitudServicioSocialId === 3) {
+      GetFile(fileData, (url, error) => {
+        if (error) {
+          setNoti({
+            open: true,
+            message: '¡Error al obtener el archivo!',
+            type: 'error',
+          });
+          console.error(error);
+        } else {
+          setFileUrl(`${baseUrl}${url}`);
+        }
+      });
+    }
+  }, [formData.estatusSolicitudServicioSocialId]);
 
   const { municipios } = getMunicipios();
   const municipiosOrdenados = municipios
@@ -69,6 +97,19 @@ export default function DatosSolicitud({
           fullWidth
         />
       </Grid>
+      <Grid item xs={3.7} />
+      {formData.id && (
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <InputFile
+            url={fileUrl}
+            setUrl={setFileUrl}
+            id={formData?.id}
+            tipoDocumento={fileData.tipoDocumento}
+            tipoEntidad={fileData.tipoEntidad}
+            label="Acta de comite"
+          />
+        </Grid>
+      )}
       <Grid item xs={12}>
         <Typography variant="h6" sx={{ mt: 3 }}>
           Datos del Domicilio de la Asamblea
@@ -140,6 +181,19 @@ export default function DatosSolicitud({
           fullWidth
         />
       </Grid>
+      {formData.observaciones && (
+        <Grid item xs={12} sx={{ mr: 3 }}>
+          <Input
+            id="observaciones"
+            label="Observaciones"
+            name="observaciones"
+            value={formData.observaciones}
+            multiline
+            rows={4}
+            disabled
+          />
+        </Grid>
+      )}
     </Grid>
   );
 }
@@ -155,7 +209,10 @@ DatosSolicitud.propTypes = {
     id: PropTypes.number,
   }).isRequired,
   formData: PropTypes.shape({
+    id: PropTypes.number,
     cicloEscolarId: PropTypes.number,
+    estatusSolicitudServicioSocialId: PropTypes.number,
+    observaciones: PropTypes.string,
     domicilio: PropTypes.shape({
       municipioId: PropTypes.number,
       calle: PropTypes.string,
