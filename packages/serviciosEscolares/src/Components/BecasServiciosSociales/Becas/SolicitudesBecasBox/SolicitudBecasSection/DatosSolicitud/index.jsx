@@ -1,10 +1,11 @@
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  Select, Context, Input, ButtonFile,
-  GetFile,
+  Select, Context, Input, ButtonFile, GetFile, InputFile,
 } from '@siiges-ui/shared';
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext, useState, useEffect, useCallback,
+} from 'react';
 import { fetchCiclosData } from '../../../utils';
 
 const baseUrl = process.env.NEXT_PUBLIC_URL;
@@ -14,33 +15,68 @@ export default function DatosSolicitud({
 }) {
   const { setNoti, setLoading } = useContext(Context);
   const [ciclos, setCiclos] = useState([]);
-  const [fileUrl, setFileUrl] = useState(null);
-  const fileData = {
-    entidadId: formData.id,
-    tipoEntidad: 'SOLICITUD_BECA',
-    tipoDocumento: 'REPORTE_BECAS',
+  const [fileUrls, setFileUrls] = useState({
+    reporteBecas: null,
+    actaComite: null,
+  });
+
+  const fileConfigs = {
+    reporteBecas: {
+      tipoEntidad: 'SOLICITUD_BECA',
+      tipoDocumento: 'REPORTE_BECAS',
+      showCondition: formData.estatusSolicitudBecaId === 3,
+    },
+    actaComite: {
+      tipoEntidad: 'SOLICITUD_BECA',
+      tipoDocumento: 'ACTA_COMITE_BECAS',
+      showCondition: !!formData.id,
+    },
   };
 
   useEffect(() => {
     fetchCiclosData(setNoti, setLoading, setCiclos, programa.id);
   }, [programa.id, setNoti, setLoading]);
 
-  useEffect(() => {
-    if (formData.estatusSolicitudBecaId === 3) {
-      GetFile(fileData, (url, error) => {
-        if (error) {
-          setNoti({
-            open: true,
-            message: '¡Error al obtener el archivo!',
-            type: 'error',
-          });
-          console.error(error);
-        } else {
-          setFileUrl(`${baseUrl}${url}`);
-        }
+  const fetchFile = useCallback(async (config, fileKey) => {
+    if (!formData.id || !config.showCondition) return;
+
+    try {
+      const fileData = {
+        entidadId: formData.id,
+        tipoEntidad: config.tipoEntidad,
+        tipoDocumento: config.tipoDocumento,
+      };
+
+      const result = await new Promise((resolve) => {
+        GetFile(fileData, (fileUrl, fileError) => resolve({
+          url: fileUrl,
+          error: fileError,
+        }));
       });
+
+      const { url, error } = result;
+
+      if (error) throw error;
+
+      setFileUrls((prev) => ({
+        ...prev,
+        [fileKey]: url ? `${baseUrl}${url}` : null,
+      }));
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `¡Error al obtener el archivo ${config.tipoDocumento}!`,
+        type: 'error',
+      });
+      console.error(error);
     }
-  }, [formData.estatusSolicitudBecaId]);
+  }, [formData.id, setNoti]);
+
+  useEffect(() => {
+    Object.entries(fileConfigs).forEach(([key, config]) => {
+      fetchFile(config, key);
+    });
+  }, [formData.estatusSolicitudBecaId, formData.id, fetchFile]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -57,6 +93,7 @@ export default function DatosSolicitud({
           Datos de la Solicitud
         </Typography>
       </Grid>
+
       <Grid item xs={4}>
         <Select
           title="Ciclos Escolares"
@@ -65,14 +102,34 @@ export default function DatosSolicitud({
           options={ciclos}
           onChange={handleChange}
           disabled={disabled}
+          fullWidth
         />
       </Grid>
+
       <Grid item xs={3.7} />
-      {formData.estatusSolicitudBecaId === 3 && (
-      <Grid item xs={4} sx={{ mt: 2 }}>
-        <ButtonFile url={fileUrl}>Archivo de resolución de Becas</ButtonFile>
-      </Grid>
+
+      {fileConfigs.reporteBecas.showCondition && (
+        <Grid item xs={4} sx={{ mt: 2 }}>
+          <ButtonFile url={fileUrls.reporteBecas}>
+            Archivo de resolución de Becas
+          </ButtonFile>
+        </Grid>
       )}
+
+      {fileConfigs.actaComite.showCondition && (
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <InputFile
+            url={fileUrls.actaComite}
+            setUrl={(url) => setFileUrls((prev) => ({ ...prev, actaComite: url }))}
+            id={formData.id}
+            tipoDocumento={fileConfigs.actaComite.tipoDocumento}
+            tipoEntidad={fileConfigs.actaComite.tipoEntidad}
+            label="Acta de comité"
+            disabled={disabled}
+          />
+        </Grid>
+      )}
+
       {formData.observaciones && (
         <Grid item xs={12} sx={{ mr: 3 }}>
           <Input
@@ -83,6 +140,7 @@ export default function DatosSolicitud({
             multiline
             rows={4}
             disabled
+            fullWidth
           />
         </Grid>
       )}
@@ -98,11 +156,11 @@ DatosSolicitud.propTypes = {
   setReqData: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   programa: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.number.isRequired,
   }).isRequired,
   formData: PropTypes.shape({
-    estatusSolicitudBecaId: PropTypes.number,
     id: PropTypes.number,
+    estatusSolicitudBecaId: PropTypes.number,
     cicloEscolarId: PropTypes.number,
     observaciones: PropTypes.string,
   }),
