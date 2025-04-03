@@ -4,9 +4,11 @@ import {
   MenuItem,
   Grid,
   Typography,
-  Button,
+  FormHelperText,
 } from '@mui/material';
-import { Context, getData, updateRecord } from '@siiges-ui/shared';
+import {
+  ButtonSimple, Context, getData, updateRecord,
+} from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 
 export default function Reglas() {
@@ -17,6 +19,20 @@ export default function Reglas() {
 
   const [form, setForm] = useState({
     id: query.id || '',
+    calificacionMinima: '',
+    calificacionMaxima: '',
+    calificacionAprobatoria: '',
+    calificacionDecimal: '',
+  });
+
+  const [errors, setErrors] = useState({
+    calificacionMinima: false,
+    calificacionMaxima: false,
+    calificacionAprobatoria: false,
+    calificacionDecimal: false,
+  });
+
+  const [errorMessages, setErrorMessages] = useState({
     calificacionMinima: '',
     calificacionMaxima: '',
     calificacionAprobatoria: '',
@@ -53,14 +69,62 @@ export default function Reglas() {
     }
   }, [query.id, setLoading, setNoti]);
 
+  const validateField = (name, value) => {
+    let isValid = true;
+    let message = '';
+
+    if (!value && value !== 0) {
+      isValid = false;
+      message = 'Este campo es requerido';
+    } else if (name !== 'calificacionDecimal' && Number.isNaN(value)) {
+      isValid = false;
+      message = 'Debe ser un número válido';
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: !isValid }));
+    setErrorMessages((prev) => ({ ...prev, [name]: message }));
+    return isValid;
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setForm({ ...form, [name]: value });
+    validateField(name, value);
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = { ...errors };
+    const newErrorMessages = { ...errorMessages };
+
+    // Validate all fields except the disabled ID field
+    const fieldsToValidate = ['calificacionMinima', 'calificacionMaxima', 'calificacionAprobatoria', 'calificacionDecimal'];
+
+    fieldsToValidate.forEach((field) => {
+      if (!form[field] && form[field] !== 0) {
+        newErrors[field] = true;
+        newErrorMessages[field] = 'Este campo es requerido';
+        isValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    setErrorMessages(newErrorMessages);
+    return isValid;
   };
 
   const formatToDecimal = (value) => parseFloat(value).toFixed(1);
 
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      setNoti({
+        open: true,
+        message: 'Por favor complete todos los campos requeridos',
+        type: 'error',
+      });
+      return;
+    }
+
     setLoading(true);
     const dataBody = {
       programa: {
@@ -72,7 +136,7 @@ export default function Reglas() {
     };
 
     try {
-      const response = await updateRecord({
+      await updateRecord({
         data: dataBody,
         endpoint: `/solicitudes/${idSolicitud}`,
       });
@@ -83,7 +147,6 @@ export default function Reglas() {
         message: '¡Reglas actualizadas con éxito!',
         type: 'success',
       });
-      return response;
     } catch (error) {
       setLoading(false);
       setNoti({
@@ -91,7 +154,6 @@ export default function Reglas() {
         message: `¡Error al actualizar las reglas!: ${error.message}`,
         type: 'error',
       });
-      return null;
     }
   };
 
@@ -116,8 +178,13 @@ export default function Reglas() {
             type="number"
             value={form.calificacionMinima}
             onChange={handleInputChange}
+            error={errors.calificacionMinima}
             fullWidth
+            required
           />
+          {errors.calificacionMinima && (
+            <FormHelperText error>{errorMessages.calificacionMinima}</FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
@@ -126,8 +193,13 @@ export default function Reglas() {
             type="number"
             value={form.calificacionMaxima}
             onChange={handleInputChange}
+            error={errors.calificacionMaxima}
             fullWidth
+            required
           />
+          {errors.calificacionMaxima && (
+            <FormHelperText error>{errorMessages.calificacionMaxima}</FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
@@ -136,8 +208,13 @@ export default function Reglas() {
             type="number"
             value={form.calificacionAprobatoria}
             onChange={handleInputChange}
+            error={errors.calificacionAprobatoria}
             fullWidth
+            required
           />
+          {errors.calificacionAprobatoria && (
+            <FormHelperText error>{errorMessages.calificacionAprobatoria}</FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
@@ -146,16 +223,21 @@ export default function Reglas() {
             name="calificacionDecimal"
             value={form.calificacionDecimal}
             onChange={handleInputChange}
+            error={errors.calificacionDecimal}
             fullWidth
+            required
           >
             <MenuItem value="1">Si</MenuItem>
             <MenuItem value="2">No</MenuItem>
           </TextField>
+          {errors.calificacionDecimal && (
+            <FormHelperText error>{errorMessages.calificacionDecimal}</FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <ButtonSimple onClick={handleSubmit} align="right">
             Guardar
-          </Button>
+          </ButtonSimple>
         </Grid>
       </Grid>
     </div>

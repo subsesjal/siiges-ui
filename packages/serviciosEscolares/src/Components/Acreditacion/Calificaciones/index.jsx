@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
   Button,
+  ButtonSimple,
   Context,
   DataTable,
+  DefaultModal,
   getData,
   InputDate,
 } from '@siiges-ui/shared';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import columnsInscritosOrdinario from '../../../Tables/columnsInscritosOrdinario';
 import columnsInscritosExtra from '../../../Tables/columnsInscritosExtra';
 import submitCalificaciones from '../../utils/submitCalificaciones';
@@ -32,6 +34,9 @@ export default function Calificaciones({
   const [calificacionMinima, setCalificacionMinima] = useState(null);
   const [calificacionMaxima, setCalificacionMaxima] = useState(null);
   const [calificacionDecimal, setCalificacionDecimal] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const url = '/serviciosEscolares/programas';
 
   const { setNoti } = useContext(Context);
   const router = useRouter();
@@ -42,9 +47,12 @@ export default function Calificaciones({
         const result = await getData({ endpoint: `/programas/${programaId}` });
         if (result.statusCode === 200) {
           setCalificacionAprobatoria(result.data.calificacionAprobatoria);
-          setCalificacionMinima(result.data.calificacionMinima);
+          setCalificacionMinima(result.data.calificacionMinima || 0);
           setCalificacionMaxima(result.data.calificacionMaxima);
           setCalificacionDecimal(result.data.calificacionDecimal);
+          if (result.data.calificacionMaxima === '' && result.data.calificacionAprobatoria === '') {
+            setOpen(true);
+          }
         } else {
           setNoti({
             open: true,
@@ -264,6 +272,10 @@ export default function Calificaciones({
           />
         </Grid>
       )}
+      <DefaultModal title="Advertencia" open={open} setOpen={setOpen}>
+        Asegúrese de que todos los campos de las reglas de calificación esten llenos.
+        <ButtonSimple text="Agregar Reglas" onClick={() => { Router.push(url); }} align="right" />
+      </DefaultModal>
     </Grid>
   );
 }
