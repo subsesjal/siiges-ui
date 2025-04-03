@@ -34,7 +34,7 @@ export default function Calificaciones({
   const [calificacionMinima, setCalificacionMinima] = useState(null);
   const [calificacionMaxima, setCalificacionMaxima] = useState(null);
   const [calificacionDecimal, setCalificacionDecimal] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const url = '/serviciosEscolares/programas';
 
@@ -273,7 +273,7 @@ export default function Calificaciones({
         </Grid>
       )}
       <DefaultModal title="Advertencia" open={open} setOpen={setOpen}>
-        Asegureze de que los campos de las reglas esten completos
+        Asegúrese de que todos los campos de las reglas de calificación esten llenos.
         <ButtonSimple text="Redireccionar" onClick={() => { Router.push(url); }} align="right" />
       </DefaultModal>
     </Grid>
