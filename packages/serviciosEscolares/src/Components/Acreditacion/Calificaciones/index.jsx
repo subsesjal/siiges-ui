@@ -34,7 +34,7 @@ export default function Calificaciones({
   const [calificacionMinima, setCalificacionMinima] = useState(null);
   const [calificacionMaxima, setCalificacionMaxima] = useState(null);
   const [calificacionDecimal, setCalificacionDecimal] = useState(false);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const url = '/serviciosEscolares/programas';
 
