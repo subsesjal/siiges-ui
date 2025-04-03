@@ -2,13 +2,17 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import getSolicitudesById from '@siiges-ui/solicitudes/src/components/utils/getSolicitudesById';
+import useProgramaById from '@siiges-ui/solicitudes/src/components/utils/useProgramaById';
 import ProgramasPDF from '../../utils/ProgramasPDF';
 
 export default function ProgramasData() {
   const router = useRouter();
   const { query } = router;
-  const { solicitudesProgramas: programa } = getSolicitudesById(query.id);
+  const programa = useProgramaById(query.id);
+
+  if (!programa) {
+    return <div>Cargando...</div>;
+  }
   const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
   const fecha = new Date(programa.fechaSurteEfecto)
     .toLocaleDateString('es', opciones)
