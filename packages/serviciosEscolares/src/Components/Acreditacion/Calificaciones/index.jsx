@@ -274,7 +274,7 @@ export default function Calificaciones({
       )}
       <DefaultModal title="Advertencia" open={open} setOpen={setOpen}>
         Asegúrese de que todos los campos de las reglas de calificación esten llenos.
-        <ButtonSimple text="Redireccionar" onClick={() => { Router.push(url); }} align="right" />
+        <ButtonSimple text="Agregar Reglas" onClick={() => { Router.push(url); }} align="right" />
       </DefaultModal>
     </Grid>
   );
