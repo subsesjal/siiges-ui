@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { DefaultModal, Input, ButtonSimple } from '@siiges-ui/shared';
-import { updateRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
+import {
+  DefaultModal, Input, Select,
+  ButtonsModal, getData, updateRecord,
+  Context,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 
 export default function oficioModal({
@@ -12,6 +15,8 @@ export default function oficioModal({
 }) {
   const [oficioNumber, setOficioNumber] = useState('');
   const [fechaEfecto, setFechaEfecto] = useState('');
+  const [nombresPropuestos, setNombresPropuestos] = useState([]);
+  const { session } = useContext(Context);
   const [setError] = useState('');
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -21,6 +26,28 @@ export default function oficioModal({
       setFechaEfecto(value);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userIdResponse = await getData({ endpoint: `/usuarios/secundario/${session.id}` });
+        if (userIdResponse.statusCode === 200) {
+          const institucionResponse = await getData({
+            endpoint: `/instituciones/usuario/${userIdResponse.data.id}`,
+          });
+          if (institucionResponse.statusCode === 200) {
+            setNombresPropuestos(institucionResponse.data?.ratificacionesNombre || []);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    if (session?.id) {
+      fetchData();
+    }
+  }, [session?.id]);
 
   const handleOnSubmit = async () => {
     if (!fechaEfecto || !oficioNumber) {
@@ -65,6 +92,9 @@ export default function oficioModal({
           />
         </Grid>
         <Grid item xs={12}>
+          <Select title="Nombres Propuestos" options={nombresPropuestos} name="nombreAutorizado" />
+        </Grid>
+        <Grid item xs={12}>
           <Input
             id="fechaEfecto"
             label="Fecha en que surte efecto"
@@ -75,20 +105,8 @@ export default function oficioModal({
             required
           />
         </Grid>
-      </Grid>
-      <Grid container justifyContent="flex-end" marginTop={2}>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text="Cancelar"
-            design="cancel"
-            onClick={hideModal}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text="Guardar"
-            onClick={handleOnSubmit}
-          />
+        <Grid item xs={12}>
+          <ButtonsModal confirm={handleOnSubmit} cancel={hideModal} />
         </Grid>
       </Grid>
     </DefaultModal>
