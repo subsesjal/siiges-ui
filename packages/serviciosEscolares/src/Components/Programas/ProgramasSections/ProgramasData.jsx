@@ -2,19 +2,31 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import getSolicitudesById from '@siiges-ui/solicitudes/src/components/utils/getSolicitudesById';
+import { useProgramaById } from '@siiges-ui/solicitudes';
 import ProgramasPDF from '../../utils/ProgramasPDF';
 
 export default function ProgramasData() {
   const router = useRouter();
   const { query } = router;
-  const { solicitudesProgramas: programa } = getSolicitudesById(query.id);
+  const programa = useProgramaById(query.id);
+
+  if (!programa) {
+    return <div>Cargando...</div>;
+  }
   const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
   const fecha = new Date(programa.fechaSurteEfecto)
     .toLocaleDateString('es', opciones)
     .replace(/ /g, ' ')
     .replace('.', '')
     .replace(/-([a-z])/, (x) => `-${x[1].toUpperCase()}`);
+
+  const formatTurnos = (turnosArray) => {
+    if (!turnosArray || !Array.isArray(turnosArray)) return '';
+    return turnosArray
+      .map((programaTurno) => programaTurno?.turno?.nombre)
+      .filter(Boolean)
+      .join(', ');
+  };
 
   const dataSections = [
     {
@@ -27,12 +39,12 @@ export default function ProgramasData() {
         'Turnos',
       ],
       subtitles: [
-        programa.acuerdoRvoe,
-        programa.nivel,
-        programa.nombre,
-        programa.modalidad,
-        programa.periodo,
-        programa.turno,
+        programa?.acuerdoRvoe || 'N/A',
+        programa?.nivel?.nombre || 'N/A',
+        programa?.nombre || 'N/A',
+        programa?.modalidad?.nombre || 'N/A',
+        programa?.ciclo?.nombre || 'N/A',
+        formatTurnos(programa?.programaTurnos) || 'N/A',
       ],
     },
     {
@@ -42,9 +54,9 @@ export default function ProgramasData() {
         'Duración del programa',
       ],
       subtitles: [
-        programa.creditos,
+        programa?.creditos || 'N/A',
         fecha,
-        programa.duracionPeriodos,
+        programa?.duracionPeriodos || 'N/A',
       ],
     },
   ];

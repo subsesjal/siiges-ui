@@ -20,8 +20,10 @@ import getSolicitudDetalles from './components/utils/getSolicitudDetalles';
 import columnsSolicitudes from './components/utils/Tables/solicitudesColumns';
 import DocentesCreateModal from './components/utils/Components/DocentesModales/DocentesModal';
 import HerramientaEducativa from './components/Sections/HerramientaEducativa';
+import useProgramaById from './components/utils/useProgramaById';
 
 export {
+  useProgramaById,
   HerramientaEducativa,
   getSolicitudDetalles,
   NewRequest,

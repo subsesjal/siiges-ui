@@ -97,7 +97,6 @@ export default function Reglas() {
     const newErrors = { ...errors };
     const newErrorMessages = { ...errorMessages };
 
-    // Validate all fields except the disabled ID field
     const fieldsToValidate = ['calificacionMinima', 'calificacionMaxima', 'calificacionAprobatoria', 'calificacionDecimal'];
 
     fieldsToValidate.forEach((field) => {
