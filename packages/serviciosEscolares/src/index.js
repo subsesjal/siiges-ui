@@ -33,7 +33,7 @@ import RevalidacionEquivalencias from './Components/RevalidacionesEquivalencias'
 import ActionsAlumnosInscritos from './Components/utils/ActionsAlumnosInscritos';
 import ModalCertificado from './Components/Folios/FoliosData/Modal/certificados';
 import FechaExamenInput from './Components/utils/Calificaciones/FechaExamenInput';
-import { ProgramasData } from './Components/Programas/ProgramasSections/ProgramasData';
+import ProgramasData from './Components/Programas/ProgramasSections/ProgramasData';
 import CalificacionInput from './Components/utils/Calificaciones/CalificacionInput';
 import DetallesAsignatura from './Components/Acreditacion/DetallesAsignatura/index';
 import CiclosEscolares from './Components/Programas/ProgramasSections/CiclosEscolares';

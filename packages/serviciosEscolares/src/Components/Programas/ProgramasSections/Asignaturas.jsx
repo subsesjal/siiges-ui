@@ -1,6 +1,10 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import { useRouter } from 'next/router';
-import { Grid, Typography, Snackbar, Alert } from '@mui/material';
+import {
+  Grid, Typography, Snackbar, Alert,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { getData, Context } from '@siiges-ui/shared';
 import useAsignaturas from '@siiges-ui/solicitudes/src/components/utils/getAsignaturas';
@@ -43,14 +47,30 @@ export default function Asignaturas() {
   }, [asignaturasLoading, asignaturas]);
 
   const tableColumns = useMemo(
-    () => columns(grados, programaId, asignaturasList, setAsignaturasList, programaData.cicloId, setLoading, setNoti, session.rol),
-    [grados, programaId, asignaturasList, setAsignaturasList, programaData.cicloId, setLoading, setNoti, session.rol],
+    () => columns(
+      grados,
+      programaId,
+      asignaturasList,
+      setAsignaturasList,
+      programaData.cicloId,
+      setLoading,
+      setNoti,
+      session.rol,
+    ),
+    [
+      grados,
+      programaId,
+      asignaturasList,
+      setAsignaturasList,
+      programaData.cicloId,
+      setLoading,
+      setNoti,
+      session.rol,
+    ],
   );
 
   if (localLoading || asignaturasLoading) {
-    return (
-      <div>Loading...</div>
-    );
+    return <div>Loading...</div>;
   }
 
   const handleCloseSnackbar = () => {
@@ -73,8 +93,16 @@ export default function Asignaturas() {
           />
         </div>
       </Grid>
-      <Snackbar open={noti.open} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity={noti.type} sx={{ width: '100%' }}>
+      <Snackbar
+        open={noti.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={noti.type}
+          sx={{ width: '100%' }}
+        >
           {noti.message}
         </Alert>
       </Snackbar>
