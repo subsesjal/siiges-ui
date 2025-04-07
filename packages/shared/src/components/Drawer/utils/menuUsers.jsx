@@ -24,7 +24,7 @@ const options = [
   {
     id: 2,
     nombre: 'Servicios escolares',
-    roles: ['admin', 'representante', 'sicyt_editar', 'ce_ies', 'ce_sicyt'],
+    roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt'],
   },
   { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
 ];

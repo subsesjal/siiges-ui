@@ -1,93 +1,178 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { DefaultModal, Input, ButtonSimple } from '@siiges-ui/shared';
-import { updateRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
+import {
+  DefaultModal,
+  Input,
+  Select,
+  ButtonsModal,
+  getData,
+  updateRecord,
+  InputDate,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 
-export default function oficioModal({
+export default function OficioModal({
   open,
   hideModal,
   downloadFile,
   solicitudId,
 }) {
-  const [oficioNumber, setOficioNumber] = useState('');
-  const [fechaEfecto, setFechaEfecto] = useState('');
-  const [setError] = useState('');
+  const [formData, setFormData] = useState({
+    oficioNumber: '',
+    fechaEfecto: '',
+    nombreAutorizado: '',
+    fechaAutorizacion: '',
+  });
+  const [institucionId, setInstitucionId] = useState(null);
+  const [nombresPropuestos, setNombresPropuestos] = useState([]);
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-    if (name === 'oficioNumber') {
-      setOficioNumber(value);
-    } else if (name === 'fechaEfecto') {
-      setFechaEfecto(value);
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        const response = await getData({
+          endpoint: `/solicitudes/${solicitudId}/detalles`,
+        });
+
+        if (isMounted && response.statusCode === 200) {
+          const ratificaciones = response.data?.programa?.plantel?.institucion
+            ?.ratificacionesNombre || [];
+
+          const transformedNombres = [
+            { id: 1, nombre: ratificaciones[0]?.nombrePropuesto1 || '' },
+            { id: 2, nombre: ratificaciones[0]?.nombrePropuesto2 || '' },
+            { id: 3, nombre: ratificaciones[0]?.nombrePropuesto3 || '' },
+          ].filter((item) => item.nombre);
+
+          setInstitucionId(response.data?.programa?.plantel?.institucion?.id);
+          setNombresPropuestos(transformedNombres);
+        }
+      } catch (errorMessage) {
+        if (isMounted) {
+          setError('Error al cargar los datos');
+        }
+      }
+    };
+
+    if (solicitudId) {
+      fetchData();
+    }
+
+    return () => { isMounted = false; };
+  }, [solicitudId]);
+
   const handleOnSubmit = async () => {
-    if (!fechaEfecto || !oficioNumber) {
-      setError('¡Por favor, completa todos los campos!.');
+    const {
+      fechaEfecto, oficioNumber, nombreAutorizado, fechaAutorizacion,
+    } = formData;
+
+    if (!fechaEfecto || !oficioNumber || !nombreAutorizado || !fechaAutorizacion) {
+      setError('¡Por favor, completa todos los campos!');
       return;
     }
 
-    const formattedDate = new Date(fechaEfecto).toISOString();
-    const dataRvoe = {
-      estatusSolicitudId: 11,
-      programa: {
-        fechaSurteEfecto: formattedDate,
-        acuerdoRvoe: String(oficioNumber),
-      },
-    };
+    setIsSubmitting(true);
+    setError('');
 
     try {
-      const response = await updateRecord({ data: dataRvoe, endpoint: `/solicitudes/${solicitudId}` });
-      if (response.statusCode === 200) {
+      const [response, responseInstitucion] = await Promise.all([
+        updateRecord({
+          data: {
+            estatusSolicitudId: 11,
+            programa: {
+              fechaSurteEfecto: new Date(fechaEfecto).toISOString(),
+              acuerdoRvoe: String(oficioNumber),
+            },
+          },
+          endpoint: `/solicitudes/${solicitudId}`,
+        }),
+        updateRecord({
+          data: {
+            nombre: nombreAutorizado,
+            ratificacionesNombre: [{
+              nombreAutorizado,
+              esNombreAutorizado: 1,
+              fechaAutorizacion: new Date(fechaAutorizacion).toISOString(),
+            }],
+          },
+          endpoint: `/instituciones/${institucionId}`,
+        }),
+      ]);
+
+      if (response.statusCode === 200 && responseInstitucion.statusCode === 200) {
         downloadFile('ACUERDO_RVOE');
         hideModal();
       } else {
-        setError(response.errorMessage);
+        setError(response.errorMessage || responseInstitucion.errorMessage);
       }
-    } catch (errorResponse) {
-      setError(errorResponse);
+    } catch (errorMessage) {
+      setError('Error al procesar la solicitud');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <DefaultModal open={open} setOpen={hideModal} title="Oficio">
       <Grid container spacing={2}>
+        {error && (
+          <Grid item xs={12}>
+            <div style={{ color: 'red' }}>{error}</div>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Input
             id="oficioNumber"
-            label="Número de oficio"
+            label="Número de Acuerdo de RVOE"
             name="oficioNumber"
-            type="number"
-            value={oficioNumber}
+            value={formData.oficioNumber}
             onChange={handleChange}
             required
           />
         </Grid>
         <Grid item xs={12}>
-          <Input
+          <Select
+            title="Nombres Propuestos"
+            options={nombresPropuestos}
+            name="nombreAutorizado"
+            textValue
+            value={formData.nombreAutorizado}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <InputDate
             id="fechaEfecto"
             label="Fecha en que surte efecto"
             name="fechaEfecto"
-            type="date"
-            value={fechaEfecto}
+            value={formData.fechaEfecto}
             onChange={handleChange}
             required
           />
         </Grid>
-      </Grid>
-      <Grid container justifyContent="flex-end" marginTop={2}>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text="Cancelar"
-            design="cancel"
-            onClick={hideModal}
+        <Grid item xs={6}>
+          <InputDate
+            id="fechaAutorizacion"
+            label="Fecha en que se autoriza el nombre"
+            name="fechaAutorizacion"
+            value={formData.fechaAutorizacion}
+            onChange={handleChange}
+            required
           />
         </Grid>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text="Guardar"
-            onClick={handleOnSubmit}
+        <Grid item xs={12}>
+          <ButtonsModal
+            confirm={handleOnSubmit}
+            cancel={hideModal}
+            disabled={isSubmitting}
           />
         </Grid>
       </Grid>
@@ -95,7 +180,7 @@ export default function oficioModal({
   );
 }
 
-oficioModal.propTypes = {
+OficioModal.propTypes = {
   open: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
   downloadFile: PropTypes.func.isRequired,
