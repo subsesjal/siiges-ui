@@ -25,6 +25,7 @@ export default function OficioModal({
   });
   const [institucionId, setInstitucionId] = useState(null);
   const [nombresPropuestos, setNombresPropuestos] = useState([]);
+  const [esNombreAutorizado, setEsNombreAutorizado] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -52,6 +53,7 @@ export default function OficioModal({
             { id: 3, nombre: ratificaciones[0]?.nombrePropuesto3 || '' },
           ].filter((item) => item.nombre);
 
+          setEsNombreAutorizado(ratificaciones[0].esNombreAutorizado || false);
           setInstitucionId(response.data?.programa?.plantel?.institucion?.id);
           setNombresPropuestos(transformedNombres);
         }
@@ -69,13 +71,42 @@ export default function OficioModal({
     return () => { isMounted = false; };
   }, [solicitudId]);
 
+  const renderNombreField = () => {
+    if (nombresPropuestos.length > 0) {
+      return (
+        <Select
+          title="Nombres Propuestos"
+          options={nombresPropuestos}
+          name="nombreAutorizado"
+          textValue
+          value={formData.nombreAutorizado}
+          onChange={handleChange}
+        />
+      );
+    }
+    return (
+      <Input
+        label="Nombre Autorizado"
+        id="nombreAutorizado"
+        name="nombreAutorizado"
+        value={formData.nombreAutorizado}
+        onChange={handleChange}
+      />
+    );
+  };
+
   const handleOnSubmit = async () => {
     const {
       fechaEfecto, oficioNumber, nombreAutorizado, fechaAutorizacion,
     } = formData;
 
-    if (!fechaEfecto || !oficioNumber || !nombreAutorizado || !fechaAutorizacion) {
-      setError('¡Por favor, completa todos los campos!');
+    if (!fechaEfecto || !oficioNumber) {
+      setError('¡Por favor, completa los campos obligatorios!');
+      return;
+    }
+
+    if (esNombreAutorizado && (!nombreAutorizado || !fechaAutorizacion)) {
+      setError('¡Por favor, completa todos los campos de Autorización de nombre!');
       return;
     }
 
@@ -83,35 +114,43 @@ export default function OficioModal({
     setError('');
 
     try {
-      const [response, responseInstitucion] = await Promise.all([
-        updateRecord({
-          data: {
-            estatusSolicitudId: 11,
-            programa: {
-              fechaSurteEfecto: new Date(fechaEfecto).toISOString(),
-              acuerdoRvoe: String(oficioNumber),
-            },
+      const solicitudPromise = updateRecord({
+        data: {
+          estatusSolicitudId: 11,
+          programa: {
+            fechaSurteEfecto: new Date(fechaEfecto).toISOString(),
+            acuerdoRvoe: String(oficioNumber),
           },
-          endpoint: `/solicitudes/${solicitudId}`,
-        }),
-        updateRecord({
+        },
+        endpoint: `/solicitudes/${solicitudId}`,
+      });
+
+      let institucionPromise = Promise.resolve({ statusCode: 200 });
+
+      if (!esNombreAutorizado) {
+        institucionPromise = updateRecord({
           data: {
             nombre: nombreAutorizado,
-            ratificacionesNombre: [{
+            ratificacionesNombre: {
               nombreAutorizado,
               esNombreAutorizado: 1,
               fechaAutorizacion: new Date(fechaAutorizacion).toISOString(),
-            }],
+            },
           },
           endpoint: `/instituciones/${institucionId}`,
-        }),
+        });
+      }
+
+      const [response, responseInstitucion] = await Promise.all([
+        solicitudPromise,
+        institucionPromise,
       ]);
 
       if (response.statusCode === 200 && responseInstitucion.statusCode === 200) {
         downloadFile('ACUERDO_RVOE');
         hideModal();
       } else {
-        setError(response.errorMessage || responseInstitucion.errorMessage);
+        setError(response.errorMessage || responseInstitucion.errorMessage || 'Error desconocido');
       }
     } catch (errorMessage) {
       setError('Error al procesar la solicitud');
@@ -138,16 +177,11 @@ export default function OficioModal({
             required
           />
         </Grid>
+        {!esNombreAutorizado && (
         <Grid item xs={12}>
-          <Select
-            title="Nombres Propuestos"
-            options={nombresPropuestos}
-            name="nombreAutorizado"
-            textValue
-            value={formData.nombreAutorizado}
-            onChange={handleChange}
-          />
+          {renderNombreField()}
         </Grid>
+        )}
         <Grid item xs={6}>
           <InputDate
             id="fechaEfecto"
@@ -158,6 +192,7 @@ export default function OficioModal({
             required
           />
         </Grid>
+        {!esNombreAutorizado && (
         <Grid item xs={6}>
           <InputDate
             id="fechaAutorizacion"
@@ -168,6 +203,7 @@ export default function OficioModal({
             required
           />
         </Grid>
+        )}
         <Grid item xs={12}>
           <ButtonsModal
             confirm={handleOnSubmit}
