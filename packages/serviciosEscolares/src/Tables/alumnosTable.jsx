@@ -2,7 +2,9 @@ import React from 'react';
 import ButtonsAlumnos from '../Components/utils/ButtonAlumnos';
 
 const columnsAlumnos = [
-  { field: 'id', headerName: 'ID', width: 50 },
+  {
+    field: 'id', headerName: 'ID', width: 50, hide: true,
+  },
   { field: 'matricula', headerName: 'Matrícula', width: 150 },
   { field: 'apellidoPaterno', headerName: 'Primer Apellido', width: 200 },
   { field: 'apellidoMaterno', headerName: 'Segundo Apellido', width: 200 },

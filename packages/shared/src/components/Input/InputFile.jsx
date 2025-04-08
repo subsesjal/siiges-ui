@@ -125,7 +125,14 @@ export default function InputFile({
       </Grid>
       <DropzoneDialog
         open={open}
-        dropzoneText="Arrastre un archivo aquí, o haga clic"
+        dropzoneText={(
+          <div style={{ textAlign: 'center' }}>
+            <div>Arrastre un archivo aquí, o haga clic</div>
+            <div style={{ fontSize: '1.2rem', marginTop: '8px', color: '#666' }}>
+              Formatos aceptados: PDF (Max. 5MB)
+            </div>
+          </div>
+        )}
         dialogTitle={title}
         submitButtonText="Aceptar"
         cancelButtonText="Cancelar"

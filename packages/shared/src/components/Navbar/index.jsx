@@ -41,13 +41,12 @@ export default function Navbar() {
               variant="outlined"
               startIcon={<PersonAddIcon />}
               sx={{
-                backgroundColor: 'rgba(233, 236, 239, 0.5)',
+                backgroundColor: '#FF8300',
                 textTransform: 'none',
                 color: 'white',
                 borderRadius: '2rem',
                 '&:hover': {
-                  background: '#fff',
-                  color: '#0072ce',
+                  background: '#FF9A33',
                   m: 'auto',
                 },
               }}
