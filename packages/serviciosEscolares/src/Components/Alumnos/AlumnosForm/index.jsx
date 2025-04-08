@@ -155,6 +155,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
   useEffect(() => {
     if (selectedPrograma) {
       fetchAlumnos(selectedPrograma);
+      setPrograma(selectedPrograma);
     }
   }, [selectedPrograma]);
 
