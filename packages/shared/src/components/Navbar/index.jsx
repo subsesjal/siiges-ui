@@ -43,7 +43,7 @@ export default function Navbar() {
               sx={{
                 backgroundColor: 'rgba(233, 236, 239, 0.5)',
                 textTransform: 'none',
-                color: 'white',
+                color: 'black',
                 borderRadius: '2rem',
                 '&:hover': {
                   background: '#fff',
