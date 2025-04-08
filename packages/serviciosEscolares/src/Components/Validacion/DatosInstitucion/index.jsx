@@ -44,6 +44,7 @@ export default function DatosInstitucion({ alumno }) {
   const [errors, setErrors] = useState({});
   const [editionDisabled, setEditionDisabled] = useState(false);
   const router = useRouter();
+  const isCeSicyt = session?.rol === 'ce_sicyt';
 
   const fileData = {
     entidadId: alumno.id,
@@ -394,6 +395,18 @@ export default function DatosInstitucion({ alumno }) {
           />
         </Grid>
       )}
+      <Grid item xs={12}>
+        <Input
+          label="Observaciones"
+          name="observaciones"
+          id="observaciones"
+          multiline
+          rows={4}
+          value={form.observaciones}
+          onChange={handleChange}
+          disabled={!isCeSicyt}
+        />
+      </Grid>
       {formSent && (
         <>
           <Grid item xs={12}>
