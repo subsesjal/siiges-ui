@@ -79,8 +79,8 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `¡Error al obtener planteles!: ${error.message}`,
-          type: 'error',
+          message: '¡No se encontraron planteles!',
+          type: 'warning',
         });
         setArrays((prevState) => ({ ...prevState, planteles: [] }));
       } else {
@@ -100,8 +100,8 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `¡Error al obtener programas!: ${error.message}`,
-          type: 'error',
+          message: '¡No se encontraron programas!',
+          type: 'warning',
         });
         setArrays((prevState) => ({ ...prevState, programas: [] }));
       } else {
@@ -122,8 +122,8 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `¡Error al obtener ciclos escolares!: ${error.message}`,
-          type: 'error',
+          message: '¡No se encontraron ciclos escolares!',
+          type: 'warning',
         });
         setArrays((prevState) => ({ ...prevState, ciclosEscolares: [] }));
       } else {
@@ -137,8 +137,8 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `¡Error al obtener grados!: ${error.message}`,
-          type: 'error',
+          message: '¡No se encontraron grados!',
+          type: 'warning',
         });
         setArrays((prevState) => ({ ...prevState, grados: [] }));
       } else {
@@ -156,8 +156,8 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `¡Error al obtener grupos!: ${error.message}`,
-          type: 'error',
+          message: '¡No se encontraron grupos!',
+          type: 'warning',
         });
         setArrays((prevState) => ({ ...prevState, grupos: [] }));
       } else {
@@ -176,8 +176,8 @@ export default function InscripcionForm({
       if (error) {
         setNoti({
           open: true,
-          message: `¡Error al obtener asignaturas!: ${error.message}`,
-          type: 'error',
+          message: '¡No se encontraron asignaturas!',
+          type: 'warning',
         });
         setAsignaturas([]);
       } else {
