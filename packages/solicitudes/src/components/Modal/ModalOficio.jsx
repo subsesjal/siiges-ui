@@ -10,6 +10,7 @@ import {
   InputDate,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 
 export default function OficioModal({
   open,
@@ -28,6 +29,7 @@ export default function OficioModal({
   const [esNombreAutorizado, setEsNombreAutorizado] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -105,7 +107,7 @@ export default function OficioModal({
       return;
     }
 
-    if (esNombreAutorizado && (!nombreAutorizado || !fechaAutorizacion)) {
+    if (!esNombreAutorizado && (!nombreAutorizado || !fechaAutorizacion)) {
       setError('¡Por favor, completa todos los campos de Autorización de nombre!');
       return;
     }
@@ -149,6 +151,7 @@ export default function OficioModal({
       if (response.statusCode === 200 && responseInstitucion.statusCode === 200) {
         downloadFile('ACUERDO_RVOE');
         hideModal();
+        router.back();
       } else {
         setError(response.errorMessage || responseInstitucion.errorMessage || 'Error desconocido');
       }
