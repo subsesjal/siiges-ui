@@ -120,7 +120,7 @@ export default function detallesSolicitudes() {
             </ListItem>
           </List>
         </Grid>
-        {(solicitud.estatusSolicitudId === 8 && session.rol === 'sicyt_editar') ? (
+        {solicitud.programa?.acuerdoRvoe === '' && session.rol === 'sicyt_editar' ? (
           <Grid item xs={4}>
             <Typography variant="subtitle1" color="textSecondary">
               RVOE
@@ -132,18 +132,16 @@ export default function detallesSolicitudes() {
             </List>
           </Grid>
         ) : (
-          solicitud.estatusSolicitudId > 8 && (
-            <Grid item xs={4}>
-              <Typography variant="subtitle1" color="textSecondary">
-                RVOE
-              </Typography>
-              <List component="nav">
-                <ListItem button onClick={() => downloadFile('ACUERDO_RVOE')}>
-                  <ListItemText primary="Acuerdo RVOE" />
-                </ListItem>
-              </List>
-            </Grid>
-          )
+          <Grid item xs={4}>
+            <Typography variant="subtitle1" color="textSecondary">
+              RVOE
+            </Typography>
+            <List component="nav">
+              <ListItem button onClick={() => downloadFile('ACUERDO_RVOE')}>
+                <ListItemText primary="Acuerdo RVOE" />
+              </ListItem>
+            </List>
+          </Grid>
         )}
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
