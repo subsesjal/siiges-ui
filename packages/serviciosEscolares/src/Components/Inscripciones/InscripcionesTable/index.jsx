@@ -1,5 +1,5 @@
 import {
-  Button, Context, DataTable, Input, getData,
+  Button, Context, DataTable, InputSearch, getData,
 } from '@siiges-ui/shared';
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -171,12 +171,13 @@ export default function InscripcionesTable({
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Input
+        <InputSearch
           label="Matrícula"
           name="matricula"
           value={matriculaValue}
           onChange={(e) => setMatriculaValue(e.target.value)}
-          onblur={handleBlurMatricula}
+          onBlur={handleBlurMatricula}
+          onClickButton={handleBlurMatricula}
         />
       </Grid>
       <Grid item xs={12}>
