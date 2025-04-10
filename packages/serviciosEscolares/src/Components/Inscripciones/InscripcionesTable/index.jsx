@@ -107,6 +107,11 @@ export default function InscripcionesTable({
         }
         setAlumnoData(alumnoResult.data);
         setIsAlumnoValido(true);
+        setNoti({
+          open: true,
+          message: '¡Alumno validado correctamente!',
+          type: 'success',
+        });
       } catch (fetchError) {
         setNoti({
           open: true,
