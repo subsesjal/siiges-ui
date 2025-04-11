@@ -40,6 +40,7 @@ export default function Reglas({ programa, id }) {
     if (programa) {
       setForm({
         id: id || '',
+        solicitudId: programa.solicitudId || '',
         calificacionMinima: programa.calificacionMinima || '',
         calificacionMaxima: programa.calificacionMaxima || '',
         calificacionAprobatoria: programa.calificacionAprobatoria || '',
@@ -116,7 +117,7 @@ export default function Reglas({ programa, id }) {
     try {
       await updateRecord({
         data: dataBody,
-        endpoint: `/solicitudes/${id}`,
+        endpoint: `/solicitudes/${form.solicitudId}`,
       });
 
       setLoading(false);
@@ -225,6 +226,7 @@ export default function Reglas({ programa, id }) {
 Reglas.propTypes = {
   id: PropTypes.number.isRequired,
   programa: PropTypes.shape({
+    solicitudId: PropTypes.number,
     calificacionMinima: PropTypes.number,
     calificacionMaxima: PropTypes.number,
     calificacionAprobatoria: PropTypes.number,
