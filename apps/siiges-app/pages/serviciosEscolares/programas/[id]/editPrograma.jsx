@@ -6,20 +6,25 @@ import {
   ProgramasData,
   Reglas,
 } from '@siiges-ui/serviciosescolares';
+import { useRouter } from 'next/router';
+import { useProgramaById } from '@siiges-ui/solicitudes';
 import React, { useState } from 'react';
 import {
   Box, Grid, Tab, Tabs, Typography,
 } from '@mui/material';
 
 export default function EditPrograma() {
+  const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(true);
+  const { query } = router;
+  const programa = useProgramaById(query.id);
 
   const tabsConfig = [
-    { label: 'Programa', component: <ProgramasData /> },
+    { label: 'Programa', component: <ProgramasData programa={programa} id={query.id} /> },
     { label: 'Ciclos Escolares', component: <CiclosEscolares /> },
     { label: 'Grupos', component: <Grupos /> },
-    { label: 'Reglas', component: <Reglas /> },
+    { label: 'Reglas', component: <Reglas programa={programa} id={query.id} /> },
     { label: 'Asignaturas', component: <Asignaturas /> },
   ];
 

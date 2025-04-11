@@ -21,6 +21,7 @@ export default function FechaExamenInput({
       <Input
         name="fechaExamen"
         type="date"
+        format="DD/MM/YYYY"
         value={value}
         variant="standard"
         disabled={disabled}

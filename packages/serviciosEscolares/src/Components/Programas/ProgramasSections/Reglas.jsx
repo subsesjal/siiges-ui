@@ -6,19 +6,16 @@ import {
   Typography,
   FormHelperText,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 import {
-  ButtonSimple, Context, getData, updateRecord,
+  ButtonSimple, Context, updateRecord,
 } from '@siiges-ui/shared';
-import { useRouter } from 'next/router';
 
-export default function Reglas() {
+export default function Reglas({ programa, id }) {
   const { setNoti, setLoading } = useContext(Context);
-  const [idSolicitud, setIdSolicitud] = useState();
-  const router = useRouter();
-  const { query } = router;
 
   const [form, setForm] = useState({
-    id: query.id || '',
+    id: id || '',
     calificacionMinima: '',
     calificacionMaxima: '',
     calificacionAprobatoria: '',
@@ -40,34 +37,17 @@ export default function Reglas() {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const response = await getData({ endpoint: `/solicitudes/${query.id}` });
-
-      if (response.statusCode === 200) {
-        const { data } = response || {};
-        setIdSolicitud(data.id);
-        setForm({
-          id: query.id || '',
-          calificacionMinima: data.programa.calificacionMinima || '',
-          calificacionMaxima: data.programa.calificacionMaxima || '',
-          calificacionAprobatoria: data.programa.calificacionAprobatoria || '',
-          calificacionDecimal: data.programa.calificacionDecimal ? '1' : '2',
-        });
-      } else {
-        setNoti({
-          open: true,
-          message: response.errorMessage,
-          type: 'error',
-        });
-      }
-      setLoading(false);
-    };
-
-    if (query.id) {
-      fetchData();
+    if (programa) {
+      setForm({
+        id: id || '',
+        solicitudId: programa.solicitudId || '',
+        calificacionMinima: programa.calificacionMinima || '',
+        calificacionMaxima: programa.calificacionMaxima || '',
+        calificacionAprobatoria: programa.calificacionAprobatoria || '',
+        calificacionDecimal: programa.calificacionDecimal ? '1' : '2',
+      });
     }
-  }, [query.id, setLoading, setNoti]);
+  }, [programa]);
 
   const validateField = (name, value) => {
     let isValid = true;
@@ -137,7 +117,7 @@ export default function Reglas() {
     try {
       await updateRecord({
         data: dataBody,
-        endpoint: `/solicitudes/${idSolicitud}`,
+        endpoint: `/solicitudes/${form.solicitudId}`,
       });
 
       setLoading(false);
@@ -242,3 +222,14 @@ export default function Reglas() {
     </div>
   );
 }
+
+Reglas.propTypes = {
+  id: PropTypes.number.isRequired,
+  programa: PropTypes.shape({
+    solicitudId: PropTypes.number,
+    calificacionMinima: PropTypes.number,
+    calificacionMaxima: PropTypes.number,
+    calificacionAprobatoria: PropTypes.number,
+    calificacionDecimal: PropTypes.bool,
+  }).isRequired,
+};

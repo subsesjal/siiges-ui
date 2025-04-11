@@ -1,15 +1,9 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
-import { useProgramaById } from '@siiges-ui/solicitudes';
 import ProgramasPDF from '../../utils/ProgramasPDF';
 
-export default function ProgramasData() {
-  const router = useRouter();
-  const { query } = router;
-  const programa = useProgramaById(query.id);
-
+export default function ProgramasData({ programa, id }) {
   if (!programa) {
     return <div>Cargando...</div>;
   }
@@ -90,12 +84,13 @@ export default function ProgramasData() {
           </Grid>
         ))}
       </Grid>
-      <ProgramasPDF id={query.id} />
+      <ProgramasPDF id={id} />
     </>
   );
 }
 
 ProgramasData.propTypes = {
+  id: PropTypes.number.isRequired,
   programa: PropTypes.shape({
     id: PropTypes.number,
     acuerdoRvoe: PropTypes.string,
@@ -109,5 +104,9 @@ ProgramasData.propTypes = {
     objetivosParticulares: PropTypes.string,
     fechaSurteEfecto: PropTypes.string,
     duracionPeriodos: PropTypes.string,
+    programaTurnos: PropTypes.arrayOf([]),
+    ciclo: PropTypes.shape({
+      nombre: PropTypes.string,
+    }),
   }).isRequired,
 };
