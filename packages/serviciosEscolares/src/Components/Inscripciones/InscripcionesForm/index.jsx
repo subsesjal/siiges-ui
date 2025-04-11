@@ -221,6 +221,8 @@ export default function InscripcionForm({
       ...prevState,
       selectedCicloEscolar: cicloEscolarId,
       labelCicloEscolar: selectedCicloObj ? selectedCicloObj.nombre : '',
+      selectedGrado: null,
+      selectedGrupo: null,
     }));
     if (cicloEscolarId) fetchGrados();
   };
@@ -231,6 +233,7 @@ export default function InscripcionForm({
       ...prevState,
       selectedGrado: gradoId,
       labelGrado: selectedGradoObj ? selectedGradoObj.nombre : '',
+      selectedGrupo: null,
     }));
     if (gradoId) {
       fetchGrupos(gradoId);
@@ -297,12 +300,16 @@ export default function InscripcionForm({
     };
 
     fetchData();
+    if (state.selectedGrupo === null) {
+      setGrupoId(null);
+    }
   }, [
     state.selectedInstitucion,
     state.selectedPlantel,
     state.selectedPrograma,
     state.selectedCicloEscolar,
     state.selectedGrado,
+    state.selectedGrupo,
   ]);
 
   return (
