@@ -49,12 +49,6 @@ export default function CalificacionInput({
     }
   };
 
-  console.log('Calificacion minima: ', calificacionMinima);
-  console.log('Calificacion maxima: ', calificacionMaxima);
-  console.log('Calificacion decimal: ', calificacionDecimal);
-
-  // ID: 2574
-
   return (
     <div style={{ marginTop: -10 }}>
       <TextField
