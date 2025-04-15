@@ -17,6 +17,7 @@ function InputDate({
   required,
   size,
   type,
+  variant,
 }) {
   const handleDateChange = (newDate) => {
     const isValidDate = newDate && dayjs(newDate).isValid();
@@ -54,6 +55,7 @@ function InputDate({
             helperText: errorMessage,
             error: !!errorMessage,
             size,
+            variant,
           },
         }}
       />
@@ -74,6 +76,7 @@ InputDate.propTypes = {
   disabled: PropTypes.bool,
   required: PropTypes.bool,
   type: PropTypes.string,
+  variant: PropTypes.string,
 };
 
 InputDate.defaultProps = {
@@ -86,6 +89,7 @@ InputDate.defaultProps = {
   disabled: false,
   required: false,
   size: 'small',
+  variant: 'outlined',
 };
 
 export default InputDate;
