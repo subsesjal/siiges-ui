@@ -7,7 +7,13 @@ import ActionsAsignaturas from '../Components/utils/ActionsAsignaturas';
 const columnsAsignaturas = (handleCheckboxChange, selectedAsignaturas, allIds, handleSelectAll) => [
   { field: 'clave', headerName: 'Clave', width: 100 },
   { field: 'seriacion', headerName: 'Seriación', width: 200 },
-  { field: 'nombre', headerName: 'Asignatura', width: 650 },
+  { field: 'nombre', headerName: 'Asignatura', width: 450 },
+  {
+    field: 'tipo',
+    headerName: 'Tipo de Asignatura',
+    width: 200,
+    valueGetter: (params) => (params.row.tipo === 1 ? 'Normal' : 'Formación Electiva'),
+  },
   {
     field: 'actions',
     headerName: 'Acciones',
