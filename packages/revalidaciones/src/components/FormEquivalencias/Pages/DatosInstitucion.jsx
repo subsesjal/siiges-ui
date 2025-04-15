@@ -11,6 +11,8 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const [programas, setProgramas] = useState([]);
   const [grados, setGrados] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
+  const [institucionId, setInstitucionId] = useState(null);
+  const [rvoes, setRvoes] = useState([]);
   const [tipoInstitucionId, setTipoInstitucionId] = useState(
     form.interesado?.institucionDestino?.tipoInstitucionId || '',
   );
@@ -38,6 +40,13 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
     fetchData(
       `${domain}/api/v1/public/instituciones?tipoInstitucionId=${tipoInstitucionId}`,
       setInstituciones,
+    );
+  };
+
+  const fetchRvoes = async () => {
+    fetchData(
+      `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
+      setRvoes,
     );
   };
 
@@ -70,10 +79,20 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
     }
   }, [tipoInstitucionId]);
 
+  useEffect(() => {
+    if (institucionId) {
+      fetchRvoes();
+    }
+  }, [institucionId]);
+
   const handleTipoInstitucionChange = (event) => {
     const selectedTipoInstitucionId = event.target.value;
     setTipoInstitucionId(selectedTipoInstitucionId);
     handleOnChange(event, ['interesado', 'institucionDestino']);
+  };
+  const handleInstitucionChange = (event) => {
+    const programaId = event.target.value;
+    setInstitucionId(programaId);
   };
 
   const handleRvoeOnBlur = (event) => {
@@ -146,8 +165,8 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
             title="Instituciones"
             options={instituciones}
             name="programaId"
-            value={form.interesado?.institucionDestino?.programaId || ''}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+            value={form.interesado?.institucionDestino?.id || ''}
+            onChange={handleInstitucionChange}
           />
         ) : (
           <Input
@@ -159,35 +178,52 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           />
         )}
       </Grid>
-      <Grid item xs={3}>
-        <Select
-          title="Nivel Académico Destino"
-          options={grados}
-          name="nivel"
-          value={form.interesado?.institucionDestino?.nivel || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <Input
-          id="rvoe"
-          label="RVOE"
-          name="acuerdoRvoe"
-          value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
-          onBlur={handleRvoeOnBlur}
-          errorMessage={rvoeError}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <Input
-          id="nombreCarreraDestino"
-          label="Nombre de la Carrera (Destino)"
-          name="nombreCarrera"
-          value={programas?.nombre || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-          disabled={tipoInstitucionId === 1}
-        />
-      </Grid>
+      {tipoInstitucionId !== 1
+      && (
+      <>
+        <Grid item xs={3}>
+          <Select
+            title="Nivel Académico Destino"
+            options={grados}
+            name="nivel"
+            value={form.interesado?.institucionDestino?.nivel || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Input
+            id="rvoe"
+            label="RVOE"
+            name="acuerdoRvoe"
+            value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
+            onBlur={handleRvoeOnBlur}
+            errorMessage={rvoeError}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="nombreCarreraDestino"
+            label="Nombre de la Carrera (Destino)"
+            name="nombreCarrera"
+            value={programas?.nombre || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+            disabled={tipoInstitucionId === 1}
+          />
+        </Grid>
+      </>
+      )}
+      {institucionId && (
+        <Grid item xs={3}>
+          <Select
+            title="RVOE"
+            options={rvoes}
+            name="acuerdoRvoe"
+            value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+            errorMessage={rvoeError}
+          />
+        </Grid>
+      )}
     </Grid>
   );
 }
@@ -206,7 +242,7 @@ DatosInstitucion.propTypes = {
           PropTypes.string,
           PropTypes.number,
         ]),
-        programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         nombre: PropTypes.string,
         nivel: PropTypes.string,
         acuerdoRvoe: PropTypes.string,
