@@ -1,5 +1,5 @@
 import {
-  Button, Context, DataTable, InputSearch, getData,
+  Button, Context, DataTable, InputSearch, LabelData, getData,
 } from '@siiges-ui/shared';
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -23,6 +23,7 @@ export default function InscripcionesTable({
   const [alumnosInscritos, setAlumnosInscritos] = useState([]);
   const [alumnoValidacion, setAlumnoValidacion] = useState(null);
   const [alumnoData, setAlumnoData] = useState(null);
+  const [nombreAlumno, setNombreAlumno] = useState(null);
   const [isAlumnoValido, setIsAlumnoValido] = useState(false);
 
   const allIds = asignaturas.map((asignatura) => asignatura.id);
@@ -69,6 +70,14 @@ export default function InscripcionesTable({
   };
 
   const handleBlurMatricula = () => {
+    if (!matriculaValue) {
+      setNoti({
+        open: true,
+        message: '¡Favor de introducir una matrícula válida!',
+        type: 'error',
+      });
+      return;
+    }
     getAlumnoByMatricula(matriculaValue, programaId, async (error, result) => {
       if (error) {
         setNoti({
@@ -87,7 +96,7 @@ export default function InscripcionesTable({
         if (!validacionResult || validacionResult.data.situacionValidacionId !== 1) {
           setNoti({
             open: true,
-            message: '¡Este alumno no tiene una validación Auténtica!.',
+            message: '¡Favor de revisar la validación académica de este alumno!',
             type: 'error',
           });
           setIsAlumnoValido(false);
@@ -99,17 +108,19 @@ export default function InscripcionesTable({
         if (!alumnoResult || alumnoResult.data.situacionId !== 1) {
           setNoti({
             open: true,
-            message: '¡Este alumno no está Activo!.',
+            message: '¡Este alumno no está Activo!',
             type: 'error',
           });
           setIsAlumnoValido(false);
           return;
         }
         setAlumnoData(alumnoResult.data);
+        const fullName = `${alumnoResult.data?.persona?.nombre} ${alumnoResult.data?.persona?.apellidoPaterno} ${alumnoResult.data?.persona?.apellidoMaterno}`;
+        setNombreAlumno(fullName);
         setIsAlumnoValido(true);
         setNoti({
           open: true,
-          message: '¡Alumno validado correctamente!',
+          message: '¡Alumno encontrado exitosamente!',
           type: 'success',
         });
       } catch (fetchError) {
@@ -185,6 +196,11 @@ export default function InscripcionesTable({
           onClickButton={handleBlurMatricula}
         />
       </Grid>
+      {nombreAlumno && (
+      <Grid item xs={12}>
+        <LabelData title="Alumno" subtitle={nombreAlumno} />
+      </Grid>
+      )}
       <Grid item xs={12}>
         <DataTable
           rows={asignaturas}
