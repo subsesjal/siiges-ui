@@ -1,5 +1,5 @@
 import { Input } from '@siiges-ui/shared';
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function FechaExamenInput({
@@ -8,21 +8,43 @@ export default function FechaExamenInput({
   updateCalificaciones,
   value,
 }) {
-  useEffect(() => {
-    updateCalificaciones(id, value, 'fechaExamen');
-  }, [value]);
+  const formatForInput = (dateStr) => {
+    if (!dateStr) return '';
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+
+    const parts = dateStr.split('/');
+    if (parts.length === 3) {
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+    return '';
+  };
+
+  const formatForOutput = (dateStr) => {
+    if (!dateStr) return '';
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr;
+
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+    return '';
+  };
 
   const handleChange = (e) => {
-    updateCalificaciones(id, e.target.value, 'fechaExamen');
+    const inputValue = e.target.value;
+    const formattedValue = formatForOutput(inputValue);
+    updateCalificaciones(id, formattedValue, 'fechaExamen');
   };
+
+  const inputValue = formatForInput(value);
 
   return (
     <div style={{ marginTop: -10, width: '100%' }}>
       <Input
         name="fechaExamen"
         type="date"
-        format="DD/MM/YYYY"
-        value={value}
+        value={inputValue}
         variant="standard"
         disabled={disabled}
         onChange={handleChange}
