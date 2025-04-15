@@ -13,6 +13,8 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const [instituciones, setInstituciones] = useState([]);
   const [institucionId, setInstitucionId] = useState(null);
   const [rvoes, setRvoes] = useState([]);
+  const [rvoesList, setRvoesList] = useState([]);
+  const [carrera, setCarrera] = useState([]);
   const [tipoInstitucionId, setTipoInstitucionId] = useState(
     form.interesado?.institucionDestino?.tipoInstitucionId || '',
   );
@@ -49,6 +51,18 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
       setRvoes,
     );
   };
+
+  useEffect(() => {
+    if (rvoes && rvoes.length > 0) {
+      const mappedRvoes = rvoes.map(({ id, acuerdoRvoe }) => ({
+        id,
+        nombre: acuerdoRvoe,
+      }));
+      setRvoesList(mappedRvoes);
+    } else {
+      setRvoesList([]);
+    }
+  }, [rvoes]);
 
   const fetchProgramas = async (acuerdoRvoe) => {
     try {
@@ -93,6 +107,19 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const handleInstitucionChange = (event) => {
     const programaId = event.target.value;
     setInstitucionId(programaId);
+  };
+
+  const handleRvoeChange = (event) => {
+    const selectedId = event.target.value;
+    const selectedRvoe = rvoes.find((rvoe) => rvoe.id === selectedId);
+
+    if (selectedRvoe) {
+      setCarrera(selectedRvoe.nombre);
+    } else {
+      setCarrera('');
+    }
+
+    handleOnChange(event, ['interesado', 'institucionDestino']);
   };
 
   const handleRvoeOnBlur = (event) => {
@@ -213,16 +240,27 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
       </>
       )}
       {institucionId && (
-        <Grid item xs={3}>
-          <Select
-            title="RVOE"
-            options={rvoes}
-            name="acuerdoRvoe"
-            value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-            errorMessage={rvoeError}
-          />
-        </Grid>
+        <>
+          <Grid item xs={3}>
+            <Select
+              title="RVOE"
+              options={rvoesList}
+              name="acuerdoRvoe"
+              value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
+              onChange={handleRvoeChange}
+              errorMessage={rvoeError}
+            />
+          </Grid>
+          <Grid item xs={9}>
+            <Input
+              id="nombreCarreraDestino"
+              label="Nombre de la Carrera (Destino)"
+              name="nombreCarrera"
+              value={carrera || ''}
+              disabled
+            />
+          </Grid>
+        </>
       )}
     </Grid>
   );
