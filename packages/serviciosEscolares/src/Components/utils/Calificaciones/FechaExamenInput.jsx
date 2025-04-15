@@ -1,4 +1,4 @@
-import { Input } from '@siiges-ui/shared';
+import { InputDate } from '@siiges-ui/shared';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -40,14 +40,15 @@ export default function FechaExamenInput({
   const inputValue = formatForInput(value);
 
   return (
-    <div style={{ marginTop: -10, width: '100%' }}>
-      <Input
+    <div style={{ marginTop: -12, width: '100%' }}>
+      <InputDate
         name="fechaExamen"
         type="date"
         value={inputValue}
         variant="standard"
         disabled={disabled}
         onChange={handleChange}
+        size="small"
       />
     </div>
   );

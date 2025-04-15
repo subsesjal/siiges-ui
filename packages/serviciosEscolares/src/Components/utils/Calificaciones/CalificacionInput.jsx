@@ -50,22 +50,20 @@ export default function CalificacionInput({
   };
 
   return (
-    <div style={{ marginTop: -10 }}>
-      <TextField
-        name="calificacionInput"
-        value={inputValue}
-        variant="standard"
-        disabled={disabled}
-        inputProps={{
-          min: calificacionMinima,
-          max: calificacionMaxima,
-          step: calificacionDecimal ? '0.1' : '1',
-        }}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        fullWidth
-      />
-    </div>
+    <TextField
+      name="calificacionInput"
+      value={inputValue}
+      variant="standard"
+      disabled={disabled}
+      inputProps={{
+        min: calificacionMinima,
+        max: calificacionMaxima,
+        step: calificacionDecimal ? '0.1' : '1',
+      }}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      fullWidth
+    />
   );
 }
 
