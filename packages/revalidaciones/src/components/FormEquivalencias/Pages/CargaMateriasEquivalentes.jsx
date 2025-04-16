@@ -99,13 +99,22 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   };
 
   useEffect(() => {
-    if (form.interesado?.institucionDestino?.programaId !== null) {
+    if (
+      form.interesado?.institucionDestino?.programaId !== null
+      && form.interesado?.institucionDestino?.tipoInstitucionId === 1
+    ) {
       fetchData(
         `${domain}/api/v1/public/asignaturas/programas/${form.interesado?.institucionDestino?.programaId}`,
         setMateriasList,
       );
+    } else {
+      setMateriasList([]);
+      setAsignaturaId(null);
     }
-  }, [form.interesado?.institucionDestino?.programaId]);
+  }, [
+    form.interesado?.institucionDestino?.programaId,
+    form.interesado?.institucionDestino?.tipoInstitucionId,
+  ]);
 
   return (
     <>
@@ -192,6 +201,7 @@ CargaMateriasEquivalentes.propTypes = {
       ),
       institucionDestino: PropTypes.shape({
         programaId: PropTypes.number,
+        tipoInstitucionId: PropTypes.number,
       }),
     }),
   }).isRequired,
