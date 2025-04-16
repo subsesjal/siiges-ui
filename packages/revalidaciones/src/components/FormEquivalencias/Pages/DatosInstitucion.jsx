@@ -239,14 +239,14 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
         </Grid>
       </>
       )}
-      {institucionId && (
+      {tipoInstitucionId === 1 && (
         <>
           <Grid item xs={3}>
             <Select
               title="RVOE"
               options={rvoesList}
-              name="acuerdoRvoe"
-              value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
+              name="programaId"
+              value={form.interesado?.institucionDestino?.programaId || ''}
               onChange={handleRvoeChange}
               errorMessage={rvoeError}
             />
@@ -284,6 +284,7 @@ DatosInstitucion.propTypes = {
         nombre: PropTypes.string,
         nivel: PropTypes.string,
         acuerdoRvoe: PropTypes.string,
+        programaId: PropTypes.number,
         nombreCarrera: PropTypes.string,
       }),
     }),

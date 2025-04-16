@@ -1,9 +1,10 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm, DataTable, DefaultModal, Input,
+  ButtonsForm, DataTable, DefaultModal, Input, Select,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import fetchData from '../../../utils/FetchData';
 
 const columns = [
   {
@@ -28,12 +29,16 @@ const columns = [
   },
 ];
 
+const domain = process.env.NEXT_PUBLIC_URL;
+
 export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [open, setOpen] = useState(false);
   const [nombreAsignaturaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
   const [nombreAsignaturaEquivalente, setMateriaEquivalente] = useState('');
+  const [asignaturaId, setAsignaturaId] = useState(null);
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
+  const [materiasList, setMateriasList] = useState([]);
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
@@ -41,6 +46,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
       setRows(
         form.interesado.asignaturasAntecedentesEquivalentes.map((item, index) => ({
           id: index,
+          asignaturaId: item.asignaturaId,
           materiasAntecedente: item.nombreAsignaturaAntecedente,
           calificacionAntecedente: item.calificacionAntecedente,
           materiasEquivalentes: item.nombreAsignaturaEquivalente,
@@ -50,9 +56,24 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
     }
   }, [form]);
 
+  useEffect(() => {
+    if (asignaturaId && materiasList?.length > 0) {
+      const selectedMateria = materiasList.find(
+        (materia) => materia.id === parseInt(asignaturaId, 10),
+      );
+      if (selectedMateria) {
+        setMateriaEquivalente(selectedMateria.nombre);
+      } else {
+        setMateriaEquivalente('');
+      }
+    } else {
+      setMateriaEquivalente('');
+    }
+  }, [asignaturaId, materiasList]);
+
   const handleConfirm = () => {
     const newEntry = {
-      asignaturaId: 1,
+      asignaturaId,
       nombreAsignaturaEquivalente,
       calificacionEquivalente,
       nombreAsignaturaAntecedente,
@@ -70,11 +91,21 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
     );
 
     setOpen(false);
+    setAsignaturaId(null);
     setMateriaAntecedente('');
     setCalificacionAntecedente('');
     setMateriaEquivalente('');
     setCalificacionEquivalente('');
   };
+
+  useEffect(() => {
+    if (form.interesado?.institucionDestino?.programaId !== null) {
+      fetchData(
+        `${domain}/api/v1/public/asignaturas/programas/${form.interesado?.institucionDestino?.programaId}`,
+        setMateriasList,
+      );
+    }
+  }, [form.interesado?.institucionDestino?.programaId]);
 
   return (
     <>
@@ -108,13 +139,23 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <Input
-              id="nombreAsignaturaEquivalente"
-              name="nombreAsignaturaEquivalente"
-              label="Materias de Equivalente"
-              value={nombreAsignaturaEquivalente}
-              onChange={(e) => setMateriaEquivalente(e.target.value)}
-            />
+            {materiasList?.length > 0 ? (
+              <Select
+                title="Materias de Equivalente"
+                options={materiasList}
+                name="nombreAsignaturaEquivalente"
+                onChange={(e) => setAsignaturaId(e.target.value)}
+              />
+            )
+              : (
+                <Input
+                  id="nombreAsignaturaEquivalente"
+                  name="nombreAsignaturaEquivalente"
+                  label="Materias de Equivalente"
+                  value={nombreAsignaturaEquivalente}
+                  onChange={(e) => setMateriaEquivalente(e.target.value)}
+                />
+              )}
           </Grid>
           <Grid item xs={6}>
             <Input
