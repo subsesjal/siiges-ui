@@ -11,7 +11,9 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const [programas, setProgramas] = useState([]);
   const [grados, setGrados] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
-  const [institucionId, setInstitucionId] = useState(null);
+  const [institucionId, setInstitucionId] = useState(
+    form.interesado?.institucionDestino?.institucionId || '',
+  );
   const [rvoes, setRvoes] = useState([]);
   const [rvoesList, setRvoesList] = useState([]);
   const [carrera, setCarrera] = useState([]);
@@ -107,6 +109,8 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const handleInstitucionChange = (event) => {
     const programaId = event.target.value;
     setInstitucionId(programaId);
+
+    handleOnChange(event, ['interesado', 'institucionDestino']);
   };
 
   const handleRvoeChange = (event) => {
@@ -191,8 +195,8 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           <Select
             title="Instituciones"
             options={instituciones}
-            name="programaId"
-            value={form.interesado?.institucionDestino?.id || ''}
+            name="institucionId"
+            value={form.interesado?.institucionDestino?.institucionId || ''}
             onChange={handleInstitucionChange}
           />
         ) : (
@@ -280,7 +284,7 @@ DatosInstitucion.propTypes = {
           PropTypes.string,
           PropTypes.number,
         ]),
-        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        institucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         nombre: PropTypes.string,
         nivel: PropTypes.string,
         acuerdoRvoe: PropTypes.string,
