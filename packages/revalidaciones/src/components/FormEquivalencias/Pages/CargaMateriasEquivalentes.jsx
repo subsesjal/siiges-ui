@@ -1,15 +1,18 @@
-import { Grid } from '@mui/material';
+import { Grid, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import {
-  ButtonsForm, DataTable, DefaultModal, Input,
+  ButtonsForm, DataTable, DefaultModal, Input, Select,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import fetchData from '../../../utils/FetchData';
 
-const columns = [
+const columns = (handleDelete, handleEdit) => [
   {
     field: 'materiasAntecedente',
     headerName: 'Materias de Antecedente',
-    width: 350,
+    width: 280,
   },
   {
     field: 'calificacionAntecedente',
@@ -19,28 +22,126 @@ const columns = [
   {
     field: 'materiasEquivalentes',
     headerName: 'Materias Equivalentes',
-    width: 350,
+    width: 280,
   },
   {
     field: 'calificacionEquivalente',
     headerName: 'Calificación Equivalente',
     width: 200,
   },
+  {
+    field: 'actions',
+    headerName: 'Acciones',
+    width: 120,
+    renderCell: (params) => (
+      <>
+        <IconButton
+          onClick={() => handleEdit(params.row)}
+          aria-label="edit"
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => handleDelete(params.row.id)}
+          aria-label="delete"
+        >
+          <DeleteIcon />
+        </IconButton>
+      </>
+    ),
+  },
 ];
+
+const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   const [open, setOpen] = useState(false);
   const [nombreAsignaturaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
   const [nombreAsignaturaEquivalente, setMateriaEquivalente] = useState('');
+  const [asignaturaId, setAsignaturaId] = useState(null);
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
+  const [materiasList, setMateriasList] = useState([]);
   const [rows, setRows] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleDelete = (id) => {
+    if (form?.interesado?.asignaturasAntecedentesEquivalentes) {
+      const updatedList = form.interesado.asignaturasAntecedentesEquivalentes.filter(
+        (_, index) => index !== id,
+      );
+
+      handleOnChange(
+        {
+          target: {
+            name: 'asignaturasAntecedentesEquivalentes',
+            value: updatedList,
+          },
+        },
+        ['interesado'],
+      );
+    }
+  };
+
+  const handleEdit = (row) => {
+    setEditingId(row.id);
+    setIsEditing(true);
+    setMateriaAntecedente(row.materiasAntecedente);
+    setCalificacionAntecedente(row.calificacionAntecedente);
+    setMateriaEquivalente(row.materiasEquivalentes);
+    setCalificacionEquivalente(row.calificacionEquivalente);
+    setAsignaturaId(row.asignaturaId);
+    setOpen(true);
+  };
+
+  const resetForm = () => {
+    setOpen(false);
+    setEditingId(null);
+    setIsEditing(false);
+    setAsignaturaId(null);
+    setMateriaAntecedente('');
+    setCalificacionAntecedente('');
+    setMateriaEquivalente('');
+    setCalificacionEquivalente('');
+  };
+
+  const handleConfirm = () => {
+    const newEntry = {
+      asignaturaId,
+      nombreAsignaturaEquivalente,
+      calificacionEquivalente,
+      nombreAsignaturaAntecedente,
+      calificacionAntecedente,
+    };
+
+    let updatedList;
+    if (isEditing) {
+      updatedList = [...form.interesado.asignaturasAntecedentesEquivalentes];
+      updatedList[editingId] = newEntry;
+    } else {
+      updatedList = [...form.interesado.asignaturasAntecedentesEquivalentes, newEntry];
+    }
+
+    handleOnChange(
+      {
+        target: {
+          name: 'asignaturasAntecedentesEquivalentes',
+          value: updatedList,
+        },
+      },
+      ['interesado'],
+    );
+
+    resetForm();
+  };
 
   useEffect(() => {
     if (form?.interesado?.asignaturasAntecedentesEquivalentes) {
       setRows(
         form.interesado.asignaturasAntecedentesEquivalentes.map((item, index) => ({
           id: index,
+          asignaturaId: item.asignaturaId,
           materiasAntecedente: item.nombreAsignaturaAntecedente,
           calificacionAntecedente: item.calificacionAntecedente,
           materiasEquivalentes: item.nombreAsignaturaEquivalente,
@@ -50,44 +151,58 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
     }
   }, [form]);
 
-  const handleConfirm = () => {
-    const newEntry = {
-      asignaturaId: 1,
-      nombreAsignaturaEquivalente,
-      calificacionEquivalente,
-      nombreAsignaturaAntecedente,
-      calificacionAntecedente,
-    };
+  useEffect(() => {
+    if (asignaturaId && materiasList?.length > 0) {
+      const selectedMateria = materiasList.find(
+        (materia) => materia.id === parseInt(asignaturaId, 10),
+      );
+      if (selectedMateria) {
+        setMateriaEquivalente(selectedMateria.nombre);
+      } else {
+        setMateriaEquivalente('');
+      }
+    } else {
+      setMateriaEquivalente('');
+    }
+  }, [asignaturaId, materiasList]);
 
-    handleOnChange(
-      {
-        target: {
-          name: 'asignaturasAntecedentesEquivalentes',
-          value: [...form.interesado.asignaturasAntecedentesEquivalentes, newEntry],
-        },
-      },
-      ['interesado'],
-    );
-
-    setOpen(false);
-    setMateriaAntecedente('');
-    setCalificacionAntecedente('');
-    setMateriaEquivalente('');
-    setCalificacionEquivalente('');
-  };
+  useEffect(() => {
+    if (
+      form.interesado?.institucionDestino?.programaId !== null
+      && form.interesado?.institucionDestino?.tipoInstitucionId === 1
+    ) {
+      fetchData(
+        `${domain}/api/v1/public/asignaturas/programas/${form.interesado?.institucionDestino?.programaId}`,
+        setMateriasList,
+      );
+    } else {
+      setMateriasList([]);
+      setAsignaturaId(null);
+    }
+  }, [
+    form.interesado?.institucionDestino?.programaId,
+    form.interesado?.institucionDestino?.tipoInstitucionId,
+  ]);
 
   return (
     <>
       <Grid container spacing={1}>
         <DataTable
           buttonAdd
-          buttonClick={() => setOpen(true)}
+          buttonClick={() => {
+            resetForm();
+            setOpen(true);
+          }}
           buttonText="Carga de Materia"
           rows={rows}
-          columns={columns}
+          columns={columns(handleDelete, handleEdit)}
         />
       </Grid>
-      <DefaultModal title="Materias Equivalentes" open={open} setOpen={setOpen}>
+      <DefaultModal
+        title={isEditing ? 'Editar Materia Equivalente' : 'Materias Equivalentes'}
+        open={open}
+        setOpen={setOpen}
+      >
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <Input
@@ -108,13 +223,24 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <Input
-              id="nombreAsignaturaEquivalente"
-              name="nombreAsignaturaEquivalente"
-              label="Materias de Equivalente"
-              value={nombreAsignaturaEquivalente}
-              onChange={(e) => setMateriaEquivalente(e.target.value)}
-            />
+            {materiasList?.length > 0 ? (
+              <Select
+                title="Materias de Equivalente"
+                options={materiasList}
+                name="nombreAsignaturaEquivalente"
+                value={asignaturaId || ''}
+                onChange={(e) => setAsignaturaId(e.target.value)}
+              />
+            )
+              : (
+                <Input
+                  id="nombreAsignaturaEquivalente"
+                  name="nombreAsignaturaEquivalente"
+                  label="Materias de Equivalente"
+                  value={nombreAsignaturaEquivalente}
+                  onChange={(e) => setMateriaEquivalente(e.target.value)}
+                />
+              )}
           </Grid>
           <Grid item xs={6}>
             <Input
@@ -128,7 +254,8 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
           <Grid item xs={12}>
             <ButtonsForm
               confirm={handleConfirm}
-              cancel={() => setOpen(false)}
+              cancel={resetForm}
+              confirmText={isEditing ? 'Actualizar' : 'Confirmar'}
             />
           </Grid>
         </Grid>
@@ -151,6 +278,7 @@ CargaMateriasEquivalentes.propTypes = {
       ),
       institucionDestino: PropTypes.shape({
         programaId: PropTypes.number,
+        tipoInstitucionId: PropTypes.number,
       }),
     }),
   }).isRequired,

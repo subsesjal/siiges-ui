@@ -11,6 +11,12 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
   const [programas, setProgramas] = useState([]);
   const [grados, setGrados] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
+  const [institucionId, setInstitucionId] = useState(
+    form.interesado?.institucionDestino?.institucionId || '',
+  );
+  const [rvoes, setRvoes] = useState([]);
+  const [rvoesList, setRvoesList] = useState([]);
+  const [carrera, setCarrera] = useState([]);
   const [tipoInstitucionId, setTipoInstitucionId] = useState(
     form.interesado?.institucionDestino?.tipoInstitucionId || '',
   );
@@ -41,6 +47,25 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
     );
   };
 
+  const fetchRvoes = async () => {
+    fetchData(
+      `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
+      setRvoes,
+    );
+  };
+
+  useEffect(() => {
+    if (rvoes && rvoes.length > 0) {
+      const mappedRvoes = rvoes.map(({ id, acuerdoRvoe }) => ({
+        id,
+        nombre: acuerdoRvoe,
+      }));
+      setRvoesList(mappedRvoes);
+    } else {
+      setRvoesList([]);
+    }
+  }, [rvoes]);
+
   const fetchProgramas = async (acuerdoRvoe) => {
     try {
       const response = await fetch(
@@ -70,9 +95,34 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
     }
   }, [tipoInstitucionId]);
 
+  useEffect(() => {
+    if (institucionId) {
+      fetchRvoes();
+    }
+  }, [institucionId]);
+
   const handleTipoInstitucionChange = (event) => {
     const selectedTipoInstitucionId = event.target.value;
     setTipoInstitucionId(selectedTipoInstitucionId);
+    handleOnChange(event, ['interesado', 'institucionDestino']);
+  };
+  const handleInstitucionChange = (event) => {
+    const programaId = event.target.value;
+    setInstitucionId(programaId);
+
+    handleOnChange(event, ['interesado', 'institucionDestino']);
+  };
+
+  const handleRvoeChange = (event) => {
+    const selectedId = event.target.value;
+    const selectedRvoe = rvoes.find((rvoe) => rvoe.id === selectedId);
+
+    if (selectedRvoe) {
+      setCarrera(selectedRvoe.nombre);
+    } else {
+      setCarrera('');
+    }
+
     handleOnChange(event, ['interesado', 'institucionDestino']);
   };
 
@@ -145,9 +195,9 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           <Select
             title="Instituciones"
             options={instituciones}
-            name="programaId"
-            value={form.interesado?.institucionDestino?.programaId || ''}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+            name="institucionId"
+            value={form.interesado?.institucionDestino?.institucionId || ''}
+            onChange={handleInstitucionChange}
           />
         ) : (
           <Input
@@ -159,35 +209,63 @@ export default function DatosInstitucion({ form, handleOnChange, estados }) {
           />
         )}
       </Grid>
-      <Grid item xs={3}>
-        <Select
-          title="Nivel Académico Destino"
-          options={grados}
-          name="nivel"
-          value={form.interesado?.institucionDestino?.nivel || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <Input
-          id="rvoe"
-          label="RVOE"
-          name="acuerdoRvoe"
-          value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
-          onBlur={handleRvoeOnBlur}
-          errorMessage={rvoeError}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <Input
-          id="nombreCarreraDestino"
-          label="Nombre de la Carrera (Destino)"
-          name="nombreCarrera"
-          value={programas?.nombre || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-          disabled={tipoInstitucionId === 1}
-        />
-      </Grid>
+      {tipoInstitucionId !== 1
+      && (
+      <>
+        <Grid item xs={3}>
+          <Select
+            title="Nivel Académico Destino"
+            options={grados}
+            name="nivel"
+            value={form.interesado?.institucionDestino?.nivel || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Input
+            id="rvoe"
+            label="RVOE"
+            name="acuerdoRvoe"
+            value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
+            onBlur={handleRvoeOnBlur}
+            errorMessage={rvoeError}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="nombreCarreraDestino"
+            label="Nombre de la Carrera (Destino)"
+            name="nombreCarrera"
+            value={programas?.nombre || ''}
+            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+            disabled={tipoInstitucionId === 1}
+          />
+        </Grid>
+      </>
+      )}
+      {tipoInstitucionId === 1 && (
+        <>
+          <Grid item xs={3}>
+            <Select
+              title="RVOE"
+              options={rvoesList}
+              name="programaId"
+              value={form.interesado?.institucionDestino?.programaId || ''}
+              onChange={handleRvoeChange}
+              errorMessage={rvoeError}
+            />
+          </Grid>
+          <Grid item xs={9}>
+            <Input
+              id="nombreCarreraDestino"
+              label="Nombre de la Carrera (Destino)"
+              name="nombreCarrera"
+              value={carrera || ''}
+              disabled
+            />
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 }
@@ -206,10 +284,11 @@ DatosInstitucion.propTypes = {
           PropTypes.string,
           PropTypes.number,
         ]),
-        programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        institucionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         nombre: PropTypes.string,
         nivel: PropTypes.string,
         acuerdoRvoe: PropTypes.string,
+        programaId: PropTypes.number,
         nombreCarrera: PropTypes.string,
       }),
     }),

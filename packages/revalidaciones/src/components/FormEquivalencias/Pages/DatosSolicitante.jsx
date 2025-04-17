@@ -20,15 +20,6 @@ const sexo = [
   { id: 3, nombre: 'Otro' },
 ];
 
-const grados = [
-  { id: 1, nombre: 'Doctorado' },
-  { id: 2, nombre: 'Especialidad' },
-  { id: 3, nombre: 'Licenciatura' },
-  { id: 4, nombre: 'Maestría' },
-  { id: 5, nombre: 'Profesional Asociado' },
-  { id: 6, nombre: 'Técnico Superior Universitario' },
-];
-
 export default function DatosSolicitante({ form, handleOnChange, estados }) {
   const [municipios, setMunicipios] = useState([]);
   const [estadoId, setEstadoId] = useState(form.interesado.persona.domicilio.estadoId || '');
@@ -78,15 +69,6 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           options={tipoSolicitudes}
           name="tipoTramiteId"
           value={form.tipoTramiteId || ''}
-          onChange={(e) => handleOnChange(e, [])}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <Select
-          title="Grado Académico"
-          options={grados}
-          name="gradoAcademico"
-          value={form.gradoAcademico || ''}
           onChange={(e) => handleOnChange(e, [])}
         />
       </Grid>
