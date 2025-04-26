@@ -52,7 +52,8 @@ function ChangeAddress() {
       });
       router.push({
         pathname: `/solicitudes/detallesSolicitudes/${data.id}/editarSolicitud`,
-      });
+        query: { solicitudType: 'Cambio de Domicilio' },
+      }, `/solicitudes/detallesSolicitudes/${data.id}/editarSolicitud`);
     }
   }, [data, programaSelect]);
 
