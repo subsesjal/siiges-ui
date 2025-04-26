@@ -129,6 +129,7 @@ function InstitucionData({ id, disabled }) {
     </Grid>
   );
 }
+
 InstitucionData.defaultProps = {
   disabled: false,
 };

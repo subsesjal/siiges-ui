@@ -12,9 +12,10 @@ export default function DatosPlantel({
   disabled: initialDisabled,
   plantelesData,
   setPlantelesData,
+  usuarioId,
   type,
 }) {
-  const { planteles } = getPlantelesUsuario();
+  const { planteles } = getPlantelesUsuario(usuarioId);
   const { setForm, plantelId } = useContext(PlantelContext);
   const [plantelesSelect, setPlantelesSelect] = useState([]);
   const [disabled, setDisabled] = useState(initialDisabled);
@@ -25,7 +26,7 @@ export default function DatosPlantel({
     } else {
       setDisabled(initialDisabled);
     }
-  }, [type, initialDisabled]);
+  }, [type]);
 
   const isSectionDisabled = useSectionDisabled(14);
 
@@ -269,8 +270,13 @@ export default function DatosPlantel({
   );
 }
 
+DatosPlantel.defaultProps = {
+  usuarioId: null,
+};
+
 DatosPlantel.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  usuarioId: PropTypes.number,
   plantelesData: PropTypes.shape({
     claveCentroTrabajo: PropTypes.string,
     telefono1: PropTypes.string,

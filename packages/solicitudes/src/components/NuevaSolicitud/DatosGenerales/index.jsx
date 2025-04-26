@@ -10,7 +10,7 @@ import { DatosGeneralesProvider } from '../../utils/Context/datosGeneralesContex
 import Observaciones from '../../Sections/Observaciones';
 
 export default function DatosGenerales({
-  nextModule, id, type,
+  nextModule, id, type, solicitud,
 }) {
   const {
     next, prev, section, position, porcentaje,
@@ -21,7 +21,7 @@ export default function DatosGenerales({
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
       <CardContent>
-        <DatosGeneralesProvider>
+        <DatosGeneralesProvider solicitud={solicitud}>
           <SectionLayout
             type={type}
             sectionTitle="Datos Generales"
@@ -34,7 +34,14 @@ export default function DatosGenerales({
             next={next}
             prev={prev}
           >
-            {section === 1 && <InstitucionData disabled={isDisabled} id={id} type={type} />}
+            {section === 1
+              && (
+              <InstitucionData
+                disabled={isDisabled}
+                id={id}
+                type={type}
+              />
+              )}
             {section === 2 && <RepresentanteLegalData disabled={isDisabled} id={id} type={type} />}
             {section === 3 && <DiligenciasData disabled={isDisabled} id={id} type={type} />}
             <Observaciones
@@ -51,6 +58,7 @@ export default function DatosGenerales({
 
 DatosGenerales.defaultProps = {
   id: null,
+  solicitud: {},
 };
 
 DatosGenerales.propTypes = {
@@ -60,4 +68,14 @@ DatosGenerales.propTypes = {
     PropTypes.string,
   ]),
   type: PropTypes.string.isRequired,
+  solicitud: PropTypes.shape({
+    id: PropTypes.number,
+    programa: PropTypes.shape({
+      plantel: PropTypes.shape({
+        institucion: PropTypes.shape({
+          id: PropTypes.number,
+        }),
+      }),
+    }),
+  }),
 };
