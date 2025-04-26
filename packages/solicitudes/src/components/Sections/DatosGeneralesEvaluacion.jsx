@@ -96,7 +96,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
         porcentajeCumplimiento: cumplimiento.porcentajeCumplimiento,
       }));
     }
-  }, [error, cumplimiento, validation]);
+  }, [error]);
 
   const { evaluadores } = getEvaluadores();
 
