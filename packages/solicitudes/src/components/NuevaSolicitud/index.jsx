@@ -56,8 +56,8 @@ export default function NuevaSolicitud({
   const [id, setId] = useState(solicitudId);
   const [programaId, setProgramaId] = useState('');
   const [solicitud, setSolicitud] = useState({});
-
-  const currentDate = dayjs().locale('es').format('DD [de] MMMM YYYY');
+  const [displayDate, setDisplayDate] = useState('');
+  const { solicitudType } = router.query;
 
   useEffect(() => {
     setId(solicitudId);
@@ -69,6 +69,14 @@ export default function NuevaSolicitud({
       fetchSolicitud();
     }
   }, [solicitudId]);
+
+  useEffect(() => {
+    if (solicitud?.createdAt) {
+      setDisplayDate(dayjs(solicitud.createdAt).locale('es').format('DD [de] MMMM YYYY'));
+    } else {
+      setDisplayDate(dayjs().locale('es').format('DD [de] MMMM YYYY'));
+    }
+  }, [solicitud]);
 
   useEffect(() => {
     const modalidadMap = {
@@ -120,8 +128,8 @@ export default function NuevaSolicitud({
       <ModuleHeader
         steps={steps[modalidad].map((component) => getStepName(component))}
         isEditOrView={type}
-        type="Nueva solicitud"
-        date={currentDate}
+        type={solicitudType || 'Nueva solicitud'}
+        date={displayDate}
         nextModule={nextModule}
         prevModule={prevModule}
         module={module}

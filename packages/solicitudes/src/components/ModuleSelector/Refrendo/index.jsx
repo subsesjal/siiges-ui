@@ -36,7 +36,8 @@ function Refrendo() {
       });
       router.push({
         pathname: `/solicitudes/detallesSolicitudes/${data.id}/editarSolicitud`,
-      });
+        query: { solicitudType: 'Refrendo' },
+      }, `/solicitudes/detallesSolicitudes/${data.id}/editarSolicitud`);
     }
   }, [data]);
 
