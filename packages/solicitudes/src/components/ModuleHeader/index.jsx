@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, {
+  useEffect, useState, useContext, useMemo,
+} from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import {
@@ -27,28 +29,27 @@ export default function ModuleHeader({
   const [disabled, setDisabled] = useState(false);
   const [modalState, setModalState] = useState(false);
   const [modalRepresentante, setModalRepresentante] = useState(false);
-  const [lastStepReached, setLastStepReached] = useState(false);
   const { session, setNoti, setLoading } = useContext(Context);
   const { rol } = session;
   const router = useRouter();
-
+  const isFinalModule = useMemo(() => module === steps.length - 1, [module, steps.length]);
   const isControlDocumental = rol === 'control_documental';
-  const isFinalModule = module === steps.length - 1;
-  const textIsControlDocumental = isFinalModule
-    ? 'Terminar revisión'
-    : 'Siguiente módulo';
-  const textNormal = isFinalModule ? 'Terminar solicitud' : 'Siguiente módulo';
-  const textRol = isControlDocumental ? textIsControlDocumental : textNormal;
+
+  const buttonText = useMemo(() => {
+    if (isControlDocumental) {
+      return isFinalModule ? 'Terminar revisión' : 'Siguiente módulo';
+    }
+    return isFinalModule ? 'Terminar solicitud' : 'Siguiente módulo';
+  }, [isFinalModule, isControlDocumental]);
 
   const handleLastStepAction = async () => {
     setModalRepresentante(false);
     setLoading(true);
-    const endpoint = `/solicitudes/${id}`;
-    const data = {
-      estatusSolicitudId: 2,
-    };
     try {
+      const endpoint = `/solicitudes/${id}`;
+      const data = { estatusSolicitudId: 2 };
       const result = await updateRecord({ data, endpoint });
+
       if (result?.statusCode === 200) {
         setNoti({
           open: true,
@@ -56,9 +57,8 @@ export default function ModuleHeader({
           type: 'success',
         });
         router.push('/solicitudes');
-        setLoading(false);
       } else {
-        throw new Error('¡Error al completar la solicitud!');
+        throw new Error(result?.errorMessage || '¡Error al completar la solicitud!');
       }
     } catch (error) {
       setNoti({
@@ -66,12 +66,17 @@ export default function ModuleHeader({
         message: error.message || '¡Hubo un error al completar la solicitud!',
         type: 'error',
       });
+    } finally {
       setLoading(false);
     }
   };
 
+  const handleExit = () => {
+    router.push('/solicitudes');
+  };
+
   const submitButton = () => {
-    if (lastStepReached && rol === 'representante') {
+    if (isFinalModule && rol === 'representante') {
       if (id) {
         setModalRepresentante(true);
       } else {
@@ -81,34 +86,16 @@ export default function ModuleHeader({
           type: 'error',
         });
       }
-    } else if (isControlDocumental) {
-      if (isFinalModule) {
-        setModalState({ open: true, title: 'Enviar Observaciones' });
-      } else {
-        nextModule();
-      }
+    } else if (isControlDocumental && isFinalModule) {
+      setModalState({ open: true, title: 'Enviar Observaciones' });
     } else {
       nextModule();
     }
   };
 
-  const prevButton = () => {
-    prevModule();
-  };
-
   useEffect(() => {
-    if (id !== undefined) {
-      setDisabled(true);
-    }
+    setDisabled(id !== undefined);
   }, [id]);
-
-  useEffect(() => {
-    if (module === steps.length - 1) {
-      setLastStepReached(true);
-    } else {
-      setLastStepReached(false);
-    }
-  }, [module, steps]);
 
   const showFinishButton = isEditOrView !== 'consultar' && isFinalModule;
 
@@ -145,7 +132,7 @@ export default function ModuleHeader({
                   text="Módulo anterior"
                   alt="Módulo anterior"
                   type="success"
-                  onClick={() => prevButton()}
+                  onClick={prevModule}
                   disabled={disabled}
                 />
               </Grid>
@@ -153,10 +140,10 @@ export default function ModuleHeader({
             {showFinishButton && (
               <Grid item>
                 <ButtonSimple
-                  text={textRol}
-                  alt={textRol}
+                  text={buttonText}
+                  alt={buttonText}
                   type="success"
-                  onClick={() => submitButton()}
+                  onClick={submitButton}
                   disabled={disabled}
                 />
               </Grid>
@@ -167,7 +154,7 @@ export default function ModuleHeader({
                   text="Siguiente módulo"
                   alt="Siguiente módulo"
                   type="success"
-                  onClick={() => submitButton()}
+                  onClick={submitButton}
                   disabled={disabled}
                 />
               </Grid>
@@ -177,7 +164,7 @@ export default function ModuleHeader({
                 text="Salir"
                 alt="Salir"
                 type="success"
-                onClick={() => router.push('/home')}
+                onClick={handleExit}
               />
             </Grid>
           </Grid>
@@ -207,7 +194,7 @@ export default function ModuleHeader({
               <ButtonSimple
                 text="Aceptar"
                 type="success"
-                onClick={() => handleLastStepAction()}
+                onClick={handleLastStepAction}
               />
             </Grid>
           </Grid>
