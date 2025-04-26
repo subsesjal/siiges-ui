@@ -12,6 +12,7 @@ import {
   EvaluacionCurricular,
   PlataformaEducativa,
 } from '@siiges-ui/solicitudes';
+import { getData } from '@siiges-ui/shared';
 import { ObservacionesProvider } from '../utils/Context/observacionesContext';
 
 const commonSteps = [
@@ -54,11 +55,19 @@ export default function NuevaSolicitud({
   const [module, setModule] = useState(0);
   const [id, setId] = useState(solicitudId);
   const [programaId, setProgramaId] = useState('');
+  const [solicitud, setSolicitud] = useState({});
 
   const currentDate = dayjs().locale('es').format('DD [de] MMMM YYYY');
 
   useEffect(() => {
     setId(solicitudId);
+    if (solicitudId) {
+      const fetchSolicitud = async () => {
+        const response = await getData({ endpoint: `/solicitudes/${solicitudId}` });
+        setSolicitud(response.data);
+      };
+      fetchSolicitud();
+    }
   }, [solicitudId]);
 
   useEffect(() => {
@@ -100,6 +109,7 @@ export default function NuevaSolicitud({
         setId={setId}
         programaId={programaId}
         setProgramaId={setProgramaId}
+        solicitud={solicitud}
         type={type}
       />
     ) : null;

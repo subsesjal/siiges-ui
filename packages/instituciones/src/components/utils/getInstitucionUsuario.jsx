@@ -5,46 +5,54 @@ const ENDPOINT_MAPPING = {
   representante: (usuarioId) => `/api/v1/instituciones/usuarios/${usuarioId}`,
 };
 
-export default function useInstitucionUsuario(session) {
+export default function useInstitucionUsuario(session, usuarioId) {
   const [institucion, setInstitucion] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const basePath = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
     async function fetchInstitucion() {
-      const { id, rol } = session;
+      if (!session) return;
 
-      if (rol === 'representante') {
-        const endpoint = ENDPOINT_MAPPING[rol](id);
+      setLoading(true);
+      setError(null);
+
+      try {
+        const { id, rol } = session;
+        const endpoint = rol === 'representante'
+          ? ENDPOINT_MAPPING.representante(id)
+          : ENDPOINT_MAPPING.representante(usuarioId);
+
         const url = `${basePath}${endpoint}`;
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            api_key: apikey,
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        try {
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              api_key: apikey,
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error(`¡Error en el estatus HTTP!: ${response.status}`);
-          }
-
-          const data = await response.json();
-          setInstitucion(data.data);
-        } catch (error) {
-          console.error('¡Error al recuperar los datos de la institución!:', error);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const { data } = await response.json();
+        setInstitucion(data);
+      } catch (err) {
+        console.error('Error fetching institution data:', err);
+        setError(err.message || 'Failed to fetch institution data');
+        setInstitucion(null);
+      } finally {
+        setLoading(false);
       }
     }
 
-    if (session) {
-      fetchInstitucion();
-    }
-  }, [session, apikey, basePath, token]);
+    fetchInstitucion();
+  }, [session, usuarioId, apikey, basePath, token]);
 
-  return institucion;
+  return { institucion, loading, error };
 }

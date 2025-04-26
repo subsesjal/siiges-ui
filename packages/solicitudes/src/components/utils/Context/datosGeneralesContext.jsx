@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useEffect,
   useContext,
+  useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
@@ -11,9 +12,9 @@ import { Context } from '@siiges-ui/shared';
 
 const DatosGeneralesContext = createContext();
 
-export function DatosGeneralesProvider({ children }) {
+export function DatosGeneralesProvider({ children, solicitud }) {
   const { session } = useContext(Context);
-  const institucion = getInstitucionUsuario(session);
+  const [institucion, setInstitucion] = useState({});
   const [form, setForm] = useState({
     1: {},
     2: { persona: { domicilio: { estadoId: 14 } } },
@@ -31,8 +32,28 @@ export function DatosGeneralesProvider({ children }) {
   const [diligenciasRows, setDiligenciasRows] = useState([]);
   const [initialValues, setInitialValues] = useState({});
 
+  // Memoized function to update institution data
+  const updateInstitucion = useCallback(() => {
+    if (solicitud?.programa?.plantel?.institucion && session.rol !== 'representante') {
+      setInstitucion(solicitud.programa.plantel.institucion);
+    } else {
+      try {
+        const institucionData = getInstitucionUsuario(session);
+        setInstitucion(institucionData || {});
+      } catch (err) {
+        setInstitucion({});
+      }
+    }
+  }, [solicitud, session]);
+
+  // Update institution when solicitud or session changes
   useEffect(() => {
-    if (institucion) {
+    updateInstitucion();
+  }, [updateInstitucion]);
+
+  // Update form when institution changes
+  useEffect(() => {
+    if (institucion?.id) {
       setForm((prevForm) => ({
         ...prevForm,
         1: {
@@ -86,8 +107,22 @@ export function DatosGeneralesProvider({ children }) {
   );
 }
 
+DatosGeneralesProvider.defaultProps = {
+  solicitud: {},
+};
+
 DatosGeneralesProvider.propTypes = {
   children: PropTypes.node.isRequired,
+  solicitud: PropTypes.shape({
+    id: PropTypes.number,
+    programa: PropTypes.shape({
+      plantel: PropTypes.shape({
+        institucion: PropTypes.shape({
+          id: PropTypes.number,
+        }),
+      }),
+    }),
+  }),
 };
 
 export default DatosGeneralesContext;

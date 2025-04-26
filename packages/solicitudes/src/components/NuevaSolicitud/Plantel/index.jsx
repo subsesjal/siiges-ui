@@ -13,7 +13,6 @@ import Infraestructura from '../../Sections/Infraestructura';
 import RatificacionNombre from '../../Sections/RatificacionNombre';
 import NombresPropuestos from '../../Sections/NombresPropuestos';
 import { PlantelProvider } from '../../utils/Context/plantelContext';
-import getSolicitudesById from '../../utils/getSolicitudesById';
 import Observaciones from '../../Sections/Observaciones';
 
 export default function Plantel({
@@ -21,14 +20,14 @@ export default function Plantel({
   id,
   programaId,
   type,
+  solicitud,
 }) {
   const [disabled, setDisabled] = useState(true);
   const { session } = useContext(Context);
-  const institucion = getInstitucionUsuario(session);
+  const institucion = getInstitucionUsuario(session, solicitud?.usuarioId);
   const [ratificacion, setRatificacion] = useState(<RatificacionNombre disabled={disabled} />);
   const [plantelesData, setPlantelesData] = useState({});
   const [selectedPlantel, setSelectedPlantel] = useState();
-  const { solicitudes } = getSolicitudesById(id);
   const isDisabled = type === 'consultar' || disabled;
 
   useEffect(() => {
@@ -55,13 +54,13 @@ export default function Plantel({
         setRatificacion(<RatificacionNombre disabled={isDisabled} />);
       }
     }
-  }, [id, isDisabled, institucion]);
+  }, [id, institucion]);
 
   useEffect(() => {
-    if (solicitudes.programa) {
-      setSelectedPlantel(solicitudes.programa.plantelId);
+    if (solicitud.programa) {
+      setSelectedPlantel(solicitud.programa.plantelId);
     }
-  }, [solicitudes, id]);
+  }, [solicitud, id]);
 
   const {
     next, prev, section, position, porcentaje,
@@ -97,6 +96,7 @@ export default function Plantel({
                 disabled={isDisabled}
                 plantelesData={plantelesData}
                 setPlantelesData={setPlantelesData}
+                usuarioId={solicitud?.usuarioId}
                 type={type}
               />
             )}
@@ -138,6 +138,7 @@ Plantel.defaultProps = {
   id: null,
   programaId: null,
   type: '',
+  solicitud: {},
 };
 
 Plantel.propTypes = {
@@ -145,4 +146,16 @@ Plantel.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   type: PropTypes.string,
+  solicitud: PropTypes.shape({
+    id: PropTypes.number,
+    usuarioId: PropTypes.number,
+    programa: PropTypes.shape({
+      plantelId: PropTypes.number,
+      plantel: PropTypes.shape({
+        institucion: PropTypes.shape({
+          id: PropTypes.number,
+        }),
+      }),
+    }),
+  }),
 };
