@@ -8,7 +8,9 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import GradingIcon from '@mui/icons-material/Grading';
 import PrintIcon from '@mui/icons-material/Print';
+import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
 import { deleteRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import { useRouter } from 'next/router';
@@ -18,11 +20,13 @@ function SolicitudesActions({ id, estatus }) {
   const [openDelete, setOpenDelete] = useState(false);
   const [openDownload, setOpenDownload] = useState(false);
   const [comments, setComments] = useState('');
-  const [consultLink, setConsultLink] = useState(`/solicitudes/detallesSolicitudes/${id}`);
+  const [consultLink] = useState(`/solicitudes/detallesSolicitudes/${id}`);
   const [showButtons, setShowButtons] = useState({
     consultar: true,
     editar: false,
     eliminar: false,
+    revisar: false,
+    observaciones: false,
     ver: true,
     descargar: false,
   });
@@ -38,18 +42,24 @@ function SolicitudesActions({ id, estatus }) {
         });
         break;
       case 'control_documental':
-        setConsultLink(`/solicitudes/detallesSolicitudes/${id}/recepcionFormatos`);
         setShowButtons({
           ver: true,
-          consultar: estatus === 3,
-          editar: estatus === 2,
+          consultar: false,
+          revisar: estatus === 3,
+          editar: false,
+          observaciones: estatus === 2,
           eliminar: false,
           descargar: estatus === 10,
         });
         break;
       default:
         setShowButtons({
-          ver: true, consultar: true, editar: false, eliminar: false,
+          ver: true,
+          consultar: true,
+          editar: false,
+          eliminar: false,
+          revisar: false,
+          observaciones: false,
         });
         break;
     }
@@ -131,30 +141,71 @@ function SolicitudesActions({ id, estatus }) {
             </Link>
           </Grid>
         )}
+        {showButtons.observaciones && (
+          <Grid item xs={3}>
+            <Link
+              href={`/solicitudes/detallesSolicitudes/${id}/observacionesSolicitud`}
+              passHref
+            >
+              <IconButton aria-label="observaciones">
+                <InsertCommentIcon />
+              </IconButton>
+            </Link>
+          </Grid>
+        )}
+        {showButtons.revisar && (
+          <Grid item xs={3}>
+            <Link
+              href={`/solicitudes/detallesSolicitudes/${id}/recepcionFormatos`}
+              passHref
+            >
+              <IconButton aria-label="revisar">
+                <GradingIcon />
+              </IconButton>
+            </Link>
+          </Grid>
+        )}
         {showButtons.eliminar && (
           <Grid item xs={3}>
-            <IconButton aria-label="eliminar" onClick={() => setOpenDelete(true)}>
+            <IconButton
+              aria-label="eliminar"
+              onClick={() => setOpenDelete(true)}
+            >
               <DeleteIcon />
             </IconButton>
           </Grid>
         )}
         {showButtons.descargar && (
           <Grid item xs={4}>
-            <IconButton aria-label="descargar" onClick={() => setOpenDownload(true)}>
+            <IconButton
+              aria-label="descargar"
+              onClick={() => setOpenDownload(true)}
+            >
               <PrintIcon />
             </IconButton>
           </Grid>
         )}
       </Grid>
-      <DefaultModal title="Eliminar solicitud" open={openDelete} setOpen={setOpenDelete}>
-        <Typography>
-          ¿Está seguro de eliminar esta solicitud?
-        </Typography>
-        <ButtonsForm cancel={() => setOpenDelete(false)} confirm={handleDelete} confirmText="Confirmar" />
+      <DefaultModal
+        title="Eliminar solicitud"
+        open={openDelete}
+        setOpen={setOpenDelete}
+      >
+        <Typography>¿Está seguro de eliminar esta solicitud?</Typography>
+        <ButtonsForm
+          cancel={() => setOpenDelete(false)}
+          confirm={handleDelete}
+          confirmText="Confirmar"
+        />
       </DefaultModal>
-      <DefaultModal title="Descargar solicitud" open={openDownload} setOpen={setOpenDownload}>
+      <DefaultModal
+        title="Descargar solicitud"
+        open={openDownload}
+        setOpen={setOpenDownload}
+      >
         <Typography>
-          ¿Está seguro de descargar esta solicitud con los siguientes comentarios?
+          ¿Está seguro de descargar esta solicitud con los siguientes
+          comentarios?
         </Typography>
         <TextField
           fullWidth
@@ -164,7 +215,11 @@ function SolicitudesActions({ id, estatus }) {
           onChange={(e) => setComments(e.target.value)}
           label="Comentarios"
         />
-        <ButtonsForm cancel={() => setOpenDownload(false)} confirm={handleDownload} confirmText="Descargar" />
+        <ButtonsForm
+          cancel={() => setOpenDownload(false)}
+          confirm={handleDownload}
+          confirmText="Descargar"
+        />
       </DefaultModal>
     </>
   );

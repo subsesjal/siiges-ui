@@ -59,6 +59,9 @@ export default function NuevaSolicitud({
   const [displayDate, setDisplayDate] = useState('');
   const { solicitudType } = router.query;
 
+  const READ_ONLY_MODES = ['consultar', 'observaciones'];
+  const isDisabled = READ_ONLY_MODES.includes(type);
+
   useEffect(() => {
     setId(solicitudId);
     if (solicitudId) {
@@ -119,6 +122,7 @@ export default function NuevaSolicitud({
         setProgramaId={setProgramaId}
         solicitud={solicitud}
         type={type}
+        isDisabled={isDisabled}
       />
     ) : null;
   };
