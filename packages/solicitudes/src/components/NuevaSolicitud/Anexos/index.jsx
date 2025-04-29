@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
@@ -7,19 +7,15 @@ import AnexosSeccion from '../../Sections/AnexosSeccion';
 import Observaciones from '../../Sections/Observaciones';
 
 export default function Anexos({
-  nextModule, id, type,
+  nextModule, id, type, isDisabled: parentDisabled,
 }) {
   const [form, setForm] = useState([]);
-  const [disabled, setDisabled] = useState(true);
 
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 1);
 
-  useEffect(() => {
-    const isDisabled = type === 'consultar' || id === undefined;
-    setDisabled(isDisabled);
-  }, [id, type]);
+  const isDisabled = parentDisabled || id === undefined;
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
@@ -40,7 +36,7 @@ export default function Anexos({
             <AnexosSeccion
               form={form}
               setForm={setForm}
-              disabled={disabled}
+              disabled={isDisabled}
               id={id}
               type={type}
             />
@@ -62,6 +58,7 @@ Anexos.defaultProps = {
 
 Anexos.propTypes = {
   nextModule: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
   id: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,

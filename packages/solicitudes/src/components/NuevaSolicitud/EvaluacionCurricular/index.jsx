@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import SectionLayout from '../../SectionLayout';
@@ -12,17 +12,13 @@ export default function EvaluacionCurricular({
   id,
   programaId,
   type,
+  isDisabled: parentDisabled,
 }) {
-  const [disabled, setDisabled] = useState(true);
-
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 1);
 
-  useEffect(() => {
-    const isDisabled = type === 'consultar' || id === undefined;
-    setDisabled(isDisabled);
-  }, [id, type]);
+  const isDisabled = parentDisabled || id === undefined;
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
@@ -42,7 +38,7 @@ export default function EvaluacionCurricular({
           >
             {section === 1 && (
               <DatosGeneralesEvaluacion
-                disabled={disabled}
+                disabled={isDisabled}
                 id={id}
                 type={type}
               />
@@ -68,4 +64,5 @@ EvaluacionCurricular.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   type: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
 };

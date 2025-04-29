@@ -21,6 +21,7 @@ export default function Plantel({
   programaId,
   type,
   solicitud,
+  isDisabled,
 }) {
   const [disabled, setDisabled] = useState(true);
   const { session } = useContext(Context);
@@ -28,10 +29,9 @@ export default function Plantel({
   const [ratificacion, setRatificacion] = useState(<RatificacionNombre disabled={disabled} />);
   const [plantelesData, setPlantelesData] = useState({});
   const [selectedPlantel, setSelectedPlantel] = useState();
-  const isDisabled = type === 'consultar' || disabled;
 
   useEffect(() => {
-    setDisabled(!id);
+    setDisabled(isDisabled || !id);
   }, [id]);
 
   useEffect(() => {
@@ -45,13 +45,13 @@ export default function Plantel({
       ) {
         setRatificacion(
           <NombresPropuestos
-            disabled={isDisabled}
+            disabled={disabled}
             id={institucion.id}
             institucion={institucion}
           />,
         );
       } else {
-        setRatificacion(<RatificacionNombre disabled={isDisabled} />);
+        setRatificacion(<RatificacionNombre disabled={disabled} />);
       }
     }
   }, [id, institucion]);
@@ -93,7 +93,7 @@ export default function Plantel({
           >
             {section === 1 && (
               <DatosPlantel
-                disabled={isDisabled}
+                disabled={disabled}
                 plantelesData={plantelesData}
                 setPlantelesData={setPlantelesData}
                 usuarioId={solicitud?.usuarioId}
@@ -102,7 +102,7 @@ export default function Plantel({
             )}
             {section === 2 && (
               <DescripcionPlantel
-                disabled={isDisabled}
+                disabled={disabled}
                 plantelesData={plantelesData}
                 setPlantelesData={setPlantelesData}
                 type={type}
@@ -110,16 +110,16 @@ export default function Plantel({
             )}
             {section === 3 && (
               <HigienePlantel
-                disabled={isDisabled}
+                disabled={disabled}
                 plantelId={plantelesData?.id}
                 type={type}
               />
             )}
             {section === 4 && (
-              <InstitucionesAledanas disabled={isDisabled} programaId={programaId} type={type} />
+              <InstitucionesAledanas disabled={disabled} programaId={programaId} type={type} />
             )}
             {section === 5 && (
-              <Infraestructura disabled={isDisabled} programaId={programaId} type={type} />
+              <Infraestructura disabled={disabled} programaId={programaId} type={type} />
             )}
             {renderSection6()}
             <Observaciones
@@ -146,6 +146,7 @@ Plantel.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   type: PropTypes.string,
+  isDisabled: PropTypes.bool.isRequired,
   solicitud: PropTypes.shape({
     id: PropTypes.number,
     usuarioId: PropTypes.number,

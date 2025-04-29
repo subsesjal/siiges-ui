@@ -10,13 +10,11 @@ import { DatosGeneralesProvider } from '../../utils/Context/datosGeneralesContex
 import Observaciones from '../../Sections/Observaciones';
 
 export default function DatosGenerales({
-  nextModule, id, type, solicitud,
+  nextModule, id, type, solicitud, isDisabled,
 }) {
   const {
     next, prev, section, position, porcentaje,
   } = pagination(useState, 3);
-
-  const isDisabled = type === 'consultar';
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
@@ -68,6 +66,7 @@ DatosGenerales.propTypes = {
     PropTypes.string,
   ]),
   type: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
   solicitud: PropTypes.shape({
     id: PropTypes.number,
     programa: PropTypes.shape({

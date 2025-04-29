@@ -29,6 +29,7 @@ export default function PlanEstudios({
   programaId,
   setProgramaId,
   type,
+  isDisabled: parentDisabled,
 }) {
   const { session, loading } = useContext(Context);
   const router = useRouter();
@@ -60,9 +61,6 @@ export default function PlanEstudios({
     if (id && isMounted) {
       setDisabled(false);
     }
-    if (type === 'consultar') {
-      setDisabled(true);
-    }
 
     if (query.modalidad) {
       setModalidad(query.modalidad);
@@ -71,7 +69,7 @@ export default function PlanEstudios({
     if (
       !loadingSolicitud
       && solicitudes.programa
-      && (type === 'editar' || type === 'consultar')
+      && (type === 'editar' || type === 'consultar' || type === 'observaciones')
     ) {
       setProgramaId(solicitudes.programa.id);
       setModalidad(solicitudes.programa.modalidadId);
@@ -198,7 +196,7 @@ export default function PlanEstudios({
     }
   }, [modalidad]);
 
-  const isDisabled = type === 'consultar' || disabled;
+  const isDisabled = parentDisabled || disabled;
 
   return (
     <SolicitudContext.Provider value={value}>
@@ -243,7 +241,7 @@ export default function PlanEstudios({
               {section === 10 && (
                 <HerramientaEducativa disabled={isDisabled} type={type} />
               )}
-              {type === 'editar' && <Observaciones id={id} section={section} />}
+              <Observaciones id={id} section={section} />
             </SectionLayout>
           </CardContent>
         </Card>
@@ -270,6 +268,7 @@ PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
   setId: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
   type: PropTypes.string,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

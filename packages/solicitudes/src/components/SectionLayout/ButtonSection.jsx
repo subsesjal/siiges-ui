@@ -51,7 +51,7 @@ export default function ButtonSection({
   } = useContext(ObservacionesContext);
   const router = useRouter();
 
-  const isControlDocumental = session.rol === 'control_documental';
+  const isControlDocumental = type === 'observaciones';
   const buttonText = isControlDocumental
     ? 'Guardar observaciones'
     : 'Terminar Sección';
@@ -77,7 +77,7 @@ export default function ButtonSection({
       (section) => section.id === offsetSection,
     );
 
-    if (foundSection) {
+    if (foundSection && type !== 'observaciones') {
       setCurrentSectionStatus(() => foundSection.disabled);
     }
   }, [sectionState, currentSection, sectionTitle]);
