@@ -28,10 +28,6 @@ export default function Solicitudes() {
         filteredSolicitudes = solicitudes.filter(
           (solicitud) => [2, 3].includes(solicitud.estatusSolicitudId),
         );
-      } else if (session.rol === 'sicyt_editar') {
-        filteredSolicitudes = solicitudes.filter(
-          (solicitud) => solicitud.estatusSolicitudId === 8,
-        );
       } else {
         filteredSolicitudes = solicitudes;
       }
