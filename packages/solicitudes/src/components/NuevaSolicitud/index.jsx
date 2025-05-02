@@ -111,6 +111,21 @@ export default function NuevaSolicitud({
     setModule(stepIndex);
   };
 
+  const optionsTypeSolicitudes = [
+    { id: 1, nombre: 'Nueva Solicitud' },
+    { id: 2, nombre: 'Refrendo' },
+    { id: 3, nombre: 'Cambio de Domicilio' },
+  ];
+
+  const getSolicitudTypeName = () => {
+    if (solicitudType) return solicitudType;
+    if (!solicitud?.tipoSolicitudId) return 'Nueva solicitud';
+    const foundType = optionsTypeSolicitudes.find(
+      (option) => option.id === solicitud.tipoSolicitudId,
+    );
+    return foundType ? foundType.nombre : 'Nueva solicitud';
+  };
+
   const renderModule = () => {
     const Component = steps[modalidad][module];
     return Component ? (
@@ -132,7 +147,7 @@ export default function NuevaSolicitud({
       <ModuleHeader
         steps={steps[modalidad].map((component) => getStepName(component))}
         isEditOrView={type}
-        type={solicitudType || 'Nueva solicitud'}
+        type={getSolicitudTypeName()}
         date={displayDate}
         nextModule={nextModule}
         prevModule={prevModule}
