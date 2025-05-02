@@ -57,6 +57,7 @@ export default function NuevaSolicitud({
   const [programaId, setProgramaId] = useState('');
   const [solicitud, setSolicitud] = useState({});
   const [displayDate, setDisplayDate] = useState('');
+  const { solicitudType } = router.query;
 
   const READ_ONLY_MODES = ['consultar', 'observaciones'];
   const isDisabled = READ_ONLY_MODES.includes(type);
@@ -117,6 +118,7 @@ export default function NuevaSolicitud({
   ];
 
   const getSolicitudTypeName = () => {
+    if (solicitudType) return solicitudType;
     if (!solicitud?.tipoSolicitudId) return 'Nueva solicitud';
     const foundType = optionsTypeSolicitudes.find(
       (option) => option.id === solicitud.tipoSolicitudId,
