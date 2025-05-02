@@ -15,17 +15,23 @@ export default function useInstitucionUsuario(session, usuarioId) {
 
   useEffect(() => {
     async function fetchInstitucion() {
-      if (!session) return;
+      if (!session || (!session.id && !usuarioId)) {
+        setInstitucion(null);
+        return;
+      }
 
       setLoading(true);
       setError(null);
 
       try {
         const { id, rol } = session;
-        const endpoint = rol === 'representante'
-          ? ENDPOINT_MAPPING.representante(id)
-          : ENDPOINT_MAPPING.representante(usuarioId);
+        const targetId = rol === 'representante' ? id : usuarioId;
 
+        if (!targetId) {
+          throw new Error('No valid ID available for fetching institution data');
+        }
+
+        const endpoint = ENDPOINT_MAPPING.representante(targetId);
         const url = `${basePath}${endpoint}`;
         const response = await fetch(url, {
           method: 'GET',
@@ -43,7 +49,6 @@ export default function useInstitucionUsuario(session, usuarioId) {
         const { data } = await response.json();
         setInstitucion(data);
       } catch (err) {
-        console.error('Error fetching institution data:', err);
         setError(err.message || 'Failed to fetch institution data');
         setInstitucion(null);
       } finally {
