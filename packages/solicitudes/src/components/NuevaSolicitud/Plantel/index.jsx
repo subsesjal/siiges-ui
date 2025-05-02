@@ -25,7 +25,7 @@ export default function Plantel({
 }) {
   const [disabled, setDisabled] = useState(true);
   const { session } = useContext(Context);
-  const institucion = getInstitucionUsuario(session, solicitud?.usuarioId);
+  const { institucion } = getInstitucionUsuario(session, solicitud?.usuarioId);
   const [ratificacion, setRatificacion] = useState(<RatificacionNombre disabled={disabled} />);
   const [plantelesData, setPlantelesData] = useState({});
   const [selectedPlantel, setSelectedPlantel] = useState();
@@ -54,7 +54,7 @@ export default function Plantel({
         setRatificacion(<RatificacionNombre disabled={disabled} />);
       }
     }
-  }, [id, institucion]);
+  }, [id]);
 
   useEffect(() => {
     if (solicitud.programa) {
