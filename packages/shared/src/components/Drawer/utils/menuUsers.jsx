@@ -53,13 +53,13 @@ const solicitudesMenu = (rol) => ({
 });
 
 const panelMenuOptions = (rol) => [
-  {
+  ...(rol !== 'sicyt_editar' ? [{
     userId: 1,
     text: textPanelMenuOptions(rol).usuarios,
     icon: <GroupIcon />,
     route: '/usuarios',
     key: 'users',
-  },
+  }] : []),
   {
     userId: 1,
     text: textPanelMenuOptions(rol).instituciones,
