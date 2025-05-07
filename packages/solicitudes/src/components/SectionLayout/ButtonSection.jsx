@@ -82,6 +82,12 @@ export default function ButtonSection({
     }
   }, [sectionState, currentSection, sectionTitle]);
 
+  useEffect(() => {
+    if (type === 'editar' || type === 'observaciones' || type === 'consultar') {
+      setNewSubmit(false);
+    }
+  }, [type]);
+
   function observaciones() {
     setCreateObservaciones(true);
   }
@@ -272,7 +278,7 @@ export default function ButtonSection({
             />
           </Grid>
           )}
-          {position !== 'last' && position !== 'only' && (
+          {position !== 'last' && position !== 'only' && !newSubmit && (
           <Grid item>
             <ButtonSimple
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
