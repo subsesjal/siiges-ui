@@ -241,15 +241,15 @@ export default function AlumnosServicioSection({ programa, solicitudId, disabled
 
   const validateForm = () => {
     const newErrors = {
-      matricula: !form.matricula ? 'La matrícula es requerida' : '',
-      gradoId: !form.gradoId ? 'El grado es requerido' : '',
-      modalidadServicioSocialId: !form.modalidadServicioSocialId ? 'La modalidad es requerida' : '',
-      sectorServicioSocialId: !form.sectorServicioSocialId ? 'El sector es requerido' : '',
-      dimensionId: !form.dimensionId ? 'La dimension es requerida' : '',
-      ejeServicioSocialId: !form.ejeServicioSocialId ? 'El eje es requerido' : '',
-      lugarReceptor: !form.lugarReceptor ? 'El Lugar receptor es requerido' : '',
-      fechaInicio: !form.fechaInicio ? 'La Fecha de inicio es requerida' : '',
-      fechaTermino: !form.fechaTermino ? 'La Fecha de termino es requerida' : '',
+      matricula: !form.matricula ? '¡La matrícula es requerida!' : '',
+      gradoId: !form.gradoId ? '¡El grado es requerido!' : '',
+      modalidadServicioSocialId: !form.modalidadServicioSocialId ? '¡La modalidad es requerida!' : '',
+      sectorServicioSocialId: !form.sectorServicioSocialId ? '¡El sector es requerido!' : '',
+      dimensionId: !form.dimensionId ? '¡La dimension es requerida!' : '',
+      ejeServicioSocialId: !form.ejeServicioSocialId ? '¡El eje es requerido!' : '',
+      lugarReceptor: !form.lugarReceptor ? '¡El Lugar receptor es requerido!' : '',
+      fechaInicio: !form.fechaInicio ? '¡La Fecha de inicio es requerida!' : '',
+      fechaTermino: !form.fechaTermino ? '¡La Fecha de termino es requerida!' : '',
     };
 
     setErrors(newErrors);

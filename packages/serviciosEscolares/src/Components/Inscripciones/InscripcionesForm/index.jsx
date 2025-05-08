@@ -293,7 +293,7 @@ export default function InscripcionForm({
       } catch (error) {
         setNoti({
           open: true,
-          message: `¡Error al cargar datos: ${error.message}`,
+          message: `¡Error al cargar datos!: ${error.message}`,
           type: 'error',
         });
       }

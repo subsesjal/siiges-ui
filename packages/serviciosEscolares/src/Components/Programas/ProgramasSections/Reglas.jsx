@@ -82,7 +82,7 @@ export default function Reglas({ programa, id }) {
     fieldsToValidate.forEach((field) => {
       if (!form[field] && form[field] !== 0) {
         newErrors[field] = true;
-        newErrorMessages[field] = 'Este campo es requerido';
+        newErrorMessages[field] = '¡Este campo es requerido!';
         isValid = false;
       }
     });

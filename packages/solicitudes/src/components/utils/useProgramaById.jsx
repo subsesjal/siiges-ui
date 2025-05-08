@@ -15,14 +15,14 @@ export default function useProgramaById(id) {
         } else {
           setNoti({
             open: true,
-            message: 'No se encontro el programa',
+            message: '¡No se encontró el programa!',
             type: 'error',
           });
         }
       } catch (err) {
         setNoti({
           open: true,
-          message: 'Ocurrio un error al buscar el programa',
+          message: '¡Ocurrió un error al buscar el programa!',
           type: 'error',
         });
       } finally {
