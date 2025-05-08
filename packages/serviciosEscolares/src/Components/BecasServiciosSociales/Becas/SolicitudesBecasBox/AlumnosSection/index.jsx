@@ -232,12 +232,12 @@ export default function AlumnosSection({ programa, solicitudId, disabled }) {
 
   const validateForm = () => {
     const newErrors = {
-      matricula: !form.matricula ? 'La matrícula es requerida' : '',
-      gradoId: !form.gradoId ? 'El grado es requerido' : '',
-      porcentajeBeca: !form.porcentajeBeca ? 'El porcentaje es requerido' : '',
-      estatusAlumnoBecaId: !form.estatusAlumnoBecaId ? 'El estatus es requerido' : '',
-      tipoAlumnoBecaId: !form.tipoAlumnoBecaId ? 'El tipo de beca es requerido' : '',
-      promedio: !form.promedio ? 'El promedio es requerido' : '',
+      matricula: !form.matricula ? '¡La matrícula es requerida!' : '',
+      gradoId: !form.gradoId ? '¡El grado es requerido!' : '',
+      porcentajeBeca: !form.porcentajeBeca ? '¡El porcentaje es requerido!' : '',
+      estatusAlumnoBecaId: !form.estatusAlumnoBecaId ? '¡El estatus es requerido!' : '',
+      tipoAlumnoBecaId: !form.tipoAlumnoBecaId ? '¡El tipo de beca es requerido!' : '',
+      promedio: !form.promedio ? '¡El promedio es requerido!' : '',
     };
 
     setErrors(newErrors);

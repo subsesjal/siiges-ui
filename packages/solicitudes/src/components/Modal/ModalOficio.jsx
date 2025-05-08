@@ -61,7 +61,7 @@ export default function OficioModal({
         }
       } catch (errorMessage) {
         if (isMounted) {
-          setError('Error al cargar los datos');
+          setError('¡Error al cargar los datos!');
         }
       }
     };
@@ -153,10 +153,10 @@ export default function OficioModal({
         hideModal();
         router.back();
       } else {
-        setError(response.errorMessage || responseInstitucion.errorMessage || 'Error desconocido');
+        setError(response.errorMessage || responseInstitucion.errorMessage || '¡Error desconocido!');
       }
     } catch (errorMessage) {
-      setError('Error al procesar la solicitud');
+      setError('¡Error al procesar la solicitud!');
     } finally {
       setIsSubmitting(false);
     }

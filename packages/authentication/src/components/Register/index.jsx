@@ -60,7 +60,7 @@ export default function Register() {
     if (!formValues.contrasena) {
       newErrors.contrasena = '¡La contraseña es obligatoria!';
     } else if (!contrasenaPattern.test(formValues.contrasena)) {
-      newErrors.contrasena = 'La contraseña debe tener entre 8 y 25 caracteres, al menos una mayúscula, una minúscula, un número, y un símbolo especial';
+      newErrors.contrasena = '¡La contraseña debe tener entre 8 y 25 caracteres, al menos una mayúscula, una minúscula, un número y un símbolo especial!';
     }
 
     if (!formValues.recontrasena) {

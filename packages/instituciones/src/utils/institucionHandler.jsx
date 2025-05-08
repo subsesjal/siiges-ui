@@ -121,7 +121,7 @@ const submitInstitucion = async ({
   if (!valid) {
     setNoti({
       open: true,
-      message: '¡Revisa!, que los campos requeridos hayan sido llenados correctamente',
+      message: '¡Revisa!, que los campos requeridos hayan sido llenados correctamente!',
       type: 'error',
     });
     setLoading(false);
