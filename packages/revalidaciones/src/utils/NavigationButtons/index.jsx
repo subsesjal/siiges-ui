@@ -28,6 +28,7 @@ export default function NavigationButtons({
   onPrevious,
   handleOnSubmit,
   title,
+  isSubmitting,
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -82,6 +83,7 @@ export default function NavigationButtons({
               onClick={() => {
                 setOpen(true);
               }}
+              disabled={isSubmitting}
             />
           </Grid>
         )}
@@ -100,6 +102,7 @@ export default function NavigationButtons({
                 setOpen(false);
               }}
               confirm={handleOnSubmit}
+              disabled={isSubmitting}
             />
           </Grid>
         </Grid>
@@ -110,6 +113,7 @@ export default function NavigationButtons({
 
 NavigationButtons.defaultProps = {
   title: 'Equivalencias',
+  isSubmitting: false,
 };
 
 NavigationButtons.propTypes = {
@@ -119,4 +123,5 @@ NavigationButtons.propTypes = {
   onPrevious: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   title: PropTypes.string,
+  isSubmitting: PropTypes.bool,
 };

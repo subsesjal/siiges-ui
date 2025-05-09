@@ -21,6 +21,7 @@ export default function FormRevalidaciones() {
   const [paises, setPaises] = useState([]);
   const [nextDisabled, setNextDisabled] = useState(true);
   const [validateFields, setValidateFields] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     tipoTramiteId: null,
     estatusSolicitudRevEquivId: 2,
@@ -162,20 +163,23 @@ export default function FormRevalidaciones() {
   };
 
   const handleOnSubmit = async () => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     const formData = new FormData();
 
-    Object.keys(filesData).forEach((key) => {
-      const archivoAdjunto = filesData[key].formData.get('archivoAdjunto');
-      if (archivoAdjunto) {
-        formData.append(key, archivoAdjunto);
-      } else {
-        console.error(`¡No se encontró el archivo para ${key}!`);
-      }
-    });
-
-    formData.append('DATA', JSON.stringify(form));
-
     try {
+      Object.keys(filesData).forEach((key) => {
+        const archivoAdjunto = filesData[key].formData.get('archivoAdjunto');
+        if (archivoAdjunto) {
+          formData.append(key, archivoAdjunto);
+        } else {
+          console.error(`¡No se encontró el archivo para ${key}!`);
+        }
+      });
+
+      formData.append('DATA', JSON.stringify(form));
+
       const response = await fetch(
         `${domain}/api/v1/public/solicitudesRevEquiv/`,
         {
@@ -204,6 +208,8 @@ export default function FormRevalidaciones() {
         message: '¡Ocurrió un error al enviar la solicitud, intente de nuevo!',
         type: 'error',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -264,6 +270,7 @@ export default function FormRevalidaciones() {
           onPrevious={handlePrevious}
           handleOnSubmit={handleOnSubmit}
           title="Revalidaciones"
+          isSubmitting={isSubmitting}
         />
       </Grid>
     </Grid>
