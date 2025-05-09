@@ -16,6 +16,7 @@ export default function FormEquivalencias() {
   const router = useRouter();
   const [currentPosition, setCurrentPosition] = useState(1);
   const [filesData, setFilesData] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     tipoTramiteId: null,
     estatusSolicitudRevEquivId: 1,
@@ -114,20 +115,23 @@ export default function FormEquivalencias() {
   };
 
   const handleOnSubmit = async () => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     const formData = new FormData();
 
-    Object.keys(filesData).forEach((key) => {
-      const archivoAdjunto = filesData[key].formData.get('archivoAdjunto');
-      if (archivoAdjunto) {
-        formData.append(key, archivoAdjunto);
-      } else {
-        console.error(`¡No se encontró el archivo para ${key}!`);
-      }
-    });
-
-    formData.append('DATA', JSON.stringify(form));
-
     try {
+      Object.keys(filesData).forEach((key) => {
+        const archivoAdjunto = filesData[key].formData.get('archivoAdjunto');
+        if (archivoAdjunto) {
+          formData.append(key, archivoAdjunto);
+        } else {
+          console.error(`¡No se encontró el archivo para ${key}!`);
+        }
+      });
+
+      formData.append('DATA', JSON.stringify(form));
+
       const response = await fetch(`${domain}/api/v1/public/solicitudesRevEquiv/`, {
         method: 'POST',
         headers: {
@@ -153,6 +157,8 @@ export default function FormEquivalencias() {
         message: '¡Ocurrió un error al enviar la solicitud, intente de nuevo!',
         type: 'error',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -211,6 +217,7 @@ export default function FormEquivalencias() {
           onNext={handleNext}
           onPrevious={handlePrevious}
           handleOnSubmit={handleOnSubmit}
+          isSubmitting={isSubmitting}
         />
       </Grid>
     </Grid>
