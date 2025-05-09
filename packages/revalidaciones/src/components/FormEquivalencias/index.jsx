@@ -45,6 +45,7 @@ export default function FormEquivalencias() {
       institucionProcedencia: {
         tipoInstitucionId: 1,
         nombre: '',
+        paisId: 148,
         estadoId: '',
         nivelId: null,
         nombreCarrera: '',

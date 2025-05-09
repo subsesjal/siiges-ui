@@ -50,7 +50,7 @@ export default function FormRevalidaciones() {
       institucionProcedencia: {
         tipoInstitucionId: 1,
         nombre: '',
-        estadoId: null,
+        estadoId: 33,
         nivelId: '',
         nombreCarrera: '',
       },
