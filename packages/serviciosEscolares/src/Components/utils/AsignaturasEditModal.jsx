@@ -26,8 +26,6 @@ export default function AsignaturasEditModal({
   const [error, setError] = useState({});
   const [selectedGrade, setSelectedGrade] = useState(grados.semestral);
 
-  console.log(cicloId);
-
   useEffect(() => {
     const cicloIdMap = {
       1: grados.semestral,
