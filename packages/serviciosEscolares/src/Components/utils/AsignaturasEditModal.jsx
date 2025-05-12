@@ -26,6 +26,8 @@ export default function AsignaturasEditModal({
   const [error, setError] = useState({});
   const [selectedGrade, setSelectedGrade] = useState(grados.semestral);
 
+  console.log(cicloId);
+
   useEffect(() => {
     const cicloIdMap = {
       1: grados.semestral,
@@ -187,6 +189,7 @@ export default function AsignaturasEditModal({
             name="seriacion"
             value={formAsignaturas.seriacion || ''}
             options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
+            disabled={edit === 'Consultar Asignatura'}
             onChange={handleOnChange}
             textValue
           />

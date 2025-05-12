@@ -14,7 +14,16 @@ const createGradoMap = (grados) => {
   return gradoMap;
 };
 
-const columns = (grados, programaId, asignaturasList, setAsignaturasList, cicloId, setLoading, setNoti, rol) => {
+const columns = (
+  grados,
+  programaId,
+  asignaturasList,
+  setAsignaturasList,
+  cicloId,
+  setLoading,
+  setNoti,
+  rol,
+) => {
   const gradoMap = createGradoMap(grados);
 
   return [
