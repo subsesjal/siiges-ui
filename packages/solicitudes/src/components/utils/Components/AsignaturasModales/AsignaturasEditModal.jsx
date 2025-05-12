@@ -183,6 +183,7 @@ export default function AsignaturasEditModal({
             value={rowItem.seriacion || ''}
             options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
             onChange={handleOnChange}
+            disabled={edit === 'Consultar Asignatura'}
             textValue
           />
         </Grid>

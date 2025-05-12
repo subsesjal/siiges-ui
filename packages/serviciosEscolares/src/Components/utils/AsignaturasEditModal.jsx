@@ -187,6 +187,7 @@ export default function AsignaturasEditModal({
             name="seriacion"
             value={formAsignaturas.seriacion || ''}
             options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
+            disabled={edit === 'Consultar Asignatura'}
             onChange={handleOnChange}
             textValue
           />
