@@ -16,7 +16,7 @@ const tipoConsulta = [
 
 const getColumns = (handleConsultar) => [
   { field: 'id', headerName: 'ID', width: 100 },
-  { field: 'nombre', headerName: 'Nombre', width: 700 },
+  { field: 'folioSolicitud', headerName: 'Folio', width: 700 },
   { field: 'fecha', headerName: 'Fecha', width: 150 },
   {
     field: 'actions',
@@ -46,8 +46,8 @@ export default function RevalidacionEquivalencias() {
       if (!tipoConsultaId) return;
 
       const endpoint = tipoConsultaId === 1
-        ? '/public/solicitudesRevEquiv/revalidaciones'
-        : '/public/solicitudesRevEquiv/equivalencias';
+        ? '/solicitudesRevEquiv?tipoTramiteId=1&tipoTramiteId=2&tipoTramiteId=5'
+        : '/solicitudesRevEquiv?tipoTramiteId=3&tipoTramiteId=4&tipoTramiteId=6';
 
       const response = await getData({ endpoint });
       if (response.statusCode === 200) {

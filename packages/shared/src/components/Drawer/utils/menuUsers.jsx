@@ -265,6 +265,14 @@ const optionsMenuFilter = {
       key: 'servicioSocial',
     },
   ],
+  equiv_sicyt: [
+    {
+      text: 'Revalidación y Equivalencias',
+      icon: <DescriptionIcon />,
+      route: '/serviciosEscolares/revalidacionEquivalencias',
+      key: 'revalidacionEquivalencias',
+    },
+  ],
 };
 
 const getOptionsRoles = (rol) => options.filter(({ roles }) => roles.includes(rol));
