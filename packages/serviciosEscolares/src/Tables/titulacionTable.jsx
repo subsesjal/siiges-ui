@@ -17,7 +17,7 @@ const titulacionAlumnos = [
     renderCell: (params) => (
       <ButtonsTitulacion
         id={params.id}
-        url={`/serviciosEscolares/alumnos/${params.id}/EditarAlumno`}
+        url={`/serviciosEscolares/titulacion/${params.id}/tituloAlumno`}
       />
     ),
     sortable: false,
