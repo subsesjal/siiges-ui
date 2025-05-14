@@ -43,6 +43,8 @@ import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditaci
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
 import ServicioSocialComponents from './Components/BecasServiciosSociales/ServiciosSociales/index';
 import BecasComponents from './Components/BecasServiciosSociales/Becas/index';
+import ReporteTable from './Components/Reporte/ReporteTable/index';
+import ReporteForm from './Components/Reporte/ReporteForm/index';
 
 export {
   Grupos,
@@ -90,4 +92,6 @@ export {
   columnsInstitucionesAutorizadas,
   ButtonsInstitucionesAutorizadas,
   BecasComponents,
+  ReporteTable,
+  ReporteForm,
 };

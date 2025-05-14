@@ -137,9 +137,15 @@ const panelMenuOptions = (rol) => [
   },
   {
     userId: 2,
-    text: 'Reporte',
+    text: 'Reportes',
     icon: <AssignmentLateIcon />,
-    route: '/serviciosEscolares/reporte',
+    type: 'dropdown',
+    options: [
+      {
+        text: 'Extraordinarios',
+        route: '/serviciosEscolares/reporte/extraordinario',
+      },
+    ],
     key: 'reporte',
   },
   {
