@@ -2,32 +2,47 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { Grid, Tab, Tabs } from '@mui/material';
-import { DocumentosAlumno, FormAlumno } from '@siiges-ui/serviciosescolares';
-import { Layout } from '@siiges-ui/shared';
-import alumnosService from '@siiges-ui/serviciosescolares/src/Components/utils/alumnosService';
+import {
+  DocumentosAlumnoTitulacion,
+  FormAlumnoTitulacion,
+  HistorialTable,
+  Titulacion,
+  alumnosService,
+} from '@siiges-ui/serviciosescolares';
+import { getData, Layout } from '@siiges-ui/shared';
 
 export default function TituloAlumno() {
   const router = useRouter();
   const { query } = router;
   const [alumno, setAlumno] = useState(null);
   const [value, setValue] = useState(0);
+  const [historial, setHistorial] = useState([]);
 
   useEffect(() => {
     async function fetchAlumno() {
-      const { dataForm } = await alumnosService({ id: query.alumnoId, method: 'GET' });
+      const { dataForm } = await alumnosService({ id: query.id, method: 'GET' });
       setAlumno(dataForm);
     }
 
-    if (query.alumnoId) {
-      fetchAlumno();
+    async function fetchHistorial() {
+      const result = await getData({ endpoint: `/calificaciones/alumnos/${query.id}` });
+      if (result.statusCode === 200) {
+        setHistorial(result.data);
+      }
     }
-  }, [query.alumnoId]);
+
+    if (query.id) {
+      fetchAlumno();
+      fetchHistorial();
+    }
+  }, [query.id]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
-    <Layout title="Titulacion de alumno">
+    <Layout title="Titulación de alumno">
       <Grid container>
         <Grid
           item
@@ -44,10 +59,10 @@ export default function TituloAlumno() {
             <Tab label="Titulación" />
           </Tabs>
         </Grid>
-        {value === 0 && <FormAlumno type="edit" alumno={alumno} />}
-        {value === 1 && <DocumentosAlumno type="edit" id={alumno.id} />}
-        {value === 2 && <FormAlumno type="edit" alumno={alumno} />}
-        {value === 3 && <DocumentosAlumno type="edit" id={alumno.id} />}
+        {value === 0 && <FormAlumnoTitulacion alumno={alumno} />}
+        {value === 1 && <DocumentosAlumnoTitulacion type="edit" id={alumno.id} />}
+        {value === 2 && <HistorialTable alumno={historial} />}
+        {value === 3 && <Titulacion programa={null} />}
       </Grid>
     </Layout>
   );

@@ -46,8 +46,16 @@ import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstituci
 import ServicioSocialComponents from './Components/BecasServiciosSociales/ServiciosSociales/index';
 import ReporteTable from './Components/Reporte/ReporteTable/index';
 import ReporteForm from './Components/Reporte/ReporteForm/index';
+import FormAlumnoTitulacion from './Components/Titulacion/FormAlumno/index';
+import alumnosService from './Components/utils/alumnosService';
+import DocumentosAlumnoTitulacion from './Components/Titulacion/FormAlumno/DocumentoAlumno';
+import Titulacion from './Components/Titulacion/FormAlumno/titulacion';
 
 export {
+  Titulacion,
+  DocumentosAlumnoTitulacion,
+  alumnosService,
+  FormAlumnoTitulacion,
   Grupos,
   Reglas,
   AdminTable,
