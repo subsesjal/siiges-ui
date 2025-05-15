@@ -10,6 +10,7 @@ function InstitucionData({ id, disabled }) {
   const {
     setDisabled, form, setForm, institucion,
   } = useContext(DatosGeneralesContext);
+
   const [fileUrl, setFileUrl] = useState();
   const fileData = {
     entidadId: id,

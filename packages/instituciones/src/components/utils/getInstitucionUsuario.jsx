@@ -5,7 +5,7 @@ const ENDPOINT_MAPPING = {
   representante: (usuarioId) => `/api/v1/instituciones/usuarios/${usuarioId}`,
 };
 
-export default function useInstitucionUsuario(session, usuarioId) {
+export default function getInstitucionUsuario(session, usuarioId) {
   const [institucion, setInstitucion] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
