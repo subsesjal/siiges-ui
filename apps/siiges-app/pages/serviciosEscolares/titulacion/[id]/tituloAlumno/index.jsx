@@ -62,7 +62,7 @@ export default function TituloAlumno() {
         {value === 0 && <FormAlumnoTitulacion alumno={alumno} />}
         {value === 1 && <DocumentosAlumnoTitulacion type="edit" id={alumno.id} />}
         {value === 2 && <HistorialTable alumno={historial} />}
-        {value === 3 && <Titulacion programa={null} />}
+        {value === 3 && <Titulacion programaId={alumno.programaId} />}
       </Grid>
     </Layout>
   );

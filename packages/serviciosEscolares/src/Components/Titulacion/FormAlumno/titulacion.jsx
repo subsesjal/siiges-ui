@@ -2,10 +2,27 @@ import {
   Divider, Grid, List, Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
-import React from 'react';
+import {
+  getData, InputFile, ListSubtitle, ListTitle,
+} from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 
-export default function titulacion({ programa }) {
+export default function titulacion({ programaId }) {
+  const [programa, setPrograma] = useState({});
+
+  useEffect(() => {
+    async function fetchPrograma() {
+      const result = await getData({ endpoint: `/programas/${programaId}` });
+      if (result.statusCode === 200) {
+        setPrograma(result.data);
+      }
+    }
+
+    if (programaId) {
+      fetchPrograma();
+    }
+  }, [programaId]);
+
   return (
     <Grid container spacing={2} sx={{ m: 1 }}>
       <Typography variant="h6" sx={{ mt: 2 }}>
@@ -46,23 +63,13 @@ export default function titulacion({ programa }) {
           </List>
         </Grid>
       </Grid>
+      <Grid item xs={12}>
+        <InputFile label="XML de titulo electronico" tipoDocumento="" tipoEntidad="" />
+      </Grid>
     </Grid>
   );
 }
 
 titulacion.propTypes = {
-  programa: PropTypes.shape({
-    id: PropTypes.number,
-    acuerdoRvoe: PropTypes.string,
-    nombre: PropTypes.string,
-    nivel: PropTypes.shape({
-      descripcion: PropTypes.string,
-    }),
-    modalidad: PropTypes.shape({
-      nombre: PropTypes.string,
-    }),
-    ciclo: PropTypes.shape({
-      nombre: PropTypes.string,
-    }),
-  }).isRequired,
+  programaId: PropTypes.number.isRequired,
 };
