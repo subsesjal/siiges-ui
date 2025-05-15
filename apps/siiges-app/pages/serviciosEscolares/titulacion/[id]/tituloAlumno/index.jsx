@@ -9,7 +9,7 @@ import {
   Titulacion,
   alumnosService,
 } from '@siiges-ui/serviciosescolares';
-import { getData, Layout } from '@siiges-ui/shared';
+import { ButtonSimple, getData, Layout } from '@siiges-ui/shared';
 
 export default function TituloAlumno() {
   const router = useRouter();
@@ -63,6 +63,9 @@ export default function TituloAlumno() {
         {value === 1 && <DocumentosAlumnoTitulacion type="edit" id={alumno.id} />}
         {value === 2 && <HistorialTable alumno={historial} />}
         {value === 3 && <Titulacion programaId={alumno.programaId} />}
+        <Grid item xs={12}>
+          <ButtonSimple text="Regresar" align="right" onClick={() => { router.back(); }} />
+        </Grid>
       </Grid>
     </Layout>
   );
