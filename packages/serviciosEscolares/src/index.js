@@ -15,6 +15,7 @@ import AdminTable from './Components/Folios/FoliosTable/adminTable';
 import Grupos from './Components/Programas/ProgramasSections/Grupos';
 import Reglas from './Components/Programas/ProgramasSections/Reglas';
 import getAsignaturaById from './Components/utils/getAsignaturaById';
+import TitulacionTable from './Components/Titulacion/titulacionTable';
 import ModalTitulo from './Components/Folios/FoliosData/Modal/titulos';
 import ValidacionForm from './Components/Validacion/ValidacionForm/index';
 import InscripcionForm from './Components/Inscripciones/InscripcionesForm';
@@ -24,6 +25,7 @@ import ValidacionTable from './Components/Validacion/ValidacionTable/index';
 import ModalAlumnosInscritos from './Components/utils/ModalAlumnosInscritos';
 import DatosInstitucion from './Components/Validacion/DatosInstitucion/index';
 import ButtonsFoliosAdmin from './Components/Folios/ButtonsFoliosAdmin/index';
+import BecasComponents from './Components/BecasServiciosSociales/Becas/index';
 import getAlumnosAcreditacion from './Components/utils/getAlumnosAcreditacion';
 import Asignaturas from './Components/Programas/ProgramasSections/Asignaturas';
 import InscripcionesTable from './Components/Inscripciones/InscripcionesTable';
@@ -42,11 +44,18 @@ import AcreditacionAsignaturas from './Components/Acreditacion/AcreditacionAsign
 import ActionsAcreditacionAsignaturas from './Components/utils/ActionsAcreditacionAsignaturas';
 import ButtonsInstitucionesAutorizadas from './Components/utils/ButtonsInstitucionesAutorizadas';
 import ServicioSocialComponents from './Components/BecasServiciosSociales/ServiciosSociales/index';
-import BecasComponents from './Components/BecasServiciosSociales/Becas/index';
 import ReporteTable from './Components/Reporte/ReporteTable/index';
 import ReporteForm from './Components/Reporte/ReporteForm/index';
+import FormAlumnoTitulacion from './Components/Titulacion/FormAlumno/index';
+import alumnosService from './Components/utils/alumnosService';
+import DocumentosAlumnoTitulacion from './Components/Titulacion/FormAlumno/DocumentoAlumno';
+import Titulacion from './Components/Titulacion/FormAlumno/titulacion';
 
 export {
+  Titulacion,
+  DocumentosAlumnoTitulacion,
+  alumnosService,
+  FormAlumnoTitulacion,
   Grupos,
   Reglas,
   AdminTable,
@@ -70,6 +79,8 @@ export {
   InscripcionForm,
   CiclosEscolares,
   ValidacionTable,
+  TitulacionTable,
+  BecasComponents,
   DatosInstitucion,
   ModalCertificado,
   columnsProgramas,
@@ -91,7 +102,6 @@ export {
   ActionsAcreditacionAsignaturas,
   columnsInstitucionesAutorizadas,
   ButtonsInstitucionesAutorizadas,
-  BecasComponents,
   ReporteTable,
   ReporteForm,
 };
