@@ -46,8 +46,8 @@ export default function RevalidacionEquivalencias() {
       if (!tipoConsultaId) return;
 
       const endpoint = tipoConsultaId === 1
-        ? '/solicitudesRevEquiv?tipoTramiteId=1&tipoTramiteId=2&tipoTramiteId=5'
-        : '/solicitudesRevEquiv?tipoTramiteId=3&tipoTramiteId=4&tipoTramiteId=6';
+        ? '/solicitudesRevEquiv?tipoTramiteId=3&tipoTramiteId=4&tipoTramiteId=6'
+        : '/solicitudesRevEquiv?tipoTramiteId=1&tipoTramiteId=2&tipoTramiteId=5';
 
       const response = await getData({ endpoint });
       if (response.statusCode === 200) {

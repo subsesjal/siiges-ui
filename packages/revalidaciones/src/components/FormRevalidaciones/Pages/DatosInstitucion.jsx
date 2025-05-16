@@ -2,11 +2,124 @@ import { Grid } from '@mui/material';
 import {
   Input, InputDate, Select, Subtitle,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../../utils/FetchData';
 
 const domain = process.env.NEXT_PUBLIC_URL;
+
+// Field configurations
+const PROCEEDING_INSTITUTION_FIELDS = [
+  {
+    id: 'nombreInstitucion',
+    label: 'Nombre de la Institución',
+    name: 'nombre',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 6,
+    required: true,
+  },
+  {
+    id: 'nombreCarrera',
+    label: 'Nombre de la Carrera',
+    name: 'nombreCarrera',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 6,
+    required: true,
+  },
+];
+
+const PROCEEDING_INSTITUTION_SELECTS = [
+  {
+    title: 'Nivel Académico Procedente',
+    name: 'nivelId',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 4,
+    required: true,
+    optionsKey: 'grados',
+  },
+  {
+    title: 'País',
+    name: 'paisId',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 4,
+    required: true,
+    optionsKey: 'paises',
+  },
+];
+
+const DESTINATION_INSTITUTION_FIELDS = [
+  {
+    id: 'anoFinalizacionCarrera',
+    label: 'Año de Finalización de la Carrera',
+    name: 'anoFinalizacionCarrera',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 4,
+    component: InputDate,
+    required: false,
+  },
+  {
+    id: 'anoInicioCarrera',
+    label: 'Año de Inicio de Realización de Estudios',
+    name: 'anoInicioCarrera',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 4,
+    component: InputDate,
+    required: false,
+  },
+];
+
+const REQUIRED_FIELDS = [
+  // Proceeding institution fields (always required)
+  {
+    path: ['interesado', 'institucionProcedencia', 'nombre'],
+    name: 'nombre',
+  },
+  {
+    path: ['interesado', 'institucionProcedencia', 'nombreCarrera'],
+    name: 'nombreCarrera',
+  },
+  {
+    path: ['interesado', 'institucionProcedencia', 'nivelId'],
+    name: 'nivelId',
+  },
+  {
+    path: ['interesado', 'institucionProcedencia', 'paisId'],
+    name: 'paisId',
+  },
+
+  // Destination institution fields (conditionally required)
+  {
+    path: ['interesado', 'institucionDestino', 'tipoInstitucionId'],
+    name: 'tipoInstitucionId',
+  },
+  {
+    path: ['interesado', 'institucionDestino', 'institucionId'],
+    name: 'institucionId',
+    condition: (tipoInstitucionId) => tipoInstitucionId === 1,
+  },
+  {
+    path: ['interesado', 'institucionDestino', 'programaId'],
+    name: 'programaId',
+    condition: (tipoInstitucionId) => tipoInstitucionId === 1,
+  },
+  {
+    path: ['interesado', 'institucionDestino', 'nivel'],
+    name: 'nivel',
+    condition: (tipoInstitucionId) => tipoInstitucionId !== 1,
+  },
+  {
+    path: ['interesado', 'institucionDestino', 'acuerdoRvoe'],
+    name: 'acuerdoRvoe',
+    condition: (tipoInstitucionId) => tipoInstitucionId !== 1,
+  },
+];
+
+const getActiveRequiredFields = (form, tipoInstitucionId) => REQUIRED_FIELDS.filter((field) => {
+  if (field.condition) {
+    return field.condition(tipoInstitucionId);
+  }
+  return true; // No condition means always required
+});
 
 export default function DatosInstitucion({
   form,
@@ -15,39 +128,53 @@ export default function DatosInstitucion({
   setNextDisabled,
   validateFields,
 }) {
+  // State for fetched data
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
   const [grados, setGrados] = useState([]);
-  const [institucionId, setInstitucionId] = useState(
-    form.interesado?.institucionDestino?.institucionId || '',
-  );
-  const [tipoInstitucionId, setTipoInstitucionId] = useState(
-    form.interesado?.institucionDestino?.tipoInstitucionId || '',
-  );
-  const [touched, setTouched] = useState({});
   const [rvoes, setRvoes] = useState([]);
-  const [rvoesList, setRvoesList] = useState([]);
   const [rvoeError, setRvoeError] = useState('');
-  const [carrera, setCarrera] = useState([]);
 
-  const mapNivelesData = (item) => ({
-    id: item.id,
-    nombre: item.descripcion,
-  });
+  // Form state
+  const [touched, setTouched] = useState({});
+
+  // Derived values
+  const tipoInstitucionId = form.interesado?.institucionDestino?.tipoInstitucionId || '';
+  const institucionId = form.interesado?.institucionDestino?.institucionId || '';
+  const rvoesList = rvoes.map(({ id, acuerdoRvoe }) => ({
+    id,
+    nombre: acuerdoRvoe,
+  }));
+  const selectedRvoe = rvoes.find(
+    (rvoe) => rvoe.id === form.interesado?.institucionDestino?.programaId,
+  );
+  const carrera = selectedRvoe?.nombre || '';
+
+  // Data fetching
+  const mapNivelesData = useCallback(
+    (item) => ({
+      id: item.id,
+      nombre: item.descripcion,
+    }),
+    [],
+  );
 
   useEffect(() => {
-    fetchData(
-      `${domain}/api/v1/public/instituciones/tipoInstituciones`,
-      setTipoInstituciones,
-    );
-    fetchData(
-      `${domain}/api/v1/public/niveles/`,
-      setGrados,
-      mapNivelesData,
-      true,
-    );
-  }, []);
+    const fetchInitialData = async () => {
+      await fetchData(
+        `${domain}/api/v1/public/instituciones/tipoInstituciones`,
+        setTipoInstituciones,
+      );
+      await fetchData(
+        `${domain}/api/v1/public/niveles/`,
+        setGrados,
+        mapNivelesData,
+        true,
+      );
+    };
+    fetchInitialData();
+  }, [mapNivelesData]);
 
   useEffect(() => {
     if (tipoInstitucionId) {
@@ -58,61 +185,17 @@ export default function DatosInstitucion({
     }
   }, [tipoInstitucionId]);
 
-  const fetchInstituciones = async () => {
-    fetchData(
-      `${domain}/api/v1/public/instituciones?tipoInstitucionId=${tipoInstitucionId}`,
-      setInstituciones,
-    );
-  };
-
-  const fetchRvoes = async () => {
-    fetchData(
-      `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
-      setRvoes,
-    );
-  };
-
-  useEffect(() => {
-    if (rvoes && rvoes.length > 0) {
-      const mappedRvoes = rvoes.map(({ id, acuerdoRvoe }) => ({
-        id,
-        nombre: acuerdoRvoe,
-      }));
-      setRvoesList(mappedRvoes);
-    } else {
-      setRvoesList([]);
-    }
-  }, [rvoes]);
-
-  useEffect(() => {
-    if (tipoInstitucionId === 1) {
-      fetchInstituciones();
-    }
-  }, [tipoInstitucionId]);
-
   useEffect(() => {
     if (institucionId) {
-      fetchRvoes();
+      fetchData(
+        `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
+        setRvoes,
+      );
     }
   }, [institucionId]);
 
-  const handleChange = (e, path) => {
-    const { name } = e.target;
-    handleOnChange(e, path);
-
-    setTouched((prevTouched) => ({
-      ...prevTouched,
-      [name]: true,
-    }));
-  };
-
-  const handleTipoInstitucionChange = (event) => {
-    const selectedTipoInstitucionId = event.target.value;
-    setTipoInstitucionId(selectedTipoInstitucionId);
-    handleChange(event, ['interesado', 'institucionDestino']);
-  };
-
-  const fetchProgramas = async (acuerdoRvoe) => {
+  // Handlers
+  const fetchProgramas = useCallback(async (acuerdoRvoe) => {
     try {
       const response = await fetch(
         `${domain}/api/v1/public/programas?acuerdoRvoe=${acuerdoRvoe}`,
@@ -125,214 +208,207 @@ export default function DatosInstitucion({
       );
       const data = await response.json();
       setProgramas(data.data);
-      setRvoeError('');
-      if (!response.ok) {
-        setRvoeError('RVOE inválido');
-      }
+      setRvoeError(response.ok ? '' : 'RVOE inválido');
     } catch (error) {
       console.error('Error fetching Programas:', error);
       setRvoeError('RVOE inválido');
     }
-  };
+  }, []);
 
-  const handleRvoeOnBlur = (event) => {
-    const acuerdoRvoe = event.target.value;
-    if (tipoInstitucionId === 1) {
-      fetchProgramas(acuerdoRvoe);
-    }
-    handleOnChange(event, ['interesado', 'institucionDestino']);
-  };
+  const handleChange = useCallback(
+    (e, path) => {
+      const { name } = e.target;
+      handleOnChange(e, path);
+      setTouched((prev) => ({ ...prev, [name]: true }));
+    },
+    [handleOnChange],
+  );
 
-  const validateField = (value, required, fieldName) => (touched[fieldName] && required && !value ? 'Este campo es requerido' : '');
+  const handleTipoInstitucionChange = useCallback(
+    (e) => {
+      handleChange(e, ['interesado', 'institucionDestino']);
+    },
+    [handleChange],
+  );
 
+  const handleRvoeOnBlur = useCallback(
+    (e) => {
+      const acuerdoRvoe = e.target.value;
+      if (tipoInstitucionId !== 1) {
+        fetchProgramas(acuerdoRvoe);
+      }
+      handleOnChange(e, ['interesado', 'institucionDestino']);
+    },
+    [tipoInstitucionId, fetchProgramas, handleOnChange],
+  );
+
+  const handleRvoeChange = useCallback(
+    (e) => {
+      handleOnChange(e, ['interesado', 'institucionDestino']);
+    },
+    [handleOnChange],
+  );
+
+  const handleInstitucionChange = useCallback(
+    (e) => {
+      handleOnChange(e, ['interesado', 'institucionDestino']);
+    },
+    [handleOnChange],
+  );
+
+  const validateField = useCallback(
+    (value, required, fieldName) => (touched[fieldName] && required && !value ? 'Este campo es requerido' : ''),
+    [touched],
+  );
+
+  // Dynamic validation based on institution type
   useEffect(() => {
     if (validateFields) {
-      const requiredFields = [
-        {
-          path: ['interesado', 'institucionProcedencia', 'nombre'],
-          value: form.interesado?.institucionProcedencia?.nombre,
-        },
-        {
-          path: ['interesado', 'institucionProcedencia', 'nombreCarrera'],
-          value: form.interesado?.institucionProcedencia?.nombreCarrera,
-        },
-        {
-          path: ['interesado', 'institucionProcedencia', 'nivelId'],
-          value: form.interesado?.institucionProcedencia?.nivelId,
-        },
-        {
-          path: ['interesado', 'institucionProcedencia', 'paisId'],
-          value: form.interesado?.institucionProcedencia?.paisId,
-        },
-        {
-          path: ['interesado', 'institucionDestino', 'tipoInstitucionId'],
-          value: tipoInstitucionId,
-        },
-        {
-          path: ['interesado', 'institucionDestino', 'nivelId'],
-          value: form.interesado?.institucionDestino?.nivel,
-        },
-      ];
+      const activeRequiredFields = getActiveRequiredFields(
+        form,
+        tipoInstitucionId,
+      );
 
-      const isAnyFieldEmpty = requiredFields.some((field) => {
-        if (Array.isArray(field.value)) {
-          return field.value.length === 0;
-        }
-        return !field.value;
+      const isAnyFieldEmpty = activeRequiredFields.some(({ path }) => {
+        const value = path.reduce((obj, key) => obj?.[key], form);
+        return Array.isArray(value) ? value.length === 0 : !value;
       });
 
       setNextDisabled(isAnyFieldEmpty);
 
       if (isAnyFieldEmpty) {
-        const newTouched = {};
-        requiredFields.forEach((field) => {
-          newTouched[field.path[field.path.length - 1]] = true;
-        });
+        const newTouched = activeRequiredFields.reduce((acc, { name }) => {
+          acc[name] = true;
+          return acc;
+        }, {});
         setTouched(newTouched);
       }
     }
-  }, [validateFields, form, tipoInstitucionId, setNextDisabled]);
+  }, [validateFields, form, setNextDisabled, tipoInstitucionId]);
 
-  const handleRvoeChange = (event) => {
-    const selectedId = event.target.value;
-    const selectedRvoe = rvoes.find((rvoe) => rvoe.id === selectedId);
+  // Helper function to get nested form value
+  const getFormValue = (path) => path.reduce((obj, key) => obj?.[key], form) || '';
 
-    if (selectedRvoe) {
-      setCarrera(selectedRvoe.nombre);
-    } else {
-      setCarrera('');
-    }
-
-    handleOnChange(event, ['interesado', 'institucionDestino']);
-  };
-
-  const handleInstitucionChange = (event) => {
-    const programaId = event.target.value;
-    setInstitucionId(programaId);
-
-    handleOnChange(event, ['interesado', 'institucionDestino']);
-  };
+  // Helper function to render select fields
+  const renderSelectField = ({
+    title,
+    name,
+    path,
+    xs,
+    required,
+    optionsKey,
+  }) => (
+    <Grid item xs={xs} key={name}>
+      <Select
+        title={title}
+        name={name}
+        options={optionsKey === 'grados' ? grados : paises}
+        value={getFormValue([...path, name])}
+        onChange={(e) => handleChange(e, path)}
+        required={required}
+        errorMessage={validateField(
+          getFormValue([...path, name]),
+          required,
+          name,
+        )}
+      />
+    </Grid>
+  );
 
   return (
     <Grid container spacing={2}>
+      {/* Sección de Institución de Procedencia */}
       <Grid item xs={12}>
         <Subtitle>Datos de la Institución de procedencia</Subtitle>
       </Grid>
-      {[
-        {
-          id: 'nombreInstitucion',
-          label: 'Nombre de la Institución',
-          name: 'nombre',
-          value: form.interesado?.institucionProcedencia?.nombre,
-        },
-        {
-          id: 'nombreCarrera',
-          label: 'Nombre de la Carrera',
-          name: 'nombreCarrera',
-          value: form.interesado?.institucionProcedencia?.nombreCarrera,
-        },
-      ].map((field) => (
-        <Grid item xs={6} key={field.id}>
-          <Input
-            id={field.id}
-            label={field.label}
-            name={field.name}
-            value={field.value || ''}
-            onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
-            required
-            errorMessage={validateField(field.value, true, field.name)}
-          />
-        </Grid>
-      ))}
 
-      <Grid item xs={4}>
-        <Select
-          title="Nivel Académico Procedente"
-          options={grados}
-          name="nivelId"
-          value={form.interesado?.institucionProcedencia?.nivelId || ''}
-          onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
-          required
-          errorMessage={validateField(
-            form.interesado?.institucionProcedencia?.nivelId,
-            true,
-            'nivelId',
-          )}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <InputDate
-          id="anoFinalizacionCarrera"
-          label="Año de Finalización de la Carrera"
-          name="anoFinalizacionCarrera"
-          value={
-            form.interesado?.institucionProcedencia?.anoFinalizacionCarrera
-            || ''
-          }
-          onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <InputDate
-          id="anoInicioCarrera"
-          label="Año de Inicio de Realización de Estudios"
-          name="anoInicioCarrera"
-          value={
-            form.interesado?.institucionProcedencia?.anoInicioCarrera || ''
-          }
-          onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <Select
-          title="País"
-          options={paises}
-          name="paisId"
-          value={form.interesado?.institucionProcedencia?.paisId || ''}
-          onChange={(e) => handleChange(e, ['interesado', 'institucionProcedencia'])}
-          required
-          errorMessage={validateField(
-            form.interesado?.institucionProcedencia?.paisId,
-            true,
-            'paisId',
-          )}
-        />
-      </Grid>
+      {PROCEEDING_INSTITUTION_FIELDS.map(
+        ({
+          id, label, name, path, xs, required,
+        }) => (
+          <Grid item xs={xs} key={id}>
+            <Input
+              id={id}
+              label={label}
+              name={name}
+              value={getFormValue([...path, name])}
+              onChange={(e) => handleChange(e, path)}
+              required={required}
+              errorMessage={validateField(
+                getFormValue([...path, name]),
+                required,
+                name,
+              )}
+            />
+          </Grid>
+        ),
+      )}
 
+      {PROCEEDING_INSTITUTION_SELECTS.map(renderSelectField)}
+
+      {DESTINATION_INSTITUTION_FIELDS.map(
+        ({
+          id, label, name, path, xs, component: Component,
+        }) => (
+          <Grid item xs={xs} key={id}>
+            <Component
+              id={id}
+              label={label}
+              name={name}
+              value={getFormValue([...path, name])}
+              onChange={(e) => handleChange(e, path)}
+            />
+          </Grid>
+        ),
+      )}
+
+      {/* Sección de Institución de Destino */}
       <Grid item xs={12}>
         <Subtitle>Datos de la Institución de destino</Subtitle>
       </Grid>
+
       <Grid item xs={3}>
         <Select
           title="Tipo de Institución"
           name="tipoInstitucionId"
           options={tipoInstituciones}
-          value={
-            form.interesado?.institucionDestino?.tipoInstitucionId
-            || tipoInstitucionId
-          }
+          value={tipoInstitucionId}
           onChange={handleTipoInstitucionChange}
+          required
+          errorMessage={validateField(
+            tipoInstitucionId,
+            true,
+            'tipoInstitucionId',
+          )}
         />
       </Grid>
+
       <Grid item xs={9}>
         {tipoInstitucionId === 1 ? (
           <Select
             title="Instituciones"
             options={instituciones}
             name="institucionId"
-            value={form.interesado?.institucionDestino?.institucionId || ''}
+            value={institucionId}
             onChange={handleInstitucionChange}
+            required={tipoInstitucionId === 1}
+            errorMessage={validateField(
+              institucionId,
+              tipoInstitucionId === 1,
+              'institucionId',
+            )}
           />
         ) : (
           <Input
             id="institucionNombre"
             label="Instituciones de Educación Superior"
             name="nombre"
-            value={form.interesado?.institucionDestino?.nombre || ''}
+            value={getFormValue(['interesado', 'institucionDestino', 'nombre'])}
             onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
           />
         )}
       </Grid>
+
       {tipoInstitucionId !== 1 && (
         <>
           <Grid item xs={3}>
@@ -340,8 +416,18 @@ export default function DatosInstitucion({
               title="Nivel Académico Destino"
               options={grados}
               name="nivel"
-              value={form.interesado?.institucionDestino?.nivel || ''}
+              value={getFormValue([
+                'interesado',
+                'institucionDestino',
+                'nivel',
+              ])}
               onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+              required
+              errorMessage={validateField(
+                getFormValue(['interesado', 'institucionDestino', 'nivel']),
+                true,
+                'nivel',
+              )}
             />
           </Grid>
           <Grid item xs={3}>
@@ -349,9 +435,14 @@ export default function DatosInstitucion({
               id="rvoe"
               label="RVOE"
               name="acuerdoRvoe"
-              value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
+              value={getFormValue([
+                'interesado',
+                'institucionDestino',
+                'acuerdoRvoe',
+              ])}
               onBlur={handleRvoeOnBlur}
               errorMessage={rvoeError}
+              required
             />
           </Grid>
           <Grid item xs={6}>
@@ -361,11 +452,12 @@ export default function DatosInstitucion({
               name="nombreCarrera"
               value={programas?.nombre || ''}
               onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-              disabled={tipoInstitucionId === 1}
+              disabled
             />
           </Grid>
         </>
       )}
+
       {tipoInstitucionId === 1 && (
         <>
           <Grid item xs={3}>
@@ -373,9 +465,14 @@ export default function DatosInstitucion({
               title="RVOE"
               options={rvoesList}
               name="programaId"
-              value={form.interesado?.institucionDestino?.programaId || ''}
+              value={getFormValue([
+                'interesado',
+                'institucionDestino',
+                'programaId',
+              ])}
               onChange={handleRvoeChange}
               errorMessage={rvoeError}
+              required
             />
           </Grid>
           <Grid item xs={9}>
@@ -383,7 +480,7 @@ export default function DatosInstitucion({
               id="nombreCarreraDestino"
               label="Nombre de la Carrera (Destino)"
               name="nombreCarrera"
-              value={carrera || ''}
+              value={carrera}
               disabled
             />
           </Grid>
