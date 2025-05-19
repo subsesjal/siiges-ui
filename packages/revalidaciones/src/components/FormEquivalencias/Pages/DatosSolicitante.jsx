@@ -20,10 +20,19 @@ const sexo = [
   { id: 3, nombre: 'Otro' },
 ];
 
-export default function DatosSolicitante({ form, handleOnChange, estados }) {
+export default function DatosSolicitante({
+  form, handleOnChange, estados, disabled,
+}) {
   const [municipios, setMunicipios] = useState([]);
-  const [estadoId, setEstadoId] = useState(form.interesado.persona.domicilio.estadoId || '');
+  const [estadoId, setEstadoId] = useState('');
   const [municipiosDisabled, setMunicipiosDisabled] = useState(!estadoId);
+
+  useEffect(() => {
+    if (form.interesado?.persona?.domicilio?.estadoId) {
+      setEstadoId(form.interesado.persona.domicilio.estadoId);
+      setMunicipiosDisabled(false);
+    }
+  }, [form.interesado?.persona?.domicilio?.estadoId]);
 
   useEffect(() => {
     const fetchMunicipios = async () => {
@@ -39,9 +48,7 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
             },
           );
           const data = await response.json();
-          setMunicipios(data.data.filter(
-            (municipio) => municipio.estadoId === parseInt(estadoId, 10),
-          ));
+          setMunicipios(data.data);
         } catch (error) {
           console.error('¡Error al buscar municipios!:', error);
         }
@@ -70,6 +77,7 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           name="tipoTramiteId"
           value={form.tipoTramiteId || ''}
           onChange={(e) => handleOnChange(e, [])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={12}>
@@ -80,8 +88,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           id="curp"
           label="CURP"
           name="curp"
-          value={form.interesado.persona.curp || ''}
+          value={form.interesado?.persona?.curp || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -89,8 +98,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           id="nombre"
           label="Nombre"
           name="nombre"
-          value={form.interesado.persona.nombre || ''}
+          value={form.interesado?.persona?.nombre || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -98,8 +108,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           id="apellidoPaterno"
           label="Primer Apellido"
           name="apellidoPaterno"
-          value={form.interesado.persona.apellidoPaterno || ''}
+          value={form.interesado?.persona?.apellidoPaterno || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -107,8 +118,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           id="apellidoMaterno"
           label="Segundo Apellido"
           name="apellidoMaterno"
-          value={form.interesado.persona.apellidoMaterno || ''}
+          value={form.interesado?.persona?.apellidoMaterno || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -116,8 +128,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           id="nacionalidad"
           label="Nacionalidad"
           name="nacionalidad"
-          value={form.interesado.persona.nacionalidad || ''}
+          value={form.interesado?.persona?.nacionalidad || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -126,8 +139,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           title="Sexo"
           options={sexo}
           name="sexo"
-          value={form.interesado.persona.sexo || ''}
+          value={form.interesado?.persona?.sexo || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -135,8 +149,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           label="Fecha de Nacimiento"
           name="fechaNacimiento"
           type="datetime"
-          value={form.interesado.persona.fechaNacimiento || ''}
+          value={form.interesado?.persona?.fechaNacimiento || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={12}>
@@ -147,8 +162,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           name="calle"
           id="calle"
           label="Calle"
-          value={form.interesado.persona.domicilio.calle || ''}
+          value={form.interesado?.persona?.domicilio?.calle || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -156,8 +172,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           name="numeroExterior"
           id="numeroExterior"
           label="Número Exterior"
-          value={form.interesado.persona.domicilio.numeroExterior || ''}
+          value={form.interesado?.persona?.domicilio?.numeroExterior || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -165,8 +182,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           name="colonia"
           id="colonia"
           label="Colonia"
-          value={form.interesado.persona.domicilio.colonia || ''}
+          value={form.interesado?.persona?.domicilio?.colonia || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -176,6 +194,7 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           options={estados}
           value={estadoId}
           onChange={handleEstadoChange}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -183,9 +202,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           title="Municipio"
           name="municipioId"
           options={municipios}
-          disabled={municipiosDisabled}
-          value={form.interesado.persona.domicilio.municipioId || ''}
+          value={form.interesado?.persona?.domicilio?.municipioId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          disabled={disabled || municipiosDisabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -193,8 +212,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           name="codigoPostal"
           id="codigoPostal"
           label="Código Postal"
-          value={form.interesado.persona.domicilio.codigoPostal || ''}
+          value={form.interesado?.persona?.domicilio?.codigoPostal || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={12}>
@@ -205,8 +225,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           name="correoPrimario"
           id="correoPrimario"
           label="Correo de Contacto"
-          value={form.interesado.persona.correoPrimario || ''}
+          value={form.interesado?.persona?.correoPrimario || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -214,8 +235,9 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           name="telefono"
           id="telefono"
           label="Teléfono de Contacto"
-          value={form.interesado.persona.telefono || ''}
+          value={form.interesado?.persona?.telefono || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -223,15 +245,22 @@ export default function DatosSolicitante({ form, handleOnChange, estados }) {
           name="celular"
           id="celular"
           label="Celular"
-          value={form.interesado.persona.celular || ''}
+          value={form.interesado?.persona?.celular || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
     </Grid>
   );
 }
 
+DatosSolicitante.defaultProps = {
+  handleOnChange: () => {},
+  disabled: false,
+};
+
 DatosSolicitante.propTypes = {
+  disabled: PropTypes.bool,
   form: PropTypes.shape({
     tipoTramiteId: PropTypes.number,
     gradoAcademico: PropTypes.number,
@@ -240,7 +269,7 @@ DatosSolicitante.propTypes = {
         curp: PropTypes.string,
         nombre: PropTypes.string,
         nacionalidad: PropTypes.string,
-        sexo: PropTypes.number,
+        sexo: PropTypes.string,
         apellidoPaterno: PropTypes.string,
         apellidoMaterno: PropTypes.string,
         fechaNacimiento: PropTypes.string,
@@ -258,7 +287,7 @@ DatosSolicitante.propTypes = {
       }),
     }),
   }).isRequired,
-  handleOnChange: PropTypes.func.isRequired,
+  handleOnChange: PropTypes.func,
   estados: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

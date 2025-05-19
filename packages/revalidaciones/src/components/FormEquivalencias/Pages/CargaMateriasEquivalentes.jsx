@@ -6,9 +6,10 @@ import {
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import ArticleIcon from '@mui/icons-material/Article';
 import fetchData from '../../../utils/FetchData';
 
-const columns = (handleDelete, handleEdit) => [
+const columns = (handleDelete, handleEdit, disabled) => [
   {
     field: 'materiasAntecedente',
     headerName: 'Materias de Antecedente',
@@ -34,27 +35,36 @@ const columns = (handleDelete, handleEdit) => [
     headerName: 'Acciones',
     width: 120,
     renderCell: (params) => (
-      <>
+      !disabled ? (
+        <>
+          <IconButton
+            onClick={() => handleEdit(params.row)}
+            aria-label="editar"
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={() => handleDelete(params.row.id)}
+            aria-label="eliminar"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </>
+      ) : (
         <IconButton
           onClick={() => handleEdit(params.row)}
-          aria-label="edit"
+          aria-label="consultar"
         >
-          <EditIcon />
+          <ArticleIcon />
         </IconButton>
-        <IconButton
-          onClick={() => handleDelete(params.row.id)}
-          aria-label="delete"
-        >
-          <DeleteIcon />
-        </IconButton>
-      </>
+      )
     ),
   },
 ];
 
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
+export default function CargaMateriasEquivalentes({ form, handleOnChange, disabled }) {
   const [open, setOpen] = useState(false);
   const [nombreAsignaturaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
@@ -86,7 +96,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
 
   const handleEdit = (row) => {
     setEditingId(row.id);
-    setIsEditing(true);
+    if (disabled) { setIsEditing(true); }
     setMateriaAntecedente(row.materiasAntecedente);
     setCalificacionAntecedente(row.calificacionAntecedente);
     setMateriaEquivalente(row.materiasEquivalentes);
@@ -148,6 +158,17 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
           calificacionEquivalente: item.calificacionEquivalente,
         })),
       );
+    } else if (form?.interesado?.asignaturasAntecedenteEquivalente) {
+      setRows(
+        form.interesado.asignaturasAntecedenteEquivalente.map((item, index) => ({
+          id: index,
+          asignaturaId: item.asignaturaId,
+          materiasAntecedente: item.nombreAsignaturaAntecedente,
+          calificacionAntecedente: item.calificacionAntecedente,
+          materiasEquivalentes: item.nombreAsignaturaEquivalente,
+          calificacionEquivalente: item.calificacionEquivalente,
+        })),
+      );
     }
   }, [form]);
 
@@ -188,14 +209,15 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
     <>
       <Grid container spacing={1}>
         <DataTable
-          buttonAdd
+          buttonAdd={!disabled}
           buttonClick={() => {
             resetForm();
             setOpen(true);
           }}
           buttonText="Carga de Materia"
+          title="Materias Equivalentes"
           rows={rows}
-          columns={columns(handleDelete, handleEdit)}
+          columns={columns(handleDelete, handleEdit, disabled)}
         />
       </Grid>
       <DefaultModal
@@ -211,6 +233,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
               label="Materias de Antecedente"
               value={nombreAsignaturaAntecedente}
               onChange={(e) => setMateriaAntecedente(e.target.value)}
+              disabled={disabled}
             />
           </Grid>
           <Grid item xs={6}>
@@ -220,6 +243,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
               label="Calificación de Antecedente"
               value={calificacionAntecedente}
               onChange={(e) => setCalificacionAntecedente(e.target.value)}
+              disabled={disabled}
             />
           </Grid>
           <Grid item xs={6}>
@@ -230,6 +254,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
                 name="nombreAsignaturaEquivalente"
                 value={asignaturaId || ''}
                 onChange={(e) => setAsignaturaId(e.target.value)}
+                disabled={disabled}
               />
             )
               : (
@@ -239,6 +264,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
                   label="Materias de Equivalente"
                   value={nombreAsignaturaEquivalente}
                   onChange={(e) => setMateriaEquivalente(e.target.value)}
+                  disabled={disabled}
                 />
               )}
           </Grid>
@@ -249,12 +275,14 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
               label="Calificación de Equivalente"
               value={calificacionEquivalente}
               onChange={(e) => setCalificacionEquivalente(e.target.value)}
+              disabled={disabled}
             />
           </Grid>
           <Grid item xs={12}>
             <ButtonsForm
               confirm={handleConfirm}
               cancel={resetForm}
+              confirmDisabled={disabled}
               confirmText={isEditing ? 'Actualizar' : 'Confirmar'}
             />
           </Grid>
@@ -264,10 +292,24 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange }) {
   );
 }
 
+CargaMateriasEquivalentes.defaultProps = {
+  handleOnChange: () => {},
+  disabled: false,
+};
+
 CargaMateriasEquivalentes.propTypes = {
   form: PropTypes.shape({
     interesado: PropTypes.shape({
       asignaturasAntecedentesEquivalentes: PropTypes.arrayOf(
+        PropTypes.shape({
+          asignaturaId: PropTypes.number,
+          nombreAsignaturaEquivalente: PropTypes.string,
+          calificacionEquivalente: PropTypes.string,
+          nombreAsignaturaAntecedente: PropTypes.string,
+          calificacionAntecedente: PropTypes.string,
+        }),
+      ),
+      asignaturasAntecedenteEquivalente: PropTypes.arrayOf(
         PropTypes.shape({
           asignaturaId: PropTypes.number,
           nombreAsignaturaEquivalente: PropTypes.string,
@@ -282,5 +324,6 @@ CargaMateriasEquivalentes.propTypes = {
       }),
     }),
   }).isRequired,
-  handleOnChange: PropTypes.func.isRequired,
+  handleOnChange: PropTypes.func,
+  disabled: PropTypes.bool,
 };

@@ -6,7 +6,9 @@ import {
 import {
   Context, DataTable, getData, Select,
 } from '@siiges-ui/shared';
-import SearchIcon from '@mui/icons-material/Search';
+import ArticleIcon from '@mui/icons-material/Article';
+import GradingIcon from '@mui/icons-material/Grading';
+import SendIcon from '@mui/icons-material/Send';
 import { useRouter } from 'next/router';
 
 const tipoConsulta = [
@@ -14,7 +16,7 @@ const tipoConsulta = [
   { id: 2, nombre: 'Equivalencias' },
 ];
 
-const getColumns = (handleConsultar) => [
+const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
   { field: 'id', headerName: 'ID', width: 100 },
   { field: 'folioSolicitud', headerName: 'Folio', width: 700 },
   { field: 'fecha', headerName: 'Fecha', width: 150 },
@@ -23,9 +25,19 @@ const getColumns = (handleConsultar) => [
     headerName: 'Acciones',
     width: 150,
     renderCell: (params) => (
-      <IconButton onClick={() => handleConsultar(params.row)}>
-        <SearchIcon />
-      </IconButton>
+      <>
+        <IconButton onClick={() => handleConsultar(params.row)}>
+          <ArticleIcon />
+        </IconButton>
+        <IconButton onClick={() => handleRevisar(params.row)}>
+          <GradingIcon />
+        </IconButton>
+        {params.row.estatusSolicitudRevEquivId === 3 && (
+        <IconButton onClick={() => handleProcesar(params.row)}>
+          <SendIcon />
+        </IconButton>
+        )}
+      </>
     ),
   },
 ];
@@ -88,7 +100,23 @@ export default function RevalidacionEquivalencias() {
     if (!rowData || !rowData.id) return;
 
     const basePath = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
-    const route = tipoConsultaId === 1 ? `${basePath}/Equivalencias/consultar` : `${basePath}/Revalidaciones/consultar`;
+    const route = tipoConsultaId === 1 ? `${basePath}/Revalidacion/consultar` : `${basePath}/Equivalencias/consultar`;
+    router.push(route);
+  };
+
+  const handleRevisar = (rowData) => {
+    if (!rowData || !rowData.id) return;
+
+    const basePath = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
+    const route = tipoConsultaId === 1 ? `${basePath}/Revalidacion/revisar` : `${basePath}/Equivalencias/revisar`;
+    router.push(route);
+  };
+
+  const handleProcesar = (rowData) => {
+    if (!rowData || !rowData.id) return;
+
+    const basePath = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
+    const route = tipoConsultaId === 1 ? `${basePath}/Revalidacion/procesar` : `${basePath}/Equivalencias/procesar`;
     router.push(route);
   };
 
@@ -145,7 +173,7 @@ export default function RevalidacionEquivalencias() {
             <DataTable
               title={tipoConsultaId === 1 ? 'Revalidaciones' : 'Equivalencias'}
               rows={rows}
-              columns={getColumns(handleConsultar)}
+              columns={getColumns(handleConsultar, handleRevisar, handleProcesar)}
             />
           </Grid>
         </>

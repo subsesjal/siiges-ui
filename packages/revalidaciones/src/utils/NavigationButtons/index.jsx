@@ -29,6 +29,7 @@ export default function NavigationButtons({
   handleOnSubmit,
   title,
   isSubmitting,
+  disabled,
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -76,16 +77,16 @@ export default function NavigationButtons({
             </Grid>
           </>
         )}
-        {currentPosition === totalPositions && (
-          <Grid item>
-            <ButtonSimple
-              text="Terminar"
-              onClick={() => {
-                setOpen(true);
-              }}
-              disabled={isSubmitting}
-            />
-          </Grid>
+        {currentPosition === totalPositions && !disabled && (
+        <Grid item>
+          <ButtonSimple
+            text="Terminar"
+            onClick={() => {
+              setOpen(true);
+            }}
+            disabled={isSubmitting}
+          />
+        </Grid>
         )}
       </Grid>
       <DefaultModal title={title} open={open} setOpen={setOpen}>
@@ -114,6 +115,8 @@ export default function NavigationButtons({
 NavigationButtons.defaultProps = {
   title: 'Equivalencias',
   isSubmitting: false,
+  handleOnSubmit: () => {},
+  disabled: false,
 };
 
 NavigationButtons.propTypes = {
@@ -121,7 +124,8 @@ NavigationButtons.propTypes = {
   totalPositions: PropTypes.number.isRequired,
   onNext: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
-  handleOnSubmit: PropTypes.func.isRequired,
+  handleOnSubmit: PropTypes.func,
   title: PropTypes.string,
   isSubmitting: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
