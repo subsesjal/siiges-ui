@@ -24,21 +24,21 @@ export default function ProcesarRevalidacion() {
       if (response.statusCode === 200) {
         setNoti({
           open: true,
-          message: 'Solicitud procesada exitosamente',
+          message: '¡Solicitud procesada exitosamente!',
           type: 'success',
         });
         router.back();
       } else {
         setNoti({
           open: true,
-          message: response.errorMessage || 'Error al actualizar la solicitud',
+          message: response.errorMessage || '¡Error al actualizar la solicitud!',
           type: 'error',
         });
       }
     } catch (error) {
       setNoti({
         open: true,
-        message: 'Error al procesar la solicitud',
+        message: '¡Error al procesar la solicitud!',
         type: 'error',
       });
     }
