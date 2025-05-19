@@ -94,7 +94,7 @@ export default function NavigationButtons({
           <Grid item xs={12}>
             <Typography>
               ¿Esta seguro de que quiere terminar esta solicitud de
-              revalidación? Una vez terminada no se podra editar
+              revalidación?. Una vez terminada no se podra editar
             </Typography>
           </Grid>
           <Grid item xs={12}>

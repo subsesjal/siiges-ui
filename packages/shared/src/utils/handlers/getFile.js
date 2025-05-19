@@ -18,7 +18,7 @@ export default function GetFile(fileData) {
     })
     .then((data) => {
       if (!data.data || !data.data.ubicacion) {
-        throw new Error('No se encontró el archivo');
+        throw new Error('¡No se encontró el archivo!');
       }
       return data.data.ubicacion;
     });

@@ -33,7 +33,7 @@ export default function ConsultEquivalencia() {
 
         const equivalenciaResponse = await getData({ endpoint: `/solicitudesRevEquiv/${query.id}` });
         if (equivalenciaResponse.statusCode !== 200) {
-          setError('No se encontró esta equivalencia');
+          setError('¡No se encontró esta equivalencia!');
         }
         setForm(equivalenciaResponse.data);
       } catch (err) {

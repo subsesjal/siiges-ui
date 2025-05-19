@@ -23,7 +23,7 @@ export default function ButtonFileDownload({
     } catch (error) {
       setNoti({
         open: true,
-        message: 'No se encontro el archivo',
+        message: '¡No se encontro el archivo!',
         type: 'error',
       });
     }
