@@ -68,8 +68,10 @@ import Subtitle from './components/Subtitle';
 import BinarySelect from './components/Select/BinarySelect';
 import NavigationButtons from './components/Buttons/NavigationButtons';
 import InputSearch from './components/Input/InputSearch';
+import ButtonFileDownload from './components/Buttons/ButtonFileDownload';
 
 export {
+  ButtonFileDownload,
   InputSearch,
   NavigationButtons,
   BinarySelect,

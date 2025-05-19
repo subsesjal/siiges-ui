@@ -19,13 +19,20 @@ const sexo = [
 ];
 
 export default function DatosSolicitante({
-  form, handleOnChange, estados, setNextDisabled, validateFields,
+  form, handleOnChange, estados, setNextDisabled, validateFields, disabled,
 }) {
   const [municipios, setMunicipios] = useState([]);
-  const [estadoId, setEstadoId] = useState(form.interesado.persona.domicilio.estadoId || '');
+  const [estadoId, setEstadoId] = useState('');
   const [municipiosDisabled, setMunicipiosDisabled] = useState(!estadoId);
 
   const [touched, setTouched] = useState({});
+
+  useEffect(() => {
+    if (form.interesado?.persona?.domicilio?.estadoId) {
+      setEstadoId(form.interesado.persona.domicilio.estadoId);
+      setMunicipiosDisabled(false);
+    }
+  }, [form.interesado?.persona?.domicilio?.estadoId]);
 
   const handleChange = (e, path) => {
     const { name } = e.target;
@@ -127,6 +134,7 @@ export default function DatosSolicitante({
           onChange={(e) => handleChange(e, [])}
           required
           errorMessage={validateField(form.tipoTramiteId, true, 'tipoTramiteId')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={12}>
@@ -137,10 +145,11 @@ export default function DatosSolicitante({
           id="curp"
           label="CURP"
           name="curp"
-          value={form.interesado.persona.curp || ''}
+          value={form.interesado?.persona?.curp || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado.persona.curp, true, 'curp')}
+          errorMessage={validateField(form.interesado?.persona?.curp, true, 'curp')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -148,10 +157,11 @@ export default function DatosSolicitante({
           id="nombre"
           label="Nombre"
           name="nombre"
-          value={form.interesado.persona.nombre || ''}
+          value={form.interesado?.persona?.nombre || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado.persona.nombre, true, 'nombre')}
+          errorMessage={validateField(form.interesado?.persona?.nombre, true, 'nombre')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -159,10 +169,11 @@ export default function DatosSolicitante({
           id="apellidoPaterno"
           label="Primer Apellido"
           name="apellidoPaterno"
-          value={form.interesado.persona.apellidoPaterno || ''}
+          value={form.interesado?.persona?.apellidoPaterno || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado.persona.apellidoPaterno, true, 'apellidoPaterno')}
+          errorMessage={validateField(form.interesado?.persona?.apellidoPaterno, true, 'apellidoPaterno')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -170,8 +181,9 @@ export default function DatosSolicitante({
           id="apellidoMaterno"
           label="Segundo Apellido"
           name="apellidoMaterno"
-          value={form.interesado.persona.apellidoMaterno || ''}
+          value={form.interesado?.persona?.apellidoMaterno || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -179,10 +191,11 @@ export default function DatosSolicitante({
           id="nacionalidad"
           label="Nacionalidad"
           name="nacionalidad"
-          value={form.interesado.persona.nacionalidad || ''}
+          value={form.interesado?.persona?.nacionalidad || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado.persona.nacionalidad, true, 'nacionalidad')}
+          errorMessage={validateField(form.interesado?.persona?.nacionalidad, true, 'nacionalidad')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -191,10 +204,11 @@ export default function DatosSolicitante({
           title="Sexo"
           options={sexo}
           name="sexo"
-          value={form.interesado.persona.sexo || ''}
+          value={form.interesado?.persona?.sexo || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado.persona.sexo, true, 'sexo')}
+          errorMessage={validateField(form.interesado?.persona?.sexo, true, 'sexo')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={12}>
@@ -205,10 +219,11 @@ export default function DatosSolicitante({
           name="calle"
           id="calle"
           label="Calle"
-          value={form.interesado.persona.domicilio.calle || ''}
+          value={form.interesado?.persona?.domicilio?.calle || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado.persona.domicilio.calle, true, 'calle')}
+          errorMessage={validateField(form.interesado?.persona?.domicilio?.calle, true, 'calle')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -216,10 +231,11 @@ export default function DatosSolicitante({
           name="numeroExterior"
           id="numeroExterior"
           label="Número Exterior"
-          value={form.interesado.persona.domicilio.numeroExterior || ''}
+          value={form.interesado?.persona?.domicilio?.numeroExterior || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado.persona.domicilio.numeroExterior, true, 'numeroExterior')}
+          errorMessage={validateField(form.interesado?.persona?.domicilio?.numeroExterior, true, 'numeroExterior')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -227,10 +243,11 @@ export default function DatosSolicitante({
           name="colonia"
           id="colonia"
           label="Colonia"
-          value={form.interesado.persona.domicilio.colonia || ''}
+          value={form.interesado?.persona?.domicilio?.colonia || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado.persona.domicilio.colonia, true, 'colonia')}
+          errorMessage={validateField(form.interesado?.persona?.domicilio?.colonia, true, 'colonia')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -242,6 +259,7 @@ export default function DatosSolicitante({
           onChange={handleEstadoChange}
           required
           errorMessage={validateField(estadoId, true, 'estadoId')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -249,11 +267,11 @@ export default function DatosSolicitante({
           title="Municipio"
           name="municipioId"
           options={municipios}
-          disabled={municipiosDisabled}
-          value={form.interesado.persona.domicilio.municipioId || ''}
+          disabled={municipiosDisabled || disabled}
+          value={form.interesado?.persona?.domicilio?.municipioId || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado.persona.domicilio.municipioId, true, 'municipioId')}
+          errorMessage={validateField(form.interesado?.persona?.domicilio?.municipioId, true, 'municipioId')}
         />
       </Grid>
       <Grid item xs={3}>
@@ -261,10 +279,11 @@ export default function DatosSolicitante({
           name="codigoPostal"
           id="codigoPostal"
           label="Código Postal"
-          value={form.interesado.persona.domicilio.codigoPostal || ''}
+          value={form.interesado?.persona?.domicilio?.codigoPostal || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado.persona.domicilio.codigoPostal, true, 'codigoPostal')}
+          errorMessage={validateField(form.interesado?.persona?.domicilio?.codigoPostal, true, 'codigoPostal')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={12}>
@@ -275,10 +294,11 @@ export default function DatosSolicitante({
           name="correoPrimario"
           id="correoPrimario"
           label="Correo de Contacto"
-          value={form.interesado.persona.correoPrimario || ''}
+          value={form.interesado?.persona?.correoPrimario || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado.persona.correoPrimario, true, 'correoPrimario')}
+          errorMessage={validateField(form.interesado?.persona?.correoPrimario, true, 'correoPrimario')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -286,10 +306,11 @@ export default function DatosSolicitante({
           name="telefono"
           id="telefono"
           label="Teléfono de Contacto"
-          value={form.interesado.persona.telefono || ''}
+          value={form.interesado?.persona?.telefono || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado.persona.telefono, true, 'telefono')}
+          errorMessage={validateField(form.interesado?.persona?.telefono, true, 'telefono')}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={3}>
@@ -297,19 +318,27 @@ export default function DatosSolicitante({
           name="celular"
           id="celular"
           label="Celular"
-          value={form.interesado.persona.celular || ''}
+          value={form.interesado?.persona?.celular || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado.persona.celular, true, 'celular')}
+          errorMessage={validateField(form.interesado?.persona?.celular, true, 'celular')}
+          disabled={disabled}
         />
       </Grid>
     </Grid>
   );
 }
 
+DatosSolicitante.defaultProps = {
+  disabled: false,
+  handleOnChange: () => {},
+  setNextDisabled: () => {},
+  validateFields: false,
+};
+
 DatosSolicitante.propTypes = {
-  validateFields: PropTypes.bool.isRequired,
-  setNextDisabled: PropTypes.func.isRequired,
+  validateFields: PropTypes.bool,
+  setNextDisabled: PropTypes.func,
   form: PropTypes.shape({
     tipoTramiteId: PropTypes.number,
     gradoAcademico: PropTypes.number,
@@ -336,11 +365,12 @@ DatosSolicitante.propTypes = {
       }),
     }),
   }).isRequired,
-  handleOnChange: PropTypes.func.isRequired,
+  handleOnChange: PropTypes.func,
   estados: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       nombre: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  disabled: PropTypes.bool,
 };

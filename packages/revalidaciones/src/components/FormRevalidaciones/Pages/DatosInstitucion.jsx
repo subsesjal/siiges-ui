@@ -2,7 +2,9 @@ import { Grid } from '@mui/material';
 import {
   Input, InputDate, Select, Subtitle,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+  useEffect, useState, useCallback, useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../../utils/FetchData';
 
@@ -118,7 +120,7 @@ const getActiveRequiredFields = (form, tipoInstitucionId) => REQUIRED_FIELDS.fil
   if (field.condition) {
     return field.condition(tipoInstitucionId);
   }
-  return true; // No condition means always required
+  return true;
 });
 
 export default function DatosInstitucion({
@@ -127,8 +129,8 @@ export default function DatosInstitucion({
   paises,
   setNextDisabled,
   validateFields,
+  disabled,
 }) {
-  // State for fetched data
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
@@ -136,22 +138,36 @@ export default function DatosInstitucion({
   const [rvoes, setRvoes] = useState([]);
   const [rvoeError, setRvoeError] = useState('');
 
-  // Form state
   const [touched, setTouched] = useState({});
 
-  // Derived values
-  const tipoInstitucionId = form.interesado?.institucionDestino?.tipoInstitucionId || '';
-  const institucionId = form.interesado?.institucionDestino?.institucionId || '';
-  const rvoesList = rvoes.map(({ id, acuerdoRvoe }) => ({
-    id,
-    nombre: acuerdoRvoe,
-  }));
-  const selectedRvoe = rvoes.find(
-    (rvoe) => rvoe.id === form.interesado?.institucionDestino?.programaId,
+  const tipoInstitucionId = useMemo(
+    () => form.interesado?.institucionDestino?.tipoInstitucionId || '',
+    [form.interesado?.institucionDestino?.tipoInstitucionId],
   );
-  const carrera = selectedRvoe?.nombre || '';
 
-  // Data fetching
+  const institucionId = useMemo(
+    () => form.interesado?.institucionDestino?.id || '',
+    [form.interesado?.institucionDestino?.id],
+  );
+
+  const rvoesList = useMemo(
+    () => rvoes.map(({ id, acuerdoRvoe }) => ({
+      id,
+      nombre: acuerdoRvoe,
+    })),
+    [rvoes],
+  );
+
+  const selectedRvoe = useMemo(
+    () => rvoes.find((rvoe) => rvoe.id === form.interesado?.institucionDestino?.programaId),
+    [rvoes, form.interesado?.institucionDestino?.programaId],
+  );
+
+  const carrera = useMemo(
+    () => selectedRvoe?.nombre || '',
+    [selectedRvoe],
+  );
+
   const mapNivelesData = useCallback(
     (item) => ({
       id: item.id,
@@ -194,7 +210,6 @@ export default function DatosInstitucion({
     }
   }, [institucionId]);
 
-  // Handlers
   const fetchProgramas = useCallback(async (acuerdoRvoe) => {
     try {
       const response = await fetch(
@@ -261,7 +276,6 @@ export default function DatosInstitucion({
     [touched],
   );
 
-  // Dynamic validation based on institution type
   useEffect(() => {
     if (validateFields) {
       const activeRequiredFields = getActiveRequiredFields(
@@ -286,10 +300,10 @@ export default function DatosInstitucion({
     }
   }, [validateFields, form, setNextDisabled, tipoInstitucionId]);
 
-  // Helper function to get nested form value
   const getFormValue = (path) => path.reduce((obj, key) => obj?.[key], form) || '';
 
-  // Helper function to render select fields
+  console.log(form);
+
   const renderSelectField = ({
     title,
     name,
@@ -311,13 +325,13 @@ export default function DatosInstitucion({
           required,
           name,
         )}
+        disabled={disabled}
       />
     </Grid>
   );
 
   return (
     <Grid container spacing={2}>
-      {/* Sección de Institución de Procedencia */}
       <Grid item xs={12}>
         <Subtitle>Datos de la Institución de procedencia</Subtitle>
       </Grid>
@@ -339,6 +353,7 @@ export default function DatosInstitucion({
                 required,
                 name,
               )}
+              disabled={disabled}
             />
           </Grid>
         ),
@@ -357,12 +372,12 @@ export default function DatosInstitucion({
               name={name}
               value={getFormValue([...path, name])}
               onChange={(e) => handleChange(e, path)}
+              disabled={disabled}
             />
           </Grid>
         ),
       )}
 
-      {/* Sección de Institución de Destino */}
       <Grid item xs={12}>
         <Subtitle>Datos de la Institución de destino</Subtitle>
       </Grid>
@@ -380,6 +395,7 @@ export default function DatosInstitucion({
             true,
             'tipoInstitucionId',
           )}
+          disabled={disabled}
         />
       </Grid>
 
@@ -397,6 +413,7 @@ export default function DatosInstitucion({
               tipoInstitucionId === 1,
               'institucionId',
             )}
+            disabled={disabled}
           />
         ) : (
           <Input
@@ -405,6 +422,7 @@ export default function DatosInstitucion({
             name="nombre"
             value={getFormValue(['interesado', 'institucionDestino', 'nombre'])}
             onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+            disabled={disabled}
           />
         )}
       </Grid>
@@ -428,6 +446,7 @@ export default function DatosInstitucion({
                 true,
                 'nivel',
               )}
+              disabled={disabled}
             />
           </Grid>
           <Grid item xs={3}>
@@ -443,6 +462,7 @@ export default function DatosInstitucion({
               onBlur={handleRvoeOnBlur}
               errorMessage={rvoeError}
               required
+              disabled={disabled}
             />
           </Grid>
           <Grid item xs={6}>
@@ -473,6 +493,7 @@ export default function DatosInstitucion({
               onChange={handleRvoeChange}
               errorMessage={rvoeError}
               required
+              disabled={disabled}
             />
           </Grid>
           <Grid item xs={9}>
@@ -490,6 +511,13 @@ export default function DatosInstitucion({
   );
 }
 
+DatosInstitucion.defaultProps = {
+  handleOnChange: () => {},
+  setNextDisabled: () => {},
+  disabled: false,
+  validateFields: false,
+};
+
 DatosInstitucion.propTypes = {
   form: PropTypes.shape({
     interesado: PropTypes.shape({
@@ -505,6 +533,7 @@ DatosInstitucion.propTypes = {
         correoInstitucion: PropTypes.string,
       }),
       institucionDestino: PropTypes.shape({
+        id: PropTypes.number,
         tipoInstitucionId: PropTypes.oneOfType([
           PropTypes.string,
           PropTypes.number,
@@ -522,13 +551,14 @@ DatosInstitucion.propTypes = {
       }),
     }),
   }).isRequired,
-  handleOnChange: PropTypes.func.isRequired,
+  handleOnChange: PropTypes.func,
   paises: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       nombre: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  setNextDisabled: PropTypes.func.isRequired,
-  validateFields: PropTypes.bool.isRequired,
+  setNextDisabled: PropTypes.func,
+  validateFields: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
