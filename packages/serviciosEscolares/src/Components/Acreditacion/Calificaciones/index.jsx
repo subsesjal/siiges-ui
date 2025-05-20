@@ -216,8 +216,44 @@ export default function Calificaciones({
     }
   }, [fechaExamenes]);
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+      const parts = dateStr.split('/');
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+
+    return '';
+  };
+
   const handleFechaExamenesChange = (newValue) => {
-    setFechaExamenes(newValue);
+    if (!newValue) return;
+
+    const formattedDate = formatDate(newValue);
+
+    const updatedCalificaciones = [...calificaciones];
+    alumnos.forEach((alumno) => {
+      if (!disabled) {
+        const existingIndex = updatedCalificaciones.findIndex(
+          (c) => c.alumnoId === alumno.id && c.tipo === (mode === 'Ordinarias' ? 1 : 2),
+        );
+
+        if (existingIndex > -1) {
+          updatedCalificaciones[existingIndex].fechaExamen = formattedDate;
+        } else {
+          updatedCalificaciones.push({
+            alumnoId: alumno.id,
+            tipo: mode === 'Ordinarias' ? 1 : 2,
+            calificacion: '',
+            fechaExamen: formattedDate,
+          });
+        }
+      }
+    });
+
+    setCalificaciones(updatedCalificaciones);
+    setFechaExamenes(formattedDate);
   };
 
   const columns = mode === 'Ordinarias'
