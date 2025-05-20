@@ -55,14 +55,15 @@ const columnsInscritosOrdinario = (
     width: 220,
     renderCell: (params) => {
       const isDisabled = disabled || params.row.situacionId === 3 || params.row.situacionId === 4;
-      const fechaExamen = !isDisabled && fechaExamenes ? fechaExamenes : params.row.calificaciones[0]?.fechaExamen || '';
+      const currentFechaExamen = params.row.calificaciones[0]?.fechaExamen || '';
+      const fechaExamen = !currentFechaExamen && fechaExamenes ? fechaExamenes : currentFechaExamen;
 
       return (
         <FechaExamenInput
           id={params.id}
           disabled={isDisabled}
           value={fechaExamen}
-          updateCalificaciones={(alumnoId, newFechaExamen) => updateCalificaciones(alumnoId, newFechaExamen, 'fechaExamen')}
+          updateCalificaciones={updateCalificaciones}
         />
       );
     },

@@ -20,21 +20,29 @@ export default function FechaExamenInput({
     return '';
   };
 
-  const formatForOutput = (dateStr) => {
-    if (!dateStr) return '';
-    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr;
-
-    const parts = dateStr.split('-');
-    if (parts.length === 3) {
-      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  const isValidDate = (dateStr) => {
+    if (!dateStr) return false;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      const date = new Date(dateStr);
+      return !Number.isNaN(date.getTime());
     }
-    return '';
+
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+      const parts = dateStr.split('/');
+      const date = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+      return !Number.isNaN(date.getTime());
+    }
+
+    return false;
   };
 
   const handleChange = (e) => {
     const inputValue = e.target.value;
-    const formattedValue = formatForOutput(inputValue);
-    updateCalificaciones(id, formattedValue, 'fechaExamen');
+    if (isValidDate(inputValue)) {
+      updateCalificaciones(id, inputValue, 'fechaExamen');
+    } else {
+      updateCalificaciones(id, '', 'fechaExamen');
+    }
   };
 
   const inputValue = formatForInput(value);
