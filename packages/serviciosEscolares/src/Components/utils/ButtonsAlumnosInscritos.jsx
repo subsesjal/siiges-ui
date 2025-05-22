@@ -4,7 +4,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { useState, useContext } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Context, DefaultModal, ButtonSimple, deleteRecord,
@@ -68,7 +68,7 @@ export default function ButtonsAlumnosInscritos({
             setOpen(true);
           }}
         >
-          <ListAltIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
         <IconButton
           aria-label="Editar"
