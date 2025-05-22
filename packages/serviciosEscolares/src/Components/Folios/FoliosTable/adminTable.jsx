@@ -2,7 +2,7 @@ import { Grid, IconButton } from '@mui/material';
 import { DataTable } from '@siiges-ui/shared';
 import React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import SendIcon from '@mui/icons-material/Send';
 import DoneIcon from '@mui/icons-material/Done';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
@@ -35,7 +35,7 @@ const columns = [
 
       let IconComponent = ArticleIcon;
       if (params.row.estatusSolicitudFolioId === 2) {
-        IconComponent = VisibilityIcon;
+        IconComponent = VisibilityOutlinedIcon;
       } else if (params.row.estatusSolicitudFolioId === 3) {
         IconComponent = SendIcon;
       } else if (params.row.estatusSolicitudFolioId === 7) {
