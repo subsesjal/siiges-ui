@@ -6,7 +6,7 @@ import {
 import {
   Context, DataTable, getData, Select,
 } from '@siiges-ui/shared';
-import ArticleIcon from '@mui/icons-material/Article';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import GradingIcon from '@mui/icons-material/Grading';
 import SendIcon from '@mui/icons-material/Send';
 import { useRouter } from 'next/router';
@@ -27,7 +27,7 @@ const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
     renderCell: (params) => (
       <>
         <IconButton onClick={() => handleConsultar(params.row)}>
-          <ArticleIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
         <IconButton onClick={() => handleRevisar(params.row)}>
           <GradingIcon />
