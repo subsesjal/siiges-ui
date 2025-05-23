@@ -222,7 +222,7 @@ export default function DatosInstitucion({
       );
       const data = await response.json();
       setProgramas(data.data);
-      setRvoeError(response.ok ? '' : 'No se encontraron RVOES');
+      setRvoeError(response.ok ? '' : '¡No se encontraron RVOES!');
     } catch (error) {
       console.error('Error fetching Programas:', error);
       setRvoeError('No se encontraron RVOES');
@@ -285,7 +285,7 @@ export default function DatosInstitucion({
   );
 
   const validateField = useCallback(
-    (value, required, fieldName) => (touched[fieldName] && required && !value ? 'Este campo es requerido' : ''),
+    (value, required, fieldName) => (touched[fieldName] && required && !value ? '¡Este campo es requerido!' : ''),
     [touched],
   );
 
