@@ -193,6 +193,7 @@ export default function FormEquivalencias() {
       case 3:
         return (
           <CargaMaterias
+            form={form}
             filesData={filesData}
             setFilesData={setFilesData}
           />

@@ -3,7 +3,7 @@ import { InputFile, fileToFormData } from '@siiges-ui/shared';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function CargaMaterias({ filesData, setFilesData }) {
+export default function CargaMaterias({ form, filesData, setFilesData }) {
   const handleFileChange = async (files, name) => {
     try {
       const formData = await fileToFormData(files[0]);
@@ -58,6 +58,7 @@ export default function CargaMaterias({ filesData, setFilesData }) {
           isUploaded={isFileUploaded('ARCHIVO_NACIMIENTO')}
         />
       </Grid>
+      {form.tipoTramiteId === 3 && (
       <Grid item xs={6}>
         <InputFile
           label="Copia de Resolución"
@@ -69,50 +70,55 @@ export default function CargaMaterias({ filesData, setFilesData }) {
           isUploaded={isFileUploaded('RESOLUCION')}
         />
       </Grid>
-      <Grid item xs={6}>
-        <InputFile
-          label="Certificado Parcial/Total"
-          id="certificadoParcialTotal"
-          tipoDocumento="ARCHIVO_CERTIFICADO"
-          tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('ARCHIVO_CERTIFICADO')}
-          onChange={(files) => handleFileChange(files, 'ARCHIVO_CERTIFICADO')}
-          isUploaded={isFileUploaded('ARCHIVO_CERTIFICADO')}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <InputFile
-          label="Antecedente Académico"
-          id="antecedenteAcademico"
-          tipoDocumento="ANTECEDENTE_ACADEMICO"
-          tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('ANTECEDENTE_ACADEMICO')}
-          onChange={(files) => handleFileChange(files, 'ANTECEDENTE_ACADEMICO')}
-          isUploaded={isFileUploaded('ANTECEDENTE_ACADEMICO')}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <InputFile
-          label="Programa de Estudio Autorizado"
-          id="programaEstudioAutorizado"
-          tipoDocumento="PROGRAMA_AUTORIZADO"
-          tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('PROGRAMA_AUTORIZADO')}
-          onChange={(files) => handleFileChange(files, 'PROGRAMA_AUTORIZADO')}
-          isUploaded={isFileUploaded('PROGRAMA_AUTORIZADO')}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <InputFile
-          label="Propuesta de Equivalencia"
-          id="propuestaEquivalencia"
-          tipoDocumento="PROPUESTA"
-          tipoEntidad="EQUIVALENCIAS"
-          url={formatUrl('PROPUESTA')}
-          onChange={(files) => handleFileChange(files, 'PROPUESTA')}
-          isUploaded={isFileUploaded('PROPUESTA')}
-        />
-      </Grid>
+      )}
+      {form.tipoTramiteId !== 3 && (
+      <>
+        <Grid item xs={6}>
+          <InputFile
+            label="Certificado Parcial/Total"
+            id="certificadoParcialTotal"
+            tipoDocumento="ARCHIVO_CERTIFICADO"
+            tipoEntidad="EQUIVALENCIAS"
+            url={formatUrl('ARCHIVO_CERTIFICADO')}
+            onChange={(files) => handleFileChange(files, 'ARCHIVO_CERTIFICADO')}
+            isUploaded={isFileUploaded('ARCHIVO_CERTIFICADO')}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <InputFile
+            label="Antecedente Académico"
+            id="antecedenteAcademico"
+            tipoDocumento="ANTECEDENTE_ACADEMICO"
+            tipoEntidad="EQUIVALENCIAS"
+            url={formatUrl('ANTECEDENTE_ACADEMICO')}
+            onChange={(files) => handleFileChange(files, 'ANTECEDENTE_ACADEMICO')}
+            isUploaded={isFileUploaded('ANTECEDENTE_ACADEMICO')}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <InputFile
+            label="Programa de Estudio Autorizado"
+            id="programaEstudioAutorizado"
+            tipoDocumento="PROGRAMA_AUTORIZADO"
+            tipoEntidad="EQUIVALENCIAS"
+            url={formatUrl('PROGRAMA_AUTORIZADO')}
+            onChange={(files) => handleFileChange(files, 'PROGRAMA_AUTORIZADO')}
+            isUploaded={isFileUploaded('PROGRAMA_AUTORIZADO')}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <InputFile
+            label="Opinión Técnica"
+            id="propuestaEquivalencia"
+            tipoDocumento="PROPUESTA"
+            tipoEntidad="EQUIVALENCIAS"
+            url={formatUrl('PROPUESTA')}
+            onChange={(files) => handleFileChange(files, 'PROPUESTA')}
+            isUploaded={isFileUploaded('PROPUESTA')}
+          />
+        </Grid>
+      </>
+      )}
       <Grid item xs={6}>
         <InputFile
           label="Pago de Equivalencia"
@@ -168,4 +174,5 @@ CargaMaterias.propTypes = {
     }),
   }).isRequired,
   setFilesData: PropTypes.func.isRequired,
+  form: PropTypes.shape({ tipoTramiteId: PropTypes.number }).isRequired,
 };
