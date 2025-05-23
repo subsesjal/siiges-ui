@@ -21,7 +21,7 @@ export default function ProcesarEquivalencia() {
         data: { estatusSolicitudRevEquivId: 4 },
       });
 
-      if (response.statusCode === 200) {
+      if (response.statusCode === 201) {
         setNoti({
           open: true,
           message: '¡Solicitud procesada exitosamente!',
