@@ -21,7 +21,7 @@ export default function RevisarRevalidacion() {
         data: { estatusSolicitudRevEquivId: 3 },
       });
 
-      if (response.statusCode === 200) {
+      if (response.statusCode === 201) {
         setNoti({
           open: true,
           message: '¡Solicitud enviada a firma exitosamente!',
