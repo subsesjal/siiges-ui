@@ -39,13 +39,14 @@ const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
         <IconButton onClick={() => handleConsultar(params.row)}>
           <VisibilityOutlinedIcon />
         </IconButton>
-        {params.row.estatusSolicitudRevEquivId === 3 ? (
-          <IconButton onClick={() => handleProcesar(params.row)}>
-            <SendIcon />
-          </IconButton>
-        ) : (
+        {params.row.estatusSolicitudRevEquivId < 3 && (
           <IconButton onClick={() => handleRevisar(params.row)}>
             <GradingIcon />
+          </IconButton>
+        )}
+        {params.row.estatusSolicitudRevEquivId === 3 && (
+          <IconButton onClick={() => handleProcesar(params.row)}>
+            <SendIcon />
           </IconButton>
         )}
       </>
