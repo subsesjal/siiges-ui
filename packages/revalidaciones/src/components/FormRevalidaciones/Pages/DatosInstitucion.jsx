@@ -137,17 +137,21 @@ export default function DatosInstitucion({
   const [grados, setGrados] = useState([]);
   const [rvoes, setRvoes] = useState([]);
   const [rvoeError, setRvoeError] = useState('');
+  const [institucionId, setInstitucionId] = useState();
 
   const [touched, setTouched] = useState({});
+
+  useEffect(() => {
+    setInstitucionId(
+      form.interesado?.institucionDestino?.id
+        || form.interesado?.institucionDestino?.institucionId
+        || '',
+    );
+  }, []);
 
   const tipoInstitucionId = useMemo(
     () => form.interesado?.institucionDestino?.tipoInstitucionId || '',
     [form.interesado?.institucionDestino?.tipoInstitucionId],
-  );
-
-  const institucionId = useMemo(
-    () => form.interesado?.institucionDestino?.id || '',
-    [form.interesado?.institucionDestino?.id],
   );
 
   const rvoesList = useMemo(
@@ -159,14 +163,13 @@ export default function DatosInstitucion({
   );
 
   const selectedRvoe = useMemo(
-    () => rvoes.find((rvoe) => rvoe.id === form.interesado?.institucionDestino?.programaId),
+    () => rvoes.find(
+      (rvoe) => rvoe.id === form.interesado?.institucionDestino?.programaId,
+    ),
     [rvoes, form.interesado?.institucionDestino?.programaId],
   );
 
-  const carrera = useMemo(
-    () => selectedRvoe?.nombre || '',
-    [selectedRvoe],
-  );
+  const carrera = useMemo(() => selectedRvoe?.nombre || '', [selectedRvoe]);
 
   const mapNivelesData = useCallback(
     (item) => ({
@@ -223,10 +226,10 @@ export default function DatosInstitucion({
       );
       const data = await response.json();
       setProgramas(data.data);
-      setRvoeError(response.ok ? '' : 'RVOE inválido');
+      setRvoeError(response.ok ? '' : 'No se encontraron RVOES');
     } catch (error) {
       console.error('Error fetching Programas:', error);
-      setRvoeError('RVOE inválido');
+      setRvoeError('No se encontraron RVOES');
     }
   }, []);
 
@@ -266,7 +269,21 @@ export default function DatosInstitucion({
 
   const handleInstitucionChange = useCallback(
     (e) => {
+      const resetProgramaIdEvent = {
+        target: {
+          name: 'programaId',
+          value: '',
+        },
+      };
+
       handleOnChange(e, ['interesado', 'institucionDestino']);
+
+      handleOnChange(resetProgramaIdEvent, [
+        'interesado',
+        'institucionDestino',
+      ]);
+
+      setInstitucionId(e.target.value);
     },
     [handleOnChange],
   );
@@ -282,27 +299,35 @@ export default function DatosInstitucion({
         form,
         tipoInstitucionId,
       );
+      const emptyFields = [];
 
-      const isAnyFieldEmpty = activeRequiredFields.some(({ path }) => {
+      const isAnyFieldEmpty = activeRequiredFields.some(({ path, name }) => {
         const value = path.reduce((obj, key) => obj?.[key], form);
-        return Array.isArray(value) ? value.length === 0 : !value;
+        const isEmpty = Array.isArray(value) ? value.length === 0 : !value;
+
+        if (isEmpty) {
+          emptyFields.push({ name, path });
+        }
+
+        return isEmpty;
       });
 
       setNextDisabled(isAnyFieldEmpty);
 
       if (isAnyFieldEmpty) {
+        console.log('Empty required fields:', emptyFields);
         const newTouched = activeRequiredFields.reduce((acc, { name }) => {
           acc[name] = true;
           return acc;
         }, {});
         setTouched(newTouched);
+      } else {
+        console.log('All required fields are filled');
       }
     }
   }, [validateFields, form, setNextDisabled, tipoInstitucionId]);
 
   const getFormValue = (path) => path.reduce((obj, key) => obj?.[key], form) || '';
-
-  console.log(form);
 
   const renderSelectField = ({
     title,
@@ -443,7 +468,7 @@ export default function DatosInstitucion({
               required
               errorMessage={validateField(
                 getFormValue(['interesado', 'institucionDestino', 'nivel']),
-                true,
+                tipoInstitucionId !== 1,
                 'nivel',
               )}
               disabled={disabled}
@@ -460,7 +485,16 @@ export default function DatosInstitucion({
                 'acuerdoRvoe',
               ])}
               onBlur={handleRvoeOnBlur}
-              errorMessage={rvoeError}
+              onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+              errorMessage={validateField(
+                getFormValue([
+                  'interesado',
+                  'institucionDestino',
+                  'acuerdoRvoe',
+                ]),
+                tipoInstitucionId !== 1,
+                'acuerdoRvoe',
+              )}
               required
               disabled={disabled}
             />
@@ -472,7 +506,7 @@ export default function DatosInstitucion({
               name="nombreCarrera"
               value={programas?.nombre || ''}
               onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-              disabled
+              disabled={disabled}
             />
           </Grid>
         </>
