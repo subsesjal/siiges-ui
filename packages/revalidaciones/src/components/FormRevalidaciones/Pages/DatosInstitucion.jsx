@@ -134,8 +134,28 @@ export default function DatosInstitucion({
   const [rvoes, setRvoes] = useState([]);
   const [rvoeError, setRvoeError] = useState('');
   const [institucionId, setInstitucionId] = useState();
+  const [loadingRvoes, setLoadingRvoes] = useState(false);
 
   const [touched, setTouched] = useState({});
+
+  useEffect(() => {
+    if (institucionId) {
+      setLoadingRvoes(true);
+      fetchData(
+        `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
+        (data) => {
+          setRvoes(data);
+          setLoadingRvoes(false);
+        },
+        (error) => {
+          console.error('Error fetching RVOEs:', error);
+          setLoadingRvoes(false);
+        },
+      );
+    } else {
+      setRvoes([]);
+    }
+  }, [institucionId]);
 
   useEffect(() => {
     setInstitucionId(
@@ -151,7 +171,7 @@ export default function DatosInstitucion({
   );
 
   const rvoesList = useMemo(
-    () => rvoes.map(({ id, acuerdoRvoe }) => ({
+    () => (rvoes || []).map(({ id, acuerdoRvoe }) => ({
       id,
       nombre: acuerdoRvoe,
     })),
@@ -510,7 +530,7 @@ export default function DatosInstitucion({
           <Grid item xs={3}>
             <Select
               title="RVOE"
-              options={rvoesList}
+              options={loadingRvoes ? [] : rvoesList}
               name="programaId"
               value={getFormValue([
                 'interesado',
