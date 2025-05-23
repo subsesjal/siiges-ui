@@ -10,7 +10,6 @@ import fetchData from '../../../utils/FetchData';
 
 const domain = process.env.NEXT_PUBLIC_URL;
 
-// Field configurations
 const PROCEEDING_INSTITUTION_FIELDS = [
   {
     id: 'nombreInstitucion',
@@ -71,7 +70,6 @@ const DESTINATION_INSTITUTION_FIELDS = [
 ];
 
 const REQUIRED_FIELDS = [
-  // Proceeding institution fields (always required)
   {
     path: ['interesado', 'institucionProcedencia', 'nombre'],
     name: 'nombre',
@@ -88,8 +86,6 @@ const REQUIRED_FIELDS = [
     path: ['interesado', 'institucionProcedencia', 'paisId'],
     name: 'paisId',
   },
-
-  // Destination institution fields (conditionally required)
   {
     path: ['interesado', 'institucionDestino', 'tipoInstitucionId'],
     name: 'tipoInstitucionId',
@@ -315,14 +311,11 @@ export default function DatosInstitucion({
       setNextDisabled(isAnyFieldEmpty);
 
       if (isAnyFieldEmpty) {
-        console.log('Empty required fields:', emptyFields);
         const newTouched = activeRequiredFields.reduce((acc, { name }) => {
           acc[name] = true;
           return acc;
         }, {});
         setTouched(newTouched);
-      } else {
-        console.log('All required fields are filled');
       }
     }
   }, [validateFields, form, setNextDisabled, tipoInstitucionId]);

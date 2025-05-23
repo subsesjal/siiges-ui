@@ -17,6 +17,8 @@ export default function FormEquivalencias() {
   const [currentPosition, setCurrentPosition] = useState(1);
   const [filesData, setFilesData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validateFields, setValidateFields] = useState(false);
+  const [nextDisabled, setNextDisabled] = useState(true);
   const [form, setForm] = useState({
     tipoTramiteId: null,
     estatusSolicitudRevEquivId: 1,
@@ -84,8 +86,11 @@ export default function FormEquivalencias() {
   }, []);
 
   const handleNext = () => {
-    if (currentPosition < totalPositions) {
-      setCurrentPosition((prevPosition) => prevPosition + 1);
+    setValidateFields(true);
+    if (!nextDisabled) {
+      if (currentPosition < totalPositions) {
+        setCurrentPosition((prevPosition) => prevPosition + 1);
+      }
     }
   };
 
@@ -171,6 +176,8 @@ export default function FormEquivalencias() {
             form={form}
             handleOnChange={handleOnChange}
             estados={estados}
+            validateFields={validateFields}
+            setNextDisabled={setNextDisabled}
           />
         );
       case 2:
@@ -179,6 +186,8 @@ export default function FormEquivalencias() {
             form={form}
             handleOnChange={handleOnChange}
             estados={estados}
+            validateFields={validateFields}
+            setNextDisabled={setNextDisabled}
           />
         );
       case 3:

@@ -4,6 +4,7 @@ import {
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import validateField from '../../../utils/ValidateField';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
@@ -20,12 +21,93 @@ const sexo = [
   { id: 3, nombre: 'Otro' },
 ];
 
+// Validation rules configuration
+const validationRules = {
+  tipoTramiteId: {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.curp': {
+    message: 'La CURP debe tener 18 caracteres',
+    required: true,
+    validate: (value) => value && value.length === 18,
+  },
+  'interesado.persona.nombre': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.apellidoPaterno': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.apellidoMaterno': {
+    message: '',
+    required: false,
+  },
+  'interesado.persona.nacionalidad': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.sexo': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.fechaNacimiento': {
+    message: 'La fecha de nacimiento es requerida',
+    required: true,
+    validate: (value) => value && !Number.isNaN(Date.parse(value)),
+  },
+  'interesado.persona.domicilio.calle': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.numeroExterior': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.colonia': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.estadoId': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.municipioId': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.codigoPostal': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.correoPrimario': {
+    message: 'Ingrese un correo electrónico válido',
+    required: true,
+    validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+  },
+  'interesado.persona.telefono': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.celular': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+};
+
 export default function DatosSolicitante({
-  form, handleOnChange, estados, disabled,
+  form,
+  handleOnChange,
+  estados,
+  disabled,
+  validateFields,
+  setNextDisabled,
 }) {
   const [municipios, setMunicipios] = useState([]);
   const [estadoId, setEstadoId] = useState('');
   const [municipiosDisabled, setMunicipiosDisabled] = useState(!estadoId);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (form.interesado?.persona?.domicilio?.estadoId) {
@@ -33,6 +115,16 @@ export default function DatosSolicitante({
       setMunicipiosDisabled(false);
     }
   }, [form.interesado?.persona?.domicilio?.estadoId]);
+
+  const handleChange = (e, path) => {
+    const { name, value } = e.target;
+    const fieldName = [...path, name].join('.');
+
+    handleOnChange(e, path);
+
+    const error = validateField(fieldName, value, validationRules);
+    setErrors((prev) => ({ ...prev, [fieldName]: error }));
+  };
 
   useEffect(() => {
     const fetchMunicipios = async () => {
@@ -62,7 +154,37 @@ export default function DatosSolicitante({
     const selectedEstadoId = event.target.value;
     setEstadoId(selectedEstadoId);
     setMunicipiosDisabled(!selectedEstadoId);
-    handleOnChange(event, ['interesado', 'persona', 'domicilio']);
+    handleChange(event, ['interesado', 'persona', 'domicilio']);
+  };
+
+  useEffect(() => {
+    if (validateFields) {
+      const newErrors = {};
+      let hasErrors = false;
+
+      Object.keys(validationRules).forEach((fieldName) => {
+        const value = fieldName
+          .split('.')
+          .reduce(
+            (obj, key) => (obj && obj[key] !== undefined ? obj[key] : ''),
+            form,
+          );
+        const error = validateField(fieldName, value, validationRules);
+
+        if (error) {
+          newErrors[fieldName] = error;
+          hasErrors = true;
+        }
+      });
+
+      setErrors(newErrors);
+      setNextDisabled(hasErrors);
+    }
+  }, [validateFields, form, setNextDisabled]);
+
+  const getError = (path, name) => {
+    const fieldName = [...path, name].join('.');
+    return errors[fieldName] || '';
   };
 
   return (
@@ -76,7 +198,9 @@ export default function DatosSolicitante({
           options={tipoSolicitudes}
           name="tipoTramiteId"
           value={form.tipoTramiteId || ''}
-          onChange={(e) => handleOnChange(e, [])}
+          onChange={(e) => handleChange(e, [])}
+          required
+          errorMessage={getError([], 'tipoTramiteId')}
           disabled={disabled}
         />
       </Grid>
@@ -89,8 +213,11 @@ export default function DatosSolicitante({
           label="CURP"
           name="curp"
           value={form.interesado?.persona?.curp || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'curp')}
           disabled={disabled}
+          inputProps={{ maxLength: 18 }}
         />
       </Grid>
       <Grid item xs={3}>
@@ -99,7 +226,9 @@ export default function DatosSolicitante({
           label="Nombre"
           name="nombre"
           value={form.interesado?.persona?.nombre || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'nombre')}
           disabled={disabled}
         />
       </Grid>
@@ -109,7 +238,9 @@ export default function DatosSolicitante({
           label="Primer Apellido"
           name="apellidoPaterno"
           value={form.interesado?.persona?.apellidoPaterno || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'apellidoPaterno')}
           disabled={disabled}
         />
       </Grid>
@@ -119,7 +250,7 @@ export default function DatosSolicitante({
           label="Segundo Apellido"
           name="apellidoMaterno"
           value={form.interesado?.persona?.apellidoMaterno || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           disabled={disabled}
         />
       </Grid>
@@ -129,7 +260,9 @@ export default function DatosSolicitante({
           label="Nacionalidad"
           name="nacionalidad"
           value={form.interesado?.persona?.nacionalidad || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'nacionalidad')}
           disabled={disabled}
         />
       </Grid>
@@ -140,7 +273,9 @@ export default function DatosSolicitante({
           options={sexo}
           name="sexo"
           value={form.interesado?.persona?.sexo || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'sexo')}
           disabled={disabled}
         />
       </Grid>
@@ -150,7 +285,9 @@ export default function DatosSolicitante({
           name="fechaNacimiento"
           type="datetime"
           value={form.interesado?.persona?.fechaNacimiento || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'fechaNacimiento')}
           disabled={disabled}
         />
       </Grid>
@@ -163,7 +300,12 @@ export default function DatosSolicitante({
           id="calle"
           label="Calle"
           value={form.interesado?.persona?.domicilio?.calle || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
+          required
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'calle',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -173,7 +315,12 @@ export default function DatosSolicitante({
           id="numeroExterior"
           label="Número Exterior"
           value={form.interesado?.persona?.domicilio?.numeroExterior || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
+          required
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'numeroExterior',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -183,7 +330,12 @@ export default function DatosSolicitante({
           id="colonia"
           label="Colonia"
           value={form.interesado?.persona?.domicilio?.colonia || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
+          required
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'colonia',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -194,6 +346,11 @@ export default function DatosSolicitante({
           options={estados}
           value={estadoId}
           onChange={handleEstadoChange}
+          required
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'estadoId',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -203,7 +360,12 @@ export default function DatosSolicitante({
           name="municipioId"
           options={municipios}
           value={form.interesado?.persona?.domicilio?.municipioId || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
+          required
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'municipioId',
+          )}
           disabled={disabled || municipiosDisabled}
         />
       </Grid>
@@ -213,7 +375,12 @@ export default function DatosSolicitante({
           id="codigoPostal"
           label="Código Postal"
           value={form.interesado?.persona?.domicilio?.codigoPostal || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona', 'domicilio'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
+          required
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'codigoPostal',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -226,7 +393,9 @@ export default function DatosSolicitante({
           id="correoPrimario"
           label="Correo de Contacto"
           value={form.interesado?.persona?.correoPrimario || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'correoPrimario')}
           disabled={disabled}
         />
       </Grid>
@@ -236,7 +405,9 @@ export default function DatosSolicitante({
           id="telefono"
           label="Teléfono de Contacto"
           value={form.interesado?.persona?.telefono || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'telefono')}
           disabled={disabled}
         />
       </Grid>
@@ -246,7 +417,9 @@ export default function DatosSolicitante({
           id="celular"
           label="Celular"
           value={form.interesado?.persona?.celular || ''}
-          onChange={(e) => handleOnChange(e, ['interesado', 'persona'])}
+          onChange={(e) => handleChange(e, ['interesado', 'persona'])}
+          required
+          errorMessage={getError(['interesado', 'persona'], 'celular')}
           disabled={disabled}
         />
       </Grid>
@@ -257,6 +430,8 @@ export default function DatosSolicitante({
 DatosSolicitante.defaultProps = {
   handleOnChange: () => {},
   disabled: false,
+  setNextDisabled: () => {},
+  validateFields: false,
 };
 
 DatosSolicitante.propTypes = {
@@ -294,4 +469,6 @@ DatosSolicitante.propTypes = {
       nombre: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  validateFields: PropTypes.bool,
+  setNextDisabled: PropTypes.func,
 };

@@ -2,6 +2,7 @@ import { Grid } from '@mui/material';
 import { Input, Select, Subtitle } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import validateField from '../../../utils/ValidateField';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
@@ -18,14 +19,94 @@ const sexo = [
   { id: 3, nombre: 'Otro' },
 ];
 
+const validationRules = {
+  tipoTramiteId: {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.curp': {
+    message: 'La CURP debe tener 18 caracteres',
+    required: true,
+    validate: (value) => value && value.length === 18,
+  },
+  'interesado.persona.nombre': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.apellidoPaterno': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.apellidoMaterno': {
+    message: '',
+    required: false,
+  },
+  'interesado.persona.nacionalidad': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.sexo': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.calle': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.numeroExterior': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.colonia': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.estadoId': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.municipioId': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.domicilio.codigoPostal': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.correoPrimario': {
+    message: 'Ingrese un correo electrónico válido',
+    required: true,
+    validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+  },
+  'interesado.persona.telefono': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+  'interesado.persona.celular': {
+    message: 'Este campo es requerido',
+    required: true,
+  },
+};
+
 export default function DatosSolicitante({
-  form, handleOnChange, estados, setNextDisabled, validateFields, disabled,
+  form,
+  handleOnChange,
+  estados,
+  setNextDisabled,
+  validateFields,
+  disabled,
 }) {
   const [municipios, setMunicipios] = useState([]);
   const [estadoId, setEstadoId] = useState('');
   const [municipiosDisabled, setMunicipiosDisabled] = useState(!estadoId);
+  const [errors, setErrors] = useState({});
 
-  const [touched, setTouched] = useState({});
+  const getNestedValue = (obj, path) => path
+    .split('.')
+    .reduce(
+      (acc, key) => (acc && acc[key] !== undefined ? acc[key] : ''),
+      obj,
+    );
 
   useEffect(() => {
     if (form.interesado?.persona?.domicilio?.estadoId) {
@@ -35,18 +116,17 @@ export default function DatosSolicitante({
   }, [form.interesado?.persona?.domicilio?.estadoId]);
 
   const handleChange = (e, path) => {
-    const { name } = e.target;
+    const { name, value } = e.target;
+    const fieldName = [...path, name].join('.');
+
     handleOnChange(e, path);
 
-    setTouched((prevTouched) => ({
-      ...prevTouched,
-      [name]: true,
+    const error = validateField(fieldName, value, validationRules);
+    setErrors((prev) => ({
+      ...prev,
+      [fieldName]: error,
     }));
   };
-
-  const validateField = (value, required, fieldName) => (
-    touched[fieldName] && required && !value ? 'Este campo es requerido' : ''
-  );
 
   useEffect(() => {
     const fetchMunicipios = async () => {
@@ -62,9 +142,11 @@ export default function DatosSolicitante({
             },
           );
           const data = await response.json();
-          setMunicipios(data.data.filter(
-            (municipio) => municipio.estadoId === parseInt(estadoId, 10),
-          ));
+          setMunicipios(
+            data.data.filter(
+              (municipio) => municipio.estadoId === parseInt(estadoId, 10),
+            ),
+          );
         } catch (error) {
           console.error('¡Error al buscar municipios!:', error);
         }
@@ -83,42 +165,38 @@ export default function DatosSolicitante({
 
   useEffect(() => {
     if (validateFields) {
-      const requiredFields = [
-        { path: ['tipoTramiteId'], value: form.tipoTramiteId },
-        { path: ['interesado', 'persona', 'curp'], value: form.interesado.persona.curp },
-        { path: ['interesado', 'persona', 'nombre'], value: form.interesado.persona.nombre },
-        { path: ['interesado', 'persona', 'apellidoPaterno'], value: form.interesado.persona.apellidoPaterno },
-        { path: ['interesado', 'persona', 'nacionalidad'], value: form.interesado.persona.nacionalidad },
-        { path: ['interesado', 'persona', 'sexo'], value: form.interesado.persona.sexo },
-        { path: ['interesado', 'persona', 'domicilio', 'calle'], value: form.interesado.persona.domicilio.calle },
-        { path: ['interesado', 'persona', 'domicilio', 'numeroExterior'], value: form.interesado.persona.domicilio.numeroExterior },
-        { path: ['interesado', 'persona', 'domicilio', 'colonia'], value: form.interesado.persona.domicilio.colonia },
-        { path: ['interesado', 'persona', 'domicilio', 'estadoId'], value: estadoId },
-        { path: ['interesado', 'persona', 'domicilio', 'municipioId'], value: form.interesado.persona.domicilio.municipioId },
-        { path: ['interesado', 'persona', 'domicilio', 'codigoPostal'], value: form.interesado.persona.domicilio.codigoPostal },
-        { path: ['interesado', 'persona', 'correoPrimario'], value: form.interesado.persona.correoPrimario },
-        { path: ['interesado', 'persona', 'telefono'], value: form.interesado.persona.telefono },
-        { path: ['interesado', 'persona', 'celular'], value: form.interesado.persona.celular },
-      ];
+      try {
+        const newErrors = {};
+        let hasErrors = false;
 
-      const isAnyFieldEmpty = requiredFields.some((field) => {
-        if (Array.isArray(field.value)) {
-          return field.value.length === 0;
-        }
-        return !field.value;
-      });
+        Object.keys(validationRules).forEach((fieldName) => {
+          const value = getNestedValue(form, fieldName);
+          const error = validateField(fieldName, value, validationRules);
 
-      setNextDisabled(false);
-
-      if (isAnyFieldEmpty) {
-        const newTouched = {};
-        requiredFields.forEach((field) => {
-          newTouched[field.path[field.path.length - 1]] = true;
+          if (error) {
+            newErrors[fieldName] = error;
+            hasErrors = true;
+          }
         });
-        setTouched(newTouched);
+
+        setErrors(newErrors);
+        setNextDisabled(hasErrors);
+      } catch (error) {
+        console.error('Validation error:', error);
+        setNextDisabled(true);
       }
     }
-  }, [validateFields]);
+  }, [validateFields, form, setNextDisabled]);
+
+  const getError = (path, name) => {
+    try {
+      const fieldName = [...path, name].join('.');
+      return errors[fieldName] || '';
+    } catch (error) {
+      console.error('Error getting error message:', error);
+      return '';
+    }
+  };
 
   return (
     <Grid container spacing={1}>
@@ -133,7 +211,7 @@ export default function DatosSolicitante({
           value={form.tipoTramiteId || ''}
           onChange={(e) => handleChange(e, [])}
           required
-          errorMessage={validateField(form.tipoTramiteId, true, 'tipoTramiteId')}
+          errorMessage={getError([], 'tipoTramiteId')}
           disabled={disabled}
         />
       </Grid>
@@ -148,8 +226,9 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.curp || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.curp, true, 'curp')}
+          errorMessage={getError(['interesado', 'persona'], 'curp')}
           disabled={disabled}
+          inputProps={{ maxLength: 18 }}
         />
       </Grid>
       <Grid item xs={3}>
@@ -160,7 +239,7 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.nombre || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.nombre, true, 'nombre')}
+          errorMessage={getError(['interesado', 'persona'], 'nombre')}
           disabled={disabled}
         />
       </Grid>
@@ -172,7 +251,7 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.apellidoPaterno || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.apellidoPaterno, true, 'apellidoPaterno')}
+          errorMessage={getError(['interesado', 'persona'], 'apellidoPaterno')}
           disabled={disabled}
         />
       </Grid>
@@ -194,7 +273,7 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.nacionalidad || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.nacionalidad, true, 'nacionalidad')}
+          errorMessage={getError(['interesado', 'persona'], 'nacionalidad')}
           disabled={disabled}
         />
       </Grid>
@@ -207,7 +286,7 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.sexo || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.sexo, true, 'sexo')}
+          errorMessage={getError(['interesado', 'persona'], 'sexo')}
           disabled={disabled}
         />
       </Grid>
@@ -222,7 +301,10 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.domicilio?.calle || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.domicilio?.calle, true, 'calle')}
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'calle',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -234,7 +316,10 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.domicilio?.numeroExterior || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.domicilio?.numeroExterior, true, 'numeroExterior')}
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'numeroExterior',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -246,7 +331,10 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.domicilio?.colonia || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.domicilio?.colonia, true, 'colonia')}
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'colonia',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -258,7 +346,10 @@ export default function DatosSolicitante({
           value={estadoId}
           onChange={handleEstadoChange}
           required
-          errorMessage={validateField(estadoId, true, 'estadoId')}
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'estadoId',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -271,7 +362,10 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.domicilio?.municipioId || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.domicilio?.municipioId, true, 'municipioId')}
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'municipioId',
+          )}
         />
       </Grid>
       <Grid item xs={3}>
@@ -282,7 +376,10 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.domicilio?.codigoPostal || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.domicilio?.codigoPostal, true, 'codigoPostal')}
+          errorMessage={getError(
+            ['interesado', 'persona', 'domicilio'],
+            'codigoPostal',
+          )}
           disabled={disabled}
         />
       </Grid>
@@ -297,7 +394,7 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.correoPrimario || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.correoPrimario, true, 'correoPrimario')}
+          errorMessage={getError(['interesado', 'persona'], 'correoPrimario')}
           disabled={disabled}
         />
       </Grid>
@@ -309,7 +406,7 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.telefono || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.telefono, true, 'telefono')}
+          errorMessage={getError(['interesado', 'persona'], 'telefono')}
           disabled={disabled}
         />
       </Grid>
@@ -321,7 +418,7 @@ export default function DatosSolicitante({
           value={form.interesado?.persona?.celular || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
-          errorMessage={validateField(form.interesado?.persona?.celular, true, 'celular')}
+          errorMessage={getError(['interesado', 'persona'], 'celular')}
           disabled={disabled}
         />
       </Grid>
