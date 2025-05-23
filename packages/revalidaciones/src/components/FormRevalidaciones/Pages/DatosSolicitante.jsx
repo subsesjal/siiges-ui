@@ -45,7 +45,7 @@ export default function DatosSolicitante({
   };
 
   const validateField = (value, required, fieldName) => (
-    touched[fieldName] && required && !value ? 'Este campo es requerido' : ''
+    touched[fieldName] && required && !value ? '¡Este campo es requerido!' : ''
   );
 
   useEffect(() => {

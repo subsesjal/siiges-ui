@@ -26,7 +26,7 @@ export default function CargaMaterias({ filesData, setFilesData }) {
   const documents = [
     { label: 'Acta de Nacimiento', key: 'ACTA_NACIMIENTO' },
     { label: 'Identificación Oficial', key: 'IDENTIFICACION_OFICIAL' },
-    { label: 'Titulo, diploma o grado académico', key: 'TITULO_DIPLOMA_GRADOACADEMICO' },
+    { label: 'Título, diploma o grado académico', key: 'TITULO_DIPLOMA_GRADOACADEMICO' },
     { label: 'Certificado / Notas', key: 'CERTIFICADO_NOTAS' },
     { label: 'Plan y programa de estudio/Pensum', key: 'PLAN_PROGRAMAESTUDIO_PENSUM' },
     { label: 'Cédula profesional', key: 'CEDULA_PROFESIONAL' },
