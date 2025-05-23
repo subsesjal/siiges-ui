@@ -21,20 +21,20 @@ const sexo = [
 
 const validationRules = {
   tipoTramiteId: {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.curp': {
-    message: 'La CURP debe tener 18 caracteres',
+    message: '¡La CURP debe tener 18 caracteres!',
     required: true,
     validate: (value) => value && value.length === 18,
   },
   'interesado.persona.nombre': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.apellidoPaterno': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.apellidoMaterno': {
@@ -42,48 +42,48 @@ const validationRules = {
     required: false,
   },
   'interesado.persona.nacionalidad': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.sexo': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.domicilio.calle': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.domicilio.numeroExterior': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.domicilio.colonia': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.domicilio.estadoId': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.domicilio.municipioId': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.domicilio.codigoPostal': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.correoPrimario': {
-    message: 'Ingrese un correo electrónico válido',
+    message: '¡Ingrese un correo electrónico válido!',
     required: true,
     validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
   },
   'interesado.persona.telefono': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
   'interesado.persona.celular': {
-    message: 'Este campo es requerido',
+    message: '¡Este campo es requerido!',
     required: true,
   },
 };
