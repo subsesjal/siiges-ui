@@ -311,14 +311,11 @@ export default function DatosInstitucion({
       setNextDisabled(isAnyFieldEmpty);
 
       if (isAnyFieldEmpty) {
-        console.log('Empty required fields:', emptyFields);
         const newTouched = activeRequiredFields.reduce((acc, { name }) => {
           acc[name] = true;
           return acc;
         }, {});
         setTouched(newTouched);
-      } else {
-        console.log('All required fields are filled');
       }
     }
   }, [validateFields, form, setNextDisabled, tipoInstitucionId]);
