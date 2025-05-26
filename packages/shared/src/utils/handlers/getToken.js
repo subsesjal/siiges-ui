@@ -30,16 +30,18 @@ export default function getTokenLocalStorage() {
     return null;
   }
   const parsedJwt = parseJwt(jwt);
-  const { exp, userPayload } = parsedJwt;
+  const {
+    exp, id, usuario, rol,
+  } = parsedJwt;
   if (exp * 1000 < Date.now()) {
     localStorage.removeItem('token');
     return null;
   }
   const token = JSON.parse(jwt);
   const data = {
-    id: userPayload.id,
-    nombre: userPayload.usuario,
-    rol: userPayload.rol,
+    id,
+    nombre: usuario,
+    rol,
     token,
   };
   return data;
