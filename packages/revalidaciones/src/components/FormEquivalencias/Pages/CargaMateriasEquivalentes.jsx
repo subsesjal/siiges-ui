@@ -6,7 +6,7 @@ import {
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import ArticleIcon from '@mui/icons-material/Article';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import fetchData from '../../../utils/FetchData';
 
 const columns = (handleDelete, handleEdit, disabled) => [
@@ -55,7 +55,7 @@ const columns = (handleDelete, handleEdit, disabled) => [
           onClick={() => handleEdit(params.row)}
           aria-label="consultar"
         >
-          <ArticleIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
       )
     ),

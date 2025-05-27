@@ -13,7 +13,7 @@ import {
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import ArticleIcon from '@mui/icons-material/Article';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { ButtonsFoliosAdmin, ModalCertificado, ModalTitulo } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 
@@ -212,7 +212,7 @@ export default function Folios() {
       width: 150,
       renderCell: (params) => (
         <IconButton onClick={() => handleConsult(params.row.id)}>
-          <ArticleIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
       ),
     },
