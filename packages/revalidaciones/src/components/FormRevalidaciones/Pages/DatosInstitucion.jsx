@@ -135,35 +135,38 @@ export default function DatosInstitucion({
   const [rvoeError, setRvoeError] = useState('');
   const [institucionId, setInstitucionId] = useState();
   const [loadingRvoes, setLoadingRvoes] = useState(false);
-
   const [touched, setTouched] = useState({});
 
+  // Fetch RVOEs when institucionId changes
   useEffect(() => {
     if (institucionId) {
       setLoadingRvoes(true);
       fetchData(
         `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
         (data) => {
-          setRvoes(data);
+          setRvoes(Array.isArray(data) ? data : []);
           setLoadingRvoes(false);
         },
-        (error) => {
-          console.error('Error fetching RVOEs:', error);
-          setLoadingRvoes(false);
-        },
+        (item) => ({
+          id: item?.id || '',
+          acuerdoRvoe: item?.acuerdoRvoe || '',
+          nombre: item?.nombre || '',
+        }),
       );
     } else {
       setRvoes([]);
+      setLoadingRvoes(false);
     }
   }, [institucionId]);
 
+  // Initialize institucionId from form
   useEffect(() => {
     setInstitucionId(
       form.interesado?.institucionDestino?.id
         || form.interesado?.institucionDestino?.institucionId
         || '',
     );
-  }, []);
+  }, [form]);
 
   const tipoInstitucionId = useMemo(
     () => form.interesado?.institucionDestino?.tipoInstitucionId || '',
@@ -171,21 +174,25 @@ export default function DatosInstitucion({
   );
 
   const rvoesList = useMemo(
-    () => (rvoes || []).map(({ id, acuerdoRvoe }) => ({
-      id,
-      nombre: acuerdoRvoe,
+    () => rvoes.map((item) => ({
+      id: item.id,
+      nombre: item.acuerdoRvoe || item.nombre || 'Sin nombre',
     })),
     [rvoes],
   );
 
-  const selectedRvoe = useMemo(
-    () => rvoes.find(
-      (rvoe) => rvoe.id === form.interesado?.institucionDestino?.programaId,
-    ),
-    [rvoes, form.interesado?.institucionDestino?.programaId],
-  );
+  const selectedRvoe = useMemo(() => {
+    if (!Array.isArray(rvoes)) return undefined;
+    return rvoes.find(
+      (item) => item?.id?.toString()
+        === form.interesado?.institucionDestino?.programaId?.toString(),
+    );
+  }, [rvoes, form.interesado?.institucionDestino?.programaId]);
 
-  const carrera = useMemo(() => selectedRvoe?.nombre || '', [selectedRvoe]);
+  const carrera = useMemo(
+    () => selectedRvoe?.nombre || selectedRvoe?.acuerdoRvoe || '',
+    [selectedRvoe],
+  );
 
   const mapNivelesData = useCallback(
     (item) => ({
@@ -195,6 +202,7 @@ export default function DatosInstitucion({
     [],
   );
 
+  // Fetch initial data
   useEffect(() => {
     const fetchInitialData = async () => {
       await fetchData(
@@ -211,6 +219,7 @@ export default function DatosInstitucion({
     fetchInitialData();
   }, [mapNivelesData]);
 
+  // Fetch instituciones when tipoInstitucionId changes
   useEffect(() => {
     if (tipoInstitucionId) {
       fetchData(
@@ -219,15 +228,6 @@ export default function DatosInstitucion({
       );
     }
   }, [tipoInstitucionId]);
-
-  useEffect(() => {
-    if (institucionId) {
-      fetchData(
-        `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
-        setRvoes,
-      );
-    }
-  }, [institucionId]);
 
   const fetchProgramas = useCallback(async (acuerdoRvoe) => {
     try {
@@ -293,22 +293,23 @@ export default function DatosInstitucion({
       };
 
       handleOnChange(e, ['interesado', 'institucionDestino']);
-
       handleOnChange(resetProgramaIdEvent, [
         'interesado',
         'institucionDestino',
       ]);
-
       setInstitucionId(e.target.value);
     },
     [handleOnChange],
   );
 
   const validateField = useCallback(
-    (value, required, fieldName) => (touched[fieldName] && required && !value ? '¡Este campo es requerido!' : ''),
+    (value, required, fieldName) => (touched[fieldName] && required && !value
+      ? '¡Este campo es requerido!'
+      : ''),
     [touched],
   );
 
+  // Validate fields when validateFields changes
   useEffect(() => {
     if (validateFields) {
       const activeRequiredFields = getActiveRequiredFields(
@@ -530,7 +531,11 @@ export default function DatosInstitucion({
           <Grid item xs={3}>
             <Select
               title="RVOE"
-              options={loadingRvoes ? [] : rvoesList}
+              options={
+                loadingRvoes
+                  ? [{ id: 'loading', nombre: 'Cargando...' }]
+                  : rvoesList
+              }
               name="programaId"
               value={getFormValue([
                 'interesado',
@@ -540,7 +545,7 @@ export default function DatosInstitucion({
               onChange={handleRvoeChange}
               errorMessage={rvoeError}
               required
-              disabled={disabled}
+              disabled={disabled || loadingRvoes}
             />
           </Grid>
           <Grid item xs={9}>

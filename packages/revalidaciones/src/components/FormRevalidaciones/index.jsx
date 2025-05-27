@@ -65,6 +65,8 @@ export default function FormRevalidaciones() {
     },
   });
 
+  console.log(form);
+
   useEffect(() => {
     if ([1, 2, 3].includes(form.tipoTramiteId)) {
       setTotalPositions(4);
