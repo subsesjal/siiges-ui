@@ -3,7 +3,7 @@ import { Context, DataTable } from '@siiges-ui/shared';
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
-import ArticleIcon from '@mui/icons-material/Article';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PropTypes from 'prop-types';
 
 const columns = (handleEdit, handleConsultar) => [
@@ -24,7 +24,7 @@ const columns = (handleEdit, handleConsultar) => [
     renderCell: (params) => (
       <>
         <IconButton onClick={() => handleConsultar(params.row.id)}>
-          <ArticleIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
         {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA'
           || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (

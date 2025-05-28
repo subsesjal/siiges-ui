@@ -1,7 +1,7 @@
 import { IconButton, Stack } from '@mui/material';
 import React from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
@@ -25,7 +25,7 @@ export default function ActionsAcreditacionAsignaturas({ id, grupoId }) {
         aria-label="Consultar"
         onClick={() => navigateTo('/serviciosEscolares/acreditacion/ConsultarAsignatura')}
       >
-        <ListAltIcon />
+        <VisibilityOutlinedIcon />
       </IconButton>
       <IconButton
         aria-label="Editar"

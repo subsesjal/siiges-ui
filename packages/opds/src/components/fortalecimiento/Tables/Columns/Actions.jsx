@@ -22,7 +22,6 @@ export default function ButtonsDatosProyecto({ id, data }) {
     });
   };
   const handleDelete = () => {
-    console.log('Deleted tu culo');
   };
 
   return (

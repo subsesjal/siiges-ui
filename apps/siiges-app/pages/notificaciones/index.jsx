@@ -5,7 +5,7 @@ import {
 import {
   Divider, IconButton, Typography, Grid, CircularProgress,
 } from '@mui/material';
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 function ModalState() {
   const [modal, setModal] = useState(false);
@@ -83,7 +83,7 @@ export default function Notificaciones() {
       width: 150,
       renderCell: (params) => (
         <IconButton aria-label="consultar" onClick={() => showModal(params.id)}>
-          <ListAltIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
       ),
     },
@@ -101,7 +101,7 @@ export default function Notificaciones() {
       width: 110,
       renderCell: (params) => (
         <IconButton aria-label="consultar" onClick={() => showModal(params.id)}>
-          <ListAltIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
       ),
     },
