@@ -8,11 +8,11 @@ export default function ProgramasData({ programa, id }) {
     return <div>Cargando...</div>;
   }
   const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
-  const fecha = new Date(programa.fechaSurteEfecto)
+  const fecha = programa.fechaSurteEfecto ? new Date(programa.fechaSurteEfecto)
     .toLocaleDateString('es', opciones)
     .replace(/ /g, ' ')
     .replace('.', '')
-    .replace(/-([a-z])/, (x) => `-${x[1].toUpperCase()}`);
+    .replace(/-([a-z])/, (x) => `-${x[1].toUpperCase()}`) : 'N/A';
 
   const formatTurnos = (turnosArray) => {
     if (!turnosArray || !Array.isArray(turnosArray)) return '';
