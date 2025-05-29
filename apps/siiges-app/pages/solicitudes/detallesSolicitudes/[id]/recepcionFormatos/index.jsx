@@ -95,7 +95,7 @@ export default function RecepcionFormatos() {
 
               setUrl((prevUrls) => {
                 const newUrls = [...prevUrls];
-                newUrls[index] = fileUrl; // Sin la validación de 'http'
+                newUrls[index] = fileUrl;
                 return newUrls;
               });
             });

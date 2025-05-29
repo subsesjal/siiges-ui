@@ -23,7 +23,7 @@ import NavigationButtons from '../../utils/NavigationButtons';
 const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function InstitucionView({ institucion }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti, setLoading } = useContext(Context);
   const [page, setPage] = useState(1);
   const [urlBiografia, setUrlBiografia] = useState('');
   const [urlBibliografia, setUrlBibliografia] = useState('');
@@ -48,68 +48,81 @@ export default function InstitucionView({ institucion }) {
     }
   };
 
-  useEffect(() => {
-    const fetchFiles = () => {
-      GetFile(
-        {
+  const fetchFiles = async () => {
+    try {
+      const [biografia, bibliografia, actaConstitutiva] = await Promise.allSettled([
+        GetFile({
           entidadId: institucion.id,
           tipoEntidad: 'RATIFICACION',
           tipoDocumento: 'BIOGRAFIA',
-        },
-        (url, error) => {
-          if (error) {
-            setNoti({
-              open: true,
-              message: '¡Error al cargar el archivo de biografía!',
-              type: 'error',
-            });
-          } else {
-            setUrlBiografia(url);
-          }
-        },
-      );
-
-      GetFile(
-        {
+        }),
+        GetFile({
           entidadId: institucion.id,
           tipoEntidad: 'RATIFICACION',
           tipoDocumento: 'BIBLIOGRAFIA',
-        },
-        (url, error) => {
-          if (error) {
-            setNoti({
-              open: true,
-              message: '¡Error al cargar el archivo de bibliografía!',
-              type: 'error',
-            });
-          } else {
-            setUrlBibliografia(url);
-          }
-        },
-      );
-
-      GetFile(
-        {
+        }),
+        GetFile({
           entidadId: institucion.id,
           tipoEntidad: 'INSTITUCION',
           tipoDocumento: 'ACTA_CONSTITUTIVA',
-        },
-        (url, error) => {
-          if (error) {
-            setNoti({
-              open: true,
-              message: '¡Error al cargar el archivo de acta constitutiva!',
-              type: 'error',
-            });
-          } else {
-            setUrlActaConstitutiva(url);
-          }
-        },
-      );
+        }),
+      ]);
+
+      if (biografia.status === 'fulfilled') {
+        setUrlBiografia(biografia.value);
+      } else {
+        setNoti({
+          open: true,
+          message: '¡Error al cargar el archivo de biografía!',
+          type: 'error',
+        });
+      }
+
+      if (bibliografia.status === 'fulfilled') {
+        setUrlBibliografia(bibliografia.value);
+      } else {
+        setNoti({
+          open: true,
+          message: '¡Error al cargar el archivo de bibliografía!',
+          type: 'error',
+        });
+      }
+
+      if (actaConstitutiva.status === 'fulfilled') {
+        setUrlActaConstitutiva(actaConstitutiva.value);
+      } else {
+        setNoti({
+          open: true,
+          message: '¡Error al cargar el archivo de acta constitutiva!',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      setNoti({
+        open: true,
+        message: '¡Error al cargar los archivos!',
+        type: 'error',
+      });
+    }
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        await Promise.all([
+          fetchFiles(),
+          getInstitutionPhoto(institucion.id),
+        ]);
+      } catch (error) {
+        console.error('Error loading institution data:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchFiles();
-    getInstitutionPhoto(institucion.id);
+    loadData();
   }, [institucion.id]);
 
   const totalPages = 2;
