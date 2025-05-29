@@ -5,7 +5,7 @@ export default function getPlantelesByInstitucion(institucionId, callback) {
   const url = process.env.NEXT_PUBLIC_URL;
   const token = getToken();
 
-  fetch(`${url}/api/v1/instituciones/${institucionId}/planteles`, {
+  fetch(`${url}/api/v1/instituciones/${institucionId}/planteles?claveCentroTrabajo=true`, {
     headers: { api_key: apikey, Authorization: `Bearer ${token}` },
   })
     .then((response) => response.json())
