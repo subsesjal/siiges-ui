@@ -117,7 +117,7 @@ export default function DatosSolicitud({
       )}
 
       {fileConfigs.actaComite.showCondition && (
-        <Grid item xs={12} sx={{ mt: 2 }}>
+        <Grid item xs={11} sx={{ mt: 2 }}>
           <InputFile
             url={fileUrls.actaComite}
             setUrl={(url) => setFileUrls((prev) => ({ ...prev, actaComite: url }))}

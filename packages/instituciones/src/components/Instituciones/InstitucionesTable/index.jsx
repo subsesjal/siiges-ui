@@ -68,9 +68,8 @@ export default function InstitucionesTable({ instituciones, session }) {
               text="Cancelar"
               alt="Cancelar"
               onClick={hideModal}
-            >
-              Cancelar
-            </ButtonSimple>
+            />
+
           </Grid>
           <Grid item>
             <ButtonSimple
@@ -80,9 +79,7 @@ export default function InstitucionesTable({ instituciones, session }) {
               onClick={() => {
                 hideModal();
               }}
-            >
-              Confirmar
-            </ButtonSimple>
+            />
           </Grid>
         </Grid>
       </DefaultModal>
