@@ -1,31 +1,21 @@
 import { getToken } from '@siiges-ui/shared';
-import { useEffect, useState } from 'react';
 
-export default function getGrados(id) {
-  const [grados, setGrados] = useState([]);
-  const [loading, setLoading] = useState(false);
-  let userData = {};
+/**
+ * Fetches the list of grades (grados) for a specific program by its ID.
+ *
+ * @param {string} id - The ID of the program to fetch grades for.
+ * @returns {Promise<Array>} A promise that resolves to an array of grades.
+ */
+export default async function getGrados(id) {
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
 
-  useEffect(() => {
-    fetch(`${url}/api/v1/grados/programas/${id}`, {
-      headers: { api_key: apikey, Authorization: `Bearer ${token}` },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setLoading(true);
-        if (data.data !== undefined) {
-          userData = data.data;
-        }
-        setGrados(userData);
-      });
-    setLoading(false);
-  }, []);
+  const response = await fetch(
+    `${url}/api/v1/grados/programas/${id}`,
+    { headers: { api_key: apikey, Authorization: `Bearer ${token}` } },
+  );
 
-  return {
-    grados,
-    loading,
-  };
+  const data = await response.json();
+  return data.data || [];
 }

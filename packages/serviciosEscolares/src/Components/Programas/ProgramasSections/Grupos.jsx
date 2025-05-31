@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Grid } from '@mui/material';
-import { Button, DataTable } from '@siiges-ui/shared';
+import { Button, DataTable, Context } from '@siiges-ui/shared';
 import GruposForm from '../../utils/GruposForm';
-import columnsGrupos from '../../../Tables/gruposTable';
+import getColumnsGrupos from '../../../Tables/gruposTable';
 import GruposModal from '../../utils/GruposModal';
 
 export default function Grupos() {
@@ -10,6 +10,19 @@ export default function Grupos() {
   const [grupos, setGrupos] = useState([]);
   const [parametros, setParametros] = useState([]);
   const [fetchGrupos, setFetchGrupos] = useState(true);
+  const { setNoti } = useContext(Context);
+
+  const handleSuccess = () => {
+    setOpen(false);
+    setFetchGrupos((prev) => !prev); // toggle based on latest value
+    setNoti({
+      open: true,
+      message: 'Grupo guardado exitosamente.',
+      type: 'success',
+    });
+  };
+
+  const columnsGrupos = getColumnsGrupos({ handleSuccess });
 
   return (
     <Grid container spacing={2}>
@@ -18,7 +31,7 @@ export default function Grupos() {
           setGrupos={setGrupos}
           setParametros={setParametros}
           fetchGrupos={fetchGrupos}
-          setFetchGrupos={setFetchGrupos}
+          setNoti={setNoti}
         />
       </Grid>
       <Grid item xs={12}>
@@ -43,7 +56,7 @@ export default function Grupos() {
         type="new"
         data={grupos}
         params={parametros}
-        setFetchGrupos={setFetchGrupos}
+        onSuccess={handleSuccess}
       />
     </Grid>
   );
