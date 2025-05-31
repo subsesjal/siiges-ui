@@ -1,14 +1,16 @@
 import { Grid } from '@mui/material';
-import { Button, DataTable } from '@siiges-ui/shared';
-import React, { useState, useEffect } from 'react';
+import { Button, DataTable, Context } from '@siiges-ui/shared';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
-import columnsCiclosEscolares from '../../../Tables/ciclosEscolaresTable';
+import getColumnsCiclosEscolares from '../../../Tables/ciclosEscolaresTable';
 import CiclosEscolaresModal from '../../utils/CiclosEscolaresModal';
 import getCiclosEscolares from '../../utils/getCiclosEscolares';
 
 export default function CiclosEscolares() {
   const [open, setOpen] = useState(false);
   const [ciclos, setCiclos] = useState([]);
+  const [fetchCiclos, setFetchCiclos] = useState(false);
+  const { setNoti } = useContext(Context);
 
   const router = useRouter();
   const { id: programaId } = router.query;
@@ -19,12 +21,28 @@ export default function CiclosEscolares() {
         const ciclosEscolaresData = await getCiclosEscolares(programaId);
         setCiclos(ciclosEscolaresData);
       } catch (error) {
-        console.error('¡Error al recuperar ciclos escolares!:', error);
+        setNoti({
+          open: true,
+          message: 'Error al consultar los ciclos escolares',
+          type: 'error',
+        });
       }
     };
 
-    fetchData();
-  }, [open, setOpen]);
+    if (programaId) fetchData();
+  }, [fetchCiclos]);
+
+  const handleSuccess = () => {
+    setOpen(false);
+    setFetchCiclos((prev) => !prev); // triggers table refresh
+    setNoti({
+      open: true,
+      message: 'Ciclo escolar guardado exitosamente.',
+      type: 'success',
+    });
+  };
+
+  const columnsCiclosEscolares = getColumnsCiclosEscolares({ handleSuccess });
 
   return (
     <Grid container spacing={2}>
@@ -37,9 +55,9 @@ export default function CiclosEscolares() {
       </Grid>
       <Grid item xs={12}>
         <DataTable
-          rows={ciclos || []}
+          title="Tabla de Ciclos Escolares"
           columns={columnsCiclosEscolares}
-          title="Tabla de Ciclos escolares"
+          rows={ciclos || []}
         />
       </Grid>
       <CiclosEscolaresModal
@@ -47,6 +65,7 @@ export default function CiclosEscolares() {
         setOpen={setOpen}
         type="new"
         data={{ programaId }}
+        onSuccess={handleSuccess}
       />
     </Grid>
   );

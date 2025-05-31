@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import CiclosEscolaresModal from './CiclosEscolaresModal';
 
-export default function ButtonsCiclosEscolares({ row }) {
+export default function ButtonsCiclosEscolares({ row, handleSuccess }) {
   const [open, setOpen] = useState(false);
+
   return (
     <>
       <Stack direction="row" spacing={1}>
@@ -20,11 +21,18 @@ export default function ButtonsCiclosEscolares({ row }) {
           </IconButton>
         )}
       </Stack>
-      <CiclosEscolaresModal open={open} setOpen={setOpen} type="edit" data={row} />
+      <CiclosEscolaresModal
+        open={open}
+        setOpen={setOpen}
+        onSuccess={handleSuccess}
+        type="edit"
+        data={row}
+      />
     </>
   );
 }
 
 ButtonsCiclosEscolares.propTypes = {
   row: PropTypes.number.isRequired,
+  handleSuccess: PropTypes.func.isRequired,
 };

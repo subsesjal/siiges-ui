@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import GruposModal from './GruposModal';
 
-export default function ButtonsGrupos({ id }) {
+export default function ButtonsGrupos({ id, handleSuccess }) {
   const [open, setOpen] = useState(false);
   const params = {
     cicloEscolarId: id.cicloEscolarId,
@@ -31,6 +31,7 @@ export default function ButtonsGrupos({ id }) {
         type="edit"
         data={id}
         params={params}
+        onSuccess={handleSuccess}
       />
     </>
   );
@@ -38,4 +39,5 @@ export default function ButtonsGrupos({ id }) {
 
 ButtonsGrupos.propTypes = {
   id: PropTypes.number.isRequired,
+  handleSuccess: PropTypes.func.isRequired,
 };

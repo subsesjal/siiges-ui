@@ -1,15 +1,14 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonSimple,
   DefaultModal,
   Input,
-  LabelData,
   Select,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
 import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
-import postCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/PostCiclosEscolares';
+import postCiclosEscolares from './postCiclosEscolares';
 
 const nombresCiclos = [
   { id: 1, nombre: '2015A' },
@@ -48,19 +47,22 @@ export default function CiclosEscolaresModal({
   setOpen,
   type,
   data,
+  onSuccess,
 }) {
   const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Editar Ciclo Escolar';
+
   const [form, setForm] = React.useState({
     id: data?.id,
     nombre: data?.nombre,
     descripcion: data?.descripcion,
   });
+
   const pathCiclosEscolares = async ({ id, ...body }) => {
     if (type === 'new') {
-      await postCiclosEscolares({ ...body, programaId: data?.programaId });
+      await postCiclosEscolares({ ...body, programaId: data?.programaId }, onSuccess);
       setOpen(false);
     } else {
-      await updateCiclosEscolares({ id, dataBody: body });
+      await updateCiclosEscolares({ id, dataBody: body }, onSuccess);
       setOpen(false);
     }
   };
@@ -72,13 +74,6 @@ export default function CiclosEscolaresModal({
   return (
     <DefaultModal open={open} setOpen={setOpen} title={title}>
       <Grid container spacing={1}>
-        <Grid item xs={2}>
-          <LabelData title="ID" subtitle={data?.id} />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData title="Programa ID" subtitle={data?.programaId} />
-        </Grid>
-        <Grid item xs={6} />
         <Grid item xs={4}>
           <Select
             title="Nombre"
@@ -86,6 +81,7 @@ export default function CiclosEscolaresModal({
             options={nombresCiclos || []}
             textValue
             onChange={handleOnChange}
+            value={form?.nombre}
           />
         </Grid>
         <Grid item xs={8}>
@@ -98,21 +94,12 @@ export default function CiclosEscolaresModal({
             value={form?.descripcion}
           />
         </Grid>
-      </Grid>
-      <Grid container justifyContent="flex-end" marginTop={2}>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text="Cancelar"
-            design="cancel"
-            onClick={() => setOpen(false)}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text="Confirmar"
-            onClick={() => {
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <ButtonsForm
+            confirm={() => {
               pathCiclosEscolares(form);
             }}
+            cancel={() => setOpen(false)}
           />
         </Grid>
       </Grid>
@@ -121,9 +108,9 @@ export default function CiclosEscolaresModal({
 }
 
 CiclosEscolaresModal.propTypes = {
-
   type: PropTypes.string.isRequired,
-  setOpen: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   data: PropTypes.shape({
     id: PropTypes.number,

@@ -24,7 +24,7 @@ export default function GruposModal({
   type,
   data,
   params,
-  setFetchGrupos,
+  onSuccess,
 }) {
   const title = type === 'new' ? 'Agregar Grupo' : 'Editar Grupo';
   const { setNoti, setLoading } = useContext(Context);
@@ -35,19 +35,13 @@ export default function GruposModal({
     try {
       let result;
       if (data?.id) {
-        result = await grupoService({ id: data.id, dataBody });
+        result = await grupoService({ id: data.id, dataBody }, onSuccess);
       } else {
-        result = await grupoService({ dataBody });
+        result = await grupoService({ dataBody }, onSuccess);
       }
 
       if (result) {
         setLoading(false);
-        setNoti({
-          open: true,
-          message: '¡Grupo creado con éxito!',
-          type: 'success',
-        });
-        setFetchGrupos(true);
       }
 
       setOpen(false);
@@ -64,6 +58,7 @@ export default function GruposModal({
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
+
   return (
     <DefaultModal open={open} setOpen={setOpen} title={title}>
       <Grid container spacing={1}>
@@ -148,6 +143,7 @@ export default function GruposModal({
 }
 
 GruposModal.propTypes = {
+  onSuccess: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   params: PropTypes.shape({
     cicloEscolarId: PropTypes.number,
@@ -156,7 +152,6 @@ GruposModal.propTypes = {
   }).isRequired,
   setOpen: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  setFetchGrupos: PropTypes.func.isRequired,
   data: PropTypes.shape({
     id: PropTypes.number,
     cicloEscolarId: PropTypes.number,
