@@ -1,6 +1,6 @@
 import { getToken } from '@siiges-ui/shared';
 
-export default async function updateCiclosEscolares({ id, dataBody }) {
+export default async function updateCiclosEscolares({ id, dataBody }, onSuccess) {
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -17,5 +17,7 @@ export default async function updateCiclosEscolares({ id, dataBody }) {
   });
   const result = await response.text();
   const { data } = JSON.parse(result);
+  onSuccess?.();
+
   return data;
 }

@@ -1,6 +1,6 @@
 import { getToken } from '@siiges-ui/shared';
 
-export default async function grupoService({ id, dataBody }) {
+export default async function grupoService({ id, dataBody }, onSuccess) {
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
@@ -24,6 +24,8 @@ export default async function grupoService({ id, dataBody }) {
     throw new Error(`Error: ${response.status} ${errorText}`);
   }
 
-  const result = await response.json();
-  return result.data;
+  const result = await response.text();
+  const { data } = JSON.parse(result);
+  onSuccess?.();
+  return data;
 }

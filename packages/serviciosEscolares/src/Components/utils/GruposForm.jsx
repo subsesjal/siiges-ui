@@ -3,54 +3,77 @@ import { Grid } from '@mui/material';
 import Select from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import useGrupos from '../Programas/ProgramasSections/useGrupos';
+import getGrupos from './getGrupos';
 import getCiclosEscolares from './getCiclosEscolares';
-import getGrados from './GetGrados';
+import getGrados from './getGrados';
+
+const getGradoName = (grados, id) => grados.find((g) => g.id === id)?.nombre || '';
 
 export default function GruposForm({
-  setGrupos, setParametros, fetchGrupos, setFetchGrupos,
+  setGrupos, setParametros, setNoti, fetchGrupos,
 }) {
   const router = useRouter();
   const { query } = router;
   const [selectedCicloEscolar, setSelectedCicloEscolar] = useState('');
   const [selectedGrado, setSelectedGrado] = useState('');
   const [ciclos, setCiclos] = useState([]);
+  const [grados, setGrados] = useState([]);
   const turnos = [null, 'Matutino', 'Vespertino', 'Nocturno', 'Mixto'];
-  const { grados } = getGrados(query.id);
 
-  const { grupos } = useGrupos(selectedCicloEscolar, selectedGrado, fetchGrupos, setFetchGrupos);
-  const getGradoNameFunction = (id) => {
-    const gradoNombre = grados.find((grado) => grado.id === id);
-    return gradoNombre?.nombre;
-  };
-
+  // Fetch ciclosEscolares and grados when component mounts or query.id changes
   useEffect(() => {
     const fetchData = async () => {
       try {
         const ciclosEscolaresData = await getCiclosEscolares(query.id);
+        const gradosData = await getGrados(query.id);
         setCiclos(ciclosEscolaresData);
+        setGrados(gradosData);
       } catch (error) {
-        console.error('¡Error al recuperar ciclos escolares!:', error);
+        setNoti({
+          open: true,
+          message: 'Error al consultar los ciclos escolares',
+          type: 'error',
+        });
       }
     };
 
-    fetchData();
-  }, []);
+    if (query.id) fetchData();
+  }, [query.id]);
 
+  // Fetch grupos when cicloEscolar or grado changes
   useEffect(() => {
-    setGrupos(
-      grupos?.map((grupo) => ({
-        ...grupo,
-        gradoNombre: getGradoNameFunction(grupo.gradoId),
-        turno: turnos[grupo.turnoId],
-      })),
-    );
-    setParametros({
-      cicloEscolarId: selectedCicloEscolar,
-      gradoId: selectedGrado,
-      gradoNombre: getGradoNameFunction(selectedGrado),
-    });
-  }, [grupos, setGrupos]);
+    const fetchData = async () => {
+      try {
+        const gruposData = await getGrupos(selectedCicloEscolar, selectedGrado);
+        setGrupos(
+          gruposData?.map((grupo) => ({
+            ...grupo,
+            gradoNombre: getGradoName(grados, grupo.gradoId),
+            turno: turnos[grupo.turnoId],
+          })),
+        );
+        setParametros({
+          cicloEscolarId: selectedCicloEscolar,
+          gradoId: selectedGrado,
+          gradoNombre: getGradoName(grados, selectedGrado),
+        });
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: 'Error al consultar los grupos',
+          type: 'error',
+        });
+      }
+    };
+
+    if (selectedCicloEscolar && selectedGrado) fetchData();
+  }, [selectedGrado, fetchGrupos]);
+
+  // Reset grado when ciclo changes
+  useEffect(() => {
+    setSelectedGrado('');
+    setGrupos([]);
+  }, [selectedCicloEscolar]);
 
   return (
     <Grid container spacing={2}>
@@ -78,6 +101,7 @@ export default function GruposForm({
 }
 
 GruposForm.propTypes = {
+  setNoti: PropTypes.func.isRequired,
   setGrupos: PropTypes.shape({
     id: PropTypes.number,
     cicloEscolarId: PropTypes.number,
@@ -99,5 +123,4 @@ GruposForm.propTypes = {
     generacionFechaFin: PropTypes.string,
   }).isRequired,
   fetchGrupos: PropTypes.bool.isRequired,
-  setFetchGrupos: PropTypes.func.isRequired,
 };
