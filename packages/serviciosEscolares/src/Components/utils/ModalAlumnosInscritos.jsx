@@ -19,6 +19,7 @@ export default function ModalAlumnosInscritos({
   alumnoAsignaturas,
   alumnoId,
   grupoId,
+  alumnoInfo,
 }) {
   const { setNoti } = useContext(Context);
   const transformToAsignaturaIds = (arr) => arr.map((item) => item.asignaturaId);
@@ -56,7 +57,6 @@ export default function ModalAlumnosInscritos({
 
       postAsignaturasAlumno(dataToSend, grupoId, (error) => {
         if (error) {
-          console.error('¡No se pudo inscribir al estudiante!:', error);
           setNoti({
             open: true,
             message:
@@ -86,10 +86,10 @@ export default function ModalAlumnosInscritos({
     <DefaultModal open={open} setOpen={setOpen} title={title}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <LabelData title="Alumno" subtitle="Pedro Perez" />
+          <LabelData title="Alumno" subtitle={`${alumnoInfo?.persona?.nombre} ${alumnoInfo?.persona?.apellidoPaterno} ${alumnoInfo?.persona?.apellidoMaterno}`} />
         </Grid>
         <Grid item xs={6}>
-          <LabelData title="Matrícula" subtitle="PSC101" />
+          <LabelData title="Matrícula" subtitle={alumnoInfo?.matricula} />
         </Grid>
       </Grid>
       <DataTable
@@ -141,4 +141,12 @@ ModalAlumnosInscritos.propTypes = {
   grupoId: PropTypes.func.isRequired,
   asignaturas: PropTypes.arrayOf(PropTypes.string).isRequired,
   alumnoAsignaturas: PropTypes.arrayOf(PropTypes.string).isRequired,
+  alumnoInfo: PropTypes.shape({
+    matricula: PropTypes.string.isRequired,
+    persona: PropTypes.shape({
+      nombre: PropTypes.string.isRequired,
+      apellidoPaterno: PropTypes.string.isRequired,
+      apellidoMaterno: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };

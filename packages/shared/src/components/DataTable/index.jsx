@@ -16,11 +16,11 @@ function DataTable({
   buttonDisabled = false,
   buttonClick,
   buttonType,
+  initialState,
 }) {
   const [searchText, setSearchText] = useState('');
   const [filteredRows, setFilteredRows] = useState(rows);
   const [loading, setLoading] = useState(true);
-  const [sortModel] = useState([{ field: 'id', sort: 'desc' }]);
   const [pageSize, setPageSize] = useState(10); // Default page size
 
   useEffect(() => {
@@ -112,11 +112,7 @@ function DataTable({
           pageSize={pageSize}
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          initialState={{
-            sorting: {
-              sortModel,
-            },
-          }}
+          initialState={initialState || { sorting: { sortModel: [{ field: 'id', sort: 'desc' }] } }}
         />
       </div>
     </>
@@ -129,10 +125,21 @@ DataTable.defaultProps = {
   buttonDisabled: false,
   buttonText: '',
   buttonType: '',
+  initialState: { sorting: { sortModel: [{ field: 'id', sort: 'desc' }] } },
   buttonClick: () => {},
 };
 
 DataTable.propTypes = {
+  initialState: PropTypes.shape({
+    sorting: PropTypes.shape({
+      sortModel: PropTypes.arrayOf(
+        PropTypes.shape({
+          field: PropTypes.string.isRequired,
+          sort: PropTypes.oneOf(['asc', 'desc']),
+        }),
+      ),
+    }),
+  }),
   title: PropTypes.string,
   rows: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })).isRequired,
   columns: PropTypes.arrayOf(

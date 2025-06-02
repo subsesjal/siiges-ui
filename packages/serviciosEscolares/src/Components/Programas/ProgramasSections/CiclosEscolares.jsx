@@ -58,6 +58,9 @@ export default function CiclosEscolares() {
           title="Tabla de Ciclos Escolares"
           columns={columnsCiclosEscolares}
           rows={ciclos || []}
+          initialState={{
+            sorting: { sortModel: [{ field: 'nombre', sort: 'asc' }] },
+          }}
         />
       </Grid>
       <CiclosEscolaresModal

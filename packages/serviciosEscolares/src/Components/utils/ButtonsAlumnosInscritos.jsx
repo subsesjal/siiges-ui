@@ -94,6 +94,7 @@ export default function ButtonsAlumnosInscritos({
         onClose={() => setOpen(false)}
         asignaturas={asignaturas}
         title={title}
+        alumnoInfo={alumnoInfo}
         alumnoAsignaturas={alumnoInfo ? alumnoInfo.alumnoAsignaturas : []}
       />
       <DefaultModal

@@ -2,7 +2,9 @@ import React from 'react';
 import ButtonsValidacion from '../Components/utils/ButtonValidacion';
 
 const columnsValidacion = (programa, institucion) => [
-  { field: 'id', headerName: 'ID', width: 100 },
+  {
+    field: 'id', headerName: 'ID', width: 100, hide: true,
+  },
   { field: 'matricula', headerName: 'Matrícula', width: 150 },
   { field: 'apellidoPaterno', headerName: 'Primer Apellido', width: 200 },
   { field: 'apellidoMaterno', headerName: 'Segundo Apellido', width: 200 },
