@@ -2,7 +2,9 @@ import React from 'react';
 import ButtonsProgramas from '../Components/utils/ButtonProgramas';
 
 const columnsProgramas = [
-  { field: 'id', headerName: 'ID', width: 80 },
+  {
+    field: 'id', headerName: 'ID', width: 80, hide: true,
+  },
   { field: 'nombre', headerName: 'Programa', width: 650 },
   { field: 'acuerdoRvoe', headerName: 'RVOE', width: 220 },
   {

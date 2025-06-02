@@ -83,7 +83,7 @@ export default function InscripcionesTable({
         setNoti({
           open: true,
           message: '¡Algo salió mal al cargar al alumno, revisa la matrícula!',
-          type: 'error',
+          type: 'warning',
         });
         setIsAlumnoValido(false);
         return;
@@ -92,30 +92,28 @@ export default function InscripcionesTable({
       setAlumnoByMatricula(result.alumnos);
 
       try {
-        const validacionResult = await getData({ endpoint: `/alumnos/${result.alumnos.id}/validaciones` });
-        if (!validacionResult || validacionResult.data.situacionValidacionId !== 1) {
+        if (!result.alumnos.validacion || result.alumnos.validacion.situacionValidacionId !== 1) {
           setNoti({
             open: true,
             message: '¡Favor de revisar la validación académica de este alumno!',
-            type: 'error',
+            type: 'warning',
           });
           setIsAlumnoValido(false);
           return;
         }
-        setAlumnoValidacion(validacionResult.data);
+        setAlumnoValidacion(result.alumnos.validacion);
 
-        const alumnoResult = await getData({ endpoint: `/alumnos/${result.alumnos.id}` });
-        if (!alumnoResult || alumnoResult.data.situacionId !== 1) {
+        if (!result.alumnos || result.alumnos.situacionId !== 1) {
           setNoti({
             open: true,
             message: '¡Este alumno no está Activo!',
-            type: 'error',
+            type: 'warning',
           });
           setIsAlumnoValido(false);
           return;
         }
-        setAlumnoData(alumnoResult.data);
-        const fullName = `${alumnoResult.data?.persona?.nombre} ${alumnoResult.data?.persona?.apellidoPaterno} ${alumnoResult.data?.persona?.apellidoMaterno}`;
+        setAlumnoData(result.alumnos);
+        const fullName = `${result?.alumnos?.persona?.nombre} ${result?.alumnos?.persona?.apellidoPaterno} ${result?.alumnos?.persona?.apellidoMaterno}`;
         setNombreAlumno(fullName);
         setIsAlumnoValido(true);
         setNoti({
@@ -126,7 +124,7 @@ export default function InscripcionesTable({
       } catch (fetchError) {
         setNoti({
           open: true,
-          message: '¡Algo salió mal al validar al alumno!',
+          message: '¡Error interno, reintente más tarde!',
           type: 'error',
         });
         setIsAlumnoValido(false);
