@@ -209,19 +209,24 @@ export default function DatosInstitucion({ alumno }) {
           response
           && (response.statusCode === 200 || response.statusCode === 201)
         ) {
-          setFormSent(true);
-          setLoading(false);
           setNoti({
             open: true,
             message: '¡Datos guardados correctamente!',
             type: 'success',
           });
-          setOpenDropzone(true);
+
+          if (!url) {
+            setOpenDropzone(true);
+            setFormSent(true);
+            setLoading(false);
+          } else {
+            setLoading(false);
+            router.back();
+          }
         } else {
           throw new Error('¡La API no obtuvo éxito!');
         }
       } catch (error) {
-        console.error('¡Error en la llamda a la API!:', error);
         setLoading(false);
         setNoti({
           open: true,
