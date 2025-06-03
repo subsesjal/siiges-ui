@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, Stack } from '@mui/material';
@@ -43,14 +44,18 @@ export default function InstitucionesAledanasButtons({ id, type, isDisabled }) {
   return (
     <Stack direction="row" spacing={1}>
       {!isDisabled && (
-      <>
-        <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
-          <EditIcon />
-        </IconButton>
-        <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
-          <DeleteIcon />
-        </IconButton>
-      </>
+        <>
+          <Tooltip title="Editar" placement="top">
+            <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Eliminar" placement="top">
+            <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </>
       )}
 
       {modalOpen && (

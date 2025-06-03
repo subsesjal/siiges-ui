@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { Grid, Typography, IconButton } from '@mui/material';
 import {
   ButtonsForm,
@@ -17,7 +18,7 @@ import PropTypes from 'prop-types';
 import React, {
   useEffect, useState, useContext, useCallback,
 } from 'react';
-import { Visibility, Edit, Delete } from '@mui/icons-material';
+import { VisibilityOutlined, Edit, Delete } from '@mui/icons-material';
 
 const columns = (setType, setOpen, setAlumnoId, disabled, setOpenDelete) => [
   { field: 'id', headerName: 'ID', hide: true },
@@ -33,34 +34,40 @@ const columns = (setType, setOpen, setAlumnoId, disabled, setOpenDelete) => [
     renderCell: (params) => (
       !disabled ? (
         <>
+          <Tooltip title="Editar" placement="top">
+            <IconButton
+              onClick={() => {
+                setType('edit');
+                setOpen(true);
+                setAlumnoId(params.row.id);
+              }}
+            >
+              <Edit />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Eliminar" placement="top">
+            <IconButton
+              onClick={() => {
+                setAlumnoId(params.row.id);
+                setOpenDelete(true);
+              }}
+            >
+              <Delete />
+            </IconButton>
+          </Tooltip>
+        </>
+      ) : (
+        <Tooltip title="Consultar" placement="top">
           <IconButton
             onClick={() => {
-              setType('edit');
+              setType('consult');
               setOpen(true);
               setAlumnoId(params.row.id);
             }}
           >
-            <Edit />
+            <VisibilityOutlined />
           </IconButton>
-          <IconButton
-            onClick={() => {
-              setAlumnoId(params.row.id);
-              setOpenDelete(true);
-            }}
-          >
-            <Delete />
-          </IconButton>
-        </>
-      ) : (
-        <IconButton
-          onClick={() => {
-            setType('consult');
-            setOpen(true);
-            setAlumnoId(params.row.id);
-          }}
-        >
-          <Visibility />
-        </IconButton>
+        </Tooltip>
       )
     ),
   },

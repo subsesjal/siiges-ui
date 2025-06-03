@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -37,26 +38,32 @@ const columns = (handleDelete, handleEdit, disabled) => [
     renderCell: (params) => (
       !disabled ? (
         <>
-          <IconButton
-            onClick={() => handleEdit(params.row)}
-            aria-label="editar"
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            onClick={() => handleDelete(params.row.id)}
-            aria-label="eliminar"
-          >
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Editar" placement="top">
+            <IconButton
+              onClick={() => handleEdit(params.row)}
+              aria-label="editar"
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Eliminar" placement="top">
+            <IconButton
+              onClick={() => handleDelete(params.row.id)}
+              aria-label="eliminar"
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </>
       ) : (
-        <IconButton
-          onClick={() => handleEdit(params.row)}
-          aria-label="consultar"
-        >
-          <VisibilityOutlinedIcon />
-        </IconButton>
+        <Tooltip title="Consultar" placement="top">
+          <IconButton
+            onClick={() => handleEdit(params.row)}
+            aria-label="consultar"
+          >
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </Tooltip>
       )
     ),
   },
@@ -293,7 +300,7 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange, disabl
 }
 
 CargaMateriasEquivalentes.defaultProps = {
-  handleOnChange: () => {},
+  handleOnChange: () => { },
   disabled: false,
 };
 

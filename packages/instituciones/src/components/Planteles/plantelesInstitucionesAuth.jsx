@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, { useState } from 'react';
 import { DataTable } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
@@ -34,9 +35,11 @@ export default function PlantelesInstitucionesAuth({ data, institucion }) {
       width: 150,
       renderCell: (params) => (
         <Link href={`/serviciosEscolares/${params.id}/ProgramasEstudios`}>
-          <IconButton aria-label="Programas de estudios">
-            <AssignmentIcon />
-          </IconButton>
+          <Tooltip title="Programas de estudios" placement="top">
+            <IconButton aria-label="Programas de estudios">
+              <AssignmentIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
       ),
       sortable: false,

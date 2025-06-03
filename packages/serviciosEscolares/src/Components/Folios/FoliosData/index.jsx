@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import {
   Grid, Typography, Tabs, Tab, Box, IconButton,
 } from '@mui/material';
@@ -15,7 +16,7 @@ import {
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import ArticleIcon from '@mui/icons-material/Article';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
@@ -52,13 +53,17 @@ const columns = (handleEdit, handleConsult, status) => [
     width: 150,
     renderCell: (params) => (
       <div>
-        <IconButton onClick={() => handleConsult(params.row.id)}>
-          <ArticleIcon />
-        </IconButton>
-        {status !== 'consult' && (
-          <IconButton onClick={() => handleEdit(params.row.id)}>
-            <EditIcon />
+        <Tooltip title="Consultar" placement="top">
+          <IconButton onClick={() => handleConsult(params.row.id)}>
+            <VisibilityOutlinedIcon />
           </IconButton>
+        </Tooltip>
+        {status !== 'consult' && (
+          <Tooltip title="Editar" placement="top">
+            <IconButton onClick={() => handleEdit(params.row.id)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </div>
     ),

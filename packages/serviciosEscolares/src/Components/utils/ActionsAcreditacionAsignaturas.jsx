@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { IconButton, Stack } from '@mui/material';
 import React from 'react';
 import EditIcon from '@mui/icons-material/Edit';
@@ -21,18 +22,22 @@ export default function ActionsAcreditacionAsignaturas({ id, grupoId }) {
 
   return (
     <Stack direction="row" spacing={1}>
-      <IconButton
-        aria-label="Consultar"
-        onClick={() => navigateTo('/serviciosEscolares/acreditacion/ConsultarAsignatura')}
-      >
-        <VisibilityOutlinedIcon />
-      </IconButton>
-      <IconButton
-        aria-label="Editar"
-        onClick={() => navigateTo('/serviciosEscolares/acreditacion/EditarAsignatura')}
-      >
-        <EditIcon />
-      </IconButton>
+      <Tooltip title="Consultar" placement="top">
+        <IconButton
+          aria-label="Consultar"
+          onClick={() => navigateTo('/serviciosEscolares/acreditacion/ConsultarAsignatura')}
+        >
+          <VisibilityOutlinedIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Editar" placement="top">
+        <IconButton
+          aria-label="Editar"
+          onClick={() => navigateTo('/serviciosEscolares/acreditacion/EditarAsignatura')}
+        >
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
     </Stack>
   );
 }

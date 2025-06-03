@@ -1,10 +1,11 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, {
   useState, useEffect, useContext, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, IconButton } from '@mui/material';
 import { useRouter } from 'next/router';
-import AddIcon from '@mui/icons-material/Add';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import {
   ButtonsForm,
   Context,
@@ -126,9 +127,11 @@ function ModalInspecciones({ params: { row }, solicitud }) {
 
   return (
     <>
-      <IconButton aria-label="consultar" onClick={openModal}>
-        <AddIcon />
-      </IconButton>
+      <Tooltip title="Consultar" placement="top">
+        <IconButton aria-label="consultar" onClick={openModal}>
+          <VisibilityOutlinedIcon />
+        </IconButton>
+      </Tooltip>
       <DefaultModal open={open} setOpen={setOpen} title="Confirmar inspector">
         {isLoading ? (
           <p>Loading...</p>

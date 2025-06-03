@@ -1,7 +1,9 @@
+import Tooltip from '@mui/material/Tooltip';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import React, { useContext, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Visibility, Edit, Delete, RateReview,
+  Edit, Delete, RateReview,
 } from '@mui/icons-material';
 import { Typography, IconButton } from '@mui/material';
 import {
@@ -50,24 +52,30 @@ export default function SolicitudesServSocTableButtons({
 
   return (
     <>
-      <IconButton
-        onClick={() => handleViewClick(id, { programa, institucion }, router)}
-        title="Consultar"
-      >
-        {isAdmin ? <RateReview /> : <Visibility />}
-      </IconButton>
+      <Tooltip title="Consultar" placement="top">
+        <IconButton
+          onClick={() => handleViewClick(id, { programa, institucion }, router)}
+          title="Consultar"
+        >
+          {isAdmin ? <RateReview /> : <VisibilityOutlinedIcon />}
+        </IconButton>
+      </Tooltip>
 
       {!isAdmin && !isEnRevision && (
         <>
-          <IconButton
-            onClick={() => handleEditClick(id, { programa, institucion }, router)}
-            title="Editar"
-          >
-            <Edit />
-          </IconButton>
-          <IconButton onClick={() => { setOpen(true); }} title="Borrar">
-            <Delete />
-          </IconButton>
+          <Tooltip title="Editar" placement="top">
+            <IconButton
+              onClick={() => handleEditClick(id, { programa, institucion }, router)}
+              title="Editar"
+            >
+              <Edit />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Eliminar" placement="top">
+            <IconButton onClick={() => { setOpen(true); }} title="Borrar">
+              <Delete />
+            </IconButton>
+          </Tooltip>
         </>
       )}
       <DefaultModal title="Eliminar Solicitud Servicio Social" open={open} setOpen={setOpen}>

@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { IconButton, Stack } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
@@ -11,14 +12,18 @@ export default function ButtonsAlumnos({ id, url }) {
       {id && (
         <>
           <Link href={`/serviciosEscolares/alumnos/${id}/HistorialAlumno`} passHref>
-            <IconButton aria-label="Historial Académico del Alumno" component="a">
-              <VisibilityOutlinedIcon />
-            </IconButton>
+            <Tooltip title="Consultar" placement="top">
+              <IconButton aria-label="Historial Académico del Alumno" component="a">
+                <VisibilityOutlinedIcon />
+              </IconButton>
+            </Tooltip>
           </Link>
           <Link href={url} passHref>
-            <IconButton aria-label="Editar Alumno" component="a">
-              <EditIcon />
-            </IconButton>
+            <Tooltip title="Editar" placement="top">
+              <IconButton aria-label="Editar Alumno" component="a">
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
           </Link>
         </>
       )}

@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import InputLabel from '@mui/material/InputLabel';
@@ -73,28 +74,30 @@ export default function SelectAdd({
         </FormControl>
       </Grid>
       <Grid item xs={1.5}>
-        <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            onAddClick();
-          }}
-          disabled={disabled}
-          edge="end"
-          size="small"
-          sx={{
-            border: '1px solid',
-            borderRadius: 1,
-            borderColor: 'rgba(0, 0, 0, 0.23)',
-            marginLeft: 1,
-            height: '40px', // match the Select height
-            width: '38px', // make it square
-            '&:hover': {
-              borderColor: 'rgba(0, 0, 0, 0.87)', // darken the border color on hover
-            },
-          }}
-        >
-          <AddIcon />
-        </IconButton>
+        <Tooltip title="Agregar" placement="top">
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddClick();
+            }}
+            disabled={disabled}
+            edge="end"
+            size="small"
+            sx={{
+              border: '1px solid',
+              borderRadius: 1,
+              borderColor: 'rgba(0, 0, 0, 0.23)',
+              marginLeft: 1,
+              height: '40px', // match the Select height
+              width: '38px', // make it square
+              '&:hover': {
+                borderColor: 'rgba(0, 0, 0, 0.87)', // darken the border color on hover
+              },
+            }}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
       </Grid>
     </Grid>
   );
@@ -107,10 +110,10 @@ SelectAdd.defaultProps = {
   disabled: false,
   textValue: false,
   errorMessage: '',
-  onChange: () => {},
-  onblur: () => {},
-  onfocus: () => {},
-  onAddClick: () => {},
+  onChange: () => { },
+  onblur: () => { },
+  onfocus: () => { },
+  onAddClick: () => { },
 };
 
 SelectAdd.propTypes = {

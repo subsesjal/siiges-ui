@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import router from 'next/router';
@@ -146,19 +147,21 @@ export default function InstitucionForm({
             style={{ zIndex: 1, overflow: 'hidden' }}
           />
           {accion !== 'crear' && (
-            <IconButton
-              onClick={() => fileInputRef.current.click()}
-              sx={{
-                position: 'absolute',
-                top: '255px',
-                right: '10px',
-                zIndex: 2,
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              }}
-              size="small"
-            >
-              <PhotoCameraIcon />
-            </IconButton>
+            <Tooltip title="Agregar imagen" placement="top">
+              <IconButton
+                onClick={() => fileInputRef.current.click()}
+                sx={{
+                  position: 'absolute',
+                  top: '255px',
+                  right: '10px',
+                  zIndex: 2,
+                  backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                }}
+                size="small"
+              >
+                <PhotoCameraIcon />
+              </IconButton>
+            </Tooltip>
           )}
 
           <input

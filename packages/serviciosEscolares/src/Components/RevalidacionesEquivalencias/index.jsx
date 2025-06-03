@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Divider, Grid, IconButton, Paper, Typography,
@@ -36,18 +37,24 @@ const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
     width: 100,
     renderCell: (params) => (
       <>
-        <IconButton onClick={() => handleConsultar(params.row)}>
-          <VisibilityOutlinedIcon />
-        </IconButton>
-        {params.row.estatusSolicitudRevEquivId < 3 && (
-          <IconButton onClick={() => handleRevisar(params.row)}>
-            <GradingIcon />
+        <Tooltip title="Consultar" placement="top">
+          <IconButton onClick={() => handleConsultar(params.row)}>
+            <VisibilityOutlinedIcon />
           </IconButton>
+        </Tooltip>
+        {params.row.estatusSolicitudRevEquivId < 3 && (
+          <Tooltip title="Revisar" placement="top">
+            <IconButton onClick={() => handleRevisar(params.row)}>
+              <GradingIcon />
+            </IconButton>
+          </Tooltip>
         )}
         {params.row.estatusSolicitudRevEquivId === 3 && (
-          <IconButton onClick={() => handleProcesar(params.row)}>
-            <SendIcon />
-          </IconButton>
+          <Tooltip title="Procesar" placement="top">
+            <IconButton onClick={() => handleProcesar(params.row)}>
+              <SendIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </>
     ),
@@ -68,9 +75,8 @@ export default function RevalidacionEquivalencias() {
   const mapApiDataToRows = (apiData) => apiData.map((item) => ({
     ...item,
     estatusSolicitud:
-        ESTATUS_MAP[item.estatusSolicitudRevEquivId] || 'Desconocido',
-    nombre: `${item?.interesado?.persona?.nombre} ${
-      item?.interesado?.persona?.apellidoPaterno
+      ESTATUS_MAP[item.estatusSolicitudRevEquivId] || 'Desconocido',
+    nombre: `${item?.interesado?.persona?.nombre} ${item?.interesado?.persona?.apellidoPaterno
     } ${item?.interesado?.persona?.apellidoMaterno || ''}`,
     fecha: new Date(item.createdAt).toLocaleDateString(),
   }));

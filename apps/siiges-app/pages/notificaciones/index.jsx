@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Layout, DataTable, Context, DefaultModal, getData, ButtonSimple,
@@ -82,9 +83,11 @@ export default function Notificaciones() {
       headerName: 'Acciones',
       width: 150,
       renderCell: (params) => (
-        <IconButton aria-label="consultar" onClick={() => showModal(params.id)}>
-          <VisibilityOutlinedIcon />
-        </IconButton>
+        <Tooltip title="Consultar" placement="top">
+          <IconButton aria-label="consultar" onClick={() => showModal(params.id)}>
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </Tooltip>
       ),
     },
   ];
@@ -100,9 +103,11 @@ export default function Notificaciones() {
       headerName: 'Acciones',
       width: 110,
       renderCell: (params) => (
-        <IconButton aria-label="consultar" onClick={() => showModal(params.id)}>
-          <VisibilityOutlinedIcon />
-        </IconButton>
+        <Tooltip title="Consultar" placement="top">
+          <IconButton aria-label="consultar" onClick={() => showModal(params.id)}>
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </Tooltip>
       ),
     },
   ];

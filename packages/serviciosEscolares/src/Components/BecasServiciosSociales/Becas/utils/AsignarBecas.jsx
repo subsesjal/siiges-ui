@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { Grid, Typography, IconButton } from '@mui/material';
 import {
   ButtonsForm, Context, DataTable, DefaultModal, getData, Input, LabelData,
@@ -47,12 +48,16 @@ export default function AsignarBecas({ type }) {
       width: 150,
       renderCell: (params) => (
         <>
-          <IconButton onClick={() => handleEdit(params.row)} title="Edit">
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDelete(params.row)} title="Delete">
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Editar" placement="top">
+            <IconButton onClick={() => handleEdit(params.row)} title="Edit">
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Eliminar" placement="top">
+            <IconButton onClick={() => handleDelete(params.row)} title="Delete">
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </>
       ),
     },
