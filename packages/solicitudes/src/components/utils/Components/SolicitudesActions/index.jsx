@@ -126,8 +126,8 @@ function SolicitudesActions({ id, estatus }) {
         {showButtons.consultar && (
           <Grid item xs={3}>
             <Link href={consultLink} passHref>
-              <Tooltip title="Revisar" placement="top">
-                <IconButton aria-label="consultar">
+              <Tooltip title="Detalles" placement="top">
+                <IconButton aria-label="detalles">
                   <ListAltIcon />
                 </IconButton>
               </Tooltip>
@@ -168,7 +168,7 @@ function SolicitudesActions({ id, estatus }) {
               href={`/solicitudes/detallesSolicitudes/${id}/recepcionFormatos`}
               passHref
             >
-              <Tooltip title="Revisar" placement="top">
+              <Tooltip title="Recepción" placement="top">
                 <IconButton aria-label="revisar">
                   <GradingIcon />
                 </IconButton>

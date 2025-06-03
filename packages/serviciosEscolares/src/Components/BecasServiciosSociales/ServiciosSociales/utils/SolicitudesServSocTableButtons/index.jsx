@@ -3,7 +3,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import React, { useContext, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Edit, Delete, RateReview,
+  Edit, Delete,
 } from '@mui/icons-material';
 import { Typography, IconButton } from '@mui/material';
 import {
@@ -57,7 +57,7 @@ export default function SolicitudesServSocTableButtons({
           onClick={() => handleViewClick(id, { programa, institucion }, router)}
           title="Consultar"
         >
-          {isAdmin ? <RateReview /> : <VisibilityOutlinedIcon />}
+          <VisibilityOutlinedIcon />
         </IconButton>
       </Tooltip>
 
