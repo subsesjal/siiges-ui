@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { ButtonsModal, DataTable, DefaultModal } from '@siiges-ui/shared';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -46,15 +47,21 @@ export default function BecasTable({ becas, institucion }) {
       width: 150,
       renderCell: (params) => (
         <>
-          <IconButton onClick={() => handleViewClick(params.row)} title="Consultar">
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton onClick={() => handleEditClick(params.row)} title="Editar">
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDeleteClick(params.row)} title="Borrar">
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Consultar" placement="top">
+            <IconButton onClick={() => handleViewClick(params.row)} title="Consultar">
+              <VisibilityIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Editar" placement="top">
+            <IconButton onClick={() => handleEditClick(params.row)} title="Editar">
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Eliminar" placement="top">
+            <IconButton onClick={() => handleDeleteClick(params.row)} title="Borrar">
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </>
       ),
     },

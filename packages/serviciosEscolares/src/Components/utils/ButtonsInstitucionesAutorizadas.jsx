@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { IconButton, Stack } from '@mui/material';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import KeyIcon from '@mui/icons-material/Key';
@@ -10,16 +11,20 @@ export default function ButtonsInstitucionesAutorizadas({ planteles, claveIES })
     <Stack direction="row" spacing={1}>
       {planteles && (
         <Link href={planteles}>
-          <IconButton aria-label="Planteles">
-            <ApartmentIcon />
-          </IconButton>
+          <Tooltip title="Planteles" placement="top">
+            <IconButton aria-label="Planteles">
+              <ApartmentIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
       )}
       {claveIES && (
         <Link href={claveIES}>
-          <IconButton aria-label="clave IES">
-            <KeyIcon />
-          </IconButton>
+          <Tooltip title="Clave IES" placement="top">
+            <IconButton aria-label="clave IES">
+              <KeyIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
       )}
     </Stack>

@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { IconButton, Stack } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import PropTypes from 'prop-types';
@@ -15,14 +16,16 @@ export default function ButtonsGrupos({ id, handleSuccess }) {
     <>
       <Stack direction="row" spacing={1}>
         {id && (
-          <IconButton
-            aria-label="Ciclos Escolares Editar"
-            onClick={() => {
-              setOpen(true);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <Tooltip title="Editar" placement="top">
+            <IconButton
+              aria-label="Ciclos Escolares Editar"
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </Stack>
       <GruposModal

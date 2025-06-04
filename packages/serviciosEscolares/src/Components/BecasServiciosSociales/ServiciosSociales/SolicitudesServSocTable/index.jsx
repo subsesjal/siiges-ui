@@ -11,7 +11,7 @@ export default function SolicitudServSocTable({
   const { loading, session } = useContext(Context);
   const router = useRouter();
   const isIes = session.rol === 'serv_soc_ies';
-  const isAdmin = session.rol === 'serv_soc_sicyt';
+  const isAdmin = session.rol === 'serv_soc_sicyt' || session.rol === 'admin';
 
   const onDeleteSuccess = (id) => {
     setSolicitudes((prevSolicitudes) => prevSolicitudes.filter((solicitud) => solicitud.id !== id));

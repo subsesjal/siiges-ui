@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { IconButton, Stack } from '@mui/material';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import PropTypes from 'prop-types';
@@ -13,9 +14,11 @@ export default function ButtonsValidacion({
     <Stack direction="row" spacing={1}>
       {id && (
         <Link href={linkUrl} passHref>
-          <IconButton aria-label="Validar Alumno en misma pestaña" component="a">
-            <PlaylistAddCheckIcon />
-          </IconButton>
+          <Tooltip title="Validar Alumno" placement="top">
+            <IconButton aria-label="Validar Alumno en misma pestaña" component="a">
+              <PlaylistAddCheckIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
       )}
     </Stack>

@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import {
   Grid, IconButton, Typography, TextField,
 } from '@mui/material';
@@ -114,18 +115,22 @@ function SolicitudesActions({ id, estatus }) {
               href={`/solicitudes/detallesSolicitudes/${id}/consultarSolicitud`}
               passHref
             >
-              <IconButton aria-label="ver">
-                <VisibilityOutlinedIcon />
-              </IconButton>
+              <Tooltip title="Consultar" placement="top">
+                <IconButton aria-label="ver">
+                  <VisibilityOutlinedIcon />
+                </IconButton>
+              </Tooltip>
             </Link>
           </Grid>
         )}
         {showButtons.consultar && (
           <Grid item xs={3}>
             <Link href={consultLink} passHref>
-              <IconButton aria-label="consultar">
-                <ListAltIcon />
-              </IconButton>
+              <Tooltip title="Detalles" placement="top">
+                <IconButton aria-label="detalles">
+                  <ListAltIcon />
+                </IconButton>
+              </Tooltip>
             </Link>
           </Grid>
         )}
@@ -135,9 +140,11 @@ function SolicitudesActions({ id, estatus }) {
               href={`/solicitudes/detallesSolicitudes/${id}/editarSolicitud`}
               passHref
             >
-              <IconButton aria-label="editar">
-                <EditIcon />
-              </IconButton>
+              <Tooltip title="Editar" placement="top">
+                <IconButton aria-label="editar">
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
             </Link>
           </Grid>
         )}
@@ -147,9 +154,11 @@ function SolicitudesActions({ id, estatus }) {
               href={`/solicitudes/detallesSolicitudes/${id}/observacionesSolicitud`}
               passHref
             >
-              <IconButton aria-label="observaciones">
-                <InsertCommentIcon />
-              </IconButton>
+              <Tooltip title="Observaciones" placement="top">
+                <IconButton aria-label="observaciones">
+                  <InsertCommentIcon />
+                </IconButton>
+              </Tooltip>
             </Link>
           </Grid>
         )}
@@ -159,30 +168,36 @@ function SolicitudesActions({ id, estatus }) {
               href={`/solicitudes/detallesSolicitudes/${id}/recepcionFormatos`}
               passHref
             >
-              <IconButton aria-label="revisar">
-                <GradingIcon />
-              </IconButton>
+              <Tooltip title="Recepción" placement="top">
+                <IconButton aria-label="revisar">
+                  <GradingIcon />
+                </IconButton>
+              </Tooltip>
             </Link>
           </Grid>
         )}
         {showButtons.eliminar && (
           <Grid item xs={3}>
-            <IconButton
-              aria-label="eliminar"
-              onClick={() => setOpenDelete(true)}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <Tooltip title="Eliminar" placement="top">
+              <IconButton
+                aria-label="eliminar"
+                onClick={() => setOpenDelete(true)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
           </Grid>
         )}
         {showButtons.descargar && (
           <Grid item xs={4}>
-            <IconButton
-              aria-label="descargar"
-              onClick={() => setOpenDownload(true)}
-            >
-              <PrintIcon />
-            </IconButton>
+            <Tooltip title="Descargar" placement="top">
+              <IconButton
+                aria-label="descargar"
+                onClick={() => setOpenDownload(true)}
+              >
+                <PrintIcon />
+              </IconButton>
+            </Tooltip>
           </Grid>
         )}
       </Grid>

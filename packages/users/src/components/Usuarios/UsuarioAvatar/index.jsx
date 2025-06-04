@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, {
   useContext, useState, useRef,
 } from 'react';
@@ -81,20 +82,21 @@ export default function UsuarioAvatar({ usuario }) {
             <span>Imagen no disponible</span>
           </div>
         )}
-
-        <IconButton
-          onClick={() => fileInputRef.current.click()}
-          sx={{
-            position: 'absolute',
-            top: '255px',
-            right: '10px',
-            zIndex: 2,
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-          }}
-          size="small"
-        >
-          <PhotoCameraIcon />
-        </IconButton>
+        <Tooltip title="Agregar Imagen" placement="top">
+          <IconButton
+            onClick={() => fileInputRef.current.click()}
+            sx={{
+              position: 'absolute',
+              top: '255px',
+              right: '10px',
+              zIndex: 2,
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            }}
+            size="small"
+          >
+            <PhotoCameraIcon />
+          </IconButton>
+        </Tooltip>
 
         <input
           type="file"

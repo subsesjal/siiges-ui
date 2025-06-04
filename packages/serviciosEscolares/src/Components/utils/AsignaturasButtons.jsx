@@ -1,5 +1,6 @@
+import Tooltip from '@mui/material/Tooltip';
 import { IconButton, Stack } from '@mui/material';
-import DescriptionIcon from '@mui/icons-material/Description';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -37,17 +38,23 @@ export default function AsignaturasButtons({
 
   return (
     <Stack direction="row" spacing={1}>
-      <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
-        <DescriptionIcon />
-      </IconButton>
+      <Tooltip title="Consultar" placement="top">
+        <IconButton aria-label="consultar" onClick={() => handleModalOpen(false)}>
+          <VisibilityOutlinedIcon />
+        </IconButton>
+      </Tooltip>
       {canEditOrDelete && (
         <>
-          <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Editar" placement="top">
+            <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Eliminar" placement="top">
+            <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </>
       )}
 

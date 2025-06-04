@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton } from '@mui/material';
 import { DataTable } from '@siiges-ui/shared';
 import React from 'react';
@@ -45,9 +46,11 @@ const columns = [
       }
 
       return (
-        <IconButton onClick={handleAddClick}>
-          <IconComponent />
-        </IconButton>
+        <Tooltip title="Agregar" placement="top">
+          <IconButton onClick={handleAddClick}>
+            <IconComponent />
+          </IconButton>
+        </Tooltip>
       );
     },
   },

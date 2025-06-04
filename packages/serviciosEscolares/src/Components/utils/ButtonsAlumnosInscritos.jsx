@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import {
   Box, IconButton, Stack, Typography,
 } from '@mui/material';
@@ -61,30 +62,36 @@ export default function ButtonsAlumnosInscritos({
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <IconButton
-          aria-label="Consultar"
-          onClick={() => {
-            setTitle('Consultar Alumno');
-            setOpen(true);
-          }}
-        >
-          <VisibilityOutlinedIcon />
-        </IconButton>
-        <IconButton
-          aria-label="Editar"
-          onClick={() => {
-            setTitle('Editar Alumno');
-            setOpen(true);
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-        <IconButton
-          aria-label="Eliminar"
-          onClick={handleDeleteClick}
-        >
-          <DeleteIcon />
-        </IconButton>
+        <Tooltip title="Consultar" placement="top">
+          <IconButton
+            aria-label="Consultar"
+            onClick={() => {
+              setTitle('Consultar Alumno');
+              setOpen(true);
+            }}
+          >
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Editar" placement="top">
+          <IconButton
+            aria-label="Editar"
+            onClick={() => {
+              setTitle('Editar Alumno');
+              setOpen(true);
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Eliminar" placement="top">
+          <IconButton
+            aria-label="Eliminar"
+            onClick={handleDeleteClick}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
       </Stack>
       <ModalAlumnosInscritos
         alumnoId={id}

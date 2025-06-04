@@ -13,7 +13,7 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
   } = useContext(Context);
   const [data, setData] = useState([]);
   const router = useRouter();
-  const isBecasSicyt = session.rol === 'becas_sicyt';
+  const isBecasSicyt = session.rol === 'becas_sicyt' || session.rol === 'admin';
 
   const fetchData = async () => {
     setLoading(true);

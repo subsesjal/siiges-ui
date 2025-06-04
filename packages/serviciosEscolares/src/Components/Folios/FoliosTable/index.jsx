@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton } from '@mui/material';
 import { Context, DataTable } from '@siiges-ui/shared';
 import React, { useContext } from 'react';
@@ -23,14 +24,18 @@ const columns = (handleEdit, handleConsultar) => [
     width: 150,
     renderCell: (params) => (
       <>
-        <IconButton onClick={() => handleConsultar(params.row.id)}>
-          <VisibilityOutlinedIcon />
-        </IconButton>
+        <Tooltip title="Consultar" placement="top">
+          <IconButton onClick={() => handleConsultar(params.row.id)}>
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </Tooltip>
         {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA'
           || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (
-          <IconButton onClick={() => handleEdit(params.row.id)}>
-            <EditIcon />
-          </IconButton>
+            <Tooltip title="Editar" placement="top">
+              <IconButton onClick={() => handleEdit(params.row.id)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
         )}
       </>
     ),

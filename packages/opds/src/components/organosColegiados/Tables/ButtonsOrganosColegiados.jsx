@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React from 'react';
 import { IconButton, Stack } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -19,15 +20,19 @@ export default function ButtonsOrganosColegiados({ params }) {
 
   return (
     <Stack direction="row" spacing={1}>
-      <IconButton
-        aria-label="Editar"
-        onClick={() => handleButtonClick('editar')}
-      >
-        <EditIcon />
-      </IconButton>
-      <IconButton aria-label="Eliminar">
-        <DeleteIcon />
-      </IconButton>
+      <Tooltip title="Editar" placement="top">
+        <IconButton
+          aria-label="Editar"
+          onClick={() => handleButtonClick('editar')}
+        >
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Eliminar" placement="top">
+        <IconButton aria-label="Eliminar">
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     </Stack>
   );
 }

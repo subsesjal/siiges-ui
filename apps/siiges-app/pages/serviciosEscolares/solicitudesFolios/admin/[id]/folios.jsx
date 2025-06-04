@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import {
   Grid, Typography, Tabs, Tab,
   IconButton,
@@ -211,9 +212,11 @@ export default function Folios() {
       headerName: 'Acciones',
       width: 150,
       renderCell: (params) => (
-        <IconButton onClick={() => handleConsult(params.row.id)}>
-          <VisibilityOutlinedIcon />
-        </IconButton>
+        <Tooltip title="Consultar" placement="top">
+          <IconButton onClick={() => handleConsult(params.row.id)}>
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </Tooltip>
       ),
     },
   ];
@@ -303,7 +306,7 @@ export default function Folios() {
                 type="consult"
                 id={id}
                 rowData={rowData}
-                setAlumnoResponse={() => {}}
+                setAlumnoResponse={() => { }}
                 disabled={disabled}
               />
             ) : (
@@ -314,7 +317,7 @@ export default function Folios() {
                 id={id}
                 rowData={rowData}
                 title="Agregar Alumno"
-                setAlumnoResponse={() => {}}
+                setAlumnoResponse={() => { }}
                 disabled={disabled}
               />
             )}
@@ -322,17 +325,17 @@ export default function Folios() {
         )}
 
         {estatus !== 3 && (
-        <Grid item xs={12}>
-          <Input
-            id="observaciones"
-            name="observaciones"
-            label="Observaciones"
-            multiline
-            rows={4}
-            value={observaciones}
-            onChange={handleObservacionesChange}
-          />
-        </Grid>
+          <Grid item xs={12}>
+            <Input
+              id="observaciones"
+              name="observaciones"
+              label="Observaciones"
+              multiline
+              rows={4}
+              value={observaciones}
+              onChange={handleObservacionesChange}
+            />
+          </Grid>
         )}
         <Grid item xs={12}>
           <ButtonsFoliosAdmin

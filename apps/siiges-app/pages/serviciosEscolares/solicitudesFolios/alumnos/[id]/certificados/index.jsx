@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton } from '@mui/material';
 import {
   ButtonSimple,
@@ -31,9 +32,11 @@ const columns = (handleEdit) => [
     headerName: 'Acciones',
     width: 150,
     renderCell: (params) => (
-      <IconButton onClick={() => handleEdit(params.row.id)}>
-        <EditIcon />
-      </IconButton>
+      <Tooltip title="Editar" placement="top">
+        <IconButton onClick={() => handleEdit(params.row.id)}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
     ),
   },
 ];

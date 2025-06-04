@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React from 'react';
 import { IconButton, Link } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -15,9 +16,11 @@ const getColumns = () => {
       renderCell: (params) => (
         !params.row.isAssigned ? (
           <Link href={`/inspecciones/asignacionInspecciones/${params.id}`}>
-            <IconButton aria-label="Asignar Inspecciones">
-              <PostAddIcon />
-            </IconButton>
+            <Tooltip title="Asignar Inspección" placement="top">
+              <IconButton aria-label="Asignar Inspecciones">
+                <PostAddIcon />
+              </IconButton>
+            </Tooltip>
           </Link>
         ) : (
           <span>Asignado</span>

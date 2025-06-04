@@ -1,3 +1,4 @@
+import Tooltip from '@mui/material/Tooltip';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
@@ -12,7 +13,7 @@ function ActionCell({ id }) {
     title: '',
     disabled: false,
     edit: true,
-    confirmAction: () => {},
+    confirmAction: () => { },
   });
 
   const handleConsultar = () => {
@@ -21,7 +22,7 @@ function ActionCell({ id }) {
       title: 'Consultar Datos del Proyecto',
       disabled: true,
       edit: false,
-      confirmAction: () => {},
+      confirmAction: () => { },
     });
   };
 
@@ -42,15 +43,21 @@ function ActionCell({ id }) {
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <IconButton aria-label="Consultar" onClick={handleConsultar}>
-          <ListAltIcon />
-        </IconButton>
-        <IconButton aria-label="Editar" onClick={handleEditar}>
-          <EditIcon />
-        </IconButton>
-        <IconButton aria-label="Eliminar" onClick={handleEliminar}>
-          <DeleteIcon />
-        </IconButton>
+        <Tooltip title="Consultar" placement="top">
+          <IconButton aria-label="Consultar" onClick={handleConsultar}>
+            <ListAltIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Editar" placement="top">
+          <IconButton aria-label="Editar" onClick={handleEditar}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Eliminar" placement="top">
+          <IconButton aria-label="Eliminar" onClick={handleEliminar}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
       </Stack>
       <Modal id={id} modalState={modalState} setModalState={setModalState} />
     </>
