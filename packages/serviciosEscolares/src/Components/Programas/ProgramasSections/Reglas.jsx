@@ -214,9 +214,7 @@ export default function Reglas({ programa, id }) {
           )}
         </Grid>
         <Grid item xs={12}>
-          <ButtonSimple onClick={handleSubmit} align="right">
-            Guardar
-          </ButtonSimple>
+          <ButtonSimple onClick={handleSubmit} align="right" text="Guardar" />
         </Grid>
       </Grid>
     </div>

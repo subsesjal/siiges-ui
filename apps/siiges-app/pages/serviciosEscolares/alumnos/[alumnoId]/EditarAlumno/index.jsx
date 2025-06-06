@@ -27,7 +27,7 @@ export default function EditarAlumno() {
     setValue(newValue);
   };
   return (
-    <Layout title="Editar Alumno">
+    <Layout title="Modificar Alumno">
       <Grid container>
         <Grid
           item

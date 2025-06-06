@@ -26,7 +26,7 @@ export default function GruposModal({
   params,
   onSuccess,
 }) {
-  const title = type === 'new' ? 'Agregar Grupo' : 'Editar Grupo';
+  const title = type === 'new' ? 'Agregar Grupo' : 'Modificar Grupo';
   const { setNoti, setLoading } = useContext(Context);
   const [form, setForm] = useState();
   const pathGrupo = async (dataform) => {

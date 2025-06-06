@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { useRouter } from 'next/router';
 import {
-  Grid, Typography, Snackbar, Alert,
+  Grid, Typography,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { getData, Context } from '@siiges-ui/shared';
@@ -14,8 +14,7 @@ import columns from './Mocks/index';
 export default function Asignaturas() {
   const router = useRouter();
   const { id: programaId } = router.query;
-  const { setLoading, session } = useContext(Context);
-  const [noti, setNoti] = useState({});
+  const { setLoading, session, setNoti } = useContext(Context);
 
   const [asignaturasList, setAsignaturasList] = useState([]);
   const [programaData, setProgramaData] = useState({});
@@ -73,10 +72,6 @@ export default function Asignaturas() {
     return <div>Loading...</div>;
   }
 
-  const handleCloseSnackbar = () => {
-    setNoti({ open: false, message: '', type: '' });
-  };
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -93,19 +88,6 @@ export default function Asignaturas() {
           />
         </div>
       </Grid>
-      <Snackbar
-        open={noti.open}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity={noti.type}
-          sx={{ width: '100%' }}
-        >
-          {noti.message}
-        </Alert>
-      </Snackbar>
     </Grid>
   );
 }
