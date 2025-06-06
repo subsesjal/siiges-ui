@@ -33,7 +33,7 @@ export default function EditPrograma() {
   };
 
   return (
-    <Layout title="Programas">
+    <Layout title=" Modificar Programas">
       <Grid container>
         <Grid
           item

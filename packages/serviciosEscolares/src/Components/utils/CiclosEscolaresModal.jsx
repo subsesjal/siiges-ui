@@ -49,7 +49,7 @@ export default function CiclosEscolaresModal({
   data,
   onSuccess,
 }) {
-  const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Editar Ciclo Escolar';
+  const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Modificar Ciclo Escolar';
 
   const [form, setForm] = React.useState({
     id: data?.id,

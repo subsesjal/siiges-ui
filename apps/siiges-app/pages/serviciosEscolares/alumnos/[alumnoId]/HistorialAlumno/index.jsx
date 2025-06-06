@@ -31,7 +31,7 @@ export default function HistorialAlumno() {
   }, [query.alumnoId]);
 
   return (
-    <Layout title="Historial Académico del Alumno">
+    <Layout title=" Consultar Historial Académico del Alumno">
       <Grid container>
         <Grid item xs={12}>
           <HistorialAcademico alumno={alumno} historial={historial} />
