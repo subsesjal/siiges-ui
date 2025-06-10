@@ -221,9 +221,9 @@ export default function Folios() {
     },
   ];
 
-  let title = 'Consultar solicitud';
+  let title = '';
   if (estatus === 2) {
-    title = 'Revisar Solicitud';
+    title = 'Consultar Solicitud';
   } else if (estatus === 3) {
     title = `Envío de Solicitud a ${etiquetas.tipoDocumento}`;
   } else if (estatus === 4) {
