@@ -69,6 +69,10 @@ export default function HistorialTable({ alumno }) {
           variant="contained"
           color="primary"
           onClick={downloadHistorialAcademico}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 'bold',
+          }}
         >
           Descargar
         </Button>

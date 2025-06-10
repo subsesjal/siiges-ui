@@ -13,12 +13,13 @@ export default function UserForm({
   justifyContent,
 }) {
   const cancelButtonText = confirmDisabled ? 'Regresar' : cancelText;
+  const design = confirmDisabled ? 'enviar' : 'cancel';
 
   return (
     <Grid container justifyContent={justifyContent} spacing={2}>
       <Grid item>
         <ButtonSimple
-          design="cancel"
+          design={design}
           onClick={cancel}
           text={cancelButtonText}
         />

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonSimple, validateField,
+  DefaultModal, validateField,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -222,21 +223,15 @@ export default function AsignaturasEditModal({
         </Grid>
       </Grid>
       <Grid container justifyContent="flex-end" marginTop={2}>
-        <Grid item xs={2}>
-          <ButtonSimple
-            text={cancelButtonText}
-            design="cancel"
-            onClick={hideModal}
-          />
-        </Grid>
-        {edit !== 'Consultar Asignatura' && (
-          <Grid item xs={2}>
-            <ButtonSimple
-              text="Guardar"
-              onClick={handleOnSubmit}
-            />
-          </Grid>
-        )}
+        {/* se Agrego ButtonsForm para mantener mejor coherencia de los formularios */}
+        <ButtonsForm
+          cancel={hideModal}
+          confirm={handleOnSubmit}
+          confirmDisabled={edit === 'Consultar Asignatura'}
+          cancelText={cancelButtonText}
+          confirmText="Guardar"
+          justifyContent="flex-end"
+        />
       </Grid>
     </DefaultModal>
   );
