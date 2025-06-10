@@ -289,8 +289,9 @@ export default function Calificaciones({
         <DataTable title={labelAsignatura} rows={alumnos} columns={columns} />
       </Grid>
       <Grid item xs={3}>
-        <Button
+        <ButtonSimple
           text="Cancelar"
+          design="cancel"
           type="cancel"
           onClick={() => {
             router.back();

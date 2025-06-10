@@ -64,7 +64,7 @@ export default function DetallesAsignatura({ type }) {
   }, [asignaturaId, grupoId]);
 
   return (
-    <Layout title="Acreditación">
+    <Layout title={type === 'editar' ? 'Modificar Acreditación' : 'Consultar Acreditación'}>
       {!asignatura ? (
         <Loading />
       ) : (

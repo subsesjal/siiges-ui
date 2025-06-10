@@ -8,7 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
-  Context, DefaultModal, ButtonSimple, deleteRecord,
+  Context, DefaultModal, ButtonsForm, deleteRecord,
 } from '@siiges-ui/shared';
 import ModalAlumnosInscritos from './ModalAlumnosInscritos';
 
@@ -77,7 +77,7 @@ export default function ButtonsAlumnosInscritos({
           <IconButton
             aria-label="Editar"
             onClick={() => {
-              setTitle('Editar Alumno');
+              setTitle('Modificar Alumno');
               setOpen(true);
             }}
           >
@@ -148,21 +148,13 @@ export default function ButtonsAlumnosInscritos({
                 </Typography>
               </Typography>
             </Box>
-            <Box display="flex" justifyContent="flex-end" marginTop={2}>
-              <Box sx={{ marginRight: 2 }}>
-                <ButtonSimple
-                  text="Cancelar"
-                  design="cancel"
-                  onClick={() => setOpenDeleteModal(false)}
-                />
-              </Box>
-              <Box>
-                <ButtonSimple
-                  text="Confirmar"
-                  onClick={handleDeleteConfirm}
-                />
-              </Box>
-            </Box>
+            <ButtonsForm
+              cancel={() => setOpenDeleteModal(false)}
+              confirm={handleDeleteConfirm}
+              cancelText="Cancelar"
+              confirmText="Confirmar"
+              justifyContent="flex-end"
+            />
           </>
         ) : (
           <Typography>Cargando datos del alumno...</Typography>
