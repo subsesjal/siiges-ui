@@ -19,6 +19,7 @@ export default function ButtonsFoliosAdmin({
         <ButtonSimple
           text="Regresar"
           align="left"
+          design="enviar"
           onClick={() => {
             router.back();
           }}
