@@ -16,7 +16,7 @@ export default function ConsultarEquivalencia() {
           <ConsultEquivalencia />
         </Grid>
         <Grid item xs={6}>
-          <ButtonSimple text="Regresar" onClick={() => { router.back(); }} />
+          <ButtonSimple text="Regresar" align="right" design="confirm" onClick={() => { router.back(); }} />
         </Grid>
       </Grid>
     </Layout>

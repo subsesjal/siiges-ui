@@ -16,7 +16,7 @@ export default function ConsultarRevalidacion() {
           <ConsultRevalidacion />
         </Grid>
         <Grid item xs={6}>
-          <ButtonSimple text="Regresar" onClick={() => { router.back(); }} />
+          <ButtonSimple text="Regresar" design="confirm" onClick={() => { router.back(); }} />
         </Grid>
       </Grid>
     </Layout>
