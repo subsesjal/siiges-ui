@@ -3,10 +3,9 @@ import { Grid, IconButton } from '@mui/material';
 import { DataTable } from '@siiges-ui/shared';
 import React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import SendIcon from '@mui/icons-material/Send';
-import DoneIcon from '@mui/icons-material/Done';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
+import {
+  RuleOutlined, Send, VisibilityOutlined, DoneAll,
+} from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
@@ -35,18 +34,23 @@ const columns = [
       };
 
       let IconComponent = ArticleIcon;
+      let tooltipTitle = '';
       if (params.row.estatusSolicitudFolioId === 2) {
-        IconComponent = VisibilityOutlinedIcon;
+        IconComponent = VisibilityOutlined;
+        tooltipTitle = 'Revisar';
       } else if (params.row.estatusSolicitudFolioId === 3) {
-        IconComponent = SendIcon;
+        IconComponent = Send;
+        tooltipTitle = 'Envío a titulación';
       } else if (params.row.estatusSolicitudFolioId === 7) {
-        IconComponent = DoneIcon;
+        IconComponent = RuleOutlined;
+        tooltipTitle = 'Envío parcial';
       } else if (params.row.estatusSolicitudFolioId === 6) {
-        IconComponent = DoneAllIcon;
+        IconComponent = DoneAll;
+        tooltipTitle = 'Envío completo';
       }
 
       return (
-        <Tooltip title="Agregar" placement="top">
+        <Tooltip title={tooltipTitle} placement="top">
           <IconButton onClick={handleAddClick}>
             <IconComponent />
           </IconButton>
