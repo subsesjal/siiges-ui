@@ -220,7 +220,7 @@ export default function AsignaturasEditModal({
         <Grid item xs={2}>
           <ButtonSimple
             text={cancelButtonText}
-            design="cancel"
+            design="enviar"
             onClick={hideModal}
           />
         </Grid>

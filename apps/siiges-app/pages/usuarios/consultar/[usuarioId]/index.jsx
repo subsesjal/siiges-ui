@@ -37,7 +37,7 @@ export default function ConsultarUsuario() {
           <UsuarioView usuario={data} />
           <Grid container justifyContent="flex-end" spacing={2}>
             <Grid item>
-              <ButtonSimple onClick={() => router.back()} text="Regresar" />
+              <ButtonSimple onClick={() => router.back()} text="Regresar" design="enviar" />
             </Grid>
           </Grid>
         </Grid>

@@ -67,6 +67,7 @@ export default function InstitucionesTable({ instituciones, session }) {
             <ButtonSimple
               text="Cancelar"
               alt="Cancelar"
+              design="cancel"
               onClick={hideModal}
             />
 
@@ -75,7 +76,6 @@ export default function InstitucionesTable({ instituciones, session }) {
             <ButtonSimple
               text="Confirmar"
               alt="Confirmar"
-              design="error"
               onClick={() => {
                 hideModal();
               }}
