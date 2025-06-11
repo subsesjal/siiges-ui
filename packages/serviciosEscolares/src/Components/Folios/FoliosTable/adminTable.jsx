@@ -46,7 +46,7 @@ const columns = [
       }
 
       return (
-        <Tooltip title="Agregar" placement="top">
+        <Tooltip title="Consultar" placement="top">
           <IconButton onClick={handleAddClick}>
             <IconComponent />
           </IconButton>
