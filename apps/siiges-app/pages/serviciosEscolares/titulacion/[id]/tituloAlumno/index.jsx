@@ -42,7 +42,7 @@ export default function TituloAlumno() {
   };
 
   return (
-    <Layout title="Titulación de alumno">
+    <Layout title=" Modificar Titulación de Alumno">
       <Grid container>
         <Grid
           item
@@ -64,7 +64,7 @@ export default function TituloAlumno() {
         {value === 2 && <HistorialTable alumno={historial} />}
         {value === 3 && <Titulacion programaId={alumno.programaId} />}
         <Grid item xs={12}>
-          <ButtonSimple text="Regresar" align="right" onClick={() => { router.back(); }} />
+          <ButtonSimple text="Regresar" design="enviar" align="right" onClick={() => { router.back(); }} />
         </Grid>
       </Grid>
     </Layout>
