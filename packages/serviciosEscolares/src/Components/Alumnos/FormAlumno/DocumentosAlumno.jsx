@@ -79,6 +79,7 @@ export default function DocumentosAlumno({ id, type }) {
           <ButtonSimple
             text="Regresar"
             align="right"
+            design="enviar"
             onClick={() => {
               router.back();
             }}
