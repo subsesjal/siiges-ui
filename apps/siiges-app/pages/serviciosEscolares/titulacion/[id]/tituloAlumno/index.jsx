@@ -42,7 +42,7 @@ export default function TituloAlumno() {
   };
 
   return (
-    <Layout title="Titulación de alumno">
+    <Layout title=" Modificar Titulación de Alumno">
       <Grid container>
         <Grid
           item

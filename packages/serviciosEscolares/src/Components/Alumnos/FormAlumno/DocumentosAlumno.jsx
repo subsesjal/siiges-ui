@@ -78,6 +78,7 @@ export default function DocumentosAlumno({ id, type }) {
         <Grid item xs={12} style={{ textAlign: 'right' }}>
           <ButtonSimple
             text="Regresar"
+            design="enviar"
             align="right"
             design="enviar"
             onClick={() => {

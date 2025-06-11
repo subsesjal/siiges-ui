@@ -21,7 +21,7 @@ export default function ButtonsFolios({
   return (
     <Grid container justifyContent="flex-end" spacing={2} sx={{ mt: 1 }}>
       <Grid item>
-        <ButtonSimple text="Regresar" onClick={cancel} design="cancel" />
+        <ButtonSimple text="Regresar" onClick={cancel} design="enviar" />
       </Grid>
       { (!saveIsDisabled && (!isSaved && !solicitudId)) && (
         <Grid item>
