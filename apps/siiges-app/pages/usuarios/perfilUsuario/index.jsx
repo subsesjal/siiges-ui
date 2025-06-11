@@ -21,7 +21,7 @@ export default function UserProfile() {
             <UsuarioAvatar usuario={user} />
           </Grid>
           <UsuarioView usuario={user} />
-          <Grid container justifyContent="flex-end" spacing={2}>
+          <Grid container justifyContent="flex-end" spacing={2} marginTo>
             <Grid item>
               <ButtonSimple onClick={() => router.back()} design="enviar" text="Regresar" />
             </Grid>
