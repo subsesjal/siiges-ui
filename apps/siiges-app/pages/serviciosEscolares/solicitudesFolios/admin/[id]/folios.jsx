@@ -221,6 +221,7 @@ export default function Folios() {
     },
   ];
 
+
   let title = '';
   if (estatus === 2) {
     title = 'Consultar Solicitud';

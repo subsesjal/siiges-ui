@@ -80,6 +80,7 @@ export default function DocumentosAlumno({ id, type }) {
             text="Regresar"
             design="enviar"
             align="right"
+            design="enviar"
             onClick={() => {
               router.back();
             }}
