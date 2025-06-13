@@ -31,8 +31,9 @@ export default function Plantel({
   const [selectedPlantel, setSelectedPlantel] = useState();
 
   useEffect(() => {
-    setDisabled(isDisabled || !id);
-  }, [id]);
+    const shouldDisable = isDisabled === true || id === null;
+    setDisabled(shouldDisable);
+  }, [id, disabled]);
 
   useEffect(() => {
     if (institucion) {
