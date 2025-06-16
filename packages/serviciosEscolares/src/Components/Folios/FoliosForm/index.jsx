@@ -204,12 +204,24 @@ export default function FoliosForm({
     { id: 1, nombre: 'Títulos' },
     { id: 2, nombre: 'Certificados' },
   ];
-
-  const solicitudes = [
+  const solicitudesTitulos = [
+    { id: 1, nombre: 'Total' },
+    { id: 3, nombre: 'Duplicado' },
+  ];
+  const solicitudesCertificados = [
     { id: 1, nombre: 'Total' },
     { id: 2, nombre: 'Parcial' },
     { id: 3, nombre: 'Duplicado' },
   ];
+  const getSolicitudesOptions = () => {
+    if (state.selectedDocumento === 1) {
+      return solicitudesTitulos;
+    }
+    if (state.selectedDocumento === 2) {
+      return solicitudesCertificados;
+    }
+    return [];
+  };
 
   const estatus = [
     { id: 1, nombre: 'Enviado' },
@@ -265,7 +277,7 @@ export default function FoliosForm({
           title="Tipo de solicitud"
           name="solicitud"
           value={state.selectedSolicitud}
-          options={solicitudes || []}
+          options={getSolicitudesOptions() || []}
           onChange={handleSolicitudChange}
           disabled={!isAdmin && !state.selectedPrograma}
         />
