@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import { Card, CardContent } from '@mui/material';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
 import { Context } from '@siiges-ui/shared';
@@ -26,42 +28,37 @@ export default function Plantel({
   const [disabled, setDisabled] = useState(true);
   const { session } = useContext(Context);
   const { institucion } = getInstitucionUsuario(session, solicitud?.usuarioId);
-  const [ratificacion, setRatificacion] = useState(<RatificacionNombre disabled={disabled} />);
   const [plantelesData, setPlantelesData] = useState({});
   const [selectedPlantel, setSelectedPlantel] = useState();
 
   useEffect(() => {
-    const shouldDisable = isDisabled === true || id === null;
-    setDisabled(shouldDisable);
-  }, [id, disabled]);
+    setDisabled(isDisabled === true || id == null);
+  }, [id, isDisabled]);
 
   useEffect(() => {
-    if (institucion) {
-      if (
-        !institucion.ratificacionNombre
-        || (Array.isArray(institucion.ratificacionNombre)
-          && institucion.ratificacionNombre.some(
-            (item) => !item.esNombreAutorizado,
-          ))
-      ) {
-        setRatificacion(
-          <NombresPropuestos
-            disabled={disabled}
-            id={institucion.id}
-            institucion={institucion}
-          />,
-        );
-      } else {
-        setRatificacion(<RatificacionNombre disabled={disabled} />);
-      }
-    }
-  }, [id]);
-
-  useEffect(() => {
-    if (solicitud.programa) {
+    if (solicitud?.programa) {
       setSelectedPlantel(solicitud.programa.plantelId);
     }
-  }, [solicitud, id]);
+  }, [solicitud]);
+
+  const ratificacion = useMemo(() => {
+    if (!institucion) return <RatificacionNombre disabled={disabled} />;
+
+    if (
+      !institucion.ratificacionNombre
+      || (Array.isArray(institucion.ratificacionNombre)
+        && institucion.ratificacionNombre.some((item) => !item.esNombreAutorizado))
+    ) {
+      return (
+        <NombresPropuestos
+          disabled={disabled}
+          id={institucion.id}
+          institucion={institucion}
+        />
+      );
+    }
+    return <RatificacionNombre disabled={disabled} />;
+  }, [institucion, disabled]);
 
   const {
     next, prev, section, position, porcentaje,
@@ -117,17 +114,21 @@ export default function Plantel({
               />
             )}
             {section === 4 && (
-              <InstitucionesAledanas disabled={disabled} programaId={programaId} type={type} />
+              <InstitucionesAledanas
+                disabled={disabled}
+                programaId={programaId}
+                type={type}
+              />
             )}
             {section === 5 && (
-              <Infraestructura disabled={disabled} programaId={programaId} type={type} />
+              <Infraestructura
+                disabled={disabled}
+                programaId={programaId}
+                type={type}
+              />
             )}
             {renderSection6()}
-            <Observaciones
-              id={id}
-              section={section + 13}
-              type={type}
-            />
+            <Observaciones id={id} section={section + 13} type={type} />
           </SectionLayout>
         </PlantelProvider>
       </CardContent>
