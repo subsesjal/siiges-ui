@@ -7,12 +7,15 @@ export default function ProgramasData({ programa, id }) {
   if (!programa) {
     return <div>Cargando...</div>;
   }
-  const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
-  const fecha = programa.fechaSurteEfecto ? new Date(programa.fechaSurteEfecto)
-    .toLocaleDateString('es', opciones)
-    .replace(/ /g, ' ')
-    .replace('.', '')
-    .replace(/-([a-z])/, (x) => `-${x[1].toUpperCase()}`) : 'N/A';
+  const opciones = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  };
+
+  const fecha = new Date(programa.fechaSurteEfecto)
+    .toLocaleDateString('es', opciones);
 
   const formatTurnos = (turnosArray) => {
     if (!turnosArray || !Array.isArray(turnosArray)) return '';
