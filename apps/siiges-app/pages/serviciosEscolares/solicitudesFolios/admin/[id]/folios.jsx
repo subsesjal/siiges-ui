@@ -167,7 +167,7 @@ export default function Folios() {
       } catch (error) {
         setNoti({
           open: true,
-          message: `¡Error al asignar los folios!: ${error.message}`,
+          message: ` ${error.message}`,
           type: 'error',
         });
       } finally {
