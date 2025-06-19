@@ -208,7 +208,7 @@ export default function RecepcionFormatos() {
         setLoading(false);
         setNoti({
           open: true,
-          message: `¡Error al actualizar la solicitud!: ${error.message}`,
+          message: ` ${error.message}`,
           type: 'error',
         });
       }

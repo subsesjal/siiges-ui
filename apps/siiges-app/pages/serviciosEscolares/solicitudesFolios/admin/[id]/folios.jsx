@@ -132,7 +132,7 @@ export default function Folios() {
       } catch (error) {
         setNoti({
           open: true,
-          message: `¡Error al actualizar las observaciones!: ${error.message}`,
+          message: ` ${error.message}`,
           type: 'error',
         });
       } finally {
