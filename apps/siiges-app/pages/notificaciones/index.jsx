@@ -123,11 +123,19 @@ export default function Notificaciones() {
           modalData && (
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Typography variant="h6">{`Asunto: ${modalData.asunto}`}</Typography>
+                <Typography variant="h7">{`Asunto: ${modalData.asunto}`}</Typography>
               </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6">{`Notificación: ${modalData.data}`}</Typography>
-              </Grid>
+              {modalData.emailHtml && (
+                <Grid item xs={12}>
+                  <Typography variant="h7">Contenido del Correo:</Typography>
+                  <div
+                    style={{
+                      maxHeight: '400px', overflowY: 'auto', fontFamily: 'Arial, sans-serif', fontSize: '14px', lineHeight: '1.6',
+                    }}
+                    dangerouslySetInnerHTML={{ __html: modalData.emailHtml }}
+                  />
+                </Grid>
+              )}
               <Grid container spacing={2} sx={{ justifyContent: 'flex-end', mt: 2 }}>
                 <Grid item>
                   <ButtonSimple onClick={hideModal} design="enviar" text="Regresar" />
