@@ -6,24 +6,57 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function RecoverPass() {
-  const [user, setUser] = useState('');
+export default function NewPassword() {
+  const router = useRouter();
+  const { token } = router.query;
   const { setNoti, setLoading, loading } = useContext(Context);
+  const [passwords, setPasswords] = useState({
+    newPassword: '',
+    repeatNewPassword: '',
+  });
 
   const handleInputChange = (e) => {
-    setUser(e.target.value);
+    const { name, value } = e.target;
+    setPasswords((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const validatePassword = (password) => {
+    const regex = /^(?!.* )(?=.*[a-z])(?=.*[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&./])[A-Za-z0-9@$!%*?&./]{8,25}$/;
+    return regex.test(password);
   };
 
   const handleSubmit = async () => {
-    if (!user) {
+    if (passwords.newPassword !== passwords.repeatNewPassword) {
       setNoti({
         open: true,
-        message: 'Por favor ingresa tu usuario',
-        type: 'warning',
+        message: 'Las contraseñas no coinciden',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!validatePassword(passwords.newPassword)) {
+      setNoti({
+        open: true,
+        message: '¡La contraseña debe tener entre 8 y 25 caracteres, al menos una mayúscula, una minúscula, un número y un símbolo especial!',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!token) {
+      setNoti({
+        open: true,
+        message: 'El enlace de recuperación de contraseña ya caduco',
+        type: 'error',
       });
       return;
     }
@@ -31,13 +64,16 @@ export default function RecoverPass() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${domain}/api/v1/public/auth/tokenRecoveryPassword`, {
+      const response = await fetch(`${domain}/api/v1/public/auth/newPassword`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           api_key: apiKey,
         },
-        body: JSON.stringify({ usuario: user }),
+        body: JSON.stringify({
+          token,
+          newPassword: passwords.newPassword,
+        }),
       });
 
       const data = await response.json();
@@ -45,13 +81,15 @@ export default function RecoverPass() {
       if (response.ok) {
         setNoti({
           open: true,
-          message: 'Se ha enviado un correo con las instrucciones para recuperar tu contraseña',
+          message: 'Contraseña cambiada exitosamente',
           type: 'success',
         });
+
+        router.push('/autenticacion/login');
       } else {
         setNoti({
           open: true,
-          message: data.message || 'Error al solicitar recuperación de contraseña',
+          message: data.message || 'Error al cambiar la contraseña',
           type: 'error',
         });
       }
@@ -93,13 +131,24 @@ export default function RecoverPass() {
       >
         <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>Recuperar contraseña</Typography>
         <Input
-          label="Usuario"
-          id="user"
-          name="user"
-          auto="user"
+          label="Nueva contraseña"
+          id="newPassword"
+          name="newPassword"
+          auto="newPassword"
           size="normal"
           onChange={handleInputChange}
-          value={user}
+          type="password"
+          value={passwords.newPassword}
+        />
+        <Input
+          label="Repita la Nueva contraseña"
+          id="repeatNewPassword"
+          name="repeatNewPassword"
+          auto="repeatNewPassword"
+          size="normal"
+          onChange={handleInputChange}
+          type="password"
+          value={passwords.repeatNewPassword}
         />
 
         <Box
@@ -115,7 +164,7 @@ export default function RecoverPass() {
         <ButtonLogin
           color="secondary"
           type="submit"
-          text="Enviar correo"
+          text="Cambiar contraseña"
           click={handleSubmit}
           disabled={loading}
         />

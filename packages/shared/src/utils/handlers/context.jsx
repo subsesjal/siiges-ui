@@ -23,7 +23,7 @@ function Provider({ children }) {
   const [section, setSection] = useState(findRoute(router.route, session.rol));
   const [avatarUrl, setAvatarUrl] = useState(null);
 
-  const excludedRoutes = ['/revalidaciones', '/equivalencias'];
+  const excludedRoutes = ['/revalidaciones', '/equivalencias', '/autenticacion/recovery-password/[token]'];
 
   const fetchAvatar = async (userId) => {
     if (!session?.token) {
