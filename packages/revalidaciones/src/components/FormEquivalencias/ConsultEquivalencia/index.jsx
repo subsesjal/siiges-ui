@@ -76,6 +76,7 @@ export default function ConsultEquivalencia() {
       case 1:
         return (
           <DatosSolicitante
+            tipoSolicitud="equivalencia"
             form={form}
             estados={estados}
             disabled

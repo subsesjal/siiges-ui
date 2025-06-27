@@ -90,6 +90,7 @@ export default function ConsultRevalidacion() {
       case 1:
         return (
           <DatosSolicitante
+            tipoSolicitud="revalidacion"
             form={form}
             estados={estados}
             disabled

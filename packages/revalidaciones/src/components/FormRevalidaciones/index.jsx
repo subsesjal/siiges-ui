@@ -220,6 +220,7 @@ export default function FormRevalidaciones() {
       case 1:
         return (
           <DatosSolicitante
+            tipoSolicitud="revalidacion"
             form={form}
             handleOnChange={handleOnChange}
             estados={estados}
