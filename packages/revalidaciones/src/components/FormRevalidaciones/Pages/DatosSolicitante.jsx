@@ -7,11 +7,22 @@ import validateField from '../../../utils/ValidateField';
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-const tipoSolicitudes = [
+const tipoSolicitudesRev = [
   { id: 3, nombre: 'Parcial' },
   { id: 4, nombre: 'Total' },
   { id: 6, nombre: 'Duplicado' },
 ];
+
+const tipoSolicitudesEquiv = [
+  { id: 1, nombre: 'Parcial' },
+  { id: 2, nombre: 'Total' },
+  { id: 5, nombre: 'Duplicado' },
+];
+
+const TIPO_SOLICITUDES = {
+  revalidacion: tipoSolicitudesRev,
+  equivalencia: tipoSolicitudesEquiv,
+};
 
 const sexo = [
   { id: 1, nombre: 'Masculino' },
@@ -89,6 +100,7 @@ const validationRules = {
 };
 
 export default function DatosSolicitante({
+  tipoSolicitud,
   form,
   handleOnChange,
   estados,
@@ -201,12 +213,12 @@ export default function DatosSolicitante({
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
-        <Subtitle>Trámite de Equivalencia</Subtitle>
+        <Subtitle>{tipoSolicitud === 'revalidacion' ? 'Trámite de Revalidación' : 'Trámite de Equivalencia'}</Subtitle>
       </Grid>
       <Grid item xs={4}>
         <Select
           title="Tipo de Solicitud"
-          options={tipoSolicitudes}
+          options={TIPO_SOLICITUDES[tipoSolicitud]}
           name="tipoTramiteId"
           value={form.tipoTramiteId || ''}
           onChange={(e) => handleChange(e, [])}
@@ -428,12 +440,13 @@ export default function DatosSolicitante({
 
 DatosSolicitante.defaultProps = {
   disabled: false,
-  handleOnChange: () => {},
-  setNextDisabled: () => {},
+  handleOnChange: () => { },
+  setNextDisabled: () => { },
   validateFields: false,
 };
 
 DatosSolicitante.propTypes = {
+  tipoSolicitud: PropTypes.string.isRequired,
   validateFields: PropTypes.bool,
   setNextDisabled: PropTypes.func,
   form: PropTypes.shape({

@@ -173,6 +173,7 @@ export default function FormEquivalencias() {
       case 1:
         return (
           <DatosSolicitante
+            tipoSolicitud="equivalencia"
             form={form}
             handleOnChange={handleOnChange}
             estados={estados}
