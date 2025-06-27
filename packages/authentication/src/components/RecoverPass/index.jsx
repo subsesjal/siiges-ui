@@ -22,7 +22,7 @@ export default function RecoverPass() {
     if (!user) {
       setNoti({
         open: true,
-        message: 'Por favor ingresa tu usuario',
+        message: '¡Por favor ingresa tu usuario!',
         type: 'warning',
       });
       return;
@@ -51,14 +51,14 @@ export default function RecoverPass() {
       } else {
         setNoti({
           open: true,
-          message: data.message || 'Error al solicitar recuperación de contraseña',
+          message: data.message || '¡Error al solicitar recuperación de contraseña!',
           type: 'error',
         });
       }
     } catch (error) {
       setNoti({
         open: true,
-        message: 'Error de conexión. Por favor intenta nuevamente.',
+        message: '¡Error de conexión!. Por favor intenta nuevamente.',
         type: 'error',
       });
     } finally {

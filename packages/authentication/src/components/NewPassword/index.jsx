@@ -37,7 +37,7 @@ export default function NewPassword() {
     if (passwords.newPassword !== passwords.repeatNewPassword) {
       setNoti({
         open: true,
-        message: 'Las contraseñas no coinciden',
+        message: '¡Las contraseñas no coinciden!',
         type: 'error',
       });
       return;
@@ -55,7 +55,7 @@ export default function NewPassword() {
     if (!token) {
       setNoti({
         open: true,
-        message: 'El enlace de recuperación de contraseña ya caduco',
+        message: '¡El enlace de recuperación de contraseña ya caduco!',
         type: 'error',
       });
       return;
@@ -81,7 +81,7 @@ export default function NewPassword() {
       if (response.ok) {
         setNoti({
           open: true,
-          message: 'Contraseña cambiada exitosamente',
+          message: '¡Contraseña cambiada exitosamente!',
           type: 'success',
         });
 
@@ -89,14 +89,14 @@ export default function NewPassword() {
       } else {
         setNoti({
           open: true,
-          message: data.message || 'Error al cambiar la contraseña',
+          message: data.message || '¡Error al cambiar la contraseña!',
           type: 'error',
         });
       }
     } catch (error) {
       setNoti({
         open: true,
-        message: 'Error de conexión. Por favor intenta nuevamente.',
+        message: '¡Error de conexión!. Por favor intenta nuevamente.',
         type: 'error',
       });
     } finally {
