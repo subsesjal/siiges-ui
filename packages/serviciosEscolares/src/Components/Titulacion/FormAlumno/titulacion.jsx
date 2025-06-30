@@ -1,27 +1,75 @@
 import {
-  Divider, Grid, List, Typography,
+  Divider,
+  Grid,
+  List,
+  Typography,
+  Button,
 } from '@mui/material';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState, useContext } from 'react';
 import {
-  getData, InputFile, ListSubtitle, ListTitle,
+  getData,
+  GetFile,
+  InputFile,
+  ListSubtitle,
+  ListTitle,
+  Context,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
 
-export default function titulacion({ programaId }) {
+const baseUrl = process.env.NEXT_PUBLIC_URL;
+
+export default function titulacion({
+  programaId,
+  id,
+  disabled,
+  type,
+}) {
   const [programa, setPrograma] = useState({});
+  const [url, setUrl] = useState(null);
+  const { setNoti } = useContext(Context);
+
+  const fileData = {
+    entidadId: id,
+    tipoEntidad: 'ALUMNO',
+    tipoDocumento: 'TITULO_ELECTRONICO_XML',
+  };
 
   useEffect(() => {
-    async function fetchPrograma() {
-      const result = await getData({ endpoint: `/programas/${programaId}` });
-      if (result.statusCode === 200) {
-        setPrograma(result.data);
-      }
-    }
-
     if (programaId) {
-      fetchPrograma();
+      getData({ endpoint: `/programas/${programaId}` })
+        .then((result) => {
+          if (result.statusCode === 200) setPrograma(result.data);
+        });
     }
   }, [programaId]);
+
+  useEffect(() => {
+    if (type === 'editar') {
+      GetFile(fileData, setUrl);
+    }
+  }, [id]);
+
+  const downloadFile = async () => {
+    try {
+      const response = await getData({
+        endpoint: `/files/?tipoEntidad=ALUMNO&entidadId=${id}&tipoDocumento=TITULO_ELECTRONICO_PDF`,
+      });
+
+      const ubicacion = response?.data?.ubicacion;
+      if (ubicacion && typeof ubicacion === 'string') {
+        const fullUrl = `${baseUrl}${ubicacion}`;
+        window.open(fullUrl, '_blank');
+      } else {
+        throw new Error('Archivo no encontrado');
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: '¡No se encontró el archivo!',
+        type: 'error',
+      });
+    }
+  };
 
   return (
     <Grid container spacing={2} sx={{ m: 1 }}>
@@ -64,12 +112,49 @@ export default function titulacion({ programaId }) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <InputFile label="XML de titulo electronico" tipoDocumento="" tipoEntidad="" />
+        <InputFile
+          label="XML de título electrónico"
+          tipoDocumento="TITULO_ELECTRONICO_XML"
+          tipoEntidad="ALUMNO"
+          id={id}
+          url={url}
+          setUrl={setUrl}
+          disabled={disabled}
+        />
       </Grid>
+      {url && (
+      <Grid item xs={6}>
+        <Button
+          variant="outlined"
+          onClick={downloadFile}
+          sx={{
+            width: '100%',
+            height: '40px',
+            color: 'black',
+            borderColor: 'black',
+            '&:hover': {
+              color: 'white',
+              backgroundColor: 'black',
+              borderColor: 'black',
+            },
+          }}
+        >
+          Título PDF
+        </Button>
+      </Grid>
+      )}
     </Grid>
   );
 }
 
 titulacion.propTypes = {
   programaId: PropTypes.number.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  disabled: PropTypes.bool,
+  type: PropTypes.string,
+};
+
+titulacion.defaultProps = {
+  disabled: false,
+  type: 'editar',
 };
