@@ -23,7 +23,13 @@ function Provider({ children }) {
   const [section, setSection] = useState(findRoute(router.route, session.rol));
   const [avatarUrl, setAvatarUrl] = useState(null);
 
-  const excludedRoutes = ['/revalidaciones', '/equivalencias', '/autenticacion/recovery-password/[token]'];
+  const excludedRoutes = [
+    '/revalidaciones',
+    '/equivalencias',
+    '/autenticacion/recovery-password/[token]',
+    '/tituloElectronico',
+    '/tituloElectronico/[folio]/consultarFolio',
+  ];
 
   const fetchAvatar = async (userId) => {
     if (!session?.token) {
@@ -150,11 +156,14 @@ function Provider({ children }) {
     [session, auth, noti, router, section, loading, avatarUrl],
   );
 
-  useEffect(() => () => {
-    if (avatarUrl && avatarUrl.startsWith('blob:')) {
-      URL.revokeObjectURL(avatarUrl);
-    }
-  }, [avatarUrl]);
+  useEffect(
+    () => () => {
+      if (avatarUrl && avatarUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(avatarUrl);
+      }
+    },
+    [avatarUrl],
+  );
 
   return (
     <Context.Provider value={value}>
