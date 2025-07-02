@@ -14,11 +14,13 @@ import {
   fetchUsuarioData,
 } from '../utils';
 import ButtonsReviewBox from './ButtonsReviewBox';
+import ActaComiteSection from './ActaComiteSection';
 
 export default function SolicitudesBecasBox({ type }) {
   const EN_CAPTURA = 1;
   const DATOS_SOLICTUD = 0;
-  const ALUMNOS = 1;
+  const ACTA_COMITE = 1;
+  const ALUMNOS = 2;
   const { setNoti, session, setLoading } = useContext(Context);
   const [tabIndex, setTabIndex] = useState(DATOS_SOLICTUD);
   const [data, setData] = useState({});
@@ -40,11 +42,23 @@ export default function SolicitudesBecasBox({ type }) {
 
   useEffect(() => {
     validateData[type]();
-    fetchProgramaPlantelData(setNoti, setLoading, setData, programa, institucion);
+    fetchProgramaPlantelData(
+      setNoti,
+      setLoading,
+      setData,
+      programa,
+      institucion,
+    );
 
     if (solicitudBecasId && type !== 'crear') {
       setSolicitudId(solicitudBecasId);
-      fetchSolicitudData(setNoti, setLoading, setFormData, setUsuario, solicitudBecasId);
+      fetchSolicitudData(
+        setNoti,
+        setLoading,
+        setFormData,
+        setUsuario,
+        solicitudBecasId,
+      );
     } else {
       fetchUsuarioData(setNoti, setLoading, setUsuario, session.id);
       setReqData({
@@ -69,11 +83,15 @@ export default function SolicitudesBecasBox({ type }) {
     if (!data || typeof data !== 'object') return false;
     if (!Array.isArray(properties)) return false;
 
-    return properties.every((prop) => data[prop] && typeof data[prop] === 'object' && Object.keys(data[prop]).length > 0);
+    return properties.every(
+      (prop) => data[prop]
+        && typeof data[prop] === 'object'
+        && Object.keys(data[prop]).length > 0,
+    );
   };
 
   useEffect(() => {
-    if (tabIndex === 1) {
+    if (solicitudId) {
       setIsSaved(true);
     } else {
       setIsSaved(false);
@@ -85,25 +103,33 @@ export default function SolicitudesBecasBox({ type }) {
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Tabs value={tabIndex} onChange={handleTabChange}>
           <Tab label="Datos de la Solicitud" />
+          <Tab label="Acta de Comité" disabled={!solicitudId} />
           <Tab label="Alumnos" disabled={!solicitudId} />
         </Tabs>
       </Box>
-      {tabIndex === DATOS_SOLICTUD && hasValidProperties(['programa', 'plantel']) && (
-      <SolicitudBecasSection
-        programa={data?.programa}
-        plantel={data?.plantel}
-        usuario={usuario}
-        setReqData={setReqData}
-        formData={formData}
-        disabled={disabled}
-      />
+      {tabIndex === DATOS_SOLICTUD
+        && hasValidProperties(['programa', 'plantel']) && (
+          <SolicitudBecasSection
+            programa={data?.programa}
+            plantel={data?.plantel}
+            usuario={usuario}
+            setReqData={setReqData}
+            formData={formData}
+            disabled={disabled}
+          />
+      )}
+      {tabIndex === ACTA_COMITE && hasValidProperties(['programa', 'plantel']) && (
+        <ActaComiteSection
+          formData={formData}
+          disabled={disabled}
+        />
       )}
       {tabIndex === ALUMNOS && hasValidProperties(['programa', 'plantel']) && (
-      <AlumnosSection
-        programa={data?.programa}
-        solicitudId={solicitudId}
-        disabled={disabled}
-      />
+        <AlumnosSection
+          programa={data?.programa}
+          solicitudId={solicitudId}
+          disabled={disabled}
+        />
       )}
       {session.rol !== 'becas_sicyt' ? (
         <ButtonsBox
@@ -115,18 +141,20 @@ export default function SolicitudesBecasBox({ type }) {
             reqData,
             setTabIndex,
           )}
-          update={() => handleUpdateSolicitud(
-            setNoti,
-            setLoading,
-            reqData,
-            solicitudId,
-          )}
+          update={() => handleUpdateSolicitud(setNoti, setLoading, reqData, solicitudId)}
           isSaved={isSaved}
           solicitudId={solicitudId}
           setIsSaved={setIsSaved}
           saveIsDisabled={disabled}
+          tabIndex={tabIndex}
         />
-      ) : <ButtonsReviewBox router={router} solicitudId={solicitudId} formData={formData} />}
+      ) : (
+        <ButtonsReviewBox
+          router={router}
+          solicitudId={solicitudId}
+          formData={formData}
+        />
+      )}
     </Box>
   );
 }

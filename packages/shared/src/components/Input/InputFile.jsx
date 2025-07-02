@@ -29,7 +29,7 @@ export default function InputFile({
   const [files, setFiles] = useState([]);
   const { setNoti } = useContext(Context);
   const [open, setOpen] = useState(false);
-  const domain = process.env.NEXT_PUBLIC_URL;
+  // const domain = process.env.NEXT_PUBLIC_URL;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -108,7 +108,7 @@ export default function InputFile({
               </Button>
             ) : (
               url && (
-                <Link href={`${domain}${url}`} passHref legacyBehavior>
+                <Link href={`${url}`} passHref legacyBehavior>
                   <Button
                     component="a"
                     target="_blank"

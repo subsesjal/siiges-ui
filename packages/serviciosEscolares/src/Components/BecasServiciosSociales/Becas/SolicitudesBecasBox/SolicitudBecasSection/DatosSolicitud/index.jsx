@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  Select, Context, Input, ButtonFile, GetFile, InputFile,
+  Select, Context, Input, ButtonFile, GetFile,
 } from '@siiges-ui/shared';
 import React, {
   useContext, useState, useEffect, useCallback,
@@ -17,7 +17,6 @@ export default function DatosSolicitud({
   const [ciclos, setCiclos] = useState([]);
   const [fileUrls, setFileUrls] = useState({
     reporteBecas: null,
-    actaComite: null,
   });
 
   const fileConfigs = {
@@ -25,11 +24,6 @@ export default function DatosSolicitud({
       tipoEntidad: 'SOLICITUD_BECA',
       tipoDocumento: 'REPORTE_BECAS',
       showCondition: formData.estatusSolicitudBecaId === 3,
-    },
-    actaComite: {
-      tipoEntidad: 'SOLICITUD_BECA',
-      tipoDocumento: 'ACTA_COMITE_BECAS',
-      showCondition: !!formData.id,
     },
   };
 
@@ -113,20 +107,6 @@ export default function DatosSolicitud({
           <ButtonFile url={fileUrls.reporteBecas}>
             Archivo de resolución de Becas
           </ButtonFile>
-        </Grid>
-      )}
-
-      {fileConfigs.actaComite.showCondition && (
-        <Grid item xs={11} sx={{ mt: 2 }}>
-          <InputFile
-            url={fileUrls.actaComite}
-            setUrl={(url) => setFileUrls((prev) => ({ ...prev, actaComite: url }))}
-            id={formData.id}
-            tipoDocumento={fileConfigs.actaComite.tipoDocumento}
-            tipoEntidad={fileConfigs.actaComite.tipoEntidad}
-            label="Acta de comité"
-            disabled={disabled}
-          />
         </Grid>
       )}
 
