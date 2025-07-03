@@ -28,8 +28,8 @@ export default function FoliosForm({
 
   const { setNoti, session } = useContext(Context);
 
-  const isRepresentante = session?.rol === 'representante' || 'ce_ies';
-  const isAdmin = session?.rol === 'admin';
+  const isRepresentante = session?.rol === 'representante' || session?.rol === 'ce_ies';
+  const isAdmin = session?.rol === 'admin' || session?.rol === 'ce_sicyt';
 
   const initialState = typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_KEY)
     ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
