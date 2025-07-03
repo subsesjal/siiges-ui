@@ -45,7 +45,7 @@ export default function InputFile({
       formData.append('entidadId', id);
       formData.append('tipoDocumento', tipoDocumento);
 
-      await SubmitDocument(formData, setUrl, setNoti);
+      await SubmitDocument(formData, setUrl);
 
       setNoti({
         open: true,
@@ -149,7 +149,7 @@ export default function InputFile({
 
 InputFile.defaultProps = {
   url: '',
-  setUrl: () => {},
+  setUrl: () => { },
   id: null,
   disabled: false,
   onChange: null,
