@@ -31,7 +31,7 @@ export default function BecasForm({ setBecas, setInstitucion }) {
     rvoes: [],
     ciclos: [],
   });
-  const isAdmin = session.rol === 'admin';
+  const isAdmin = session.rol === 'admin' || session.rol === 'ce_sicyt';
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,
