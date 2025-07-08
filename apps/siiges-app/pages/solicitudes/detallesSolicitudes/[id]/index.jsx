@@ -29,6 +29,15 @@ export default function detallesSolicitudes() {
       const solicitudId = solicitud?.id;
       const response = await getData({ endpoint: `/files/?tipoEntidad=SOLICITUD&entidadId=${solicitudId}&tipoDocumento=${type}` });
 
+      if (response?.statusCode === 404) {
+        setNoti({
+          open: true,
+          message: '¡No se encontró el archivo solicitado!',
+          type: 'error',
+        });
+        return;
+      }
+
       if (response && response.data) {
         const { ubicacion } = response.data;
         if (ubicacion && typeof ubicacion === 'string') {
