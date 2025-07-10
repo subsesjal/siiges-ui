@@ -8,6 +8,7 @@ const withTM = require('next-transpile-modules')([
   '@siiges-ui/solicitudes',
   '@siiges-ui/serviciosescolares',
   '@siiges-ui/revalidaciones',
+  '@siiges-ui/notificaciones',
   '@siiges-ui/opds',
 ]);
 

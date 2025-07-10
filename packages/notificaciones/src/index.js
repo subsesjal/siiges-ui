@@ -1,3 +1,4 @@
-import fetchNotificaciones from './components/utils/fetchNotificaciones';
+import fetchNotificaciones from './Components/utils/fetchNotificaciones';
+import NoticiasTable from './Components/Noticias';
 
-export default fetchNotificaciones;
+export { fetchNotificaciones, NoticiasTable };

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -95,6 +96,16 @@ export default function MenuNavbar() {
             Notificaciones
           </MenuItem>
         </Link>
+        {session.rol === 'admin' && (
+        <Link href="/noticias">
+          <MenuItem>
+            <ListItemIcon>
+              <NewspaperIcon fontSize="small" />
+            </ListItemIcon>
+            Noticias
+          </MenuItem>
+        </Link>
+        )}
         <Link href="/">
           <MenuItem onClick={() => removeAuth()}>
             <ListItemIcon>
