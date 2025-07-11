@@ -1,9 +1,8 @@
 import {
-  Box, Divider, Typography, IconButton, Grid,
+  Box, Divider, Typography, IconButton,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { Button, getData } from '@siiges-ui/shared';
-import { useRouter } from 'next/router';
+import { getData } from '@siiges-ui/shared';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PaperHome from '../Paper/PaperHome';
@@ -12,7 +11,6 @@ function HomePage() {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [noticias, setNoticias] = useState([]);
   const noticiasPerPage = 3;
-  const router = useRouter();
 
   useEffect(() => {
     const fetchNoticias = async () => {
@@ -43,10 +41,6 @@ function HomePage() {
     carouselIndex,
     carouselIndex + noticiasPerPage,
   );
-
-  const handleButtonClick = () => {
-    router.push('/serviciosEscolares/alumnos');
-  };
 
   return (
     <>
@@ -109,20 +103,6 @@ function HomePage() {
         >
           <ArrowForwardIosIcon fontSize="inherit" />
         </IconButton>
-      </Box>
-
-      <Box sx={{ mt: 6 }}>
-        <Grid container spacing={2} justifyContent="center">
-          <Grid item xs={12} textAlign="center">
-            <Typography fontSize={25}>Avances Académicos</Typography>
-            <Button
-              text="Avances"
-              onClick={handleButtonClick}
-              type="people"
-              align="center"
-            />
-          </Grid>
-        </Grid>
       </Box>
     </>
   );
