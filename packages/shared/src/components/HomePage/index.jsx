@@ -9,73 +9,37 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PaperHome from '../Paper/PaperHome';
 
-const noticiasMock = [
-  {
-    id: 1,
-    title: 'Noticia 1',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    id: 2,
-    title: 'Noticia 2',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    id: 3,
-    title: 'Noticia 3',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    id: 4,
-    title: 'Noticia 4',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    id: 5,
-    title: 'Noticia 5',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    id: 6,
-    title: 'Noticia 6',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    id: 7,
-    title: 'Noticia 7',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-];
-
 function HomePage() {
   const [carouselIndex, setCarouselIndex] = useState(0);
-
   const noticiasPerPage = 3;
-  const totalNoticias = noticiasMock.length;
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchNoticias = async () => {
+      const response = await getData({ endpoint: '/noticias' });
+      if (response.statusCode === 200) {
+        setNoticias(response.data);
+      }
+    };
+    fetchNoticias();
+  }, []);
 
   const nextNoticia = () => {
-    if (carouselIndex + noticiasPerPage < totalNoticias) {
-      setCarouselIndex(carouselIndex + noticiasPerPage);
-    } else {
-      setCarouselIndex(0);
-    }
+    setCarouselIndex(
+      (prev) => (prev + noticiasPerPage < noticias.length ? prev + noticiasPerPage : 0),
+    );
   };
 
   const prevNoticia = () => {
-    if (carouselIndex > 0) {
-      setCarouselIndex(carouselIndex - noticiasPerPage);
-    }
+    setCarouselIndex((prev) => (prev > 0 ? prev - noticiasPerPage : 0));
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      nextNoticia();
-    }, 5000);
-
+    const interval = setInterval(nextNoticia, 5000);
     return () => clearInterval(interval);
-  }, [carouselIndex]);
+  }, [carouselIndex, noticias.length]);
 
-  const noticiasVisibles = noticiasMock.slice(
+  const noticiasVisibles = noticias.slice(
     carouselIndex,
     carouselIndex + noticiasPerPage,
   );
@@ -84,23 +48,16 @@ function HomePage() {
     <>
       <Typography>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
+        tempor incididunt ut labore et dolore magna aliqua...
       </Typography>
       <Divider sx={{ mt: 5 }} />
+
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          '& > :not(style)': {
-            mt: 5,
-            mx: 1,
-          },
+          '& > :not(style)': { mt: 5, mx: 1 },
         }}
       >
         <IconButton
@@ -110,6 +67,7 @@ function HomePage() {
         >
           <ArrowBackIosNewIcon fontSize="inherit" />
         </IconButton>
+
         <Box
           sx={{
             display: 'flex',
@@ -132,9 +90,9 @@ function HomePage() {
               }}
             >
               <PaperHome
-                title={noticia.title}
-                text={noticia.text}
-                sx={{ width: '100%', height: '100%' }}
+                title={noticia.titulo}
+                image={noticia.urlImagen}
+                url={noticia.urlNoticia}
               />
             </Box>
           ))}
@@ -142,7 +100,7 @@ function HomePage() {
 
         <IconButton
           onClick={nextNoticia}
-          disabled={carouselIndex + noticiasPerPage >= totalNoticias}
+          disabled={carouselIndex + noticiasPerPage >= noticias.length}
           sx={{ fontSize: '1.5rem', padding: '0.5rem' }}
         >
           <ArrowForwardIosIcon fontSize="inherit" />

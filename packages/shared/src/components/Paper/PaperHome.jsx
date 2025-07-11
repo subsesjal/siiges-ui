@@ -5,24 +5,40 @@ import PropTypes from 'prop-types';
 import '../../styles/Home/PaperHome.css';
 import Button from '../Buttons/Button';
 
-export default function PaperHome({ title, text }) {
+export default function PaperHome({ title, image, url }) {
   return (
     <Paper className="paper" variant="outlined">
-      <Typography variant="h5" gutterBottom component="div">
+      <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
-      <hr />
-      <Typography>
-        {text}
-      </Typography>
-      <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2, ml: -1 }}>
-        <Button text="Leer noticia" align="right" type="consult" />
+      <img
+        src={image || '/no-image.png'}
+        alt={title}
+        style={{
+          width: '100%',
+          height: 120,
+          objectFit: 'cover',
+          marginTop: 8,
+        }}
+      />
+      <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2 }}>
+        <Button
+          text="Leer noticia"
+          align="right"
+          type="consult"
+          onClick={() => window.open(url, '_blank')}
+        />
       </Stack>
     </Paper>
   );
 }
 
 PaperHome.propTypes = {
-  text: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  image: PropTypes.string,
+  url: PropTypes.string.isRequired,
+};
+
+PaperHome.defaultProps = {
+  image: '/no-image.png',
 };
