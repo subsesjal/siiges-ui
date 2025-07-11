@@ -2,14 +2,15 @@ import {
   Box, Divider, Typography, IconButton,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
+import { getData } from '@siiges-ui/shared';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PaperHome from '../Paper/PaperHome';
 
 function HomePage() {
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [noticias, setNoticias] = useState([]);
   const noticiasPerPage = 3;
-  const router = useRouter();
 
   useEffect(() => {
     const fetchNoticias = async () => {
