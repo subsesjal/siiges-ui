@@ -7,32 +7,26 @@ import React, {
 
 const baseUrl = process.env.NEXT_PUBLIC_URL;
 
-export default function ActaComiteSection({ formData, disabled }) {
+export default function ActaComiteSection({ formData, solicitudId, disabled }) {
   const { setNoti } = useContext(Context);
   const [fileUrls, setFileUrls] = useState({
     actaComite: null,
   });
-
   const fileConfigs = {
-    reporteBecas: {
-      tipoEntidad: 'SOLICITUD_BECA',
-      tipoDocumento: 'REPORTE_BECAS',
-      showCondition: formData.estatusSolicitudBecaId === 3,
-    },
     actaComite: {
       tipoEntidad: 'SOLICITUD_BECA',
       tipoDocumento: 'ACTA_COMITE_BECAS',
-      showCondition: !!formData.id,
+      showCondition: !!solicitudId,
     },
   };
 
   const fetchFile = useCallback(
     async (config, fileKey) => {
-      if (!formData.id || !config.showCondition) return;
+      if (!solicitudId || !config.showCondition) return;
 
       try {
         const fileData = {
-          entidadId: formData.id,
+          entidadId: solicitudId,
           tipoEntidad: config.tipoEntidad,
           tipoDocumento: config.tipoDocumento,
         };
@@ -61,29 +55,27 @@ export default function ActaComiteSection({ formData, disabled }) {
         console.error(error);
       }
     },
-    [formData.id, setNoti],
+    [solicitudId, setNoti],
   );
 
   useEffect(() => {
     Object.entries(fileConfigs).forEach(([key, config]) => {
       fetchFile(config, key);
     });
-  }, [formData.estatusSolicitudBecaId, formData.id, fetchFile]);
+  }, [formData.estatusSolicitudBecaId, solicitudId, fetchFile]);
   return (
     <Grid container>
-      {fileConfigs.actaComite.showCondition && (
-        <Grid item xs={11} sx={{ mt: 2 }}>
-          <InputFile
-            url={fileUrls.actaComite}
-            setUrl={(url) => setFileUrls((prev) => ({ ...prev, actaComite: url }))}
-            id={formData.id}
-            tipoDocumento={fileConfigs.actaComite.tipoDocumento}
-            tipoEntidad={fileConfigs.actaComite.tipoEntidad}
-            label="Acta de comité"
-            disabled={disabled}
-          />
-        </Grid>
-      )}
+      <Grid item xs={11} sx={{ mt: 2 }}>
+        <InputFile
+          url={fileUrls.actaComite}
+          setUrl={(url) => setFileUrls((prev) => ({ ...prev, actaComite: url }))}
+          id={solicitudId}
+          tipoDocumento={fileConfigs.actaComite.tipoDocumento}
+          tipoEntidad={fileConfigs.actaComite.tipoEntidad}
+          label="Acta de comité"
+          disabled={disabled}
+        />
+      </Grid>
     </Grid>
   );
 }
@@ -94,6 +86,7 @@ ActaComiteSection.defaultProps = {
 
 ActaComiteSection.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  solicitudId: PropTypes.number.isRequired,
   formData: PropTypes.shape({
     id: PropTypes.number,
     estatusSolicitudBecaId: PropTypes.number,

@@ -121,6 +121,7 @@ export default function SolicitudesBecasBox({ type }) {
       {tabIndex === ACTA_COMITE && hasValidProperties(['programa', 'plantel']) && (
         <ActaComiteSection
           formData={formData}
+          solicitudId={solicitudId}
           disabled={disabled}
         />
       )}
