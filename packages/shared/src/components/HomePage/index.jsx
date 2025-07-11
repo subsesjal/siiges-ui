@@ -1,8 +1,5 @@
 import {
-  Box,
-  Divider,
-  Typography,
-  IconButton,
+  Box, Divider, Typography, IconButton,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
