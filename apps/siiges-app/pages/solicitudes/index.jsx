@@ -98,7 +98,7 @@ export default function Solicitudes() {
       <DataTable
         title="Tipo de solicitud"
         rows={rows}
-        columns={columnsSolicitudes}
+        columns={columnsSolicitudes(session.rol)}
       />
     </Layout>
   );

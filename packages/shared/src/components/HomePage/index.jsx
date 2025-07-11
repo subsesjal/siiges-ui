@@ -3,11 +3,8 @@ import {
   Divider,
   Typography,
   IconButton,
-  Grid,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { Button } from '@siiges-ui/shared';
-import { useRouter } from 'next/router';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PaperHome from '../Paper/PaperHome';
@@ -52,7 +49,6 @@ const noticiasMock = [
 
 function HomePage() {
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const router = useRouter();
 
   const noticiasPerPage = 3;
   const totalNoticias = noticiasMock.length;
@@ -83,10 +79,6 @@ function HomePage() {
     carouselIndex,
     carouselIndex + noticiasPerPage,
   );
-
-  const handleButtonClick = () => {
-    router.push('/serviciosEscolares/alumnos');
-  };
 
   return (
     <>
@@ -155,19 +147,6 @@ function HomePage() {
         >
           <ArrowForwardIosIcon fontSize="inherit" />
         </IconButton>
-      </Box>
-      <Box sx={{ mt: 6 }}>
-        <Grid container spacing={2} justifyContent="center">
-          <Grid item xs={12} textAlign="center">
-            <Typography fontSize={25}>Avances Académicos</Typography>
-            <Button
-              text="Avances"
-              onClick={handleButtonClick}
-              type="people"
-              align="center"
-            />
-          </Grid>
-        </Grid>
       </Box>
     </>
   );

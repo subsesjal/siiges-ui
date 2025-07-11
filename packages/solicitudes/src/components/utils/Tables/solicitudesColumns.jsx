@@ -1,7 +1,7 @@
 import React from 'react';
 import SolicitudesActions from '../Components/SolicitudesActions';
 
-const columnsSolicitudes = [
+const columnsSolicitudes = (rol) => [
   {
     field: 'id', headerName: 'ID', width: 80, hide: true,
   },
@@ -11,7 +11,9 @@ const columnsSolicitudes = [
   { field: 'folio', headerName: 'Folio', width: 125 },
   { field: 'studyPlan', headerName: 'Plan de estudios', width: 180 },
   { field: 'estatusSolicitudId', headerName: 'Estatus', width: 275 },
-  { field: 'institucion', headerName: 'Institución', width: 300 },
+  {
+    field: 'institucion', headerName: 'Institución', width: 300, hide: rol === 'representante' || rol === 'gestor',
+  },
   { field: 'plantel', headerName: 'Plantel', width: 300 },
   {
     field: 'actions',
