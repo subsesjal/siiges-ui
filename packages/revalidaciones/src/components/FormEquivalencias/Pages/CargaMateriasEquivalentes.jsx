@@ -102,8 +102,13 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange, disabl
   };
 
   const handleEdit = (row) => {
-    setEditingId(row.id);
-    if (disabled) { setIsEditing(true); }
+    const index = form.interesado.asignaturasAntecedentesEquivalentes.findIndex(
+      (item) => item.asignaturaId === row.asignaturaId,
+    );
+    setEditingId(index);
+
+    setIsEditing(true);
+
     setMateriaAntecedente(row.materiasAntecedente);
     setCalificacionAntecedente(row.calificacionAntecedente);
     setMateriaEquivalente(row.materiasEquivalentes);
@@ -132,12 +137,12 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange, disabl
       calificacionAntecedente,
     };
 
-    let updatedList;
-    if (isEditing) {
-      updatedList = [...form.interesado.asignaturasAntecedentesEquivalentes];
+    const updatedList = [...form.interesado.asignaturasAntecedentesEquivalentes];
+
+    if (isEditing && editingId !== null) {
       updatedList[editingId] = newEntry;
     } else {
-      updatedList = [...form.interesado.asignaturasAntecedentesEquivalentes, newEntry];
+      updatedList.push(newEntry);
     }
 
     handleOnChange(
