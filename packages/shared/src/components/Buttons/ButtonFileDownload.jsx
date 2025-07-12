@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import GetFile from '../../utils/handlers/getFile';
 import { Context } from '../../utils/handlers/context';
 
+const baseUrl = process.env.NEXT_PUBLIC_URL;
+
 export default function ButtonFileDownload({
   entidadId, tipoEntidad, tipoDocumento, children,
 }) {
@@ -17,8 +19,10 @@ export default function ButtonFileDownload({
         tipoDocumento,
       });
 
-      if (fileUrl) {
-        window.open(fileUrl, '_blank');
+      const url = `${baseUrl}${fileUrl}`;
+
+      if (url) {
+        window.open(url, '_blank');
       }
     } catch (error) {
       setNoti({
