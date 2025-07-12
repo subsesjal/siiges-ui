@@ -30,7 +30,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           label="CURP"
           id="curp"
           tipoDocumento="ARCHIVO_CURP"
-          tipoEntidad="EQUIVALENCIAS"
+          tipoEntidad="SOLICITUD_REV_EQUIV"
           url={formatUrl('ARCHIVO_CURP')}
           onChange={(files) => handleFileChange(files, 'ARCHIVO_CURP')}
           isUploaded={isFileUploaded('ARCHIVO_CURP')}
@@ -41,7 +41,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           label="Identificación Oficial"
           id="identificacionOficial"
           tipoDocumento="IDENTIFICACION_OFICIAL"
-          tipoEntidad="EQUIVALENCIAS"
+          tipoEntidad="SOLICITUD_REV_EQUIV"
           url={formatUrl('IDENTIFICACION_OFICIAL')}
           onChange={(files) => handleFileChange(files, 'IDENTIFICACION_OFICIAL')}
           isUploaded={isFileUploaded('IDENTIFICACION_OFICIAL')}
@@ -52,7 +52,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           label="Acta de Nacimiento"
           id="actaNacimiento"
           tipoDocumento="ARCHIVO_NACIMIENTO"
-          tipoEntidad="EQUIVALENCIAS"
+          tipoEntidad="SOLICITUD_REV_EQUIV"
           url={formatUrl('ARCHIVO_NACIMIENTO')}
           onChange={(files) => handleFileChange(files, 'ARCHIVO_NACIMIENTO')}
           isUploaded={isFileUploaded('ARCHIVO_NACIMIENTO')}
@@ -64,7 +64,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           label="Copia de Resolución"
           id="copiaResolucion"
           tipoDocumento="RESOLUCION"
-          tipoEntidad="EQUIVALENCIAS"
+          tipoEntidad="SOLICITUD_REV_EQUIV"
           url={formatUrl('RESOLUCION')}
           onChange={(files) => handleFileChange(files, 'RESOLUCION')}
           isUploaded={isFileUploaded('RESOLUCION')}
@@ -78,7 +78,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
             label="Certificado Parcial/Total"
             id="certificadoParcialTotal"
             tipoDocumento="ARCHIVO_CERTIFICADO"
-            tipoEntidad="EQUIVALENCIAS"
+            tipoEntidad="SOLICITUD_REV_EQUIV"
             url={formatUrl('ARCHIVO_CERTIFICADO')}
             onChange={(files) => handleFileChange(files, 'ARCHIVO_CERTIFICADO')}
             isUploaded={isFileUploaded('ARCHIVO_CERTIFICADO')}
@@ -89,7 +89,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
             label="Antecedente Académico"
             id="antecedenteAcademico"
             tipoDocumento="ANTECEDENTE_ACADEMICO"
-            tipoEntidad="EQUIVALENCIAS"
+            tipoEntidad="SOLICITUD_REV_EQUIV"
             url={formatUrl('ANTECEDENTE_ACADEMICO')}
             onChange={(files) => handleFileChange(files, 'ANTECEDENTE_ACADEMICO')}
             isUploaded={isFileUploaded('ANTECEDENTE_ACADEMICO')}
@@ -100,7 +100,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
             label="Programa de Estudio Autorizado"
             id="programaEstudioAutorizado"
             tipoDocumento="PROGRAMA_AUTORIZADO"
-            tipoEntidad="EQUIVALENCIAS"
+            tipoEntidad="SOLICITUD_REV_EQUIV"
             url={formatUrl('PROGRAMA_AUTORIZADO')}
             onChange={(files) => handleFileChange(files, 'PROGRAMA_AUTORIZADO')}
             isUploaded={isFileUploaded('PROGRAMA_AUTORIZADO')}
@@ -111,7 +111,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
             label="Opinión Técnica"
             id="propuestaEquivalencia"
             tipoDocumento="PROPUESTA"
-            tipoEntidad="EQUIVALENCIAS"
+            tipoEntidad="SOLICITUD_REV_EQUIV"
             url={formatUrl('PROPUESTA')}
             onChange={(files) => handleFileChange(files, 'PROPUESTA')}
             isUploaded={isFileUploaded('PROPUESTA')}
@@ -124,7 +124,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           label="Pago de Equivalencia"
           id="pagoEquivalencia"
           tipoDocumento="COMPROBANTE_PAGO_TRAMITE"
-          tipoEntidad="EQUIVALENCIAS"
+          tipoEntidad="SOLICITUD_REV_EQUIV"
           url={formatUrl('COMPROBANTE_PAGO_TRAMITE')}
           onChange={(files) => handleFileChange(files, 'COMPROBANTE_PAGO_TRAMITE')}
           isUploaded={isFileUploaded('COMPROBANTE_PAGO_TRAMITE')}

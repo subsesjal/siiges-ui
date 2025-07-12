@@ -7,31 +7,85 @@ export default function ConsultDocumentos({ id }) {
   return (
     <Grid container spacing={1}>
       <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="ARCHIVO_CURP">CURP</ButtonFileDownload>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="ARCHIVO_CURP"
+        >
+          CURP
+        </ButtonFileDownload>
       </Grid>
       <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="IDENTIFICACION_OFICIAL">Identificación Oficial</ButtonFileDownload>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="IDENTIFICACION_OFICIAL"
+        >
+          Identificación Oficial
+        </ButtonFileDownload>
       </Grid>
       <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="ARCHIVO_NACIMIENTO">Acta de Nacimiento</ButtonFileDownload>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="ARCHIVO_NACIMIENTO"
+        >
+          Acta de Nacimiento
+        </ButtonFileDownload>
+      </Grid>
+      {/* <Grid item xs={6}>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="RESOLUCION"
+        >
+          Copia de Resolución
+        </ButtonFileDownload>
+      </Grid> */}
+      <Grid item xs={6}>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="ARCHIVO_CERTIFICADO"
+        >
+          Certificado Parcial/Total
+        </ButtonFileDownload>
       </Grid>
       <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="RESOLUCION">Copia de Resolución</ButtonFileDownload>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="ANTECEDENTE_ACADEMICO"
+        >
+          Antecedente Académico
+        </ButtonFileDownload>
       </Grid>
       <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="ARCHIVO_CERTIFICADO">Certificado Parcial/Total</ButtonFileDownload>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="PROGRAMA_AUTORIZADO"
+        >
+          Programa de Estudio Autorizado
+        </ButtonFileDownload>
       </Grid>
       <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="ANTECEDENTE_ACADEMICO">Antecedente Académico</ButtonFileDownload>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="PROPUESTA"
+        >
+          Propuesta de Equivalencia
+        </ButtonFileDownload>
       </Grid>
       <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="PROGRAMA_AUTORIZADO">Programa de Estudio Autorizado</ButtonFileDownload>
-      </Grid>
-      <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="PROPUESTA">Propuesta de Equivalencia</ButtonFileDownload>
-      </Grid>
-      <Grid item xs={6}>
-        <ButtonFileDownload entidadId={id} tipoEntidad="EQUIVALENCIAS" tipoDocumento="COMPROBANTE_PAGO_TRAMITE">Pago de Equivalencia</ButtonFileDownload>
+        <ButtonFileDownload
+          entidadId={id}
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          tipoDocumento="COMPROBANTE_PAGO_TRAMITE"
+        >
+          Pago de Equivalencia
+        </ButtonFileDownload>
       </Grid>
     </Grid>
   );
