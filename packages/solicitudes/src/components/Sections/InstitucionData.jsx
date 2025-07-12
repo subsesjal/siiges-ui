@@ -82,6 +82,7 @@ function InstitucionData({ id, disabled }) {
         <Grid item xs={12}>
           <Input
             id="vision"
+            name="vision"
             label="Visión"
             rows={4}
             multiline
@@ -94,6 +95,7 @@ function InstitucionData({ id, disabled }) {
         <Grid item xs={12}>
           <Input
             id="mision"
+            name="mision"
             label="Misión"
             rows={4}
             multiline
@@ -106,6 +108,7 @@ function InstitucionData({ id, disabled }) {
         <Grid item xs={12}>
           <Input
             id="valoresInstitucionales"
+            name="valoresInstitucionales"
             label="Valores institucionales"
             rows={4}
             multiline
