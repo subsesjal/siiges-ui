@@ -10,11 +10,12 @@ import {
   getData,
 } from '@siiges-ui/shared';
 import Router, { useRouter } from 'next/router';
-import columnsInscritosOrdinario from '../../../Tables/columnsInscritosOrdinario';
+import columnsInscritosExtra from '../../../Tables/columnsInscritosExtra';
 import submitCalificaciones from '../../utils/submitCalificaciones';
 import getAlumnosAcreditacion from '../../utils/getAlumnosAcreditacion';
 
-export default function Calificaciones({
+export default function calificacionesExtraordinarias({
+  mode,
   disabled,
   labelAsignatura,
   alumnos,
@@ -26,6 +27,7 @@ export default function Calificaciones({
   const [calificaciones, setCalificaciones] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [response, setResponse] = useState();
+  const [calificacionAprobatoria, setCalificacionAprobatoria] = useState(null);
   const [calificacionMinima, setCalificacionMinima] = useState(null);
   const [calificacionMaxima, setCalificacionMaxima] = useState(null);
   const [calificacionDecimal, setCalificacionDecimal] = useState(false);
@@ -42,6 +44,7 @@ export default function Calificaciones({
       try {
         const result = await getData({ endpoint: `/programas/${programaId}` });
         if (result.statusCode === 200) {
+          setCalificacionAprobatoria(result.data.calificacionAprobatoria);
           setCalificacionMinima(result.data.calificacionMinima || 0);
           setCalificacionMaxima(result.data.calificacionMaxima);
           setCalificacionDecimal(result.data.calificacionDecimal);
@@ -98,11 +101,17 @@ export default function Calificaciones({
     }
   }, [response]);
 
+  const isExtraordinarioEnabled = (alumnoId) => {
+    const alumno = alumnos.find((a) => a.id === alumnoId);
+    const calificacionOrdinaria = alumno.calificaciones.find(({ tipo }) => tipo === 1);
+    return alumno && calificacionOrdinaria.calificacion <= calificacionAprobatoria;
+  };
+
   const updateCalificaciones = (
     alumnoId,
     newValue,
     fieldToUpdate,
-    tipo = 1,
+    tipo = 2,
   ) => {
     setCalificaciones((prevCalificaciones) => {
       const existingIndex = prevCalificaciones.findIndex(
@@ -156,14 +165,21 @@ export default function Calificaciones({
     setIsSubmitting(true);
 
     try {
-      const calificacionesOrdinarias = calificacionesValidas.filter((c) => c.tipo === 1);
-      if (calificacionesOrdinarias.length > 0) {
+      const calificacionesData = calificacionesValidas
+        .filter((c) => c.tipo === 2 || parseFloat(c.calificacion) < calificacionAprobatoria)
+        .map((c) => ({
+          ...c,
+          calificacion: c.tipo === 2 ? c.calificacion : '',
+          tipo: 2,
+        }));
+
+      if (mode === 'Extraodinarias' && calificacionesData.length > 0) {
         await submitCalificaciones(
-          calificacionesOrdinarias,
+          calificacionesData,
           setNoti,
           grupoId,
           asignaturaId,
-          1,
+          2,
           setResponse,
         );
       }
@@ -187,9 +203,10 @@ export default function Calificaciones({
     }
   }, [fechaExamenes]);
 
-  const columns = columnsInscritosOrdinario(
+  const columns = columnsInscritosExtra(
     disabled,
     updateCalificaciones,
+    isExtraordinarioEnabled,
     calificacionMinima,
     calificacionMaxima,
     calificacionDecimal,
@@ -230,7 +247,7 @@ export default function Calificaciones({
   );
 }
 
-Calificaciones.propTypes = {
+calificacionesExtraordinarias.propTypes = {
   disabled: PropTypes.bool.isRequired,
   labelAsignatura: PropTypes.string.isRequired,
   alumnos: PropTypes.arrayOf(

@@ -9,7 +9,6 @@ const columnsInscritosExtra = (
   calificacionMinima,
   calificacionMaxima,
   calificacionDecimal,
-  fechaExamenes,
 ) => [
   {
     field: 'matricula',
@@ -60,8 +59,11 @@ const columnsInscritosExtra = (
       const isDisabled = disabled
         || !isExtraordinarioEnabled(params.row.id)
         || params.row.situacionId === 3 || params.row.situacionId === 4;
-
-      const fechaExamen = !isDisabled && fechaExamenes ? fechaExamenes : params.row.calificaciones[0]?.fechaExamen || '';
+      const calificacionExtraordinaria = params.row.calificaciones.find(({ tipo }) => tipo === 2);
+      let fechaExamen = '';
+      if (calificacionExtraordinaria) {
+        fechaExamen = calificacionExtraordinaria.fechaExamen;
+      }
       return (
         <FechaExamenInput
           id={params.id}
