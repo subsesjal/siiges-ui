@@ -50,6 +50,7 @@ import FormAlumnoTitulacion from './Components/Titulacion/FormAlumno/index';
 import alumnosService from './Components/utils/alumnosService';
 import DocumentosAlumnoTitulacion from './Components/Titulacion/FormAlumno/DocumentoAlumno';
 import Titulacion from './Components/Titulacion/FormAlumno/titulacion';
+import FormFoliosAsignados from './Components/FoliosAsignados/FormFoliosAsignados';
 
 export {
   Titulacion,
@@ -104,4 +105,5 @@ export {
   ButtonsInstitucionesAutorizadas,
   ReporteTable,
   ReporteForm,
+  FormFoliosAsignados,
 };

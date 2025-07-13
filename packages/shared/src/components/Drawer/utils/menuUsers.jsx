@@ -145,6 +145,10 @@ const panelMenuOptions = (rol) => [
         text: 'Extraordinarios',
         route: '/serviciosEscolares/reporte/extraordinario',
       },
+      {
+        text: 'Folios Asignados',
+        route: '/serviciosEscolares/reporte/foliosAsignados',
+      },
     ],
     key: 'reporte',
   },
