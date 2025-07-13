@@ -36,6 +36,7 @@ export default function Solicitudes() {
         estatus: solicitud.estatusSolicitudId,
         folio: solicitud.folio,
         studyPlan: solicitud.programa?.nombre,
+        acuerdoRvoe: solicitud.programa?.acuerdoRvoe,
         estatusSolicitudId: solicitud.estatusSolicitud?.nombre,
         institucion: solicitud?.programa?.plantel?.institucion?.nombre,
         plantel: `${solicitud.programa?.plantel?.domicilio?.calle} #${solicitud.programa?.plantel?.domicilio?.numeroExterior}`,
