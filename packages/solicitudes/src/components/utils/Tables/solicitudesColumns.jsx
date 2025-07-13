@@ -11,6 +11,7 @@ const columnsSolicitudes = (rol) => [
   { field: 'folio', headerName: 'Folio', width: 125 },
   { field: 'studyPlan', headerName: 'Plan de estudios', width: 180 },
   { field: 'estatusSolicitudId', headerName: 'Estatus', width: 275 },
+  { field: 'acuerdoRvoe', headerName: 'RVOE', width: 125 },
   {
     field: 'institucion', headerName: 'Institución', width: 300, hide: rol === 'representante' || rol === 'gestor',
   },
