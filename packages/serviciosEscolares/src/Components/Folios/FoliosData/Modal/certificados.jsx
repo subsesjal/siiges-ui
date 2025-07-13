@@ -22,7 +22,6 @@ export default function ModalCertificado({
   programaId,
   setAlumnoResponse,
   rowData,
-  title,
   disabled,
 }) {
   const [form, setForm] = useState({});
@@ -30,6 +29,7 @@ export default function ModalCertificado({
   const [alumnoId, setAlumnoId] = useState(null);
   const [disabledButton, setDisabledButton] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
+  const [modalTitulo, setModalTitulo] = useState('Agregar Alumno');
 
   useEffect(() => {
     if (open && type === 'create') {
@@ -58,6 +58,13 @@ export default function ModalCertificado({
       setForm({});
       setAlumno(null);
       setAlumnoId(null);
+    }
+    if (type === 'edit') {
+      setModalTitulo('Editar Alumno');
+    } else if (type === 'consult') {
+      setModalTitulo('Consultar Alumno');
+    } else {
+      setModalTitulo('Agregar Alumno');
     }
   }, [type, rowData]);
 
@@ -155,14 +162,14 @@ export default function ModalCertificado({
   };
 
   return (
-    <DefaultModal title={title} open={open} setOpen={setOpen}>
+    <DefaultModal title={modalTitulo} open={open} setOpen={setOpen}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Input
             label="Matrícula"
             id="matricula"
             name="matricula"
-            value={form.matricula || ''}
+            value={form.alumno?.matricula || ''}
             onblur={handleBlur}
             onChange={handleChange}
             disabled={disabled}
@@ -245,5 +252,4 @@ ModalCertificado.propTypes = {
     fechaExamenProfesional: PropTypes.string,
     fechaExencionExamenProfesional: PropTypes.string,
   }),
-  title: PropTypes.string.isRequired,
 };
