@@ -1,5 +1,5 @@
 import { InputDate } from '@siiges-ui/shared';
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function FechaExamenInput({
@@ -46,14 +46,6 @@ export default function FechaExamenInput({
   };
 
   const inputValue = formatForInput(value);
-
-  useEffect(() => {
-    if (isValidDate(value)) {
-      updateCalificaciones(id, formatForInput(value), 'fechaExamen');
-    } else {
-      updateCalificaciones(id, '', 'fechaExamen');
-    }
-  }, [value]);
 
   return (
     <div style={{ marginTop: -12, width: '100%' }}>

@@ -9,6 +9,7 @@ import getAsignaturaById from '../../utils/getAsignaturaById';
 import getGrupoById from '../../utils/getGrupoById';
 import getAlumnosAcreditacion from '../../utils/getAlumnosAcreditacion';
 import Calificaciones from '../Calificaciones';
+import CalificacionesExtraordinarias from '../CalificacionesExtraordinarias';
 
 export default function DetallesAsignatura({ type }) {
   const disabled = type !== 'editar';
@@ -111,7 +112,7 @@ export default function DetallesAsignatura({ type }) {
             />
           )}
           {value === 1 && (
-            <Calificaciones
+            <CalificacionesExtraordinarias
               mode="Extraodinarias"
               disabled={disabled}
               labelAsignatura={labelAsignatura}
