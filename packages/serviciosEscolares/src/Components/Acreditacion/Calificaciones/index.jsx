@@ -8,7 +8,6 @@ import {
   DataTable,
   DefaultModal,
   getData,
-  InputDate,
 } from '@siiges-ui/shared';
 import Router, { useRouter } from 'next/router';
 import columnsInscritosOrdinario from '../../../Tables/columnsInscritosOrdinario';
@@ -29,11 +28,11 @@ export default function Calificaciones({
   const [calificaciones, setCalificaciones] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [response, setResponse] = useState();
-  const [fechaExamenes, setFechaExamenes] = useState('');
   const [calificacionAprobatoria, setCalificacionAprobatoria] = useState(null);
   const [calificacionMinima, setCalificacionMinima] = useState(null);
   const [calificacionMaxima, setCalificacionMaxima] = useState(null);
   const [calificacionDecimal, setCalificacionDecimal] = useState(false);
+  const [fechaExamenes] = useState();
   const [open, setOpen] = useState(false);
 
   const url = '/serviciosEscolares/programas';
@@ -216,46 +215,6 @@ export default function Calificaciones({
     }
   }, [fechaExamenes]);
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
-    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
-      const parts = dateStr.split('/');
-      return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    }
-
-    return '';
-  };
-
-  const handleFechaExamenesChange = (newValue) => {
-    if (!newValue) return;
-
-    const formattedDate = formatDate(newValue);
-
-    const updatedCalificaciones = [...calificaciones];
-    alumnos.forEach((alumno) => {
-      if (!disabled) {
-        const existingIndex = updatedCalificaciones.findIndex(
-          (c) => c.alumnoId === alumno.id && c.tipo === (mode === 'Ordinarias' ? 1 : 2),
-        );
-
-        if (existingIndex > -1) {
-          updatedCalificaciones[existingIndex].fechaExamen = formattedDate;
-        } else {
-          updatedCalificaciones.push({
-            alumnoId: alumno.id,
-            tipo: mode === 'Ordinarias' ? 1 : 2,
-            calificacion: '',
-            fechaExamen: formattedDate,
-          });
-        }
-      }
-    });
-
-    setCalificaciones(updatedCalificaciones);
-    setFechaExamenes(formattedDate);
-  };
-
   const columns = mode === 'Ordinarias'
     ? columnsInscritosOrdinario(
       disabled,
@@ -277,14 +236,6 @@ export default function Calificaciones({
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <InputDate
-          label="Fecha de Examenes General"
-          name="fechaExamenes"
-          onChange={(event) => handleFechaExamenesChange(event.target.value)}
-          value=""
-        />
-      </Grid>
       <Grid item xs={12}>
         <DataTable title={labelAsignatura} rows={alumnos} columns={columns} />
       </Grid>
