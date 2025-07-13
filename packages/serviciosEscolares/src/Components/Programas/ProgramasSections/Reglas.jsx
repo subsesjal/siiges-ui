@@ -142,16 +142,6 @@ export default function Reglas({ programa, id }) {
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <TextField
-            label="ID"
-            name="id"
-            value={form.id}
-            onChange={handleInputChange}
-            fullWidth
-            disabled
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
             label="Calificación Mínima"
             name="calificacionMinima"
             type="number"
