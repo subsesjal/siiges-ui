@@ -24,7 +24,7 @@ import ButtonsFolios from '../ButtonsFolios';
 import ModalCertificado from './Modal/certificados';
 import ModalTitulo from './Modal/titulos';
 
-const columns = (handleEdit, handleConsult, status) => [
+const columnsTitulo = (handleEdit, handleConsult, status) => [
   {
     field: 'id',
     headerName: 'ID',
@@ -47,6 +47,47 @@ const columns = (handleEdit, handleConsult, status) => [
   { field: 'foja', headerName: 'Foja', width: 250 },
   { field: 'libro', headerName: 'Libro', width: 250 },
   { field: 'titulacion', headerName: 'Titulacion', width: 250 },
+  {
+    field: 'actions',
+    headerName: 'Acciones',
+    width: 150,
+    renderCell: (params) => (
+      <div>
+        <Tooltip title="Consultar" placement="top">
+          <IconButton onClick={() => handleConsult(params.row.id)}>
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </Tooltip>
+        {status !== 'consult' && (
+          <Tooltip title="Editar" placement="top">
+            <IconButton onClick={() => handleEdit(params.row.id)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </div>
+    ),
+  },
+];
+
+const columnsCertificado = (handleEdit, handleConsult, status) => [
+  {
+    field: 'id',
+    headerName: 'ID',
+    hide: true,
+  },
+  { field: 'name', headerName: 'Nombre', width: 250 },
+  { field: 'matricula', headerName: 'Matrícula', width: 250 },
+  {
+    field: 'fechaTerminacion',
+    headerName: 'Fecha de Terminación',
+    width: 250,
+  },
+  {
+    field: 'fechaElaboracion',
+    headerName: 'Fecha de Elaboración',
+    width: 250,
+  },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -238,6 +279,7 @@ export default function FoliosData({ type }) {
                 name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
                 matricula: alumnos.alumno.matricula,
                 fechaTerminacion: dayjs(alumnos.fechaTerminacion).format('DD/MM/YYYY'),
+                fechaElaboracion: dayjs(alumnos.fechaElaboracion).format('DD/MM/YYYY'),
                 fechaInicio: dayjs(alumnos.fechaInicio).format('DD/MM/YYYY'),
                 fundamento: fundamentoObj ? fundamentoObj.nombre : 'Desconocido',
                 folio: alumnos.folioDocumentoAlumno?.folioDocumento,
@@ -283,7 +325,7 @@ export default function FoliosData({ type }) {
 
   const handleConsult = async (value) => {
     try {
-      setAlumnoType('edit');
+      setAlumnoType('consult');
       const alumno = alumnosData.find((row) => row.id === value);
       setRowData(alumno);
       setDisabled(true);
@@ -299,6 +341,7 @@ export default function FoliosData({ type }) {
 
   const handleAddAlumno = () => {
     setAlumnoType('create');
+    setDisabled(false);
     setOpen(true);
   };
 
@@ -462,7 +505,9 @@ export default function FoliosData({ type }) {
               buttonText="Agregar Alumnos"
               title="Alumnos"
               rows={rows}
-              columns={columns(handleEdit, handleConsult, status)}
+              columns={tipoDocumento === '1'
+                ? columnsTitulo(handleEdit, handleConsult, status)
+                : columnsCertificado(handleEdit, handleConsult, status)}
             />
           </Grid>
         </Grid>
@@ -501,7 +546,6 @@ export default function FoliosData({ type }) {
           id={id}
           programaId={formData.programaId}
           rowData={rowData}
-          title="Agregar Alumno"
           setAlumnoResponse={setAlumnoResponse}
           disabled={disabled}
         />

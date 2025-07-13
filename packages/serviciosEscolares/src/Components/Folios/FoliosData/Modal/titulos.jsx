@@ -53,6 +53,7 @@ export default function ModalTitulo({
   disabled,
 }) {
   const [position, setPosition] = useState('first');
+  const [modalTitulo, setModalTitulo] = useState('Agregar Alumno');
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
   const [alumnoId, setAlumnoId] = useState(null);
@@ -70,6 +71,13 @@ export default function ModalTitulo({
       setForm({});
       setAlumno();
       setAlumnoId();
+    }
+    if (type === 'edit') {
+      setModalTitulo('Editar Alumno');
+    } else if (type === 'consult') {
+      setModalTitulo('Consultar Alumno');
+    } else {
+      setModalTitulo('Agregar Alumno');
     }
   }, [type, rowData]);
 
@@ -122,17 +130,25 @@ export default function ModalTitulo({
     const action = type === 'edit' ? updateRecord : createRecord;
 
     action({ data: formattedForm, endpoint })
-      .then(() => {
-        setNoti({
-          open: true,
-          message:
+      .then((data) => {
+        if (data.statusCode === 200 || data.statusCode === 201) {
+          setNoti({
+            open: true,
+            message:
               type === 'edit'
                 ? 'Registro actualizado exitosamente'
                 : 'Registro creado exitosamente',
-          type: 'success',
-        });
-        setAlumnoResponse(true);
-        setOpen(false);
+            type: 'success',
+          });
+          setAlumnoResponse(true);
+          setOpen(false);
+        } else {
+          setNoti({
+            open: true,
+            message: 'El alumno registrado no esta validado',
+            type: 'warning',
+          });
+        }
       })
       .catch((error) => {
         setNoti({
@@ -194,7 +210,7 @@ export default function ModalTitulo({
   };
 
   return (
-    <DefaultModal title="Folios título" open={open} setOpen={setOpen}>
+    <DefaultModal title={modalTitulo} open={open} setOpen={setOpen}>
       <Grid container spacing={2}>
         {position === 'first' && (
           <>
