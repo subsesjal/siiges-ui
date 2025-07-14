@@ -20,7 +20,7 @@ function Refrendo() {
     method,
   });
 
-  const showCrearSolicitud = process.env.NEXT_PUBLIC_SHOW_CREAR_SOLICITUD === 'true';
+  const showCrearSolicitud = process.env.NEXT_PUBLIC_SHOW_CREAR_SOLICITUD !== 'false';
 
   useEffect(() => {
     if (data && Array.isArray(data)) {

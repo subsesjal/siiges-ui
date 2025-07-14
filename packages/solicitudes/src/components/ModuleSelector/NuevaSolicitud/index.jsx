@@ -18,7 +18,7 @@ function NewRequest() {
   const [plantelesData, setPlantelesData] = useState([]);
   const [validation, setValidation] = useState([]);
 
-  const showCrearSolicitud = process.env.NEXT_PUBLIC_SHOW_CREAR_SOLICITUD === 'true';
+  const showCrearSolicitud = process.env.NEXT_PUBLIC_SHOW_CREAR_SOLICITUD !== 'false';
 
   useEffect(() => {
     if (planteles) {

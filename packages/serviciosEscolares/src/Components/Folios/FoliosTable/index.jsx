@@ -52,7 +52,7 @@ function FoliosTable({
   const router = useRouter();
   const { setNoti } = useContext(Context);
 
-  const showCrearFolio = process.env.NEXT_PUBLIC_SHOW_CREAR_FOLIO === 'true';
+  const showCrearFolio = process.env.NEXT_PUBLIC_SHOW_CREAR_FOLIO !== 'false';
 
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
