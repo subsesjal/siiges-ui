@@ -22,6 +22,8 @@ function ChangeAddress() {
     method,
   });
 
+  const showCrearSolicitud = process.env.NEXT_PUBLIC_SHOW_CREAR_SOLICITUD !== 'false';
+
   useEffect(() => {
     if (data && Array.isArray(data)) {
       if (!programaData.length) {
@@ -90,7 +92,7 @@ function ChangeAddress() {
           />
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
-          <ButtonSimple text="Crear" onClick={() => handleOnClick()} />
+          <ButtonSimple text="Crear" onClick={() => handleOnClick()} disabled={!showCrearSolicitud} />
         </Grid>
       </Grid>
     </Grid>

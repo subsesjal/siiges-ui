@@ -4,7 +4,7 @@ import { Typography, Grid, Button } from '@mui/material';
 import '../../styles/buttons/ButtonAdd.css';
 
 export default function ButtonSimple({
-  text, onClick, align, design, children,
+  text, onClick, align, design, children, disabled,
 }) {
   const justifyContent = {
     left: 'flex-start',
@@ -19,6 +19,7 @@ export default function ButtonSimple({
           onClick={onClick}
           className={`buttonAdd ${design}`}
           variant="text"
+          disabled={disabled}
         >
           <Typography variant="body1" style={{ textTransform: 'none' }}>
             {text}
@@ -35,12 +36,14 @@ ButtonSimple.defaultProps = {
   design: 'guardar',
   onClick: () => {},
   children: null,
+  disabled: false,
 };
 
 ButtonSimple.propTypes = {
   onClick: PropTypes.func,
   text: PropTypes.string.isRequired,
   design: PropTypes.string,
+  disabled: PropTypes.string,
   align: PropTypes.oneOf(['left', 'center', 'right']),
   children: PropTypes.node,
 };

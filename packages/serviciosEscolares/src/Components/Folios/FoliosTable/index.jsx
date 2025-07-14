@@ -52,6 +52,8 @@ function FoliosTable({
   const router = useRouter();
   const { setNoti } = useContext(Context);
 
+  const showCrearFolio = process.env.NEXT_PUBLIC_SHOW_CREAR_FOLIO !== 'false';
+
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
     const path = status === 'create' ? `/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}` : `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`;
@@ -87,7 +89,7 @@ function FoliosTable({
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <DataTable
-          buttonAdd
+          buttonAdd={showCrearFolio}
           buttonClick={() => navigateTo(null, 'create')}
           buttonText="Agregar Solicitud"
           title="Solicitudes de Títulos"
