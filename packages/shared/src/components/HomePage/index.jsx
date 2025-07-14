@@ -53,11 +53,7 @@ function HomePage() {
       <Typography>
         Bienvenida/o al Sistema de Información para la Gestión de la Educación Superior (SIGES)
 
-        Plataforma digital para instituciones con RVOE, donde podrán realizar trámites ante la Dirección General de Incorporación y Servicios Escolares de manera ágil y segura.
-
-        Simplificamos procesos, reduciendo trámites presenciales y documentación, garantizando eficiencia en la gestión educativa ante la Subsecretaría de Educación Superior de Jalisco.
-
-        ¡Gestiona con facilidad en SIGES!
+        Plataforma digital para instituciones con RVOE, donde podrán realizar trámites ante la Dirección General de Incorporación y Servicios Escolares.
       </Typography>
       <Divider sx={{ mt: 5 }} />
 
