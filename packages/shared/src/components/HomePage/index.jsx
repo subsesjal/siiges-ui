@@ -45,8 +45,9 @@ function HomePage() {
   return (
     <>
       <Typography>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua...
+        Bienvenida/o al Sistema de Información para la Gestión de la Educación Superior (SIGES)
+
+        Plataforma digital para instituciones con RVOE, donde podrán realizar trámites ante la Dirección General de Incorporación y Servicios Escolares.
       </Typography>
       <Divider sx={{ mt: 5 }} />
 
