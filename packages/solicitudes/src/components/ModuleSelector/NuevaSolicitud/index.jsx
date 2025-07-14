@@ -18,6 +18,8 @@ function NewRequest() {
   const [plantelesData, setPlantelesData] = useState([]);
   const [validation, setValidation] = useState([]);
 
+  const showCrearSolicitud = process.env.NEXT_PUBLIC_SHOW_CREAR_SOLICITUD === 'true';
+
   useEffect(() => {
     if (planteles) {
       setPlantelesData(planteles.map((plantel) => ({
@@ -96,7 +98,7 @@ function NewRequest() {
         </Grid>
         <Grid item xs={2} sx={{ mt: 2, mb: 1 }}>
           <div style={{ height: '100%' }}>
-            <ButtonSimple onClick={submit} text="Crear" />
+            <ButtonSimple onClick={submit} text="Crear" disabled={!showCrearSolicitud} />
           </div>
         </Grid>
       </Grid>
