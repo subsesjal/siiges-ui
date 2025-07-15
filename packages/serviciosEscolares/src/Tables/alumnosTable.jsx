@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonsAlumnos from '../Components/utils/ButtonAlumnos';
 
-const columnsAlumnos = [
+const columnsAlumnos = (onDeleteSuccess) => [
   {
     field: 'id', headerName: 'ID', width: 50, hide: true,
   },
@@ -18,6 +18,7 @@ const columnsAlumnos = [
       <ButtonsAlumnos
         id={params.id}
         url={`/serviciosEscolares/alumnos/${params.id}/EditarAlumno`}
+        onDeleteSuccess={onDeleteSuccess}
       />
     ),
     sortable: false,
