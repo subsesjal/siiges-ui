@@ -8,6 +8,7 @@ import {
   getProgramas,
 } from '@siiges-ui/instituciones';
 import getAlumnosByPrograma from '@siiges-ui/instituciones/src/utils/getAlumnosByPrograma';
+import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 export default function ValidacionForm({
   setInstitucion, setAlumnos, setPrograma, setLoading,
@@ -35,7 +36,8 @@ export default function ValidacionForm({
     ? localStorage.getItem('validacion_selectedPrograma')
     : ''));
 
-  const isRepresentante = session?.rol === 'representante';
+  const roles = ['representante', 'ce_ies'];
+  const isRepresentante = roles.includes(session.rol);
 
   useEffect(() => {
     if (fetchedInstituciones?.length) {
@@ -159,16 +161,22 @@ export default function ValidacionForm({
   };
 
   useEffect(() => {
-    if (isRepresentante && instituciones?.length) {
-      const institucionId = instituciones.find(
-        ({ usuarioId }) => usuarioId === session.id,
-      )?.id;
+    const asignarInstitucionDesdeSesion = async () => {
+      if (!isRepresentante || !instituciones?.length) return;
+
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones,
+        session,
+      });
+
       if (institucionId) {
         setSelectedInstitucion(institucionId);
         setInstitucion(institucionId);
         fetchPlanteles(institucionId);
       }
-    }
+    };
+
+    asignarInstitucionDesdeSesion();
   }, [isRepresentante, instituciones]);
 
   return (

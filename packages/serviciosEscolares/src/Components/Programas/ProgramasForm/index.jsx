@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
 import { Context, Select } from '@siiges-ui/shared';
 import React, { useState, useEffect, useContext } from 'react';
+import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 export default function ProgramasForm({ setProgramas, setLoading }) {
   const { setNoti, session } = useContext(Context);
@@ -97,13 +98,19 @@ export default function ProgramasForm({ setProgramas, setLoading }) {
   }, [selectedInstitucion, selectedPlantel]);
 
   useEffect(() => {
-    if (isRepresentante && institucionesOrdenadas.length) {
-      const findIndexInstitucion = institucionesOrdenadas.findIndex(
-        ({ usuarioId }) => usuarioId === session.id,
-      );
-      setSelectedInstitucion(institucionesOrdenadas[findIndexInstitucion]?.id || '');
-    }
-  }, [isRepresentante, institucionesOrdenadas]);
+    const asignarInstitucionDesdeSesion = async () => {
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones: institucionesOrdenadas,
+        session,
+      });
+
+      if (institucionId) {
+        setSelectedInstitucion(institucionId);
+      }
+    };
+
+    asignarInstitucionDesdeSesion();
+  }, [institucionesOrdenadas, session]);
 
   return (
     <Grid container spacing={2} alignItems="center">

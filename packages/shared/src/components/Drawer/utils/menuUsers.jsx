@@ -135,23 +135,17 @@ const panelMenuOptions = (rol) => [
     ],
     key: 'otrosTramites',
   },
-  {
+  ...(rol !== 'ce_ies' ? [{
     userId: 2,
     text: 'Reportes',
     icon: <AssignmentLateIcon />,
     type: 'dropdown',
     options: [
-      {
-        text: 'Extraordinarios',
-        route: '/serviciosEscolares/reporte/extraordinario',
-      },
-      {
-        text: 'Folios Asignados',
-        route: '/serviciosEscolares/reporte/foliosAsignados',
-      },
+      { text: 'Extraordinarios', route: '/serviciosEscolares/reporte/extraordinario' },
+      { text: 'Folios Asignados', route: '/serviciosEscolares/reporte/foliosAsignados' },
     ],
     key: 'reporte',
-  },
+  }] : []),
   {
     userId: 3,
     text: 'Instituciones',

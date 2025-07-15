@@ -9,6 +9,7 @@ import {
   getPlantelesByInstitucion,
   getProgramas,
 } from '@siiges-ui/instituciones';
+import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 const LOCAL_STORAGE_KEY = 'foliosFormState';
 
@@ -54,24 +55,37 @@ export default function FoliosForm({
   }, [state]);
 
   useEffect(() => {
-    if (!isAdmin && instituciones?.length) {
-      const findIndexIntitucion = instituciones.findIndex(
-        ({ usuarioId }) => usuarioId === session.id,
-      );
-      if (findIndexIntitucion !== -1) {
-        setState((prevState) => ({
-          ...prevState,
-          selectedInstitucion: instituciones[findIndexIntitucion]?.id,
+    const asignarInstitucionDesdeSesion = async () => {
+      if (isAdmin) return;
+
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones,
+        session,
+      });
+
+      if (institucionId) {
+        setState((prev) => ({
+          ...prev,
+          selectedInstitucion: institucionId,
         }));
-      } else {
+        if (typeof window !== 'undefined') {
+          const stored = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
+          localStorage.setItem(
+            LOCAL_STORAGE_KEY,
+            JSON.stringify({ ...stored, selectedInstitucion: institucionId }),
+          );
+        }
+      } else if (isRepresentante) {
         setNoti({
           open: true,
           message: '¡No se encontró una institución con nombre autorizado asociada al usuario!',
           type: 'error',
         });
       }
-    }
-  }, [isRepresentante, instituciones, session, setNoti]);
+    };
+
+    asignarInstitucionDesdeSesion();
+  }, [instituciones, session]);
 
   const fetchProgramas = useCallback((plantelId) => {
     getProgramas(plantelId, (error, data) => {

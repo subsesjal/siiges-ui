@@ -8,6 +8,7 @@ import {
   getPlantelesByInstitucion,
   getProgramas,
 } from '@siiges-ui/instituciones';
+import getInstitucionIdFromSession from '../../../utils/getInstitucionId';
 
 export default function SolicitudServSocFilter({
   setSolicitudes,
@@ -37,7 +38,8 @@ export default function SolicitudServSocFilter({
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
   const isIes = session.rol === 'serv_soc_ies';
-  const isRepresentante = session.rol === 'representante';
+  const roles = ['representante', 'ce_ies'];
+  const isRepresentante = roles.includes(session.rol);
 
   const fetchPlanteles = (institucionId) => {
     setLoading(true);
@@ -130,25 +132,27 @@ export default function SolicitudServSocFilter({
   };
 
   useEffect(() => {
-    if (!instituciones?.length) return;
+    const asignarInstitucionDesdeSesion = async () => {
+      if (!instituciones?.length) return;
 
-    const findInstitutionById = (id) => instituciones.find(({ usuarioId }) => usuarioId === id)?.id || '';
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones,
+        session,
+      });
 
-    if (isIes) {
-      const fetchData = async () => {
-        try {
-          const response = await getData({ endpoint: `/usuarios/secundario/${session.id}` });
-          setSelectedInstitucion(findInstitutionById(response.data.id));
-        } catch (error) {
-          console.error('Error fetching users:', error);
-          setSelectedInstitucion('');
-        }
-      };
-      fetchData();
-    } else if (isRepresentante) {
-      setSelectedInstitucion(findInstitutionById(session.id));
-    }
-  }, [isIes, isRepresentante, instituciones, session.id]);
+      if (institucionId) {
+        setSelectedInstitucion(institucionId);
+      } else if (isRepresentante || isIes) {
+        setNoti({
+          open: true,
+          message: '¡No se encontró una institución con nombre autorizado asociada al usuario!',
+          type: 'error',
+        });
+      }
+    };
+
+    asignarInstitucionDesdeSesion();
+  }, [instituciones, session]);
 
   return (
     <Grid container spacing={2} alignItems="center">
@@ -163,7 +167,7 @@ export default function SolicitudServSocFilter({
               .sort((a, b) => a.nombre.localeCompare(b.nombre)) || []
           }
           onChange={(event) => setSelectedInstitucion(event.target.value)}
-          disabled={isIes && selectedInstitucion}
+          disabled={(isIes || isRepresentante) && selectedInstitucion}
         />
       </Grid>
       <Grid item xs={4}>

@@ -8,6 +8,7 @@ import {
   getProgramas,
 } from '@siiges-ui/instituciones';
 import getAlumnosByPrograma from '@siiges-ui/instituciones/src/utils/getAlumnosByPrograma';
+import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
   const { instituciones } = getInstituciones({
@@ -31,7 +32,8 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
 
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
-  const isRepresentante = session.rol === 'representante';
+  const roles = ['representante', 'ce_ies'];
+  const isRepresentante = roles.includes(session.rol);
 
   const fetchAlumnos = (programaId) => {
     getAlumnosByPrograma(programaId, (error, data) => {
@@ -56,14 +58,24 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
     });
   };
 
+  const institucionesOrdenadas = instituciones?.slice().sort(
+    (a, b) => a.nombre.localeCompare(b.nombre),
+  ) || [];
+
   useEffect(() => {
-    if (isRepresentante && instituciones?.length) {
-      const findIndexInstitucion = instituciones.findIndex(
-        ({ usuarioId }) => usuarioId === session.id,
-      );
-      setSelectedInstitucion(instituciones[findIndexInstitucion]?.id || '');
-    }
-  }, [isRepresentante, instituciones]);
+    const asignarInstitucionDesdeSesion = async () => {
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones: institucionesOrdenadas,
+        session,
+      });
+
+      if (institucionId) {
+        setSelectedInstitucion(institucionId);
+      }
+    };
+
+    asignarInstitucionDesdeSesion();
+  }, [institucionesOrdenadas, session]);
 
   const handleProgramaChange = (event) => {
     const programaId = event.target.value;
@@ -166,7 +178,7 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
           title="Instituciones"
           name="instituciones"
           value={selectedInstitucion}
-          options={instituciones?.slice().sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
+          options={institucionesOrdenadas}
           onChange={(event) => setSelectedInstitucion(event.target.value)}
           disabled={isRepresentante}
         />
