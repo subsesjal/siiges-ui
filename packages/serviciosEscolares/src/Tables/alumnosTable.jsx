@@ -18,6 +18,7 @@ const columnsAlumnos = (onDeleteSuccess) => [
       <ButtonsAlumnos
         id={params.id}
         url={`/serviciosEscolares/alumnos/${params.id}/EditarAlumno`}
+        matricula={params.row.matricula}
         onDeleteSuccess={onDeleteSuccess}
       />
     ),

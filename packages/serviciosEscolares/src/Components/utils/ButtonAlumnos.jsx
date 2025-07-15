@@ -18,7 +18,12 @@ import {
   deleteRecord,
 } from '@siiges-ui/shared';
 
-export default function ButtonsAlumnos({ id, url, onDeleteSuccess }) {
+export default function ButtonsAlumnos({
+  id,
+  url,
+  matricula,
+  onDeleteSuccess,
+}) {
   const { session, setNoti } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
 
@@ -69,7 +74,12 @@ export default function ButtonsAlumnos({ id, url, onDeleteSuccess }) {
       </Stack>
       {validUser && (
         <DefaultModal open={openModal} setOpen={setOpenModal} id={id} title="Eliminar Alumno">
-          <Typography>¿Desea eliminar el alumno?</Typography>
+          <Typography>
+            ¿Desea eliminar el alumno con matrícula
+            {' '}
+            <strong>{matricula}</strong>
+            ?
+          </Typography>
           <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
             <Grid item>
               <ButtonSimple text="Cancelar" design="cancel" onClick={() => setOpenModal(false)} />
@@ -94,6 +104,7 @@ export default function ButtonsAlumnos({ id, url, onDeleteSuccess }) {
 ButtonsAlumnos.propTypes = {
   id: PropTypes.number.isRequired,
   url: PropTypes.string.isRequired,
+  matricula: PropTypes.string.isRequired,
   onDeleteSuccess: PropTypes.func,
 };
 
