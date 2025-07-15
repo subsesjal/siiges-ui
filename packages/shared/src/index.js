@@ -69,8 +69,10 @@ import BinarySelect from './components/Select/BinarySelect';
 import NavigationButtons from './components/Buttons/NavigationButtons';
 import InputSearch from './components/Input/InputSearch';
 import ButtonFileDownload from './components/Buttons/ButtonFileDownload';
+import getParentUserById from './utils/handlers/getParentUserById';
 
 export {
+  getParentUserById,
   ButtonFileDownload,
   InputSearch,
   NavigationButtons,

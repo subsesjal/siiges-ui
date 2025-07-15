@@ -19,6 +19,7 @@ import {
 import getAsignaturas from '@siiges-ui/instituciones/src/utils/getAsignaturas';
 import CicloEscolarModal from './Modals/CicloEscolarModal';
 import GruposModal from '../../utils/GruposModal';
+import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 const LOCAL_STORAGE_KEY = 'inscripcionFormState';
 
@@ -38,7 +39,8 @@ export default function InscripcionForm({
   const [open, setOpen] = useState(false);
   const [openGrupos, setOpenGrupos] = useState(false);
 
-  const isRepresentante = session.rol === 'representante';
+  const roles = ['representante', 'ce_ies'];
+  const isRepresentante = roles.includes(session.rol);
 
   const initialState = typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_KEY)
     ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
@@ -254,11 +256,19 @@ export default function InscripcionForm({
   };
 
   useEffect(() => {
-    if (isRepresentante && instituciones?.length) {
-      const institution = instituciones.find(({ usuarioId }) => usuarioId === session.id);
-      if (institution) handleInstitucionChange(institution.id);
-    }
-  }, [isRepresentante, instituciones]);
+    const asignarInstitucionDesdeSesion = async () => {
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones,
+        session,
+      });
+
+      if (institucionId) {
+        handleInstitucionChange(institucionId);
+      }
+    };
+
+    asignarInstitucionDesdeSesion();
+  }, [instituciones, session]);
 
   useEffect(() => {
     if (fetchGruposTrigger) {

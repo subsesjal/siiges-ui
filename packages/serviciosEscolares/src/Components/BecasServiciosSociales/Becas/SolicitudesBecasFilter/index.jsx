@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Select, Context, getData } from '@siiges-ui/shared';
+import { Select, Context } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import {
   getInstituciones,
@@ -8,6 +8,7 @@ import {
   getProgramas,
 } from '@siiges-ui/instituciones';
 import getBecasByPrograma from '@siiges-ui/instituciones/src/utils/getProgramas';
+import getInstitucionIdFromSession from '../../../utils/getInstitucionId';
 
 export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInstitucion }) {
   const { setNoti, session, setLoading } = useContext(Context);
@@ -35,7 +36,8 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
   const isIes = session.rol === 'becas_ies';
-  const isRepresentante = session.rol === 'representante';
+  const roles = ['representante', 'ce_ies'];
+  const isRepresentante = roles.includes(session.rol);
 
   const fetchSolicitudesBecas = (programaId) => {
     getBecasByPrograma(programaId, (error, data) => {
@@ -63,25 +65,27 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
   };
 
   useEffect(() => {
-    if (!instituciones?.length) return;
+    const asignarInstitucionDesdeSesion = async () => {
+      if (!instituciones?.length) return;
 
-    const findInstitutionById = (id) => instituciones.find(({ usuarioId }) => usuarioId === id)?.id || '';
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones,
+        session,
+      });
 
-    if (isIes) {
-      const fetchData = async () => {
-        try {
-          const response = await getData({ endpoint: `/usuarios/secundario/${session.id}` });
-          setSelectedInstitucion(findInstitutionById(response.data.id));
-        } catch (error) {
-          console.error('Error fetching users:', error);
-          setSelectedInstitucion('');
-        }
-      };
-      fetchData();
-    } else if (isRepresentante) {
-      setSelectedInstitucion(findInstitutionById(session.id));
-    }
-  }, [isIes, isRepresentante, instituciones, session.id]);
+      if (institucionId) {
+        setSelectedInstitucion(institucionId);
+      } else if (isRepresentante || isIes) {
+        setNoti({
+          open: true,
+          message: '¡No se encontró una institución con nombre autorizado asociada al usuario!',
+          type: 'error',
+        });
+      }
+    };
+
+    asignarInstitucionDesdeSesion();
+  }, [instituciones, session]);
 
   const handleProgramaChange = (event) => {
     const programaId = event.target.value;
@@ -196,7 +200,7 @@ export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInsti
               .sort((a, b) => a.nombre.localeCompare(b.nombre)) || []
           }
           onChange={(event) => setSelectedInstitucion(event.target.value)}
-          disabled={isIes && selectedInstitucion}
+          disabled={(isIes || isRepresentante) && selectedInstitucion}
         />
       </Grid>
       <Grid item xs={4}>
