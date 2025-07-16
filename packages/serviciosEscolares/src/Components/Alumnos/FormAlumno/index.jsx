@@ -194,7 +194,7 @@ export default function FormAlumno({ type, alumno, setId }) {
                 options={campo.options}
                 onChange={handleOnChange}
                 disabled={
-                  campo.id === 'situacionId' && !(type === 'edit')
+                  campo.id === 'situacionId' && !(type === 'edit' && !ifRepresentantes)
                 }
               />
             )}
