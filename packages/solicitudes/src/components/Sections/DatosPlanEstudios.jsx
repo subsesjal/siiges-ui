@@ -87,8 +87,9 @@ export default function DatosPlanEstudios({ disabled, type }) {
   const periodo = [
     { id: 1, nombre: 'Semestral' },
     { id: 2, nombre: 'Cuatrimestral' },
-    { id: 3, nombre: 'Semestral curriculum flexible' },
-    { id: 4, nombre: 'Cuatrimestral curriculum flexible' },
+    { id: 3, nombre: 'Anual' },
+    { id: 4, nombre: 'Semestral curriculum flexible' },
+    { id: 5, nombre: 'Cuatrimestral curriculum flexible' },
   ];
 
   const turno = [
@@ -215,7 +216,6 @@ export default function DatosPlanEstudios({ disabled, type }) {
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
             errorMessage={error.antecedenteAcademico}
-            textValue
             required
             disabled={isDisabled}
           />
