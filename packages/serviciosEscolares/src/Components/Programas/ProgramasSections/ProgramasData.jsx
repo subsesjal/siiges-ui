@@ -3,10 +3,11 @@ import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import ProgramasPDF from '../../utils/ProgramasPDF';
 
-export default function ProgramasData({ programa, id }) {
+export default function ProgramasData({ programa }) {
   if (!programa) {
     return <div>Cargando...</div>;
   }
+
   const opciones = {
     year: 'numeric',
     month: 'long',
@@ -87,15 +88,15 @@ export default function ProgramasData({ programa, id }) {
           </Grid>
         ))}
       </Grid>
-      <ProgramasPDF id={id} />
+      <ProgramasPDF id={programa.solicitudId} />
     </>
   );
 }
 
 ProgramasData.propTypes = {
-  id: PropTypes.number.isRequired,
   programa: PropTypes.shape({
     id: PropTypes.number,
+    solicitudId: PropTypes.number,
     acuerdoRvoe: PropTypes.string,
     nombre: PropTypes.string,
     nivel: PropTypes.string,
