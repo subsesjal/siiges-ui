@@ -2,7 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import {
-  Select, Input, ButtonsForm, Context,
+  Select,
+  Input,
+  ButtonsForm,
+  Context,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import {
@@ -14,6 +17,7 @@ import {
   nacionalidad,
 } from './dataAlumnos';
 import alumnosService from '../../utils/alumnosService';
+import SituacionSelect from '../../utils/SituacionSelect';
 
 export default function FormAlumno({ type, alumno, setId }) {
   const router = useRouter();
@@ -44,7 +48,7 @@ export default function FormAlumno({ type, alumno, setId }) {
         ...prevForm,
         sexo: findId(generos, 'sexo'),
         nacionalidad: findId(nacionalidad, 'nacionalidad'),
-        situacionId: alumno.situacionId ? alumno.situacionId : '',
+        situacionId: alumno.situacionId || '',
       }));
     }
     if (ifRepresentantes) {
@@ -82,19 +86,6 @@ export default function FormAlumno({ type, alumno, setId }) {
       return false;
     }
 
-    if (name === 'situacionId' && ifRepresentantes && (value === 1 || value === 3)) {
-      setNoti({
-        open: true,
-        message: '¡Solo puede seleccionar Situación: Inactivo o Baja.!',
-        type: 'error',
-      });
-      setForm((prevForm) => ({
-        ...prevForm,
-        situacionId: alumno?.situacionId,
-      }));
-      return false;
-    }
-
     return true;
   };
 
@@ -103,6 +94,7 @@ export default function FormAlumno({ type, alumno, setId }) {
     const isValid = validator(name, value);
     if (isValid) {
       setForm({ ...form, [name]: value.toString().trim() });
+      setFormSelect({ ...formSelect, [name]: value });
     }
   };
 
@@ -163,6 +155,54 @@ export default function FormAlumno({ type, alumno, setId }) {
     }
   };
 
+  const renderCampo = (campo) => {
+    const value = formSelect?.[campo.id] || '';
+    const errorMessage = getErrorMessage(campo.id);
+
+    if (campo.type === 'text' || campo.type === 'date') {
+      return (
+        <Input
+          id={campo.id}
+          label={campo.label}
+          name={campo.id}
+          auto={campo.id}
+          onChange={handleOnChange}
+          value={form?.[campo.id] || alumno?.[campo.id]}
+          type={campo.type}
+          disabled={campo.disabled}
+          errorMessage={errorMessage}
+        />
+      );
+    }
+
+    if (campo.id === 'situacionId') {
+      return (
+        <SituacionSelect
+          title={campo.label}
+          options={campo.options}
+          disabled={!(type === 'edit')}
+          ifRepresentantes={ifRepresentantes}
+          name={campo.id}
+          value={value}
+          onChange={handleOnChange}
+          errorMessage={errorMessage}
+        />
+      );
+    }
+
+    return (
+      <Select
+        title={campo.label}
+        options={campo.options}
+        disabled={campo.disabled}
+        name={campo.id}
+        value={value}
+        onChange={handleOnChange}
+        errorMessage={errorMessage}
+      />
+    );
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <Typography variant="body1">
@@ -174,30 +214,7 @@ export default function FormAlumno({ type, alumno, setId }) {
       <Grid container spacing={2}>
         {campos.map((campo) => (
           <Grid item xs={4} key={campo.id}>
-            {campo.type === 'text' || campo.type === 'date' ? (
-              <Input
-                id={campo.id}
-                label={campo.label}
-                name={campo.id}
-                auto={campo.id}
-                onChange={handleOnChange}
-                value={form?.[campo.id] || alumno?.[campo.id]}
-                type={campo.type}
-                disabled={campo.disabled}
-                errorMessage={getErrorMessage(campo.id)}
-              />
-            ) : (
-              <Select
-                title={campo.label}
-                name={campo.id}
-                value={formSelect?.[campo.id] || ''}
-                options={campo.options}
-                onChange={handleOnChange}
-                disabled={
-                  campo.id === 'situacionId' && !(type === 'edit' && !ifRepresentantes)
-                }
-              />
-            )}
+            {renderCampo(campo)}
           </Grid>
         ))}
 
@@ -236,7 +253,7 @@ FormAlumno.propTypes = {
   alumno: PropTypes.shape({
     id: PropTypes.number,
     fechaRegistro: PropTypes.string,
-    situacionId: PropTypes.string,
+    situacionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     search: PropTypes.string,
   }).isRequired,
 };
