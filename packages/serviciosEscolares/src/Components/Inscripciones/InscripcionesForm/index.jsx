@@ -322,8 +322,6 @@ export default function InscripcionForm({
     state.selectedGrupo,
   ]);
 
-  console.log(fetchGruposTrigger);
-
   return (
     <>
       <Grid container spacing={2} alignItems="center">
