@@ -112,7 +112,6 @@ export default function CicloEscolarModal({
             textValue
             onChange={handleFormCicloOnChange}
           />
-
         </Grid>
         <Grid item xs={8}>
           <Input
