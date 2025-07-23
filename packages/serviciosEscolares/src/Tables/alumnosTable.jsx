@@ -10,7 +10,7 @@ const columnsAlumnos = (onDeleteSuccess) => [
   { field: 'apellidoMaterno', headerName: 'Segundo Apellido', width: 200 },
   { field: 'nombre', headerName: 'Nombre', width: 200 },
   { field: 'situacion', headerName: 'Situación', width: 120 },
-  { field: 'estatus', headerName: 'Estatus', width: 120 },
+  { field: 'validacion', headerName: 'Validación', width: 120 },
   {
     field: 'actions',
     headerName: 'Acciones',
