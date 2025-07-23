@@ -8,7 +8,7 @@ import {
 import PropTypes from 'prop-types';
 import React from 'react';
 import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
-import postCiclosEscolares from './postCiclosEscolares';
+import postCiclosEscolares from './PostCiclosEscolares';
 
 const nombresCiclos = [
   { id: 1, nombre: '2015A' },
@@ -40,6 +40,8 @@ const nombresCiclos = [
   { id: 27, nombre: '2023C' },
   { id: 28, nombre: '2024A' },
   { id: 29, nombre: '2024B' },
+  { id: 30, nombre: '2024C' },
+  { id: 31, nombre: '2025A' },
 ];
 
 export default function CiclosEscolaresModal({
