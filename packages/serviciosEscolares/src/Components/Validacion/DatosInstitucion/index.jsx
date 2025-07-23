@@ -40,6 +40,7 @@ export default function DatosInstitucion({ alumno }) {
     fechaValidacion: dayjs(),
     usuarioId: session?.id,
     tipoValidacionId: '',
+    observaciones: '',
   });
   const [errors, setErrors] = useState({});
   const [editionDisabled, setEditionDisabled] = useState(false);
@@ -98,6 +99,7 @@ export default function DatosInstitucion({ alumno }) {
               ? dayjs(validation.fechaValidacion).format('YYYY-MM-DDTHH:mm:ss')
               : dayjs().format('YYYY-MM-DDTHH:mm:ss'),
             tipoValidacionId: validation.tipoValidacionId || '',
+            observaciones: validation.observaciones || '',
           }));
         }
       };
