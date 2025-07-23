@@ -57,6 +57,8 @@ export default function CicloEscolarModal({
     { id: 27, nombre: '2023C' },
     { id: 28, nombre: '2024A' },
     { id: 29, nombre: '2024B' },
+    { id: 30, nombre: '2024C' },
+    { id: 31, nombre: '2025A' },
   ];
 
   const handleFormCicloOnChange = (event) => {
@@ -110,6 +112,7 @@ export default function CicloEscolarModal({
             textValue
             onChange={handleFormCicloOnChange}
           />
+
         </Grid>
         <Grid item xs={8}>
           <Input
