@@ -69,10 +69,30 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
           />
           {menuDown && (
             <div style={{ position: 'relative' }}>
-              <IconButton color="inherit" onClick={handleClick}>
-                <Typography variant="subtitle1">
+              <IconButton
+                color="inherit"
+                onClick={handleClick}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  borderRadius: '10px',
+                  px: 2,
+                  py: 1,
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                  },
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: '#fff', mr: 1 }}
+                >
                   {options.find((opt) => opt.id === section)?.nombre || 'Áreas'}
                 </Typography>
+                <span style={{
+                  borderLeft: '4px solid transparent', borderRight: '4px solid transparent', borderTop: '6px solid white', display: 'inline-block',
+                }}
+                />
               </IconButton>
               <Menu
                 anchorEl={anchorEl}
@@ -108,12 +128,25 @@ export default function MainNavbar({ menuSwitch, section, setSection }) {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
                 {options.map((option) => (
-                  <MenuItem
-                    key={option.id}
-                    onClick={() => handleClose(option.id)}
-                  >
-                    {option.nombre}
-                  </MenuItem>
+                  option.externalLink ? (
+                    <MenuItem
+                      key={option.id}
+                      component="a"
+                      href={option.externalLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setAnchorEl(null)}
+                    >
+                      {option.nombre}
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      key={option.id}
+                      onClick={() => handleClose(option.id)}
+                    >
+                      {option.nombre}
+                    </MenuItem>
+                  )
                 ))}
               </Menu>
             </div>
