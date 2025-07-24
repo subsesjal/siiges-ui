@@ -19,8 +19,9 @@ export default function SituacionSelect({
   name,
   title,
 }) {
+  const REPRESENTANTES_OPTION_ID = 4;
   const filteredOptions = ifRepresentantes
-    ? options.filter((opt) => opt.id === 4 || opt.id === value)
+    ? options.filter((opt) => opt.id === REPRESENTANTES_OPTION_ID || opt.id === value)
     : options;
 
   return (

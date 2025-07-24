@@ -94,7 +94,10 @@ export default function FormAlumno({ type, alumno, setId }) {
     const isValid = validator(name, value);
     if (isValid) {
       setForm({ ...form, [name]: value.toString().trim() });
-      setFormSelect({ ...formSelect, [name]: value });
+      const field = campos.find((campo) => campo.id === name);
+      if (field?.type === 'select') {
+        setFormSelect({ ...formSelect, [name]: value });
+      }
     }
   };
 
