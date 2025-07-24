@@ -25,6 +25,7 @@ export default function GruposModal({
   data,
   params,
   onSuccess,
+  setFetchGrupos,
 }) {
   const title = type === 'new' ? 'Agregar Grupo' : 'Modificar Grupo';
   const { setNoti, setLoading } = useContext(Context);
@@ -41,6 +42,7 @@ export default function GruposModal({
       }
 
       if (result) {
+        setFetchGrupos(true);
         setLoading(false);
       }
 
@@ -144,6 +146,7 @@ export default function GruposModal({
 
 GruposModal.propTypes = {
   onSuccess: PropTypes.func.isRequired,
+  setFetchGrupos: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   params: PropTypes.shape({
     cicloEscolarId: PropTypes.number,

@@ -21,12 +21,16 @@ const baseUrl = process.env.NEXT_PUBLIC_URL;
 export default function titulacion({
   programaId,
   id,
-  disabled,
   type,
 }) {
   const [programa, setPrograma] = useState({});
   const [url, setUrl] = useState(null);
-  const { setNoti } = useContext(Context);
+  const { setNoti, session } = useContext(Context);
+  const [fileDisabled, setFileDisabled] = useState(false);
+
+  useEffect(() => {
+    setFileDisabled(['representante', 'ce_ies'].includes(session?.rol));
+  }, [session?.rol]);
 
   const fileData = {
     entidadId: id,
@@ -119,7 +123,7 @@ export default function titulacion({
           id={id}
           url={url}
           setUrl={setUrl}
-          disabled={disabled}
+          disabled={fileDisabled}
         />
       </Grid>
       {url && (
@@ -150,7 +154,6 @@ export default function titulacion({
 titulacion.propTypes = {
   programaId: PropTypes.number.isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  disabled: PropTypes.bool,
   type: PropTypes.string,
 };
 
