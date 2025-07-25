@@ -94,7 +94,7 @@ export default function ModuleHeader({
   };
 
   useEffect(() => {
-    setDisabled(id !== undefined);
+    setDisabled(id === undefined);
   }, [id]);
 
   const showFinishButton = isEditOrView !== 'consultar' && isFinalModule;
