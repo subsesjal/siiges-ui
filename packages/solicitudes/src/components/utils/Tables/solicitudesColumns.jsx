@@ -9,11 +9,11 @@ const columnsSolicitudes = (rol) => [
     field: 'estatus', headerName: 'Estatus ID', width: 80, hide: true,
   },
   { field: 'folio', headerName: 'Folio', width: 125 },
-  { field: 'studyPlan', headerName: 'Plan de estudios', width: 180 },
-  { field: 'estatusSolicitudId', headerName: 'Estatus', width: 275 },
-  { field: 'acuerdoRvoe', headerName: 'RVOE', width: 125 },
+  { field: 'studyPlan', headerName: 'Plan de estudios', width: 300 },
+  { field: 'estatusSolicitudId', headerName: 'Estatus', width: 300 },
+  { field: 'acuerdoRvoe', headerName: 'RVOE', width: 200 },
   {
-    field: 'institucion', headerName: 'Institución', width: 300, hide: rol === 'representante' || rol === 'gestor',
+    field: 'institucion', headerName: 'Institución', width: 400, hide: rol === 'representante' || rol === 'gestor',
   },
   { field: 'plantel', headerName: 'Plantel', width: 300 },
   {

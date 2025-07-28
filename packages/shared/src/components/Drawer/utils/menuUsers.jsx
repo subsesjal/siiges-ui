@@ -12,7 +12,7 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import SchoolIcon from '@mui/icons-material/School';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 
 const options = [
@@ -26,7 +26,13 @@ const options = [
     nombre: 'Servicios escolares',
     roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt'],
   },
-  { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
+  // { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
+  {
+    id: 4,
+    nombre: 'App de Titulación Electrónica',
+    roles: ['representante', 'ce_ies'],
+    externalLink: 'https://tituloelectronico.jalisco.gob.mx:8443/ies/login.jsp',
+  },
 ];
 
 const usersAdmin = ['admin', 'sicyt_editar'];
@@ -110,7 +116,7 @@ const panelMenuOptions = (rol) => [
     route: '/serviciosEscolares/titulacion',
     key: 'titulacion',
   },
-  {
+  /* {
     userId: 2,
     text: 'Otros Trámites',
     icon: <MoreHorizIcon />,
@@ -134,7 +140,7 @@ const panelMenuOptions = (rol) => [
       },
     ],
     key: 'otrosTramites',
-  },
+  }, */
   ...(rol !== 'ce_ies' ? [{
     userId: 2,
     text: 'Reportes',

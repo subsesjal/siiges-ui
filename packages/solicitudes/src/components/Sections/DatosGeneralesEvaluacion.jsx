@@ -33,9 +33,11 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
   const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
-    const modalidadSource = type === 'editar' ? solicitudes?.programa?.modalidadId : query.modalidad;
+    const modalidadSource = (type === 'editar' || type === 'consultar')
+      ? solicitudes?.programa?.modalidadId
+      : query.modalidad;
 
-    if (type === 'editar' && solicitudes?.programa?.evaluacion?.id) {
+    if ((type === 'editar' || type === 'consultar') && solicitudes?.programa?.evaluacion?.id) {
       setForm((prevForm) => ({
         ...prevForm,
         modalidad: modalidadSource,
@@ -52,7 +54,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
       }));
     }
 
-    if (type === 'editar' && form.programaId) {
+    if ((type === 'editar' || type === 'consultar') && form.programaId) {
       const fileData = {
         entidadId: form.programaId,
         tipoEntidad: 'PROGRAMA',
@@ -60,7 +62,7 @@ export default function DatosGeneralesEvaluacion({ disabled, id, type }) {
       };
       GetFile(fileData, setUrl);
     }
-  }, [type, solicitudes, form.programaId, query.modalidad]);
+  }, [type, solicitudes, form.programaId, query]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
