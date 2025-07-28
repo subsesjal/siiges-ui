@@ -29,7 +29,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
   const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
-    if (type === 'editar' && id) {
+    if ((type === 'editar' || type === 'consultar') && id) {
       fileData.forEach((fileInfo, index) => {
         GetFile(fileInfo, (url, err) => {
           if (!err) {
