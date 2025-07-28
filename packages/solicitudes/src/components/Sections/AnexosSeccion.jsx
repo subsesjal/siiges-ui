@@ -180,8 +180,8 @@ export default function AnexosSeccion({ disabled, id, type }) {
             tipoEntidad="SOLICITUD"
             tipoDocumento="PROGRAMA_SUPERACION"
             id={id}
-            url={fileURLs[11] || ''}
-            setUrl={(url) => handleFileLoaded(11, url)}
+            url={fileURLs[10] || ''}
+            setUrl={(url) => handleFileLoaded(10, url)}
             disabled={isDisabled}
             label="Programa de superación"
           />
