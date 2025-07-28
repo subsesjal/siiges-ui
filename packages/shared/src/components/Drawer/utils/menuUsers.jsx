@@ -26,7 +26,7 @@ const options = [
     nombre: 'Servicios escolares',
     roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt'],
   },
-  { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
+  // { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
   {
     id: 4,
     nombre: 'App de Titulación Electrónica',
