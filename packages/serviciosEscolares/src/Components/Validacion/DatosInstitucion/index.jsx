@@ -387,6 +387,7 @@ export default function DatosInstitucion({ alumno }) {
           onChange={handleChange}
           onblur={handleBlur}
           errorMessage={errors.fechaValidacion}
+          type="datetime"
           required
         />
       </Grid>
