@@ -185,7 +185,10 @@ export default function PlanEstudios({
   );
   const {
     next, prev, section, position, porcentaje,
-  } = pagination(useState, sectionLength);
+  } = pagination(
+    useState,
+    sectionLength,
+  );
 
   useEffect(() => {
     const modalidadNumber = Number(modalidad);
@@ -224,7 +227,13 @@ export default function PlanEstudios({
               )}
               {section === 3 && <Ingreso disabled={isDisabled} type={type} />}
               {section === 4 && <Egreso disabled={isDisabled} type={type} />}
-              {section === 5 && <Curricula disabled={isDisabled} type={type} />}
+              {section === 5 && (
+                <Curricula
+                  disabled={isDisabled}
+                  type={type}
+                  programaId={programaId}
+                />
+              )}
               {section === 6 && (
                 <Asignaturas disabled={isDisabled} type={type} />
               )}
