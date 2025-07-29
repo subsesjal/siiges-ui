@@ -105,9 +105,13 @@ export default function FormAlumno({ type, alumno, setId }) {
 
   const validateFormBeforeSubmit = () => {
     let isValid = true;
+    const optionalFields = ['apellidoMaterno'];
 
     campos.forEach((field) => {
       const value = form?.[field.id] || alumno?.[field.id];
+
+      if (optionalFields.includes(field.id)) return;
+
       if (field.type !== 'select' && (!value || value.trim() === '')) {
         setNoti({
           open: true,
