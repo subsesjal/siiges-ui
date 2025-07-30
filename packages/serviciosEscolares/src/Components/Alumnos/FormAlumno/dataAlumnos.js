@@ -19,7 +19,7 @@ export const situaciones = [
 export const campos = [
   { id: 'nombre', label: 'Nombre', type: 'text' },
   { id: 'apellidoPaterno', label: 'Primer Apellido', type: 'text' },
-  { id: 'apellidoMaterno', label: 'Seundo Apellido', type: 'text' },
+  { id: 'apellidoMaterno', label: 'Segundo Apellido', type: 'text' },
   { id: 'fechaNacimiento', label: 'Fecha de nacimiento', type: 'date' },
   {
     id: 'sexo',
