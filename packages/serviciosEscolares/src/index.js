@@ -51,8 +51,10 @@ import alumnosService from './Components/utils/alumnosService';
 import DocumentosAlumnoTitulacion from './Components/Titulacion/FormAlumno/DocumentoAlumno';
 import Titulacion from './Components/Titulacion/FormAlumno/titulacion';
 import FormFoliosAsignados from './Components/FoliosAsignados/FormFoliosAsignados';
+import TitulosForm from './Components/Titulacion/TitulosForm/index';
 
 export {
+  TitulosForm,
   Titulacion,
   DocumentosAlumnoTitulacion,
   alumnosService,
