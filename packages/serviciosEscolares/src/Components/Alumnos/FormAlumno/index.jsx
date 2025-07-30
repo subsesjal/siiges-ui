@@ -6,6 +6,7 @@ import {
   Input,
   ButtonsForm,
   Context,
+  DefaultModal,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import {
@@ -29,7 +30,8 @@ export default function FormAlumno({ type, alumno, setId }) {
   });
   const [errorMail, setErrorMail] = useState('');
   const [errorCurp, setErrorCurp] = useState('');
-  const ifRepresentantes = (session.rol === 'representante' || session.rol === 'ce_ies');
+  const ifRepresentantes = session.rol === 'representante' || session.rol === 'ce_ies';
+  const [open, setOpen] = useState(false);
 
   const getErrorMessage = (campoId) => {
     if (campoId === 'correoPrimario') return errorMail;
@@ -103,8 +105,13 @@ export default function FormAlumno({ type, alumno, setId }) {
 
   const validateFormBeforeSubmit = () => {
     let isValid = true;
+    const optionalFields = ['apellidoMaterno'];
+
     campos.forEach((field) => {
       const value = form?.[field.id] || alumno?.[field.id];
+
+      if (optionalFields.includes(field.id)) return;
+
       if (field.type !== 'select' && (!value || value.trim() === '')) {
         setNoti({
           open: true,
@@ -114,16 +121,23 @@ export default function FormAlumno({ type, alumno, setId }) {
         isValid = false;
       }
     });
+
+    if (Number(formSelect?.situacionId) === 4) {
+      if (!form?.fechaBaja || !form?.observacionesBaja) {
+        setNoti({
+          open: true,
+          message: 'Debe llenar los campos de fecha y observaciones de baja.',
+          type: 'error',
+        });
+        isValid = false;
+      }
+    }
+
     return isValid;
   };
 
-  const saveButtonAction = async () => {
+  const actualSubmit = async () => {
     setLoading(true);
-    if (!validateFormBeforeSubmit()) {
-      setLoading(false);
-      return;
-    }
-
     try {
       const dataBody = setAndValidateFormData({ ...form, ...query }).formData;
       let response;
@@ -147,15 +161,54 @@ export default function FormAlumno({ type, alumno, setId }) {
           type: 'success',
         });
       }
-      setLoading(false);
     } catch (err) {
       setNoti({
         open: true,
         message: `¡Error al registrar alumno! ${err.message}`,
         type: 'error',
       });
+    } finally {
       setLoading(false);
     }
+  };
+
+  const handleConfirmSubmit = async () => {
+    setLoading(true);
+    if (!validateFormBeforeSubmit()) {
+      setLoading(false);
+      return;
+    }
+
+    if (Number(formSelect?.situacionId) === 4) {
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+
+    await actualSubmit();
+  };
+
+  const handleModalConfirm = async () => {
+    const fechaBaja = form?.fechaBaja || alumno?.fechaBaja;
+    const observacionesBaja = form?.observacionesBaja || alumno?.observacionesBaja;
+
+    if (!fechaBaja || !observacionesBaja) {
+      setNoti({
+        open: true,
+        message: 'Por favor complete la fecha y observaciones de baja.',
+        type: 'error',
+      });
+      return;
+    }
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      fechaBaja,
+      observacionesBaja,
+    }));
+
+    setOpen(false);
+    await actualSubmit();
   };
 
   const renderCampo = (campo) => {
@@ -211,7 +264,8 @@ export default function FormAlumno({ type, alumno, setId }) {
       <Typography variant="body1">
         ¡Nota importante!. El nombre del alumno se debe registrar tal y como
         aparece en el acta de nacimiento, en mayúsculas y en caso de tener
-        acentos, letra Ñ (poner N), diéresis o algún otro caracter especial, favor de omitirlos.
+        acentos, letra Ñ (poner N), diéresis o algún otro caracter especial,
+        favor de omitirlos.
       </Typography>
       <br />
       <Grid container spacing={2}>
@@ -239,13 +293,53 @@ export default function FormAlumno({ type, alumno, setId }) {
         <Grid item xs={9} />
         <Grid item xs={3}>
           <ButtonsForm
-            confirm={saveButtonAction}
+            confirm={handleConfirmSubmit}
             cancel={() => {
               router.back();
             }}
           />
         </Grid>
       </Grid>
+
+      <DefaultModal title="Baja de Alumno" open={open} setOpen={setOpen}>
+        <Typography>
+          Está por dar de baja este alumno, la baja deberá estar fundamentada
+          con reglamento. ¿Está usted seguro?
+        </Typography>
+        <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
+          <Grid item xs={12}>
+            <Input
+              id="fechaBaja"
+              label="Fecha de baja"
+              name="fechaBaja"
+              autoComplete="fechaBaja"
+              onChange={handleOnChange}
+              value={form?.fechaBaja || alumno?.fechaBaja || ''}
+              type="date"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Input
+              id="observacionesBaja"
+              label="Observaciones"
+              name="observacionesBaja"
+              autoComplete="observacionesBaja"
+              multiline
+              rows={4}
+              onChange={handleOnChange}
+              value={form?.observacionesBaja || alumno?.observacionesBaja || ''}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <ButtonsForm
+              confirm={handleModalConfirm}
+              cancel={() => {
+                setOpen(false);
+              }}
+            />
+          </Grid>
+        </Grid>
+      </DefaultModal>
     </div>
   );
 }
@@ -256,6 +350,8 @@ FormAlumno.propTypes = {
   alumno: PropTypes.shape({
     id: PropTypes.number,
     fechaRegistro: PropTypes.string,
+    fechaBaja: PropTypes.string,
+    observacionesBaja: PropTypes.string,
     situacionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     search: PropTypes.string,
   }).isRequired,
