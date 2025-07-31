@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { DropzoneDialog } from 'mui-file-dropzone';
 import catalogoTitulos from '../../Tables/catalogoTitulosTable';
 
-export default function TitulosTable({ titulos }) {
+export default function TitulosTable({ titulos, reloadTitulos }) {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState([]);
   const { setNoti } = useContext(Context);
@@ -25,13 +25,18 @@ export default function TitulosTable({ titulos }) {
       formData.append('tipoDocumento', 'TITULO_ELECTRONICO_XML');
       formData.append('entidadId', 0);
 
-      await SubmitDocument(formData);
+      const result = await SubmitDocument(formData, setFiles);
 
-      setNoti({
-        open: true,
-        message: '¡XML cargado con éxito!',
-        type: 'success',
-      });
+      if (result?.success !== false) {
+        reloadTitulos();
+        setNoti({
+          open: true,
+          message: '¡XML cargado con éxito!',
+          type: 'success',
+        });
+      } else {
+        throw new Error('Error inesperado al subir el XML');
+      }
     } catch (error) {
       setNoti({
         open: true,
@@ -43,6 +48,7 @@ export default function TitulosTable({ titulos }) {
       setFiles([]);
     }
   };
+
   return (
     <Grid container sx={{ marginTop: 2 }}>
       <Grid item xs={12}>
@@ -58,7 +64,7 @@ export default function TitulosTable({ titulos }) {
       <DataTable
         rows={titulos}
         columns={catalogoTitulos}
-        title="Tabla de alumnos"
+        title="Catálogo de títulos Electrónicos"
       />
       <DropzoneDialog
         open={open}
@@ -86,4 +92,5 @@ export default function TitulosTable({ titulos }) {
 
 TitulosTable.propTypes = {
   titulos: PropTypes.arrayOf(PropTypes.string).isRequired,
+  reloadTitulos: PropTypes.func.isRequired,
 };

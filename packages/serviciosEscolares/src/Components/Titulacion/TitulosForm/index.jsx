@@ -9,7 +9,9 @@ import {
 } from '@siiges-ui/instituciones';
 import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
-export default function TitulosForm({ setTitulos, setPrograma, setLoading }) {
+export default function TitulosForm({
+  setTitulos, setPrograma, setLoading, reloadFlag,
+}) {
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,
@@ -217,7 +219,13 @@ export default function TitulosForm({ setTitulos, setPrograma, setLoading }) {
       fetchTitulos(selectedPrograma);
       setPrograma(selectedPrograma);
     }
-  }, [selectedPrograma]);
+  }, [selectedPrograma, programas]);
+
+  useEffect(() => {
+    if (selectedPrograma) {
+      fetchTitulos(selectedPrograma);
+    }
+  }, [reloadFlag]);
 
   return (
     <Grid container spacing={2} alignItems="center">
@@ -259,4 +267,5 @@ TitulosForm.propTypes = {
   setTitulos: PropTypes.func.isRequired,
   setPrograma: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
+  reloadFlag: PropTypes.func.isRequired,
 };
