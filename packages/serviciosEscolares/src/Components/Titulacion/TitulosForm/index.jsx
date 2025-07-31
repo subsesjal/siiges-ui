@@ -1,13 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Select, Context } from '@siiges-ui/shared';
+import { Select, Context, getData } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import {
   getInstituciones,
   getPlantelesByInstitucion,
   getProgramas,
 } from '@siiges-ui/instituciones';
-import getAlumnosByPrograma from '@siiges-ui/instituciones/src/utils/getAlumnosByPrograma';
 import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 export default function TitulosForm({ setTitulos, setPrograma, setLoading }) {
@@ -18,15 +17,18 @@ export default function TitulosForm({ setTitulos, setPrograma, setLoading }) {
   });
   const { setNoti, session } = useContext(Context);
 
-  const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('alumnos_selectedInstitucion')
+  const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined'
+    && localStorage.getItem('alumnos_selectedInstitucion')
     ? localStorage.getItem('alumnos_selectedInstitucion')
     : ''));
 
-  const [selectedPlantel, setSelectedPlantel] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('alumnos_selectedPlantel')
+  const [selectedPlantel, setSelectedPlantel] = useState(() => (typeof window !== 'undefined'
+    && localStorage.getItem('alumnos_selectedPlantel')
     ? localStorage.getItem('alumnos_selectedPlantel')
     : ''));
 
-  const [selectedPrograma, setSelectedPrograma] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('alumnos_selectedPrograma')
+  const [selectedPrograma, setSelectedPrograma] = useState(() => (typeof window !== 'undefined'
+    && localStorage.getItem('alumnos_selectedPrograma')
     ? localStorage.getItem('alumnos_selectedPrograma')
     : ''));
 
@@ -35,33 +37,77 @@ export default function TitulosForm({ setTitulos, setPrograma, setLoading }) {
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
 
-  const fetchTitulos = (programaId) => {
-    getAlumnosByPrograma(programaId, (error, data) => {
-      if (error) {
+  const formatFecha = (fechaStr) => {
+    const date = new Date(fechaStr);
+    if (Number.isNaN(date)) return '';
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const fetchTitulos = async (programaId) => {
+    const programaSeleccionado = programas.find(
+      (programa) => programa.id === Number(programaId),
+    );
+
+    if (!programaSeleccionado) {
+      setNoti({
+        open: true,
+        message: 'Programa no encontrado',
+        type: 'warning',
+      });
+      return;
+    }
+
+    const { rvoe } = programaSeleccionado;
+
+    if (!rvoe) {
+      setNoti({
+        open: true,
+        message: 'Este programa no tiene acuerdo RVOE',
+        type: 'warning',
+      });
+      return;
+    }
+
+    try {
+      const response = await getData({
+        endpoint: '/titulosElectronicos',
+        query: `?numeroRvoe=${rvoe}`,
+      });
+
+      if (response.statusCode === 200) {
+        const titulosFiltrados = response.data.map((item) => ({
+          id: item.id,
+          folioControl: item.folioControl,
+          nombreCompleto: `${item.nombre} ${item.primerApellido} ${item.segundoApellido}`,
+          curp: item.curp,
+          nombreCarrera: item.nombreCarrera,
+          fechaExpedicion: formatFecha(item.fechaExpedicion),
+        }));
+
+        setTitulos(titulosFiltrados);
+      } else {
         setNoti({
           open: true,
-          message: `¡Error al obtener alumnos!: ${error.message}`,
-          type: 'error',
+          message: 'No se encontraron títulos',
+          type: 'warning',
         });
-        setTitulos([]);
-      } else {
-        const transformedAlumnos = data.alumnos.map((alumno) => ({
-          id: alumno.id,
-          matricula: alumno.matricula,
-          apellidoPaterno: alumno.persona.apellidoPaterno,
-          apellidoMaterno: alumno.persona.apellidoMaterno,
-          nombre: alumno.persona.nombre,
-          situacion: alumno.situacion.nombre,
-          validacion: alumno.validacion?.situacionValidacion?.nombre || 'Sin validar',
-        }));
-        setTitulos(transformedAlumnos);
       }
-    });
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `Error al obtener titulos: ${error}`,
+        type: 'error',
+      });
+    }
   };
 
   const institucionesOrdenadas = instituciones?.slice().sort(
     (a, b) => a.nombre.localeCompare(b.nombre),
-  ) || [];
+  )
+    || [];
 
   useEffect(() => {
     const asignarInstitucionDesdeSesion = async () => {
@@ -102,7 +148,8 @@ export default function TitulosForm({ setTitulos, setPrograma, setLoading }) {
         const transformedProgramas = data.programas
           .map((programa) => ({
             id: programa.id,
-            nombre: `${programa.nombre} ${programa.acuerdoRvoe}`,
+            nombre: `${programa.nombre} | ${programa.acuerdoRvoe}`,
+            rvoe: programa.acuerdoRvoe,
           }))
           .sort((a, b) => a.nombre.localeCompare(b.nombre));
 

@@ -1,4 +1,4 @@
-import { TitulosForm, TitulacionTable } from '@siiges-ui/serviciosescolares';
+import { TitulosForm, TitulosTable } from '@siiges-ui/serviciosescolares';
 import { Context, Layout } from '@siiges-ui/shared';
 import { Divider } from '@mui/material';
 import React, { useState, useContext } from 'react';
@@ -16,7 +16,7 @@ export default function Titulacion() {
         setLoading={setLoading}
       />
       <Divider sx={{ marginTop: 2 }} />
-      {titulos && <TitulacionTable titulos={titulos} programa={programa} />}
+      {titulos && <TitulosTable titulos={titulos} programa={programa} />}
     </Layout>
   );
 }
