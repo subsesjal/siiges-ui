@@ -58,75 +58,88 @@ const solicitudesMenu = (rol) => ({
   key: 'solicitudes',
 });
 
-const panelMenuOptions = (rol) => [
-  ...(rol !== 'sicyt_editar' ? [{
-    userId: 1,
-    text: textPanelMenuOptions(rol).usuarios,
-    icon: <GroupIcon />,
-    route: '/usuarios',
-    key: 'users',
-  }] : []),
-  {
-    userId: 1,
-    text: textPanelMenuOptions(rol).instituciones,
-    icon: <BusinessIcon />,
-    route: routeInstitucionesRol(rol),
-    key: 'intitutions',
-  },
-  solicitudesMenu(rol),
-  {
-    userId: 2,
-    text: 'Programas',
-    icon: <AssignmentIcon />,
-    route: '/serviciosEscolares/programas',
-    key: 'programas',
-  },
-  {
-    userId: 2,
-    text: 'Alumnos',
-    icon: <PersonIcon />,
-    route: '/serviciosEscolares/alumnos',
-    key: 'alumnos',
-  },
-  {
-    userId: 2,
-    text: 'Validación',
-    icon: <AssignmentTurnedInIcon />,
-    route: '/serviciosEscolares/validacion',
-    key: 'validacion',
-  },
-  {
-    userId: 2,
-    text: 'Inscripción',
-    icon: <PersonAddIcon />,
-    route: '/serviciosEscolares/inscripcion',
-    key: 'inscripcion',
-  },
-  {
-    userId: 2,
-    text: 'Acreditación',
-    icon: <HistoryEduIcon />,
-    route: '/serviciosEscolares/acreditacion',
-    key: 'acreditacion',
-  },
-  {
-    userId: 2,
-    text: 'Titulación',
-    icon: <SchoolIcon />,
-    type: 'dropdown',
-    options: [
-      {
-        text: 'Egresados',
-        route: '/serviciosEscolares/egresados',
-      },
-      {
-        text: 'Catálogo de Títulos Electrónicos',
-        route: '/serviciosEscolares/titulacion',
-      },
-    ],
-    key: 'titulacion',
-  },
-  /* {
+const panelMenuOptions = (rol) => {
+  const canSeeTitulacion = [
+    'admin',
+    'representante',
+    'ce_ies',
+    'ce_sicyt',
+  ].includes(rol);
+
+  return [
+    ...(rol !== 'sicyt_editar'
+      ? [
+        {
+          userId: 1,
+          text: textPanelMenuOptions(rol).usuarios,
+          icon: <GroupIcon />,
+          route: '/usuarios',
+          key: 'users',
+        },
+      ]
+      : []),
+    {
+      userId: 1,
+      text: textPanelMenuOptions(rol).instituciones,
+      icon: <BusinessIcon />,
+      route: routeInstitucionesRol(rol),
+      key: 'intitutions',
+    },
+    solicitudesMenu(rol),
+    {
+      userId: 2,
+      text: 'Programas',
+      icon: <AssignmentIcon />,
+      route: '/serviciosEscolares/programas',
+      key: 'programas',
+    },
+    {
+      userId: 2,
+      text: 'Alumnos',
+      icon: <PersonIcon />,
+      route: '/serviciosEscolares/alumnos',
+      key: 'alumnos',
+    },
+    {
+      userId: 2,
+      text: 'Validación',
+      icon: <AssignmentTurnedInIcon />,
+      route: '/serviciosEscolares/validacion',
+      key: 'validacion',
+    },
+    {
+      userId: 2,
+      text: 'Inscripción',
+      icon: <PersonAddIcon />,
+      route: '/serviciosEscolares/inscripcion',
+      key: 'inscripcion',
+    },
+    {
+      userId: 2,
+      text: 'Acreditación',
+      icon: <HistoryEduIcon />,
+      route: '/serviciosEscolares/acreditacion',
+      key: 'acreditacion',
+    },
+    ...(canSeeTitulacion
+      ? [
+        {
+          userId: 2,
+          text: 'Titulación',
+          icon: <SchoolIcon />,
+          type: 'dropdown',
+          options: [
+            { text: 'Egresados', route: '/serviciosEscolares/egresados' },
+            {
+              text: 'Catálogo de Títulos Electrónicos',
+              route: '/serviciosEscolares/titulacion',
+            },
+          ],
+          key: 'titulacion',
+        },
+      ]
+      : []),
+    /* {
     userId: 2,
     text: 'Otros Trámites',
     icon: <MoreHorizIcon />,
@@ -151,46 +164,57 @@ const panelMenuOptions = (rol) => [
     ],
     key: 'otrosTramites',
   }, */
-  ...(rol !== 'ce_ies' ? [{
-    userId: 2,
-    text: 'Reportes',
-    icon: <AssignmentLateIcon />,
-    type: 'dropdown',
-    options: [
-      { text: 'Extraordinarios', route: '/serviciosEscolares/reporte/extraordinario' },
-      { text: 'Folios Asignados', route: '/serviciosEscolares/reporte/foliosAsignados' },
-    ],
-    key: 'reporte',
-  }] : []),
-  {
-    userId: 3,
-    text: 'Instituciones',
-    icon: <BusinessIcon />,
-    route: '/opds/instituciones',
-    key: 'intitutions',
-  },
-  {
-    userId: 3,
-    text: 'Órganos colegiados',
-    icon: <GroupsIcon />,
-    route: '/opds/organosColegiados',
-    key: 'organosColegiados',
-  },
-  {
-    userId: 3,
-    text: 'Fortalecimiento',
-    icon: <ArticleIcon />,
-    route: '/opds/fortalecimiento',
-    key: 'fortalecimeiento',
-  },
-  {
-    userId: 3,
-    text: 'Presupuesto',
-    icon: <RequestQuoteIcon />,
-    route: '/opds/presupuesto',
-    key: 'presupuesto',
-  },
-];
+    ...(rol !== 'ce_ies'
+      ? [
+        {
+          userId: 2,
+          text: 'Reportes',
+          icon: <AssignmentLateIcon />,
+          type: 'dropdown',
+          options: [
+            {
+              text: 'Extraordinarios',
+              route: '/serviciosEscolares/reporte/extraordinario',
+            },
+            {
+              text: 'Folios Asignados',
+              route: '/serviciosEscolares/reporte/foliosAsignados',
+            },
+          ],
+          key: 'reporte',
+        },
+      ]
+      : []),
+    {
+      userId: 3,
+      text: 'Instituciones',
+      icon: <BusinessIcon />,
+      route: '/opds/instituciones',
+      key: 'intitutions',
+    },
+    {
+      userId: 3,
+      text: 'Órganos colegiados',
+      icon: <GroupsIcon />,
+      route: '/opds/organosColegiados',
+      key: 'organosColegiados',
+    },
+    {
+      userId: 3,
+      text: 'Fortalecimiento',
+      icon: <ArticleIcon />,
+      route: '/opds/fortalecimiento',
+      key: 'fortalecimeiento',
+    },
+    {
+      userId: 3,
+      text: 'Presupuesto',
+      icon: <RequestQuoteIcon />,
+      route: '/opds/presupuesto',
+      key: 'presupuesto',
+    },
+  ];
+};
 
 const optionsMenuFilter = {
   jefe_inspector: [
@@ -300,8 +324,9 @@ const getOptionsRoles = (rol) => options.filter(({ roles }) => roles.includes(ro
 const optionsAdminMenuFilterRol = (rol) => {
   const user = getOptionsRoles(rol);
   const usersMenu = panelMenuOptions(rol);
-  const optionsMultiplerMenuFilter = user
-    .map(({ id }) => usersMenu.filter(({ userId }) => userId === id));
+  const optionsMultiplerMenuFilter = user.map(
+    ({ id }) => usersMenu.filter(({ userId }) => userId === id),
+  );
   return optionsMultiplerMenuFilter;
 };
 

@@ -10,7 +10,7 @@ import catalogoTitulos from '../../Tables/catalogoTitulosTable';
 export default function TitulosTable({ titulos, reloadTitulos }) {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState([]);
-  const { setNoti } = useContext(Context);
+  const { setNoti, session } = useContext(Context);
 
   const handleClose = () => setOpen(false);
 
@@ -49,18 +49,20 @@ export default function TitulosTable({ titulos, reloadTitulos }) {
     }
   };
 
+  const canUploadXml = ['admin', 'ce_sicyt'].includes(session?.rol);
+
   return (
     <Grid container sx={{ marginTop: 2 }}>
-      <Grid item xs={12}>
-        <ButtonSimple
-          align="right"
-          text="Cargar XML"
-          design="enviar"
-          onClick={() => {
-            setOpen(true);
-          }}
-        />
-      </Grid>
+      {canUploadXml && (
+        <Grid item xs={12}>
+          <ButtonSimple
+            align="right"
+            text="Cargar XML"
+            design="enviar"
+            onClick={() => setOpen(true)}
+          />
+        </Grid>
+      )}
       <DataTable
         rows={titulos}
         columns={catalogoTitulos}
