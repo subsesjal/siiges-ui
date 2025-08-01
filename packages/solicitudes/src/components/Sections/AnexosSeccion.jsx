@@ -4,34 +4,73 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
-export default function AnexosSeccion({ disabled, id, type }) {
+export default function AnexosSeccion({
+  disabled, id, type, institucionId,
+}) {
   const [fileURLs, setFileURLs] = useState(Array(11).fill(null));
-  const fileData = [
-    'IDENTIFICACION_REPRESENTANTE',
-    'COMPROBANTE_PAGO_RVOE',
-    'FOTOGRAFIA_INMUEBLE',
-    'CONSTANCIA_INFEJAL',
-    'LICENCIA_MUNICIPAL',
-    'DICTAMEN_IMPI',
-    'SECRETARIA_SALUD',
-    'COMPROBANTE_TELEFONO',
-    'PROYECTO_VINCULACION',
-    'PLAN_MEJORA',
-    'PROGRAMA_SUPERACION',
-  ].map((tipoDocumento) => ({
-    entidadId: id,
-    tipoEntidad: 'SOLICITUD',
-    tipoDocumento,
-  }));
-
   const isSectionDisabled = useSectionDisabled(20);
-
   const isDisabled = disabled || isSectionDisabled;
+
+  const tiposDocumentos = [
+    {
+      tipoDocumento: 'IDENTIFICACION_REPRESENTANTE',
+      label: 'Identificación oficial con fotografía',
+    },
+    {
+      tipoDocumento: 'COMPROBANTE_PAGO_RVOE',
+      label: 'Comprobante de pago',
+    },
+    {
+      tipoDocumento: 'FOTOGRAFIA_INMUEBLE',
+      label: 'Fotografías inmuebles',
+    },
+    {
+      tipoDocumento: 'CONSTANCIA_INFEJAL',
+      label: 'Constancia INFEJAL',
+    },
+    {
+      tipoDocumento: 'LICENCIA_MUNICIPAL',
+      label: 'Licencia municipal',
+    },
+    {
+      tipoDocumento: 'DICTAMEN_IMPI',
+      label: 'Dictamen del Instituto Mexicano de Propiedad Intelectual (IMPI)',
+    },
+    {
+      tipoDocumento: 'SECRETARIA_SALUD',
+      label:
+        'Aviso funcionamiento de Secretaría de Salud ó Carta bajo protesta de decir verdad de NO venta de alimentos.',
+    },
+    {
+      tipoDocumento: 'COMPROBANTE_TELEFONO',
+      label: 'Comprobante de línea telefónica',
+    },
+    {
+      tipoDocumento: 'PROYECTO_VINCULACION',
+      label: 'Proyecto de vinculación y movilidad',
+    },
+    {
+      tipoDocumento: 'PLAN_MEJORA',
+      label: 'Plan de mejora',
+    },
+    {
+      tipoDocumento: 'PROGRAMA_SUPERACION',
+      label: 'Programa de superación',
+    },
+  ];
+
+  const getEntidadData = (tipoDocumento) => {
+    if (tipoDocumento === 'DICTAMEN_IMPI') {
+      return { tipoEntidad: 'INSTITUCION', entidadId: institucionId };
+    }
+    return { tipoEntidad: 'SOLICITUD', entidadId: id };
+  };
 
   useEffect(() => {
     if ((type === 'editar' || type === 'consultar') && id) {
-      fileData.forEach((fileInfo, index) => {
-        GetFile(fileInfo, (url, err) => {
+      tiposDocumentos.forEach(({ tipoDocumento }, index) => {
+        const { tipoEntidad, entidadId } = getEntidadData(tipoDocumento);
+        GetFile({ tipoEntidad, tipoDocumento, entidadId }, (url, err) => {
           if (!err) {
             setFileURLs((currentURLs) => {
               const updatedURLs = [...currentURLs];
@@ -42,7 +81,7 @@ export default function AnexosSeccion({ disabled, id, type }) {
         });
       });
     }
-  }, [type, id]);
+  }, [type, id, institucionId]);
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => [
@@ -57,135 +96,32 @@ export default function AnexosSeccion({ disabled, id, type }) {
       <Grid item xs={12}>
         <Typography variant="h6">Anexos</Typography>
       </Grid>
+
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="IDENTIFICACION_REPRESENTANTE"
-            id={id}
-            url={fileURLs[0] || ''}
-            setUrl={(url) => handleFileLoaded(0, url)}
-            disabled={isDisabled}
-            label="Identificación oficial con fotografía"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="subtitle2">
-            En el caso de ser persona física anexar la
-            Identificación oficial, en el caso de contar con razón social o persona moral
-            anexar el acta constitutiva junto con su Identificación oficial.
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="COMPROBANTE_PAGO_RVOE"
-            id={id}
-            url={fileURLs[1] || ''}
-            setUrl={(url) => handleFileLoaded(1, url)}
-            disabled={isDisabled}
-            label="Comprobante de pago"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="FOTOGRAFIA_INMUEBLE"
-            id={id}
-            url={fileURLs[2] || ''}
-            setUrl={(url) => handleFileLoaded(2, url)}
-            disabled={isDisabled}
-            label="Fotografías inmuebles"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="CONSTANCIA_INFEJAL"
-            id={id}
-            url={fileURLs[3] || ''}
-            setUrl={(url) => handleFileLoaded(3, url)}
-            disabled={isDisabled}
-            label="Constancia INFEJAL"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="LICENCIA_MUNICIPAL"
-            id={id}
-            url={fileURLs[4] || ''}
-            setUrl={(url) => handleFileLoaded(4, url)}
-            disabled={isDisabled}
-            label="Licencia municipal"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="DICTAMEN_IMPI"
-            id={id}
-            url={fileURLs[5] || ''}
-            setUrl={(url) => handleFileLoaded(5, url)}
-            disabled={isDisabled}
-            label="Dictamen del Instituto Mexicano de Propiedad Intelectual (IMPI)"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="SECRETARIA_SALUD"
-            id={id}
-            url={fileURLs[6] || ''}
-            setUrl={(url) => handleFileLoaded(6, url)}
-            disabled={isDisabled}
-            label="Aviso funcionamiento de Secretaría de Salud ó Carta bajo protesta de decir verdad de NO venta de alimentos."
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="COMPROBANTE_TELEFONO"
-            id={id}
-            url={fileURLs[7] || ''}
-            setUrl={(url) => handleFileLoaded(7, url)}
-            disabled={isDisabled}
-            label="Comprobante de línea telefónica"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="PROYECTO_VINCULACION"
-            id={id}
-            url={fileURLs[8] || ''}
-            setUrl={(url) => handleFileLoaded(8, url)}
-            disabled={isDisabled}
-            label="Proyecto de vinculación y movilidad"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="PLAN_MEJORA"
-            id={id}
-            url={fileURLs[9] || ''}
-            setUrl={(url) => handleFileLoaded(9, url)}
-            disabled={isDisabled}
-            label="Plan de mejora"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputFile
-            tipoEntidad="SOLICITUD"
-            tipoDocumento="PROGRAMA_SUPERACION"
-            id={id}
-            url={fileURLs[10] || ''}
-            setUrl={(url) => handleFileLoaded(10, url)}
-            disabled={isDisabled}
-            label="Programa de superación"
-          />
-        </Grid>
+        {tiposDocumentos.map(({ tipoDocumento, label }, index) => {
+          const { tipoEntidad, entidadId } = getEntidadData(tipoDocumento);
+
+          return (
+            <Grid item xs={12} key={tipoDocumento}>
+              <InputFile
+                tipoEntidad={tipoEntidad}
+                tipoDocumento={tipoDocumento}
+                id={entidadId}
+                url={fileURLs[index] || ''}
+                setUrl={(url) => handleFileLoaded(index, url)}
+                disabled={isDisabled}
+                label={label}
+              />
+              {tipoDocumento === 'IDENTIFICACION_REPRESENTANTE' && (
+                <Typography variant="subtitle2">
+                  En el caso de ser persona física anexar la Identificación oficial, en el caso
+                  de contar con razón social o persona moral anexar el acta constitutiva junto
+                  con su Identificación oficial.
+                </Typography>
+              )}
+            </Grid>
+          );
+        })}
       </Grid>
     </Grid>
   );
@@ -193,11 +129,13 @@ export default function AnexosSeccion({ disabled, id, type }) {
 
 AnexosSeccion.defaultProps = {
   id: null,
+  institucionId: null,
   type: null,
 };
 
 AnexosSeccion.propTypes = {
   disabled: PropTypes.bool.isRequired,
   id: PropTypes.number,
+  institucionId: PropTypes.number,
   type: PropTypes.string,
 };

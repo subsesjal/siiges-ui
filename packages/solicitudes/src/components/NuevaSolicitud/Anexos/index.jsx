@@ -7,7 +7,11 @@ import AnexosSeccion from '../../Sections/AnexosSeccion';
 import Observaciones from '../../Sections/Observaciones';
 
 export default function Anexos({
-  nextModule, id, type, isDisabled: parentDisabled,
+  nextModule,
+  id,
+  type,
+  isDisabled: parentDisabled,
+  solicitud,
 }) {
   const [form, setForm] = useState([]);
 
@@ -39,12 +43,10 @@ export default function Anexos({
               disabled={isDisabled}
               id={id}
               type={type}
+              institucionId={solicitud?.programa?.plantel?.institucionId}
             />
           )}
-          <Observaciones
-            id={id}
-            section={section + 19}
-          />
+          <Observaciones id={id} section={section + 19} />
         </SectionLayout>
       </CardContent>
     </Card>
@@ -59,9 +61,13 @@ Anexos.defaultProps = {
 Anexos.propTypes = {
   nextModule: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool.isRequired,
-  id: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   type: PropTypes.string,
+  solicitud: PropTypes.shape({
+    programa: PropTypes.shape({
+      plantel: PropTypes.shape({
+        institucionId: PropTypes.number,
+      }),
+    }),
+  }).isRequired,
 };

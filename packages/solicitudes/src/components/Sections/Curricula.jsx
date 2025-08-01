@@ -11,7 +11,7 @@ export default function Curricula({ disabled, type }) {
   const [initialValues, setInitialValues] = useState({});
   const [fileURLs, setFileURLs] = useState([null, null, null]);
   const {
-    form, setForm, error, setError, id,
+    form, setForm, error, setError, programaId,
   } = useContext(SolicitudContext);
   const errors = errorCurricula(form, setError, error);
 
@@ -24,7 +24,7 @@ export default function Curricula({ disabled, type }) {
     'ASIGNATURAS_DETALLE',
     'PROPUESTA_HEMEROGRAFICA',
   ].map((tipoDocumento) => ({
-    entidadId: id,
+    entidadId: programaId,
     tipoEntidad: 'PROGRAMA',
     tipoDocumento,
   }));
@@ -135,7 +135,7 @@ export default function Curricula({ disabled, type }) {
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="MAPA_CURRICULAR"
-            id={id}
+            id={programaId}
             label="Mapa curricular"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
@@ -146,7 +146,7 @@ export default function Curricula({ disabled, type }) {
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="ASIGNATURAS_DETALLE"
-            id={id}
+            id={programaId}
             label="Asignaturas a detalle"
             url={fileURLs[1]}
             setUrl={(url) => handleFileLoaded(1, url)}
@@ -157,7 +157,7 @@ export default function Curricula({ disabled, type }) {
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="PROPUESTA_HEMEROGRAFICA"
-            id={id}
+            id={programaId}
             label="Propuesta hemerobibliográfica"
             url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
