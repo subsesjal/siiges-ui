@@ -53,37 +53,24 @@ export const mailValidator = (email) => {
 
 export const curpValidator = (curp) => curp.length === 18;
 
-export const setFormData = (data) => {
-  const form = {
-    situacionId: data?.situacionId || 2,
-    programaId: data?.alumnoId,
-    matricula: data?.matricula,
-    estatus: 1,
-    persona: {
-      nombre: data?.nombre,
-      apellidoPaterno: data?.apellidoPaterno,
-      apellidoMaterno: data?.apellidoMaterno,
-      fechaNacimiento: data?.fechaNacimiento && new Date(data?.fechaNacimiento).toISOString(),
-      sexo: generos[data.sexo - 1]?.nombre,
-      nacionalidad: nacionalidad[data.nacionalidad - 1]?.nombre,
-      telefono: data?.telefono,
-      celular: data?.celular,
-      curp: data?.curp,
-      correoPrimario: data?.correoPrimario,
-    },
-  };
-
-  if (Number(data?.situacionId) === 4) {
-    if (data?.fechaBaja) {
-      form.fechaBaja = new Date(data.fechaBaja).toISOString();
-    }
-    if (data?.observacionesBaja) {
-      form.observacionesBaja = data.observacionesBaja;
-    }
-  }
-
-  return form;
-};
+export const setFormData = (data) => ({
+  situacionId: data?.situacionId || 2,
+  programaId: data?.alumnoId,
+  matricula: data?.matricula,
+  estatus: 1,
+  persona: {
+    nombre: data?.nombre,
+    apellidoPaterno: data?.apellidoPaterno,
+    apellidoMaterno: data?.apellidoMaterno,
+    fechaNacimiento: data?.fechaNacimiento && new Date(data?.fechaNacimiento).toISOString(),
+    sexo: generos[data.sexo - 1]?.nombre,
+    nacionalidad: nacionalidad[data.nacionalidad - 1]?.nombre,
+    telefono: data?.telefono,
+    celular: data?.celular,
+    curp: data?.curp,
+    correoPrimario: data?.correoPrimario,
+  },
+});
 
 const validateForm = (data) => {
   const queryEvaluate = (value) => value === undefined || value === null || value === '';
