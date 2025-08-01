@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
   DataTable, formattedDate, DefaultModal, ButtonSimple,
+  Context,
 } from '@siiges-ui/shared';
 import { commonColumns, adminColumns } from '../../Tables/usuariosTable';
 import { deleteUsuario } from '../../../utils/usuarioHandler';
@@ -45,6 +46,7 @@ export default function UsuariosTable({ usuarios, session }) {
   const { rol } = session;
   const [rows, setRows] = useState([]);
   const router = useRouter();
+  const { setNoti } = useContext(Context);
 
   const {
     modal, showModal, hideModal, modalId,
@@ -59,6 +61,11 @@ export default function UsuariosTable({ usuarios, session }) {
 
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
+    setNoti({
+      open: true,
+      message: 'El usuario se a eliminado exitosamente',
+      type: 'success',
+    });
   };
 
   return (
