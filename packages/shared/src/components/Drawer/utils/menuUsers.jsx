@@ -113,7 +113,17 @@ const panelMenuOptions = (rol) => [
     userId: 2,
     text: 'Titulación',
     icon: <SchoolIcon />,
-    route: '/serviciosEscolares/titulacion',
+    type: 'dropdown',
+    options: [
+      {
+        text: 'Egresados',
+        route: '/serviciosEscolares/egresados',
+      },
+      {
+        text: 'Catálogo de Títulos Electrónicos',
+        route: '/serviciosEscolares/titulacion',
+      },
+    ],
     key: 'titulacion',
   },
   /* {
