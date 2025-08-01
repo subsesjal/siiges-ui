@@ -40,9 +40,10 @@ export default function AsignaturasFormacionEditModal({
       const cicloIdMap = {
         1: grados.semestral,
         2: grados.cuatrimestral,
-        3: grados.flexibleSemestral,
-        4: grados.flexibleCuatrimestral,
-        5: grados.optativa,
+        3: grados.anual,
+        4: grados.flexibleSemestral,
+        5: grados.flexibleCuatrimestral,
+        6: grados.optativa,
       };
 
       const selectedGradeValue = cicloIdMap[form[1].programa.cicloId] || grados.semestral;
