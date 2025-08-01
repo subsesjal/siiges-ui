@@ -6,6 +6,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { Context, GetFile } from '@siiges-ui/shared';
 
+const url = process.env.NEXT_PUBLIC_URL;
 export default function ButtonsCatalogoTitulo({ id }) {
   const { setLoading, setNoti } = useContext(Context);
   const handleDownload = async (tipoDocumento) => {
@@ -18,7 +19,7 @@ export default function ButtonsCatalogoTitulo({ id }) {
       });
 
       if (ubicacion) {
-        window.open(ubicacion, '_blank');
+        window.open(url + ubicacion, '_blank');
       }
     } catch (error) {
       setNoti({
