@@ -1,26 +1,34 @@
-import { AlumnosForm, TitulacionTable } from '@siiges-ui/serviciosescolares';
+import { TitulosForm, TitulosTable } from '@siiges-ui/serviciosescolares';
 import { Context, Layout } from '@siiges-ui/shared';
 import { Divider } from '@mui/material';
 import React, { useState, useContext } from 'react';
 
 export default function Titulacion() {
   const { setLoading } = useContext(Context);
-  const [alumnos, setAlumnos] = useState();
+  const [titulos, setTitulos] = useState();
   const [programa, setPrograma] = useState();
+  const [reloadFlag, setReloadFlag] = useState(false);
 
-  const alumnosEgresados = alumnos?.filter(
-    (alumno) => alumno.situacion?.toLowerCase() === 'egresado',
-  );
+  const reloadTitulos = () => {
+    setReloadFlag((prev) => !prev);
+  };
 
   return (
-    <Layout title="Titulación">
-      <AlumnosForm
-        setAlumnos={setAlumnos}
+    <Layout title="Catálogo de Títulos Electrónicos">
+      <TitulosForm
+        setTitulos={setTitulos}
         setPrograma={setPrograma}
         setLoading={setLoading}
+        reloadFlag={reloadFlag}
       />
       <Divider sx={{ marginTop: 2 }} />
-      {alumnos && <TitulacionTable alumnos={alumnosEgresados} programa={programa} />}
+      {titulos && (
+        <TitulosTable
+          titulos={titulos}
+          programa={programa}
+          reloadTitulos={reloadTitulos}
+        />
+      )}
     </Layout>
   );
 }
