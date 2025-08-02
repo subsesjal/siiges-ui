@@ -75,7 +75,12 @@ export const setFormData = (data) => ({
 const validateForm = (data) => {
   const queryEvaluate = (value) => value === undefined || value === null || value === '';
   const firstValidate = !Object.values(data).some(queryEvaluate);
-  const secondValidate = !Object.values(data?.persona).some(queryEvaluate);
+
+  const secondValidate = !Object.entries(data?.persona)
+    .filter(([key]) => key !== 'apellidoMaterno')
+    .map(([, value]) => value)
+    .some(queryEvaluate);
+
   return firstValidate && secondValidate;
 };
 
