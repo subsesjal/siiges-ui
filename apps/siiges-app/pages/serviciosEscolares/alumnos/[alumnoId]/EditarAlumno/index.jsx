@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 import { Grid, Tab, Tabs } from '@mui/material';
 import { DocumentosAlumno, FormAlumno } from '@siiges-ui/serviciosescolares';
+import ExpedienteAlumno from '@siiges-ui/serviciosescolares/src/Components/Alumnos/FormAlumno/ExpedienteAlumnos';
 import { Layout } from '@siiges-ui/shared';
 import alumnosService from '@siiges-ui/serviciosescolares/src/Components/utils/alumnosService';
 
@@ -26,6 +27,9 @@ export default function EditarAlumno() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const mostrarExpediente = alumno?.tipoTramiteId !== 7;
+
   return (
     <Layout title="Modificar Alumno">
       <Grid container>
@@ -40,10 +44,13 @@ export default function EditarAlumno() {
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Información Personal" />
             <Tab label="Documentos" />
+            {mostrarExpediente && <Tab label="Expediente" />}
           </Tabs>
         </Grid>
+
         {value === 0 && <FormAlumno type="edit" alumno={alumno} />}
-        {value === 1 && <DocumentosAlumno id={alumno.id} type="edit" />}
+        {value === 1 && <DocumentosAlumno id={alumno?.id} type="edit" />}
+        {value === 2 && mostrarExpediente && <ExpedienteAlumno id={alumno?.id} type="edit" />}
       </Grid>
     </Layout>
   );
