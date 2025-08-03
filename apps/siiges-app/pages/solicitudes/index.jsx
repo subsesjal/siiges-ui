@@ -35,7 +35,8 @@ export default function Solicitudes() {
         id: solicitud.id,
         estatus: solicitud.estatusSolicitudId,
         folio: solicitud.folio,
-        studyPlan: solicitud.programa?.nombre,
+        tipoSolicitud: solicitud.tipoSolicitud?.nombre,
+        programa: solicitud.programa?.nombre,
         acuerdoRvoe: solicitud.programa?.acuerdoRvoe,
         estatusSolicitudId: solicitud.estatusSolicitud?.nombre,
         institucion: solicitud?.programa?.plantel?.institucion?.nombre,
@@ -97,7 +98,7 @@ export default function Solicitudes() {
       {ChangeAddressContentVisible && <ChangeAddress />}
       {RefrendoContentVisible && <Refrendo />}
       <DataTable
-        title="Tipo de solicitud"
+        title="Tabla de solicitudes"
         rows={rows}
         columns={columnsSolicitudes(session.rol)}
       />
