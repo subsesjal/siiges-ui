@@ -28,8 +28,10 @@ export default function DatosInstitucion({
   useEffect(() => {
     if (form.interesado?.institucionDestino) {
       const { institucionDestino } = form.interesado;
+      console.log(institucionDestino?.institucionDestinoPrograma?.programa?.plantel?.institucionId);
+
       setTipoInstitucionId(institucionDestino.tipoInstitucionId || '');
-      setInstitucionId(institucionDestino.id || '');
+      setInstitucionId(institucionDestino?.institucionDestinoPrograma?.programa?.plantel?.institucionId || '');
 
       if (institucionDestino.programaId && rvoes.length > 0) {
         const selectedRvoe = rvoes.find((rvoe) => rvoe.id === institucionDestino.programaId);
@@ -213,7 +215,7 @@ export default function DatosInstitucion({
             title="Instituciones"
             options={instituciones}
             name="institucionId"
-            value={form.interesado?.institucionDestino?.id || ''}
+            value={form.interesado?.institucionDestino?.institucionDestinoPrograma?.programa?.plantel?.institucionId || ''}
             onChange={handleInstitucionChange}
             disabled={disabled}
           />
@@ -311,6 +313,9 @@ DatosInstitucion.propTypes = {
           programaId: PropTypes.number,
           programa: PropTypes.shape({
             acuerdoRvoe: PropTypes.string,
+            plantel: PropTypes.shape({
+              institucionId: PropTypes.number,
+            }),
           }),
         }),
         tipoInstitucionId: PropTypes.oneOfType([
