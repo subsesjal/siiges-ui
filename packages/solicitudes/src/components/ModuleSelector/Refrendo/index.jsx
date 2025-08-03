@@ -51,7 +51,7 @@ function Refrendo() {
     if (option) {
       setMethod('POST');
       setDataBody({ tipoSolicitudId: 2 });
-      setUrl(`api/v1/solicitudes/?solicitudId=${option}`);
+      setUrl(`api/v1/solicitudes/${option}/refrendo`);
     }
   };
 
