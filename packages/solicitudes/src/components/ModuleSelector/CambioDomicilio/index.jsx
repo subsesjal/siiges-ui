@@ -62,7 +62,7 @@ function ChangeAddress() {
   const handleOnClick = () => {
     if (programaSelect && plantelSelect) {
       setMethod('POST');
-      setDataBody({ usuarioId: id });
+      setDataBody({ tipoSolicitudId: 3 });
       setUrl(`api/v1/solicitudes/${programaSelect}/cambioDomicilio/${plantelSelect}`);
     }
   };
