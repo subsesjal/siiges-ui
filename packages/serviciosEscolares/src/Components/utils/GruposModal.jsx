@@ -30,9 +30,17 @@ export default function GruposModal({
   const title = type === 'new' ? 'Agregar Grupo' : 'Modificar Grupo';
   const { setNoti, setLoading } = useContext(Context);
   const [form, setForm] = useState();
-  const pathGrupo = async (dataform) => {
+
+  const safeSetFetchGrupos = (value) => {
+    if (typeof setFetchGrupos === 'function') {
+      setFetchGrupos(value);
+    }
+  };
+
+  const pathGrupo = async (dataForm) => {
     setLoading(true);
-    const dataBody = { ...dataform, ...params };
+    const dataBody = { ...dataForm, ...params };
+
     try {
       let result;
       if (data?.id) {
@@ -42,20 +50,20 @@ export default function GruposModal({
       }
 
       if (result) {
-        setFetchGrupos(true);
-        setLoading(false);
+        safeSetFetchGrupos(true);
+        setOpen(false);
       }
-
-      setOpen(false);
     } catch (error) {
-      setLoading(false);
       setNoti({
         open: true,
-        message: `¡Error al guardar Grupo!: ${error}`,
+        message: `¡Error al guardar Grupo!: ${error.message}`,
         type: 'error',
       });
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
