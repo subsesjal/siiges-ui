@@ -48,6 +48,7 @@ export default function InfraestructuraEditModal({
               plantelId: data.data.plantelId,
               programaId: data.data.programaId,
               tipoInstalacionId: data.data.tipoInstalacionId,
+              tipoInstalacion: data.data.tipoInstalacion?.nombre,
               nombre: data.data.nombre,
               ubicacion: data.data.ubicacion,
               capacidad: data.data.capacidad,
@@ -60,7 +61,11 @@ export default function InfraestructuraEditModal({
             setFormInfraestructuras(infraestructuraValues);
           }
         } catch (err) {
-          console.error(err);
+          setNoti({
+            open: true,
+            message: `¡Error al obtener datos de infraestructura! ${err.message}`,
+            type: 'error',
+          });
         }
       };
       fetchData();
@@ -247,7 +252,7 @@ export default function InfraestructuraEditModal({
             name="asignaturasInfraestructura"
             multiple
             value={formInfraestructuras.asignaturasInfraestructura || []}
-            options={asignaturasTotal}
+            options={asignaturasTotal.map((asignatura) => ({ nombre: `${asignatura?.clave} - ${asignatura?.nombre}`, id: asignatura?.id }))}
             onChange={handleOnChange}
             onblur={handleOnBlur}
             errorMessage={error.asignaturasInfraestructura}
