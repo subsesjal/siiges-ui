@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { DataTable, getData } from '@siiges-ui/shared';
+import { DataTable, getData, Context } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, {
   useState,
@@ -16,6 +16,7 @@ import useSectionDisabled from './Hooks/useSectionDisabled';
 export default function Infraestructura({ disabled, programaId, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const { infraestructuras, setInfraestructuras, plantelId } = useContext(PlantelContext);
+  const { setNoti } = useContext(Context);
   const isSectionDisabled = useSectionDisabled(18);
 
   const isDisabled = disabled || isSectionDisabled;
@@ -35,7 +36,11 @@ export default function Infraestructura({ disabled, programaId, type }) {
             setInfraestructuras(response.data);
           }
         } catch (err) {
-          console.error('¡Error al obtener datos!:', err);
+          setNoti({
+            open: true,
+            message: `¡Error al obtener datos de infraestructura! ${err.message}`,
+            type: 'error',
+          });
         }
       };
       fetchData();
@@ -45,13 +50,14 @@ export default function Infraestructura({ disabled, programaId, type }) {
   const rows = useMemo(
     () => infraestructuras.map((item) => ({
       id: item.id,
-      tipoInstalacion: item.nombre,
+      tipoInstalacion: item.tipoInstalacion?.nombre,
+      instalacion: item.nombre,
       capacidad: item.capacidad,
       metros: item.metros,
       recursos: item.recursos,
       ubicacion: item.ubicacion,
       asignaturas: item.asignaturasInfraestructura?.map(
-        (asignaturaInfra) => asignaturaInfra.asignatura?.nombre,
+        (asignaturaInfra) => asignaturaInfra.asignatura?.clave || asignaturaInfra,
       ),
     })),
     [infraestructuras],
