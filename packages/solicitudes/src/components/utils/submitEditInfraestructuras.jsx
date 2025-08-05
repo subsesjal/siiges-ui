@@ -38,8 +38,13 @@ const handleEdit = (
     body: JSON.stringify(form),
   })
     .then((response) => response.json())
-    .then((data) => {
-      const updatedData = { ...form, id: data.data.id };
+    .then(({ data }) => {
+      const updatedData = {
+        ...form,
+        id: data.id,
+        asignaturasInfraestructura: data.asignaturasInfraestructura,
+        tipoInstalacion: data.tipoInstalacion,
+      };
       setInfraestructuras((prevList) => {
         const newList = [...prevList];
         const index = newList.findIndex((item) => item.id === updatedData.id);
