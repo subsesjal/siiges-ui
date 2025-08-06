@@ -222,7 +222,11 @@ export default function RecepcionFormatos() {
       });
     }
   };
-
+  const tipoTramiteSubtitulo = {
+    1: 'Nueva solicitud',
+    2: 'Refrendo',
+    3: 'Cambio de domicilio',
+  };
   return (
     <Layout title="Recepción de formatos Administrativos">
       <Grid container spacing={2}>
@@ -230,7 +234,11 @@ export default function RecepcionFormatos() {
           <Typography variant="h6">Información de la solicitud</Typography>
         </Grid>
         <Grid item xs={3}>
-          <LabelData title="Tipo de trámite" subtitle="Nueva solicitud" />
+          <LabelData
+            title="Tipo de trámite"
+            subtitle={tipoTramiteSubtitulo[solicitud.tipoSolicitudId] || 'Sin definir'}
+          />
+
         </Grid>
         <Grid item xs={3}>
           <LabelData
@@ -259,13 +267,13 @@ export default function RecepcionFormatos() {
         <Grid item xs={3}>
           <LabelData
             title="Nivel"
-            subtitle={solicitud.programa?.nivelId || ''}
+            subtitle={solicitud.programa?.nivel?.nombre || ''}
           />
         </Grid>
         <Grid item xs={3}>
           <LabelData
             title="Modalidad"
-            subtitle={solicitud.programa?.modalidadId || ''}
+            subtitle={solicitud.programa?.modalidad?.nombre || ''}
           />
         </Grid>
         <Grid item xs={6}>
@@ -282,9 +290,11 @@ export default function RecepcionFormatos() {
             title="Turno"
             subtitle={
               solicitud.programa?.programaTurnos
-                ?.map((t) => t.turnoId)
+                ?.map((t) => t.turno?.nombre)
+                .filter(Boolean)
                 .join(', ') || ''
             }
+
           />
         </Grid>
         <Grid item xs={6}>
