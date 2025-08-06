@@ -222,11 +222,6 @@ export default function RecepcionFormatos() {
       });
     }
   };
-  const tipoTramiteSubtitulo = {
-    1: 'Nueva solicitud',
-    2: 'Refrendo',
-    3: 'Cambio de domicilio',
-  };
   return (
     <Layout title="Recepción de formatos Administrativos">
       <Grid container spacing={2}>
@@ -236,7 +231,7 @@ export default function RecepcionFormatos() {
         <Grid item xs={3}>
           <LabelData
             title="Tipo de trámite"
-            subtitle={tipoTramiteSubtitulo[solicitud.tipoSolicitudId] || 'Sin definir'}
+            subtitle={solicitud.tipoSolicitud?.nombre || 'Sin definir'}
           />
 
         </Grid>
