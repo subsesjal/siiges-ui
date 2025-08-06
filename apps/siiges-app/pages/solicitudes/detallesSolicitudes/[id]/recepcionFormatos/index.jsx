@@ -262,7 +262,7 @@ export default function RecepcionFormatos() {
         <Grid item xs={3}>
           <LabelData
             title="Nivel"
-            subtitle={solicitud.programa?.nivel?.nombre || ''}
+            subtitle={solicitud.programa?.nivel?.descripcion || ''}
           />
         </Grid>
         <Grid item xs={3}>
