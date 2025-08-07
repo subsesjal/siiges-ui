@@ -26,10 +26,15 @@ const TIPO_SOLICITUDES = {
   equivalencia: tipoSolicitudesEquiv,
 };
 
-const sexo = [
+const generos = [
   { id: 1, nombre: 'Masculino' },
   { id: 2, nombre: 'Femenino' },
   { id: 3, nombre: 'Otro' },
+];
+
+const nacionalidades = [
+  { id: 1, nombre: 'Mexicana' },
+  { id: 2, nombre: 'Otro' },
 ];
 
 // Validation rules configuration
@@ -59,7 +64,7 @@ const validationRules = {
     message: 'Este campo es requerido',
     required: true,
   },
-  'interesado.persona.sexo': {
+  'interesado.persona.genero': {
     message: 'Este campo es requerido',
     required: true,
   },
@@ -267,13 +272,15 @@ export default function DatosSolicitante({
         />
       </Grid>
       <Grid item xs={3}>
-        <Input
+        <Select
           id="nacionalidad"
-          label="Nacionalidad"
+          title="Nacionalidad"
           name="nacionalidad"
+          options={nacionalidades}
           value={form.interesado?.persona?.nacionalidad || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
+          textValue
           errorMessage={getError(['interesado', 'persona'], 'nacionalidad')}
           disabled={disabled}
         />
@@ -281,9 +288,10 @@ export default function DatosSolicitante({
       <Grid item xs={3}>
         <Select
           id="sexo"
-          title="Sexo"
-          options={sexo}
+          title="Género"
+          options={generos}
           name="sexo"
+          textValue
           value={form.interesado?.persona?.sexo || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
