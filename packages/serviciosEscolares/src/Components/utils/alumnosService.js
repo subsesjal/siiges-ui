@@ -33,6 +33,7 @@ export default async function alumnosService({ id, dataBody, method }) {
 
   const result = await response.text();
   const { data } = JSON.parse(result);
+
   const dataForm = {
     id: data?.id,
     personaId: data?.personaId,
@@ -59,6 +60,7 @@ export default async function alumnosService({ id, dataBody, method }) {
     matricula: data?.matricula,
     situacionId: data?.situacionId,
     fechaRegistro: new Date(data?.createdAt).toLocaleDateString('en-CA'),
+    tipoTramiteId: data?.tipoTramiteId,
   };
 
   return { data, dataForm };
