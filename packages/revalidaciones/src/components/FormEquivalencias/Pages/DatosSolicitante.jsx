@@ -64,7 +64,7 @@ const validationRules = {
     message: 'Este campo es requerido',
     required: true,
   },
-  'interesado.persona.genero': {
+  'interesado.persona.sexo': {
     message: 'Este campo es requerido',
     required: true,
   },
