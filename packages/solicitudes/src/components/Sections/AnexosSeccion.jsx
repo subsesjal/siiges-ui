@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function AnexosSeccion({
-  disabled, id, type, institucionId,
+  disabled, id, type, institucionId, usuarioId,
 }) {
   const [fileURLs, setFileURLs] = useState(Array(11).fill(null));
   const isSectionDisabled = useSectionDisabled(20);
@@ -62,6 +62,9 @@ export default function AnexosSeccion({
   const getEntidadData = (tipoDocumento) => {
     if (tipoDocumento === 'DICTAMEN_IMPI') {
       return { tipoEntidad: 'INSTITUCION', entidadId: institucionId };
+    }
+    if (tipoDocumento === 'IDENTIFICACION_REPRESENTANTE') {
+      return { tipoEntidad: 'REPRESENTANTE', entidadId: usuarioId };
     }
     return { tipoEntidad: 'SOLICITUD', entidadId: id };
   };
@@ -130,6 +133,7 @@ export default function AnexosSeccion({
 AnexosSeccion.defaultProps = {
   id: null,
   institucionId: null,
+  usuarioId: null,
   type: null,
 };
 
@@ -137,5 +141,6 @@ AnexosSeccion.propTypes = {
   disabled: PropTypes.bool.isRequired,
   id: PropTypes.number,
   institucionId: PropTypes.number,
+  usuarioId: PropTypes.number,
   type: PropTypes.string,
 };

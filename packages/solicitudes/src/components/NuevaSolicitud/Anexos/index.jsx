@@ -44,6 +44,7 @@ export default function Anexos({
               id={id}
               type={type}
               institucionId={solicitud?.programa?.plantel?.institucionId}
+              usuarioId={solicitud?.usuarioId}
             />
           )}
           <Observaciones id={id} section={section + 19} />
@@ -69,5 +70,6 @@ Anexos.propTypes = {
         institucionId: PropTypes.number,
       }),
     }),
+    usuarioId: PropTypes.number,
   }).isRequired,
 };
