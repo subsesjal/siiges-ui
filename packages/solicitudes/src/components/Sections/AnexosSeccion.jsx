@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function AnexosSeccion({
-  disabled, id, type, institucionId, usuarioId,
+  disabled, id, type, institucionId, usuarioId, plantelId, programaId,
 }) {
   const [fileURLs, setFileURLs] = useState(Array(11).fill(null));
   const isSectionDisabled = useSectionDisabled(20);
@@ -13,85 +13,62 @@ export default function AnexosSeccion({
 
   const tiposDocumentos = [
     {
-      tipoDocumento: 'IDENTIFICACION_REPRESENTANTE',
-      label: 'Identificación oficial con fotografía',
+      tipoDocumento: 'IDENTIFICACION_REPRESENTANTE', label: 'Identificación oficial con fotografía', tipoEntidad: 'REPRESENTANTE', entidad: () => usuarioId,
     },
     {
-      tipoDocumento: 'COMPROBANTE_PAGO_RVOE',
-      label: 'Comprobante de pago',
+      tipoDocumento: 'COMPROBANTE_PAGO_RVOE', label: 'Comprobante de pago', tipoEntidad: 'SOLICITUD', entidad: () => id,
     },
     {
-      tipoDocumento: 'FOTOGRAFIA_INMUEBLE',
-      label: 'Fotografías inmuebles',
+      tipoDocumento: 'FOTOGRAFIA_INMUEBLE', label: 'Fotografías inmuebles', tipoEntidad: 'PLANTEL', entidad: () => plantelId,
     },
     {
-      tipoDocumento: 'CONSTANCIA_INFEJAL',
-      label: 'Constancia INFEJAL',
+      tipoDocumento: 'CONSTANCIA_INFEJAL', label: 'Constancia INFEJAL', tipoEntidad: 'PLANTEL', entidad: () => plantelId,
     },
     {
-      tipoDocumento: 'LICENCIA_MUNICIPAL',
-      label: 'Licencia municipal',
+      tipoDocumento: 'LICENCIA_MUNICIPAL', label: 'Licencia municipal', tipoEntidad: 'PLANTEL', entidad: () => plantelId,
     },
     {
-      tipoDocumento: 'DICTAMEN_IMPI',
-      label: 'Dictamen del Instituto Mexicano de Propiedad Intelectual (IMPI)',
+      tipoDocumento: 'DICTAMEN_IMPI', label: 'Dictamen del Instituto Mexicano de Propiedad Intelectual (IMPI)', tipoEntidad: 'INSTITUCION', entidad: () => institucionId,
     },
     {
-      tipoDocumento: 'SECRETARIA_SALUD',
-      label:
-        'Aviso funcionamiento de Secretaría de Salud ó Carta bajo protesta de decir verdad de NO venta de alimentos.',
+      tipoDocumento: 'SECRETARIA_SALUD', label: 'Aviso funcionamiento de Secretaría de Salud ó Carta bajo protesta de decir verdad de NO venta de alimentos.', tipoEntidad: 'PLANTEL', entidad: () => plantelId,
     },
     {
-      tipoDocumento: 'COMPROBANTE_TELEFONO',
-      label: 'Comprobante de línea telefónica',
+      tipoDocumento: 'COMPROBANTE_TELEFONO', label: 'Comprobante de línea telefónica', tipoEntidad: 'PLANTEL', entidad: () => plantelId,
     },
     {
-      tipoDocumento: 'PROYECTO_VINCULACION',
-      label: 'Proyecto de vinculación y movilidad',
+      tipoDocumento: 'PROYECTO_VINCULACION', label: 'Proyecto de vinculación y movilidad', tipoEntidad: 'PROGRAMA', entidad: () => programaId,
     },
     {
-      tipoDocumento: 'PLAN_MEJORA',
-      label: 'Plan de mejora',
+      tipoDocumento: 'PLAN_MEJORA', label: 'Plan de mejora', tipoEntidad: 'PROGRAMA', entidad: () => programaId,
     },
     {
-      tipoDocumento: 'PROGRAMA_SUPERACION',
-      label: 'Programa de superación',
+      tipoDocumento: 'PROGRAMA_SUPERACION', label: 'Programa de superación', tipoEntidad: 'PROGRAMA', entidad: () => programaId,
     },
   ];
 
-  const getEntidadData = (tipoDocumento) => {
-    if (tipoDocumento === 'DICTAMEN_IMPI') {
-      return { tipoEntidad: 'INSTITUCION', entidadId: institucionId };
-    }
-    if (tipoDocumento === 'IDENTIFICACION_REPRESENTANTE') {
-      return { tipoEntidad: 'REPRESENTANTE', entidadId: usuarioId };
-    }
-    return { tipoEntidad: 'SOLICITUD', entidadId: id };
-  };
-
   useEffect(() => {
     if ((type === 'editar' || type === 'consultar') && id) {
-      tiposDocumentos.forEach(({ tipoDocumento }, index) => {
-        const { tipoEntidad, entidadId } = getEntidadData(tipoDocumento);
-        GetFile({ tipoEntidad, tipoDocumento, entidadId }, (url, err) => {
+      tiposDocumentos.forEach(({ tipoDocumento, tipoEntidad, entidad }, index) => {
+        GetFile({ tipoEntidad, tipoDocumento, entidadId: entidad() }, (url, err) => {
           if (!err) {
-            setFileURLs((currentURLs) => {
-              const updatedURLs = [...currentURLs];
-              updatedURLs[index] = url;
-              return updatedURLs;
+            setFileURLs((urls) => {
+              const updated = [...urls];
+              updated[index] = url;
+              return updated;
             });
           }
         });
       });
     }
-  }, [type, id, institucionId]);
+  }, [type, id, institucionId, usuarioId, plantelId, programaId]);
 
   const handleFileLoaded = (index, url) => {
-    setFileURLs((prevURLs) => [
-      ...prevURLs.slice(0, index),
-      url,
-      ...prevURLs.slice(index + 1),
-    ]);
+    setFileURLs((prev) => {
+      const updated = [...prev];
+      updated[index] = url;
+      return updated;
+    });
   };
 
   return (
@@ -101,30 +78,28 @@ export default function AnexosSeccion({
       </Grid>
 
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
-        {tiposDocumentos.map(({ tipoDocumento, label }, index) => {
-          const { tipoEntidad, entidadId } = getEntidadData(tipoDocumento);
-
-          return (
-            <Grid item xs={12} key={tipoDocumento}>
-              <InputFile
-                tipoEntidad={tipoEntidad}
-                tipoDocumento={tipoDocumento}
-                id={entidadId}
-                url={fileURLs[index] || ''}
-                setUrl={(url) => handleFileLoaded(index, url)}
-                disabled={isDisabled}
-                label={label}
-              />
-              {tipoDocumento === 'IDENTIFICACION_REPRESENTANTE' && (
-                <Typography variant="subtitle2">
-                  En el caso de ser persona física anexar la Identificación oficial, en el caso
-                  de contar con razón social o persona moral anexar el acta constitutiva junto
-                  con su Identificación oficial.
-                </Typography>
-              )}
-            </Grid>
-          );
-        })}
+        {tiposDocumentos.map(({
+          tipoDocumento, label, tipoEntidad, entidad,
+        }, index) => (
+          <Grid item xs={12} key={tipoDocumento}>
+            <InputFile
+              tipoEntidad={tipoEntidad}
+              tipoDocumento={tipoDocumento}
+              id={entidad()}
+              url={fileURLs[index] || ''}
+              setUrl={(url) => handleFileLoaded(index, url)}
+              disabled={isDisabled}
+              label={label}
+            />
+            {tipoDocumento === 'IDENTIFICACION_REPRESENTANTE' && (
+            <Typography variant="subtitle2">
+              En el caso de ser persona física anexar la Identificación oficial, en el caso
+              de contar con razón social o persona moral anexar el acta constitutiva junto
+              con su Identificación oficial.
+            </Typography>
+            )}
+          </Grid>
+        ))}
       </Grid>
     </Grid>
   );
@@ -133,7 +108,9 @@ export default function AnexosSeccion({
 AnexosSeccion.defaultProps = {
   id: null,
   institucionId: null,
+  plantelId: null,
   usuarioId: null,
+  programaId: null,
   type: null,
 };
 
@@ -141,6 +118,8 @@ AnexosSeccion.propTypes = {
   disabled: PropTypes.bool.isRequired,
   id: PropTypes.number,
   institucionId: PropTypes.number,
+  plantelId: PropTypes.number,
   usuarioId: PropTypes.number,
+  programaId: PropTypes.number,
   type: PropTypes.string,
 };
