@@ -126,6 +126,8 @@ export default function ConsultEquivalencia() {
           onNext={handleNext}
           onPrevious={handlePrevious}
           disabled
+          estatus={form.estatusSolicitudRevEquivId}
+          id={form.id}
         />
       </Grid>
     </Grid>

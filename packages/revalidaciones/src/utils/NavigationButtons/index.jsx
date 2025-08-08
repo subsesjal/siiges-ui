@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid, IconButton, Divider, Typography,
 } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { styled } from '@mui/system';
-import { ButtonsForm, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
+import {
+  ButtonsForm,
+  ButtonSimple,
+  Context,
+  createRecord,
+  DefaultModal,
+  Input,
+  InputDate,
+} from '@siiges-ui/shared';
 
 const CircularIconButton = styled(IconButton)(({ theme }) => ({
   border: `1px solid ${theme.palette.primary.main}`,
@@ -30,8 +38,100 @@ export default function NavigationButtons({
   title,
   isSubmitting,
   disabled,
+  estatus,
+  id,
 }) {
   const [open, setOpen] = useState(false);
+  const [openProcesarModal, setOpenProcesarModal] = useState(false);
+  const { setNoti } = useContext(Context);
+
+  const [formProcesar, setFormProcesar] = useState({
+    matricula: '',
+    folioExpediente: '',
+    folioResolucion: '',
+    fechaResolucion: '',
+  });
+
+  const [errors, setErrors] = useState({
+    matricula: '',
+    folioExpediente: '',
+    folioResolucion: '',
+    fechaResolucion: '',
+  });
+
+  const [isSubmittingProcesar, setIsSubmittingProcesar] = useState(false);
+
+  const validateField = (name, value) => {
+    if (!value || (typeof value === 'string' && value.trim() === '')) {
+      return 'Este campo es obligatorio';
+    }
+    return '';
+  };
+
+  const handleOnChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormProcesar((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, value),
+    }));
+  };
+
+  const handleOnSubmitProcesar = async () => {
+    if (!id || typeof id !== 'number') {
+      setNoti({
+        open: true,
+        message: 'No se pudo procesar la equivalencia: ID inválido.',
+      });
+      return;
+    }
+
+    const newErrors = {};
+    Object.entries(formProcesar).forEach(([key, value]) => {
+      newErrors[key] = validateField(key, value);
+    });
+
+    setErrors(newErrors);
+
+    const hasErrors = Object.values(newErrors).some((err) => err);
+    if (hasErrors) return;
+
+    setIsSubmittingProcesar(true);
+
+    const response = await createRecord({
+      endpoint: `/solicitudesRevEquiv/${id}/procesar`,
+      data: formProcesar,
+    });
+
+    if (response.statusCode === 200 || response.statusCode === 201) {
+      setOpenProcesarModal(false);
+      setFormProcesar({
+        matricula: '',
+        folioExpediente: '',
+        folioResolucion: '',
+        fechaResolucion: '',
+      });
+      setErrors({});
+    } else {
+      setNoti({
+        open: true,
+        message: `Error al procesar: ${response.errorMessage}`,
+        type: 'error',
+      });
+    }
+
+    setIsSubmittingProcesar(false);
+  };
+
+  const isDisabledProcesar = isSubmittingProcesar
+    || Object.values(formProcesar).some((v) => !v)
+    || Object.values(errors).some((e) => !!e);
+
   return (
     <>
       <Grid container alignItems="center" justifyContent="flex-end" spacing={1}>
@@ -78,32 +178,98 @@ export default function NavigationButtons({
           </>
         )}
         {currentPosition === totalPositions && !disabled && (
-        <Grid item>
-          <ButtonSimple
-            text="Terminar"
-            onClick={() => {
-              setOpen(true);
-            }}
-            disabled={isSubmitting}
-          />
-        </Grid>
+          <Grid item>
+            <ButtonSimple
+              text="Terminar"
+              onClick={() => setOpen(true)}
+              disabled={isSubmitting}
+            />
+          </Grid>
+        )}
+        {estatus === 4 && currentPosition === totalPositions && (
+          <Grid item>
+            <ButtonSimple
+              text="Procesar"
+              onClick={() => setOpenProcesarModal(true)}
+              disabled={isSubmitting}
+            />
+          </Grid>
         )}
       </Grid>
+
       <DefaultModal title={title} open={open} setOpen={setOpen}>
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Typography>
-              ¿Esta seguro de que quiere terminar esta solicitud de
-              revalidación?. Una vez terminada no se podra editar
+              ¿Está seguro de que quiere terminar esta solicitud de
+              revalidación? Una vez terminada no se podrá editar.
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <ButtonsForm
-              cancel={() => {
-                setOpen(false);
-              }}
+              cancel={() => setOpen(false)}
               confirm={handleOnSubmit}
               disabled={isSubmitting}
+            />
+          </Grid>
+        </Grid>
+      </DefaultModal>
+
+      <DefaultModal
+        title="Procesar Equivalencia Interna"
+        open={openProcesarModal}
+        setOpen={setOpenProcesarModal}
+      >
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <Input
+              name="matricula"
+              label="Matrícula"
+              id="matricula"
+              required
+              value={formProcesar.matricula}
+              errorMessage={errors.matricula}
+              onChange={handleOnChange}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Input
+              name="folioExpediente"
+              label="Folio del Expediente"
+              id="folioExpediente"
+              required
+              value={formProcesar.folioExpediente}
+              errorMessage={errors.folioExpediente}
+              onChange={handleOnChange}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Input
+              name="folioResolucion"
+              label="Folio de Resolución"
+              id="folioResolucion"
+              required
+              value={formProcesar.folioResolucion}
+              errorMessage={errors.folioResolucion}
+              onChange={handleOnChange}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <InputDate
+              name="fechaResolucion"
+              label="Fecha de Resolución"
+              id="fechaResolucion"
+              required
+              value={formProcesar.fechaResolucion}
+              errorMessage={errors.fechaResolucion}
+              onChange={handleOnChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <ButtonsForm
+              cancel={() => setOpenProcesarModal(false)}
+              confirm={handleOnSubmitProcesar}
+              disabled={isDisabledProcesar || isSubmittingProcesar}
             />
           </Grid>
         </Grid>
@@ -117,11 +283,15 @@ NavigationButtons.defaultProps = {
   isSubmitting: false,
   handleOnSubmit: () => {},
   disabled: false,
+  estatus: null,
+  id: null,
 };
 
 NavigationButtons.propTypes = {
   currentPosition: PropTypes.number.isRequired,
   totalPositions: PropTypes.number.isRequired,
+  estatus: PropTypes.number,
+  id: PropTypes.number,
   onNext: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func,
