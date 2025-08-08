@@ -194,6 +194,7 @@ export default function Calificaciones({
     calificacionMaxima,
     calificacionDecimal,
     fechaExamenes,
+    calificaciones,
   );
 
   return (
