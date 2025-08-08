@@ -45,7 +45,7 @@ export default function Anexos({
               type={type}
               institucionId={solicitud?.programa?.plantel?.institucionId}
               plantelId={solicitud?.programa?.plantelId}
-              programaId={solicitud?.programaId}
+              programaId={solicitud?.programa?.id}
               usuarioId={solicitud?.usuarioId}
             />
           )}
@@ -67,8 +67,8 @@ Anexos.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   type: PropTypes.string,
   solicitud: PropTypes.shape({
-    programaId: PropTypes.number,
     programa: PropTypes.shape({
+      id: PropTypes.number,
       plantelId: PropTypes.number,
       plantel: PropTypes.shape({
         institucionId: PropTypes.number,
