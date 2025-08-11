@@ -57,9 +57,7 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
       (nombre) => nombre !== null && nombre !== '',
     );
 
-    const areFilesLoaded = fileURLs.every((url) => url !== null);
-
-    setValidNombres(isNombrePropuestoValid && areFilesLoaded);
+    setValidNombres(isNombrePropuestoValid);
   }, [form, fileURLs, setValidNombres]);
 
   return (
