@@ -31,6 +31,7 @@ const nombresCiclos = [
   { id: 30, nombre: '2024C' },
   { id: 31, nombre: '2025A' },
   { id: 32, nombre: '2025B' },
+  { id: 33, nombre: 'EQUIV' },
 ];
 
 export default nombresCiclos;

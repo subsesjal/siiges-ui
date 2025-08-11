@@ -4,9 +4,10 @@ import {
   Input,
   Select,
   ButtonsForm,
+  Context,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useContext } from 'react';
 import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
 import postCiclosEscolares from './PostCiclosEscolares';
 import nombresCiclos from '../../Utils/nombresCiclos';
@@ -19,6 +20,10 @@ export default function CiclosEscolaresModal({
   onSuccess,
 }) {
   const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Modificar Ciclo Escolar';
+  const { setNoti, session } = useContext(Context);
+  const ciclosFiltered = session?.rol !== 'admin'
+    ? nombresCiclos.filter(({ nombre }) => nombre !== 'EQUIV')
+    : nombresCiclos;
 
   const [form, setForm] = React.useState({
     id: data?.id,
@@ -27,12 +32,20 @@ export default function CiclosEscolaresModal({
   });
 
   const pathCiclosEscolares = async ({ id, ...body }) => {
-    if (type === 'new') {
-      await postCiclosEscolares({ ...body, programaId: data?.programaId }, onSuccess);
-      setOpen(false);
-    } else {
-      await updateCiclosEscolares({ id, dataBody: body }, onSuccess);
-      setOpen(false);
+    try {
+      if (type === 'new') {
+        await postCiclosEscolares({ ...body, programaId: data?.programaId }, onSuccess);
+        setOpen(false);
+      } else {
+        await updateCiclosEscolares({ id, dataBody: body }, onSuccess);
+        setOpen(false);
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `Error al ${type === 'new' ? 'crear' : 'actualizar'} el ciclo escolar: ${error.message}`,
+        type: 'error',
+      });
     }
   };
   const handleOnChange = (e) => {
@@ -47,7 +60,7 @@ export default function CiclosEscolaresModal({
           <Select
             title="Nombre"
             name="nombre"
-            options={nombresCiclos || []}
+            options={ciclosFiltered || []}
             textValue
             onChange={handleOnChange}
             value={form?.nombre}

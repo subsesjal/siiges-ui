@@ -30,6 +30,7 @@ import getAlumnosAcreditacion from './Components/utils/getAlumnosAcreditacion';
 import Asignaturas from './Components/Programas/ProgramasSections/Asignaturas';
 import InscripcionesTable from './Components/Inscripciones/InscripcionesTable';
 import DocumentosAlumno from './Components/Alumnos/FormAlumno/DocumentosAlumno';
+import ExpedienteAlumno from './Components/Alumnos/FormAlumno/ExpedienteAlumno';
 import columnsInstitucionesAutorizadas from './Tables/institucionesAutorizadas';
 import RevalidacionEquivalencias from './Components/RevalidacionesEquivalencias';
 import ActionsAlumnosInscritos from './Components/utils/ActionsAlumnosInscritos';
@@ -92,6 +93,7 @@ export {
   ModalCertificado,
   columnsProgramas,
   DocumentosAlumno,
+  ExpedienteAlumno,
   FechaExamenInput,
   getAsignaturaById,
   CalificacionInput,
