@@ -6,10 +6,10 @@ import SolicitudContext from '../utils/Context/solicitudContext';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function FundamentosPlanEstudios({ disabled, type }) {
-  const { form, setForm, id } = useContext(SolicitudContext);
+  const { form, setForm, programaId } = useContext(SolicitudContext);
   const [url, setUrl] = useState();
   const fileData = {
-    entidadId: id,
+    entidadId: programaId,
     tipoEntidad: 'PROGRAMA',
     tipoDocumento: 'FORMATO_PEDAGOGICO_01',
   };
@@ -40,7 +40,7 @@ export default function FundamentosPlanEstudios({ disabled, type }) {
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="FORMATO_PEDAGOGICO_01"
-            id={id}
+            id={programaId}
             label="FDP01"
             setLoaded={() => {}}
             url={url}

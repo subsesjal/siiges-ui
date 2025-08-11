@@ -44,6 +44,9 @@ export default function Anexos({
               id={id}
               type={type}
               institucionId={solicitud?.programa?.plantel?.institucionId}
+              plantelId={solicitud?.programa?.plantelId}
+              programaId={solicitud?.programa?.id}
+              usuarioId={solicitud?.usuarioId}
             />
           )}
           <Observaciones id={id} section={section + 19} />
@@ -65,9 +68,12 @@ Anexos.propTypes = {
   type: PropTypes.string,
   solicitud: PropTypes.shape({
     programa: PropTypes.shape({
+      id: PropTypes.number,
+      plantelId: PropTypes.number,
       plantel: PropTypes.shape({
         institucionId: PropTypes.number,
       }),
     }),
+    usuarioId: PropTypes.number,
   }).isRequired,
 };

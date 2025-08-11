@@ -18,6 +18,7 @@ const turnos = [
   { id: 3, nombre: 'Nocturno' },
   { id: 4, nombre: 'Mixto' },
 ];
+
 export default function GruposModal({
   open,
   setOpen,

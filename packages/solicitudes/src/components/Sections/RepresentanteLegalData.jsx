@@ -11,11 +11,15 @@ import formDatosRepresentante from '../utils/sections/forms/formDatosRepresentan
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 function RepresentanteLegalData({ id, disabled }) {
+  const {
+    setDisabled, form, setForm, solicitud,
+  } = useContext(DatosGeneralesContext);
+
   const { municipios } = getMunicipios();
   const { user } = getCurrentUser();
   const [fileUrl, setFileUrl] = useState();
   const fileData = {
-    entidadId: id,
+    entidadId: solicitud.usuarioId,
     tipoEntidad: 'REPRESENTANTE',
     tipoDocumento: 'FIRMA_REPRESENTANTE',
   };
@@ -27,10 +31,6 @@ function RepresentanteLegalData({ id, disabled }) {
   const isSectionDisabled = useSectionDisabled(12);
 
   const isDisabled = disabled || isSectionDisabled;
-
-  const {
-    setDisabled, form, setForm,
-  } = useContext(DatosGeneralesContext);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -225,7 +225,7 @@ function RepresentanteLegalData({ id, disabled }) {
           <InputFile
             tipoEntidad="REPRESENTANTE"
             tipoDocumento="FIRMA_REPRESENTANTE"
-            id={id}
+            id={solicitud.usuarioId}
             label="Subir firma"
             url={fileUrl}
             setUrl={setFileUrl}
