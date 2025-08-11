@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs'; // Import dayjs
-import 'dayjs/locale/es'; // Import Spanish locale for dayjs
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
 import {
   ModuleHeader,
   DatosGenerales,
@@ -15,14 +15,6 @@ import {
 import { getData } from '@siiges-ui/shared';
 import { ObservacionesProvider } from '../utils/Context/observacionesContext';
 
-const commonSteps = [
-  PlanEstudios,
-  DatosGenerales,
-  Plantel,
-  Anexos,
-  EvaluacionCurricular,
-];
-
 const componentSteps = [
   { name: DatosGenerales, stepName: 'Datos Generales' },
   { name: Plantel, stepName: 'Plantel' },
@@ -32,24 +24,32 @@ const componentSteps = [
   { name: PlataformaEducativa, stepName: 'Plataforma Educativa' },
 ];
 
-const steps = {
-  escolarizada: [...commonSteps],
-  mixta: [...commonSteps],
-  dual: [...commonSteps],
-  noEscolarizada: [
-    ...commonSteps.slice(0, 3),
-    PlataformaEducativa,
-    ...commonSteps.slice(3),
-  ],
+const getStepName = (component) => componentSteps.find(
+  ({ name: step }) => step.name === component.name,
+)?.stepName || '';
+
+const buildSteps = (modalidad, tipoSolicitudId) => {
+  const baseCommonSteps = [PlanEstudios, DatosGenerales, Plantel, Anexos];
+
+  if (tipoSolicitudId !== 3) {
+    baseCommonSteps.push(EvaluacionCurricular);
+  }
+
+  const modalidadMapSteps = {
+    escolarizada: [...baseCommonSteps],
+    mixta: [...baseCommonSteps],
+    dual: [...baseCommonSteps],
+    noEscolarizada: [
+      ...baseCommonSteps.slice(0, 3),
+      PlataformaEducativa,
+      ...baseCommonSteps.slice(3),
+    ],
+  };
+
+  return modalidadMapSteps[modalidad] || [];
 };
 
-const getStepName = (component) => componentSteps
-  .find(({ name: step }) => step.name === component.name).stepName;
-
-export default function NuevaSolicitud({
-  type,
-  solicitudId = '',
-}) {
+export default function NuevaSolicitud({ type, solicitudId = '' }) {
   const router = useRouter();
   const [modalidad, setModalidad] = useState('escolarizada');
   const [module, setModule] = useState(0);
@@ -57,6 +57,7 @@ export default function NuevaSolicitud({
   const [programaId, setProgramaId] = useState('');
   const [solicitud, setSolicitud] = useState({});
   const [displayDate, setDisplayDate] = useState('');
+  const [stepsList, setStepsList] = useState([]);
   const { solicitudType } = router.query;
 
   const READ_ONLY_MODES = ['consultar', 'observaciones'];
@@ -66,8 +67,10 @@ export default function NuevaSolicitud({
     setId(solicitudId);
     if (solicitudId) {
       const fetchSolicitud = async () => {
-        const response = await getData({ endpoint: `/solicitudes/${solicitudId}` });
-        setSolicitud(response.data);
+        const response = await getData({
+          endpoint: `/solicitudes/${solicitudId}`,
+        });
+        setSolicitud(response.data || {});
       };
       fetchSolicitud();
     }
@@ -75,7 +78,9 @@ export default function NuevaSolicitud({
 
   useEffect(() => {
     if (solicitud?.createdAt) {
-      setDisplayDate(dayjs(solicitud.createdAt).locale('es').format('DD [de] MMMM YYYY'));
+      setDisplayDate(
+        dayjs(solicitud.createdAt).locale('es').format('DD [de] MMMM YYYY'),
+      );
     } else {
       setDisplayDate(dayjs().locale('es').format('DD [de] MMMM YYYY'));
     }
@@ -90,13 +95,16 @@ export default function NuevaSolicitud({
     };
 
     if (router.query.modalidad) {
-      setModalidad(modalidadMap[router.query.modalidad]);
+      setModalidad(modalidadMap[router.query.modalidad] || 'escolarizada');
     }
   }, [router.query.modalidad]);
 
+  useEffect(() => {
+    setStepsList(buildSteps(modalidad, solicitud?.tipoSolicitudId));
+  }, [modalidad, solicitud?.tipoSolicitudId]);
+
   const nextModule = () => {
-    const stepList = steps[modalidad];
-    if (module < stepList.length - 1) {
+    if (module < stepsList.length - 1) {
       setModule((position) => position + 1);
     }
   };
@@ -127,7 +135,7 @@ export default function NuevaSolicitud({
   };
 
   const renderModule = () => {
-    const Component = steps[modalidad][module];
+    const Component = stepsList[module];
     return Component ? (
       <Component
         nextModule={nextModule}
@@ -138,6 +146,7 @@ export default function NuevaSolicitud({
         solicitud={solicitud}
         type={type}
         isDisabled={isDisabled}
+        tipoSolicitudId={solicitud?.tipoSolicitudId}
       />
     ) : null;
   };
@@ -145,7 +154,7 @@ export default function NuevaSolicitud({
   return (
     <ObservacionesProvider>
       <ModuleHeader
-        steps={steps[modalidad].map((component) => getStepName(component))}
+        steps={stepsList.map((component) => getStepName(component))}
         isEditOrView={type}
         type={getSolicitudTypeName()}
         date={displayDate}
