@@ -1,5 +1,18 @@
 import { getToken, SubmitDocument } from '@siiges-ui/shared';
 
+const fileToBlob = (file) => new Promise((resolve, reject) => {
+  const fileReader = new FileReader();
+  fileReader.readAsArrayBuffer(file);
+  fileReader.onload = (event) => {
+    const fileContent = event.target.result;
+    const fileBlob = new Blob([fileContent], { type: file.type });
+    resolve({ fileBlob, fileName: file.name });
+  };
+  fileReader.onerror = (error) => {
+    reject(error);
+  };
+});
+
 export default async function submitRatificacion(
   validations,
   setNoti,
@@ -9,19 +22,17 @@ export default async function submitRatificacion(
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const baseUrl = process.env.NEXT_PUBLIC_URL;
-  const {
-    form, validNombres, file1, file2,
-  } = validations;
+  const { form, validNombres, archivosNombres } = validations;
   const token = getToken();
 
-  if (!validNombres || !file1 || !file2) {
+  if (!validNombres) {
     setNoti({
       open: true,
-      message: '¡Se requiere al menos 1 nombre propuesto y ambos archivos!',
+      message: '¡Se requiere al menos 1 nombre propuesto!',
       type: 'error',
     });
     setLoading(false);
-    return;
+    return null;
   }
 
   const { ratificacionId } = form[6];
@@ -30,9 +41,9 @@ export default async function submitRatificacion(
     ? `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones/${ratificacionId}`
     : `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones`;
 
-  try {
-    setLoading(true);
+  setLoading(true);
 
+  try {
     let currentRatificacionId = ratificacionId;
 
     const ratificacionResponse = await fetch(endpoint, {
@@ -50,20 +61,34 @@ export default async function submitRatificacion(
       throw new Error(errorData.message || '¡Error al enviar la ratificación!');
     }
 
+    const ratificacionData = await ratificacionResponse.json();
     if (!currentRatificacionId) {
-      const ratificacionData = await ratificacionResponse.json();
       currentRatificacionId = ratificacionData.id;
     }
 
-    const uploadFile = async (file) => {
-      const formData = new FormData();
-      formData.append('ratificacionId', currentRatificacionId);
-      formData.append('file', file);
-      await SubmitDocument(formData, () => {});
-    };
+    if (
+      archivosNombres
+      && typeof archivosNombres === 'object'
+      && Object.keys(archivosNombres).length > 0
+    ) {
+      await Promise.all(
+        Object.entries(archivosNombres)
+          .filter(([file]) => Boolean(file))
+          .map(async ([tipoDocumento, file]) => {
+            const { fileBlob, fileName } = await fileToBlob(file);
 
-    await uploadFile(file1);
-    await uploadFile(file2);
+            const formData = new FormData();
+            formData.append('uploadFile', fileBlob, fileName);
+            formData.append('tipoEntidad', 'RATIFICACION');
+            formData.append('entidadId', currentRatificacionId);
+            formData.append('tipoDocumento', tipoDocumento);
+
+            console.log('Enviando archivo:', { tipoDocumento, fileName, fileBlob });
+
+            return SubmitDocument(formData, () => {});
+          }),
+      );
+    }
 
     const postSectionResponse = await fetch(
       `${baseUrl}/api/v1/solicitudes/${id}/secciones/19`,
@@ -78,9 +103,7 @@ export default async function submitRatificacion(
 
     if (!postSectionResponse.ok) {
       const errorData = await postSectionResponse.json();
-      throw new Error(
-        errorData.message || '¡Error al desactivar la sección 19!',
-      );
+      throw new Error(errorData.message || '¡Error al desactivar la sección 19!');
     }
 
     setSections((prevSections) => prevSections.map(
@@ -92,6 +115,8 @@ export default async function submitRatificacion(
       message: '¡Éxito, no hubo problemas en esta sección!',
       type: 'success',
     });
+
+    return true;
   } catch (error) {
     console.error('Error:', error);
     setNoti({
@@ -99,6 +124,7 @@ export default async function submitRatificacion(
       message: `¡Hubo un problema!: ${error.message}`,
       type: 'error',
     });
+    return false;
   } finally {
     setLoading(false);
   }
