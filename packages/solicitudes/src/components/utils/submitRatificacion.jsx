@@ -1,4 +1,4 @@
-import { getToken } from '@siiges-ui/shared';
+import { getToken, SubmitDocument } from '@siiges-ui/shared';
 
 export default async function submitRatificacion(
   validations,
@@ -9,13 +9,15 @@ export default async function submitRatificacion(
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const baseUrl = process.env.NEXT_PUBLIC_URL;
-  const { form, validNombres } = validations;
+  const {
+    form, validNombres, file1, file2,
+  } = validations;
   const token = getToken();
 
-  if (!validNombres) {
+  if (!validNombres || !file1 || !file2) {
     setNoti({
       open: true,
-      message: '¡Algo salió mal, se requiere al menos 1 nombre propuesto y ambos archivos!',
+      message: '¡Se requiere al menos 1 nombre propuesto y ambos archivos!',
       type: 'error',
     });
     setLoading(false);
@@ -31,7 +33,8 @@ export default async function submitRatificacion(
   try {
     setLoading(true);
 
-    // First request to submit ratificacion
+    let currentRatificacionId = ratificacionId;
+
     const ratificacionResponse = await fetch(endpoint, {
       method,
       headers: {
@@ -47,26 +50,42 @@ export default async function submitRatificacion(
       throw new Error(errorData.message || '¡Error al enviar la ratificación!');
     }
 
-    // Second request to disable section 11
-    const postSectionResponse = await fetch(`${baseUrl}/api/v1/solicitudes/${id}/secciones/19`, {
-      method: 'POST',
-      headers: {
-        api_key: apikey,
-        Authorization: `Bearer ${token}`,
+    if (!currentRatificacionId) {
+      const ratificacionData = await ratificacionResponse.json();
+      currentRatificacionId = ratificacionData.id;
+    }
+
+    const uploadFile = async (file) => {
+      const formData = new FormData();
+      formData.append('ratificacionId', currentRatificacionId);
+      formData.append('file', file);
+      await SubmitDocument(formData, () => {});
+    };
+
+    await uploadFile(file1);
+    await uploadFile(file2);
+
+    const postSectionResponse = await fetch(
+      `${baseUrl}/api/v1/solicitudes/${id}/secciones/19`,
+      {
+        method: 'POST',
+        headers: {
+          api_key: apikey,
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!postSectionResponse.ok) {
       const errorData = await postSectionResponse.json();
-      throw new Error(errorData.message || '¡Error al desactivar la sección 19!');
+      throw new Error(
+        errorData.message || '¡Error al desactivar la sección 19!',
+      );
     }
 
-    setSections((prevSections) => prevSections.map((section) => {
-      if (section.id === 19) {
-        return { ...section, disabled: true };
-      }
-      return section;
-    }));
+    setSections((prevSections) => prevSections.map(
+      (section) => (section.id === 19 ? { ...section, disabled: true } : section),
+    ));
 
     setNoti({
       open: true,

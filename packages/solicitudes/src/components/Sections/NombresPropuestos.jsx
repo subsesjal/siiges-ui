@@ -6,8 +6,10 @@ import PlantelContext from '../utils/Context/plantelContext';
 import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
-export default function NombresPropuestos({ disabled, id, institucion }) {
-  const { form, setForm, setValidNombres } = useContext(PlantelContext);
+export default function NombresPropuestos({ disabled, institucion }) {
+  const {
+    form, setForm, setValidNombres, setArchivosNombres,
+  } = useContext(PlantelContext);
   const [fileURLs, setFileURLs] = useState([null, null]);
 
   const isSectionDisabled = useSectionDisabled(19);
@@ -15,8 +17,8 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
   const isDisabled = disabled || isSectionDisabled;
 
   const fileData = ['BIOGRAFIA', 'BIBLIOGRAFIA'].map((tipoDocumento) => ({
-    entidadId: id,
-    tipoEntidad: 'INSTITUCION',
+    entidadId: institucion?.ratificacionesNombre[0]?.id,
+    tipoEntidad: 'RATIFICACION',
     tipoDocumento,
   }));
 
@@ -104,24 +106,26 @@ export default function NombresPropuestos({ disabled, id, institucion }) {
         </Grid>
         <Grid item xs={12}>
           <InputFile
-            tipoEntidad="INSTITUCION"
+            tipoEntidad="RATIFICACION"
             tipoDocumento="BIOGRAFIA"
-            id={id}
+            id={institucion?.ratificacionesNombre[0]?.id}
             label="Biografía o Fundamento"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
             disabled={isDisabled}
+            setFilesState={setArchivosNombres}
           />
         </Grid>
         <Grid item xs={12}>
           <InputFile
-            tipoEntidad="INSTITUCION"
+            tipoEntidad="RATIFICACION"
             tipoDocumento="BIBLIOGRAFIA"
-            id={id}
+            id={institucion?.ratificacionesNombre[0]?.id}
             label="Bibliografía para fuente de consulta"
             url={fileURLs[1]}
             setUrl={(url) => handleFileLoaded(1, url)}
             disabled={isDisabled}
+            setFilesState={setArchivosNombres}
           />
         </Grid>
         <Grid item xs={12}>
@@ -155,6 +159,7 @@ NombresPropuestos.propTypes = {
   institucion: PropTypes.shape({
     ratificacionesNombre: PropTypes.arrayOf(
       PropTypes.shape({
+        id: PropTypes.number,
         nombrePropuesto1: PropTypes.string,
         nombrePropuesto2: PropTypes.string,
         nombrePropuesto3: PropTypes.string,
