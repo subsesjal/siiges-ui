@@ -8,7 +8,7 @@ import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function NombresPropuestos({ disabled, institucion }) {
   const {
-    form, setForm, setValidNombres, setArchivosNombres,
+    form, setForm, setValidNombres, setArchivosNombres, archivosNombres,
   } = useContext(PlantelContext);
   const [fileURLs, setFileURLs] = useState([null, null]);
 
@@ -62,6 +62,9 @@ export default function NombresPropuestos({ disabled, institucion }) {
     setValidNombres(isNombrePropuestoValid);
   }, [form, fileURLs, setValidNombres]);
 
+  const isUploadedBIOGRAFIA = !!archivosNombres?.BIOGRAFIA;
+  const isUploadedBIBLIOGRAFIA = !!archivosNombres?.BIBLIOGRAFIA;
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -114,6 +117,7 @@ export default function NombresPropuestos({ disabled, institucion }) {
             setUrl={(url) => handleFileLoaded(0, url)}
             disabled={isDisabled}
             setFilesState={setArchivosNombres}
+            isUploaded={isUploadedBIOGRAFIA}
           />
         </Grid>
         <Grid item xs={12}>
@@ -126,6 +130,7 @@ export default function NombresPropuestos({ disabled, institucion }) {
             setUrl={(url) => handleFileLoaded(1, url)}
             disabled={isDisabled}
             setFilesState={setArchivosNombres}
+            isUploaded={isUploadedBIBLIOGRAFIA}
           />
         </Grid>
         <Grid item xs={12}>
