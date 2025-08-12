@@ -1,4 +1,4 @@
-import { getToken, SubmitDocument, fileToFormData } from '@siiges-ui/shared';
+import { getToken, SubmitDocument } from '@siiges-ui/shared';
 
 export default async function submitRatificacion(
   validations,
@@ -9,17 +9,19 @@ export default async function submitRatificacion(
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const baseUrl = process.env.NEXT_PUBLIC_URL;
-  const { form, validNombres, archivosNombres } = validations;
+  const {
+    form, validNombres, file1, file2,
+  } = validations;
   const token = getToken();
 
-  if (!validNombres) {
+  if (!validNombres || !file1 || !file2) {
     setNoti({
       open: true,
-      message: '¡Se requiere al menos 1 nombre propuesto!',
+      message: '¡Se requiere al menos 1 nombre propuesto y ambos archivos!',
       type: 'error',
     });
     setLoading(false);
-    return null;
+    return;
   }
 
   const { ratificacionId } = form[6];
@@ -28,9 +30,9 @@ export default async function submitRatificacion(
     ? `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones/${ratificacionId}`
     : `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones`;
 
-  setLoading(true);
-
   try {
+    setLoading(true);
+
     let currentRatificacionId = ratificacionId;
 
     const ratificacionResponse = await fetch(endpoint, {
@@ -48,26 +50,20 @@ export default async function submitRatificacion(
       throw new Error(errorData.message || '¡Error al enviar la ratificación!');
     }
 
-    const ratificacionData = await ratificacionResponse.json();
     if (!currentRatificacionId) {
+      const ratificacionData = await ratificacionResponse.json();
       currentRatificacionId = ratificacionData.id;
     }
 
-    if (archivosNombres && typeof archivosNombres === 'object') {
-      await Promise.all(
-        Object.entries(archivosNombres)
-          .filter(([file]) => Boolean(file))
-          .map(async ([tipoDocumento, file]) => {
-            const formData = await fileToFormData(file);
+    const uploadFile = async (file) => {
+      const formData = new FormData();
+      formData.append('ratificacionId', currentRatificacionId);
+      formData.append('file', file);
+      await SubmitDocument(formData, () => {});
+    };
 
-            formData.append('tipoEntidad', 'RATIFICACION');
-            formData.append('entidadId', currentRatificacionId);
-            formData.append('tipoDocumento', tipoDocumento);
-
-            return SubmitDocument(formData, () => {});
-          }),
-      );
-    }
+    await uploadFile(file1);
+    await uploadFile(file2);
 
     const postSectionResponse = await fetch(
       `${baseUrl}/api/v1/solicitudes/${id}/secciones/19`,
@@ -82,7 +78,9 @@ export default async function submitRatificacion(
 
     if (!postSectionResponse.ok) {
       const errorData = await postSectionResponse.json();
-      throw new Error(errorData.message || '¡Error al desactivar la sección 19!');
+      throw new Error(
+        errorData.message || '¡Error al desactivar la sección 19!',
+      );
     }
 
     setSections((prevSections) => prevSections.map(
@@ -94,8 +92,6 @@ export default async function submitRatificacion(
       message: '¡Éxito, no hubo problemas en esta sección!',
       type: 'success',
     });
-
-    return true;
   } catch (error) {
     console.error('Error:', error);
     setNoti({
@@ -103,7 +99,6 @@ export default async function submitRatificacion(
       message: `¡Hubo un problema!: ${error.message}`,
       type: 'error',
     });
-    return false;
   } finally {
     setLoading(false);
   }
