@@ -215,38 +215,32 @@ export default function DocentesModal({
         value: formDocentes?.formacionesDocentes?.[0]?.institucion,
         errorMsg: errorDatosDocentes.formacion_1_institucion,
       },
+      {
+        name: 'formacion_2_nivelId',
+        value: formDocentes?.formacionesDocentes?.[1]?.nivelId,
+        errorMsg: errorDatosDocentes.formacion_2_nivelId,
+      },
+      {
+        name: 'formacion_2_nombre',
+        value: formDocentes?.formacionesDocentes?.[1]?.nombre,
+        errorMsg: errorDatosDocentes.formacion_2_nombre,
+      },
+      {
+        name: 'formacion_2_descripcion',
+        value: formDocentes?.formacionesDocentes?.[1]?.descripcion,
+        errorMsg: errorDatosDocentes.formacion_2_descripcion,
+      },
+      {
+        name: 'formacion_2_fechaGraduado',
+        value: formDocentes?.formacionesDocentes?.[1]?.fechaGraduado,
+        errorMsg: errorDatosDocentes.formacion_2_fechaGraduado,
+      },
+      {
+        name: 'formacion_2_institucion',
+        value: formDocentes?.formacionesDocentes?.[1]?.institucion,
+        errorMsg: errorDatosDocentes.formacion_2_institucion,
+      },
     ];
-    const form2 = formDocentes?.formacionesDocentes?.[1] || {};
-    const form2TieneDatos = Object.values(form2).some((v) => v !== null && v !== undefined && v !== '');
-    if (form2TieneDatos) {
-      requiredFields.push(
-        {
-          name: 'formacion_2_nivelId',
-          value: formDocentes?.formacionesDocentes?.[1]?.nivelId,
-          errorMsg: errorDatosDocentes.formacion_2_nivelId,
-        },
-        {
-          name: 'formacion_2_nombre',
-          value: formDocentes?.formacionesDocentes?.[1]?.nombre,
-          errorMsg: errorDatosDocentes.formacion_2_nombre,
-        },
-        {
-          name: 'formacion_2_descripcion',
-          value: formDocentes?.formacionesDocentes?.[1]?.descripcion,
-          errorMsg: errorDatosDocentes.formacion_2_descripcion,
-        },
-        {
-          name: 'formacion_2_fechaGraduado',
-          value: formDocentes?.formacionesDocentes?.[1]?.fechaGraduado,
-          errorMsg: errorDatosDocentes.formacion_2_fechaGraduado,
-        },
-        {
-          name: 'formacion_2_institucion',
-          value: formDocentes?.formacionesDocentes?.[1]?.institucion,
-          errorMsg: errorDatosDocentes.formacion_2_institucion,
-        },
-      );
-    }
     let hasError = false;
 
     requiredFields.forEach(({ name, value, errorMsg }) => {
