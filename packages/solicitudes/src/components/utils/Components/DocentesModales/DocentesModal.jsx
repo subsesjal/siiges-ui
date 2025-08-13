@@ -621,3 +621,4 @@ DocentesModal.propTypes = {
   setDocentesList: PropTypes.func.isRequired,
   mode: PropTypes.oneOf(['create', 'edit', 'consult']).isRequired,
 };
+
