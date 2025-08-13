@@ -1,17 +1,4 @@
-import { getToken, SubmitDocument } from '@siiges-ui/shared';
-
-const fileToBlob = (file) => new Promise((resolve, reject) => {
-  const fileReader = new FileReader();
-  fileReader.readAsArrayBuffer(file);
-  fileReader.onload = (event) => {
-    const fileContent = event.target.result;
-    const fileBlob = new Blob([fileContent], { type: file.type });
-    resolve({ fileBlob, fileName: file.name });
-  };
-  fileReader.onerror = (error) => {
-    reject(error);
-  };
-});
+import { getToken, SubmitDocument, fileToFormData } from '@siiges-ui/shared';
 
 export default async function submitRatificacion(
   validations,
@@ -66,24 +53,16 @@ export default async function submitRatificacion(
       currentRatificacionId = ratificacionData.id;
     }
 
-    if (
-      archivosNombres
-      && typeof archivosNombres === 'object'
-      && Object.keys(archivosNombres).length > 0
-    ) {
+    if (archivosNombres && typeof archivosNombres === 'object') {
       await Promise.all(
         Object.entries(archivosNombres)
           .filter(([file]) => Boolean(file))
           .map(async ([tipoDocumento, file]) => {
-            const { fileBlob, fileName } = await fileToBlob(file);
+            const formData = await fileToFormData(file);
 
-            const formData = new FormData();
-            formData.append('uploadFile', fileBlob, fileName);
             formData.append('tipoEntidad', 'RATIFICACION');
             formData.append('entidadId', currentRatificacionId);
             formData.append('tipoDocumento', tipoDocumento);
-
-            console.log('Enviando archivo:', { tipoDocumento, fileName, fileBlob });
 
             return SubmitDocument(formData, () => {});
           }),
