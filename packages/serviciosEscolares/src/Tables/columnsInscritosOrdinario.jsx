@@ -9,6 +9,7 @@ const columnsInscritosOrdinario = (
   calificacionMaxima,
   calificacionDecimal,
   fechaExamenes,
+  calificaciones,
 ) => [
   {
     field: 'matricula',
@@ -32,8 +33,14 @@ const columnsInscritosOrdinario = (
     headerName: 'Calificación Ordinario',
     width: 220,
     renderCell: (params) => {
-      const calificacion = params.row.calificaciones[0]?.calificacion || '';
+      const califGuardada = calificaciones.find(
+        (c) => c.alumnoId === params.id && c.tipo === 1,
+      )?.calificacion;
+
+      const calificacion = califGuardada ?? params.row.calificaciones[0]?.calificacion ?? '';
+
       const isDisabled = disabled || params.row.situacionId === 3 || params.row.situacionId === 4;
+
       return (
         <CalificacionInput
           id={params.id}
@@ -54,9 +61,14 @@ const columnsInscritosOrdinario = (
     headerName: 'Fecha de examen',
     width: 220,
     renderCell: (params) => {
-      const isDisabled = disabled || params.row.situacionId === 3 || params.row.situacionId === 4;
-      const currentFechaExamen = params.row.calificaciones[0]?.fechaExamen || '';
+      const fechaGuardada = calificaciones.find(
+        (c) => c.alumnoId === params.id && c.tipo === 1,
+      )?.fechaExamen;
+
+      const currentFechaExamen = fechaGuardada ?? params.row.calificaciones[0]?.fechaExamen ?? '';
       const fechaExamen = !currentFechaExamen && fechaExamenes ? fechaExamenes : currentFechaExamen;
+
+      const isDisabled = disabled || params.row.situacionId === 3 || params.row.situacionId === 4;
 
       return (
         <FechaExamenInput
