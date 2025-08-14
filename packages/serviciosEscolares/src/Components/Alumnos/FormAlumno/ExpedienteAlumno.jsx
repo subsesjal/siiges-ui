@@ -6,27 +6,32 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
-export default function ExpedienteAlumno({ id, type }) {
-  const [certificadoFile, setCertificadoFile] = useState(null);
-  const [resolucionFile, setResolucionFile] = useState(null);
-
-  const [expedienteInfo, setExpedienteInfo] = useState({
-    numeroExpediente: '',
-    folioResolucionParcial: '',
-    fechaResolucionParcial: '',
-  });
-
+export default function ExpedienteAlumno({ alumno, type }) {
+  const { id, equivalencia = {} } = alumno || {};
   const router = useRouter();
 
+  const [certificadoFile, setCertificadoFile] = useState(null);
+  const [resolucionFile, setResolucionFile] = useState(null);
+  const [expedienteInfo, setExpedienteInfo] = useState({
+    folioExpediente: equivalencia.folioExpediente || '',
+    folioResolucion: equivalencia.folioResolucion || '',
+    fechaResolucion: equivalencia.fechaResolucion || '',
+  });
+
+  // Carga de archivos
   useEffect(() => {
-    if (type === 'edit' && id) {
-      GetFile({ tipoEntidad: 'ALUMNO', entidadId: id, tipoDocumento: 'CERTIFICADO_PARCIAL' }, (url, error) => {
-        if (!error) setCertificadoFile(url);
+    if (type !== 'edit' || !id) return;
+
+    const filesToLoad = [
+      { tipoDocumento: 'CERTIFICADO_PARCIAL', setter: setCertificadoFile },
+      { tipoDocumento: 'RESOLUCION_PARCIAL', setter: setResolucionFile },
+    ];
+
+    filesToLoad.forEach(({ tipoDocumento, setter }) => {
+      GetFile({ tipoEntidad: 'ALUMNO', entidadId: id, tipoDocumento }, (url, error) => {
+        if (!error) setter(url);
       });
-      GetFile({ tipoEntidad: 'ALUMNO', entidadId: id, tipoDocumento: 'RESOLUCION_PARCIAL' }, (url, error) => {
-        if (!error) setResolucionFile(url);
-      });
-    }
+    });
   }, [id, type]);
 
   const handleChange = (e) => {
@@ -42,45 +47,32 @@ export default function ExpedienteAlumno({ id, type }) {
         Asegúrese de subir un archivo legible.
       </Typography>
       <br />
-      <Grid container spacing={2}>
-        {/* Campos de texto */}
-        <Grid item xs={6}>
-          <Input
-            id="numeroExpediente"
-            name="numeroExpediente"
-            label="No. de Expediente"
-            value={expedienteInfo.numeroExpediente}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Input
-            id="folioResolucionParcial"
-            name="folioResolucionParcial"
-            label="Folio de Resolución Parcial"
-            value={expedienteInfo.folioResolucionParcial}
-            onChange={handleChange}
-          />
-        </Grid>
 
-        {/* Campo de fecha */}
-        <Grid item xs={6}>
-          <Input
-            id="fechaResolucionParcial"
-            name="fechaResolucionParcial"
-            label="Fecha de Resolución Parcial"
-            type="date"
-            value={expedienteInfo.fechaResolucionParcial}
-            onChange={handleChange}
-          />
-        </Grid>
+      <Grid container spacing={2}>
+        {[
+          { id: 'folioExpediente', label: 'No. de Expediente' },
+          { id: 'folioResolucion', label: 'Folio de Resolución Parcial' },
+          { id: 'fechaResolucion', label: 'Fecha de Resolución Parcial', type: 'date' },
+        ].map(({ id: fieldId, label, type: inputType }) => (
+          <Grid item xs={6} key={fieldId}>
+            <Input
+              id={fieldId}
+              name={fieldId}
+              label={label}
+              type={inputType || 'text'}
+              value={expedienteInfo[fieldId]}
+              onChange={handleChange}
+              disabled
+            />
+          </Grid>
+        ))}
 
         {/* Archivos adicionales */}
         <Grid item xs={12}>
           <InputFile
             tipoEntidad="ALUMNO"
             tipoDocumento="CERTIFICADO_PARCIAL"
-            id={id}
+            id={alumno?.id}
             label="Certificado Parcial o Total (PDF)"
             url={certificadoFile}
             setUrl={setCertificadoFile}
@@ -90,7 +82,7 @@ export default function ExpedienteAlumno({ id, type }) {
           <InputFile
             tipoEntidad="ALUMNO"
             tipoDocumento="RESOLUCION_PARCIAL"
-            id={id}
+            id={alumno?.id}
             label="Resolución Parcial (PDF)"
             url={resolucionFile}
             setUrl={setResolucionFile}
@@ -112,11 +104,13 @@ export default function ExpedienteAlumno({ id, type }) {
 }
 
 ExpedienteAlumno.defaultProps = {
-  id: null,
+  alumno: null,
   type: null,
 };
 
 ExpedienteAlumno.propTypes = {
-  id: PropTypes.number,
+  alumno: PropTypes.shape({
+    id: PropTypes.number,
+  }),
   type: PropTypes.string,
 };
