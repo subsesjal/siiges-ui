@@ -1,4 +1,4 @@
-import { getToken } from '@siiges-ui/shared';
+import { getToken, SubmitDocument, fileToFormData } from '@siiges-ui/shared';
 
 export default async function submitRatificacion(
   validations,
@@ -9,17 +9,17 @@ export default async function submitRatificacion(
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const baseUrl = process.env.NEXT_PUBLIC_URL;
-  const { form, validNombres } = validations;
+  const { form, validNombres, archivosNombres } = validations;
   const token = getToken();
 
   if (!validNombres) {
     setNoti({
       open: true,
-      message: '¡Algo salió mal, se requiere al menos 1 nombre propuesto y ambos archivos!',
+      message: '¡Se requiere al menos 1 nombre propuesto!',
       type: 'error',
     });
     setLoading(false);
-    return;
+    return null;
   }
 
   const { ratificacionId } = form[6];
@@ -28,10 +28,11 @@ export default async function submitRatificacion(
     ? `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones/${ratificacionId}`
     : `${baseUrl}/api/v1/instituciones/${form[6].institucionId}/ratificaciones`;
 
-  try {
-    setLoading(true);
+  setLoading(true);
 
-    // First request to submit ratificacion
+  try {
+    let currentRatificacionId = ratificacionId;
+
     const ratificacionResponse = await fetch(endpoint, {
       method,
       headers: {
@@ -47,32 +48,54 @@ export default async function submitRatificacion(
       throw new Error(errorData.message || '¡Error al enviar la ratificación!');
     }
 
-    // Second request to disable section 11
-    const postSectionResponse = await fetch(`${baseUrl}/api/v1/solicitudes/${id}/secciones/19`, {
-      method: 'POST',
-      headers: {
-        api_key: apikey,
-        Authorization: `Bearer ${token}`,
+    const ratificacionData = await ratificacionResponse.json();
+    if (!currentRatificacionId) {
+      currentRatificacionId = ratificacionData.id;
+    }
+
+    if (archivosNombres && typeof archivosNombres === 'object') {
+      await Promise.all(
+        Object.entries(archivosNombres)
+          .filter(([file]) => Boolean(file))
+          .map(async ([tipoDocumento, file]) => {
+            const formData = await fileToFormData(file);
+
+            formData.append('tipoEntidad', 'RATIFICACION');
+            formData.append('entidadId', currentRatificacionId);
+            formData.append('tipoDocumento', tipoDocumento);
+
+            return SubmitDocument(formData, () => {});
+          }),
+      );
+    }
+
+    const postSectionResponse = await fetch(
+      `${baseUrl}/api/v1/solicitudes/${id}/secciones/19`,
+      {
+        method: 'POST',
+        headers: {
+          api_key: apikey,
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!postSectionResponse.ok) {
       const errorData = await postSectionResponse.json();
       throw new Error(errorData.message || '¡Error al desactivar la sección 19!');
     }
 
-    setSections((prevSections) => prevSections.map((section) => {
-      if (section.id === 19) {
-        return { ...section, disabled: true };
-      }
-      return section;
-    }));
+    setSections((prevSections) => prevSections.map(
+      (section) => (section.id === 19 ? { ...section, disabled: true } : section),
+    ));
 
     setNoti({
       open: true,
       message: '¡Éxito, no hubo problemas en esta sección!',
       type: 'success',
     });
+
+    return true;
   } catch (error) {
     console.error('Error:', error);
     setNoti({
@@ -80,6 +103,7 @@ export default async function submitRatificacion(
       message: `¡Hubo un problema!: ${error.message}`,
       type: 'error',
     });
+    return false;
   } finally {
     setLoading(false);
   }

@@ -30,6 +30,7 @@ export default function PlanEstudios({
   setProgramaId,
   type,
   isDisabled: parentDisabled,
+  tipoSolicitudId,
 }) {
   const { session, loading } = useContext(Context);
   const router = useRouter();
@@ -53,7 +54,6 @@ export default function PlanEstudios({
   const [modalidad, setModalidad] = useState();
   const { solicitudes, loading: loadingSolicitud } = getSolicitudesById(id);
   const [trayectoriaStatus, setTrayectoriaStatus] = useState('new');
-  const [sectionLength, setSectionLength] = useState(10);
 
   useEffect(() => {
     let isMounted = true;
@@ -183,6 +183,23 @@ export default function PlanEstudios({
     }),
     [form, error, errors, noti, id, programaId, modalidad, trayectoriaStatus],
   );
+
+  const allowedSections = useMemo(() => {
+    const modalidadNumber = Number(modalidad) || 0;
+    const baseLength = modalidadNumber === 1 ? 9 : 10;
+    const base = Array.from({ length: baseLength }, (_, i) => i + 1);
+    if (tipoSolicitudId === 3) {
+      return [1, 2, 6, 7];
+    }
+    return base;
+  }, [modalidad, tipoSolicitudId]);
+
+  const [sectionLength, setSectionLength] = useState(allowedSections.length);
+
+  useEffect(() => {
+    setSectionLength(allowedSections.length);
+  }, [allowedSections]);
+
   const {
     next, prev, section, position, porcentaje,
   } = pagination(
@@ -190,14 +207,7 @@ export default function PlanEstudios({
     sectionLength,
   );
 
-  useEffect(() => {
-    const modalidadNumber = Number(modalidad);
-    if (modalidadNumber === 1) {
-      setSectionLength(9);
-    } else {
-      setSectionLength(10);
-    }
-  }, [modalidad]);
+  const realSection = allowedSections[section - 1];
 
   const isDisabled = parentDisabled || disabled;
 
@@ -210,47 +220,64 @@ export default function PlanEstudios({
               type={type}
               id={id}
               sectionTitle="Plan de estudios"
-              sections={section}
-              position={position}
-              total={sectionLength}
-              porcentaje={porcentaje}
               nextModule={nextModule}
+              sections={section}
+              position={String(position)}
+              total={String(sectionLength)}
+              porcentaje={porcentaje}
               next={next}
               prev={prev}
             >
               <Loading loading={loading} />
-              {section === 1 && (
-                <DatosPlanEstudios disabled={isDisabled} type={type} />
+
+              {realSection === 1 && (
+                <DatosPlanEstudios
+                  disabled={isDisabled}
+                  type={type}
+                  tipoSolicitudId={tipoSolicitudId}
+                />
               )}
-              {section === 2 && (
+
+              {realSection === 2 && (
                 <FundamentosPlanEstudios disabled={isDisabled} type={type} />
               )}
-              {section === 3 && <Ingreso disabled={isDisabled} type={type} />}
-              {section === 4 && <Egreso disabled={isDisabled} type={type} />}
-              {section === 5 && (
+
+              {realSection === 3 && <Ingreso disabled={isDisabled} type={type} />}
+
+              {realSection === 4 && <Egreso disabled={isDisabled} type={type} />}
+
+              {realSection === 5 && (
                 <Curricula
                   disabled={isDisabled}
                   type={type}
                   programaId={programaId}
                 />
               )}
-              {section === 6 && (
+
+              {realSection === 6 && (
                 <Asignaturas disabled={isDisabled} type={type} />
               )}
-              {section === 7 && (
+
+              {realSection === 7 && (
                 <AsignaturasFormacionElectiva
                   disabled={isDisabled}
                   type={type}
                 />
               )}
-              {section === 8 && <Docentes disabled={isDisabled} type={type} />}
-              {section === 9 && (
+
+              {realSection === 8 && (
+                <Docentes disabled={isDisabled} type={type} />
+              )}
+
+              {realSection === 9 && (
                 <TrayectoriaEducativa disabled={isDisabled} type={type} />
               )}
-              {section === 10 && (
+
+              {realSection === 10 && (
                 <HerramientaEducativa disabled={isDisabled} type={type} />
               )}
-              <Observaciones id={id} section={section} />
+
+              <Observaciones id={id} section={realSection} />
             </SectionLayout>
           </CardContent>
         </Card>
@@ -271,12 +298,14 @@ PlanEstudios.defaultProps = {
   type: null,
   id: null,
   programaId: null,
+  tipoSolicitudId: null,
 };
 
 PlanEstudios.propTypes = {
   nextModule: PropTypes.func.isRequired,
   setId: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
+  tipoSolicitudId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   isDisabled: PropTypes.bool.isRequired,
   type: PropTypes.string,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

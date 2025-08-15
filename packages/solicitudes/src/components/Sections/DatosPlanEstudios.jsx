@@ -11,7 +11,7 @@ import modalidades from '../utils/Mocks/mockModalidades';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
-export default function DatosPlanEstudios({ disabled, type }) {
+export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
   const [initialValues, setInitialValues] = useState({});
   const [open, setOpen] = useState(false);
 
@@ -220,44 +220,48 @@ export default function DatosPlanEstudios({ disabled, type }) {
             disabled={isDisabled}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Objetivo General"
-            id="objetivoGeneral"
-            name="objetivoGeneral"
-            auto="objetivoGeneral"
-            value={form[1].programa?.objetivoGeneral || ''}
-            rows={4}
-            multiline
-            sx={{ width: '100%' }}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
-            helperText={error.objetivoGeneral}
-            error={!!error.objetivoGeneral}
-            required
-            disabled={isDisabled}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Objetivo Particular"
-            id="objetivosParticulares"
-            name="objetivosParticulares"
-            auto="objetivosParticulares"
-            value={form[1].programa?.objetivosParticulares || ''}
-            rows={4}
-            multiline
-            sx={{ width: '100%' }}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
-            onFocus={handleInputFocus}
-            helperText={error.objetivosParticulares}
-            error={!!error.objetivosParticulares}
-            required
-            disabled={isDisabled}
-          />
-        </Grid>
+        {tipoSolicitudId !== 3 && (
+        <>
+          <Grid item xs={12}>
+            <TextField
+              label="Objetivo General"
+              id="objetivoGeneral"
+              name="objetivoGeneral"
+              auto="objetivoGeneral"
+              value={form[1].programa?.objetivoGeneral || ''}
+              rows={4}
+              multiline
+              sx={{ width: '100%' }}
+              onChange={handleOnChange}
+              onBlur={handleOnBlur}
+              onFocus={handleInputFocus}
+              helperText={error.objetivoGeneral}
+              error={!!error.objetivoGeneral}
+              required
+              disabled={isDisabled}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Objetivo Particular"
+              id="objetivosParticulares"
+              name="objetivosParticulares"
+              auto="objetivosParticulares"
+              value={form[1].programa?.objetivosParticulares || ''}
+              rows={4}
+              multiline
+              sx={{ width: '100%' }}
+              onChange={handleOnChange}
+              onBlur={handleOnBlur}
+              onFocus={handleInputFocus}
+              helperText={error.objetivosParticulares}
+              error={!!error.objetivosParticulares}
+              required
+              disabled={isDisabled}
+            />
+          </Grid>
+        </>
+        )}
       </Grid>
       <DefaultModal title="Recordatorio" open={open} setOpen={setOpen}>
         Estimada Institución, recuerda que la fecha oficial de recepción de la solicitud será al
@@ -270,9 +274,11 @@ export default function DatosPlanEstudios({ disabled, type }) {
 
 DatosPlanEstudios.defaultProps = {
   type: null,
+  tipoSolicitudId: null,
 };
 
 DatosPlanEstudios.propTypes = {
   disabled: PropTypes.bool.isRequired,
   type: PropTypes.string,
+  tipoSolicitudId: PropTypes.number,
 };

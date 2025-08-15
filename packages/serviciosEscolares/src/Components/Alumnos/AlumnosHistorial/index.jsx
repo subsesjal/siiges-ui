@@ -14,21 +14,22 @@ export default function HistorialAcademico({ alumno, historial }) {
     return null;
   }
 
-  const totalCreditosPrograma = parseFloat(alumno.creditos) || 0;
+  const totalCreditosPrograma = Number(alumno?.programa?.creditos ?? alumno?.creditos ?? 0);
 
   const asignaturasMap = new Map();
-  historial.forEach((record) => {
-    if (asignaturasMap.has(record.asignaturaId)) {
-      if (asignaturasMap.get(record.asignaturaId).tipo === 1 && record.tipo === 2) {
+  (historial ?? [])
+    .filter((r) => r && r.asignatura)
+    .forEach((record) => {
+      const prev = asignaturasMap.get(record.asignaturaId);
+      if (prev) {
+        if (prev.tipo === 1 && record.tipo === 2) asignaturasMap.set(record.asignaturaId, record);
+      } else {
         asignaturasMap.set(record.asignaturaId, record);
       }
-    } else {
-      asignaturasMap.set(record.asignaturaId, record);
-    }
-  });
+    });
 
-  const creditosObtenidos = Array.from(asignaturasMap.values())
-    .reduce((sum, record) => sum + (parseFloat(record.asignatura.creditos) || 0), 0);
+  const creditosObtenidos = [...asignaturasMap.values()]
+    .reduce((sum, r) => sum + Number(r?.asignatura?.creditos ?? 0), 0);
 
   return (
     <Grid container spacing={1} sx={{ paddingTop: 3 }}>
@@ -72,9 +73,12 @@ HistorialAcademico.propTypes = {
     nombre: PropTypes.string.isRequired,
     apellidoPaterno: PropTypes.string.isRequired,
     apellidoMaterno: PropTypes.string,
-    creditos: PropTypes.string.isRequired,
     situacionId: PropTypes.number.isRequired,
     matricula: PropTypes.string.isRequired,
+    creditos: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    programa: PropTypes.shape({
+      creditos: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }),
   }).isRequired,
   historial: PropTypes.arrayOf(
     PropTypes.shape({
@@ -86,16 +90,16 @@ HistorialAcademico.propTypes = {
       tipo: PropTypes.number.isRequired,
       fechaExamen: PropTypes.string.isRequired,
       asignatura: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        clave: PropTypes.string.isRequired,
-        nombre: PropTypes.string.isRequired,
-        creditos: PropTypes.string.isRequired,
-      }).isRequired,
+        id: PropTypes.number,
+        clave: PropTypes.string,
+        nombre: PropTypes.string,
+        creditos: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      }),
       grupo: PropTypes.shape({
         cicloEscolar: PropTypes.shape({
-          nombre: PropTypes.string.isRequired,
-        }).isRequired,
-      }).isRequired,
+          nombre: PropTypes.string,
+        }),
+      }),
     }),
   ).isRequired,
 };

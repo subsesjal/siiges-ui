@@ -18,11 +18,17 @@ function InputTime({
   size,
 }) {
   const handleDateChange = (newDate) => {
-    if (newDate) {
+    if (newDate && newDate.isValid && newDate.isValid()) {
       const formattedDate = newDate.toDate();
       onChange({ target: { name, value: formattedDate } });
     } else {
       onChange({ target: { name, value: null } });
+    }
+  };
+
+  const handleAccept = () => {
+    if (onblur) {
+      onblur({ target: { name } });
     }
   };
 
@@ -32,6 +38,7 @@ function InputTime({
         label={label}
         value={value ? dayjs(value) : null}
         onChange={handleDateChange}
+        onAccept={handleAccept}
         onFocus={onfocus}
         disabled={disabled}
         sx={{ width: '100%', mt: 2 }}

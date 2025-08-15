@@ -41,6 +41,7 @@ export default function InscripcionForm({
 
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
+  const isAdmin = session.rol === 'admin';
 
   const initialState = typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_KEY)
     ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
@@ -129,7 +130,16 @@ export default function InscripcionForm({
         });
         setArrays((prevState) => ({ ...prevState, ciclosEscolares: [] }));
       } else {
-        setArrays((prevState) => ({ ...prevState, ciclosEscolares: data.ciclosEscolares }));
+        const ciclosFiltered = !isAdmin ? data.ciclosEscolares.filter(({ nombre }) => nombre !== 'EQUIV') : data.ciclosEscolares;
+        const ciclosSorted = ciclosFiltered
+          .slice()
+          .sort((a, b) => {
+            if (a.nombre === 'EQUIV') return 1;
+            if (b.nombre === 'EQUIV') return -1;
+            return a.nombre.localeCompare(b.nombre);
+          });
+
+        setArrays((prevState) => ({ ...prevState, ciclosEscolares: ciclosSorted }));
       }
     });
   };
@@ -422,7 +432,14 @@ export default function InscripcionForm({
         open={openGrupos}
         setOpen={setOpenGrupos}
         type="new"
-        params={{ cicloEscolarId: state.selectedCicloEscolar, gradoId: state.selectedGrado }}
+        params={{
+          cicloEscolarId: state.selectedCicloEscolar,
+          cicloNombre: arrays.ciclosEscolares.find(
+            (ciclo) => ciclo.id === state.selectedCicloEscolar,
+          )?.nombre,
+          gradoId: state.selectedGrado,
+          gradoNombre: arrays.grados.find((grado) => grado.id === state.selectedGrado)?.nombre,
+        }}
         setFetchGrupos={setFetchGruposTrigger}
       />
     </>

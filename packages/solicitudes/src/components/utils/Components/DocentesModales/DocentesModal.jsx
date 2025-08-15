@@ -1,28 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Divider, Grid, Typography } from '@mui/material';
+import {
+  Divider, Grid, Typography, Button,
+} from '@mui/material';
 import {
   DefaultModal,
   validateField,
-  Input,
-  Select,
   ButtonSimple,
-  InputDate,
   Context,
+  Select,
+  Input,
   InputNumber,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { styled } from '@mui/system';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import handleCreate from '../../submitDocentes';
+import FormacionFields from './FormacionFields';
 import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProviderContext';
-import getAsignaturas from '../../getAsignaturas';
 import {
   documentosPresentados,
   nivel,
   tipoContratacion,
   tiposDocentes,
 } from '../../../Sections/Mocks/Docentes/utils';
-import useDocente from '../../getDocente';
+import handleCreate from '../../submitDocentes';
+import useDocentes from '../../getDocente';
+import getAsignaturas from '../../getAsignaturas';
 
 const errorDatosDocentes = {
   tipodocente: '¡Nombre inválido!',
@@ -46,6 +51,22 @@ const errorDatosDocentes = {
   formacion_2_institucion: '¡Institución no inválida!',
 };
 
+// Botón personalizado con borde, texto e ícono
+const IconButtonCustom = styled(Button)(({ theme }) => ({
+  padding: theme.spacing(1, 1),
+  borderRadius: 30,
+  backgroundColor: 'transparent',
+  color: theme.palette.text.primary,
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  textTransform: 'none',
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
+
 export default function DocentesModal({
   open,
   hideModal,
@@ -54,6 +75,10 @@ export default function DocentesModal({
   mode,
   id,
 }) {
+  const { setLoading } = useContext(Context);
+  const [showFormacion2, setShowFormacion2] = useState(false);
+  const [currentSection, setCurrentSection] = useState(1);
+
   const {
     formDocentes,
     setFormDocentes,
@@ -63,39 +88,55 @@ export default function DocentesModal({
     programaId,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
-  const { setLoading } = useContext(Context);
   const { asignaturasTotal } = getAsignaturas(programaId);
-  const [currentSection, setCurrentSection] = useState(1);
-  const docente = useDocente(id);
+
+  const docente = useDocentes(id);
 
   useEffect(() => {
     if (mode !== 'create' && docente) {
-      const docenteValues = {
+      const formaciones = docente.formacionesDocentes?.map((f) => ({
+        id: f.id,
+        nivelId: f.formacion.nivelId,
+        nombre: f.formacion.nombre,
+        descripcion: f.formacion.descripcion,
+        fechaGraduado: f.formacion.fechaGraduado,
+        institucion: f.formacion.institucion,
+      })) || [];
+
+      while (formaciones.length < 2) formaciones.push({});
+
+      setFormDocentes({
         id: docente.id,
         programaId: docente.programaId,
-        tipoDocente: docente.tipoDocente,
-        tipoContratacion: docente.tipoContratacion,
-        antiguedad: docente.antiguedad,
-        experiencias: docente.experiencias,
+        tipoDocente: docente.tipoDocente || '',
+        tipoContratacion: docente.tipoContratacion || '',
+        antiguedad: docente.antiguedad || '',
+        experiencias: docente.experiencias || '',
         asignaturasDocentes:
-          docente.asignaturasDocentes?.map((asig) => asig.asignaturaId) || [],
+          docente.asignaturasDocentes?.map((a) => a.asignaturaId) || [],
         persona: {
-          nombre: docente.persona?.nombre,
-          apellidoPaterno: docente.persona?.apellidoPaterno,
-          apellidoMaterno: docente.persona?.apellidoMaterno,
+          nombre: docente.persona?.nombre || '',
+          apellidoPaterno: docente.persona?.apellidoPaterno || '',
+          apellidoMaterno: docente.persona?.apellidoMaterno || '',
         },
-        formacionesDocentes: docente.formacionesDocentes?.map((formacion) => ({
-          id: formacion.id,
-          nivelId: formacion.formacion.nivelId,
-          nombre: formacion.formacion.nombre,
-          descripcion: formacion.formacion.descripcion,
-          fechaGraduado: formacion.formacion.fechaGraduado,
-          institucion: formacion.formacion.institucion,
-        })) || [{}, {}],
-      };
-      setFormDocentes(docenteValues);
+        formacionesDocentes: formaciones,
+      });
     }
-  }, [docente]);
+  }, [docente, mode]);
+
+  useEffect(() => {
+    const form2 = formDocentes?.formacionesDocentes?.[1];
+    if (
+      form2
+    && Object.values(form2).some(
+      (v) => v !== null && v !== undefined && v !== '',
+    )
+    ) {
+      setShowFormacion2(true);
+    } else {
+      setShowFormacion2(false);
+    }
+  }, [formDocentes]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -139,57 +180,36 @@ export default function DocentesModal({
   };
 
   const handleOnBlur = (e) => {
-    const { name } = e.target;
-    validateField(formDocentes, name, setError, errorDatosDocentes);
+    const { name, value } = e.target;
+    setError((prev) => ({
+      ...prev,
+      [name]: validateField({ [name]: value }, name, () => {}, {
+        [name]: { message: errorDatosDocentes[name] },
+      })[name],
+    }));
   };
 
   const handleInputFocus = (e) => {
-    const { name, value } = e.target;
-    setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
+    const { name } = e.target;
+    setError((prev) => ({ ...prev, [name]: '' }));
+  };
+
+  const handleAddFormacion2 = () => {
+    setShowFormacion2(true);
+  };
+
+  const handleRemoveFormacion2 = () => {
+    setFormDocentes((prev) => ({
+      ...prev,
+      formacionesDocentes: prev.formacionesDocentes
+        ? prev.formacionesDocentes.slice(0, 1)
+        : [],
+    }));
+    setShowFormacion2(false);
   };
 
   const handleOnSubmit = () => {
     const requiredFields = [
-      {
-        name: 'tipoDocente',
-        value: formDocentes?.tipoDocente,
-        errorMsg: errorDatosDocentes.tipoDocente,
-      },
-      {
-        name: 'nombre',
-        value: formDocentes?.persona?.nombre,
-        errorMsg: errorDatosDocentes.nombre,
-      },
-      {
-        name: 'apellidoPaterno',
-        value: formDocentes?.persona?.apellidoPaterno,
-        errorMsg: errorDatosDocentes.apellidoPaterno,
-      },
-      {
-        name: 'apellidoMaterno',
-        value: formDocentes?.persona?.apellidoMaterno,
-        errorMsg: errorDatosDocentes.apellidoMaterno,
-      },
-      {
-        name: 'asignaturasDocentes',
-        value: formDocentes?.asignaturasDocentes,
-        errorMsg: errorDatosDocentes.asignaturasDocentes,
-      },
-      {
-        name: 'tipoContratacion',
-        value: formDocentes?.tipoContratacion,
-        errorMsg: errorDatosDocentes.tipoContratacion,
-      },
-      {
-        name: 'antiguedad',
-        value: formDocentes?.antiguedad,
-        errorMsg: errorDatosDocentes.antiguedad,
-      },
-      {
-        name: 'experiencias',
-        value: formDocentes?.experiencias,
-        errorMsg: errorDatosDocentes.experiencias,
-      },
       {
         name: 'formacion_1_nivelId',
         value: formDocentes?.formacionesDocentes?.[0]?.nivelId,
@@ -215,78 +235,69 @@ export default function DocentesModal({
         value: formDocentes?.formacionesDocentes?.[0]?.institucion,
         errorMsg: errorDatosDocentes.formacion_1_institucion,
       },
-      {
-        name: 'formacion_2_nivelId',
-        value: formDocentes?.formacionesDocentes?.[1]?.nivelId,
-        errorMsg: errorDatosDocentes.formacion_2_nivelId,
-      },
-      {
-        name: 'formacion_2_nombre',
-        value: formDocentes?.formacionesDocentes?.[1]?.nombre,
-        errorMsg: errorDatosDocentes.formacion_2_nombre,
-      },
-      {
-        name: 'formacion_2_descripcion',
-        value: formDocentes?.formacionesDocentes?.[1]?.descripcion,
-        errorMsg: errorDatosDocentes.formacion_2_descripcion,
-      },
-      {
-        name: 'formacion_2_fechaGraduado',
-        value: formDocentes?.formacionesDocentes?.[1]?.fechaGraduado,
-        errorMsg: errorDatosDocentes.formacion_2_fechaGraduado,
-      },
-      {
-        name: 'formacion_2_institucion',
-        value: formDocentes?.formacionesDocentes?.[1]?.institucion,
-        errorMsg: errorDatosDocentes.formacion_2_institucion,
-      },
     ];
-    let hasError = false;
 
-    requiredFields.forEach(({ name, value, errorMsg }) => {
-      if (!value || (Array.isArray(value) && value.length === 0)) {
-        setError((prevError) => ({
-          ...prevError,
-          [name]: errorMsg,
-        }));
-        hasError = true;
-      }
-    });
-
-    if (hasError) {
-      return;
+    if (showFormacion2) {
+      requiredFields.push(
+        {
+          name: 'formacion_2_nivelId',
+          value: formDocentes?.formacionesDocentes?.[1]?.nivelId,
+          errorMsg: errorDatosDocentes.formacion_2_nivelId,
+        },
+        {
+          name: 'formacion_2_nombre',
+          value: formDocentes?.formacionesDocentes?.[1]?.nombre,
+          errorMsg: errorDatosDocentes.formacion_2_nombre,
+        },
+        {
+          name: 'formacion_2_descripcion',
+          value: formDocentes?.formacionesDocentes?.[1]?.descripcion,
+          errorMsg: errorDatosDocentes.formacion_2_descripcion,
+        },
+        {
+          name: 'formacion_2_fechaGraduado',
+          value: formDocentes?.formacionesDocentes?.[1]?.fechaGraduado,
+          errorMsg: errorDatosDocentes.formacion_2_fechaGraduado,
+        },
+        {
+          name: 'formacion_2_institucion',
+          value: formDocentes?.formacionesDocentes?.[1]?.institucion,
+          errorMsg: errorDatosDocentes.formacion_2_institucion,
+        },
+      );
     }
 
-    handleCreate(
-      formDocentes,
-      setFormDocentes,
-      setInitialValues,
-      setDocentesList,
-      hideModal,
-      setNoti,
-      programaId,
-      setCurrentSection,
-      mode,
-      setLoading,
-    );
-    setCurrentSection(1);
-  };
+    const newErrors = {};
+    let isValid = true;
 
-  const handleNextSection = () => {
-    setCurrentSection((prevSection) => prevSection + 1);
-  };
+    requiredFields.forEach(({ name, value, errorMsg }) => {
+      const err = validateField({ [name]: value }, name, () => {}, {
+        [name]: { message: errorMsg },
+      })[name];
+      if (err) isValid = false;
+      newErrors[name] = err;
+    });
 
-  const handlePreviousSection = () => {
-    setCurrentSection((prevSection) => prevSection - 1);
-  };
+    setError(newErrors);
 
-  const handleModalClose = () => {
-    hideModal();
+    if (isValid) {
+      handleCreate(
+        formDocentes,
+        setFormDocentes,
+        setInitialValues,
+        setDocentesList,
+        hideModal,
+        setNoti,
+        programaId,
+        setCurrentSection,
+        mode,
+        setLoading,
+      );
+    }
     setCurrentSection(1);
   };
 
   const isConsultMode = mode === 'consult';
-
   const getTitleByMode = () => {
     switch (mode) {
       case 'edit':
@@ -298,8 +309,40 @@ export default function DocentesModal({
     }
   };
 
+  const hasTwoFormaciones = (mode === 'edit' || mode === 'consult')
+    && Array.isArray(formDocentes?.formacionesDocentes)
+    && formDocentes.formacionesDocentes.filter(
+      (f) => f
+        && Object.values(f).some((v) => v !== null && v !== undefined && v !== ''),
+    ).length === 2;
+
+  const handleNextSection = () => {
+    setCurrentSection((prevSection) => prevSection + 1);
+  };
+
+  const handlePreviousSection = () => {
+    setCurrentSection((prevSection) => prevSection - 1);
+  };
+
+  useEffect(() => {
+    if (open) {
+      setShowFormacion2(false);
+    }
+  }, [open]);
+
+  const handleModalClose = () => {
+    hideModal();
+    setCurrentSection(1);
+  };
+
   return (
-    <DefaultModal open={open} setOpen={hideModal} title={getTitleByMode()}>
+    <DefaultModal
+      open={open}
+      setOpen={hideModal}
+      title={getTitleByMode()}
+      submitText="Guardar"
+      onSubmit={handleOnSubmit}
+    >
       {currentSection === 1 && (
         <Grid container spacing={2} sx={{ width: '100%' }}>
           <Grid item xs={4}>
@@ -431,162 +474,66 @@ export default function DocentesModal({
       )}
       {currentSection === 2 && (
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h6">Formaciones Docentes</Typography>
-          </Grid>
-          <Grid item xs={1} sx={{ mt: 3 }}>
-            <Typography variant="subtitle">1.</Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Select
-              title="Nivel"
-              name="formacion_1_nivelId"
-              value={formDocentes?.formacionesDocentes[0]?.nivelId || ''}
-              options={nivel}
-              onChange={handleOnChange}
-              onblur={handleOnBlur}
-              errorMessage={error.formacion_1_nivelId}
-              required
-              disabled={isConsultMode}
-            />
-          </Grid>
-          <Grid item xs={8}>
-            <Input
-              id="formacion_1_nombre"
-              label="Nombre del grado"
-              name="formacion_1_nombre"
-              value={formDocentes?.formacionesDocentes[0]?.nombre || ''}
-              onChange={handleOnChange}
-              onblur={handleOnBlur}
-              onfocus={handleInputFocus}
-              required
-              errorMessage={error.formacion_1_nombre}
-              disabled={isConsultMode}
-            />
-          </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={5}>
-            <Select
-              title="Documento presentado"
-              name="formacion_1_descripcion"
-              value={formDocentes?.formacionesDocentes[0]?.descripcion || ''}
-              options={documentosPresentados}
-              onChange={handleOnChange}
-              onblur={handleOnBlur}
-              errorMessage={error.formacion_1_descripcion}
-              textValue
-              required
-              disabled={isConsultMode}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <InputDate
-              id="formacion_1_fechaGraduado"
-              label="Fecha de Graduado"
-              name="formacion_1_fechaGraduado"
-              value={formDocentes?.formacionesDocentes[0]?.fechaGraduado || ''}
-              onChange={handleOnChange}
-              onfocus={handleInputFocus}
-              onblur={handleOnBlur}
-              required
-              type="datetime"
-              errorMessage={error.formacion_1_fechaGraduado}
-              disabled={isConsultMode}
-            />
-          </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={11}>
-            <Input
-              id="formacion_1_institucion"
-              label="Nombre de la Institución"
-              name="formacion_1_institucion"
-              value={formDocentes?.formacionesDocentes[0]?.institucion || ''}
-              onChange={handleOnChange}
-              onblur={handleOnBlur}
-              onfocus={handleInputFocus}
-              required
-              errorMessage={error.formacion_1_institucion}
-              disabled={isConsultMode}
-            />
-          </Grid>
+          {/* Formación 1 */}
+          <FormacionFields
+            index={1}
+            formDocentes={formDocentes}
+            handleOnChange={handleOnChange}
+            handleOnBlur={handleOnBlur}
+            handleInputFocus={handleInputFocus}
+            error={error}
+            isConsultMode={isConsultMode}
+            nivel={nivel}
+            documentosPresentados={documentosPresentados}
+          />
+
           <Grid item xs={12}>
             <Divider />
           </Grid>
-          <Grid item xs={1} sx={{ mt: 3 }}>
-            <Typography variant="subtitle">2.</Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Select
-              title="Nivel"
-              name="formacion_2_nivelId"
-              value={formDocentes?.formacionesDocentes[1]?.nivelId || ''}
-              options={nivel}
-              onChange={handleOnChange}
-              onblur={handleOnBlur}
-              errorMessage={error.formacion_2_nivelId}
-              required
-              disabled={isConsultMode}
+
+          {/* Botones de agregar/eliminar formación 2 */}
+          {!isConsultMode && (
+            <Grid
+              item
+              xs={12}
+              sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}
+            >
+              {!showFormacion2 && (
+                <IconButtonCustom
+                  onClick={handleAddFormacion2}
+                  title="Agregar formación"
+                >
+                  <span>Agregar Formación</span>
+                  <AddIcon fontSize="small" />
+                </IconButtonCustom>
+              )}
+              {showFormacion2 && !hasTwoFormaciones && (
+                <IconButtonCustom
+                  onClick={handleRemoveFormacion2}
+                  title="Quitar formación"
+                  sx={{ color: 'error.main', borderColor: 'error.main' }}
+                >
+                  <span>Quitar Formación</span>
+                  <DeleteIcon fontSize="small" />
+                </IconButtonCustom>
+              )}
+            </Grid>
+          )}
+
+          {/* Formación 2 */}
+          {showFormacion2 && (
+            <FormacionFields
+              index={2}
+              formDocentes={formDocentes}
+              handleOnChange={handleOnChange}
+              handleOnBlur={handleOnBlur}
+              handleInputFocus={handleInputFocus}
+              error={error}
+              isConsultMode={isConsultMode}
+              nivel={nivel}
+              documentosPresentados={documentosPresentados}
             />
-          </Grid>
-          <Grid item xs={8}>
-            <Input
-              id="formacion_2_nombre"
-              label="Nombre del grado"
-              name="formacion_2_nombre"
-              value={formDocentes?.formacionesDocentes[1]?.nombre || ''}
-              onChange={handleOnChange}
-              onblur={handleOnBlur}
-              onfocus={handleInputFocus}
-              required
-              errorMessage={error.formacion_2_nombre}
-              disabled={isConsultMode}
-            />
-          </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={5}>
-            <Select
-              title="Documento presentado"
-              name="formacion_2_descripcion"
-              value={formDocentes?.formacionesDocentes[1]?.descripcion || ''}
-              options={documentosPresentados}
-              onChange={handleOnChange}
-              onblur={handleOnBlur}
-              errorMessage={error.formacion_2_descripcion}
-              textValue
-              required
-              disabled={isConsultMode}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <InputDate
-              id="formacion_2_fechaGraduado"
-              label="Fecha de Graduado"
-              name="formacion_2_fechaGraduado"
-              value={formDocentes?.formacionesDocentes[1]?.fechaGraduado || ''}
-              onChange={handleOnChange}
-              onfocus={handleInputFocus}
-              onblur={handleOnBlur}
-              required
-              type="datetime"
-              errorMessage={error.formacion_2_fechaGraduado}
-              disabled={isConsultMode}
-            />
-          </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={11}>
-            <Input
-              id="formacion_2_institucion"
-              label="Nombre de la Institución"
-              name="formacion_2_institucion"
-              value={formDocentes?.formacionesDocentes[1]?.institucion || ''}
-              onChange={handleOnChange}
-              onblur={handleOnBlur}
-              onfocus={handleInputFocus}
-              required
-              errorMessage={error.formacion_2_institucion}
-              disabled={isConsultMode}
-            />
-          </Grid>
+          )}
         </Grid>
       )}
       <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -674,3 +621,4 @@ DocentesModal.propTypes = {
   setDocentesList: PropTypes.func.isRequired,
   mode: PropTypes.oneOf(['create', 'edit', 'consult']).isRequired,
 };
+
