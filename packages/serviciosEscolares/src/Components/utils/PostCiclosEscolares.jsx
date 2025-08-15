@@ -15,6 +15,9 @@ export default async function postCiclosEscolares(dataBody, onSuccess) {
     },
     redirect: 'follow',
   });
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
   const result = await response.text();
   const { data } = JSON.parse(result);
   onSuccess?.();

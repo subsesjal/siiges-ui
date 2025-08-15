@@ -1,23 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Grid } from '@mui/material';
 import Select from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
+import { Context } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import getGrupos from './getGrupos';
+import getGrupos from './GetGrupos';
 import getCiclosEscolares from './getCiclosEscolares';
-import getGrados from './getGrados';
+import getGrados from './GetGrados';
 
 const getGradoName = (grados, id) => grados.find((g) => g.id === id)?.nombre || '';
+const getCicloName = (ciclos, id) => ciclos.find((g) => g.id === id)?.nombre || '';
 
 export default function GruposForm({
   setGrupos, setParametros, setNoti, fetchGrupos,
 }) {
   const router = useRouter();
+  const { session } = useContext(Context);
   const { query } = router;
   const [selectedCicloEscolar, setSelectedCicloEscolar] = useState('');
   const [selectedGrado, setSelectedGrado] = useState('');
   const [ciclos, setCiclos] = useState([]);
   const [grados, setGrados] = useState([]);
+  const isAdmin = session.rol === 'admin';
   const turnos = [null, 'Matutino', 'Vespertino', 'Nocturno', 'Mixto'];
 
   // Fetch ciclosEscolares and grados when component mounts or query.id changes
@@ -26,7 +30,17 @@ export default function GruposForm({
       try {
         const ciclosEscolaresData = await getCiclosEscolares(query.id);
         const gradosData = await getGrados(query.id);
-        setCiclos(ciclosEscolaresData);
+
+        const ciclosFiltered = !isAdmin ? ciclosEscolaresData.filter(({ nombre }) => nombre !== 'EQUIV') : ciclosEscolaresData;
+        const ciclosSorted = ciclosFiltered
+          .slice()
+          .sort((a, b) => {
+            if (a.nombre === 'EQUIV') return 1;
+            if (b.nombre === 'EQUIV') return -1;
+            return a.nombre.localeCompare(b.nombre);
+          });
+
+        setCiclos(ciclosSorted);
         setGrados(gradosData);
       } catch (error) {
         setNoti({
@@ -54,6 +68,7 @@ export default function GruposForm({
         );
         setParametros({
           cicloEscolarId: selectedCicloEscolar,
+          cicloNombre: getCicloName(ciclos, selectedCicloEscolar),
           gradoId: selectedGrado,
           gradoNombre: getGradoName(grados, selectedGrado),
         });
