@@ -235,6 +235,7 @@ export default function InscripcionForm({
       selectedGrado: null,
       selectedGrupo: null,
     }));
+    setCicloTxt(selectedCicloObj ? selectedCicloObj.nombre : '');
     if (cicloEscolarId) fetchGrados();
   };
 
@@ -300,10 +301,7 @@ export default function InscripcionForm({
           setProgramaId(state.selectedPrograma);
         }
         if (state.selectedCicloEscolar) {
-          const cicloTxt = arrays.ciclosEscolares.find(
-            (ciclo) => ciclo.id === state.selectedCicloEscolar,
-          )?.nombre;
-          setCicloTxt(cicloTxt);
+          setCicloTxt(state.labelCicloEscolar);
           await fetchGrados();
         }
         if (state.selectedGrado) {
