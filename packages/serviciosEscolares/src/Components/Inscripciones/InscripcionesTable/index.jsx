@@ -15,6 +15,7 @@ export default function InscripcionesTable({
   asignaturas,
   programaId,
   grupoId,
+  cicloTxt,
 }) {
   const { setNoti } = useContext(Context);
   const [matriculaValue, setMatriculaValue] = useState('');
@@ -92,6 +93,16 @@ export default function InscripcionesTable({
       setAlumnoByMatricula(result.alumnos);
 
       try {
+        if (cicloTxt === 'EQUIV' && !result.alumnos.equivalencia) {
+          setNoti({
+            open: true,
+            message: '¡El alumno no tiene equivalencia registrada!',
+            type: 'warning',
+          });
+          setIsAlumnoValido(false);
+          return;
+        }
+
         if (!result.alumnos.validacion || result.alumnos.validacion.situacionValidacionId !== 1) {
           setNoti({
             open: true,
@@ -245,4 +256,5 @@ InscripcionesTable.propTypes = {
   asignaturas: PropTypes.arrayOf(PropTypes.string),
   programaId: PropTypes.number.isRequired,
   grupoId: PropTypes.number.isRequired,
+  cicloTxt: PropTypes.number.isRequired,
 };

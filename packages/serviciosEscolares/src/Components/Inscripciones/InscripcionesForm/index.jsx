@@ -28,6 +28,7 @@ export default function InscripcionForm({
   setProgramaId,
   setGrupoId,
   setLoading,
+  setCicloTxt,
 }) {
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -301,6 +302,10 @@ export default function InscripcionForm({
           setProgramaId(state.selectedPrograma);
         }
         if (state.selectedCicloEscolar) {
+          const cicloTxt = arrays.ciclosEscolares.find(
+            (ciclo) => ciclo.id === state.selectedCicloEscolar,
+          )?.nombre;
+          setCicloTxt(cicloTxt);
           await fetchGrados();
         }
         if (state.selectedGrado) {
@@ -450,5 +455,6 @@ InscripcionForm.propTypes = {
   setAsignaturas: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
   setGrupoId: PropTypes.func.isRequired,
+  setCicloTxt: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
 };
