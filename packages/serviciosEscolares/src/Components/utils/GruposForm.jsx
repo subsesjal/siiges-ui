@@ -28,8 +28,7 @@ export default function GruposForm({
         const ciclosEscolaresData = await getCiclosEscolares(query.id);
         const gradosData = await getGrados(query.id);
 
-        const ciclosFiltered = ciclosEscolaresData;
-        const ciclosSorted = ciclosFiltered
+        const ciclosSorted = ciclosEscolaresData
           .slice()
           .sort((a, b) => {
             if (a.nombre === 'EQUIV') return 1;

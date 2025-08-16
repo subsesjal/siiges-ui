@@ -130,8 +130,7 @@ export default function InscripcionForm({
         });
         setArrays((prevState) => ({ ...prevState, ciclosEscolares: [] }));
       } else {
-        const ciclosFiltered = data.ciclosEscolares;
-        const ciclosSorted = ciclosFiltered
+        const ciclosSorted = data.ciclosEscolares
           .slice()
           .sort((a, b) => {
             if (a.nombre === 'EQUIV') return 1;

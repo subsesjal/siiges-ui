@@ -18,7 +18,6 @@ export default function CicloEscolarModal({
   fetchCiclosEscolares,
 }) {
   const { setNoti } = useContext(Context);
-  const ciclosFiltered = nombresCiclos;
 
   const [formCicloEscolar, setFormCicloEscolar] = useState({});
   useEffect(() => {
@@ -76,7 +75,7 @@ export default function CicloEscolarModal({
           <Select
             title="Nombre"
             name="nombre"
-            options={ciclosFiltered || []}
+            options={nombresCiclos || []}
             value={formCicloEscolar.nombre || ''}
             textValue
             onChange={handleFormCicloOnChange}

@@ -21,7 +21,6 @@ export default function CiclosEscolaresModal({
 }) {
   const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Modificar Ciclo Escolar';
   const { setNoti } = useContext(Context);
-  const ciclosFiltered = nombresCiclos;
 
   const [form, setForm] = React.useState({
     id: data?.id,
@@ -58,7 +57,7 @@ export default function CiclosEscolaresModal({
           <Select
             title="Nombre"
             name="nombre"
-            options={ciclosFiltered || []}
+            options={nombresCiclos || []}
             textValue
             onChange={handleOnChange}
             value={form?.nombre}
