@@ -42,7 +42,6 @@ export default function InscripcionForm({
 
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
-  const isAdmin = session.rol === 'admin';
 
   const initialState = typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_KEY)
     ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
@@ -131,7 +130,7 @@ export default function InscripcionForm({
         });
         setArrays((prevState) => ({ ...prevState, ciclosEscolares: [] }));
       } else {
-        const ciclosFiltered = !isAdmin ? data.ciclosEscolares.filter(({ nombre }) => nombre !== 'EQUIV') : data.ciclosEscolares;
+        const ciclosFiltered = data.ciclosEscolares;
         const ciclosSorted = ciclosFiltered
           .slice()
           .sort((a, b) => {

@@ -17,10 +17,8 @@ export default function CicloEscolarModal({
   programaId,
   fetchCiclosEscolares,
 }) {
-  const { setNoti, session } = useContext(Context);
-  const ciclosFiltered = session?.rol !== 'admin'
-    ? nombresCiclos.filter(({ nombre }) => nombre !== 'EQUIV')
-    : nombresCiclos;
+  const { setNoti } = useContext(Context);
+  const ciclosFiltered = nombresCiclos;
 
   const [formCicloEscolar, setFormCicloEscolar] = useState({});
   useEffect(() => {

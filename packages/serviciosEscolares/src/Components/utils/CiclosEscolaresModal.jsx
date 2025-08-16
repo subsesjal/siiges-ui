@@ -20,10 +20,8 @@ export default function CiclosEscolaresModal({
   onSuccess,
 }) {
   const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Modificar Ciclo Escolar';
-  const { setNoti, session } = useContext(Context);
-  const ciclosFiltered = session?.rol !== 'admin'
-    ? nombresCiclos.filter(({ nombre }) => nombre !== 'EQUIV')
-    : nombresCiclos;
+  const { setNoti } = useContext(Context);
+  const ciclosFiltered = nombresCiclos;
 
   const [form, setForm] = React.useState({
     id: data?.id,
