@@ -28,6 +28,7 @@ export default function InscripcionForm({
   setProgramaId,
   setGrupoId,
   setLoading,
+  setCicloTxt,
 }) {
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -41,7 +42,6 @@ export default function InscripcionForm({
 
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
-  const isAdmin = session.rol === 'admin';
 
   const initialState = typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_KEY)
     ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
@@ -130,8 +130,7 @@ export default function InscripcionForm({
         });
         setArrays((prevState) => ({ ...prevState, ciclosEscolares: [] }));
       } else {
-        const ciclosFiltered = !isAdmin ? data.ciclosEscolares.filter(({ nombre }) => nombre !== 'EQUIV') : data.ciclosEscolares;
-        const ciclosSorted = ciclosFiltered
+        const ciclosSorted = data.ciclosEscolares
           .slice()
           .sort((a, b) => {
             if (a.nombre === 'EQUIV') return 1;
@@ -301,6 +300,10 @@ export default function InscripcionForm({
           setProgramaId(state.selectedPrograma);
         }
         if (state.selectedCicloEscolar) {
+          const cicloTxt = arrays.ciclosEscolares.find(
+            (ciclo) => ciclo.id === state.selectedCicloEscolar,
+          )?.nombre;
+          setCicloTxt(cicloTxt);
           await fetchGrados();
         }
         if (state.selectedGrado) {
@@ -450,5 +453,6 @@ InscripcionForm.propTypes = {
   setAsignaturas: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
   setGrupoId: PropTypes.func.isRequired,
+  setCicloTxt: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
 };

@@ -10,8 +10,7 @@ export default function CiclosEscolares() {
   const [open, setOpen] = useState(false);
   const [ciclos, setCiclos] = useState([]);
   const [fetchCiclos, setFetchCiclos] = useState(false);
-  const { setNoti, session } = useContext(Context);
-  const isAdmin = session?.rol === 'admin';
+  const { setNoti } = useContext(Context);
 
   const router = useRouter();
   const { id: programaId } = router.query;
@@ -20,11 +19,8 @@ export default function CiclosEscolares() {
     const fetchData = async () => {
       try {
         const ciclosEscolaresData = await getCiclosEscolares(programaId);
-        const ciclosFiltered = !isAdmin
-          ? ciclosEscolaresData.filter(({ nombre }) => nombre !== 'EQUIV')
-          : ciclosEscolaresData;
 
-        setCiclos(ciclosFiltered);
+        setCiclos(ciclosEscolaresData);
       } catch (error) {
         setNoti({
           open: true,

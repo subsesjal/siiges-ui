@@ -17,10 +17,7 @@ export default function CicloEscolarModal({
   programaId,
   fetchCiclosEscolares,
 }) {
-  const { setNoti, session } = useContext(Context);
-  const ciclosFiltered = session?.rol !== 'admin'
-    ? nombresCiclos.filter(({ nombre }) => nombre !== 'EQUIV')
-    : nombresCiclos;
+  const { setNoti } = useContext(Context);
 
   const [formCicloEscolar, setFormCicloEscolar] = useState({});
   useEffect(() => {
@@ -78,7 +75,7 @@ export default function CicloEscolarModal({
           <Select
             title="Nombre"
             name="nombre"
-            options={ciclosFiltered || []}
+            options={nombresCiclos || []}
             value={formCicloEscolar.nombre || ''}
             textValue
             onChange={handleFormCicloOnChange}
