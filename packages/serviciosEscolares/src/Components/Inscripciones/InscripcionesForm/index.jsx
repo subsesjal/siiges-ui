@@ -235,7 +235,6 @@ export default function InscripcionForm({
       selectedGrado: null,
       selectedGrupo: null,
     }));
-    setCicloTxt(selectedCicloObj ? selectedCicloObj.nombre : '');
     if (cicloEscolarId) fetchGrados();
   };
 
@@ -323,6 +322,9 @@ export default function InscripcionForm({
     fetchData();
     if (state.selectedGrupo === null) {
       setGrupoId(null);
+    }
+    if (state.selectedCicloEscolar === null) {
+      setCicloTxt(null);
     }
   }, [
     state.selectedInstitucion,
