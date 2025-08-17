@@ -323,9 +323,6 @@ export default function InscripcionForm({
     if (state.selectedGrupo === null) {
       setGrupoId(null);
     }
-    if (state.selectedCicloEscolar === null) {
-      setCicloTxt(null);
-    }
   }, [
     state.selectedInstitucion,
     state.selectedPlantel,
