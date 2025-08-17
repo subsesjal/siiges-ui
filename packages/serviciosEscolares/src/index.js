@@ -4,6 +4,7 @@ import AlumnosForm from './Components/Alumnos/AlumnosForm';
 import getGrupoById from './Components/utils/getGrupoById';
 import columnsAsignaturas from './Tables/inscripcionesTable';
 import AlumnosTable from './Components/Alumnos/AlumnosTable';
+import ExpedienteAlumno from './Components/Alumnos/FormAlumno/ExpedienteAlumnos';
 import FoliosData from './Components/Folios/FoliosData/index';
 import FoliosForm from './Components/Folios/FoliosForm/index';
 import FoliosTable from './Components/Folios/FoliosTable/index';
@@ -56,6 +57,7 @@ import TitulosTable from './Components/Titulacion/catalogoTitulosTable';
 import catalogoTitulos from './Tables/catalogoTitulosTable';
 
 export {
+  ExpedienteAlumno,
   catalogoTitulos,
   TitulosTable,
   TitulosForm,
