@@ -57,6 +57,7 @@ import TitulosTable from './Components/Titulacion/catalogoTitulosTable';
 import catalogoTitulos from './Tables/catalogoTitulosTable';
 
 export {
+  ExpedienteAlumno,
   catalogoTitulos,
   TitulosTable,
   TitulosForm,
@@ -93,7 +94,6 @@ export {
   ModalCertificado,
   columnsProgramas,
   DocumentosAlumno,
-  ExpedienteAlumno,
   FechaExamenInput,
   getAsignaturaById,
   CalificacionInput,

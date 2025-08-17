@@ -1,10 +1,13 @@
 import { Grid, Typography } from '@mui/material';
-import { ButtonSimple, GetFile, InputFile } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import {
+  ButtonSimple, Context, GetFile, InputFile,
+} from '@siiges-ui/shared';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
 export default function DocumentosAlumno({ id, type }) {
+  const { setNoti } = useContext(Context);
   const [fileURLs, setFileURLs] = useState([null, null, null]);
   const router = useRouter();
 
@@ -35,6 +38,14 @@ export default function DocumentosAlumno({ id, type }) {
       fetchFiles();
     }
   }, [id, type]);
+
+  const saveButtonAction = async () => {
+    setNoti({
+      open: true,
+      message: 'Documentos Guardados con exito',
+      type: 'success',
+    });
+  };
 
   return (
     <div style={{ padding: '20px' }}>
@@ -75,7 +86,8 @@ export default function DocumentosAlumno({ id, type }) {
             setUrl={(url) => handleFileLoaded(2, url)}
           />
         </Grid>
-        <Grid item xs={12} style={{ textAlign: 'right' }}>
+        <Grid item xs={9} />
+        <Grid item>
           <ButtonSimple
             text="Regresar"
             design="enviar"
@@ -84,6 +96,9 @@ export default function DocumentosAlumno({ id, type }) {
               router.back();
             }}
           />
+        </Grid>
+        <Grid item>
+          <ButtonSimple onClick={saveButtonAction} text="Guardar" />
         </Grid>
       </Grid>
     </div>
