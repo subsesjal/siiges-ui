@@ -1,13 +1,19 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonSimple, Context, createRecord, GetFile, Input, InputDate, InputFile,
-  updateRecord, InputNumber,
+  ButtonSimple,
+  Context,
+  createRecord,
+  GetFile,
+  Input,
+  InputDate,
+  InputFile,
+  updateRecord,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
-export default function ExpedienteAlumno({ alumno, type }) {
+export default function ExpedienteAlumno({ alumno, setAlumno, type }) {
   const { id, equivalencia } = alumno || {};
   const { setNoti, setLoading } = useContext(Context);
   const router = useRouter();
@@ -24,14 +30,17 @@ export default function ExpedienteAlumno({ alumno, type }) {
   useEffect(() => {
     if (type === 'edit' && id) {
       const filesToLoad = [
-        { tipoDocumento: 'CERTIFICADO_PARCIAL', setter: setCertificadoFile },
-        { tipoDocumento: 'RESOLUCION_PARCIAL', setter: setResolucionFile },
+        { tipoDocumento: 'CERTIFICADO_PARCIAL_EQUIVALENCIA', setter: setCertificadoFile },
+        { tipoDocumento: 'RESOLUCION_EQUIVALENCIA', setter: setResolucionFile },
       ];
 
       filesToLoad.forEach(({ tipoDocumento, setter }) => {
-        GetFile({ tipoEntidad: 'ALUMNO', entidadId: id, tipoDocumento }, (url, error) => {
-          if (!error) setter(url);
-        });
+        GetFile(
+          { tipoEntidad: 'ALUMNO', entidadId: id, tipoDocumento },
+          (url, error) => {
+            if (!error) setter(url);
+          },
+        );
       });
     }
 
@@ -75,6 +84,18 @@ export default function ExpedienteAlumno({ alumno, type }) {
       }
 
       if (response.statusCode === 200 || response.statusCode === 201) {
+        // 🔹 Actualizar alumno en estado padre
+        setAlumno((prev) => ({
+          ...prev,
+          equivalencia: {
+            ...(prev?.equivalencia || {}),
+            id: response.data?.id || equivalencia?.id,
+            folioExpediente: expedienteInfo.numeroExpediente,
+            folioResolucion: expedienteInfo.folioResolucionParcial,
+            fechaResolucion: expedienteInfo.fechaResolucionParcial,
+          },
+        }));
+
         setNoti({
           open: true,
           message: 'Expediente guardado con éxito',
@@ -94,7 +115,7 @@ export default function ExpedienteAlumno({ alumno, type }) {
         type: 'error',
       });
     } finally {
-      setLoading(false); // Quitar loading al terminar
+      setLoading(false);
     }
   };
 
@@ -109,7 +130,7 @@ export default function ExpedienteAlumno({ alumno, type }) {
       <Grid container spacing={2}>
         {/* Campos de texto */}
         <Grid item xs={4}>
-          <InputNumber
+          <Input
             id="numeroExpediente"
             name="numeroExpediente"
             label="No. de Expediente"
@@ -142,7 +163,7 @@ export default function ExpedienteAlumno({ alumno, type }) {
         <Grid item xs={12}>
           <InputFile
             tipoEntidad="ALUMNO"
-            tipoDocumento="CERTIFICADO_PARCIAL"
+            tipoDocumento="CERTIFICADO_PARCIAL_EQUIVALENCIA"
             id={alumno?.id}
             label="Certificado Parcial o Total (PDF)"
             url={certificadoFile}
@@ -152,7 +173,7 @@ export default function ExpedienteAlumno({ alumno, type }) {
         <Grid item xs={12}>
           <InputFile
             tipoEntidad="ALUMNO"
-            tipoDocumento="RESOLUCION_PARCIAL"
+            tipoDocumento="RESOLUCION_EQUIVALENCIA"
             id={alumno?.id}
             label="Resolución Parcial (PDF)"
             url={resolucionFile}
@@ -196,4 +217,5 @@ ExpedienteAlumno.propTypes = {
     }),
   }),
   type: PropTypes.string,
+  setAlumno: PropTypes.func.isRequired,
 };
