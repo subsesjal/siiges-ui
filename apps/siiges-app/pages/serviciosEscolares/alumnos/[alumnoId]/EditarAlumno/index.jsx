@@ -57,7 +57,7 @@ export default function EditarAlumno() {
 
         {value === 0 && <FormAlumno type="edit" alumno={alumno} />}
         {value === 1 && <DocumentosAlumno id={alumno?.id} type="edit" />}
-        {value === 2 && mostrarExpediente && alumno?.equivalencia && (
+        {value === 2 && mostrarExpediente && (
           <ExpedienteAlumno alumno={alumno} setAlumno={setAlumno} type="edit" />
         )}
       </Grid>
