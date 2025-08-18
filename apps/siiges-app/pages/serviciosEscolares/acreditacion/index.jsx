@@ -1,19 +1,20 @@
+/* eslint-disable no-unused-vars */
+import {
+  AcreditacionAsignaturas,
+  InscripcionForm,
+} from '@siiges-ui/serviciosescolares';
 import { Layout } from '@siiges-ui/shared';
 import React, { useState } from 'react';
-import {
-  InscripcionForm,
-  InscripcionesTable,
-} from '@siiges-ui/serviciosescolares';
 
-export default function Inscripcion() {
+export default function Acreditacion() {
   const [asignaturas, setAsignaturas] = useState();
   const [programaId, setProgramaId] = useState();
-  const [grupoId, setGrupoId] = useState();
   const [cicloTxt, setCicloTxt] = useState();
+  const [grupoId, setGrupoId] = useState();
   const [loading, setLoading] = useState(true);
 
   return (
-    <Layout title="Inscripción" loading={loading}>
+    <Layout title="Acreditación" loading={loading}>
       <InscripcionForm
         setAsignaturas={setAsignaturas}
         setProgramaId={setProgramaId}
@@ -22,11 +23,10 @@ export default function Inscripcion() {
         setCicloTxt={setCicloTxt}
       />
       {grupoId && (
-        <InscripcionesTable
+        <AcreditacionAsignaturas
           asignaturas={asignaturas}
           programaId={programaId}
           grupoId={grupoId}
-          cicloTxt={cicloTxt}
         />
       )}
     </Layout>
