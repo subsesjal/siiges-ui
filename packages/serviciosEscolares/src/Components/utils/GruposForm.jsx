@@ -3,11 +3,12 @@ import { Grid } from '@mui/material';
 import Select from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import getGrupos from './getGrupos';
+import getGrupos from './GetGrupos';
 import getCiclosEscolares from './getCiclosEscolares';
-import getGrados from './getGrados';
+import getGrados from './GetGrados';
 
 const getGradoName = (grados, id) => grados.find((g) => g.id === id)?.nombre || '';
+const getCicloName = (ciclos, id) => ciclos.find((g) => g.id === id)?.nombre || '';
 
 export default function GruposForm({
   setGrupos, setParametros, setNoti, fetchGrupos,
@@ -26,7 +27,16 @@ export default function GruposForm({
       try {
         const ciclosEscolaresData = await getCiclosEscolares(query.id);
         const gradosData = await getGrados(query.id);
-        setCiclos(ciclosEscolaresData);
+
+        const ciclosSorted = ciclosEscolaresData
+          .slice()
+          .sort((a, b) => {
+            if (a.nombre === 'EQUIV') return 1;
+            if (b.nombre === 'EQUIV') return -1;
+            return a.nombre.localeCompare(b.nombre);
+          });
+
+        setCiclos(ciclosSorted);
         setGrados(gradosData);
       } catch (error) {
         setNoti({
@@ -54,6 +64,7 @@ export default function GruposForm({
         );
         setParametros({
           cicloEscolarId: selectedCicloEscolar,
+          cicloNombre: getCicloName(ciclos, selectedCicloEscolar),
           gradoId: selectedGrado,
           gradoNombre: getGradoName(grados, selectedGrado),
         });

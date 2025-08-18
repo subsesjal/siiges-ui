@@ -19,6 +19,7 @@ export default function CiclosEscolares() {
     const fetchData = async () => {
       try {
         const ciclosEscolaresData = await getCiclosEscolares(programaId);
+
         setCiclos(ciclosEscolaresData);
       } catch (error) {
         setNoti({

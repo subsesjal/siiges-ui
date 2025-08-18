@@ -34,10 +34,10 @@ const transformDataForTable = (data) => data.map((item) => {
 
   return {
     id: item.id,
-    nombre: `${item.persona.nombre} ${item.persona.apellidoPaterno} ${item.persona.apellidoMaterno}`,
+    nombre: `${item.persona?.nombre} ${item.persona?.apellidoPaterno} ${item.persona?.apellidoMaterno}`,
     tipoDocente: tipoDocenteObj ? tipoDocenteObj.nombre : 'Desconocido',
     formacion: '-',
-    asignatura: item.asignaturasDocentes
+    asignatura: (item.asignaturasDocentes || [])
       .map((asig) => asig.asignatura?.nombre)
       .join(', '),
     experiencia: item.experiencias,

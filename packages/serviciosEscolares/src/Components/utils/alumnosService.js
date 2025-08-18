@@ -61,6 +61,8 @@ export default async function alumnosService({ id, dataBody, method }) {
     situacionId: data?.situacionId,
     fechaRegistro: new Date(data?.createdAt).toLocaleDateString('en-CA'),
     tipoTramiteId: data?.tipoTramiteId,
+    equivalenciaId: data?.equivalencia?.id,
+    equivalencia: data?.equivalencia,
   };
 
   return { data, dataForm };

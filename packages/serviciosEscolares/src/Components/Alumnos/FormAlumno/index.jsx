@@ -4,8 +4,8 @@ import { Grid, Typography } from '@mui/material';
 import {
   Select,
   Input,
-  ButtonsForm,
   Context,
+  ButtonSimple,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import {
@@ -242,13 +242,15 @@ export default function FormAlumno({ type, alumno, setId }) {
         )}
 
         <Grid item xs={9} />
-        <Grid item xs={3}>
-          <ButtonsForm
-            confirm={saveButtonAction}
-            cancel={() => {
-              router.back();
-            }}
+        <Grid item>
+          <ButtonSimple
+            design="enviar"
+            onClick={() => { router.back(); }}
+            text="Regresar"
           />
+        </Grid>
+        <Grid item>
+          <ButtonSimple onClick={saveButtonAction} text="Guardar" />
         </Grid>
       </Grid>
     </div>
