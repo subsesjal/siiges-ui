@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { Grid, Tab, Tabs } from '@mui/material';
-import { DocumentosAlumno, FormAlumno, ExpedienteAlumno } from '@siiges-ui/serviciosescolares';
+import {
+  DocumentosAlumno,
+  FormAlumno,
+  ExpedienteAlumno,
+} from '@siiges-ui/serviciosescolares';
 import { Layout } from '@siiges-ui/shared';
 import alumnosService from '@siiges-ui/serviciosescolares/src/Components/utils/alumnosService';
 
@@ -14,7 +18,10 @@ export default function EditarAlumno() {
 
   useEffect(() => {
     async function fetchAlumno() {
-      const { dataForm } = await alumnosService({ id: query.alumnoId, method: 'GET' });
+      const { dataForm } = await alumnosService({
+        id: query.alumnoId,
+        method: 'GET',
+      });
 
       setAlumno(dataForm);
     }
@@ -50,7 +57,7 @@ export default function EditarAlumno() {
 
         {value === 0 && <FormAlumno type="edit" alumno={alumno} />}
         {value === 1 && <DocumentosAlumno id={alumno?.id} type="edit" />}
-        {value === 2 && mostrarExpediente && alumno?.equivalencia && <ExpedienteAlumno alumno={alumno} type="edit" />}
+        {value === 2 && mostrarExpediente && <ExpedienteAlumno alumno={alumno} setAlumno={setAlumno} type="edit" />}
       </Grid>
     </Layout>
   );
