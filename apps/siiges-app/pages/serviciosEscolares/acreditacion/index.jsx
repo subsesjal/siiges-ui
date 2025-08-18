@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   AcreditacionAsignaturas,
   InscripcionForm,
@@ -9,7 +8,6 @@ import React, { useState } from 'react';
 export default function Acreditacion() {
   const [asignaturas, setAsignaturas] = useState();
   const [programaId, setProgramaId] = useState();
-  const [cicloTxt, setCicloTxt] = useState();
   const [grupoId, setGrupoId] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +18,6 @@ export default function Acreditacion() {
         setProgramaId={setProgramaId}
         setGrupoId={setGrupoId}
         setLoading={setLoading}
-        setCicloTxt={setCicloTxt}
       />
       {grupoId && (
         <AcreditacionAsignaturas
