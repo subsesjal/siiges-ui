@@ -30,8 +30,8 @@ export default function ExpedienteAlumno({ alumno, setAlumno, type }) {
   useEffect(() => {
     if (type === 'edit' && id) {
       const filesToLoad = [
-        { tipoDocumento: 'CERTIFICADO_PARCIAL', setter: setCertificadoFile },
-        { tipoDocumento: 'RESOLUCION_PARCIAL', setter: setResolucionFile },
+        { tipoDocumento: 'CERTIFICADO_PARCIAL_EQUIVALENCIA', setter: setCertificadoFile },
+        { tipoDocumento: 'RESOLUCION_EQUIVALENCIA', setter: setResolucionFile },
       ];
 
       filesToLoad.forEach(({ tipoDocumento, setter }) => {
@@ -163,7 +163,7 @@ export default function ExpedienteAlumno({ alumno, setAlumno, type }) {
         <Grid item xs={12}>
           <InputFile
             tipoEntidad="ALUMNO"
-            tipoDocumento="CERTIFICADO_PARCIAL"
+            tipoDocumento="CERTIFICADO_PARCIAL_EQUIVALENCIA"
             id={alumno?.id}
             label="Certificado Parcial o Total (PDF)"
             url={certificadoFile}
@@ -173,7 +173,7 @@ export default function ExpedienteAlumno({ alumno, setAlumno, type }) {
         <Grid item xs={12}>
           <InputFile
             tipoEntidad="ALUMNO"
-            tipoDocumento="RESOLUCION_PARCIAL"
+            tipoDocumento="RESOLUCION_EQUIVALENCIA"
             id={alumno?.id}
             label="Resolución Parcial (PDF)"
             url={resolucionFile}
