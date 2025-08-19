@@ -2,6 +2,9 @@ import React from 'react';
 import FechaExamenInput from '../Components/utils/Calificaciones/FechaExamenInput';
 import CalificacionExtraInput from '../Components/utils/Calificaciones/CalificacionExtraInput';
 
+const EGRESADO = 3;
+const BAJA = 4;
+
 const columnsInscritosExtra = (
   disabled,
   updateCalificaciones,
@@ -35,7 +38,9 @@ const columnsInscritosExtra = (
       const calificacion = params.row.calificaciones[1]?.calificacion || '';
       const isDisabled = disabled
         || !isExtraordinarioEnabled(params.row.id)
-        || params.row.situacionId === 3;
+        || params.row.situacionId === EGRESADO
+        || params.row.situacionId === BAJA;
+
       return (
         <CalificacionExtraInput
           id={params.id}
@@ -58,8 +63,13 @@ const columnsInscritosExtra = (
     renderCell: (params) => {
       const isDisabled = disabled
         || !isExtraordinarioEnabled(params.row.id)
-        || params.row.situacionId === 3 || params.row.situacionId === 4;
-      const calificacionExtraordinaria = params.row.calificaciones.find(({ tipo }) => tipo === 2);
+        || params.row.situacionId === EGRESADO
+        || params.row.situacionId === BAJA;
+
+      const calificacionExtraordinaria = params.row.calificaciones.find(
+        ({ tipo }) => tipo === 2,
+      );
+
       let fechaExamen = '';
       if (calificacionExtraordinaria) {
         fechaExamen = calificacionExtraordinaria.fechaExamen;
@@ -69,9 +79,7 @@ const columnsInscritosExtra = (
           id={params.id}
           value={fechaExamen}
           disabled={isDisabled}
-          updateCalificaciones={
-            (alumnoId, newFechaExamen) => updateCalificaciones(alumnoId, newFechaExamen, 'fechaExamen', 2)
-          }
+          updateCalificaciones={(alumnoId, newFechaExamen) => updateCalificaciones(alumnoId, newFechaExamen, 'fechaExamen', 2)}
         />
       );
     },
