@@ -124,7 +124,7 @@ export default function calificacionesExtraordinarias({
       return false;
     }
 
-    return Number(calificacion) <= calificacionAprobatoria;
+    return Number(calificacion) < calificacionAprobatoria;
   };
 
   const updateCalificaciones = (
