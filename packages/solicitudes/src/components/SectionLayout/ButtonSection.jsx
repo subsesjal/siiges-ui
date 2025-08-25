@@ -193,7 +193,7 @@ export default function ButtonSection({
         plantelesValidations,
         setNoti,
         setLoading,
-        institucion.id,
+        institucion.institucion.id,
         setSections,
         id,
       ),
