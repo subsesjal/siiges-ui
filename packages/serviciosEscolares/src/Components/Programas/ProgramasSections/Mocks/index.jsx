@@ -33,7 +33,17 @@ const columns = (
       width: 230,
       valueGetter: (params) => gradoMap[params.row.gradoId] || 'N/A',
     },
-    { field: 'nombre', headerName: 'Nombre', width: 320 },
+    { field: 'nombre', headerName: 'Asignatura', width: 320 },
+    {
+      field: 'tipo',
+      headerName: 'Tipo de asignaturas',
+      width: 200,
+      valueGetter: (params) => {
+        if (params.row.tipo === 1) return 'Normal';
+        if (params.row.tipo === 2) return 'Formación Electiva';
+        return 'N/A';
+      },
+    },
     { field: 'clave', headerName: 'Clave', width: 100 },
     { field: 'seriacion', headerName: 'Seriación', width: 170 },
     { field: 'creditos', headerName: 'Créditos' },
