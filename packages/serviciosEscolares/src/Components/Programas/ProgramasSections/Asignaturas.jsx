@@ -22,8 +22,6 @@ export default function Asignaturas() {
 
   const { asignaturasTotal: asignaturas, loading: asignaturasLoading } = useAsignaturas(programaId);
 
-  console.log(asignaturas);
-
   useEffect(() => {
     const fetchProgramaData = async () => {
       setLoading(true);
@@ -77,7 +75,7 @@ export default function Asignaturas() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Tabla de Asignaturas</Typography>
+        <Typography variant="h6">Tabla de asignaturas</Typography>
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
