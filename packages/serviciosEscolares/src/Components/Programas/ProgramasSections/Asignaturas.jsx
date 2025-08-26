@@ -20,7 +20,9 @@ export default function Asignaturas() {
   const [programaData, setProgramaData] = useState({});
   const [localLoading, setLocalLoading] = useState(false);
 
-  const { asignaturas, loading: asignaturasLoading } = useAsignaturas(programaId);
+  const { asignaturasTotal: asignaturas, loading: asignaturasLoading } = useAsignaturas(programaId);
+
+  console.log(asignaturas);
 
   useEffect(() => {
     const fetchProgramaData = async () => {
@@ -75,7 +77,7 @@ export default function Asignaturas() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Asignaturas</Typography>
+        <Typography variant="h6">Tabla de Asignaturas</Typography>
       </Grid>
       <Grid item xs={12}>
         <div style={{ height: 400, width: '100%', marginTop: 15 }}>
