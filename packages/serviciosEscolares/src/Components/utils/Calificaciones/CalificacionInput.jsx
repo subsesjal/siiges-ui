@@ -20,7 +20,10 @@ export default function CalificacionInput({
 
     const numericValue = parseFloat(newValue);
     if (!Number.isNaN(numericValue)) {
-      if (numericValue >= calificacionMinima && numericValue <= calificacionMaxima) {
+      if (
+        numericValue >= calificacionMinima
+        && numericValue <= calificacionMaxima
+      ) {
         updateCalificaciones(id, newValue, 'calificacion');
       }
     }
@@ -30,19 +33,27 @@ export default function CalificacionInput({
     const numericValue = parseFloat(inputValue);
     if (!Number.isNaN(numericValue)) {
       let correctedValue = numericValue;
+
       if (!calificacionDecimal) {
+        // Si no se permiten decimales, redondeamos
         correctedValue = numericValue % 1 <= 0.5
           ? Math.floor(numericValue)
           : Math.ceil(numericValue);
       }
+
+      // Validar límites
       if (correctedValue < calificacionMinima) {
         correctedValue = calificacionMinima;
       } else if (correctedValue > calificacionMaxima) {
         correctedValue = calificacionMaxima;
       }
 
-      setInputValue(correctedValue.toString());
-      updateCalificaciones(id, correctedValue.toString(), 'calificacion');
+      const finalValue = calificacionDecimal
+        ? inputValue
+        : correctedValue.toString();
+
+      setInputValue(finalValue);
+      updateCalificaciones(id, finalValue, 'calificacion');
     } else {
       setInputValue('');
       updateCalificaciones(id, '', 'calificacion');
