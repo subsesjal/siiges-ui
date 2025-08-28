@@ -46,7 +46,8 @@
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"postinstall": "",
-		"dev": "cd apps/siiges-app && yarn dev"
+		"dev": "cd apps/siiges-app && yarn dev",
+		"setup": "git config core.hooksPath .hooks"
 	},
 	"dependencies": {
 		"@babel/cli": "^7.18.9",
