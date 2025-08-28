@@ -233,6 +233,7 @@ export default function calificacionesExtraordinarias({
     calificacionMaxima,
     calificacionDecimal,
     fechaExamenes,
+    calificaciones,
   );
 
   return (
