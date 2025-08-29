@@ -12,6 +12,8 @@ const columnsInscritosExtra = (
   calificacionMinima,
   calificacionMaxima,
   calificacionDecimal,
+  fechaExamenes,
+  calificaciones,
 ) => [
   {
     field: 'matricula',
@@ -35,7 +37,14 @@ const columnsInscritosExtra = (
     headerName: 'Calificación Extraordinario',
     width: 220,
     renderCell: (params) => {
-      const calificacion = params.row.calificaciones[1]?.calificacion || '';
+      const califGuardada = calificaciones.find(
+        (c) => c.alumnoId === params.id && c.tipo === 2,
+      )?.calificacion;
+      const califParams = params.row.calificaciones.find(
+        (c) => c.tipo === 2,
+      )?.calificacion;
+
+      const calificacion = califGuardada ?? califParams ?? '';
       const isDisabled = disabled
         || !isExtraordinarioEnabled(params.row.id)
         || params.row.situacionId === EGRESADO
@@ -61,19 +70,24 @@ const columnsInscritosExtra = (
     headerName: 'Fecha de examen',
     width: 220,
     renderCell: (params) => {
+      const fechaGuardada = calificaciones.find(
+        (c) => c.alumnoId === params.id && c.tipo === 2,
+      )?.fechaExamen;
+      const fechaParams = params.row.calificaciones.find(
+        (c) => c.tipo === 2,
+      )?.fechaExamen;
+
+      const currentFechaExamen = fechaGuardada ?? fechaParams ?? '';
+
+      const fechaExamen = !currentFechaExamen && fechaExamenes
+        ? fechaExamenes
+        : currentFechaExamen;
+
       const isDisabled = disabled
         || !isExtraordinarioEnabled(params.row.id)
         || params.row.situacionId === EGRESADO
         || params.row.situacionId === BAJA;
 
-      const calificacionExtraordinaria = params.row.calificaciones.find(
-        ({ tipo }) => tipo === 2,
-      );
-
-      let fechaExamen = '';
-      if (calificacionExtraordinaria) {
-        fechaExamen = calificacionExtraordinaria.fechaExamen;
-      }
       return (
         <FechaExamenInput
           id={params.id}

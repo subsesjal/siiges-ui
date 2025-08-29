@@ -39,8 +39,11 @@ const columnsInscritosOrdinario = (
       const califGuardada = calificaciones.find(
         (c) => c.alumnoId === params.id && c.tipo === 1,
       )?.calificacion;
+      const califParams = params.row.calificaciones.find(
+        (c) => c.tipo === 1,
+      )?.calificacion;
 
-      const calificacion = califGuardada ?? params.row.calificaciones[0]?.calificacion ?? '';
+      const calificacion = califGuardada ?? califParams ?? '';
 
       const isDisabled = disabled
         || params.row.situacionId === EGRESADO
@@ -69,8 +72,11 @@ const columnsInscritosOrdinario = (
       const fechaGuardada = calificaciones.find(
         (c) => c.alumnoId === params.id && c.tipo === 1,
       )?.fechaExamen;
+      const fechaParams = params.row.calificaciones.find(
+        (c) => c.tipo === 1,
+      )?.fechaExamen;
 
-      const currentFechaExamen = fechaGuardada ?? params.row.calificaciones[0]?.fechaExamen ?? '';
+      const currentFechaExamen = fechaGuardada ?? fechaParams ?? '';
       const fechaExamen = !currentFechaExamen && fechaExamenes
         ? fechaExamenes
         : currentFechaExamen;
