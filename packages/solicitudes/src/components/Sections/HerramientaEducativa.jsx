@@ -5,11 +5,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import SolicitudContext from '../utils/Context/solicitudContext';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
-export default function HerramientaEducativa({ disabled, type }) {
-  const { form, setForm, id } = useContext(SolicitudContext);
+export default function HerramientaEducativa({ disabled, type, programaId }) {
+  const { form, setForm } = useContext(SolicitudContext);
   const [url, setUrl] = useState();
   const fileData = {
-    entidadId: id,
+    entidadId: programaId,
     tipoEntidad: 'PROGRAMA',
     tipoDocumento: 'FDA05',
   };
@@ -40,7 +40,7 @@ export default function HerramientaEducativa({ disabled, type }) {
           <InputFile
             tipoEntidad="PROGRAMA"
             tipoDocumento="FDA05"
-            id={id}
+            id={programaId}
             label="Herramienta Educativa"
             url={url}
             setUrl={setUrl}
@@ -59,4 +59,5 @@ HerramientaEducativa.defaultProps = {
 HerramientaEducativa.propTypes = {
   disabled: PropTypes.bool.isRequired,
   type: PropTypes.string,
+  programaId: PropTypes.number.isRequired,
 };
