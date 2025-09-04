@@ -92,7 +92,7 @@ export default function SolicitudServSocFilter({
         const solicitudesMapeadas = data.map((solicitud) => ({
           id: solicitud.id,
           folioSolicitud: solicitud.folioSolicitud,
-          programa: solicitud.cicloEscolar.nombre,
+          programa: solicitud.programa.nombre,
           estatusSolicitudServicioSocial:
             solicitud.estatusSolicitudServicioSocial.nombre,
           createdAt: dayjs(solicitud.createdAt).format('DD/MM/YYYY'),
