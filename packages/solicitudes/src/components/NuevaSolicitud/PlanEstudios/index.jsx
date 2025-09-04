@@ -274,7 +274,7 @@ export default function PlanEstudios({
               )}
 
               {realSection === 10 && (
-                <HerramientaEducativa disabled={isDisabled} type={type} />
+                <HerramientaEducativa disabled={isDisabled} type={type} programaId={programaId} />
               )}
 
               <Observaciones id={id} section={realSection} />
