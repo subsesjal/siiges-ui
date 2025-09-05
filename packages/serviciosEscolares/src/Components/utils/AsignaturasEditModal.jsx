@@ -11,6 +11,11 @@ import errorDatosAsignaturas from '@siiges-ui/solicitudes/src/components/utils/s
 import handleEdit from '@siiges-ui/solicitudes/src/components/utils/submitEditAsignaturas';
 import { area, grados } from '@siiges-ui/solicitudes/src/components/utils/Mocks/mockAsignaturas';
 
+const tipos = [
+  { id: 1, nombre: 'Normal' },
+  { id: 2, nombre: 'Formacion Electiva' },
+];
+
 export default function AsignaturasEditModal({
   open,
   hideModal,
@@ -45,6 +50,7 @@ export default function AsignaturasEditModal({
     const rowItemValues = {
       id: rowItem.id,
       gradoId: rowItem.gradoId,
+      tipo: rowItem.tipo,
       areaId: rowItem.areaId,
       nombre: rowItem.nombre,
       clave: rowItem.clave,
@@ -59,6 +65,18 @@ export default function AsignaturasEditModal({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'tipo') {
+      if (Number(value) === 2) {
+        setFormAsignaturas((prevData) => ({
+          ...prevData,
+          [name]: Number(value),
+          gradoId: 25,
+        }));
+        return;
+      }
+    }
+
     setFormAsignaturas((prevData) => ({
       ...prevData,
       [name]: value,
@@ -103,6 +121,20 @@ export default function AsignaturasEditModal({
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <BasicSelect
+            title="Tipo"
+            name="tipo"
+            value={formAsignaturas.tipo}
+            options={tipos}
+            onChange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.tipo}
+            required
+            disabled={edit === 'Consultar Asignatura'}
+          />
+        </Grid>
+        {formAsignaturas.tipo !== 2 && (
+        <Grid item xs={6}>
+          <BasicSelect
             title="Grado"
             name="gradoId"
             value={formAsignaturas.gradoId}
@@ -114,6 +146,7 @@ export default function AsignaturasEditModal({
             disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
+        )}
         <Grid item xs={6}>
           <BasicSelect
             title="Área"
@@ -169,7 +202,7 @@ export default function AsignaturasEditModal({
             errorMessage={error.creditos}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Input
             id="academia"
             label="Academia"
@@ -245,6 +278,7 @@ AsignaturasEditModal.propTypes = {
   rowItem: PropTypes.shape({
     id: PropTypes.number,
     gradoId: PropTypes.number,
+    tipo: PropTypes.number,
     areaId: PropTypes.number,
     cicloId: PropTypes.number,
     nombre: PropTypes.string,
