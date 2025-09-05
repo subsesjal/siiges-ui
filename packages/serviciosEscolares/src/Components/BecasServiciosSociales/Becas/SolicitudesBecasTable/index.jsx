@@ -18,13 +18,14 @@ export default function SolicitudesBecasTable({ programa, institucion }) {
   const fetchData = async () => {
     setLoading(true);
     fetchSolicitudesData(setNoti, setLoading, (fetchedData) => {
+      const fetchedDataFiltered = fetchedData.filter((beca) => beca.programaId === programa);
       if (isBecasSicyt) {
-        const filtered = fetchedData.filter(
+        const filtered = fetchedDataFiltered.filter(
           (item) => item.estatusSolicitudBecaId !== 'EN CAPTURA',
         );
         setData(filtered);
       } else {
-        setData(fetchedData);
+        setData(fetchedDataFiltered);
       }
     });
   };
