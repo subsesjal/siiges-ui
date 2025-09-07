@@ -37,6 +37,8 @@
 	},
 	"scripts": {
 		"bootstrap": "lerna bootstrap",
+		"postbootstrap": "yarn setup",
+  	"setup": "git config core.hooksPath .hooks",
 		"start:app": "npx lerna run dev --scope siiges-app",
 		"build": "npx lerna run build --scope siiges-app",
 		"export": "npx lerna run export --scope siiges-app",
@@ -46,8 +48,7 @@
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"postinstall": "",
-		"dev": "cd apps/siiges-app && yarn dev",
-		"setup": "git config core.hooksPath .hooks"
+		"dev": "cd apps/siiges-app && yarn dev"
 	},
 	"dependencies": {
 		"@babel/cli": "^7.18.9",
