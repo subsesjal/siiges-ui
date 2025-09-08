@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Autocomplete, TextField, Box } from '@mui/material';
@@ -99,6 +100,7 @@ export default function CalificacionExtraInput({
         disabled={disabled}
         renderInput={(params) => (
           <TextField
+            {...params}
             id={params.id}
             inputRef={params.InputProps.ref}
             InputProps={params.InputProps}
