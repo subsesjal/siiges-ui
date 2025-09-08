@@ -47,6 +47,19 @@ export default function AsignaturasEditModal({
   }, [cicloId]);
 
   useEffect(() => {
+    let seriacionValue = rowItem.seriacion;
+
+    if (seriacionValue) {
+      const match = asignaturasList.find(
+        (seriacion) => seriacion.clave === seriacionValue || seriacion.nombre === seriacionValue,
+      );
+      if (match) {
+        seriacionValue = match.nombre;
+      }
+    }
+
+    console.log('Seriacion nombre: ', seriacionValue);
+
     const rowItemValues = {
       id: rowItem.id,
       gradoId: rowItem.gradoId,
@@ -56,7 +69,7 @@ export default function AsignaturasEditModal({
       clave: rowItem.clave,
       creditos: rowItem.creditos,
       academia: rowItem.academia,
-      seriacion: rowItem.seriacion,
+      seriacion: seriacionValue,
       horasDocente: rowItem.horasDocente,
       horasIndependiente: rowItem.horasIndependiente,
     };
@@ -221,11 +234,12 @@ export default function AsignaturasEditModal({
             title="Seriación"
             name="seriacion"
             value={formAsignaturas.seriacion || ''}
-            options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
+            options={asignaturasList || []}
             disabled={edit === 'Consultar Asignatura'}
             onChange={handleOnChange}
             textValue
           />
+
         </Grid>
         <Grid item xs={6}>
           <Input
