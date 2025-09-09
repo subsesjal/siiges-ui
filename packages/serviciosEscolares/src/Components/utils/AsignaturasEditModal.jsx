@@ -58,8 +58,6 @@ export default function AsignaturasEditModal({
       }
     }
 
-    console.log('Seriacion nombre: ', seriacionValue);
-
     const rowItemValues = {
       id: rowItem.id,
       gradoId: rowItem.gradoId,
@@ -126,6 +124,11 @@ export default function AsignaturasEditModal({
       setLoading,
     );
   };
+
+  const seriacionOptions = asignaturasList.map((asignatura) => ({
+    id: asignatura.id,
+    nombre: asignatura.clave,
+  }));
 
   const cancelButtonText = edit === 'Consultar Asignatura' ? 'Regresar' : 'Cancelar';
 
@@ -234,7 +237,7 @@ export default function AsignaturasEditModal({
             title="Seriación"
             name="seriacion"
             value={formAsignaturas.seriacion || ''}
-            options={asignaturasList || []}
+            options={seriacionOptions || []}
             disabled={edit === 'Consultar Asignatura'}
             onChange={handleOnChange}
             textValue
@@ -304,7 +307,13 @@ AsignaturasEditModal.propTypes = {
     horasIndependiente: PropTypes.number,
   }).isRequired,
   programaId: PropTypes.number.isRequired,
-  asignaturasList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  asignaturasList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+      clave: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   setAsignaturasList: PropTypes.func.isRequired,
   setNoti: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
