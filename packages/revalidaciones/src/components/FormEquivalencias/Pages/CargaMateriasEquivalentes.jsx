@@ -236,7 +236,7 @@ export default function CargaMateriasEquivalentes({
   ]);
 
   // 🔎 Filtrar materias disponibles evitando duplicados
-  const materiasDisponibles = materiasList.filter((materia) => {
+  const materiasDisponibles = materiasList?.filter((materia) => {
     const usados = form?.interesado?.asignaturasAntecedentesEquivalentes?.map(
       (item) => item.asignaturaId,
     ) || [];
