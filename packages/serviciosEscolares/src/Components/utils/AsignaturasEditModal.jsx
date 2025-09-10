@@ -47,6 +47,17 @@ export default function AsignaturasEditModal({
   }, [cicloId]);
 
   useEffect(() => {
+    let seriacionValue = rowItem.seriacion;
+
+    if (seriacionValue) {
+      const match = asignaturasList.find(
+        (seriacion) => seriacion.clave === seriacionValue || seriacion.nombre === seriacionValue,
+      );
+      if (match) {
+        seriacionValue = match.nombre;
+      }
+    }
+
     const rowItemValues = {
       id: rowItem.id,
       gradoId: rowItem.gradoId,
@@ -56,7 +67,7 @@ export default function AsignaturasEditModal({
       clave: rowItem.clave,
       creditos: rowItem.creditos,
       academia: rowItem.academia,
-      seriacion: rowItem.seriacion,
+      seriacion: seriacionValue,
       horasDocente: rowItem.horasDocente,
       horasIndependiente: rowItem.horasIndependiente,
     };
@@ -113,6 +124,11 @@ export default function AsignaturasEditModal({
       setLoading,
     );
   };
+
+  const seriacionOptions = asignaturasList.map((asignatura) => ({
+    id: asignatura.id,
+    nombre: asignatura.clave,
+  }));
 
   const cancelButtonText = edit === 'Consultar Asignatura' ? 'Regresar' : 'Cancelar';
 
@@ -221,11 +237,12 @@ export default function AsignaturasEditModal({
             title="Seriación"
             name="seriacion"
             value={formAsignaturas.seriacion || ''}
-            options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
+            options={seriacionOptions || []}
             disabled={edit === 'Consultar Asignatura'}
             onChange={handleOnChange}
             textValue
           />
+
         </Grid>
         <Grid item xs={6}>
           <Input
@@ -290,7 +307,13 @@ AsignaturasEditModal.propTypes = {
     horasIndependiente: PropTypes.number,
   }).isRequired,
   programaId: PropTypes.number.isRequired,
-  asignaturasList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  asignaturasList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+      clave: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   setAsignaturasList: PropTypes.func.isRequired,
   setNoti: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
