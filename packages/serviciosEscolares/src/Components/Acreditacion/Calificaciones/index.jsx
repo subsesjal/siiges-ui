@@ -110,22 +110,33 @@ export default function Calificaciones({
       );
 
       if (existingIndex > -1) {
+      // actualizar solo el campo que cambió
         return prevCalificaciones.map((item, index) => (index === existingIndex
           ? { ...item, [fieldToUpdate]: newValue }
           : item));
       }
+
+      // buscar valores iniciales en el alumno si existen
+      const alumno = alumnos.find((a) => a.id === alumnoId);
+      const califBase = alumno?.calificaciones?.find((c) => c.tipo === tipo);
+
       return [
         ...prevCalificaciones,
         {
           alumnoId,
           tipo,
-          calificacion: fieldToUpdate === 'calificacion' ? newValue : '',
-          fechaExamen: fieldToUpdate === 'fechaExamen' ? newValue : '',
+          calificacion:
+          fieldToUpdate === 'calificacion'
+            ? newValue
+            : califBase?.calificacion ?? '',
+          fechaExamen:
+          fieldToUpdate === 'fechaExamen'
+            ? newValue
+            : califBase?.fechaExamen ?? '',
         },
       ];
     });
   };
-
   const handleSubmit = async () => {
     const alumnosById = new Map(alumnos.map((a) => [a.id, a]));
 
@@ -194,6 +205,7 @@ export default function Calificaciones({
     calificacionMaxima,
     calificacionDecimal,
     fechaExamenes,
+    calificaciones,
   );
 
   return (

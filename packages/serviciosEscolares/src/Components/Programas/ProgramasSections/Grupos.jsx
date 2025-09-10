@@ -14,7 +14,7 @@ export default function Grupos() {
 
   const handleSuccess = () => {
     setOpen(false);
-    setFetchGrupos((prev) => !prev); // toggle based on latest value
+    setFetchGrupos((prev) => !prev);
     setNoti({
       open: true,
       message: 'Grupo guardado exitosamente.',
@@ -57,6 +57,7 @@ export default function Grupos() {
         data={grupos}
         params={parametros}
         onSuccess={handleSuccess}
+        setFetchGrupos={setFetchGrupos}
       />
     </Grid>
   );

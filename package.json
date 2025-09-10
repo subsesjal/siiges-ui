@@ -37,6 +37,8 @@
 	},
 	"scripts": {
 		"bootstrap": "lerna bootstrap",
+		"postbootstrap": "yarn setup",
+  	"setup": "git config core.hooksPath .hooks",
 		"start:app": "npx lerna run dev --scope siiges-app",
 		"build": "npx lerna run build --scope siiges-app",
 		"export": "npx lerna run export --scope siiges-app",

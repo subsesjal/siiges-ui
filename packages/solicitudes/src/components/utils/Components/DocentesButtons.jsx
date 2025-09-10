@@ -9,7 +9,9 @@ import DeleteDocentes from './DocentesModales/DeleteDocentes';
 import { TablesPlanEstudiosContext } from '../Context/tablesPlanEstudiosProviderContext';
 import DocentesModal from './DocentesModales/DocentesModal';
 
-export default function DocentesButtons({ id, setDocentesList, isDisabled, type }) {
+export default function DocentesButtons({
+  id, setDocentesList, isDisabled, type,
+}) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -87,6 +89,7 @@ export default function DocentesButtons({ id, setDocentesList, isDisabled, type 
 
 DocentesButtons.propTypes = {
   id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
   setDocentesList: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool.isRequired,
 };

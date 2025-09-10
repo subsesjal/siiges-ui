@@ -48,7 +48,10 @@ export default function calificacionesExtraordinarias({
           setCalificacionMinima(result.data.calificacionMinima || 0);
           setCalificacionMaxima(result.data.calificacionMaxima);
           setCalificacionDecimal(result.data.calificacionDecimal);
-          if (result.data.calificacionMaxima === '' && result.data.calificacionAprobatoria === '') {
+          if (
+            result.data.calificacionMaxima === ''
+            && result.data.calificacionAprobatoria === ''
+          ) {
             setOpen(true);
           }
         } else {
@@ -103,8 +106,25 @@ export default function calificacionesExtraordinarias({
 
   const isExtraordinarioEnabled = (alumnoId) => {
     const alumno = alumnos.find((a) => a.id === alumnoId);
-    const calificacionOrdinaria = alumno.calificaciones.find(({ tipo }) => tipo === 1);
-    return alumno && calificacionOrdinaria.calificacion <= calificacionAprobatoria;
+    if (!alumno) return false;
+
+    const calificacionOrdinaria = alumno.calificaciones.find(
+      ({ tipo }) => tipo === 1,
+    );
+    if (!calificacionOrdinaria) return false;
+
+    const { calificacion } = calificacionOrdinaria;
+
+    if (
+      calificacion === null
+      || calificacion === undefined
+      || calificacion === ''
+      || Number.isNaN(Number(calificacion))
+    ) {
+      return false;
+    }
+
+    return Number(calificacion) < calificacionAprobatoria;
   };
 
   const updateCalificaciones = (
@@ -123,13 +143,23 @@ export default function calificacionesExtraordinarias({
           ? { ...item, [fieldToUpdate]: newValue }
           : item));
       }
+
+      const alumno = alumnos.find((a) => a.id === alumnoId);
+      const califBase = alumno?.calificaciones?.find((c) => c.tipo === tipo);
+
       return [
         ...prevCalificaciones,
         {
           alumnoId,
           tipo,
-          calificacion: fieldToUpdate === 'calificacion' ? newValue : '',
-          fechaExamen: fieldToUpdate === 'fechaExamen' ? newValue : '',
+          calificacion:
+          fieldToUpdate === 'calificacion'
+            ? newValue
+            : califBase?.calificacion ?? '',
+          fechaExamen:
+          fieldToUpdate === 'fechaExamen'
+            ? newValue
+            : califBase?.fechaExamen ?? '',
         },
       ];
     });
@@ -166,7 +196,9 @@ export default function calificacionesExtraordinarias({
 
     try {
       const calificacionesData = calificacionesValidas
-        .filter((c) => c.tipo === 2 || parseFloat(c.calificacion) < calificacionAprobatoria)
+        .filter(
+          (c) => c.tipo === 2 || parseFloat(c.calificacion) < calificacionAprobatoria,
+        )
         .map((c) => ({
           ...c,
           calificacion: c.tipo === 2 ? c.calificacion : '',
@@ -211,6 +243,7 @@ export default function calificacionesExtraordinarias({
     calificacionMaxima,
     calificacionDecimal,
     fechaExamenes,
+    calificaciones,
   );
 
   return (
@@ -240,8 +273,15 @@ export default function calificacionesExtraordinarias({
         </Grid>
       )}
       <DefaultModal title="Advertencia" open={open} setOpen={setOpen}>
-        Asegúrese de que todos los campos de las reglas de calificación esten llenos.
-        <ButtonSimple text="Agregar Reglas" onClick={() => { Router.push(url); }} align="right" />
+        Asegúrese de que todos los campos de las reglas de calificación esten
+        llenos.
+        <ButtonSimple
+          text="Agregar Reglas"
+          onClick={() => {
+            Router.push(url);
+          }}
+          align="right"
+        />
       </DefaultModal>
     </Grid>
   );

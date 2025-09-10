@@ -33,6 +33,7 @@ export default async function alumnosService({ id, dataBody, method }) {
 
   const result = await response.text();
   const { data } = JSON.parse(result);
+
   const dataForm = {
     id: data?.id,
     personaId: data?.personaId,
@@ -47,9 +48,7 @@ export default async function alumnosService({ id, dataBody, method }) {
     nombre: data?.persona?.nombre,
     apellidoPaterno: data?.persona?.apellidoPaterno,
     apellidoMaterno: data?.persona?.apellidoMaterno,
-    fechaNacimiento: new Date(
-      data?.persona?.fechaNacimiento,
-    ).toLocaleDateString('en-CA'),
+    fechaNacimiento: data?.persona?.fechaNacimiento?.split('T')[0],
     sexo: data?.persona?.sexo,
     nacionalidad: data?.persona?.nacionalidad,
     telefono: data?.persona?.telefono,
@@ -58,7 +57,10 @@ export default async function alumnosService({ id, dataBody, method }) {
     correoPrimario: data?.persona?.correoPrimario,
     matricula: data?.matricula,
     situacionId: data?.situacionId,
-    fechaRegistro: new Date(data?.createdAt).toLocaleDateString('en-CA'),
+    fechaRegistro: data?.createdAt?.split('T')[0],
+    tipoTramiteId: data?.tipoTramiteId,
+    equivalenciaId: data?.equivalencia?.id,
+    equivalencia: data?.equivalencia,
   };
 
   return { data, dataForm };

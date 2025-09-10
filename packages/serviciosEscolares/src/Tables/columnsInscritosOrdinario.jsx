@@ -2,6 +2,9 @@ import React from 'react';
 import FechaExamenInput from '../Components/utils/Calificaciones/FechaExamenInput';
 import CalificacionInput from '../Components/utils/Calificaciones/CalificacionInput';
 
+const EGRESADO = 3;
+const BAJA = 4;
+
 const columnsInscritosOrdinario = (
   disabled,
   updateCalificaciones,
@@ -9,6 +12,7 @@ const columnsInscritosOrdinario = (
   calificacionMaxima,
   calificacionDecimal,
   fechaExamenes,
+  calificaciones,
 ) => [
   {
     field: 'matricula',
@@ -32,8 +36,19 @@ const columnsInscritosOrdinario = (
     headerName: 'Calificación Ordinario',
     width: 220,
     renderCell: (params) => {
-      const calificacion = params.row.calificaciones[0]?.calificacion || '';
-      const isDisabled = disabled || params.row.situacionId === 3 || params.row.situacionId === 4;
+      const califGuardada = calificaciones.find(
+        (c) => c.alumnoId === params.id && c.tipo === 1,
+      )?.calificacion;
+      const califParams = params.row.calificaciones.find(
+        (c) => c.tipo === 1,
+      )?.calificacion;
+
+      const calificacion = califGuardada ?? califParams ?? '';
+
+      const isDisabled = disabled
+        || params.row.situacionId === EGRESADO
+        || params.row.situacionId === BAJA;
+
       return (
         <CalificacionInput
           id={params.id}
@@ -54,9 +69,21 @@ const columnsInscritosOrdinario = (
     headerName: 'Fecha de examen',
     width: 220,
     renderCell: (params) => {
-      const isDisabled = disabled || params.row.situacionId === 3 || params.row.situacionId === 4;
-      const currentFechaExamen = params.row.calificaciones[0]?.fechaExamen || '';
-      const fechaExamen = !currentFechaExamen && fechaExamenes ? fechaExamenes : currentFechaExamen;
+      const fechaGuardada = calificaciones.find(
+        (c) => c.alumnoId === params.id && c.tipo === 1,
+      )?.fechaExamen;
+      const fechaParams = params.row.calificaciones.find(
+        (c) => c.tipo === 1,
+      )?.fechaExamen;
+
+      const currentFechaExamen = fechaGuardada ?? fechaParams ?? '';
+      const fechaExamen = !currentFechaExamen && fechaExamenes
+        ? fechaExamenes
+        : currentFechaExamen;
+
+      const isDisabled = disabled
+        || params.row.situacionId === EGRESADO
+        || params.row.situacionId === BAJA;
 
       return (
         <FechaExamenInput

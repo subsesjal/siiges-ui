@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Obtiene el nombre de la rama actual
+branch="$(git branch --show-current)"
+msg="$(cat "$1")"
+
+# Extrae ticket tipo ABC-1234 del nombre de la rama
+prefix=$(echo "$branch" | grep -oE '[A-Z]+-[0-9]+')
+
+# Si hay ticket y no está ya en el mensaje, lo agrega
+if [[ -n "$prefix" ]]; then
+  if [[ "$msg" != "$prefix: "* ]]; then
+    echo "$prefix: $msg" > "$1"
+  fi
+fi

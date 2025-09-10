@@ -11,6 +11,11 @@ import errorDatosAsignaturas from '@siiges-ui/solicitudes/src/components/utils/s
 import handleEdit from '@siiges-ui/solicitudes/src/components/utils/submitEditAsignaturas';
 import { area, grados } from '@siiges-ui/solicitudes/src/components/utils/Mocks/mockAsignaturas';
 
+const tipos = [
+  { id: 1, nombre: 'Normal' },
+  { id: 2, nombre: 'Formacion Electiva' },
+];
+
 export default function AsignaturasEditModal({
   open,
   hideModal,
@@ -31,9 +36,10 @@ export default function AsignaturasEditModal({
     const cicloIdMap = {
       1: grados.semestral,
       2: grados.cuatrimestral,
-      3: grados.flexibleSemestral,
-      4: grados.flexibleCuatrimestral,
-      5: grados.optativa,
+      3: grados.anual,
+      4: grados.flexibleSemestral,
+      5: grados.flexibleCuatrimestral,
+      6: grados.optativa,
     };
 
     const selectedGradeValue = cicloIdMap[cicloId] || grados.semestral;
@@ -41,15 +47,27 @@ export default function AsignaturasEditModal({
   }, [cicloId]);
 
   useEffect(() => {
+    let seriacionValue = rowItem.seriacion;
+
+    if (seriacionValue) {
+      const match = asignaturasList.find(
+        (seriacion) => seriacion.clave === seriacionValue || seriacion.nombre === seriacionValue,
+      );
+      if (match) {
+        seriacionValue = match.nombre;
+      }
+    }
+
     const rowItemValues = {
       id: rowItem.id,
       gradoId: rowItem.gradoId,
+      tipo: rowItem.tipo,
       areaId: rowItem.areaId,
       nombre: rowItem.nombre,
       clave: rowItem.clave,
       creditos: rowItem.creditos,
       academia: rowItem.academia,
-      seriacion: rowItem.seriacion,
+      seriacion: seriacionValue,
       horasDocente: rowItem.horasDocente,
       horasIndependiente: rowItem.horasIndependiente,
     };
@@ -58,6 +76,18 @@ export default function AsignaturasEditModal({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'tipo') {
+      if (Number(value) === 2) {
+        setFormAsignaturas((prevData) => ({
+          ...prevData,
+          [name]: Number(value),
+          gradoId: 25,
+        }));
+        return;
+      }
+    }
+
     setFormAsignaturas((prevData) => ({
       ...prevData,
       [name]: value,
@@ -95,11 +125,30 @@ export default function AsignaturasEditModal({
     );
   };
 
+  const seriacionOptions = asignaturasList.map((asignatura) => ({
+    id: asignatura.id,
+    nombre: asignatura.clave,
+  }));
+
   const cancelButtonText = edit === 'Consultar Asignatura' ? 'Regresar' : 'Cancelar';
 
   return (
     <DefaultModal open={open} setOpen={hideModal} title={edit}>
       <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <BasicSelect
+            title="Tipo"
+            name="tipo"
+            value={formAsignaturas.tipo}
+            options={tipos}
+            onChange={handleOnChange}
+            onblur={handleOnBlur}
+            errorMessage={error.tipo}
+            required
+            disabled={edit === 'Consultar Asignatura'}
+          />
+        </Grid>
+        {formAsignaturas.tipo !== 2 && (
         <Grid item xs={6}>
           <BasicSelect
             title="Grado"
@@ -113,6 +162,7 @@ export default function AsignaturasEditModal({
             disabled={edit === 'Consultar Asignatura'}
           />
         </Grid>
+        )}
         <Grid item xs={6}>
           <BasicSelect
             title="Área"
@@ -168,7 +218,7 @@ export default function AsignaturasEditModal({
             errorMessage={error.creditos}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Input
             id="academia"
             label="Academia"
@@ -187,11 +237,12 @@ export default function AsignaturasEditModal({
             title="Seriación"
             name="seriacion"
             value={formAsignaturas.seriacion || ''}
-            options={[{ value: '', label: '' }, ...(asignaturasList || [])]}
+            options={seriacionOptions || []}
             disabled={edit === 'Consultar Asignatura'}
             onChange={handleOnChange}
             textValue
           />
+
         </Grid>
         <Grid item xs={6}>
           <Input
@@ -244,6 +295,7 @@ AsignaturasEditModal.propTypes = {
   rowItem: PropTypes.shape({
     id: PropTypes.number,
     gradoId: PropTypes.number,
+    tipo: PropTypes.number,
     areaId: PropTypes.number,
     cicloId: PropTypes.number,
     nombre: PropTypes.string,
@@ -255,7 +307,13 @@ AsignaturasEditModal.propTypes = {
     horasIndependiente: PropTypes.number,
   }).isRequired,
   programaId: PropTypes.number.isRequired,
-  asignaturasList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  asignaturasList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+      clave: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   setAsignaturasList: PropTypes.func.isRequired,
   setNoti: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,

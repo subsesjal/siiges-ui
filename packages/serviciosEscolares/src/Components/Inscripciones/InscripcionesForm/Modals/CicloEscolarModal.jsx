@@ -18,6 +18,7 @@ export default function CicloEscolarModal({
   fetchCiclosEscolares,
 }) {
   const { setNoti } = useContext(Context);
+
   const [formCicloEscolar, setFormCicloEscolar] = useState({});
   useEffect(() => {
     if (programaId) {

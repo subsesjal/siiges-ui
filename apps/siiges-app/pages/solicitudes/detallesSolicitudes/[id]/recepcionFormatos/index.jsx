@@ -4,18 +4,21 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
+  List,
+  ListItem,
+  ListItemText,
   Typography,
 } from '@mui/material';
 import {
-  ButtonFile,
   ButtonsForm,
   Context,
   DefaultModal,
   GetFile,
   Input,
   InputDate,
-  LabelData,
   Layout,
+  ListSubtitle,
+  ListTitle,
   updateRecord,
 } from '@siiges-ui/shared';
 import { getSolicitudDetalles } from '@siiges-ui/solicitudes';
@@ -31,6 +34,8 @@ const initialCheckboxes = {
   fda06: false,
 };
 
+const baseUrl = process.env.NEXT_PUBLIC_URL;
+
 export default function RecepcionFormatos() {
   const { session, setNoti, setLoading } = useContext(Context);
   const router = useRouter();
@@ -40,39 +45,7 @@ export default function RecepcionFormatos() {
   const [solicitud, setSolicitud] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [checkboxes, setCheckboxes] = useState({ ...initialCheckboxes });
-  const [url, setUrl] = useState([null, null, null, null, null, null]);
-  const fileData = [
-    {
-      entidadId: query.id,
-      tipoEntidad: 'SOLICITUD',
-      tipoDocumento: 'FDA01',
-    },
-    {
-      entidadId: query.id,
-      tipoEntidad: 'SOLICITUD',
-      tipoDocumento: 'FDA02',
-    },
-    {
-      entidadId: query.id,
-      tipoEntidad: 'SOLICITUD',
-      tipoDocumento: 'FDA03',
-    },
-    {
-      entidadId: query.id,
-      tipoEntidad: 'SOLICITUD',
-      tipoDocumento: 'FDA04',
-    },
-    {
-      entidadId: query.id,
-      tipoEntidad: 'SOLICITUD',
-      tipoDocumento: 'FDA05',
-    },
-    {
-      entidadId: query.id,
-      tipoEntidad: 'SOLICITUD',
-      tipoDocumento: 'FDA06',
-    },
-  ];
+
   useEffect(() => {
     const fetchSolicitud = async () => {
       if (query.id !== undefined) {
@@ -83,23 +56,6 @@ export default function RecepcionFormatos() {
             setNoti,
           );
           setSolicitud(solicitudData.data);
-          fileData.forEach((data, index) => {
-            GetFile(data, (fileUrl, error) => {
-              if (error) {
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  fileError: `Error fetching file: ${error}`,
-                }));
-                return;
-              }
-
-              setUrl((prevUrls) => {
-                const newUrls = [...prevUrls];
-                newUrls[index] = fileUrl;
-                return newUrls;
-              });
-            });
-          });
         } catch (error) {
           setErrors((prevErrors) => ({
             ...prevErrors,
@@ -110,7 +66,7 @@ export default function RecepcionFormatos() {
     };
 
     fetchSolicitud();
-  }, [query, session]);
+  }, [query, session, setNoti]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -135,39 +91,50 @@ export default function RecepcionFormatos() {
       [name]: checked,
     }));
   };
+
   const allChecked = Object.values(checkboxes).every((value) => value);
 
-  const downloadFile = async (type) => {
-    try {
-      const solicitudId = solicitud?.id;
-      GetFile({
-        tipoEntidad: 'SOLICITUD',
-        entidadId: solicitudId,
-        tipoDocumento: type,
-      }, async (fileURL, error) => {
-        if (error) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            fileDownloadError: `Error downloading the file: ${error}`,
-          }));
-          return;
-        }
-        if (!fileURL) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            fileDownloadError: 'File URL not provided',
-          }));
-          return;
-        }
+  const handleDownload = (tipoDocumento) => {
+    let tipoEntidad = 'SOLICITUD';
+    let finalEntidadId = solicitud.id;
+    let typeDocument = tipoDocumento;
 
-        window.open(fileURL, '_blank');
-      });
-    } catch (error) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        fileDownloadError: `Error calling GetFile: ${error}`,
-      }));
+    if (['FDA05', 'FDP01', 'FDP03', 'FDP04'].includes(tipoDocumento)) {
+      tipoEntidad = 'PROGRAMA';
+      finalEntidadId = solicitud.programa?.id;
     }
+
+    if (tipoDocumento === 'FDP01') {
+      typeDocument = 'FORMATO_PEDAGOGICO_01';
+    }
+    if (tipoDocumento === 'FDP03') {
+      typeDocument = 'ASIGNATURAS_DETALLE';
+    }
+    if (tipoDocumento === 'FDP04') {
+      typeDocument = 'PROPUESTA_HEMEROGRAFICA';
+    }
+
+    setLoading(true);
+    GetFile(
+      {
+        entidadId: finalEntidadId,
+        tipoDocumento: typeDocument,
+        tipoEntidad,
+      },
+      (result, error) => {
+        if (error) {
+          setNoti({
+            open: true,
+            message: `¡No se encontró el archivo!: ${error}`,
+            type: 'error',
+          });
+        } else {
+          const fileUrl = `${baseUrl}${result}`;
+          window.open(fileUrl, '_blank');
+        }
+        setLoading(false);
+      },
+    );
   };
 
   const handleSubmit = async () => {
@@ -194,7 +161,7 @@ export default function RecepcionFormatos() {
             message: '¡Éxito al actualizar la solicitud!',
             type: 'success',
           });
-          downloadFile('OFICIO_ADMISORIO');
+          handleDownload('OFICIO_ADMISORIO');
           router.back();
         } else {
           setLoading(false);
@@ -223,164 +190,150 @@ export default function RecepcionFormatos() {
     }
   };
 
+  const opciones = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  };
+
+  const fechaAlta = new Date(solicitud.programa?.plantel?.institucion?.createdAt)
+    .toLocaleDateString('es', opciones);
+
+  const TURNOS = {
+    1: 'Matutino',
+    2: 'Vespertino',
+    3: 'Nocturno',
+    4: 'Mixto',
+  };
+
+  const PERIODOS = {
+    1: 'Semestral',
+    2: 'Cuatrimestral',
+    3: 'Anual',
+    4: 'Semestral curriculum flexible',
+    5: 'Cuatrimestral curriculum flexible',
+  };
+
+  const formatTurnos = (turnosArray) => {
+    if (!turnosArray || !Array.isArray(turnosArray)) return '';
+    return turnosArray
+      .map((programaTurno) => TURNOS[programaTurno?.turnoId])
+      .filter(Boolean)
+      .join(', ');
+  };
+
   return (
     <Layout title="Recepción de formatos Administrativos">
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h6">Información de la solicitud</Typography>
+      <Typography variant="h6" gutterBottom component="div" sx={{ mt: 3 }}>
+        Información del Programa
+      </Typography>
+      <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid container xs={6}>
+          <Grid item xs>
+            <List>
+              <ListTitle text="Tipo de trámite" />
+              <ListTitle text="Folio de solicitud" />
+              <ListTitle text="Acuerdo de RVOE" />
+              <ListTitle text="Nivel" />
+              <ListTitle text="Nombre del Programa" />
+            </List>
+          </Grid>
+          <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+          <Grid item xs>
+            <List>
+              <ListSubtitle text={solicitud?.tipoSolicitud?.nombre || 'N/A'} />
+              <ListSubtitle text={solicitud?.folio || 'N/A'} />
+              <ListSubtitle text={solicitud?.programa?.acuerdoRvoe || 'N/A'} />
+              <ListSubtitle text={solicitud?.programa?.nivel?.descripcion || 'N/A'} />
+              <ListSubtitle text={solicitud?.programa?.nombre || 'N/A'} />
+            </List>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <LabelData title="Tipo de trámite" subtitle="Nueva solicitud" />
+        <Grid container xs={5}>
+          <Grid item xs>
+            <List>
+              <ListTitle text="Modalidad" />
+              <ListTitle text="Periodo" />
+              <ListTitle text="Turnos" />
+              <ListTitle text="Fecha recepción" />
+            </List>
+          </Grid>
+          <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+          <Grid item xs={{ mx: 3 }}>
+            <List>
+              <ListSubtitle text={solicitud?.programa?.modalidad?.nombre || 'N/A'} />
+              <ListSubtitle text={PERIODOS[solicitud.programa?.cicloId] || 'N/A'} />
+              <ListSubtitle text={formatTurnos(solicitud.programa?.programaTurnos) || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.creditos || 'N/A'} />
+            </List>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="Fecha de recepción"
-            subtitle={
-              solicitud.fechaRecepcion
-                ? new Date(solicitud.fechaRecepcion).toLocaleDateString(
-                  'es-MX',
-                  {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  },
-                )
-                : ''
-            }
-          />
+      </Grid>
+      <Typography variant="h6" gutterBottom component="div" sx={{ mt: 3 }}>
+        Información del Plantel
+      </Typography>
+      <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid container xs={6}>
+          <Grid item xs>
+            <List>
+              <ListTitle text="Institución" />
+              <ListTitle text="CCT" />
+              <ListTitle text="Fecha de alta" />
+              <ListTitle text="Representante Legal" />
+              <ListTitle text="Email" />
+              <ListTitle text="Celular" />
+            </List>
+          </Grid>
+          <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+          <Grid item xs>
+            <List>
+              <ListSubtitle text={solicitud.programa?.plantel?.institucion?.nombre || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.plantel?.claveCentroTrabajo || 'N/A'} />
+              <ListSubtitle text={fechaAlta || 'N/A'} />
+              <ListSubtitle text={solicitud.usuario?.nombre || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.plantel?.correo1 || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.plantel?.telefono1 || 'N/A'} />
+            </List>
+          </Grid>
         </Grid>
-
-        <Grid item xs={3}>
-          <LabelData title="Folio" subtitle={solicitud.folio || ''} />
+        <Grid container xs={5}>
+          <Grid item xs>
+            <List>
+              <ListTitle text="Calle" />
+              <ListTitle text="No. Exterior" />
+              <ListTitle text="No. Interior" />
+              <ListTitle text="Colonia" />
+              <ListTitle text="CP" />
+              <ListTitle text="Municipio" />
+            </List>
+          </Grid>
+          <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+          <Grid item xs={{ mx: 3 }}>
+            <List>
+              <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.calle || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.numeroExterior || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.numeroInterior || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.colonia || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.codigoPostal || 'N/A'} />
+              <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.municipio?.nombre || 'N/A'} />
+            </List>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <LabelData title="RVOE" subtitle={solicitud.rvoe || ''} />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="Nivel"
-            subtitle={solicitud.programa?.nivelId || ''}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="Modalidad"
-            subtitle={solicitud.programa?.modalidadId || ''}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelData
-            title="Nombre"
-            subtitle={solicitud.programa?.nombre || ''}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData title="Periodo" subtitle="Semestral" />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="Turno"
-            subtitle={
-              solicitud.programa?.programaTurnos
-                ?.map((t) => t.turnoId)
-                .join(', ') || ''
-            }
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelData
-            title="Clave de centro de trabajo"
-            subtitle={solicitud.programa?.plantel?.claveCentroTrabajo || ''}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelData
-            title="Calle"
-            subtitle={solicitud.programa?.plantel?.domicilio?.calle || ''}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="Número"
-            subtitle={
-              solicitud.programa?.plantel?.domicilio?.numeroExterior || ''
-            }
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="Interior"
-            subtitle={
-              solicitud.programa?.plantel?.domicilio?.numeroInterior || ''
-            }
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="Colonia"
-            subtitle={solicitud.programa?.plantel?.domicilio?.colonia || ''}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="CP"
-            subtitle={
-              solicitud.programa?.plantel?.domicilio?.codigoPostal || ''
-            }
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelData
-            title="Municipio"
-            subtitle={
-              solicitud.programa?.plantel?.domicilio?.municipio?.nombre || ''
-            }
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelData
-            title="Institución"
-            subtitle={solicitud.programa?.plantel?.institucion?.nombre || ''}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelData
-            title="Fecha en que se dio de alta"
-            subtitle={solicitud.programa?.plantel?.institucion?.createdAt || ''}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelData
-            title="Representante Legal"
-            subtitle={
-              solicitud.programa?.plantel?.institucion?.representanteLegal || ''
-            }
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelData
-            title="Email"
-            subtitle={solicitud.programa?.plantel?.correo1 || ''}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <LabelData
-            title="Celular"
-            subtitle={solicitud.programa?.plantel?.telefono1 || ''}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">
-            Recepción de formatos Administrativos
-          </Typography>
-        </Grid>
-        <Grid item xs={3}>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="h6" gutterBottom component="div" sx={{ mt: 3 }}>
+          Recepción de formatos Administrativos
+        </Typography>
+        <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
+      </Grid>
+      <Grid container spacing={1}>
+        <Grid item xs={3} sx={{ mr: 15, ml: 5 }}>
           <FormGroup>
             <Grid container alignItems="center" spacing={1}>
-              <Grid item xs={7}>
+              <Grid item xs={1}>
                 <FormControlLabel
                   control={(
                     <Checkbox
@@ -389,15 +342,18 @@ export default function RecepcionFormatos() {
                       name="fda01"
                     />
                   )}
-                  label="FDA 01"
                 />
               </Grid>
               <Grid item xs={5}>
-                <ButtonFile url={url[0]}>FDA 01</ButtonFile>
+                <ListItem button onClick={() => handleDownload('FDA01')}>
+                  <ListItemText>
+                    FDA 01
+                  </ListItemText>
+                </ListItem>
               </Grid>
             </Grid>
             <Grid container alignItems="center" spacing={1}>
-              <Grid item xs={7}>
+              <Grid item xs={1}>
                 <FormControlLabel
                   control={(
                     <Checkbox
@@ -406,15 +362,18 @@ export default function RecepcionFormatos() {
                       name="fda03"
                     />
                   )}
-                  label="FDA 03"
                 />
               </Grid>
               <Grid item xs={5}>
-                <ButtonFile url={url[2]}>FDA 03</ButtonFile>
+                <ListItem button onClick={() => handleDownload('FDA03')}>
+                  <ListItemText>
+                    FDA 03
+                  </ListItemText>
+                </ListItem>
               </Grid>
             </Grid>
             <Grid container alignItems="center" spacing={1}>
-              <Grid item xs={7}>
+              <Grid item xs={1}>
                 <FormControlLabel
                   control={(
                     <Checkbox
@@ -423,11 +382,14 @@ export default function RecepcionFormatos() {
                       name="fda05"
                     />
                   )}
-                  label="FDA 05"
                 />
               </Grid>
               <Grid item xs={5}>
-                <ButtonFile url={url[4]}>FDA 05</ButtonFile>
+                <ListItem button onClick={() => handleDownload('FDA05')}>
+                  <ListItemText>
+                    FDA 05
+                  </ListItemText>
+                </ListItem>
               </Grid>
             </Grid>
           </FormGroup>
@@ -435,7 +397,7 @@ export default function RecepcionFormatos() {
         <Grid item xs={3}>
           <FormGroup>
             <Grid container alignItems="center" spacing={1}>
-              <Grid item xs={7}>
+              <Grid item xs={1}>
                 <FormControlLabel
                   control={(
                     <Checkbox
@@ -444,15 +406,18 @@ export default function RecepcionFormatos() {
                       name="fda02"
                     />
                   )}
-                  label="FDA 02"
                 />
               </Grid>
               <Grid item xs={5}>
-                <ButtonFile url={url[1]}>FDA 02</ButtonFile>
+                <ListItem button onClick={() => handleDownload('FDA02')}>
+                  <ListItemText>
+                    FDA 02
+                  </ListItemText>
+                </ListItem>
               </Grid>
             </Grid>
             <Grid container alignItems="center" spacing={1}>
-              <Grid item xs={7}>
+              <Grid item xs={1}>
                 <FormControlLabel
                   control={(
                     <Checkbox
@@ -461,15 +426,18 @@ export default function RecepcionFormatos() {
                       name="fda04"
                     />
                   )}
-                  label="FDA 04"
                 />
               </Grid>
               <Grid item xs={5}>
-                <ButtonFile url={url[3]}>FDA 04</ButtonFile>
+                <ListItem button onClick={() => handleDownload('FDA04')}>
+                  <ListItemText>
+                    FDA 04
+                  </ListItemText>
+                </ListItem>
               </Grid>
             </Grid>
             <Grid container alignItems="center" spacing={1}>
-              <Grid item xs={7}>
+              <Grid item xs={1}>
                 <FormControlLabel
                   control={(
                     <Checkbox
@@ -478,11 +446,14 @@ export default function RecepcionFormatos() {
                       name="fda06"
                     />
                   )}
-                  label="FDA 06"
                 />
               </Grid>
               <Grid item xs={5}>
-                <ButtonFile url={url[5]}>FDA 06</ButtonFile>
+                <ListItem button onClick={() => handleDownload('FDA06')}>
+                  <ListItemText>
+                    FDA 06
+                  </ListItemText>
+                </ListItem>
               </Grid>
             </Grid>
           </FormGroup>

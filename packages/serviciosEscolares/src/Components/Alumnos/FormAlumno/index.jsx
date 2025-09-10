@@ -4,8 +4,9 @@ import { Grid, Typography } from '@mui/material';
 import {
   Select,
   Input,
-  ButtonsForm,
   Context,
+  ButtonSimple,
+  InputDate,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import {
@@ -167,7 +168,7 @@ export default function FormAlumno({ type, alumno, setId }) {
     const value = formSelect?.[campo.id] || '';
     const errorMessage = getErrorMessage(campo.id);
 
-    if (campo.type === 'text' || campo.type === 'date') {
+    if (campo.type === 'text') {
       return (
         <Input
           id={campo.id}
@@ -176,9 +177,24 @@ export default function FormAlumno({ type, alumno, setId }) {
           auto={campo.id}
           onChange={handleOnChange}
           value={form?.[campo.id] || alumno?.[campo.id]}
-          type={campo.type}
+          type="text"
           disabled={campo.disabled}
           errorMessage={errorMessage}
+        />
+      );
+    }
+
+    if (campo.type === 'date') {
+      return (
+        <InputDate
+          id={campo.id}
+          label={campo.label}
+          name={campo.id}
+          onChange={handleOnChange}
+          value={form?.[campo.id] || alumno?.[campo.id]}
+          disabled={campo.disabled}
+          errorMessage={errorMessage}
+          type="datetime"
         />
       );
     }
@@ -228,27 +244,29 @@ export default function FormAlumno({ type, alumno, setId }) {
 
         {type === 'edit' && (
           <Grid item xs={4}>
-            <Input
+            <InputDate
               id="fechaRegistro"
               label="Fecha de registro"
               name="fechaRegistro"
               autoComplete="fechaRegistro"
               onChange={handleOnChange}
               value={alumno?.fechaRegistro}
-              type="date"
+              type="datetime"
               disabled
             />
           </Grid>
         )}
 
         <Grid item xs={9} />
-        <Grid item xs={3}>
-          <ButtonsForm
-            confirm={saveButtonAction}
-            cancel={() => {
-              router.back();
-            }}
+        <Grid item>
+          <ButtonSimple
+            design="enviar"
+            onClick={() => { router.back(); }}
+            text="Regresar"
           />
+        </Grid>
+        <Grid item>
+          <ButtonSimple onClick={saveButtonAction} text="Guardar" />
         </Grid>
       </Grid>
     </div>

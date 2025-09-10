@@ -28,6 +28,7 @@ export default function InscripcionForm({
   setProgramaId,
   setGrupoId,
   setLoading,
+  setCicloTxt,
 }) {
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -129,7 +130,15 @@ export default function InscripcionForm({
         });
         setArrays((prevState) => ({ ...prevState, ciclosEscolares: [] }));
       } else {
-        setArrays((prevState) => ({ ...prevState, ciclosEscolares: data.ciclosEscolares }));
+        const ciclosSorted = data.ciclosEscolares
+          .slice()
+          .sort((a, b) => {
+            if (a.nombre === 'EQUIV') return 1;
+            if (b.nombre === 'EQUIV') return -1;
+            return a.nombre.localeCompare(b.nombre);
+          });
+
+        setArrays((prevState) => ({ ...prevState, ciclosEscolares: ciclosSorted }));
       }
     });
   };
@@ -291,6 +300,7 @@ export default function InscripcionForm({
           setProgramaId(state.selectedPrograma);
         }
         if (state.selectedCicloEscolar) {
+          setCicloTxt(state.labelCicloEscolar);
           await fetchGrados();
         }
         if (state.selectedGrado) {
@@ -422,7 +432,14 @@ export default function InscripcionForm({
         open={openGrupos}
         setOpen={setOpenGrupos}
         type="new"
-        params={{ cicloEscolarId: state.selectedCicloEscolar, gradoId: state.selectedGrado }}
+        params={{
+          cicloEscolarId: state.selectedCicloEscolar,
+          cicloNombre: arrays.ciclosEscolares.find(
+            (ciclo) => ciclo.id === state.selectedCicloEscolar,
+          )?.nombre,
+          gradoId: state.selectedGrado,
+          gradoNombre: arrays.grados.find((grado) => grado.id === state.selectedGrado)?.nombre,
+        }}
         setFetchGrupos={setFetchGruposTrigger}
       />
     </>
@@ -433,5 +450,6 @@ InscripcionForm.propTypes = {
   setAsignaturas: PropTypes.func.isRequired,
   setProgramaId: PropTypes.func.isRequired,
   setGrupoId: PropTypes.func.isRequired,
+  setCicloTxt: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
 };

@@ -9,6 +9,7 @@ export default function Inscripcion() {
   const [asignaturas, setAsignaturas] = useState();
   const [programaId, setProgramaId] = useState();
   const [grupoId, setGrupoId] = useState();
+  const [cicloTxt, setCicloTxt] = useState();
   const [loading, setLoading] = useState(true);
 
   return (
@@ -18,12 +19,14 @@ export default function Inscripcion() {
         setProgramaId={setProgramaId}
         setGrupoId={setGrupoId}
         setLoading={setLoading}
+        setCicloTxt={setCicloTxt}
       />
       {grupoId && (
         <InscripcionesTable
           asignaturas={asignaturas}
           programaId={programaId}
           grupoId={grupoId}
+          cicloTxt={cicloTxt}
         />
       )}
     </Layout>

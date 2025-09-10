@@ -18,6 +18,7 @@ const turnos = [
   { id: 3, nombre: 'Nocturno' },
   { id: 4, nombre: 'Mixto' },
 ];
+
 export default function GruposModal({
   open,
   setOpen,
@@ -30,9 +31,23 @@ export default function GruposModal({
   const title = type === 'new' ? 'Agregar Grupo' : 'Modificar Grupo';
   const { setNoti, setLoading } = useContext(Context);
   const [form, setForm] = useState();
-  const pathGrupo = async (dataform) => {
+
+  const safeSetFetchGrupos = (value) => {
+    if (typeof setFetchGrupos === 'function') {
+      setFetchGrupos(value);
+    }
+  };
+
+  const pathGrupo = async (dataForm) => {
     setLoading(true);
-    const dataBody = { ...dataform, ...params };
+    const equiv = params?.cicloNombre === 'EQUIV';
+
+    const dataBody = {
+      ...dataForm,
+      ...params,
+      ...(equiv ? { turnoId: 1, descripcion: 'UNICO' } : {}),
+    };
+
     try {
       let result;
       if (data?.id) {
@@ -42,20 +57,20 @@ export default function GruposModal({
       }
 
       if (result) {
-        setFetchGrupos(true);
-        setLoading(false);
+        safeSetFetchGrupos(true);
+        setOpen(false);
       }
-
-      setOpen(false);
     } catch (error) {
-      setLoading(false);
       setNoti({
         open: true,
-        message: `¡Error al guardar Grupo!: ${error}`,
+        message: '¡Error al guardar Grupo!',
         type: 'error',
       });
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -71,8 +86,8 @@ export default function GruposModal({
         )}
         <Grid item xs={4}>
           <LabelData
-            title="Ciclo Escolar ID"
-            subtitle={params?.cicloEscolarId}
+            title="Ciclo Escolar"
+            subtitle={params?.cicloNombre}
           />
         </Grid>
         <Grid item xs={4}>
@@ -86,17 +101,19 @@ export default function GruposModal({
             name="descripcion"
             auto="descripcion"
             onChange={handleOnChange}
-            value={data?.descripcion}
+            value={params?.cicloNombre === 'EQUIV' ? 'UNICO' : data?.descripcion}
+            disabled={params?.cicloNombre === 'EQUIV'}
           />
         </Grid>
         <Grid item xs={4}>
           <Select
             title="Turno"
-            value={data?.turnoId}
+            value={params?.cicloNombre === 'EQUIV' ? 1 : data?.turnoId}
             options={turnos}
             onChange={handleOnChange}
             id="turnoId"
             name="turnoId"
+            disabled={params?.cicloNombre === 'EQUIV'}
           />
         </Grid>
         <Grid item xs={4}>
@@ -150,8 +167,9 @@ GruposModal.propTypes = {
   type: PropTypes.string.isRequired,
   params: PropTypes.shape({
     cicloEscolarId: PropTypes.number,
-    gradoNombre: PropTypes.string,
+    cicloNombre: PropTypes.string,
     gradoId: PropTypes.number,
+    gradoNombre: PropTypes.string,
   }).isRequired,
   setOpen: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,

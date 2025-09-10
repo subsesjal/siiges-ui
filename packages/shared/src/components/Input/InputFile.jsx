@@ -25,6 +25,7 @@ export default function InputFile({
   isUploaded,
   title,
   openDropzone,
+  setFilesState,
 }) {
   const [files, setFiles] = useState([]);
   const { setNoti } = useContext(Context);
@@ -64,7 +65,13 @@ export default function InputFile({
   };
 
   const handleFileSave = async () => {
-    if (onChange) {
+    if (setFilesState) {
+      setFilesState((prev) => ({
+        ...prev,
+        [tipoDocumento]: files[0],
+      }));
+      setOpen(false);
+    } else if (onChange) {
       onChange(files);
       setOpen(false);
     } else {
@@ -156,6 +163,7 @@ InputFile.defaultProps = {
   isUploaded: false,
   openDropzone: false,
   title: 'Subir archivo',
+  setFilesState: null,
 };
 
 InputFile.propTypes = {
@@ -170,4 +178,5 @@ InputFile.propTypes = {
   isUploaded: PropTypes.bool,
   openDropzone: PropTypes.bool,
   title: PropTypes.string,
+  setFilesState: PropTypes.func,
 };

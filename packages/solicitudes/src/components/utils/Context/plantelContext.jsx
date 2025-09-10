@@ -21,6 +21,7 @@ export function PlantelProvider({ children, selectedPlantel, institucion }) {
   const [formInstitucionesAledanas, setFormInstitucionesAledanas] = useState(
     {},
   );
+  const [archivosNombres, setArchivosNombres] = useState({});
   const [form, setForm] = useState({
     1: {},
     2: {},
@@ -85,8 +86,10 @@ export function PlantelProvider({ children, selectedPlantel, institucion }) {
       setDiligencias,
       setValidNombres,
       formDiligencias,
+      archivosNombres,
       infraestructuras,
       setInitialValues,
+      setArchivosNombres,
       setFormDiligencias,
       selectedCheckboxes,
       setInfraestructuras,
@@ -108,6 +111,7 @@ export function PlantelProvider({ children, selectedPlantel, institucion }) {
       diligencias,
       validNombres,
       initialValues,
+      archivosNombres,
       formDiligencias,
       infraestructuras,
       selectedCheckboxes,

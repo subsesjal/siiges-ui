@@ -12,6 +12,7 @@ export default function Anexos({
   type,
   isDisabled: parentDisabled,
   solicitud,
+  tipoSolicitudId,
 }) {
   const [form, setForm] = useState([]);
 
@@ -44,6 +45,10 @@ export default function Anexos({
               id={id}
               type={type}
               institucionId={solicitud?.programa?.plantel?.institucionId}
+              plantelId={solicitud?.programa?.plantelId}
+              programaId={solicitud?.programa?.id}
+              usuarioId={solicitud?.usuarioId}
+              tipoSolicitudId={tipoSolicitudId}
             />
           )}
           <Observaciones id={id} section={section + 19} />
@@ -61,13 +66,17 @@ Anexos.defaultProps = {
 Anexos.propTypes = {
   nextModule: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool.isRequired,
+  tipoSolicitudId: PropTypes.number.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   type: PropTypes.string,
   solicitud: PropTypes.shape({
     programa: PropTypes.shape({
+      id: PropTypes.number,
+      plantelId: PropTypes.number,
       plantel: PropTypes.shape({
         institucionId: PropTypes.number,
       }),
     }),
+    usuarioId: PropTypes.number,
   }).isRequired,
 };
