@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Regex: ticket tipo ABC-1234 o commits de merge
+commit_regex="^([A-Z]+-[0-9]+:|Merge)"
+
+if ! grep -iqE "$commit_regex" "$1"; then
+    echo "❌ Commit abortado: El mensaje debe iniciar con un ticket (ej: SDT-1234:) o 'Merge'" >&2
+    exit 1
+fi
