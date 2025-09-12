@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { styled } from '@mui/system';
+import { useRouter } from 'next/router';
 import {
   ButtonsForm,
   ButtonSimple,
@@ -44,6 +45,7 @@ export default function NavigationButtons({
   const [open, setOpen] = useState(false);
   const [openProcesarModal, setOpenProcesarModal] = useState(false);
   const { setNoti } = useContext(Context);
+  const router = useRouter();
 
   const [formProcesar, setFormProcesar] = useState({
     matricula: '',
@@ -134,67 +136,84 @@ export default function NavigationButtons({
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="flex-end" spacing={1}>
-        {currentPosition > 1 && (
-          <>
+      <Grid container alignItems="center" spacing={1}>
+        {/* Botón regresar a la izquierda */}
+        <Grid item xs="auto">
+          <ButtonSimple
+            text="Regresar"
+            design="enviar"
+            onClick={() => {
+              router.back();
+            }}
+          />
+        </Grid>
+
+        {/* Contenedor para el resto, alineado a la derecha */}
+        <Grid item xs>
+          <Grid container justifyContent="flex-end" alignItems="center" spacing={1}>
+            {currentPosition > 1 && (
+            <>
+              <Grid item>
+                <CircularIconButton
+                  onClick={onPrevious}
+                  aria-label="Anterior"
+                  sx={{
+                    transform: 'rotate(180deg)',
+                    '&:hover': {
+                      transform: 'rotate(180deg) translateY(2px)',
+                    },
+                  }}
+                >
+                  <NavigateNextIcon />
+                </CircularIconButton>
+              </Grid>
+              <Grid item>
+                <Typography align="center">Anterior</Typography>
+              </Grid>
+              <Grid item>
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{ height: '2rem', mx: 4 }}
+                />
+              </Grid>
+            </>
+            )}
+
+            {currentPosition < totalPositions && (
+            <>
+              <Grid item>
+                <Typography align="center">Siguiente</Typography>
+              </Grid>
+              <Grid item>
+                <CircularIconButton onClick={onNext} aria-label="Siguiente">
+                  <NavigateNextIcon />
+                </CircularIconButton>
+              </Grid>
+            </>
+            )}
+
+            {currentPosition === totalPositions && !disabled && (
             <Grid item>
-              <CircularIconButton
-                onClick={onPrevious}
-                aria-label="Anterior"
-                sx={{
-                  transform: 'rotate(180deg)',
-                  '&:hover': {
-                    transform: 'rotate(180deg) translateY(2px)',
-                  },
-                }}
-              >
-                <NavigateNextIcon />
-              </CircularIconButton>
+              <ButtonSimple
+                text="Terminar"
+                onClick={() => setOpen(true)}
+                disabled={isSubmitting}
+              />
             </Grid>
+            )}
+
+            {estatus === 4 && currentPosition === totalPositions && (
             <Grid item>
-              <Typography align="center">Anterior</Typography>
+              <ButtonSimple
+                text="Procesar"
+                onClick={() => setOpenProcesarModal(true)}
+                disabled={isSubmitting}
+              />
             </Grid>
-          </>
-        )}
-        {currentPosition > 1 && (
-          <Grid item>
-            <Divider
-              orientation="vertical"
-              flexItem
-              sx={{ height: '2rem', mx: 4 }}
-            />
+            )}
           </Grid>
-        )}
-        {currentPosition < totalPositions && (
-          <>
-            <Grid item>
-              <Typography align="center">Siguiente</Typography>
-            </Grid>
-            <Grid item>
-              <CircularIconButton onClick={onNext} aria-label="Siguiente">
-                <NavigateNextIcon />
-              </CircularIconButton>
-            </Grid>
-          </>
-        )}
-        {currentPosition === totalPositions && !disabled && (
-          <Grid item>
-            <ButtonSimple
-              text="Terminar"
-              onClick={() => setOpen(true)}
-              disabled={isSubmitting}
-            />
-          </Grid>
-        )}
-        {estatus === 4 && currentPosition === totalPositions && (
-          <Grid item>
-            <ButtonSimple
-              text="Procesar"
-              onClick={() => setOpenProcesarModal(true)}
-              disabled={isSubmitting}
-            />
-          </Grid>
-        )}
+        </Grid>
       </Grid>
 
       <DefaultModal title={title} open={open} setOpen={setOpen}>
