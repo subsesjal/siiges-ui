@@ -50,14 +50,7 @@ export default function ProcesarEquivalencia() {
         <Grid item xs={12}>
           <ConsultEquivalencia />
         </Grid>
-        <Grid item xs={6}>
-          <ButtonSimple
-            text="Regresar"
-            onClick={() => router.back()}
-            design="warning"
-          />
-        </Grid>
-        <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <ButtonSimple
             text="Procesar Solicitud"
             onClick={handleSubmit}
