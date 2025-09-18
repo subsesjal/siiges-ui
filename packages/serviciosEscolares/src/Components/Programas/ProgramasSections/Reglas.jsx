@@ -94,6 +94,13 @@ export default function Reglas({ programa, id }) {
 
   const formatToDecimal = (value) => parseFloat(value).toFixed(1);
 
+  const formatValue = (value) => {
+    if (value === '' || Number.isNaN(Number(value))) return '';
+    return form.calificacionDecimal === '1'
+      ? Number(value).toFixed(1)
+      : Number(value);
+  };
+
   const handleSubmit = async () => {
     if (!validateForm()) {
       setNoti({
@@ -145,11 +152,12 @@ export default function Reglas({ programa, id }) {
             label="Calificación Mínima"
             name="calificacionMinima"
             type="number"
-            value={form.calificacionMinima}
+            value={formatValue(form.calificacionMinima)}
             onChange={handleInputChange}
             error={errors.calificacionMinima}
             fullWidth
             required
+            inputProps={{ step: form.calificacionDecimal === '1' ? '0.1' : '1' }}
           />
           {errors.calificacionMinima && (
             <FormHelperText error>{errorMessages.calificacionMinima}</FormHelperText>
@@ -160,11 +168,12 @@ export default function Reglas({ programa, id }) {
             label="Calificación Máxima"
             name="calificacionMaxima"
             type="number"
-            value={form.calificacionMaxima}
+            value={formatValue(form.calificacionMaxima)}
             onChange={handleInputChange}
             error={errors.calificacionMaxima}
             fullWidth
             required
+            inputProps={{ step: form.calificacionDecimal === '1' ? '0.1' : '1' }}
           />
           {errors.calificacionMaxima && (
             <FormHelperText error>{errorMessages.calificacionMaxima}</FormHelperText>
@@ -175,11 +184,12 @@ export default function Reglas({ programa, id }) {
             label="Calificación Aprobatoria"
             name="calificacionAprobatoria"
             type="number"
-            value={form.calificacionAprobatoria}
+            value={formatValue(form.calificacionAprobatoria)}
             onChange={handleInputChange}
             error={errors.calificacionAprobatoria}
             fullWidth
             required
+            inputProps={{ step: form.calificacionDecimal === '1' ? '0.1' : '1' }}
           />
           {errors.calificacionAprobatoria && (
             <FormHelperText error>{errorMessages.calificacionAprobatoria}</FormHelperText>
