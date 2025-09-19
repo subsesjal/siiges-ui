@@ -1,4 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState, useContext, useEffect,
+  useRef,
+} from 'react';
 import {
   TextField,
   MenuItem,
@@ -37,7 +40,10 @@ export default function Reglas({ programa, id }) {
   });
 
   useEffect(() => {
-    if (programa) {
+    const saved = localStorage.getItem(`reglas-${id}`);
+    if (saved) {
+      setForm(JSON.parse(saved));
+    } else if (programa) {
       setForm({
         id: id || '',
         solicitudId: programa.solicitudId || '',
@@ -47,16 +53,16 @@ export default function Reglas({ programa, id }) {
         calificacionDecimal: programa.calificacionDecimal ? '1' : '2',
       });
     }
-  }, [programa]);
+  }, [programa, id]);
 
   const validateField = (name, value) => {
     let isValid = true;
     let message = '';
 
-    if (!value && value !== 0) {
+    if ((value === '' || value === null || typeof value === 'undefined') && value !== 0) {
       isValid = false;
       message = 'Este campo es requerido';
-    } else if (name !== 'calificacionDecimal' && Number.isNaN(value)) {
+    } else if (name !== 'calificacionDecimal' && Number.isNaN(Number(value))) {
       isValid = false;
       message = 'Debe ser un número válido';
     }
@@ -68,9 +74,35 @@ export default function Reglas({ programa, id }) {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setForm({ ...form, [name]: value });
+    setForm((prev) => ({ ...prev, [name]: value }));
     validateField(name, value);
   };
+  const prevDecimalRef = useRef(form.calificacionDecimal);
+
+  useEffect(() => {
+    if (form.id) {
+      localStorage.setItem(`reglas-${form.id}`, JSON.stringify(form));
+    }
+  }, [form]);
+  useEffect(() => {
+    if (prevDecimalRef.current === form.calificacionDecimal) return;
+
+    const formatValue = (val) => {
+      if (val === '' || Number.isNaN(Number(val))) return '';
+      return form.calificacionDecimal === '1'
+        ? Number(val).toFixed(1)
+        : String(Math.trunc(Number(val)));
+    };
+
+    setForm((prev) => ({
+      ...prev,
+      calificacionMinima: formatValue(prev.calificacionMinima),
+      calificacionMaxima: formatValue(prev.calificacionMaxima),
+      calificacionAprobatoria: formatValue(prev.calificacionAprobatoria),
+    }));
+
+    prevDecimalRef.current = form.calificacionDecimal;
+  }, [form.calificacionDecimal]);
 
   const validateForm = () => {
     let isValid = true;
@@ -98,7 +130,7 @@ export default function Reglas({ programa, id }) {
     if (value === '' || Number.isNaN(Number(value))) return '';
     return form.calificacionDecimal === '1'
       ? Number(value).toFixed(1)
-      : Number(value);
+      : String(Math.trunc(Number(value)));
   };
 
   const handleSubmit = async () => {
@@ -110,8 +142,15 @@ export default function Reglas({ programa, id }) {
       });
       return;
     }
+    if (form.id) {
+      localStorage.setItem(`reglas-${form.id}`, JSON.stringify(form));
+      setNoti({
+        open: true,
+        message: '¡Reglas guardadas localmente!',
+        type: 'success',
+      });
+    }
 
-    setLoading(true);
     const dataBody = {
       programa: {
         calificacionMinima: form.calificacionDecimal === '1' ? formatToDecimal(form.calificacionMinima) : form.calificacionMinima,
@@ -120,6 +159,7 @@ export default function Reglas({ programa, id }) {
         calificacionDecimal: form.calificacionDecimal === '1',
       },
     };
+    setLoading(true);
 
     try {
       await updateRecord({
