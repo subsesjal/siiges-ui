@@ -35,7 +35,7 @@ export default function CiclosEscolares() {
 
   const handleSuccess = () => {
     setOpen(false);
-    setFetchCiclos((prev) => !prev); // triggers table refresh
+    setFetchCiclos((prev) => !prev);
     setNoti({
       open: true,
       message: 'Ciclo escolar guardado exitosamente.',
