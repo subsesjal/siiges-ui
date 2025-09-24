@@ -51,7 +51,7 @@ function DeleteCicloEscolar({ id, onSuccess }) {
         const { message } = await response.json();
         setNoti({
           open: true,
-          message: message || '¡No se ha podido eliminar el ciclo escolar!',
+          message: '¡No se ha podido eliminar el ciclo escolar!',
           type: 'error',
         });
       }
