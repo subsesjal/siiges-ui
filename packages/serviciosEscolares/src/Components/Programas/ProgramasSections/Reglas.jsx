@@ -14,15 +14,18 @@ import {
   ButtonSimple, Context, updateRecord,
 } from '@siiges-ui/shared';
 
-export default function Reglas({ programa, id }) {
+export default function Reglas({
+  programa,
+  id,
+  rules,
+  onRulesChange,
+}) {
   const { setNoti, setLoading } = useContext(Context);
 
   const [form, setForm] = useState({
     id: id || '',
-    calificacionMinima: '',
-    calificacionMaxima: '',
-    calificacionAprobatoria: '',
-    calificacionDecimal: '',
+    solicitudId: programa?.solicitudId || '',
+    ...rules,
   });
 
   const [errors, setErrors] = useState({
@@ -40,20 +43,11 @@ export default function Reglas({ programa, id }) {
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem(`reglas-${id}`);
-    if (saved) {
-      setForm(JSON.parse(saved));
-    } else if (programa) {
-      setForm({
-        id: id || '',
-        solicitudId: programa.solicitudId || '',
-        calificacionMinima: programa.calificacionMinima || '',
-        calificacionMaxima: programa.calificacionMaxima || '',
-        calificacionAprobatoria: programa.calificacionAprobatoria || '',
-        calificacionDecimal: programa.calificacionDecimal ? '1' : '2',
-      });
-    }
-  }, [programa, id]);
+    setForm((prevForm) => ({
+      ...prevForm,
+      ...rules,
+    }));
+  }, [rules]);
 
   const validateField = (name, value) => {
     let isValid = true;
@@ -74,16 +68,19 @@ export default function Reglas({ programa, id }) {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const updatedForm = { ...form, [name]: value };
+    setForm(updatedForm);
     validateField(name, value);
+
+    const rulesUpdate = {
+      calificacionMinima: updatedForm.calificacionMinima,
+      calificacionMaxima: updatedForm.calificacionMaxima,
+      calificacionAprobatoria: updatedForm.calificacionAprobatoria,
+      calificacionDecimal: updatedForm.calificacionDecimal,
+    };
+    onRulesChange(rulesUpdate);
   };
   const prevDecimalRef = useRef(form.calificacionDecimal);
-
-  useEffect(() => {
-    if (form.id) {
-      localStorage.setItem(`reglas-${form.id}`, JSON.stringify(form));
-    }
-  }, [form]);
   useEffect(() => {
     if (prevDecimalRef.current === form.calificacionDecimal) return;
 
@@ -142,14 +139,6 @@ export default function Reglas({ programa, id }) {
       });
       return;
     }
-    if (form.id) {
-      localStorage.setItem(`reglas-${form.id}`, JSON.stringify(form));
-      setNoti({
-        open: true,
-        message: '¡Reglas guardadas localmente!',
-        type: 'success',
-      });
-    }
 
     const dataBody = {
       programa: {
@@ -159,7 +148,6 @@ export default function Reglas({ programa, id }) {
         calificacionDecimal: form.calificacionDecimal === '1',
       },
     };
-    setLoading(true);
 
     try {
       await updateRecord({
@@ -270,4 +258,11 @@ Reglas.propTypes = {
     calificacionAprobatoria: PropTypes.number,
     calificacionDecimal: PropTypes.bool,
   }).isRequired,
+  rules: PropTypes.shape({
+    calificacionMinima: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    calificacionMaxima: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    calificacionAprobatoria: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    calificacionDecimal: PropTypes.string,
+  }).isRequired,
+  onRulesChange: PropTypes.func.isRequired,
 };
