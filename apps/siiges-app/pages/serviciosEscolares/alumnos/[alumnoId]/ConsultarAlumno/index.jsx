@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-
+import { ButtonSimple, Layout, getData } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import {
   Grid, Tabs, Tab, Box,
 } from '@mui/material';
-import {
-  DocumentosAlumno,
-  FormAlumno,
-  ExpedienteAlumno,
-} from '@siiges-ui/serviciosescolares';
-import { Layout, getData } from '@siiges-ui/shared';
-import HistorialAcademico from '@siiges-ui/serviciosescolares/src/Components/Alumnos/AlumnosHistorial';
+import { useRouter } from 'next/router';
 import alumnosService from '@siiges-ui/serviciosescolares/src/Components/utils/alumnosService';
+import HistorialAcademico from '@siiges-ui/serviciosescolares/src/Components/Alumnos/AlumnosHistorial';
+import AlumnoData from '@siiges-ui/serviciosescolares/src/Components/Alumnos/AlumnosData';
+import { DocumentosAlumno, ExpedienteAlumno } from '@siiges-ui/serviciosescolares';
 
-export default function EditarAlumno() {
+export default function ConsultarAlumno() {
   const router = useRouter();
   const { query } = router;
   const [alumno, setAlumno] = useState(null);
@@ -22,10 +18,7 @@ export default function EditarAlumno() {
 
   useEffect(() => {
     async function fetchAlumno() {
-      const { dataForm } = await alumnosService({
-        id: query.alumnoId,
-        method: 'GET',
-      });
+      const { dataForm } = await alumnosService({ id: query.alumnoId, method: 'GET' });
       setAlumno(dataForm);
     }
 
@@ -45,11 +38,11 @@ export default function EditarAlumno() {
   const mostrarExpediente = alumno?.tipoTramiteId !== 7;
 
   const tabsConfig = [
-    { label: 'Alumnos', component: <FormAlumno type="edit" alumno={alumno} /> },
-    { label: 'Documentos', component: <DocumentosAlumno id={alumno?.id} type="edit" /> },
+    { label: 'Alumnos', component: <AlumnoData alumno={alumno} /> },
+    { label: 'Documentos', component: <DocumentosAlumno id={alumno?.id} type="view" /> },
     { label: 'Historial', component: <HistorialAcademico alumno={alumno} historial={historial} /> },
     ...(mostrarExpediente
-      ? [{ label: 'Expediente', component: <ExpedienteAlumno alumno={alumno} setAlumno={setAlumno} type="edit" /> }]
+      ? [{ label: 'Expediente', component: <ExpedienteAlumno alumno={alumno} setAlumno={setAlumno} type="view" /> }]
       : []),
   ];
 
@@ -58,7 +51,7 @@ export default function EditarAlumno() {
   };
 
   return (
-    <Layout title="Modificar Alumno">
+    <Layout title="Consultar Alumno">
       <Grid container spacing={2}>
         <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'end' }}>
           <Tabs value={value} onChange={handleChange}>
@@ -67,11 +60,18 @@ export default function EditarAlumno() {
             ))}
           </Tabs>
         </Grid>
-
         <Grid item xs={12}>
           <Box sx={{ mt: 2 }}>
             {tabsConfig[value].component}
           </Box>
+        </Grid>
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <ButtonSimple
+            onClick={() => { router.back(); }}
+            text="Regresar"
+            align="right"
+            design="enviar"
+          />
         </Grid>
       </Grid>
     </Layout>
