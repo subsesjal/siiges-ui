@@ -60,7 +60,6 @@ export default function GruposModal({
     if (!form.turnoId) newErrors.turnoId = 'El turno es obligatorio';
     if (!form.generacion?.trim()) newErrors.generacion = 'La generación es obligatoria';
     if (!form.generacionFechaInicio) newErrors.generacionFechaInicio = 'La fecha de inicio es obligatoria';
-    if (!form.generacionFechaFin) newErrors.generacionFechaFin = 'La fecha de fin es obligatoria';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -105,7 +104,7 @@ export default function GruposModal({
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' })); // limpia error al corregir
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -184,8 +183,6 @@ export default function GruposModal({
             onChange={handleOnChange}
             type="date"
             value={form.generacionFechaFin}
-            required
-            errorMessage={errors.generacionFechaFin}
           />
         </Grid>
         <Grid item xs={12} sx={{ mt: 2 }}>
