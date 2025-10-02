@@ -38,7 +38,7 @@ export default function ConsultarAlumno() {
   const mostrarExpediente = alumno?.tipoTramiteId !== 7;
 
   const tabsConfig = [
-    { label: 'Alumnos', component: <AlumnoData alumno={alumno} /> },
+    { label: 'Alumno', component: <AlumnoData alumno={alumno} /> },
     { label: 'Documentos', component: <DocumentosAlumno id={alumno?.id} type="view" /> },
     { label: 'Historial', component: <HistorialAcademico alumno={alumno} historial={historial} /> },
     ...(mostrarExpediente
