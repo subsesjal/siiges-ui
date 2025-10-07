@@ -99,9 +99,6 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     { id: 4, nombre: 'Mixto' },
   ];
 
-  console.log(form[1].programa.nivelId);
-  console.log('niveles', nivel);
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
