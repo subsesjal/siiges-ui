@@ -99,6 +99,9 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     { id: 4, nombre: 'Mixto' },
   ];
 
+  console.log(form[1].programa.nivelId);
+  console.log('niveles', nivel);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -211,7 +214,11 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
             title="Nivel Previo"
             name="antecedenteAcademico"
             options={antecedenteAcademico}
-            value={form[1].programa?.antecedenteAcademico || ''}
+            value={
+              Number.isInteger(form[1].programa?.antecedenteAcademico)
+                ? form[1].programa?.antecedenteAcademico
+                : parseInt(form[1].programa?.antecedenteAcademico || '', 10) || ''
+            }
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
