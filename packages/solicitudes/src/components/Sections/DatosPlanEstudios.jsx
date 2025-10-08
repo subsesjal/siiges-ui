@@ -211,7 +211,11 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
             title="Nivel Previo"
             name="antecedenteAcademico"
             options={antecedenteAcademico}
-            value={form[1].programa?.antecedenteAcademico || ''}
+            value={
+              Number.isInteger(form[1].programa?.antecedenteAcademico)
+                ? form[1].programa?.antecedenteAcademico
+                : parseInt(form[1].programa?.antecedenteAcademico || '', 10) || ''
+            }
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
