@@ -53,7 +53,7 @@ export default function Reglas({
     let isValid = true;
     let message = '';
 
-    if ((value === '' || value === null || typeof value === 'undefined') && value !== 0) {
+    if (value === '' || value === null || typeof value === 'undefined') {
       isValid = false;
       message = 'Este campo es requerido';
     } else if (name !== 'calificacionDecimal' && Number.isNaN(Number(value))) {
@@ -109,7 +109,11 @@ export default function Reglas({
     const fieldsToValidate = ['calificacionMinima', 'calificacionMaxima', 'calificacionAprobatoria', 'calificacionDecimal'];
 
     fieldsToValidate.forEach((field) => {
-      if (!form[field] && form[field] !== 0) {
+      if (
+        form[field] === ''
+        || form[field] === null
+        || typeof form[field] === 'undefined'
+      ) {
         newErrors[field] = true;
         newErrorMessages[field] = '¡Este campo es requerido!';
         isValid = false;
