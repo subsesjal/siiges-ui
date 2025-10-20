@@ -67,6 +67,8 @@ export default function FoliosForm({
     const asignarInstitucionDesdeSesion = async () => {
       if (isAdmin) return;
 
+      if (!instituciones || instituciones.length === 0 || !session) return;
+
       const institucionId = await getInstitucionIdFromSession({ instituciones, session });
 
       if (institucionId) {
