@@ -30,9 +30,19 @@ export default function EditPrograma() {
   useEffect(() => {
     if (programa) {
       setRules({
-        calificacionMinima: programa.calificacionMinima || '',
-        calificacionMaxima: programa.calificacionMaxima || '',
-        calificacionAprobatoria: programa.calificacionAprobatoria || '',
+        calificacionMinima:
+          programa.calificacionMinima !== null && programa.calificacionMinima !== undefined
+            ? programa.calificacionMinima
+            : '',
+        calificacionMaxima:
+          programa.calificacionMaxima !== null && programa.calificacionMaxima !== undefined
+            ? programa.calificacionMaxima
+            : '',
+        calificacionAprobatoria:
+          programa.calificacionAprobatoria !== null && programa.calificacionAprobatoria
+          !== undefined
+            ? programa.calificacionAprobatoria
+            : '',
         calificacionDecimal: programa.calificacionDecimal ? '1' : '2',
       });
     }
