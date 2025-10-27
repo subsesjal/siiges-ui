@@ -1,7 +1,7 @@
 import Tooltip from '@mui/material/Tooltip';
 import {
-  Grid, Typography, Tabs, Tab,
-  IconButton,
+  Grid, Tabs, Tab, List,
+  IconButton, Typography,
 } from '@mui/material';
 import {
   Context,
@@ -9,14 +9,16 @@ import {
   DataTable,
   getData,
   Input,
-  LabelData,
   Layout,
+  ListSubtitle,
+  ListTitle,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { ButtonsFoliosAdmin, ModalCertificado, ModalTitulo } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
+import Divider from '@mui/material/Divider';
 
 export default function Folios() {
   const { setNoti, setLoading } = useContext(Context);
@@ -28,6 +30,9 @@ export default function Folios() {
     gradoAcademico: '',
     nombreAlumno: '',
     matriculaAlumno: '',
+    claveCentroTrabajo: '',
+    modalidades: '',
+    periodos: '',
   });
   const [tabIndex, setTabIndex] = useState(0);
   const [observaciones, setObservaciones] = useState('');
@@ -61,6 +66,8 @@ export default function Folios() {
             matriculaAlumno: data.alumno ? data.alumno.matricula : '',
             institucion: data.programa?.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
+            modalidades: data.programa?.modalidadId,
+            periodos: data.programa?.cicloId,
           });
           setEstatus(data.estatusSolicitudFolioId);
           setTipoDocumento(data.tipoDocumentoId);
@@ -230,66 +237,89 @@ export default function Folios() {
     title = 'Atender Observaciones de Solicitud';
   }
 
+  const PERIODOS = {
+    1: 'Semestral',
+    2: 'Cuatrimestral',
+    3: 'Anual',
+    4: 'Semestral curriculum flexible',
+    5: 'Cuatrimestral curriculum flexible',
+  };
+
+  const MODALIDADES = {
+    1: 'Escolarizada',
+    2: 'No Escolarizada',
+    3: 'Mixta',
+    4: 'Dual',
+  };
+
   return (
     <Layout title={title}>
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
+        {/* Tabs */}
         <Grid item xs={12}>
-          <Grid container justifyContent="flex-end">
-            <Tabs
-              value={tabIndex}
-              onChange={handleTabChange}
-              aria-label="Tabs for Instituciones and Alumnos"
-            >
-              <Tab label="Instituciones" />
-              <Tab label="Alumnos" />
-            </Tabs>
-          </Grid>
+          <Tabs value={tabIndex} onChange={handleTabChange}>
+            <Tab label="Información General" />
+            <Tab label="Alumnos" />
+          </Tabs>
         </Grid>
 
+        {/* Tab: Información General */}
         {tabIndex === 0 && (
           <>
             <Grid item xs={12}>
-              <Typography variant="h6">Datos de la institución</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <LabelData title="Institución" subtitle={etiquetas.institucion} />
-            </Grid>
-            <Grid item xs={4}>
-              <LabelData title="RVOE" subtitle={etiquetas.acuerdoRvoe} />
-            </Grid>
-            <Grid item xs={8}>
-              <LabelData
-                title="Grado Académico"
-                subtitle={etiquetas.gradoAcademico}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <LabelData
-                title="Plan de Estudios"
-                subtitle={etiquetas.planEstudios}
-              />
-            </Grid>
-            <Grid item xs={8}>
-              <LabelData
-                title="Clave de centro de trabajo"
-                subtitle={etiquetas.claveCentroTrabajo}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <LabelData
-                title="Tipo de Documento"
-                subtitle={etiquetas.tipoDocumento}
-              />
+              <Typography variant="h5" gutterBottom component="div">
+                Información de la Solicitud
+              </Typography>
+              <Divider sx={{ bgcolor: 'orange', marginBottom: 3 }} />
             </Grid>
             <Grid item xs={12}>
-              <LabelData
-                title="Tipo de Solicitud"
-                subtitle={etiquetas.tipoSolicitudFolio}
-              />
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid container xs={6}>
+                  <Grid item xs>
+                    <List>
+                      <ListTitle text="Institucion" />
+                      <ListTitle text="CCT" />
+                      <ListTitle text="Acuerdo RVOE" />
+                      <ListTitle text="Nivel" />
+                      <ListTitle text="Nombre del Programa" />
+                    </List>
+                  </Grid>
+                  <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+                  <Grid item xs>
+                    <List>
+                      <ListSubtitle text={etiquetas.institucion || 'N/A'} />
+                      <ListSubtitle text={etiquetas.claveCentroTrabajo || 'N/A'} />
+                      <ListSubtitle text={etiquetas.acuerdoRvoe || 'N/A'} />
+                      <ListSubtitle text={etiquetas.gradoAcademico || 'N/A'} />
+                      <ListSubtitle text={etiquetas.planEstudios || 'N/A'} />
+                    </List>
+                  </Grid>
+                </Grid>
+                <Grid container xs={5}>
+                  <Grid item xs>
+                    <List>
+                      <ListTitle text="Modalidad" />
+                      <ListTitle text="Periodo" />
+                      <ListTitle text="Tipo de Documento" />
+                      <ListTitle text="Tipo de Solicitud" />
+                    </List>
+                  </Grid>
+                  <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+                  <Grid item xs>
+                    <List>
+                      <ListSubtitle text={MODALIDADES[etiquetas.modalidades] || 'N/A'} />
+                      <ListSubtitle text={PERIODOS[etiquetas.periodos] || 'N/A'} />
+                      <ListSubtitle text={etiquetas.tipoDocumento || 'N/A'} />
+                      <ListSubtitle text={etiquetas.tipoSolicitudFolio || 'N/A'} />
+                    </List>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
           </>
         )}
 
+        {/* Tab: Alumnos */}
         {tabIndex === 1 && (
           <>
             <Grid item xs={12}>
@@ -324,6 +354,7 @@ export default function Folios() {
           </>
         )}
 
+        {/* Observaciones */}
         {estatus !== 3 && (
           <Grid item xs={12}>
             <Input
@@ -337,6 +368,8 @@ export default function Folios() {
             />
           </Grid>
         )}
+
+        {/* Botones */}
         <Grid item xs={12}>
           <ButtonsFoliosAdmin
             tipoDocumento={etiquetas.tipoDocumento}
