@@ -255,22 +255,25 @@ export default function Folios() {
   return (
     <Layout title={title}>
       <Grid container spacing={2}>
-        {/* Tabs */}
         <Grid item xs={12}>
-          <Tabs value={tabIndex} onChange={handleTabChange}>
-            <Tab label="Información General" />
-            <Tab label="Alumnos" />
-          </Tabs>
+          <Grid container justifyContent="flex-end">
+            <Tabs
+              value={tabIndex}
+              onChange={handleTabChange}
+              aria-label="Tabs for Instituciones and Alumnos"
+            >
+              <Tab label="Instituciones" />
+              <Tab label="Alumnos" />
+            </Tabs>
+          </Grid>
         </Grid>
 
-        {/* Tab: Información General */}
         {tabIndex === 0 && (
           <>
             <Grid item xs={12}>
               <Typography variant="h5" gutterBottom component="div">
                 Información de la Solicitud
               </Typography>
-              <Divider sx={{ bgcolor: 'orange', marginBottom: 3 }} />
             </Grid>
             <Grid item xs={12}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
