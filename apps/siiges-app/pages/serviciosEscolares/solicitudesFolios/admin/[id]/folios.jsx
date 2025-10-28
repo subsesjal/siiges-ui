@@ -5,23 +5,25 @@ import {
 } from '@mui/material';
 import {
   Context,
-  createRecord,
   DataTable,
   getData,
   Input,
+  InputFile,
   Layout,
   ListSubtitle,
   ListTitle,
+  GetFile,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { ButtonsFoliosAdmin, ModalCertificado, ModalTitulo } from '@siiges-ui/serviciosescolares';
+import { ModalCertificado, ModalTitulo } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 import Divider from '@mui/material/Divider';
 
 export default function Folios() {
   const { setNoti, setLoading } = useContext(Context);
+  const [url, setUrl] = useState(null);
   const [etiquetas, setEtiquetas] = useState({
     tipoDocumento: '',
     tipoSolicitudFolio: '',
@@ -43,6 +45,9 @@ export default function Folios() {
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
   const [tipoDocumento, setTipoDocumento] = useState();
+  const [formData, setFormData] = useState({
+    folioPago: '',
+  });
 
   const router = useRouter();
   const { id } = router.query;
@@ -71,6 +76,18 @@ export default function Folios() {
           });
           setEstatus(data.estatusSolicitudFolioId);
           setTipoDocumento(data.tipoDocumentoId);
+          setFormData({
+            folioPago: data.folioPago || '',
+          });
+
+          GetFile(
+            {
+              entidadId: id,
+              tipoEntidad: 'SOLICITUD_FOLIO',
+              tipoDocumento: 'COMPROBANTE_PAGO_FOLIOS',
+            },
+            setUrl,
+          );
 
           const alumnosResponse = await getData({
             endpoint: `/solicitudesFolios/${id}/alumnos`,
@@ -118,69 +135,12 @@ export default function Folios() {
     setObservaciones(event.target.value);
   };
 
-  const handleObservacionesSubmit = async () => {
-    if (id && observaciones) {
-      setLoading(true);
-      try {
-        const response = await createRecord({
-          data: { observaciones },
-          endpoint: `/solicitudesFolios/${id}/observaciones`,
-        });
-
-        if (response.statusCode === 201) {
-          setNoti({
-            open: true,
-            message: '¡Observaciones actualizadas con éxito!',
-            type: 'success',
-          });
-        } else {
-          throw new Error(response.message || '¡Error al actualizar las observaciones!');
-        }
-      } catch (error) {
-        setNoti({
-          open: true,
-          message: ` ${error.message}`,
-          type: 'error',
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
-  const handleFoliosSubmit = async () => {
-    if (id) {
-      setLoading(true);
-      try {
-        const endpoint = estatus === 3
-          ? `/solicitudesFolios/${id}/envioTitulacion`
-          : `/solicitudesFolios/${id}/asignacionFolios`;
-
-        const response = await createRecord({
-          data: {},
-          endpoint,
-        });
-
-        if (response.statusCode === 201) {
-          setNoti({
-            open: true,
-            message: '¡Folios asignados con éxito!',
-            type: 'success',
-          });
-          router.back();
-        } else {
-          throw new Error(response.message || '¡Error al asignar los folios!');
-        }
-      } catch (error) {
-        setNoti({
-          open: true,
-          message: ` ${error.message}`,
-          type: 'error',
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleConsult = async (value) => {
@@ -319,10 +279,30 @@ export default function Folios() {
                 </Grid>
               </Grid>
             </Grid>
+            <Grid item xs={4}>
+              <Input
+                label="Número de recibo de pago oficial"
+                id="folioPago"
+                name="folioPago"
+                value={formData.folioPago}
+                onChange={handleChange}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <InputFile
+                label="Recibo de Pago"
+                id={id}
+                tipoDocumento="COMPROBANTE_PAGO_FOLIOS"
+                tipoEntidad="SOLICITUD_FOLIO"
+                url={url}
+                setUrl={setUrl}
+                disabled
+              />
+            </Grid>
           </>
         )}
 
-        {/* Tab: Alumnos */}
         {tabIndex === 1 && (
           <>
             <Grid item xs={12}>
@@ -357,7 +337,6 @@ export default function Folios() {
           </>
         )}
 
-        {/* Observaciones */}
         {estatus !== 3 && (
           <Grid item xs={12}>
             <Input
@@ -371,16 +350,6 @@ export default function Folios() {
             />
           </Grid>
         )}
-
-        {/* Botones */}
-        <Grid item xs={12}>
-          <ButtonsFoliosAdmin
-            tipoDocumento={etiquetas.tipoDocumento}
-            observaciones={handleObservacionesSubmit}
-            folios={handleFoliosSubmit}
-            estatus={estatus}
-          />
-        </Grid>
       </Grid>
     </Layout>
   );
