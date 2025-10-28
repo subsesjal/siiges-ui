@@ -134,7 +134,7 @@ export default function RevisarEquivalencia() {
           </Grid>
         )}
         <DefaultModal
-          title="Confirmar envío de observaciones"
+          title="Envío de observaciones"
           open={open}
           setOpen={setOpen}
         >

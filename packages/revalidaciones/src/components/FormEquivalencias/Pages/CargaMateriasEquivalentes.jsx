@@ -220,17 +220,46 @@ export default function CargaMateriasEquivalentes({ form, handleOnChange, disabl
   return (
     <>
       <Grid container spacing={1}>
-        <DataTable
-          buttonAdd={!disabled}
-          buttonClick={() => {
-            resetForm();
-            setOpen(true);
-          }}
-          buttonText="Carga de Materia"
-          title="Materias Equivalentes"
-          rows={rows}
-          columns={columns(handleDelete, handleEdit, disabled)}
-        />
+        <Grid item xs={4}>
+          <LabelData
+            title="Calificacion minima"
+            subtitle={
+              form?.interesado?.institucionDestino?.institucionDestinoPrograma
+                ?.programa?.calificacionMinima
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <LabelData
+            title="Calificacion maxima"
+            subtitle={
+              form?.interesado?.institucionDestino?.institucionDestinoPrograma
+                ?.programa?.calificacionMaxima
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <LabelData
+            title="Calificacion aprobatoria"
+            subtitle={
+              form?.interesado?.institucionDestino?.institucionDestinoPrograma
+                ?.programa?.calificacionAprobatoria
+            }
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <DataTable
+            buttonAdd={!disabled}
+            buttonClick={() => {
+              resetForm();
+              setOpen(true);
+            }}
+            buttonText="Carga de Materia"
+            title="Materias Equivalentes"
+            rows={rows}
+            columns={columns(handleDelete, handleEdit, disabled)}
+          />
+        </Grid>
       </Grid>
       <DefaultModal
         title={isEditing ? 'Editar Materia Equivalente' : 'Materias Equivalentes'}
@@ -333,6 +362,13 @@ CargaMateriasEquivalentes.propTypes = {
       institucionDestino: PropTypes.shape({
         programaId: PropTypes.number,
         tipoInstitucionId: PropTypes.number,
+        institucionDestinoPrograma: PropTypes.shape({
+          programa: PropTypes.shape({
+            calificacionMinima: PropTypes.number,
+            calificacionMaxima: PropTypes.number,
+            calificacionAprobatoria: PropTypes.number,
+          }),
+        }),
       }),
     }),
   }).isRequired,
