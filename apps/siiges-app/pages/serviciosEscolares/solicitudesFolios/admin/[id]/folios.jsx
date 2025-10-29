@@ -1,25 +1,29 @@
 import Tooltip from '@mui/material/Tooltip';
 import {
-  Grid, Typography, Tabs, Tab,
-  IconButton,
+  Grid, Tabs, Tab, List,
+  IconButton, Typography,
 } from '@mui/material';
 import {
   Context,
-  createRecord,
   DataTable,
   getData,
   Input,
-  LabelData,
+  InputFile,
   Layout,
+  ListSubtitle,
+  ListTitle,
+  GetFile,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { ButtonsFoliosAdmin, ModalCertificado, ModalTitulo } from '@siiges-ui/serviciosescolares';
+import { ModalCertificado, ModalTitulo } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
+import Divider from '@mui/material/Divider';
 
 export default function Folios() {
   const { setNoti, setLoading } = useContext(Context);
+  const [url, setUrl] = useState(null);
   const [etiquetas, setEtiquetas] = useState({
     tipoDocumento: '',
     tipoSolicitudFolio: '',
@@ -28,6 +32,9 @@ export default function Folios() {
     gradoAcademico: '',
     nombreAlumno: '',
     matriculaAlumno: '',
+    claveCentroTrabajo: '',
+    modalidades: '',
+    periodos: '',
   });
   const [tabIndex, setTabIndex] = useState(0);
   const [observaciones, setObservaciones] = useState('');
@@ -38,6 +45,9 @@ export default function Folios() {
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
   const [tipoDocumento, setTipoDocumento] = useState();
+  const [formData, setFormData] = useState({
+    folioPago: '',
+  });
 
   const router = useRouter();
   const { id } = router.query;
@@ -61,9 +71,23 @@ export default function Folios() {
             matriculaAlumno: data.alumno ? data.alumno.matricula : '',
             institucion: data.programa?.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
+            modalidades: data.programa?.modalidadId,
+            periodos: data.programa?.cicloId,
           });
           setEstatus(data.estatusSolicitudFolioId);
           setTipoDocumento(data.tipoDocumentoId);
+          setFormData({
+            folioPago: data.folioPago || '',
+          });
+
+          GetFile(
+            {
+              entidadId: id,
+              tipoEntidad: 'SOLICITUD_FOLIO',
+              tipoDocumento: 'COMPROBANTE_PAGO_FOLIOS',
+            },
+            setUrl,
+          );
 
           const alumnosResponse = await getData({
             endpoint: `/solicitudesFolios/${id}/alumnos`,
@@ -111,69 +135,12 @@ export default function Folios() {
     setObservaciones(event.target.value);
   };
 
-  const handleObservacionesSubmit = async () => {
-    if (id && observaciones) {
-      setLoading(true);
-      try {
-        const response = await createRecord({
-          data: { observaciones },
-          endpoint: `/solicitudesFolios/${id}/observaciones`,
-        });
-
-        if (response.statusCode === 201) {
-          setNoti({
-            open: true,
-            message: '¡Observaciones actualizadas con éxito!',
-            type: 'success',
-          });
-        } else {
-          throw new Error(response.message || '¡Error al actualizar las observaciones!');
-        }
-      } catch (error) {
-        setNoti({
-          open: true,
-          message: ` ${error.message}`,
-          type: 'error',
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
-  const handleFoliosSubmit = async () => {
-    if (id) {
-      setLoading(true);
-      try {
-        const endpoint = estatus === 3
-          ? `/solicitudesFolios/${id}/envioTitulacion`
-          : `/solicitudesFolios/${id}/asignacionFolios`;
-
-        const response = await createRecord({
-          data: {},
-          endpoint,
-        });
-
-        if (response.statusCode === 201) {
-          setNoti({
-            open: true,
-            message: '¡Folios asignados con éxito!',
-            type: 'success',
-          });
-          router.back();
-        } else {
-          throw new Error(response.message || '¡Error al asignar los folios!');
-        }
-      } catch (error) {
-        setNoti({
-          open: true,
-          message: ` ${error.message}`,
-          type: 'error',
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleConsult = async (value) => {
@@ -230,9 +197,24 @@ export default function Folios() {
     title = 'Atender Observaciones de Solicitud';
   }
 
+  const PERIODOS = {
+    1: 'Semestral',
+    2: 'Cuatrimestral',
+    3: 'Anual',
+    4: 'Semestral curriculum flexible',
+    5: 'Cuatrimestral curriculum flexible',
+  };
+
+  const MODALIDADES = {
+    1: 'Escolarizada',
+    2: 'No Escolarizada',
+    3: 'Mixta',
+    4: 'Dual',
+  };
+
   return (
     <Layout title={title}>
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Grid container justifyContent="flex-end">
             <Tabs
@@ -249,42 +231,73 @@ export default function Folios() {
         {tabIndex === 0 && (
           <>
             <Grid item xs={12}>
-              <Typography variant="h6">Datos de la institución</Typography>
+              <Typography variant="h5" gutterBottom component="div">
+                Información de la Solicitud
+              </Typography>
             </Grid>
-            <Grid item xs={8}>
-              <LabelData title="Institución" subtitle={etiquetas.institucion} />
+            <Grid item xs={12}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid container xs={6}>
+                  <Grid item xs>
+                    <List>
+                      <ListTitle text="Institucion" />
+                      <ListTitle text="CCT" />
+                      <ListTitle text="Acuerdo RVOE" />
+                      <ListTitle text="Nivel" />
+                      <ListTitle text="Nombre del Programa" />
+                    </List>
+                  </Grid>
+                  <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+                  <Grid item xs>
+                    <List>
+                      <ListSubtitle text={etiquetas.institucion || 'N/A'} />
+                      <ListSubtitle text={etiquetas.claveCentroTrabajo || 'N/A'} />
+                      <ListSubtitle text={etiquetas.acuerdoRvoe || 'N/A'} />
+                      <ListSubtitle text={etiquetas.gradoAcademico || 'N/A'} />
+                      <ListSubtitle text={etiquetas.planEstudios || 'N/A'} />
+                    </List>
+                  </Grid>
+                </Grid>
+                <Grid container xs={5}>
+                  <Grid item xs>
+                    <List>
+                      <ListTitle text="Modalidad" />
+                      <ListTitle text="Periodo" />
+                      <ListTitle text="Tipo de Documento" />
+                      <ListTitle text="Tipo de Solicitud" />
+                    </List>
+                  </Grid>
+                  <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+                  <Grid item xs>
+                    <List>
+                      <ListSubtitle text={MODALIDADES[etiquetas.modalidades] || 'N/A'} />
+                      <ListSubtitle text={PERIODOS[etiquetas.periodos] || 'N/A'} />
+                      <ListSubtitle text={etiquetas.tipoDocumento || 'N/A'} />
+                      <ListSubtitle text={etiquetas.tipoSolicitudFolio || 'N/A'} />
+                    </List>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={4}>
-              <LabelData title="RVOE" subtitle={etiquetas.acuerdoRvoe} />
-            </Grid>
-            <Grid item xs={8}>
-              <LabelData
-                title="Grado Académico"
-                subtitle={etiquetas.gradoAcademico}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <LabelData
-                title="Plan de Estudios"
-                subtitle={etiquetas.planEstudios}
-              />
-            </Grid>
-            <Grid item xs={8}>
-              <LabelData
-                title="Clave de centro de trabajo"
-                subtitle={etiquetas.claveCentroTrabajo}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <LabelData
-                title="Tipo de Documento"
-                subtitle={etiquetas.tipoDocumento}
+              <Input
+                label="Número de recibo de pago oficial"
+                id="folioPago"
+                name="folioPago"
+                value={formData.folioPago}
+                onChange={handleChange}
+                disabled
               />
             </Grid>
             <Grid item xs={12}>
-              <LabelData
-                title="Tipo de Solicitud"
-                subtitle={etiquetas.tipoSolicitudFolio}
+              <InputFile
+                label="Recibo de Pago"
+                id={id}
+                tipoDocumento="COMPROBANTE_PAGO_FOLIOS"
+                tipoEntidad="SOLICITUD_FOLIO"
+                url={url}
+                setUrl={setUrl}
+                disabled
               />
             </Grid>
           </>
@@ -337,14 +350,6 @@ export default function Folios() {
             />
           </Grid>
         )}
-        <Grid item xs={12}>
-          <ButtonsFoliosAdmin
-            tipoDocumento={etiquetas.tipoDocumento}
-            observaciones={handleObservacionesSubmit}
-            folios={handleFoliosSubmit}
-            estatus={estatus}
-          />
-        </Grid>
       </Grid>
     </Layout>
   );
