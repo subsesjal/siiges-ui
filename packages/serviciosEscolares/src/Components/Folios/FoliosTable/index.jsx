@@ -40,11 +40,11 @@ const columns = (handleEdit, handleConsultar) => [
         </Tooltip>
         {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA'
           || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (
-          <Tooltip title="Editar" placement="top">
-            <IconButton onClick={() => handleEdit(params.row.id)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Editar" placement="top">
+              <IconButton onClick={() => handleEdit(params.row.id)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
         )}
       </>
     ),
@@ -55,7 +55,7 @@ function FoliosTable({
   tipoDocumento, tipoSolicitud, programa, plantel, solicitudes,
 }) {
   const router = useRouter();
-  const { setNoti } = useContext(Context);
+  useContext(Context);
 
   const showCrearFolio = process.env.NEXT_PUBLIC_SHOW_CREAR_FOLIO !== 'false';
 
@@ -65,23 +65,19 @@ function FoliosTable({
       ? `/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}`
       : `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`;
 
-    if (tipoDocumento === 1 || tipoDocumento === 2) {
-      router.push(
-        {
-          pathname: path,
-          query: {
-            tipoDocumento, tipoSolicitud, programa, status, plantel,
-          },
+    router.push(
+      {
+        pathname: path,
+        query: {
+          tipoDocumento,
+          tipoSolicitud,
+          programa,
+          status,
+          plantel,
         },
-        path,
-      );
-    } else {
-      setNoti({
-        open: true,
-        message: '¡Error, revise que todos los campos estén seleccionados correctamente!',
-        type: 'error',
-      });
-    }
+      },
+      path,
+    );
   };
 
   const handleEdit = (id) => navigateTo(id, 'edit');
