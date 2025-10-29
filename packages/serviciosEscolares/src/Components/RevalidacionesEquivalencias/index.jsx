@@ -32,10 +32,10 @@ const ESTATUS_MAP = {
 };
 
 const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
-  { field: 'id', headerName: 'ID', width: 100 },
+  { field: 'id', headerName: 'ID', hide: true },
   { field: 'folioSolicitud', headerName: 'Folio', width: 200 },
   { field: 'estatusSolicitud', headerName: 'Estatus', width: 150 },
-  { field: 'nombre', headerName: 'Nombre', width: 450 },
+  { field: 'nombre', headerName: 'Nombre', width: 550 },
   { field: 'fecha', headerName: 'Fecha', width: 100 },
   {
     field: 'actions',
