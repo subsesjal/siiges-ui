@@ -167,7 +167,7 @@ export default function FoliosForm({
     { id: 3, nombre: 'Folios asignados' },
     { id: 4, nombre: 'Con observaciones' },
     { id: 5, nombre: 'Cancelado' },
-  ];
+  ].filter((option) => !(session?.rol === 'ce_sicyt' && option.id === 1));
 
   useEffect(() => {
     if (state.selectedInstitucion) fetchPlanteles(state.selectedInstitucion);

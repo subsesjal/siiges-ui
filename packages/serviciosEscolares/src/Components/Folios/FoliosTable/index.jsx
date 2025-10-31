@@ -40,11 +40,11 @@ const columns = (handleEdit, handleConsultar) => [
         </Tooltip>
         {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA'
           || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (
-            <Tooltip title="Editar" placement="top">
-              <IconButton onClick={() => handleEdit(params.row.id)}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
+          <Tooltip title="Editar" placement="top">
+            <IconButton onClick={() => handleEdit(params.row.id)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </>
     ),
@@ -55,7 +55,7 @@ function FoliosTable({
   tipoDocumento, tipoSolicitud, programa, plantel, solicitudes,
 }) {
   const router = useRouter();
-  useContext(Context);
+  const { session } = useContext(Context);
 
   const showCrearFolio = process.env.NEXT_PUBLIC_SHOW_CREAR_FOLIO !== 'false';
 
@@ -69,11 +69,7 @@ function FoliosTable({
       {
         pathname: path,
         query: {
-          tipoDocumento,
-          tipoSolicitud,
-          programa,
-          status,
-          plantel,
+          tipoDocumento, tipoSolicitud, programa, status, plantel,
         },
       },
       path,
@@ -83,21 +79,23 @@ function FoliosTable({
   const handleEdit = (id) => navigateTo(id, 'edit');
   const handleConsultar = (id) => navigateTo(id, 'consult');
 
-  const formattedSolicitudes = solicitudes.map((solicitud) => {
-    const mapArray = tipoDocumento === 1 ? solicitudesTitulos : solicitudesCertificados;
-    const tipoSolicitudNombre = mapArray.find((s) => s.id === solicitud.tipoSolicitudFolio?.id)?.nombre || 'Sin tipo';
+  const formattedSolicitudes = solicitudes
+    .filter((solicitud) => !(session?.rol === 'ce_sicyt' && solicitud.estatusSolicitudFolio.id === 1))
+    .map((solicitud) => {
+      const mapArray = tipoDocumento === 1 ? solicitudesTitulos : solicitudesCertificados;
+      const tipoSolicitudNombre = mapArray.find((s) => s.id === solicitud.tipoSolicitudFolio?.id)?.nombre || 'Sin tipo';
 
-    return {
-      ...solicitud,
-      programaNombre: solicitud.programa.nombre,
-      estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio.nombre,
-      plantel:
-        solicitud.programa?.plantel?.institucion?.nombre
-        || solicitud.plantel?.institucion?.nombre
-        || 'Sin nombre',
-      tipoSolicitudFolio: tipoSolicitudNombre,
-    };
-  });
+      return {
+        ...solicitud,
+        programaNombre: solicitud.programa.nombre,
+        estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio.nombre,
+        plantel:
+          solicitud.programa?.plantel?.institucion?.nombre
+          || solicitud.plantel?.institucion?.nombre
+          || 'Sin nombre',
+        tipoSolicitudFolio: tipoSolicitudNombre,
+      };
+    });
 
   return (
     <Grid container spacing={2}>
@@ -124,24 +122,17 @@ FoliosTable.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       folioSolicitud: PropTypes.string.isRequired,
-      tipoSolicitudFolio: PropTypes.shape({
-        id: PropTypes.number,
-      }),
+      tipoSolicitudFolio: PropTypes.shape({ id: PropTypes.number }),
       programa: PropTypes.shape({
         nombre: PropTypes.string.isRequired,
         plantel: PropTypes.shape({
-          institucion: PropTypes.shape({
-            nombre: PropTypes.string.isRequired,
-          }),
+          institucion: PropTypes.shape({ nombre: PropTypes.string.isRequired }),
         }),
       }).isRequired,
-      estatusSolicitudFolio: PropTypes.shape({
-        nombre: PropTypes.string.isRequired,
-      }).isRequired,
+      // eslint-disable-next-line max-len
+      estatusSolicitudFolio: PropTypes.shape({ id: PropTypes.number, nombre: PropTypes.string.isRequired }).isRequired,
       plantel: PropTypes.shape({
-        institucion: PropTypes.shape({
-          nombre: PropTypes.string,
-        }),
+        institucion: PropTypes.shape({ nombre: PropTypes.string }),
       }),
     }),
   ).isRequired,
