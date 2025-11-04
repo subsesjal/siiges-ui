@@ -13,11 +13,12 @@ import {
   ListSubtitle,
   ListTitle,
   GetFile,
+  createRecord,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { ModalCertificado, ModalTitulo } from '@siiges-ui/serviciosescolares';
+import { ModalCertificado, ModalTitulo, ButtonsFoliosAdmin } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 import Divider from '@mui/material/Divider';
 
@@ -133,6 +134,71 @@ export default function Folios() {
 
   const handleObservacionesChange = (event) => {
     setObservaciones(event.target.value);
+  };
+
+  const handleObservacionesSubmit = async () => {
+    if (id && observaciones) {
+      setLoading(true);
+      try {
+        const response = await createRecord({
+          data: { observaciones },
+          endpoint: `/solicitudesFolios/${id}/observaciones`,
+        });
+
+        if (response.statusCode === 201) {
+          setNoti({
+            open: true,
+            message: '¡Observaciones actualizadas con éxito!',
+            type: 'success',
+          });
+        } else {
+          throw new Error(response.message || '¡Error al actualizar las observaciones!');
+        }
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: ` ${error.message}`,
+          type: 'error',
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleFoliosSubmit = async () => {
+    if (id) {
+      setLoading(true);
+      try {
+        const endpoint = estatus === 3
+          ? `/solicitudesFolios/${id}/envioTitulacion`
+          : `/solicitudesFolios/${id}/asignacionFolios`;
+
+        const response = await createRecord({
+          data: {},
+          endpoint,
+        });
+
+        if (response.statusCode === 201) {
+          setNoti({
+            open: true,
+            message: '¡Folios asignados con éxito!',
+            type: 'success',
+          });
+          router.back();
+        } else {
+          throw new Error(response.message || '¡Error al asignar los folios!');
+        }
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: ` ${error.message}`,
+          type: 'error',
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   const handleChange = (event) => {
@@ -350,6 +416,14 @@ export default function Folios() {
             />
           </Grid>
         )}
+        <Grid item xs={12}>
+          <ButtonsFoliosAdmin
+            tipoDocumento={etiquetas.tipoDocumento}
+            observaciones={handleObservacionesSubmit}
+            folios={handleFoliosSubmit}
+            estatus={estatus}
+          />
+        </Grid>
       </Grid>
     </Layout>
   );
