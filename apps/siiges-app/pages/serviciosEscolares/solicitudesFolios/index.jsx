@@ -1,4 +1,4 @@
-import { FoliosForm, FoliosTable } from '@siiges-ui/serviciosescolares';
+import { AdminTable, FoliosForm, FoliosTable } from '@siiges-ui/serviciosescolares';
 import { Context, getData, Layout } from '@siiges-ui/shared';
 import React, { useState, useContext, useEffect } from 'react';
 
@@ -49,8 +49,9 @@ export default function SolicitudesFolios() {
       setLoading(true);
       const endpoint = buildEndpoint();
       const response = await getData({ endpoint });
-      if (response.statusCode === 200) setSolicitudes(response.data);
-      else {
+      if (response.statusCode === 200) {
+        setSolicitudes(response.data);
+      } else {
         setNoti({
           open: true,
           message: response.message || 'Error al cargar datos',
@@ -85,7 +86,17 @@ export default function SolicitudesFolios() {
   }, [institucion, plantel, programa, tipoDocumento, tipoSolicitud, estatus]);
 
   const renderTable = () => {
-    if (isAdmin || isCeSicyt || isRepresentante || isCeIes) {
+    if (isAdmin || isCeSicyt) {
+      return (
+        <AdminTable
+          solicitudes={solicitudes}
+          isAdmin={isAdmin}
+          isCeSicyt={isCeSicyt}
+        />
+      );
+    }
+
+    if (isRepresentante || isCeIes) {
       return (
         <FoliosTable
           tipoDocumento={tipoDocumento}
