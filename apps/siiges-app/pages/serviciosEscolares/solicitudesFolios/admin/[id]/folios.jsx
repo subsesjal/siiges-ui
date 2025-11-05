@@ -278,6 +278,17 @@ export default function Folios() {
     4: 'Dual',
   };
 
+  const NIVEL = {
+    1: 'Bachillerato',
+    2: 'Licenciatura',
+    3: 'Técnico Superior Universitario',
+    4: 'Especialidad',
+    5: 'Maestría ',
+    6: 'Doctorado',
+    7: 'Profesional Asociado',
+    8: 'Educación Continua',
+  };
+
   return (
     <Layout title={title}>
       <Grid container spacing={2}>
@@ -319,7 +330,7 @@ export default function Folios() {
                       <ListSubtitle text={etiquetas.institucion || 'N/A'} />
                       <ListSubtitle text={etiquetas.claveCentroTrabajo || 'N/A'} />
                       <ListSubtitle text={etiquetas.acuerdoRvoe || 'N/A'} />
-                      <ListSubtitle text={etiquetas.gradoAcademico || 'N/A'} />
+                      <ListSubtitle text={NIVEL[etiquetas.gradoAcademico] || 'N/A'} />
                       <ListSubtitle text={etiquetas.planEstudios || 'N/A'} />
                     </List>
                   </Grid>
