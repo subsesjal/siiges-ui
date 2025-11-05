@@ -26,9 +26,16 @@ export default function AdminTable({
     {
       field: 'id', headerName: 'ID', width: 70, hide: true,
     },
+    { field: 'tipoDocumentoNombre', headerName: 'Tipo de documento', width: 180 },
+    { field: 'tipoSolicitudFolio', headerName: 'Tipo solicitud', width: 150 },
     { field: 'folioSolicitud', headerName: 'Folio de captura', width: 150 },
     { field: 'programaNombre', headerName: 'Plan de estudios', width: 250 },
-    { field: 'tipoSolicitudFolio', headerName: 'Tipo solicitud', width: 150 },
+    {
+      field: 'rvoe',
+      headerName: 'RVOE',
+      width: 180,
+      valueGetter: (params) => params.row.rvoe || 'N/A',
+    },
     { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 250 },
     { field: 'plantelNombre', headerName: 'Plantel', width: 300 },
     {
@@ -89,6 +96,8 @@ export default function AdminTable({
       estatusSolicitudFolioId: solicitud.estatusSolicitudFolioId,
       programaNombre: solicitud.programa?.nombre || '',
       tipoSolicitudFolio: solicitud.tipoSolicitudFolio?.nombre || '',
+      tipoDocumentoNombre: solicitud.tipoDocumento?.nombre || '',
+      rvoe: solicitud.programa?.acuerdoRvoe || '',
       estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio?.nombre || '',
       plantelNombre: solicitud.programa?.plantel
         ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
