@@ -506,13 +506,9 @@ export default function FoliosData({ type }) {
                 <Grid item xs>
                   <List>
                     <ListSubtitle text={etiquetas.institucion || 'N/A'} />
-                    <ListSubtitle
-                      text={etiquetas.claveCentroTrabajo || 'N/A'}
-                    />
+                    <ListSubtitle text={etiquetas.claveCentroTrabajo || 'N/A'} />
                     <ListSubtitle text={etiquetas.acuerdoRvoe || 'N/A'} />
-                    <ListSubtitle
-                      text={NIVEL[etiquetas.gradoAcademico] || 'N/A'}
-                    />
+                    <ListSubtitle text={NIVEL[etiquetas.gradoAcademico] || 'N/A'} />
                     <ListSubtitle text={etiquetas.planEstudios || 'N/A'} />
                   </List>
                 </Grid>
@@ -529,16 +525,10 @@ export default function FoliosData({ type }) {
                 <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
                 <Grid item xs>
                   <List>
-                    <ListSubtitle
-                      text={MODALIDADES[etiquetas.modalidades] || 'N/A'}
-                    />
-                    <ListSubtitle
-                      text={PERIODOS[etiquetas.periodos] || 'N/A'}
-                    />
+                    <ListSubtitle text={MODALIDADES[etiquetas.modalidades] || 'N/A'} />
+                    <ListSubtitle text={PERIODOS[etiquetas.periodos] || 'N/A'} />
                     <ListSubtitle text={etiquetas.tipoDocumento || 'N/A'} />
-                    <ListSubtitle
-                      text={etiquetas.tipoSolicitudFolio || 'N/A'}
-                    />
+                    <ListSubtitle text={etiquetas.tipoSolicitudFolio || 'N/A'} />
                   </List>
                 </Grid>
               </Grid>
