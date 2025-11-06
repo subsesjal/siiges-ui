@@ -16,8 +16,10 @@ import {
   InputDate,
 } from '@siiges-ui/shared';
 
-const CircularIconButton = styled(IconButton)(({ theme }) => ({
-  border: `1px solid ${theme.palette.primary.main}`,
+const CircularIconButton = styled(IconButton)(({ theme, disabled }) => ({
+  border: `1px solid ${
+    disabled ? theme.palette.grey[300] : theme.palette.primary.main
+  }`,
   borderRadius: '50%',
   padding: '6px',
   transition:
@@ -186,7 +188,11 @@ export default function NavigationButtons({
                 <Typography align="center">Siguiente</Typography>
               </Grid>
               <Grid item>
-                <CircularIconButton onClick={onNext} aria-label="Siguiente">
+                <CircularIconButton
+                  onClick={onNext}
+                  aria-label="Siguiente"
+                  disabled={disabled}
+                >
                   <NavigateNextIcon />
                 </CircularIconButton>
               </Grid>
