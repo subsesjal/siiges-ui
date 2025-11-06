@@ -65,8 +65,6 @@ export default function FormRevalidaciones() {
     },
   });
 
-  console.log(form);
-
   useEffect(() => {
     if ([1, 2, 3].includes(form.tipoTramiteId)) {
       setTotalPositions(4);
@@ -240,7 +238,11 @@ export default function FormRevalidaciones() {
         );
       case 3:
         return (
-          <CargaMaterias filesData={filesData} setFilesData={setFilesData} />
+          <CargaMaterias
+            filesData={filesData}
+            setFilesData={setFilesData}
+            setNextDisabled={setNextDisabled}
+          />
         );
       case 4:
         return [1, 2, 3].includes(form.tipoTramiteId) ? (

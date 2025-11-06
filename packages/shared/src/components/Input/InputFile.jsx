@@ -26,6 +26,7 @@ export default function InputFile({
   title,
   openDropzone,
   setFilesState,
+  fileType,
 }) {
   const [files, setFiles] = useState([]);
   const { setNoti } = useContext(Context);
@@ -147,6 +148,7 @@ export default function InputFile({
         showPreviews
         onChange={(newFiles) => setFiles(newFiles)}
         onSave={handleFileSave}
+        acceptedFiles={fileType}
         maxFileSize={5000000}
         onClose={handleClose}
       />
@@ -164,6 +166,7 @@ InputFile.defaultProps = {
   openDropzone: false,
   title: 'Subir archivo',
   setFilesState: null,
+  fileType: null,
 };
 
 InputFile.propTypes = {
@@ -179,4 +182,5 @@ InputFile.propTypes = {
   openDropzone: PropTypes.bool,
   title: PropTypes.string,
   setFilesState: PropTypes.func,
+  fileType: PropTypes.arrayOf(PropTypes.string),
 };
