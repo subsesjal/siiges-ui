@@ -29,13 +29,12 @@ const columns = (handleEdit, handleConsultar) => [
             <VisibilityOutlinedIcon />
           </IconButton>
         </Tooltip>
-        {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA'
-          || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (
-            <Tooltip title="Editar" placement="top">
-              <IconButton onClick={() => handleEdit(params.row.id)}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
+        {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA' || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (
+          <Tooltip title="Editar" placement="top">
+            <IconButton onClick={() => handleEdit(params.row.id)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </>
     ),
@@ -56,20 +55,28 @@ function FoliosTable({
 
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
-    const path = status === 'create' ? `/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}` : `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`;
+    const path = status === 'create'
+      ? `/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}`
+      : `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`;
 
     if (tipoDocumento === 1 || tipoDocumento === 2) {
-      router.push({
-        pathname: path,
-        query: {
-          tipoDocumento, tipoSolicitud, programa, status,
+      router.push(
+        {
+          pathname: path,
+          query: {
+            tipoDocumento,
+            tipoSolicitud,
+            programa,
+            status,
+            plantel,
+          },
         },
-      }, path);
+        path,
+      );
     } else {
       setNoti({
         open: true,
-        message:
-          '¡Error, revise que todos los campos estén seleccionados correctamente!',
+        message: '¡Error, revise que todos los campos estén seleccionados correctamente!',
         type: 'error',
       });
     }
@@ -82,7 +89,10 @@ function FoliosTable({
     ...solicitud,
     programaNombre: solicitud.programa.nombre,
     estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio.nombre,
-    plantel,
+    plantel:
+      solicitud.programa?.plantel?.institucion?.nombre
+      || solicitud.plantel?.institucion?.nombre
+      || 'Sin nombre',
   }));
 
   return (
@@ -112,6 +122,9 @@ FoliosTable.propTypes = {
       folioSolicitud: PropTypes.string.isRequired,
       programa: PropTypes.shape({
         nombre: PropTypes.string.isRequired,
+        plantel: PropTypes.shape({
+          nombre: PropTypes.string.isRequired,
+        }),
       }).isRequired,
       estatusSolicitudFolio: PropTypes.shape({
         nombre: PropTypes.string.isRequired,
