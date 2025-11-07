@@ -197,6 +197,7 @@ export default function FormEquivalencias() {
             form={form}
             filesData={filesData}
             setFilesData={setFilesData}
+            setNextDisabled={setNextDisabled}
           />
         );
       case 4:
@@ -230,6 +231,7 @@ export default function FormEquivalencias() {
           onPrevious={handlePrevious}
           handleOnSubmit={handleOnSubmit}
           isSubmitting={isSubmitting}
+          disabled={nextDisabled}
         />
       </Grid>
     </Grid>

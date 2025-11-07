@@ -7,7 +7,7 @@ import fetchData from '../../../utils/FetchData';
 const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function DatosInstitucion({
-  form, handleOnChange, estados, disabled,
+  form, handleOnChange, estados, disabled, setNextDisabled,
 }) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
@@ -26,6 +26,7 @@ export default function DatosInstitucion({
   });
 
   useEffect(() => {
+    setNextDisabled(false);
     if (form.interesado?.institucionDestino) {
       const { institucionDestino } = form.interesado;
 
@@ -347,4 +348,5 @@ DatosInstitucion.propTypes = {
     }),
   ).isRequired,
   disabled: PropTypes.bool,
+  setNextDisabled: PropTypes.func.isRequired,
 };
