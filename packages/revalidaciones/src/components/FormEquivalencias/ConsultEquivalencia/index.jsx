@@ -156,9 +156,9 @@ export default function ConsultEquivalencia({
           totalPositions={totalPositions}
           onNext={handleNext}
           onPrevious={handlePrevious}
-          disabled
           estatus={form.estatusSolicitudRevEquivId}
           id={form.id}
+          type="consult"
         />
       </Grid>
     </Grid>
