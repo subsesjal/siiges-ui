@@ -197,7 +197,7 @@ export default function DatosSolicitante({
       setErrors(newErrors);
       setNextDisabled(hasErrors);
     }
-  }, [validateFields, form, setNextDisabled]);
+  }, [validateFields, form]);
 
   const getError = (path, name) => {
     const fieldName = [...path, name].join('.');

@@ -26,7 +26,9 @@ export default function DatosInstitucion({
   });
 
   useEffect(() => {
-    setNextDisabled(false);
+    if (setNextDisabled) {
+      setNextDisabled(false);
+    }
     if (form.interesado?.institucionDestino) {
       const { institucionDestino } = form.interesado;
 
