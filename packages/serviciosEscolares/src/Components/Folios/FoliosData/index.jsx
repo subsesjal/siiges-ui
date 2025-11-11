@@ -590,6 +590,7 @@ export default function FoliosData({ type }) {
               send={handleSend}
               disabled={status === 'consult'}
               saved={isSaved}
+              alumnos={alumnosData}
             />
           )}
         </Grid>
