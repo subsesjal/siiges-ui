@@ -14,6 +14,22 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
+function getFechaElaboracionAuto() {
+  const fecha = new Date();
+  fecha.setDate(fecha.getDate() - 1);
+
+  const dia = fecha.getDay();
+  if (dia === 6) {
+    fecha.setDate(fecha.getDate() - 1);
+  }
+
+  if (dia === 0) {
+    fecha.setDate(fecha.getDate() - 2);
+  }
+
+  return dayjs(fecha).format('YYYY-MM-DD');
+}
+
 export default function ModalCertificado({
   open,
   setOpen,
@@ -30,12 +46,13 @@ export default function ModalCertificado({
   const [disabledButton, setDisabledButton] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
   const [modalTitulo, setModalTitulo] = useState('Agregar Alumno');
-
   useEffect(() => {
     if (open && type === 'create') {
-      setForm({});
+      setForm({
+        fechaElaboracion: getFechaElaboracionAuto(),
+      });
     }
-  }, [open]);
+  }, [open, type]);
 
   const validateForm = () => {
     const isValid = alumno && form.fechaElaboracion && form.fechaTerminacion;
@@ -45,7 +62,6 @@ export default function ModalCertificado({
   useEffect(() => {
     validateForm();
   }, [form, alumno, disabled]);
-
   useEffect(() => {
     if (type !== 'create' && rowData) {
       setForm(rowData);
@@ -55,7 +71,9 @@ export default function ModalCertificado({
       }
       setAlumnoId(rowData.alumnoId);
     } else {
-      setForm({});
+      setForm({
+        fechaElaboracion: getFechaElaboracionAuto(),
+      });
       setAlumno(null);
       setAlumnoId(null);
     }
@@ -90,8 +108,7 @@ export default function ModalCertificado({
             setAlumnoId(response.data.id);
           }
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           setNoti({
             open: true,
             message: '¡No se encontró el Alumno!',
@@ -189,7 +206,7 @@ export default function ModalCertificado({
             value={form.fechaElaboracion || ''}
             onChange={handleChange}
             required
-            disabled={disabled}
+            disabled
           />
         </Grid>
         <Grid item xs={6}>

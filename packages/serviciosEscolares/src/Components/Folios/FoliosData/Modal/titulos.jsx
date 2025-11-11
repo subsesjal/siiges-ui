@@ -42,6 +42,19 @@ const fundamentoLegal = [
   { id: 5, nombre: 'NO APLICA' },
 ];
 
+function getFechaExpedicionAuto() {
+  const fecha = new Date();
+  const dia = fecha.getDay();
+
+  if (dia === 6) {
+    fecha.setDate(fecha.getDate() + 2);
+  } else if (dia === 0) {
+    fecha.setDate(fecha.getDate() + 1);
+  }
+
+  return dayjs(fecha).format('YYYY-MM-DD');
+}
+
 export default function ModalTitulo({
   open,
   setOpen,
@@ -68,17 +81,15 @@ export default function ModalTitulo({
       }
       setAlumnoId(rowData.alumnoId);
     } else {
-      setForm({});
+      setForm({
+        fechaExpedicion: getFechaExpedicionAuto(),
+      });
       setAlumno();
       setAlumnoId();
     }
-    if (type === 'edit') {
-      setModalTitulo('Editar Alumno');
-    } else if (type === 'consult') {
-      setModalTitulo('Consultar Alumno');
-    } else {
-      setModalTitulo('Agregar Alumno');
-    }
+    if (type === 'edit') setModalTitulo('Editar Alumno');
+    else if (type === 'consult') setModalTitulo('Consultar Alumno');
+    else setModalTitulo('Agregar Alumno');
   }, [type, rowData]);
 
   const handleChange = (event) => {
@@ -107,19 +118,14 @@ export default function ModalTitulo({
       fechaTerminacion: form.fechaTerminacion
         ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
-      fechaElaboracion: dayjs(form.fechaElaboracion).format(
-        'YYYY-MM-DDTHH:mm:ssZ',
-      ),
+      fechaElaboracion: form.fechaElaboracion
+        ? dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
       fechaExpedicion: form.fechaExpedicion
         ? dayjs(form.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
       fechaExamenProfesional: form.fechaExamenProfesional
         ? dayjs(form.fechaExamenProfesional).format('YYYY-MM-DDTHH:mm:ssZ')
-        : null,
-      fechaExencionExamenProfesional: form.fechaExencionExamenProfesional
-        ? dayjs(form.fechaExencionExamenProfesional).format(
-          'YYYY-MM-DDTHH:mm:ssZ',
-        )
         : null,
     };
 
@@ -170,24 +176,18 @@ export default function ModalTitulo({
   };
 
   const handlePrev = () => {
-    if (position === 'last') {
-      setPosition('first');
-    }
+    if (position === 'last') setPosition('first');
   };
 
   const handleNext = () => {
-    if (position === 'first') {
-      setPosition('last');
-    }
+    if (position === 'first') setPosition('last');
   };
 
   const handleBlur = (event) => {
     const { name, value } = event.target;
     if (name === 'matricula' && value) {
       setLoading(true);
-      getData({
-        endpoint: `/alumnos/programas/${programaId}?matricula=${value}`,
-      })
+      getData({ endpoint: `/alumnos/programas/${programaId}?matricula=${value}` })
         .then((response) => {
           if (response.data) {
             const fullName = `${response.data.persona.nombre} ${response.data.persona.apellidoPaterno} ${response.data.persona.apellidoMaterno}`;
@@ -195,8 +195,7 @@ export default function ModalTitulo({
             setAlumnoId(response.data.id);
           }
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           setNoti({
             open: true,
             message: '¡No se encontró el Alumno!',
@@ -230,16 +229,6 @@ export default function ModalTitulo({
                 <LabelData title="Alumno" subtitle={alumno} />
               </Grid>
             )}
-            <Grid item xs={6}>
-              <Input
-                label="Número de folio de acta de titulación"
-                id="folioActa"
-                name="folioActa"
-                value={form.folioActa || ''}
-                onChange={handleChange}
-                disabled={disabled}
-              />
-            </Grid>
             <Grid item xs={6}>
               <InputDate
                 label="Fecha de inicio plan de estudios"
@@ -281,7 +270,7 @@ export default function ModalTitulo({
                 name="fechaExpedicion"
                 value={form.fechaExpedicion || ''}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled
               />
             </Grid>
             <Grid item xs={6}>
@@ -304,16 +293,6 @@ export default function ModalTitulo({
                 id="fechaExamenProfesional"
                 name="fechaExamenProfesional"
                 value={form.fechaExamenProfesional || ''}
-                onChange={handleChange}
-                disabled={disabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <InputDate
-                label="Fecha de exención de examen"
-                id="fechaExencionExamenProfesional"
-                name="fechaExencionExamenProfesional"
-                value={form.fechaExencionExamenProfesional || ''}
                 onChange={handleChange}
                 disabled={disabled}
               />
@@ -388,6 +367,5 @@ ModalTitulo.propTypes = {
     fechaTerminacion: PropTypes.string,
     fechaExpedicion: PropTypes.string,
     fechaExamenProfesional: PropTypes.string,
-    fechaExencionExamenProfesional: PropTypes.string,
   }),
 };
