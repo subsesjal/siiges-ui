@@ -64,6 +64,7 @@ export default function FormEquivalencias() {
     },
   });
   const [estados, setEstados] = useState([]);
+  const [calificacionesReglas, setCalificacionesReglas] = useState([]);
   const totalPositions = 4;
 
   useEffect(() => {
@@ -78,7 +79,11 @@ export default function FormEquivalencias() {
         const data = await response.json();
         setEstados(data.data);
       } catch (error) {
-        console.error('¡Error al buscar Estados!:', error);
+        setNoti({
+          open: true,
+          message: `¡Error al buscar Estados!: ${error}`,
+          type: 'warning',
+        });
       }
     };
 
@@ -132,7 +137,11 @@ export default function FormEquivalencias() {
         if (archivoAdjunto) {
           formData.append(key, archivoAdjunto);
         } else {
-          console.error(`¡No se encontró el archivo para ${key}!`);
+          setNoti({
+            open: true,
+            message: `¡No se encontró el archivo para ${key}!`,
+            type: 'error',
+          });
         }
       });
 
@@ -156,8 +165,7 @@ export default function FormEquivalencias() {
         type: 'success',
       });
       router.reload();
-    } catch (error) {
-      console.error('¡Error al enviar el formulario!', error);
+    } catch {
       setNoti({
         open: true,
         message: '¡Ocurrió un error al enviar la solicitud, intente de nuevo!',
@@ -189,6 +197,7 @@ export default function FormEquivalencias() {
             estados={estados}
             validateFields={validateFields}
             setNextDisabled={setNextDisabled}
+            setCalificacionesReglas={setCalificacionesReglas}
           />
         );
       case 3:
@@ -205,6 +214,7 @@ export default function FormEquivalencias() {
           <CargaMateriasEquivalentes
             form={form}
             handleOnChange={handleOnChange}
+            calificacionesReglas={calificacionesReglas}
           />
         );
       default:
