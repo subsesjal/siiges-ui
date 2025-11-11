@@ -79,6 +79,7 @@ export default function CargaMateriasEquivalentes({
   form,
   handleOnChange,
   disabled,
+  calificacionesReglas,
 }) {
   const [open, setOpen] = useState(false);
   const [nombreAsignaturaAntecedente, setMateriaAntecedente] = useState('');
@@ -235,7 +236,6 @@ export default function CargaMateriasEquivalentes({
     form.interesado?.institucionDestino?.tipoInstitucionId,
   ]);
 
-  // 🔎 Filtrar materias disponibles evitando duplicados
   const materiasDisponibles = materiasList?.filter((materia) => {
     const usados = form?.interesado?.asignaturasAntecedentesEquivalentes?.map(
       (item) => item.asignaturaId,
@@ -254,28 +254,19 @@ export default function CargaMateriasEquivalentes({
         <Grid item xs={4}>
           <LabelData
             title="Calificacion minima"
-            subtitle={
-              form?.interesado?.institucionDestino?.institucionDestinoPrograma
-                ?.programa?.calificacionMinima
-            }
+            subtitle={calificacionesReglas.calificacionMinima}
           />
         </Grid>
         <Grid item xs={4}>
           <LabelData
             title="Calificacion maxima"
-            subtitle={
-              form?.interesado?.institucionDestino?.institucionDestinoPrograma
-                ?.programa?.calificacionMaxima
-            }
+            subtitle={calificacionesReglas.calificacionMaxima}
           />
         </Grid>
         <Grid item xs={4}>
           <LabelData
             title="Calificacion aprobatoria"
-            subtitle={
-              form?.interesado?.institucionDestino?.institucionDestinoPrograma
-                ?.programa?.calificacionAprobatoria
-            }
+            subtitle={calificacionesReglas.calificacionAprobatoria}
           />
         </Grid>
         <Grid item xs={12}>
@@ -371,9 +362,18 @@ export default function CargaMateriasEquivalentes({
               value={calificacionEquivalente}
               onChange={(e) => setCalificacionEquivalente(e.target.value)}
               disabled={disabled}
-              calificacionMinima={programa?.calificacionMinima}
-              calificacionMaxima={programa?.calificacionMaxima}
-              calificacionDecimal={programa?.calificacionDecimal}
+              calificacionMinima={
+                programa?.calificacionMinima
+                || calificacionesReglas.calificacionMinima
+              }
+              calificacionMaxima={
+                programa?.calificacionMaxima
+                || calificacionesReglas.calificacionMaxima
+              }
+              calificacionDecimal={
+                programa?.calificacionDecimal
+                || calificacionesReglas.calificacionDecimal
+              }
             />
           </Grid>
           <Grid item xs={12}>
@@ -393,6 +393,7 @@ export default function CargaMateriasEquivalentes({
 CargaMateriasEquivalentes.defaultProps = {
   handleOnChange: () => {},
   disabled: false,
+  calificacionesReglas: {},
 };
 
 CargaMateriasEquivalentes.propTypes = {
@@ -430,6 +431,13 @@ CargaMateriasEquivalentes.propTypes = {
       }),
     }),
   }).isRequired,
+  calificacionesReglas: PropTypes.shape({
+    id: PropTypes.number,
+    calificacionDecimal: PropTypes.bool,
+    calificacionMinima: PropTypes.number,
+    calificacionMaxima: PropTypes.number,
+    calificacionAprobatoria: PropTypes.number,
+  }),
   handleOnChange: PropTypes.func,
   disabled: PropTypes.bool,
 };
