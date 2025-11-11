@@ -1,4 +1,4 @@
-import { AdminTable, FoliosForm, FoliosTable } from '@siiges-ui/serviciosescolares';
+import { FoliosForm, FoliosTable } from '@siiges-ui/serviciosescolares';
 import { Context, getData, Layout } from '@siiges-ui/shared';
 import React, { useState, useContext, useEffect } from 'react';
 
@@ -15,6 +15,7 @@ export default function SolicitudesFolios() {
 
   const isAdmin = session.rol === 'admin';
   const isRepresentante = session.rol === 'representante';
+  const isCeIes = session.rol === 'ce_ies';
   const isCeSicyt = session.rol === 'ce_sicyt';
 
   const estatusMap = {
@@ -42,38 +43,49 @@ export default function SolicitudesFolios() {
   };
 
   const fetchData = async () => {
-    if (!institucion && !plantel && !isAdmin) return;
+    if (!institucion && !plantel && !isAdmin && !isCeSicyt) return;
+
     try {
       setLoading(true);
       const endpoint = buildEndpoint();
       const response = await getData({ endpoint });
       if (response.statusCode === 200) setSolicitudes(response.data);
-      else setNoti({ open: true, message: response.message || 'Error al cargar datos', type: 'error' });
+      else {
+        setNoti({
+          open: true,
+          message: response.message || 'Error al cargar datos',
+          type: 'error',
+        });
+      }
     } catch (error) {
-      setNoti({ open: true, message: 'Error al obtener datos, revise los filtros', type: 'error' });
+      setNoti({
+        open: true,
+        message: 'Error al obtener datos, revise los filtros',
+        type: 'error',
+      });
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (institucion || plantel || isAdmin) fetchData();
+    if (isAdmin || isCeSicyt) {
+      setEstatus([2]);
+      fetchData();
+    }
+  }, [isAdmin, isCeSicyt]);
+
+  useEffect(() => {
+    // eslint-disable-next-line max-len
+    if (institucion || plantel || programa || tipoDocumento || tipoSolicitud || estatus.length > 0) {
+      fetchData();
+    } else {
+      setSolicitudes([]);
+    }
   }, [institucion, plantel, programa, tipoDocumento, tipoSolicitud, estatus]);
 
   const renderTable = () => {
-    if (isAdmin) {
-      return (
-        <AdminTable
-          tipoDocumento={tipoDocumento}
-          tipoSolicitud={tipoSolicitud}
-          programa={programa}
-          plantel={plantel}
-          institucion={institucion}
-          solicitudes={solicitudes}
-        />
-      );
-    }
-    if (isRepresentante || isCeSicyt) {
+    if (isAdmin || isCeSicyt || isRepresentante || isCeIes) {
       return (
         <FoliosTable
           tipoDocumento={tipoDocumento}
@@ -94,6 +106,7 @@ export default function SolicitudesFolios() {
         setTipoSolicitud={setTipoSolicitud}
         setTipoDocumento={setTipoDocumento}
         setEstatus={setEstatus}
+        estatus={estatus}
         setPrograma={setPrograma}
         setPlantel={setPlantel}
         setInstitucion={setInstitucion}

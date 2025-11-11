@@ -1,8 +1,5 @@
 import React, {
-  useState,
-  useContext,
-  useEffect,
-  useCallback,
+  useState, useContext, useEffect, useCallback,
 } from 'react';
 import { Grid } from '@mui/material';
 import { Select, Context } from '@siiges-ui/shared';
@@ -14,17 +11,18 @@ export default function FoliosForm({
   setTipoSolicitud,
   setTipoDocumento,
   setEstatus,
+  estatus,
   setPrograma,
   setPlantel,
-  setLoading,
   setInstitucion,
+  setLoading,
 }) {
   // eslint-disable-next-line max-len
   const { instituciones } = getInstituciones({ esNombreAutorizado: true, tipoInstitucionId: 1, setLoading });
   const { setNoti, session } = useContext(Context);
 
   const isRepresentante = session?.rol === 'representante' || session?.rol === 'ce_ies';
-  const isAdmin = session?.rol === 'admin' || session?.rol === 'ce_sicyt';
+  const isAdminOrCeSicyt = session?.rol === 'admin' || session?.rol === 'ce_sicyt';
 
   const initialState = {
     selectedInstitucion: '',
@@ -39,17 +37,13 @@ export default function FoliosForm({
 
   useEffect(() => {
     const asignarInstitucionDesdeSesion = async () => {
-      if (isAdmin) return;
+      if (isAdminOrCeSicyt) return;
       if (!instituciones || instituciones.length === 0 || !session) return;
 
       const institucionId = await getInstitucionIdFromSession({ instituciones, session });
       if (institucionId) {
         setState((prev) => ({ ...prev, selectedInstitucion: institucionId }));
         setInstitucion(institucionId);
-        setPlantel('');
-        setPrograma('');
-        setTipoDocumento('');
-        setTipoSolicitud('');
       } else if (isRepresentante) {
         setNoti({ open: true, message: '¡No se encontró una institución asociada al usuario!', type: 'error' });
       }
@@ -99,7 +93,6 @@ export default function FoliosForm({
 
   const handlePlantelChange = (e) => {
     const selectedPlantel = e.target.value;
-    console.log('Selected Plantel:', e.target.value);
     setState((prev) => ({
       ...prev,
       selectedPlantel,
@@ -141,12 +134,11 @@ export default function FoliosForm({
     setTipoSolicitud(selectedSolicitud);
   };
 
-  const [selectedEstatus, setSelectedEstatus] = useState([]);
   const handleEstatusChange = (e) => {
     const selectedIds = e.target.value || [];
-    setSelectedEstatus(selectedIds);
     setEstatus(selectedIds);
   };
+
   const documentos = [
     { id: 1, nombre: 'Títulos' },
     { id: 2, nombre: 'Certificados' },
@@ -175,7 +167,7 @@ export default function FoliosForm({
     { id: 3, nombre: 'Folios asignados' },
     { id: 4, nombre: 'Con observaciones' },
     { id: 5, nombre: 'Cancelado' },
-  ];
+  ].filter((option) => !(session?.rol === 'ce_sicyt' && option.id === 1));
 
   useEffect(() => {
     if (state.selectedInstitucion) fetchPlanteles(state.selectedInstitucion);
@@ -196,7 +188,7 @@ export default function FoliosForm({
           value={state.selectedInstitucion}
           options={instituciones || []}
           onChange={handleInstitucionChange}
-          disabled={!isAdmin && isRepresentante}
+          disabled={!isAdminOrCeSicyt && isRepresentante}
         />
       </Grid>
       <Grid item xs={4}>
@@ -244,7 +236,7 @@ export default function FoliosForm({
           title="Estatus"
           name="estatus"
           multiple
-          value={selectedEstatus}
+          value={estatus}
           options={estatusOptions}
           onChange={handleEstatusChange}
         />
@@ -260,5 +252,10 @@ FoliosForm.propTypes = {
   setPlantel: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
   setEstatus: PropTypes.func.isRequired,
+  estatus: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])),
   setInstitucion: PropTypes.func.isRequired,
+};
+
+FoliosForm.defaultProps = {
+  estatus: [],
 };
