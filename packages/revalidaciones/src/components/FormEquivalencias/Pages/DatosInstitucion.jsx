@@ -1,44 +1,31 @@
 import { Grid } from '@mui/material';
 import { Input, Select, Subtitle } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../../utils/FetchData';
 
 const domain = process.env.NEXT_PUBLIC_URL;
+const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
 export default function DatosInstitucion({
-  form, handleOnChange, estados, disabled, setNextDisabled,
+  form,
+  handleOnChange,
+  estados,
+  disabled,
+  setNextDisabled,
+  setCalificacionesReglas,
 }) {
   const [tipoInstituciones, setTipoInstituciones] = useState([]);
-  const [programas, setProgramas] = useState([]);
   const [grados, setGrados] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
-  const [institucionId, setInstitucionId] = useState('');
   const [rvoes, setRvoes] = useState([]);
   const [rvoesList, setRvoesList] = useState([]);
-  const [carrera, setCarrera] = useState('');
-  const [tipoInstitucionId, setTipoInstitucionId] = useState('');
+  const [calificacionesReglasList, setCalificacionesReglasList] = useState([]);
   const [rvoeError, setRvoeError] = useState('');
 
-  const mapNivelesData = (item) => ({
-    id: item.id,
-    nombre: item.descripcion,
-  });
-
-  useEffect(() => {
-    setNextDisabled(false);
-    if (form.interesado?.institucionDestino) {
-      const { institucionDestino } = form.interesado;
-
-      setTipoInstitucionId(institucionDestino.tipoInstitucionId || '');
-      setInstitucionId(institucionDestino?.institucionDestinoPrograma?.programa?.plantel?.institucionId || '');
-
-      if (institucionDestino.programaId && rvoes.length > 0) {
-        const selectedRvoe = rvoes.find((rvoe) => rvoe.id === institucionDestino.programaId);
-        setCarrera(selectedRvoe?.nombre || '');
-      }
-    }
-  }, [form.interesado?.institucionDestino, rvoes]);
+  const tipoInstitucionId = form.interesado?.institucionDestino?.tipoInstitucionId || '';
+  const institucionId = form.interesado?.institucionDestino?.institucionId || '';
+  const carrera = form.interesado?.institucionDestino?.nombreCarrera || '';
 
   useEffect(() => {
     fetchData(
@@ -48,118 +35,187 @@ export default function DatosInstitucion({
     fetchData(
       `${domain}/api/v1/public/niveles/`,
       setGrados,
-      mapNivelesData,
+      (item) => ({
+        id: item.id,
+        nombre: item.descripcion,
+      }),
       true,
     );
   }, []);
 
-  const fetchInstituciones = async () => {
-    if (tipoInstitucionId) {
-      fetchData(
-        `${domain}/api/v1/public/instituciones?tipoInstitucionId=${tipoInstitucionId}`,
-        setInstituciones,
-      );
-    }
-  };
-
-  const fetchRvoes = async () => {
-    if (institucionId) {
-      fetchData(
-        `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
-        setRvoes,
-      );
-    }
-  };
+  useEffect(() => {
+    if (!tipoInstitucionId) return;
+    fetchData(
+      `${domain}/api/v1/public/instituciones?tipoInstitucionId=${tipoInstitucionId}`,
+      setInstituciones,
+    );
+  }, [tipoInstitucionId]);
 
   useEffect(() => {
-    if (rvoes && rvoes.length > 0) {
-      const mappedRvoes = rvoes.map(({ id, acuerdoRvoe, nombre }) => ({
+    if (!institucionId) {
+      setRvoes([]);
+      return;
+    }
+    fetchData(
+      `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
+      setRvoes,
+    );
+  }, [institucionId]);
+
+  useEffect(() => {
+    if (!rvoes?.length) {
+      setRvoesList([]);
+      return;
+    }
+    setRvoesList(
+      rvoes.map(({ id, acuerdoRvoe, nombre }) => ({
         id,
         nombre: acuerdoRvoe,
         carrera: nombre,
-      }));
-      setRvoesList(mappedRvoes);
-    } else {
-      setRvoesList([]);
-    }
+      })),
+    );
+    setCalificacionesReglasList(
+      rvoes.map(
+        ({
+          id,
+          calificacionAprobatoria,
+          calificacionDecimal,
+          calificacionMaxima,
+          calificacionMinima,
+        }) => ({
+          id,
+          calificacionAprobatoria,
+          calificacionDecimal,
+          calificacionMaxima,
+          calificacionMinima,
+        }),
+      ),
+    );
   }, [rvoes]);
 
-  const fetchProgramas = async (acuerdoRvoe) => {
+  const handleTipoInstitucionChange = (event) => {
+    handleOnChange(event, ['interesado', 'institucionDestino']);
+  };
+
+  const handleInstitucionChange = (event) => {
+    handleOnChange(event, ['interesado', 'institucionDestino']);
+
+    if (tipoInstitucionId === 1) {
+      handleOnChange({ target: { name: 'programaId', value: '' } }, [
+        'interesado',
+        'institucionDestino',
+      ]);
+      handleOnChange({ target: { name: 'acuerdoRvoe', value: '' } }, [
+        'interesado',
+        'institucionDestino',
+      ]);
+      handleOnChange({ target: { name: 'nombreCarrera', value: '' } }, [
+        'interesado',
+        'institucionDestino',
+      ]);
+    }
+  };
+
+  const handleRvoeChange = (event) => {
+    const selectedId = Number(event.target.value);
+    const selectedRvoe = rvoesList.find((r) => r.id === selectedId);
+    const reglas = calificacionesReglasList.find((cr) => cr.id === selectedId);
+    setCalificacionesReglas(reglas);
+
+    if (selectedRvoe) {
+      handleOnChange(
+        { target: { name: 'acuerdoRvoe', value: selectedRvoe.nombre } },
+        ['interesado', 'institucionDestino'],
+      );
+      handleOnChange(
+        { target: { name: 'nombreCarrera', value: selectedRvoe.carrera } },
+        ['interesado', 'institucionDestino'],
+      );
+      setRvoeError('');
+    } else {
+      setRvoeError('RVOE inválido');
+    }
+
+    handleOnChange(event, ['interesado', 'institucionDestino']);
+  };
+
+  const handleRvoeOnBlur = async (event) => {
+    const acuerdoRvoe = event.target.value;
+    if (tipoInstitucionId !== 1 || !acuerdoRvoe) return;
+
     try {
       const response = await fetch(
         `${domain}/api/v1/public/programas?acuerdoRvoe=${acuerdoRvoe}`,
         {
           headers: {
-            api_key: process.env.NEXT_PUBLIC_API_KEY,
+            api_key: apiKey,
             'Content-Type': 'application/json',
           },
         },
       );
       const data = await response.json();
-      setProgramas(data.data);
-      setRvoeError('');
-      if (!response.ok) {
+
+      if (!response.ok || !data.data?.length) {
         setRvoeError('RVOE inválido');
+        return;
       }
-    } catch (error) {
-      console.error('Error fetching Programas:', error);
+
+      handleOnChange(
+        { target: { name: 'nombreCarrera', value: data.data[0].nombre } },
+        ['interesado', 'institucionDestino'],
+      );
+      setRvoeError('');
+    } catch {
       setRvoeError('RVOE inválido');
     }
   };
 
-  useEffect(() => {
-    fetchInstituciones();
+  const camposRequeridos = useMemo(() => {
+    const base = [
+      'interesado.institucionProcedencia.nombre',
+      'interesado.institucionProcedencia.estadoId',
+      'interesado.institucionProcedencia.nivelId',
+      'interesado.institucionProcedencia.nombreCarrera',
+      'interesado.institucionDestino.tipoInstitucionId',
+    ];
+
+    if (tipoInstitucionId === 1) {
+      base.push('interesado.institucionDestino.programaId');
+    } else if (tipoInstitucionId) {
+      base.push(
+        'interesado.institucionDestino.nombre',
+        'interesado.institucionDestino.nivel',
+        'interesado.institucionDestino.acuerdoRvoe',
+        'interesado.institucionDestino.nombreCarrera',
+      );
+    }
+
+    return base;
   }, [tipoInstitucionId]);
 
   useEffect(() => {
-    fetchRvoes();
-  }, [institucionId]);
+    const isEmpty = (val) => val === undefined || val === null || val === '';
 
-  const handleTipoInstitucionChange = (event) => {
-    const selectedTipoInstitucionId = event.target.value;
-    setTipoInstitucionId(selectedTipoInstitucionId);
-    handleOnChange(event, ['interesado', 'institucionDestino']);
-  };
+    const allFilled = camposRequeridos.every((path) => {
+      const value = path
+        .split('.')
+        .reduce(
+          (obj, key) => (obj && obj[key] !== undefined ? obj[key] : ''),
+          form,
+        );
+      return !isEmpty(value);
+    });
 
-  const handleInstitucionChange = (event) => {
-    const selectedInstitucionId = event.target.value;
-    setInstitucionId(selectedInstitucionId);
-    handleOnChange(event, ['interesado', 'institucionDestino']);
-  };
-
-  const handleRvoeChange = (event) => {
-    const selectedId = event.target.value;
-    const selectedRvoe = rvoes.find((rvoe) => rvoe.id === selectedId);
-    const rvoeName = rvoesList.find((rvoe) => rvoe.id === selectedId);
-
-    if (selectedRvoe) {
-      setCarrera(selectedRvoe.nombre);
-      const syntheticEvent = {
-        target: {
-          name: 'acuerdoRvoe',
-          value: rvoeName.nombre,
-        },
-      };
-      handleOnChange(syntheticEvent, ['interesado', 'institucionDestino']);
-    } else {
-      setCarrera('');
-    }
-
-    handleOnChange(event, ['interesado', 'institucionDestino']);
-  };
-
-  const handleRvoeOnBlur = (event) => {
-    const acuerdoRvoe = event.target.value;
-    if (tipoInstitucionId === 1) {
-      fetchProgramas(acuerdoRvoe);
-    }
-  };
+    setNextDisabled(!allFilled);
+  }, [form, camposRequeridos, setNextDisabled]);
 
   return (
     <Grid container spacing={1}>
+      {/* Institución de Procedencia */}
       <Grid item xs={12}>
         <Subtitle>Datos de la Institución de procedencia</Subtitle>
       </Grid>
+
       <Grid item xs={9}>
         <Input
           id="nombreInstitucion"
@@ -168,28 +224,34 @@ export default function DatosInstitucion({
           value={form.interesado?.institucionProcedencia?.nombre || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
           disabled={disabled}
+          required
         />
       </Grid>
+
       <Grid item xs={3}>
         <Select
           title="Estado"
-          options={estados}
+          options={estados || []}
           name="estadoId"
           value={form.interesado?.institucionProcedencia?.estadoId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
           disabled={disabled}
+          required
         />
       </Grid>
+
       <Grid item xs={4}>
         <Select
           title="Nivel Académico Procedente"
-          options={grados}
+          options={grados || []}
           name="nivelId"
           value={form.interesado?.institucionProcedencia?.nivelId || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
           disabled={disabled}
+          required
         />
       </Grid>
+
       <Grid item xs={8}>
         <Input
           id="nombreCarrera"
@@ -198,101 +260,115 @@ export default function DatosInstitucion({
           value={form.interesado?.institucionProcedencia?.nombreCarrera || ''}
           onChange={(e) => handleOnChange(e, ['interesado', 'institucionProcedencia'])}
           disabled={disabled}
+          required
         />
       </Grid>
+
+      {/* Institución de destino */}
       <Grid item xs={12}>
         <Subtitle>Datos de la Institución de destino</Subtitle>
       </Grid>
+
       <Grid item xs={3}>
         <Select
           title="Tipo de Institución"
           name="tipoInstitucionId"
-          options={tipoInstituciones}
-          value={
-            form.interesado?.institucionDestino?.tipoInstitucionId
-            || tipoInstitucionId
-          }
+          options={tipoInstituciones || []}
+          value={tipoInstitucionId}
           onChange={handleTipoInstitucionChange}
           disabled={disabled}
+          required
         />
       </Grid>
+
       <Grid item xs={9}>
         {tipoInstitucionId === 1 ? (
           <Select
             title="Instituciones"
-            options={instituciones}
+            options={instituciones || []}
             name="institucionId"
-            value={form.interesado?.institucionDestino?.institucionDestinoPrograma?.programa?.plantel?.institucionId || ''}
+            value={institucionId}
             onChange={handleInstitucionChange}
             disabled={disabled}
+            required
           />
         ) : (
           <Input
             id="institucionNombre"
-            label="Instituciones de Educación Superior"
+            label="Institución de Educación Superior"
             name="nombre"
             value={form.interesado?.institucionDestino?.nombre || ''}
             onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
             disabled={disabled}
+            required
           />
         )}
       </Grid>
-      {tipoInstitucionId !== 1
-      && (
-      <>
-        <Grid item xs={3}>
-          <Select
-            title="Nivel Académico Destino"
-            options={grados}
-            name="nivel"
-            value={form.interesado?.institucionDestino?.nivel || ''}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-            disabled={disabled}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <Input
-            id="rvoe"
-            label="RVOE"
-            name="acuerdoRvoe"
-            value={form.interesado?.institucionDestino?.institucionDestinoPrograma?.programa?.acuerdoRvoe || form.interesado?.institucionDestino?.acuerdoRvoe || ''}
-            onBlur={handleRvoeOnBlur}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-            errorMessage={rvoeError}
-            disabled={disabled}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Input
-            id="nombreCarreraDestino"
-            label="Nombre de la Carrera (Destino)"
-            name="nombreCarrera"
-            value={programas?.nombre || ''}
-            onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
-            disabled={tipoInstitucionId === 1 || disabled}
-          />
-        </Grid>
-      </>
+
+      {/* Campos destino según tipoInstitucionId */}
+      {tipoInstitucionId !== 1 && tipoInstitucionId && (
+        <>
+          <Grid item xs={3}>
+            <Select
+              title="Nivel Académico Destino"
+              options={grados || []}
+              name="nivel"
+              value={form.interesado?.institucionDestino?.nivel || ''}
+              onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+              disabled={disabled}
+              required
+            />
+          </Grid>
+
+          <Grid item xs={3}>
+            <Input
+              id="rvoe"
+              label="RVOE"
+              name="acuerdoRvoe"
+              value={form.interesado?.institucionDestino?.acuerdoRvoe || ''}
+              onBlur={handleRvoeOnBlur}
+              onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+              errorMessage={rvoeError}
+              disabled={disabled}
+              required
+            />
+          </Grid>
+
+          <Grid item xs={6}>
+            <Input
+              id="nombreCarreraDestino"
+              label="Nombre de la Carrera (Destino)"
+              name="nombreCarrera"
+              value={carrera}
+              onChange={(e) => handleOnChange(e, ['interesado', 'institucionDestino'])}
+              disabled={disabled}
+              required
+            />
+          </Grid>
+        </>
       )}
+
       {tipoInstitucionId === 1 && (
         <>
           <Grid item xs={3}>
             <Select
               title="RVOE"
-              options={rvoesList}
+              options={rvoesList || []}
               name="programaId"
-              value={form.interesado?.institucionDestino?.institucionDestinoPrograma?.programaId || form.interesado?.institucionDestino?.programaId || ''}
+              value={form.interesado?.institucionDestino?.programaId || ''}
               onChange={handleRvoeChange}
               errorMessage={rvoeError}
               disabled={disabled}
+              required
             />
           </Grid>
+
           <Grid item xs={9}>
             <Input
               id="nombreCarreraDestino"
               label="Nombre de la Carrera (Destino)"
               name="nombreCarrera"
-              value={carrera || form.interesado?.institucionDestino?.institucionDestinoPrograma?.programa?.nombre || ''}
+              value={carrera}
               disabled
             />
           </Grid>
@@ -317,13 +393,20 @@ DatosInstitucion.propTypes = {
         nombreCarrera: PropTypes.string,
       }),
       institucionDestino: PropTypes.shape({
+        institucionId: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.number,
+        ]),
         institucionDestinoPrograma: PropTypes.shape({
-          programaId: PropTypes.number,
+          programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
           programa: PropTypes.shape({
             nombre: PropTypes.string,
             acuerdoRvoe: PropTypes.string,
             plantel: PropTypes.shape({
-              institucionId: PropTypes.number,
+              institucionId: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number,
+              ]),
             }),
           }),
         }),
@@ -335,11 +418,12 @@ DatosInstitucion.propTypes = {
         nombre: PropTypes.string,
         nivel: PropTypes.string,
         acuerdoRvoe: PropTypes.string,
-        programaId: PropTypes.number,
+        programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         nombreCarrera: PropTypes.string,
       }),
     }),
   }).isRequired,
+
   handleOnChange: PropTypes.func,
   estados: PropTypes.arrayOf(
     PropTypes.shape({
@@ -349,4 +433,5 @@ DatosInstitucion.propTypes = {
   ).isRequired,
   disabled: PropTypes.bool,
   setNextDisabled: PropTypes.func.isRequired,
+  setCalificacionesReglas: PropTypes.func.isRequired,
 };

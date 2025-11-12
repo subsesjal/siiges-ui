@@ -1,8 +1,9 @@
 import { Grid } from '@mui/material';
 import {
+  Context,
   Input, InputDate, Select, Subtitle,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import validateField from '../../../utils/ValidateField';
 
@@ -121,6 +122,7 @@ export default function DatosSolicitante({
   validateFields,
   setNextDisabled,
 }) {
+  const { setNoti } = useContext(Context);
   const [municipios, setMunicipios] = useState([]);
   const [estadoId, setEstadoId] = useState('');
   const [municipiosDisabled, setMunicipiosDisabled] = useState(!estadoId);
@@ -159,7 +161,11 @@ export default function DatosSolicitante({
           const data = await response.json();
           setMunicipios(data.data);
         } catch (error) {
-          console.error('¡Error al buscar municipios!:', error);
+          setNoti({
+            open: true,
+            message: `¡Error al buscar municipios!: ${error}`,
+            type: 'warning',
+          });
         }
       }
     };
@@ -197,7 +203,31 @@ export default function DatosSolicitante({
       setErrors(newErrors);
       setNextDisabled(hasErrors);
     }
-  }, [validateFields, form, setNextDisabled]);
+  }, [validateFields, form]);
+
+  useEffect(() => {
+    const allFilled = Object.keys(validationRules).every((fieldName) => {
+      const value = fieldName
+        .split('.')
+        .reduce(
+          (obj, key) => (obj && obj[key] !== undefined ? obj[key] : ''),
+          form,
+        );
+
+      const rule = validationRules[fieldName];
+      if (rule.required && (value === '' || value === null || value === undefined)) {
+        return false;
+      }
+
+      if (rule.validate && !rule.validate(value)) {
+        return false;
+      }
+
+      return true;
+    });
+
+    setNextDisabled(!allFilled);
+  }, [form]);
 
   const getError = (path, name) => {
     const fieldName = [...path, name].join('.');
@@ -212,7 +242,7 @@ export default function DatosSolicitante({
       <Grid item xs={3}>
         <Select
           title="Tipo de Solicitud"
-          options={TIPO_SOLICITUDES[tipoSolicitud]}
+          options={TIPO_SOLICITUDES[tipoSolicitud] || []}
           name="tipoTramiteId"
           value={form.tipoTramiteId || ''}
           onChange={(e) => handleChange(e, [])}
@@ -276,7 +306,7 @@ export default function DatosSolicitante({
           id="nacionalidad"
           title="Nacionalidad"
           name="nacionalidad"
-          options={nacionalidades}
+          options={nacionalidades || []}
           value={form.interesado?.persona?.nacionalidad || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
@@ -289,7 +319,7 @@ export default function DatosSolicitante({
         <Select
           id="sexo"
           title="Género"
-          options={generos}
+          options={generos || []}
           name="sexo"
           textValue
           value={form.interesado?.persona?.sexo || ''}
@@ -363,7 +393,7 @@ export default function DatosSolicitante({
         <Select
           title="Estados"
           name="estadoId"
-          options={estados}
+          options={estados || []}
           value={estadoId}
           onChange={handleEstadoChange}
           required
@@ -378,7 +408,7 @@ export default function DatosSolicitante({
         <Select
           title="Municipio"
           name="municipioId"
-          options={municipios}
+          options={municipios || []}
           value={form.interesado?.persona?.domicilio?.municipioId || ''}
           onChange={(e) => handleChange(e, ['interesado', 'persona', 'domicilio'])}
           required

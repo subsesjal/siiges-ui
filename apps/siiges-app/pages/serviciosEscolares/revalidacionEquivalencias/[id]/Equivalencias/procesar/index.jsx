@@ -7,12 +7,13 @@ import {
   Context,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 export default function ProcesarEquivalencia() {
   const router = useRouter();
   const { query } = router;
   const { setNoti } = useContext(Context);
+  const [estatus, setEstatus] = useState({ estatus: null });
 
   const handleSubmit = async () => {
     try {
@@ -48,7 +49,7 @@ export default function ProcesarEquivalencia() {
     <Layout title="Procesar Solicitud de Equivalencias">
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <ConsultEquivalencia />
+          <ConsultEquivalencia estatus={estatus} setEstatus={setEstatus} />
         </Grid>
         <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <ButtonSimple
