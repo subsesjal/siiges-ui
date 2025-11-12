@@ -103,6 +103,22 @@ ButtonsFolios.propTypes = {
   send: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   saved: PropTypes.bool.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  alumnos: PropTypes.array.isRequired,
+  alumnos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      alumnoId: PropTypes.number,
+      solicitudFolioId: PropTypes.number,
+      fechaExpedicion: PropTypes.string,
+      alumno: PropTypes.shape({
+        id: PropTypes.number,
+        matricula: PropTypes.string,
+        persona: PropTypes.shape({
+          nombre: PropTypes.string,
+          apellidoPaterno: PropTypes.string,
+          apellidoMaterno: PropTypes.string,
+          curp: PropTypes.string,
+        }),
+      }),
+    }),
+  ).isRequired,
 };
