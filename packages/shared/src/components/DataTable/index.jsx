@@ -40,19 +40,17 @@ function DataTable({
 
   const debouncedSearch = useCallback(
     debounce((value) => {
-      const filteredData = rows.filter(
-        (row) => Object.values(row || {}).some(
-          (data) => data?.toString().toLowerCase().includes(value),
-        ),
-      );
+      const keywords = value.split(' ').filter((word) => word.trim() !== '');
+      const filteredData = rows.filter((row) => keywords.every((keyword) => Object.values(row || {})
+        .some((data) => data?.toString().toLowerCase().includes(keyword))));
       setFilteredRows(value ? filteredData : rows);
     }, 300),
     [rows],
   );
 
   const handleSearch = (event) => {
-    const value = event.target.value.toLowerCase();
-    setSearchText(value);
+    const value = event.target.value.toLowerCase().trim();
+    setSearchText(event.target.value);
     debouncedSearch(value);
   };
 
@@ -126,7 +124,7 @@ DataTable.defaultProps = {
   buttonText: '',
   buttonType: '',
   initialState: { sorting: { sortModel: [{ field: 'id', sort: 'desc' }] } },
-  buttonClick: () => {},
+  buttonClick: () => { },
 };
 
 DataTable.propTypes = {
