@@ -1,11 +1,13 @@
 import { Grid } from '@mui/material';
-import { InputFile, fileToFormData } from '@siiges-ui/shared';
-import React, { useEffect } from 'react';
+import { Context, InputFile, fileToFormData } from '@siiges-ui/shared';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 export default function CargaMaterias({
   form, filesData, setFilesData, setNextDisabled,
 }) {
+  const { setNoti } = useContext(Context);
+
   const handleFileChange = async (files, name) => {
     try {
       const formData = await fileToFormData(files[0]);
@@ -14,7 +16,11 @@ export default function CargaMaterias({
         [name]: { formData, url: URL.createObjectURL(files[0]) },
       }));
     } catch (error) {
-      console.error('¡Error al procesar el archivo!:', error);
+      setNoti({
+        open: true,
+        message: `¡Error al procesar el archivo!: ${error}`,
+        type: 'warning',
+      });
     }
   };
 
@@ -33,7 +39,7 @@ export default function CargaMaterias({
       'COMPROBANTE_PAGO_TRAMITE',
     ];
 
-    if (form.tipoTramiteId === 3) {
+    if (form.tipoTramiteId === 5) {
       requiredFiles.push('RESOLUCION');
     } else {
       requiredFiles.push(
@@ -87,7 +93,7 @@ export default function CargaMaterias({
           fileType={['application/pdf']}
         />
       </Grid>
-      {form.tipoTramiteId === 3 && (
+      {form.tipoTramiteId === 5 && (
       <Grid item xs={6}>
         <InputFile
           label="Copia de Resolución"
@@ -101,7 +107,7 @@ export default function CargaMaterias({
         />
       </Grid>
       )}
-      {form.tipoTramiteId !== 3 && (
+      {form.tipoTramiteId !== 5 && (
       <>
         <Grid item xs={6}>
           <InputFile
