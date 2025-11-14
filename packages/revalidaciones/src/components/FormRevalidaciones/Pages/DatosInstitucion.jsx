@@ -69,12 +69,6 @@ const DESTINATION_INSTITUTION_FIELDS = [
   },
 ];
 
-const TIPOS_INSTITUCION = [
-  { id: 1, nombre: 'Incorporación Estatal' },
-  { id: 2, nombre: 'Organismo Público Descentralizado' },
-  { id: 3, nombre: 'Incorporación Federal' },
-];
-
 const REQUIRED_FIELDS = [
   {
     path: ['interesado', 'institucionProcedencia', 'nombre'],
@@ -133,6 +127,7 @@ export default function DatosInstitucion({
   validateFields,
   disabled,
 }) {
+  const [tipoInstituciones, setTipoInstituciones] = useState([]);
   const [programas, setProgramas] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
   const [grados, setGrados] = useState([]);
@@ -210,6 +205,10 @@ export default function DatosInstitucion({
   // Fetch initial data
   useEffect(() => {
     const fetchInitialData = async () => {
+      await fetchData(
+        `${domain}/api/v1/public/instituciones/tipoInstituciones`,
+        setTipoInstituciones,
+      );
       await fetchData(
         `${domain}/api/v1/public/niveles/`,
         setGrados,
@@ -426,7 +425,7 @@ export default function DatosInstitucion({
         <Select
           title="Tipo de Institución"
           name="tipoInstitucionId"
-          options={TIPOS_INSTITUCION}
+          options={tipoInstituciones}
           value={tipoInstitucionId}
           onChange={handleTipoInstitucionChange}
           required
