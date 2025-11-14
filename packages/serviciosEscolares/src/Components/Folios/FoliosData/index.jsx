@@ -212,10 +212,6 @@ export default function FoliosData({ type }) {
     { id: 3, label: 'Duplicado' },
   ];
 
-  const selectedTipoSolicitudFolio = tipoSolicitudFolioOptions.find(
-    (option) => option.id === Number(tipoSolicitud),
-  )?.label || 'Desconocido';
-
   useEffect(() => {
     if (type === 'edit') {
       setIsSaved(true);
@@ -246,8 +242,8 @@ export default function FoliosData({ type }) {
             fecha: dayjs(data.fecha),
           });
           setEtiquetas({
-            tipoDocumento: data.tipoDocumento.nombre,
-            tipoSolicitudFolio: data.tipoSolicitudFolio.nombre,
+            tipoDocumento: data.tipoDocumento?.nombre,
+            tipoSolicitudFolio: data.tipoSolicitudFolio?.nombre,
             acuerdoRvoe: data.programa.acuerdoRvoe,
             planEstudios: data.programa.nombre,
             gradoAcademico: data.programa.nivelId,
@@ -268,8 +264,8 @@ export default function FoliosData({ type }) {
           );
         } else {
           setFormData({
-            tipoDocumentoId: tipoDocumento,
-            tipoSolicitudFolioId: tipoSolicitud,
+            tipoDocumentoId: Number(tipoDocumento),
+            tipoSolicitudFolioId: Number(tipoSolicitud),
             estatusSolicitudFolioId: 1,
             programaId: data.id,
             fecha: dayjs(data.fecha),
@@ -277,8 +273,10 @@ export default function FoliosData({ type }) {
           setEtiquetas({
             institucion: data.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.plantel?.claveCentroTrabajo,
-            tipoDocumento: tipoDocumento === '1' ? 'Titulo' : 'Certificado',
-            tipoSolicitudFolio: selectedTipoSolicitudFolio,
+            tipoDocumento: tipoDocumento === '1' ? 'Título' : 'Certificado',
+            tipoSolicitudFolio: tipoSolicitudFolioOptions.find(
+              (o) => o.id === Number(tipoSolicitud),
+            )?.label,
             acuerdoRvoe: data.acuerdoRvoe,
             planEstudios: data.nombre,
             gradoAcademico: data.nivelId,
@@ -566,11 +564,9 @@ export default function FoliosData({ type }) {
               buttonText="Agregar Alumnos"
               title="Alumnos"
               rows={rows}
-              columns={
-                tipoDocumento === '1'
-                  ? columnsTitulo(handleEdit, handleConsult, status)
-                  : columnsCertificado(handleEdit, handleConsult, status)
-              }
+              columns={formData.tipoDocumentoId === 1
+                ? columnsTitulo(handleEdit, handleConsult, status)
+                : columnsCertificado(handleEdit, handleConsult, status)}
             />
           </Grid>
         </Grid>
@@ -595,7 +591,7 @@ export default function FoliosData({ type }) {
           )}
         </Grid>
       </Grid>
-      {tipoDocumento === '1' ? (
+      {formData.tipoDocumentoId === 1 ? (
         <ModalTitulo
           open={open}
           setOpen={setOpen}
