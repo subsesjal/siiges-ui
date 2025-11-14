@@ -15,7 +15,7 @@ export default function DatosInstitucion({
   setNextDisabled,
   setCalificacionesReglas,
 }) {
-  const [tipoInstituciones, setTipoInstituciones] = useState([]);
+  const [setTipoInstituciones] = useState([]);
   const [grados, setGrados] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
   const [rvoes, setRvoes] = useState([]);
@@ -115,6 +115,12 @@ export default function DatosInstitucion({
       ]);
     }
   };
+
+  const TIPOS_INSTITUCION = [
+    { id: 1, nombre: 'Incorporación Estatal' },
+    { id: 2, nombre: 'Organismo Público Descentralizado' },
+    { id: 3, nombre: 'Incorporación Federal' },
+  ];
 
   const handleRvoeChange = (event) => {
     const selectedId = Number(event.target.value);
@@ -273,7 +279,7 @@ export default function DatosInstitucion({
         <Select
           title="Tipo de Institución"
           name="tipoInstitucionId"
-          options={tipoInstituciones || []}
+          options={TIPOS_INSTITUCION || []}
           value={tipoInstitucionId}
           onChange={handleTipoInstitucionChange}
           disabled={disabled}
