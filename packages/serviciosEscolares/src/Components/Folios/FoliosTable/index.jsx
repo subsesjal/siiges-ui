@@ -22,9 +22,16 @@ const columns = (handleEdit, handleConsultar) => [
   {
     field: 'id', headerName: 'ID', width: 70, hide: true,
   },
+  { field: 'tipoDocumentoNombre', headerName: 'Tipo de documento', width: 180 },
+  { field: 'tipoSolicitudFolio', headerName: 'Tipo solicitud', width: 150 },
   { field: 'folioSolicitud', headerName: 'Folio de captura', width: 150 },
   { field: 'programaNombre', headerName: 'Plan de estudios', width: 250 },
-  { field: 'tipoSolicitudFolio', headerName: 'Tipo solicitud', width: 150 },
+  {
+    field: 'rvoe',
+    headerName: 'RVOE',
+    width: 180,
+    valueGetter: (params) => params.row.rvoe || 'N/A',
+  },
   { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 150 },
   { field: 'plantel', headerName: 'Plantel', width: 300 },
   {
@@ -40,11 +47,11 @@ const columns = (handleEdit, handleConsultar) => [
         </Tooltip>
         {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA'
           || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (
-          <Tooltip title="Editar" placement="top">
-            <IconButton onClick={() => handleEdit(params.row.id)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Editar" placement="top">
+              <IconButton onClick={() => handleEdit(params.row.id)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
         )}
       </>
     ),
@@ -94,6 +101,8 @@ function FoliosTable({
           || solicitud.plantel?.institucion?.nombre
           || 'Sin nombre',
         tipoSolicitudFolio: tipoSolicitudNombre,
+        tipoDocumentoNombre: solicitud.tipoDocumento?.nombre || '',
+        rvoe: solicitud.programa?.acuerdoRvoe || '',
       };
     });
 
