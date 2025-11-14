@@ -7,7 +7,6 @@ export default function CargaMaterias({
   form, filesData, setFilesData, setNextDisabled,
 }) {
   const { setNoti } = useContext(Context);
-  console.log(form.tipoTramiteId);
 
   const handleFileChange = async (files, name) => {
     try {
