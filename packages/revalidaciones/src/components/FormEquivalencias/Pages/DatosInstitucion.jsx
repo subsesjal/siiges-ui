@@ -15,7 +15,6 @@ export default function DatosInstitucion({
   setNextDisabled,
   setCalificacionesReglas,
 }) {
-  const [setTipoInstituciones] = useState([]);
   const [grados, setGrados] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
   const [rvoes, setRvoes] = useState([]);
@@ -28,10 +27,6 @@ export default function DatosInstitucion({
   const carrera = form.interesado?.institucionDestino?.nombreCarrera || '';
 
   useEffect(() => {
-    fetchData(
-      `${domain}/api/v1/public/instituciones/tipoInstituciones`,
-      setTipoInstituciones,
-    );
     fetchData(
       `${domain}/api/v1/public/niveles/`,
       setGrados,
