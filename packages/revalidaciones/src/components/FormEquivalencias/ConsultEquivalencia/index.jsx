@@ -145,7 +145,7 @@ export default function ConsultEquivalencia({
           name="observaciones"
           multiline
           rows={4}
-          value={observaciones?.observaciones || ''}
+          value={observaciones?.observaciones || form.observaciones || ''}
           onChange={handleOnChange}
           disabled={isObservacionesDisabled}
         />
