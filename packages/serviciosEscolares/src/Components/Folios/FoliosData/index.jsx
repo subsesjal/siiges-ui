@@ -179,6 +179,7 @@ export default function FoliosData({ type }) {
   const [alumnoType, setAlumnoType] = useState('create');
   const [alumnosData, setAlumnosData] = useState({});
   const [alumnoResponse, setAlumnoResponse] = useState(true);
+  const [solicitudFolioCreatedAt, setSolicitudFolioCreatedAt] = useState(null);
   const [formData, setFormData] = useState({
     folioPago: '',
     tipoDocumentoId: '',
@@ -232,6 +233,7 @@ export default function FoliosData({ type }) {
         }
         const { data } = response;
 
+        setSolicitudFolioCreatedAt(data.createdAt);
         if (type === 'edit') {
           setFormData({
             folioPago: data.folioPago,
@@ -600,6 +602,7 @@ export default function FoliosData({ type }) {
           rowData={rowData}
           programaId={formData.programaId}
           setAlumnoResponse={setAlumnoResponse}
+          fechaExpedicion={solicitudFolioCreatedAt}
           disabled={disabled}
         />
       ) : (
@@ -611,6 +614,7 @@ export default function FoliosData({ type }) {
           programaId={formData.programaId}
           rowData={rowData}
           setAlumnoResponse={setAlumnoResponse}
+          fechaElaboracion={solicitudFolioCreatedAt}
           disabled={disabled}
         />
       )}

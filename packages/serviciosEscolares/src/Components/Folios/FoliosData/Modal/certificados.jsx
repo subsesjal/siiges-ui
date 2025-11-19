@@ -14,9 +14,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-function getFechaElaboracionAuto() {
-  const fecha = new Date();
-  fecha.setDate(fecha.getDate() - 1);
+function getFechaElaboracionAuto(FechaElaboracion) {
+  const fecha = new Date(FechaElaboracion);
 
   const dia = fecha.getDay();
   if (dia === 6) {
@@ -39,6 +38,7 @@ export default function ModalCertificado({
   setAlumnoResponse,
   rowData,
   disabled,
+  fechaElaboracion,
 }) {
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
@@ -49,7 +49,7 @@ export default function ModalCertificado({
   useEffect(() => {
     if (open && type === 'create') {
       setForm({
-        fechaElaboracion: getFechaElaboracionAuto(),
+        fechaElaboracion: getFechaElaboracionAuto(fechaElaboracion),
       });
     }
   }, [open, type]);
@@ -72,7 +72,7 @@ export default function ModalCertificado({
       setAlumnoId(rowData.alumnoId);
     } else {
       setForm({
-        fechaElaboracion: getFechaElaboracionAuto(),
+        fechaElaboracion: getFechaElaboracionAuto(fechaElaboracion),
       });
       setAlumno(null);
       setAlumnoId(null);
@@ -203,7 +203,7 @@ export default function ModalCertificado({
             id="fechaElaboracion"
             name="fechaElaboracion"
             type="datetime"
-            value={form.fechaElaboracion || ''}
+            value={getFechaElaboracionAuto(fechaElaboracion) || ''}
             onChange={handleChange}
             required
             disabled
@@ -248,6 +248,7 @@ ModalCertificado.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
+  fechaElaboracion: PropTypes.string.isRequired,
   rowData: PropTypes.shape({
     alumno: PropTypes.shape({
       id: PropTypes.number,
