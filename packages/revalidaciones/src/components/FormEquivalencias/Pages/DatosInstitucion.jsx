@@ -23,8 +23,15 @@ export default function DatosInstitucion({
   const [rvoeError, setRvoeError] = useState('');
 
   const tipoInstitucionId = form.interesado?.institucionDestino?.tipoInstitucionId || '';
-  const institucionId = form.interesado?.institucionDestino?.institucionId || '';
   const carrera = form.interesado?.institucionDestino?.nombreCarrera || '';
+  const institucionId = form.interesado?.institucionDestino?.institucionId
+    || form.interesado?.institucionDestino?.institucionDestinoPrograma
+      ?.programa?.plantel?.institucionId
+    || '';
+  const programaId = form.interesado?.institucionDestino?.programaId
+    || form.interesado?.institucionDestino?.institucionDestinoPrograma
+      ?.programaId
+    || '';
 
   useEffect(() => {
     fetchData(
@@ -356,7 +363,7 @@ export default function DatosInstitucion({
               title="RVOE"
               options={rvoesList || []}
               name="programaId"
-              value={form.interesado?.institucionDestino?.programaId || ''}
+              value={programaId}
               onChange={handleRvoeChange}
               errorMessage={rvoeError}
               disabled={disabled}
@@ -400,6 +407,10 @@ DatosInstitucion.propTypes = {
           PropTypes.number,
         ]),
         institucionDestinoPrograma: PropTypes.shape({
+          institucionDestinoId: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+          ]),
           programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
           programa: PropTypes.shape({
             nombre: PropTypes.string,
