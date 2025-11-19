@@ -42,8 +42,8 @@ const fundamentoLegal = [
   { id: 5, nombre: 'NO APLICA' },
 ];
 
-function getFechaExpedicionAuto() {
-  const fecha = new Date();
+function getFechaExpedicionAuto(fechaExpedicion) {
+  const fecha = new Date(fechaExpedicion);
   const dia = fecha.getDay();
 
   if (dia === 6) {
@@ -63,6 +63,7 @@ export default function ModalTitulo({
   rowData,
   programaId,
   setAlumnoResponse,
+  fechaExpedicion,
   disabled,
 }) {
   const [position, setPosition] = useState('first');
@@ -82,7 +83,7 @@ export default function ModalTitulo({
       setAlumnoId(rowData.alumnoId);
     } else {
       setForm({
-        fechaExpedicion: getFechaExpedicionAuto(),
+        fechaExpedicion: getFechaExpedicionAuto(fechaExpedicion),
       });
       setAlumno();
       setAlumnoId();
@@ -268,7 +269,7 @@ export default function ModalTitulo({
                 label="Fecha de expedición de título"
                 id="fechaExpedicion"
                 name="fechaExpedicion"
-                value={form.fechaExpedicion || ''}
+                value={getFechaExpedicionAuto(fechaExpedicion) || ''}
                 onChange={handleChange}
                 disabled
               />
@@ -348,6 +349,7 @@ ModalTitulo.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
+  fechaExpedicion: PropTypes.string.isRequired,
   rowData: PropTypes.shape({
     alumno: PropTypes.shape({
       id: PropTypes.number,
