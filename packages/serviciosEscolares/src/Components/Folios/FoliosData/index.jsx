@@ -614,6 +614,7 @@ export default function FoliosData({ type }) {
           programaId={formData.programaId}
           rowData={rowData}
           setAlumnoResponse={setAlumnoResponse}
+          fechaElaboracion={solicitudFolioCreatedAt}
           disabled={disabled}
         />
       )}
