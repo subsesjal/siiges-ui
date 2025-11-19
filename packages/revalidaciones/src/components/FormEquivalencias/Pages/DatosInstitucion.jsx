@@ -382,6 +382,7 @@ export default function DatosInstitucion({
 DatosInstitucion.defaultProps = {
   handleOnChange: () => {},
   disabled: false,
+  setNextDisabled: () => {},
 };
 
 DatosInstitucion.propTypes = {
@@ -433,6 +434,6 @@ DatosInstitucion.propTypes = {
     }),
   ).isRequired,
   disabled: PropTypes.bool,
-  setNextDisabled: PropTypes.func.isRequired,
+  setNextDisabled: PropTypes.func,
   setCalificacionesReglas: PropTypes.func.isRequired,
 };
