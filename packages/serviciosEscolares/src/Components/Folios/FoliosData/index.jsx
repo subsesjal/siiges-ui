@@ -246,9 +246,9 @@ export default function FoliosData({ type }) {
           setEtiquetas({
             tipoDocumento: data.tipoDocumento?.nombre,
             tipoSolicitudFolio: data.tipoSolicitudFolio?.nombre,
-            acuerdoRvoe: data.programa.acuerdoRvoe,
-            planEstudios: data.programa.nombre,
-            gradoAcademico: data.programa.nivelId,
+            acuerdoRvoe: data.programa?.acuerdoRvoe || '',
+            planEstudios: data.programa?.nombre || '',
+            gradoAcademico: data.programa?.nivelId || '',
             institucion: data.programa?.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
             modalidades: data.programa?.modalidadId,
