@@ -65,17 +65,17 @@ export default function Folios() {
           const { data } = response;
           setSolicitudFolioCreatedAt(data.createdAt);
           setEtiquetas({
-            tipoDocumento: data.tipoDocumento.nombre,
-            tipoSolicitudFolio: data.tipoSolicitudFolio.nombre,
-            acuerdoRvoe: data.programa.acuerdoRvoe,
-            planEstudios: data.programa.nombre,
-            gradoAcademico: data.programa.nivelId,
+            tipoDocumento: data.tipoDocumento?.nombre || '',
+            tipoSolicitudFolio: data.tipoSolicitudFolio?.nombre || '',
+            acuerdoRvoe: data.programa?.acuerdoRvoe || '',
+            planEstudios: data.programa?.nombre || '',
+            gradoAcademico: data.programa?.nivelId || '',
             nombreAlumno: data.alumno ? data.alumno.nombre : '',
             matriculaAlumno: data.alumno ? data.alumno.matricula : '',
-            institucion: data.programa?.plantel?.institucion?.nombre,
-            claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
-            modalidades: data.programa?.modalidadId,
-            periodos: data.programa?.cicloId,
+            institucion: data.programa?.plantel?.institucion?.nombre || '',
+            claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo || '',
+            modalidades: data.programa?.modalidadId || '',
+            periodos: data.programa?.cicloId || '',
           });
           setEstatus(data.estatusSolicitudFolioId);
           setTipoDocumento(data.tipoDocumentoId);
