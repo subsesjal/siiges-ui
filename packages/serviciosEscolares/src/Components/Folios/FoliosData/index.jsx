@@ -241,7 +241,7 @@ export default function FoliosData({ type }) {
             tipoSolicitudFolioId: data.tipoSolicitudFolioId,
             estatusSolicitudFolioId: data.estatusSolicitudFolioId,
             programaId: data.programaId,
-            fecha: dayjs(data.fecha),
+            fecha: dayjs(data.createdAt),
           });
           setEtiquetas({
             tipoDocumento: data.tipoDocumento?.nombre,
