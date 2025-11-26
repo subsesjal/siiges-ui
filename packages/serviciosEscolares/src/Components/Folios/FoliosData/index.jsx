@@ -417,6 +417,22 @@ export default function FoliosData({ type }) {
       if (response.statusCode === 200 || response.statusCode === 201) {
         setId(response.data.id);
         setIsSaved(true);
+        const solicitud = await getData({
+          endpoint: `/solicitudesFolios/${response.data.id}`,
+        });
+
+        if (solicitud?.data?.createdAt) {
+          setSolicitudFolioCreatedAt(solicitud.data.createdAt);
+
+          setFormData((prev) => ({
+            ...prev,
+            fecha: dayjs(solicitud.data.createdAt),
+          }));
+          localStorage.setItem(
+            `solicitud_createdAt_${response.data.id}`,
+            solicitud.data.createdAt,
+          );
+        }
         setNoti({
           open: true,
           message:
