@@ -15,6 +15,7 @@ import {
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import GradingIcon from '@mui/icons-material/Grading';
 import SendIcon from '@mui/icons-material/Send';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/router';
 
 const tipoConsulta = [
@@ -31,7 +32,13 @@ const ESTATUS_MAP = {
   6: 'Cancelada',
 };
 
-const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
+const getColumns = (
+  handleConsultar,
+  handleRevisar,
+  handleProcesar,
+  setRowToDelete,
+  setOpenDelete,
+) => [
   { field: 'id', headerName: 'ID', hide: true },
   { field: 'folioSolicitud', headerName: 'Folio', width: 200 },
   { field: 'estatusSolicitud', headerName: 'Estatus', width: 150 },
@@ -40,7 +47,7 @@ const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
   {
     field: 'actions',
     headerName: 'Acciones',
-    width: 100,
+    width: 170,
     renderCell: (params) => (
       <>
         <Tooltip title="Consultar" placement="top">
@@ -48,6 +55,7 @@ const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
             <VisibilityOutlinedIcon />
           </IconButton>
         </Tooltip>
+
         {params.row.estatusSolicitudRevEquivId < 3 && (
           <Tooltip title="Revisar" placement="top">
             <IconButton onClick={() => handleRevisar(params.row)}>
@@ -55,10 +63,25 @@ const getColumns = (handleConsultar, handleRevisar, handleProcesar) => [
             </IconButton>
           </Tooltip>
         )}
+
         {params.row.estatusSolicitudRevEquivId === 3 && (
           <Tooltip title="Procesar" placement="top">
             <IconButton onClick={() => handleProcesar(params.row)}>
               <SendIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+
+        {/* BOTÓN DESECHAR */}
+        {params.row.estatusSolicitudRevEquivId !== 6 && (
+          <Tooltip title="Desechar solicitud" placement="top">
+            <IconButton
+              onClick={() => {
+                setRowToDelete(params.row);
+                setOpenDelete(true);
+              }}
+            >
+              <DeleteIcon />
             </IconButton>
           </Tooltip>
         )}
@@ -73,11 +96,17 @@ export default function RevalidacionEquivalencias() {
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(false);
+
+  // Estado de eliminación
+  const [openDelete, setOpenDelete] = useState(false);
+  const [rowToDelete, setRowToDelete] = useState(null);
+
   const [count, setCount] = useState({
     recibidas: 0,
     proceso: 0,
     expedidas: 0,
   });
+
   const router = useRouter();
 
   const mapApiDataToRows = (apiData) => apiData.map((item) => ({
@@ -88,6 +117,7 @@ export default function RevalidacionEquivalencias() {
       item?.interesado?.persona?.apellidoPaterno
     } ${item?.interesado?.persona?.apellidoMaterno || ''}`,
     fecha: new Date(item.createdAt).toLocaleDateString(),
+    tipoTramite: item?.tipoTramite?.nombre || 'Trámite',
   }));
 
   useEffect(() => {
@@ -99,6 +129,7 @@ export default function RevalidacionEquivalencias() {
         : '/solicitudesRevEquiv?tipoTramiteId=1&tipoTramiteId=2&tipoTramiteId=5';
 
       const response = await getData({ endpoint });
+
       if (response.statusCode === 200) {
         const data = response.data || [];
         const mappedData = mapApiDataToRows(data);
@@ -106,13 +137,9 @@ export default function RevalidacionEquivalencias() {
 
         setCount({
           recibidas: data.length,
-          proceso: data.filter((item) => item.estatusSolicitudRevEquivId === 1)
-            .length,
-          expedidas: data.filter(
-            (item) => item.estatusSolicitudRevEquivId === 2,
-          ).length,
+          proceso: data.filter((i) => i.estatusSolicitudRevEquivId === 1).length,
+          expedidas: data.filter((i) => i.estatusSolicitudRevEquivId === 2).length,
         });
-        setLoading(false);
       } else {
         setNoti({
           open: true,
@@ -120,13 +147,10 @@ export default function RevalidacionEquivalencias() {
           type: 'warning',
         });
         setRows([]);
-        setCount({
-          recibidas: 0,
-          proceso: 0,
-          expedidas: 0,
-        });
-        setLoading(false);
+        setCount({ recibidas: 0, proceso: 0, expedidas: 0 });
       }
+
+      setLoading(false);
     };
 
     fetchData();
@@ -138,25 +162,26 @@ export default function RevalidacionEquivalencias() {
   };
 
   const handleConsultar = (rowData) => {
-    if (!rowData || !rowData.id) return;
+    if (!rowData?.id) return;
 
-    const basePath = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
+    const base = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
     const route = tipoConsultaId === 1
-      ? `${basePath}/Revalidacion/consultar`
-      : `${basePath}/Equivalencias/consultar`;
+      ? `${base}/Revalidacion/consultar`
+      : `${base}/Equivalencias/consultar`;
+
     router.push(route);
   };
 
   const handleRevisar = (rowData) => {
-    if (!rowData || !rowData.id) return;
+    if (!rowData?.id) return;
 
     setId(rowData.id);
 
     if (rowData.estatusSolicitudRevEquivId === 2) {
-      const basePath = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
+      const base = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
       const route = tipoConsultaId === 1
-        ? `${basePath}/Revalidacion/revisar`
-        : `${basePath}/Equivalencias/revisar`;
+        ? `${base}/Revalidacion/revisar`
+        : `${base}/Equivalencias/revisar`;
 
       router.push(route);
     } else {
@@ -166,6 +191,7 @@ export default function RevalidacionEquivalencias() {
 
   const handleRevisarSuccess = async () => {
     if (!id) return;
+
     setOpen(false);
     setLoading(true);
 
@@ -182,21 +208,20 @@ export default function RevalidacionEquivalencias() {
           type: 'success',
         });
 
-        const basePath = `/serviciosEscolares/revalidacionEquivalencias/${id}`;
+        const base = `/serviciosEscolares/revalidacionEquivalencias/${id}`;
         const route = tipoConsultaId === 1
-          ? `${basePath}/Revalidacion/revisar`
-          : `${basePath}/Equivalencias/revisar`;
+          ? `${base}/Revalidacion/revisar`
+          : `${base}/Equivalencias/revisar`;
 
         router.push(route);
       } else {
         setNoti({
           open: true,
-          message:
-            response.errorMessage || '¡Error al actualizar la solicitud!',
+          message: 'Error al actualizar la solicitud.',
           type: 'error',
         });
       }
-    } catch (error) {
+    } catch {
       setNoti({
         open: true,
         message: '¡Error al procesar la solicitud!',
@@ -207,18 +232,65 @@ export default function RevalidacionEquivalencias() {
     }
   };
 
-  const handleProcesar = (rowData) => {
-    if (!rowData || !rowData.id) return;
+  // CONFIRMAR DESECHAR
+  const confirmEliminar = async () => {
+    if (!rowToDelete?.id) return;
 
-    const basePath = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
+    setOpenDelete(false);
+    setLoading(true);
+
+    try {
+      const response = await updateRecord({
+        endpoint: `/solicitudesRevEquiv/${rowToDelete.id}`,
+        data: { estatusSolicitudRevEquivId: 6 },
+      });
+
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        setNoti({
+          open: true,
+          message: '¡Solicitud desechada correctamente!',
+          type: 'success',
+        });
+
+        setRows((prev) => prev.map((r) => (r.id === rowToDelete.id
+          ? {
+            ...r,
+            estatusSolicitudRevEquivId: 6,
+            estatusSolicitud: 'Cancelada',
+          }
+          : r)));
+      } else {
+        setNoti({
+          open: true,
+          message: 'Error al desechar la solicitud.',
+          type: 'error',
+        });
+      }
+    } catch {
+      setNoti({
+        open: true,
+        message: 'Error al procesar la cancelación.',
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleProcesar = (rowData) => {
+    if (!rowData?.id) return;
+
+    const base = `/serviciosEscolares/revalidacionEquivalencias/${rowData.id}`;
     const route = tipoConsultaId === 1
-      ? `${basePath}/Revalidacion/procesar`
-      : `${basePath}/Equivalencias/procesar`;
+      ? `${base}/Revalidacion/procesar`
+      : `${base}/Equivalencias/procesar`;
+
     router.push(route);
   };
 
   return (
     <Grid container spacing={3}>
+      {/* SELECT */}
       <Grid item xs={12}>
         <Select
           name="tipoConsulta"
@@ -227,72 +299,106 @@ export default function RevalidacionEquivalencias() {
           onChange={handleTipoConsultaChange}
         />
       </Grid>
+
       {tipoConsultaId && (
         <>
+          {/* ESTADÍSTICAS */}
           <Grid item xs={12}>
             <Paper sx={{ p: 1, height: 90 }} elevation={3}>
               <Grid container>
                 <Grid item xs={12}>
                   <Typography variant="h6">
-                    Estadisticas de
+                    Estadísticas de
                     {' '}
                     {tipoConsultaId === 1 ? 'Revalidaciones' : 'Equivalencias'}
                   </Typography>
                 </Grid>
+
                 <Grid item xs={12}>
                   <Divider sx={{ mb: 1 }} />
                 </Grid>
+
                 <Grid item xs={4}>
-                  <Typography variant="h7">
+                  <Typography>
                     Recibidas:
-                    {' '}
                     {count.recibidas}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography variant="h7">
+                  <Typography>
                     En proceso:
-                    {' '}
                     {count.proceso}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography variant="h7">
+                  <Typography>
                     Expedidas:
-                    {' '}
                     {count.expedidas}
                   </Typography>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
+
+          {/* TABLA */}
           <Grid item xs={12}>
             <DataTable
-              title={tipoConsultaId === 1 ? 'Revalidaciones' : 'Equivalencias'}
+              title={
+                tipoConsultaId === 1 ? 'Revalidaciones' : 'Equivalencias'
+              }
               rows={rows}
               columns={getColumns(
                 handleConsultar,
                 handleRevisar,
                 handleProcesar,
+                setRowToDelete,
+                setOpenDelete,
               )}
             />
           </Grid>
         </>
       )}
+
+      {/* MODAL REVISAR */}
       <DefaultModal
         title="Confirmar envío a revisión"
         open={open}
         setOpen={setOpen}
       >
-        Estás a punto de enviar esta solicitud al proceso de revisión. ¿Deseas
-        continuar?
+        Estás a punto de enviar esta solicitud al proceso de revisión.
+        ¿Deseas continuar?
         <ButtonsForm
           confirm={handleRevisarSuccess}
           confirmText="Continuar"
-          cancel={() => {
-            setOpen(false);
-          }}
+          cancel={() => setOpen(false)}
           cancelText="Regresar"
+        />
+      </DefaultModal>
+
+      {/* MODAL DESECHAR */}
+      <DefaultModal
+        title="Desechar trámite"
+        open={openDelete}
+        setOpen={setOpenDelete}
+      >
+        {rowToDelete && (
+          <>
+            ¿Seguro que deseas desechar la solicitud de
+            {' '}
+            <strong>{rowToDelete.tipoTramite}</strong>
+            {' '}
+            con folio
+            {' '}
+            <strong>{rowToDelete.folioSolicitud}</strong>
+            ?
+          </>
+        )}
+
+        <ButtonsForm
+          confirm={confirmEliminar}
+          confirmText="Desechar"
+          cancel={() => setOpenDelete(false)}
+          cancelText="Cancelar"
         />
       </DefaultModal>
     </Grid>
