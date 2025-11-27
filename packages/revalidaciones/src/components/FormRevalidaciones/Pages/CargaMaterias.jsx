@@ -48,6 +48,7 @@ export default function CargaMaterias({ filesData, setFilesData }) {
             url={formatUrl(doc.key)}
             onChange={(files) => handleFileChange(files, doc.key)}
             isUploaded={isFileUploaded(doc.key)}
+            fileType={['application/pdf']}
           />
         </Grid>
       ))}

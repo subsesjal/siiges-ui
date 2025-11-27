@@ -1,9 +1,11 @@
 import { Grid } from '@mui/material';
 import { InputFile, fileToFormData } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-export default function CargaMaterias({ form, filesData, setFilesData }) {
+export default function CargaMaterias({
+  form, filesData, setFilesData, setNextDisabled,
+}) {
   const handleFileChange = async (files, name) => {
     try {
       const formData = await fileToFormData(files[0]);
@@ -23,6 +25,30 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
 
   const isFileUploaded = (fileKey) => !!filesData[fileKey]?.formData;
 
+  useEffect(() => {
+    const requiredFiles = [
+      'ARCHIVO_CURP',
+      'IDENTIFICACION_OFICIAL',
+      'ARCHIVO_NACIMIENTO',
+      'COMPROBANTE_PAGO_TRAMITE',
+    ];
+
+    if (form.tipoTramiteId === 3) {
+      requiredFiles.push('RESOLUCION');
+    } else {
+      requiredFiles.push(
+        'ARCHIVO_CERTIFICADO',
+        'ANTECEDENTE_ACADEMICO',
+        'PROGRAMA_AUTORIZADO',
+        'PROPUESTA',
+      );
+    }
+
+    const allUploaded = requiredFiles.every((key) => isFileUploaded(key));
+
+    setNextDisabled(!allUploaded);
+  }, [filesData, form.tipoTramiteId]);
+
   return (
     <Grid container spacing={1}>
       <Grid item xs={6}>
@@ -34,6 +60,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           url={formatUrl('ARCHIVO_CURP')}
           onChange={(files) => handleFileChange(files, 'ARCHIVO_CURP')}
           isUploaded={isFileUploaded('ARCHIVO_CURP')}
+          fileType={['application/pdf']}
         />
       </Grid>
       <Grid item xs={6}>
@@ -45,6 +72,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           url={formatUrl('IDENTIFICACION_OFICIAL')}
           onChange={(files) => handleFileChange(files, 'IDENTIFICACION_OFICIAL')}
           isUploaded={isFileUploaded('IDENTIFICACION_OFICIAL')}
+          fileType={['application/pdf']}
         />
       </Grid>
       <Grid item xs={6}>
@@ -56,6 +84,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           url={formatUrl('ARCHIVO_NACIMIENTO')}
           onChange={(files) => handleFileChange(files, 'ARCHIVO_NACIMIENTO')}
           isUploaded={isFileUploaded('ARCHIVO_NACIMIENTO')}
+          fileType={['application/pdf']}
         />
       </Grid>
       {form.tipoTramiteId === 3 && (
@@ -68,6 +97,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           url={formatUrl('RESOLUCION')}
           onChange={(files) => handleFileChange(files, 'RESOLUCION')}
           isUploaded={isFileUploaded('RESOLUCION')}
+          fileType={['application/pdf']}
         />
       </Grid>
       )}
@@ -82,6 +112,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
             url={formatUrl('ARCHIVO_CERTIFICADO')}
             onChange={(files) => handleFileChange(files, 'ARCHIVO_CERTIFICADO')}
             isUploaded={isFileUploaded('ARCHIVO_CERTIFICADO')}
+            fileType={['application/pdf']}
           />
         </Grid>
         <Grid item xs={6}>
@@ -93,6 +124,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
             url={formatUrl('ANTECEDENTE_ACADEMICO')}
             onChange={(files) => handleFileChange(files, 'ANTECEDENTE_ACADEMICO')}
             isUploaded={isFileUploaded('ANTECEDENTE_ACADEMICO')}
+            fileType={['application/pdf']}
           />
         </Grid>
         <Grid item xs={6}>
@@ -104,6 +136,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
             url={formatUrl('PROGRAMA_AUTORIZADO')}
             onChange={(files) => handleFileChange(files, 'PROGRAMA_AUTORIZADO')}
             isUploaded={isFileUploaded('PROGRAMA_AUTORIZADO')}
+            fileType={['application/pdf']}
           />
         </Grid>
         <Grid item xs={6}>
@@ -115,6 +148,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
             url={formatUrl('PROPUESTA')}
             onChange={(files) => handleFileChange(files, 'PROPUESTA')}
             isUploaded={isFileUploaded('PROPUESTA')}
+            fileType={['application/pdf']}
           />
         </Grid>
       </>
@@ -128,6 +162,7 @@ export default function CargaMaterias({ form, filesData, setFilesData }) {
           url={formatUrl('COMPROBANTE_PAGO_TRAMITE')}
           onChange={(files) => handleFileChange(files, 'COMPROBANTE_PAGO_TRAMITE')}
           isUploaded={isFileUploaded('COMPROBANTE_PAGO_TRAMITE')}
+          fileType={['application/pdf']}
         />
       </Grid>
     </Grid>
@@ -174,5 +209,6 @@ CargaMaterias.propTypes = {
     }),
   }).isRequired,
   setFilesData: PropTypes.func.isRequired,
+  setNextDisabled: PropTypes.func.isRequired,
   form: PropTypes.shape({ tipoTramiteId: PropTypes.number }).isRequired,
 };
