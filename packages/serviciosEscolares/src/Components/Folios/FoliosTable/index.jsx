@@ -65,6 +65,10 @@ function FoliosTable({
   const { session } = useContext(Context);
 
   const showCrearFolio = process.env.NEXT_PUBLIC_SHOW_CREAR_FOLIO !== 'false';
+  const filtrosCompletos = tipoDocumento
+    && tipoSolicitud
+    && programa
+    && plantel;
 
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
@@ -113,6 +117,7 @@ function FoliosTable({
           buttonAdd={showCrearFolio}
           buttonClick={() => navigateTo(null, 'create')}
           buttonText="Agregar Solicitud"
+          buttonDisabled={!filtrosCompletos}
           title="Solicitudes de Títulos"
           rows={formattedSolicitudes}
           columns={columns(handleEdit, handleConsultar)}

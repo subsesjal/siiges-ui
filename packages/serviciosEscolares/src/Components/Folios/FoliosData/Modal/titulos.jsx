@@ -15,6 +15,11 @@ import {
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const modalidadTitulacion = [
   { id: 1, nombre: 'Por Tesis' },
@@ -43,16 +48,17 @@ const fundamentoLegal = [
 ];
 
 function getFechaExpedicionAuto(fechaExpedicion) {
-  const fecha = new Date(fechaExpedicion);
-  const dia = fecha.getDay();
+  let fecha = dayjs.tz(fechaExpedicion, 'America/Mexico_City');
 
-  if (dia === 6) {
-    fecha.setDate(fecha.getDate() + 2);
-  } else if (dia === 0) {
-    fecha.setDate(fecha.getDate() + 1);
+  const dia = fecha.day();
+
+  if (dia === 6) { // Sábado
+    fecha = fecha.add(2, 'day');
+  } else if (dia === 0) { // Domingo
+    fecha = fecha.add(1, 'day');
   }
 
-  return dayjs(fecha).format('YYYY-MM-DD');
+  return fecha.format('YYYY-MM-DD');
 }
 
 export default function ModalTitulo({

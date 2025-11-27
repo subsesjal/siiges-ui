@@ -228,12 +228,11 @@ export default function FoliosData({ type }) {
           response = await getData({
             endpoint: `/solicitudesFolios/${editId}`,
           });
+          setSolicitudFolioCreatedAt(response.data.createdAt);
         } else {
           response = await getData({ endpoint: `/programas/${programa}` });
         }
         const { data } = response;
-
-        setSolicitudFolioCreatedAt(data.createdAt);
         if (type === 'edit') {
           setFormData({
             folioPago: data.folioPago,
@@ -241,14 +240,14 @@ export default function FoliosData({ type }) {
             tipoSolicitudFolioId: data.tipoSolicitudFolioId,
             estatusSolicitudFolioId: data.estatusSolicitudFolioId,
             programaId: data.programaId,
-            fecha: dayjs(data.fecha),
+            fecha: dayjs(data.createdAt),
           });
           setEtiquetas({
             tipoDocumento: data.tipoDocumento?.nombre,
             tipoSolicitudFolio: data.tipoSolicitudFolio?.nombre,
-            acuerdoRvoe: data.programa.acuerdoRvoe,
-            planEstudios: data.programa.nombre,
-            gradoAcademico: data.programa.nivelId,
+            acuerdoRvoe: data.programa?.acuerdoRvoe || '',
+            planEstudios: data.programa?.nombre || '',
+            gradoAcademico: data.programa?.nivelId || '',
             institucion: data.programa?.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
             modalidades: data.programa?.modalidadId,
@@ -416,6 +415,7 @@ export default function FoliosData({ type }) {
 
       if (response.statusCode === 200 || response.statusCode === 201) {
         setId(response.data.id);
+        setSolicitudFolioCreatedAt(response.data.createdAt);
         setIsSaved(true);
         setNoti({
           open: true,

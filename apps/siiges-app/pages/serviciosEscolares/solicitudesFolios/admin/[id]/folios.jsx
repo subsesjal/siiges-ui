@@ -45,6 +45,7 @@ export default function Folios() {
   const [rowData, setRowData] = useState({});
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [solicitudFolioCreatedAt, setSolicitudFolioCreatedAt] = useState(null);
   const [tipoDocumento, setTipoDocumento] = useState();
   const [formData, setFormData] = useState({
     folioPago: '',
@@ -62,18 +63,19 @@ export default function Folios() {
             endpoint: `/solicitudesFolios/${id}`,
           });
           const { data } = response;
+          setSolicitudFolioCreatedAt(data.createdAt);
           setEtiquetas({
-            tipoDocumento: data.tipoDocumento.nombre,
-            tipoSolicitudFolio: data.tipoSolicitudFolio.nombre,
-            acuerdoRvoe: data.programa.acuerdoRvoe,
-            planEstudios: data.programa.nombre,
-            gradoAcademico: data.programa.nivelId,
+            tipoDocumento: data.tipoDocumento?.nombre || '',
+            tipoSolicitudFolio: data.tipoSolicitudFolio?.nombre || '',
+            acuerdoRvoe: data.programa?.acuerdoRvoe || '',
+            planEstudios: data.programa?.nombre || '',
+            gradoAcademico: data.programa?.nivelId || '',
             nombreAlumno: data.alumno ? data.alumno.nombre : '',
             matriculaAlumno: data.alumno ? data.alumno.matricula : '',
-            institucion: data.programa?.plantel?.institucion?.nombre,
-            claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
-            modalidades: data.programa?.modalidadId,
-            periodos: data.programa?.cicloId,
+            institucion: data.programa?.plantel?.institucion?.nombre || '',
+            claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo || '',
+            modalidades: data.programa?.modalidadId || '',
+            periodos: data.programa?.cicloId || '',
           });
           setEstatus(data.estatusSolicitudFolioId);
           setTipoDocumento(data.tipoDocumentoId);
@@ -397,6 +399,7 @@ export default function Folios() {
                 id={id}
                 rowData={rowData}
                 setAlumnoResponse={() => { }}
+                fechaExpedicion={solicitudFolioCreatedAt}
                 disabled={disabled}
               />
             ) : (
@@ -408,6 +411,7 @@ export default function Folios() {
                 rowData={rowData}
                 title="Agregar Alumno"
                 setAlumnoResponse={() => { }}
+                fechaElaboracion={solicitudFolioCreatedAt}
                 disabled={disabled}
               />
             )}
