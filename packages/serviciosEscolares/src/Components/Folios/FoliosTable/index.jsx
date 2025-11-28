@@ -33,7 +33,7 @@ const columns = (handleEdit, handleConsultar) => [
     valueGetter: (params) => params.row.rvoe || 'N/A',
   },
   { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 150 },
-  { field: 'plantel', headerName: 'Plantel', width: 300 },
+  { field: 'plantelNombre', headerName: 'Plantel', width: 300 },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -100,10 +100,9 @@ function FoliosTable({
         ...solicitud,
         programaNombre: solicitud.programa.nombre,
         estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio.nombre,
-        plantel:
-          solicitud.programa?.plantel?.institucion?.nombre
-          || solicitud.plantel?.institucion?.nombre
-          || 'Sin nombre',
+        plantelNombre: solicitud.programa?.plantel
+          ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
+          : '',
         tipoSolicitudFolio: tipoSolicitudNombre,
         tipoDocumentoNombre: solicitud.tipoDocumento?.nombre || '',
         rvoe: solicitud.programa?.acuerdoRvoe || '',
