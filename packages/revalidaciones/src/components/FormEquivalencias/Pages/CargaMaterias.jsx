@@ -1,12 +1,16 @@
 import { Grid } from '@mui/material';
-import { Context, InputFile, fileToFormData } from '@siiges-ui/shared';
+import {
+  Context, GetFile, InputFile, fileToFormData,
+} from '@siiges-ui/shared';
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 export default function CargaMaterias({
-  form, filesData, setFilesData, setNextDisabled,
+  form, filesData, setFilesData, setNextDisabled, edit,
 }) {
   const { setNoti } = useContext(Context);
+  console.log(edit);
+  GetFile();
 
   const handleFileChange = async (files, name) => {
     try {
@@ -175,6 +179,11 @@ export default function CargaMaterias({
   );
 }
 
+CargaMaterias.defaultProps = {
+  setNextDisabled: () => {},
+  edit: false,
+};
+
 CargaMaterias.propTypes = {
   filesData: PropTypes.shape({
     CURP: PropTypes.shape({
@@ -215,6 +224,7 @@ CargaMaterias.propTypes = {
     }),
   }).isRequired,
   setFilesData: PropTypes.func.isRequired,
-  setNextDisabled: PropTypes.func.isRequired,
+  setNextDisabled: PropTypes.func,
   form: PropTypes.shape({ tipoTramiteId: PropTypes.number }).isRequired,
+  edit: PropTypes.bool,
 };
