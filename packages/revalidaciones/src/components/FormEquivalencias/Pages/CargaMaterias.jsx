@@ -1,57 +1,12 @@
 import { Grid } from '@mui/material';
-import {
-  Context, GetFile, InputFile, fileToFormData,
-} from '@siiges-ui/shared';
+import { Context, InputFile, fileToFormData } from '@siiges-ui/shared';
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 export default function CargaMaterias({
-  form, filesData, setFilesData, setNextDisabled, edit,
+  form, filesData, setFilesData, setNextDisabled,
 }) {
   const { setNoti } = useContext(Context);
-
-  useEffect(() => {
-    if (!edit) return;
-    if (!form?.id) return;
-
-    const documentos = [
-      'ARCHIVO_CURP',
-      'IDENTIFICACION_OFICIAL',
-      'ARCHIVO_NACIMIENTO',
-      'COMPROBANTE_PAGO_TRAMITE',
-    ];
-
-    if (form.tipoTramiteId === 5) {
-      documentos.push('RESOLUCION');
-    } else {
-      documentos.push(
-        'ARCHIVO_CERTIFICADO',
-        'ANTECEDENTE_ACADEMICO',
-        'PROGRAMA_AUTORIZADO',
-        'PROPUESTA',
-      );
-    }
-
-    documentos.forEach(async (tipoDocumento) => {
-      try {
-        const url = await GetFile({
-          tipoEntidad: 'SOLICITUD_REV_EQUIV',
-          entidadId: form.id,
-          tipoDocumento,
-        });
-
-        setFilesData((prev) => ({
-          ...prev,
-          [tipoDocumento]: {
-            formData: null,
-            url,
-          },
-        }));
-      } catch (err) {
-        console.warn(`No se encontró archivo ${tipoDocumento}`);
-      }
-    });
-  }, [edit, form.id, form.tipoTramiteId]);
 
   const handleFileChange = async (files, name) => {
     try {
@@ -220,11 +175,6 @@ export default function CargaMaterias({
   );
 }
 
-CargaMaterias.defaultProps = {
-  setNextDisabled: () => {},
-  edit: false,
-};
-
 CargaMaterias.propTypes = {
   filesData: PropTypes.shape({
     CURP: PropTypes.shape({
@@ -265,7 +215,6 @@ CargaMaterias.propTypes = {
     }),
   }).isRequired,
   setFilesData: PropTypes.func.isRequired,
-  setNextDisabled: PropTypes.func,
-  form: PropTypes.shape({ id: PropTypes.number, tipoTramiteId: PropTypes.number }).isRequired,
-  edit: PropTypes.bool,
+  setNextDisabled: PropTypes.func.isRequired,
+  form: PropTypes.shape({ tipoTramiteId: PropTypes.number }).isRequired,
 };

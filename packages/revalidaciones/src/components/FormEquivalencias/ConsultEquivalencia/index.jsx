@@ -11,19 +11,16 @@ import DatosInstitucion from '../Pages/DatosInstitucion';
 import CargaMateriasEquivalentes from '../Pages/CargaMateriasEquivalentes';
 import NavigationButtons from '../../../utils/NavigationButtons';
 import ConsultDocumentos from '../Pages/ConsultDocumentos';
-import CargaMaterias from '../Pages/CargaMaterias';
 
 export default function ConsultEquivalencia({
   observaciones,
   handleOnChange,
   setEstatus,
-  edit,
 }) {
   const [currentPosition, setCurrentPosition] = useState(1);
   const router = useRouter();
   const { query } = router;
   const { setNoti, setLoading } = useContext(Context);
-  const [filesData, setFilesData] = useState({});
   const [form, setForm] = useState({});
   const [estados, setEstados] = useState([]);
   const [error, setError] = useState(false);
@@ -88,26 +85,6 @@ export default function ConsultEquivalencia({
     }
   };
 
-  const handleChange = (event, path = []) => {
-    const { name, value } = event.target;
-
-    setForm((prevForm) => {
-      const updateNestedValue = (obj, nestedPath) => {
-        if (nestedPath.length === 0) {
-          return { ...obj, [name]: value };
-        }
-
-        const [firstKey, ...restPath] = nestedPath;
-        return {
-          ...obj,
-          [firstKey]: updateNestedValue(obj[firstKey] || {}, restPath),
-        };
-      };
-
-      return updateNestedValue(prevForm, path);
-    });
-  };
-
   const isObservacionesDisabled = ![2].includes(form.estatusSolicitudRevEquivId);
 
   const renderCurrentPage = () => {
@@ -118,8 +95,7 @@ export default function ConsultEquivalencia({
             tipoSolicitud="equivalencia"
             form={form}
             estados={estados}
-            handleOnChange={handleChange}
-            disabled={!edit}
+            disabled
           />
         );
       case 2:
@@ -127,28 +103,20 @@ export default function ConsultEquivalencia({
           <DatosInstitucion
             form={form}
             estados={estados}
-            handleOnChange={handleChange}
-            disabled={!edit}
+            disabled
           />
         );
       case 3:
-        return edit ? (
-          <CargaMaterias
-            form={form}
-            filesData={filesData}
-            setFilesData={setFilesData}
-            edit={edit}
+        return (
+          <ConsultDocumentos
+            id={query.id}
           />
-        ) : (
-          <ConsultDocumentos id={query.id} />
         );
-
       case 4:
         return (
           <CargaMateriasEquivalentes
             form={form}
-            handleOnChange={handleChange}
-            disabled={!edit}
+            disabled
           />
         );
       default:
@@ -203,7 +171,6 @@ ConsultEquivalencia.propTypes = {
   }),
   handleOnChange: PropTypes.func.isRequired,
   setEstatus: PropTypes.func.isRequired,
-  edit: PropTypes.bool.isRequired,
 };
 
 ConsultEquivalencia.defaultProps = {
