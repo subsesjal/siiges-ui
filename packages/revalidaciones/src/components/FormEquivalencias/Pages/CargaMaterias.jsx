@@ -9,8 +9,49 @@ export default function CargaMaterias({
   form, filesData, setFilesData, setNextDisabled, edit,
 }) {
   const { setNoti } = useContext(Context);
-  console.log(edit);
-  GetFile();
+
+  useEffect(() => {
+    if (!edit) return;
+    if (!form?.id) return;
+
+    const documentos = [
+      'ARCHIVO_CURP',
+      'IDENTIFICACION_OFICIAL',
+      'ARCHIVO_NACIMIENTO',
+      'COMPROBANTE_PAGO_TRAMITE',
+    ];
+
+    if (form.tipoTramiteId === 5) {
+      documentos.push('RESOLUCION');
+    } else {
+      documentos.push(
+        'ARCHIVO_CERTIFICADO',
+        'ANTECEDENTE_ACADEMICO',
+        'PROGRAMA_AUTORIZADO',
+        'PROPUESTA',
+      );
+    }
+
+    documentos.forEach(async (tipoDocumento) => {
+      try {
+        const url = await GetFile({
+          tipoEntidad: 'SOLICITUD_REV_EQUIV',
+          entidadId: form.id,
+          tipoDocumento,
+        });
+
+        setFilesData((prev) => ({
+          ...prev,
+          [tipoDocumento]: {
+            formData: null,
+            url,
+          },
+        }));
+      } catch (err) {
+        console.warn(`No se encontró archivo ${tipoDocumento}`);
+      }
+    });
+  }, [edit, form.id, form.tipoTramiteId]);
 
   const handleFileChange = async (files, name) => {
     try {
@@ -225,6 +266,6 @@ CargaMaterias.propTypes = {
   }).isRequired,
   setFilesData: PropTypes.func.isRequired,
   setNextDisabled: PropTypes.func,
-  form: PropTypes.shape({ tipoTramiteId: PropTypes.number }).isRequired,
+  form: PropTypes.shape({ id: PropTypes.number, tipoTramiteId: PropTypes.number }).isRequired,
   edit: PropTypes.bool,
 };
