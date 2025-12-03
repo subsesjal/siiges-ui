@@ -19,7 +19,7 @@ export default function ButtonTitulacion({
 
   const handleClick = async () => {
     try {
-      const endpoint = `${apiUrl}/api/v1/solicitudesFolios/reporteFolios?fojaInicio=${fojaInicio}&fojaFin=${fojaFin}&libro=${libro}&tipoDocumento=${tipoDocumento}`;
+      const endpoint = `${apiUrl}/api/v1/solicitudesFolios/reporteFolios/csv?fojaInicio=${fojaInicio}&fojaFin=${fojaFin}&libro=${libro}&tipoDocumento=${tipoDocumento}`;
       const token = getToken();
 
       const response = await fetch(endpoint, {
@@ -60,7 +60,7 @@ export default function ButtonTitulacion({
     <ButtonSimple
       onClick={handleClick}
       design="guardar"
-      text="Descargar Reporte"
+      text="Descargar reporte"
     />
   );
 }
