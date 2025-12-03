@@ -2,11 +2,8 @@ import React, {
   useContext, useEffect, useMemo, useState,
 } from 'react';
 import { useRouter } from 'next/router';
-import {
-  Grid, Typography,
-} from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import { getData, Context } from '@siiges-ui/shared';
+import { Grid } from '@mui/material';
+import { getData, Context, DataTable } from '@siiges-ui/shared';
 import useAsignaturas from '@siiges-ui/solicitudes/src/components/utils/getAsignaturas';
 import { grados } from '@siiges-ui/solicitudes/src/components/utils/Mocks/mockAsignaturas';
 import columns from './Mocks/index';
@@ -75,11 +72,9 @@ export default function Asignaturas() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Tabla de asignaturas</Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <div style={{ height: 400, width: '100%', marginTop: 15 }}>
-          <DataGrid
+        <div style={{ width: '100%', marginTop: 15 }}>
+          <DataTable
+            title="Tabla de asignaturas"
             rows={asignaturasList}
             columns={tableColumns}
             pageSize={5}
