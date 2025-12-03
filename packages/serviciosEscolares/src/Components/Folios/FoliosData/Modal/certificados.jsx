@@ -139,7 +139,7 @@ export default function ModalCertificado({
     try {
       const response = await action({ data: formattedForm, endpoint });
 
-      if (response.statusCode === 201) {
+      if (response.statusCode === 201 || response.statusCode === 200) {
         setNoti({
           open: true,
           message: type === 'edit'
