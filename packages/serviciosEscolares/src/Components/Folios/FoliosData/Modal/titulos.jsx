@@ -48,17 +48,15 @@ const fundamentoLegal = [
 ];
 
 function getFechaExpedicionAuto(fechaExpedicion) {
+  const fallback = dayjs().tz('America/Mexico_City').startOf('day');
+  if (!fechaExpedicion) return fallback.toISOString();
   let fecha = dayjs.tz(fechaExpedicion, 'America/Mexico_City');
-
+  if (!fecha.isValid()) return fallback.toISOString();
   const dia = fecha.day();
+  if (dia === 6) fecha = fecha.add(2, 'day');// sábado
+  else if (dia === 0) fecha = fecha.add(1, 'day');// domingo
 
-  if (dia === 6) { // Sábado
-    fecha = fecha.add(2, 'day');
-  } else if (dia === 0) { // Domingo
-    fecha = fecha.add(1, 'day');
-  }
-
-  return fecha.format('YYYY-MM-DD');
+  return fecha.startOf('day').toISOString();
 }
 
 export default function ModalTitulo({
@@ -276,7 +274,6 @@ export default function ModalTitulo({
                 id="fechaExpedicion"
                 name="fechaExpedicion"
                 value={getFechaExpedicionAuto(fechaExpedicion) || ''}
-                onChange={handleChange}
                 disabled
               />
             </Grid>
