@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Tabs,
-  Tab,
-  Box,
-  List,
-  Divider,
-} from '@mui/material';
+import { Grid, List, Divider } from '@mui/material';
 import {
   Context, ListSubtitle, ListTitle, Subtitle,
 } from '@siiges-ui/shared';
@@ -37,7 +30,6 @@ export default function ConsultPublicFolio() {
   const router = useRouter();
   const { folio } = router.query;
 
-  const [tab, setTab] = useState(0);
   const [data, setData] = useState(null);
   const { setLoading, loading, setNoti } = useContext(Context);
 
@@ -90,79 +82,69 @@ export default function ConsultPublicFolio() {
   }
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Box display="flex" justifyContent="flex-end">
-          <Tabs
-            value={tab}
-            onChange={(_, newValue) => setTab(newValue)}
-          >
-            <Tab label="Datos de la solicitud" />
-            <Tab label="Datos del interesado" />
-          </Tabs>
-        </Box>
+    <Grid container spacing={3}>
+      {/* DATOS DE LA SOLICITUD */}
+      <Grid item xs={12} sx={{ mt: 3 }}>
+        <Subtitle>Datos de la solicitud</Subtitle>
       </Grid>
 
-      {/* TAB 1 – Datos de la solicitud */}
-
-      {tab === 0 && (
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid container xs={6}>
-            <Grid item xs>
-              <List>
-                <ListTitle text="Tipo de solicitud" />
-                <ListTitle text="Folio de la solicitud" />
-                <ListTitle text="Estatus de la solicitud" />
-                <ListTitle text="Fecha de envío" />
-              </List>
-            </Grid>
-            <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-            <Grid item xs>
-              <List>
-                <ListSubtitle
-                  text={getNombreById(tipoSolicitudes, data?.tipoTramiteId)}
-                />
-                <ListSubtitle
-                  text={data?.folioSolicitud || 'N/A'}
-                />
-                <ListSubtitle
-                  text={getNombreById(
-                    estatusSolicitudes,
-                    data?.estatusSolicitudRevEquivId,
-                  )}
-                />
-                <ListSubtitle
-                  text={formatDate(data?.createdAt)}
-                />
-              </List>
-
-            </Grid>
-          </Grid>
+      <Grid container xs={12} md={6}>
+        <Grid item xs>
+          <List>
+            <ListTitle text="Tipo de solicitud" />
+            <ListTitle text="Folio de la solicitud" />
+            <ListTitle text="Estatus de la solicitud" />
+            <ListTitle text="Fecha de envío" />
+          </List>
         </Grid>
-      )}
 
-      {/* TAB 2 – Datos del interesado */}
-      {tab === 1 && (
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid container xs={6}>
-            <Grid item xs>
-              <List>
-                <ListTitle text="Nombre" />
-                <ListTitle text="Primer apellido" />
-                <ListTitle text="Segundo apellido" />
-              </List>
-            </Grid>
-            <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-            <Grid item xs>
-              <List>
-                <ListSubtitle text={data?.interesado?.persona?.nombre || 'N/A'} />
-                <ListSubtitle text={data?.interesado?.persona?.apellidoPaterno || 'N/A'} />
-                <ListSubtitle text={data?.interesado?.persona?.apellidoMaterno || 'N/A'} />
-              </List>
-            </Grid>
-          </Grid>
+        <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+
+        <Grid item xs>
+          <List>
+            <ListSubtitle
+              text={getNombreById(tipoSolicitudes, data?.tipoTramiteId)}
+            />
+            <ListSubtitle text={data?.folioSolicitud || 'N/A'} />
+            <ListSubtitle
+              text={getNombreById(
+                estatusSolicitudes,
+                data?.estatusSolicitudRevEquivId,
+              )}
+            />
+            <ListSubtitle text={formatDate(data?.createdAt)} />
+          </List>
         </Grid>
-      )}
+      </Grid>
+
+      {/* DATOS DEL INTERESADO */}
+      <Grid item xs={12}>
+        <Subtitle>Datos del interesado</Subtitle>
+      </Grid>
+
+      <Grid container xs={12} md={6}>
+        <Grid item xs>
+          <List>
+            <ListTitle text="Nombre" />
+            <ListTitle text="Primer apellido" />
+            <ListTitle text="Segundo apellido" />
+          </List>
+        </Grid>
+
+        <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+
+        <Grid item xs>
+          <List>
+            <ListSubtitle text={data?.interesado?.persona?.nombre || 'N/A'} />
+            <ListSubtitle
+              text={data?.interesado?.persona?.apellidoPaterno || 'N/A'}
+            />
+            <ListSubtitle
+              text={data?.interesado?.persona?.apellidoMaterno || 'N/A'}
+            />
+          </List>
+        </Grid>
+      </Grid>
     </Grid>
   );
 }
