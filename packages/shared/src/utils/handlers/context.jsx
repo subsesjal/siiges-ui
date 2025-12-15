@@ -29,6 +29,8 @@ function Provider({ children }) {
     '/autenticacion/recovery-password/[token]',
     '/tituloElectronico',
     '/tituloElectronico/[folio]/consultarFolio',
+    '/consultaRevEquiv',
+    '/consultaRevEquiv/[folio]/consultarFolio',
   ];
 
   const fetchAvatar = async (userId) => {
