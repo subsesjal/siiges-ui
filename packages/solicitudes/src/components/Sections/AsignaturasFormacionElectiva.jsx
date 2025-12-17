@@ -11,7 +11,7 @@ import SolicitudContext from '../utils/Context/solicitudContext';
 import useAsignaturas from '../utils/getAsignaturas';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
-export default function AsignaturasFormacionElectiva({ disabled, type }) {
+export default function AsignaturasFormacionElectiva({ disabled, type, section }) {
   const { programaId } = useContext(SolicitudContext);
   const [modal, setModal] = useState(false);
   const showModal = () => setModal(true);
@@ -22,8 +22,7 @@ export default function AsignaturasFormacionElectiva({ disabled, type }) {
     setAsignaturasTotalList,
   } = useContext(TablesPlanEstudiosContext);
 
-  const isSectionDisabled = useSectionDisabled(7);
-
+  const isSectionDisabled = useSectionDisabled(section);
   const isDisabled = disabled || isSectionDisabled;
 
   const { asignaturasFormacion, asignaturasTotal, loading } = type === 'editar' || type === 'consultar'
@@ -76,4 +75,5 @@ AsignaturasFormacionElectiva.defaultProps = {
 AsignaturasFormacionElectiva.propTypes = {
   disabled: PropTypes.bool.isRequired,
   type: PropTypes.string,
+  section: PropTypes.number.isRequired,
 };

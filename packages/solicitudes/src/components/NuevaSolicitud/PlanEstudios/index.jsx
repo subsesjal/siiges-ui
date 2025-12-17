@@ -211,6 +211,9 @@ export default function PlanEstudios({
 
   const isDisabled = parentDisabled || disabled;
 
+  const asignaturasSectionId = tipoSolicitudId === 3 ? 3 : 6;
+  const asignaturasFormacionSectionId = tipoSolicitudId === 3 ? 4 : 7;
+
   return (
     <SolicitudContext.Provider value={value}>
       <TablesPlanEstudiosProvider>
@@ -255,13 +258,14 @@ export default function PlanEstudios({
               )}
 
               {realSection === 6 && (
-                <Asignaturas disabled={isDisabled} type={type} />
+                <Asignaturas disabled={isDisabled} type={type} section={asignaturasSectionId} />
               )}
 
               {realSection === 7 && (
                 <AsignaturasFormacionElectiva
                   disabled={isDisabled}
                   type={type}
+                  section={asignaturasFormacionSectionId}
                 />
               )}
 
