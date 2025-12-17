@@ -12,7 +12,7 @@ import useAsignaturas from '../utils/getAsignaturas';
 import { grados } from '../utils/Mocks/mockAsignaturas';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
-export default function Asignaturas({ disabled, type }) {
+export default function Asignaturas({ disabled, type, section }) {
   const { programaId } = useContext(SolicitudContext);
   const [modal, setModal] = useState(false);
   const showModal = () => setModal(true);
@@ -21,8 +21,7 @@ export default function Asignaturas({ disabled, type }) {
     TablesPlanEstudiosContext,
   );
 
-  const isSectionDisabled = useSectionDisabled(6);
-
+  const isSectionDisabled = useSectionDisabled(section);
   const isDisabled = disabled || isSectionDisabled;
 
   const { asignaturas, loading } = type === 'editar' || type === 'consultar'
@@ -75,4 +74,5 @@ Asignaturas.defaultProps = {
 Asignaturas.propTypes = {
   disabled: PropTypes.bool.isRequired,
   type: PropTypes.string,
+  section: PropTypes.number.isRequired,
 };
