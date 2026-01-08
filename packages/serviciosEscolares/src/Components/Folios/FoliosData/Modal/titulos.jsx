@@ -247,18 +247,6 @@ export default function ModalTitulo({
             </Grid>
             <Grid item xs={6}>
               <InputDate
-                label="Fecha de elaboración de certificado"
-                id="fechaElaboracion"
-                name="fechaElaboracion"
-                type="datetime"
-                value={form.fechaElaboracion || ''}
-                onChange={handleChange}
-                required
-                disabled={disabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <InputDate
                 label="Fecha de terminación plan de estudios"
                 id="fechaTerminacion"
                 name="fechaTerminacion"
