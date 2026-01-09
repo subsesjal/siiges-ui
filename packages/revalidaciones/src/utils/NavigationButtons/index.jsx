@@ -43,7 +43,6 @@ export default function NavigationButtons({
   disabled,
   estatus,
   id,
-  type,
 }) {
   const [open, setOpen] = useState(false);
   const [openProcesarModal, setOpenProcesarModal] = useState(false);
@@ -189,18 +188,14 @@ export default function NavigationButtons({
                   <Typography align="center">Siguiente</Typography>
                 </Grid>
                 <Grid item>
-                  <CircularIconButton
-                    onClick={onNext}
-                    aria-label="Siguiente"
-                    disabled={disabled}
-                  >
+                  <CircularIconButton onClick={onNext} aria-label="Siguiente">
                     <NavigateNextIcon />
                   </CircularIconButton>
                 </Grid>
               </>
             )}
 
-            {currentPosition === totalPositions && !disabled && type === null && (
+            {currentPosition === totalPositions && !disabled && (
               <Grid item>
                 <ButtonSimple
                   text="Terminar"
@@ -311,7 +306,6 @@ NavigationButtons.defaultProps = {
   disabled: false,
   estatus: null,
   id: null,
-  type: null,
 };
 
 NavigationButtons.propTypes = {
@@ -323,7 +317,6 @@ NavigationButtons.propTypes = {
   onPrevious: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func,
   title: PropTypes.string,
-  type: PropTypes.string,
   isSubmitting: PropTypes.bool,
   disabled: PropTypes.bool,
 };
