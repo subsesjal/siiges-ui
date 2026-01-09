@@ -139,70 +139,70 @@ export default function CargaMaterias({
         />
       </Grid>
       {form.tipoTramiteId === 5 && (
+      <Grid item xs={6}>
+        <InputFile
+          label="Copia de Resolución"
+          id="copiaResolucion"
+          tipoDocumento="RESOLUCION"
+          tipoEntidad="SOLICITUD_REV_EQUIV"
+          url={formatUrl('RESOLUCION')}
+          onChange={(files) => handleFileChange(files, 'RESOLUCION')}
+          isUploaded={isFileUploaded('RESOLUCION')}
+          fileType={['application/pdf']}
+        />
+      </Grid>
+      )}
+      {form.tipoTramiteId !== 5 && (
+      <>
         <Grid item xs={6}>
           <InputFile
-            label="Copia de Resolución"
-            id="copiaResolucion"
-            tipoDocumento="RESOLUCION"
+            label="Certificado Parcial/Total"
+            id="certificadoParcialTotal"
+            tipoDocumento="ARCHIVO_CERTIFICADO"
             tipoEntidad="SOLICITUD_REV_EQUIV"
-            url={formatUrl('RESOLUCION')}
-            onChange={(files) => handleFileChange(files, 'RESOLUCION')}
-            isUploaded={isFileUploaded('RESOLUCION')}
+            url={formatUrl('ARCHIVO_CERTIFICADO')}
+            onChange={(files) => handleFileChange(files, 'ARCHIVO_CERTIFICADO')}
+            isUploaded={isFileUploaded('ARCHIVO_CERTIFICADO')}
             fileType={['application/pdf']}
           />
         </Grid>
-      )}
-      {form.tipoTramiteId !== 5 && (
-        <>
-          <Grid item xs={6}>
-            <InputFile
-              label="Certificado Parcial/Total"
-              id="certificadoParcialTotal"
-              tipoDocumento="ARCHIVO_CERTIFICADO"
-              tipoEntidad="SOLICITUD_REV_EQUIV"
-              url={formatUrl('ARCHIVO_CERTIFICADO')}
-              onChange={(files) => handleFileChange(files, 'ARCHIVO_CERTIFICADO')}
-              isUploaded={isFileUploaded('ARCHIVO_CERTIFICADO')}
-              fileType={['application/pdf']}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <InputFile
-              label="Antecedente Académico"
-              id="antecedenteAcademico"
-              tipoDocumento="ANTECEDENTE_ACADEMICO"
-              tipoEntidad="SOLICITUD_REV_EQUIV"
-              url={formatUrl('ANTECEDENTE_ACADEMICO')}
-              onChange={(files) => handleFileChange(files, 'ANTECEDENTE_ACADEMICO')}
-              isUploaded={isFileUploaded('ANTECEDENTE_ACADEMICO')}
-              fileType={['application/pdf']}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <InputFile
-              label="Programa de Estudio Autorizado"
-              id="programaEstudioAutorizado"
-              tipoDocumento="PROGRAMA_AUTORIZADO"
-              tipoEntidad="SOLICITUD_REV_EQUIV"
-              url={formatUrl('PROGRAMA_AUTORIZADO')}
-              onChange={(files) => handleFileChange(files, 'PROGRAMA_AUTORIZADO')}
-              isUploaded={isFileUploaded('PROGRAMA_AUTORIZADO')}
-              fileType={['application/pdf']}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <InputFile
-              label="Opinión Técnica"
-              id="propuestaEquivalencia"
-              tipoDocumento="PROPUESTA"
-              tipoEntidad="SOLICITUD_REV_EQUIV"
-              url={formatUrl('PROPUESTA')}
-              onChange={(files) => handleFileChange(files, 'PROPUESTA')}
-              isUploaded={isFileUploaded('PROPUESTA')}
-              fileType={['application/pdf']}
-            />
-          </Grid>
-        </>
+        <Grid item xs={6}>
+          <InputFile
+            label="Antecedente Académico"
+            id="antecedenteAcademico"
+            tipoDocumento="ANTECEDENTE_ACADEMICO"
+            tipoEntidad="SOLICITUD_REV_EQUIV"
+            url={formatUrl('ANTECEDENTE_ACADEMICO')}
+            onChange={(files) => handleFileChange(files, 'ANTECEDENTE_ACADEMICO')}
+            isUploaded={isFileUploaded('ANTECEDENTE_ACADEMICO')}
+            fileType={['application/pdf']}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <InputFile
+            label="Programa de Estudio Autorizado"
+            id="programaEstudioAutorizado"
+            tipoDocumento="PROGRAMA_AUTORIZADO"
+            tipoEntidad="SOLICITUD_REV_EQUIV"
+            url={formatUrl('PROGRAMA_AUTORIZADO')}
+            onChange={(files) => handleFileChange(files, 'PROGRAMA_AUTORIZADO')}
+            isUploaded={isFileUploaded('PROGRAMA_AUTORIZADO')}
+            fileType={['application/pdf']}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <InputFile
+            label="Opinión Técnica"
+            id="propuestaEquivalencia"
+            tipoDocumento="PROPUESTA"
+            tipoEntidad="SOLICITUD_REV_EQUIV"
+            url={formatUrl('PROPUESTA')}
+            onChange={(files) => handleFileChange(files, 'PROPUESTA')}
+            isUploaded={isFileUploaded('PROPUESTA')}
+            fileType={['application/pdf']}
+          />
+        </Grid>
+      </>
       )}
       <Grid item xs={6}>
         <InputFile
@@ -221,7 +221,7 @@ export default function CargaMaterias({
 }
 
 CargaMaterias.defaultProps = {
-  setNextDisabled: () => { },
+  setNextDisabled: () => {},
   edit: false,
 };
 

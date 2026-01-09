@@ -122,16 +122,16 @@ export default function RevisarEquivalencia() {
           />
         </Grid>
         {estatus === 2 && (
-          <Grid item>
-            <ButtonSimple
-              text="Enviar Observaciones"
-              onClick={() => {
-                setOpen(true);
-              }}
-              align="right"
-              disabled={loading}
-            />
-          </Grid>
+        <Grid item>
+          <ButtonSimple
+            text="Enviar Observaciones"
+            onClick={() => {
+              setOpen(true);
+            }}
+            align="right"
+            disabled={loading}
+          />
+        </Grid>
         )}
         <DefaultModal
           title="Envío de observaciones"

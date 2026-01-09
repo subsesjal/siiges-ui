@@ -391,7 +391,7 @@ export default function CargaMateriasEquivalentes({
 }
 
 CargaMateriasEquivalentes.defaultProps = {
-  handleOnChange: () => { },
+  handleOnChange: () => {},
   disabled: false,
   calificacionesReglas: {},
 };
