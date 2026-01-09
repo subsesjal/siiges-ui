@@ -387,7 +387,7 @@ export default function DatosInstitucion({
 }
 
 DatosInstitucion.defaultProps = {
-  handleOnChange: () => {},
+  handleOnChange: () => { },
   disabled: false,
   setNextDisabled: () => {},
 };

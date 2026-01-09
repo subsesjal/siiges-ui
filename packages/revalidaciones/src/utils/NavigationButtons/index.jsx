@@ -155,69 +155,69 @@ export default function NavigationButtons({
         <Grid item xs>
           <Grid container justifyContent="flex-end" alignItems="center" spacing={1}>
             {currentPosition > 1 && (
-            <>
-              <Grid item>
-                <CircularIconButton
-                  onClick={onPrevious}
-                  aria-label="Anterior"
-                  sx={{
-                    transform: 'rotate(180deg)',
-                    '&:hover': {
-                      transform: 'rotate(180deg) translateY(2px)',
-                    },
-                  }}
-                >
-                  <NavigateNextIcon />
-                </CircularIconButton>
-              </Grid>
-              <Grid item>
-                <Typography align="center">Anterior</Typography>
-              </Grid>
-              <Grid item>
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  sx={{ height: '2rem', mx: 4 }}
-                />
-              </Grid>
-            </>
+              <>
+                <Grid item>
+                  <CircularIconButton
+                    onClick={onPrevious}
+                    aria-label="Anterior"
+                    sx={{
+                      transform: 'rotate(180deg)',
+                      '&:hover': {
+                        transform: 'rotate(180deg) translateY(2px)',
+                      },
+                    }}
+                  >
+                    <NavigateNextIcon />
+                  </CircularIconButton>
+                </Grid>
+                <Grid item>
+                  <Typography align="center">Anterior</Typography>
+                </Grid>
+                <Grid item>
+                  <Divider
+                    orientation="vertical"
+                    flexItem
+                    sx={{ height: '2rem', mx: 4 }}
+                  />
+                </Grid>
+              </>
             )}
 
             {currentPosition < totalPositions && (
-            <>
-              <Grid item>
-                <Typography align="center">Siguiente</Typography>
-              </Grid>
-              <Grid item>
-                <CircularIconButton
-                  onClick={onNext}
-                  aria-label="Siguiente"
-                  disabled={disabled}
-                >
-                  <NavigateNextIcon />
-                </CircularIconButton>
-              </Grid>
-            </>
+              <>
+                <Grid item>
+                  <Typography align="center">Siguiente</Typography>
+                </Grid>
+                <Grid item>
+                  <CircularIconButton
+                    onClick={onNext}
+                    aria-label="Siguiente"
+                    disabled={disabled}
+                  >
+                    <NavigateNextIcon />
+                  </CircularIconButton>
+                </Grid>
+              </>
             )}
 
             {currentPosition === totalPositions && !disabled && type === null && (
-            <Grid item>
-              <ButtonSimple
-                text="Terminar"
-                onClick={() => setOpen(true)}
-                disabled={isSubmitting}
-              />
-            </Grid>
+              <Grid item>
+                <ButtonSimple
+                  text="Terminar"
+                  onClick={() => setOpen(true)}
+                  disabled={isSubmitting}
+                />
+              </Grid>
             )}
 
             {estatus === 4 && currentPosition === totalPositions && (
-            <Grid item>
-              <ButtonSimple
-                text="Procesar"
-                onClick={() => setOpenProcesarModal(true)}
-                disabled={isSubmitting}
-              />
-            </Grid>
+              <Grid item>
+                <ButtonSimple
+                  text="Procesar"
+                  onClick={() => setOpenProcesarModal(true)}
+                  disabled={isSubmitting}
+                />
+              </Grid>
             )}
           </Grid>
         </Grid>
@@ -307,7 +307,7 @@ export default function NavigationButtons({
 NavigationButtons.defaultProps = {
   title: 'Equivalencias',
   isSubmitting: false,
-  handleOnSubmit: () => {},
+  handleOnSubmit: () => { },
   disabled: false,
   estatus: null,
   id: null,
