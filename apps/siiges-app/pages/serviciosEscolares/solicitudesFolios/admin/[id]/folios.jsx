@@ -14,10 +14,12 @@ import {
   ListTitle,
   GetFile,
   createRecord,
+  deleteRecord,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import { ModalCertificado, ModalTitulo, ButtonsFoliosAdmin } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 import Divider from '@mui/material/Divider';
@@ -64,6 +66,7 @@ export default function Folios() {
           });
           const { data } = response;
           setSolicitudFolioCreatedAt(data.createdAt);
+          setObservaciones(data.observaciones || '');
           setEtiquetas({
             tipoDocumento: data.tipoDocumento?.nombre || '',
             tipoSolicitudFolio: data.tipoSolicitudFolio?.nombre || '',
@@ -153,6 +156,8 @@ export default function Folios() {
             message: '¡Observaciones actualizadas con éxito!',
             type: 'success',
           });
+
+          router.back();
         } else {
           throw new Error(response.message || '¡Error al actualizar las observaciones!');
         }
@@ -225,6 +230,32 @@ export default function Folios() {
       });
     }
   };
+  const handleDeleteAlumno = async (alumnoId) => {
+    setLoading(true);
+    try {
+      const response = await deleteRecord({
+        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${alumnoId}`,
+      });
+
+      if (response.statusCode === 200) {
+        setNoti({
+          open: true,
+          message: 'Alumno eliminado correctamente',
+          type: 'success',
+        });
+
+        setAlumnosRows((prev) => prev.filter((row) => row.id !== alumnoId));
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: 'Error al eliminar el alumno',
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const alumnosColumns = [
     {
@@ -247,11 +278,23 @@ export default function Folios() {
       headerName: 'Acciones',
       width: 150,
       renderCell: (params) => (
-        <Tooltip title="Consultar" placement="top">
-          <IconButton onClick={() => handleConsult(params.row.id)}>
-            <VisibilityOutlinedIcon />
-          </IconButton>
-        </Tooltip>
+        <>
+          <Tooltip title="Consultar" placement="top">
+            <IconButton onClick={() => handleConsult(params.row.id)}>
+              <VisibilityOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+
+          {estatus === 2 && (
+          <Tooltip title="Eliminar alumno" placement="top">
+            <IconButton
+              onClick={() => handleDeleteAlumno(params.row.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+          )}
+        </>
       ),
     },
   ];
