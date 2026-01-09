@@ -179,6 +179,7 @@ export default function FoliosData({ type }) {
   const [alumnoType, setAlumnoType] = useState('create');
   const [alumnosData, setAlumnosData] = useState({});
   const [alumnoResponse, setAlumnoResponse] = useState(true);
+  const [solicitudFolioCreatedAt, setSolicitudFolioCreatedAt] = useState(null);
   const [formData, setFormData] = useState({
     folioPago: '',
     tipoDocumentoId: '',
@@ -212,10 +213,6 @@ export default function FoliosData({ type }) {
     { id: 3, label: 'Duplicado' },
   ];
 
-  const selectedTipoSolicitudFolio = tipoSolicitudFolioOptions.find(
-    (option) => option.id === Number(tipoSolicitud),
-  )?.label || 'Desconocido';
-
   useEffect(() => {
     if (type === 'edit') {
       setIsSaved(true);
@@ -231,11 +228,11 @@ export default function FoliosData({ type }) {
           response = await getData({
             endpoint: `/solicitudesFolios/${editId}`,
           });
+          setSolicitudFolioCreatedAt(response.data.createdAt);
         } else {
           response = await getData({ endpoint: `/programas/${programa}` });
         }
         const { data } = response;
-
         if (type === 'edit') {
           setFormData({
             folioPago: data.folioPago,
@@ -243,14 +240,14 @@ export default function FoliosData({ type }) {
             tipoSolicitudFolioId: data.tipoSolicitudFolioId,
             estatusSolicitudFolioId: data.estatusSolicitudFolioId,
             programaId: data.programaId,
-            fecha: dayjs(data.fecha),
+            fecha: dayjs(data.createdAt),
           });
           setEtiquetas({
-            tipoDocumento: data.tipoDocumento.nombre,
-            tipoSolicitudFolio: data.tipoSolicitudFolio.nombre,
-            acuerdoRvoe: data.programa.acuerdoRvoe,
-            planEstudios: data.programa.nombre,
-            gradoAcademico: data.programa.nivelId,
+            tipoDocumento: data.tipoDocumento?.nombre,
+            tipoSolicitudFolio: data.tipoSolicitudFolio?.nombre,
+            acuerdoRvoe: data.programa?.acuerdoRvoe || '',
+            planEstudios: data.programa?.nombre || '',
+            gradoAcademico: data.programa?.nivelId || '',
             institucion: data.programa?.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
             modalidades: data.programa?.modalidadId,
@@ -268,8 +265,8 @@ export default function FoliosData({ type }) {
           );
         } else {
           setFormData({
-            tipoDocumentoId: tipoDocumento,
-            tipoSolicitudFolioId: tipoSolicitud,
+            tipoDocumentoId: Number(tipoDocumento),
+            tipoSolicitudFolioId: Number(tipoSolicitud),
             estatusSolicitudFolioId: 1,
             programaId: data.id,
             fecha: dayjs(data.fecha),
@@ -277,8 +274,10 @@ export default function FoliosData({ type }) {
           setEtiquetas({
             institucion: data.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.plantel?.claveCentroTrabajo,
-            tipoDocumento: tipoDocumento === '1' ? 'Titulo' : 'Certificado',
-            tipoSolicitudFolio: selectedTipoSolicitudFolio,
+            tipoDocumento: tipoDocumento === '1' ? 'Título' : 'Certificado',
+            tipoSolicitudFolio: tipoSolicitudFolioOptions.find(
+              (o) => o.id === Number(tipoSolicitud),
+            )?.label,
             acuerdoRvoe: data.acuerdoRvoe,
             planEstudios: data.nombre,
             gradoAcademico: data.nivelId,
@@ -416,6 +415,7 @@ export default function FoliosData({ type }) {
 
       if (response.statusCode === 200 || response.statusCode === 201) {
         setId(response.data.id);
+        setSolicitudFolioCreatedAt(response.data.createdAt);
         setIsSaved(true);
         setNoti({
           open: true,
@@ -566,11 +566,9 @@ export default function FoliosData({ type }) {
               buttonText="Agregar Alumnos"
               title="Alumnos"
               rows={rows}
-              columns={
-                tipoDocumento === '1'
-                  ? columnsTitulo(handleEdit, handleConsult, status)
-                  : columnsCertificado(handleEdit, handleConsult, status)
-              }
+              columns={formData.tipoDocumentoId === 1
+                ? columnsTitulo(handleEdit, handleConsult, status)
+                : columnsCertificado(handleEdit, handleConsult, status)}
             />
           </Grid>
         </Grid>
@@ -590,11 +588,12 @@ export default function FoliosData({ type }) {
               send={handleSend}
               disabled={status === 'consult'}
               saved={isSaved}
+              alumnos={alumnosData}
             />
           )}
         </Grid>
       </Grid>
-      {tipoDocumento === '1' ? (
+      {formData.tipoDocumentoId === 1 ? (
         <ModalTitulo
           open={open}
           setOpen={setOpen}
@@ -603,6 +602,7 @@ export default function FoliosData({ type }) {
           rowData={rowData}
           programaId={formData.programaId}
           setAlumnoResponse={setAlumnoResponse}
+          fechaExpedicion={solicitudFolioCreatedAt}
           disabled={disabled}
         />
       ) : (
@@ -614,6 +614,7 @@ export default function FoliosData({ type }) {
           programaId={formData.programaId}
           rowData={rowData}
           setAlumnoResponse={setAlumnoResponse}
+          fechaElaboracion={solicitudFolioCreatedAt}
           disabled={disabled}
         />
       )}

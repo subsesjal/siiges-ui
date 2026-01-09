@@ -14,6 +14,21 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
+function getFechaElaboracionAuto(FechaElaboracion) {
+  const fecha = new Date(FechaElaboracion);
+
+  const dia = fecha.getDay();
+  if (dia === 6) {
+    fecha.setDate(fecha.getDate() - 1);
+  }
+
+  if (dia === 0) {
+    fecha.setDate(fecha.getDate() - 2);
+  }
+
+  return dayjs(fecha).format('YYYY-MM-DD');
+}
+
 export default function ModalCertificado({
   open,
   setOpen,
@@ -23,6 +38,7 @@ export default function ModalCertificado({
   setAlumnoResponse,
   rowData,
   disabled,
+  fechaElaboracion,
 }) {
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
@@ -30,12 +46,13 @@ export default function ModalCertificado({
   const [disabledButton, setDisabledButton] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
   const [modalTitulo, setModalTitulo] = useState('Agregar Alumno');
-
   useEffect(() => {
     if (open && type === 'create') {
-      setForm({});
+      setForm({
+        fechaElaboracion: getFechaElaboracionAuto(fechaElaboracion),
+      });
     }
-  }, [open]);
+  }, [open, type]);
 
   const validateForm = () => {
     const isValid = alumno && form.fechaElaboracion && form.fechaTerminacion;
@@ -45,7 +62,6 @@ export default function ModalCertificado({
   useEffect(() => {
     validateForm();
   }, [form, alumno, disabled]);
-
   useEffect(() => {
     if (type !== 'create' && rowData) {
       setForm(rowData);
@@ -55,7 +71,9 @@ export default function ModalCertificado({
       }
       setAlumnoId(rowData.alumnoId);
     } else {
-      setForm({});
+      setForm({
+        fechaElaboracion: getFechaElaboracionAuto(fechaElaboracion),
+      });
       setAlumno(null);
       setAlumnoId(null);
     }
@@ -90,8 +108,7 @@ export default function ModalCertificado({
             setAlumnoId(response.data.id);
           }
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           setNoti({
             open: true,
             message: '¡No se encontró el Alumno!',
@@ -122,7 +139,7 @@ export default function ModalCertificado({
     try {
       const response = await action({ data: formattedForm, endpoint });
 
-      if (response.statusCode === 201) {
+      if (response.statusCode === 201 || response.statusCode === 200) {
         setNoti({
           open: true,
           message: type === 'edit'
@@ -186,10 +203,10 @@ export default function ModalCertificado({
             id="fechaElaboracion"
             name="fechaElaboracion"
             type="datetime"
-            value={form.fechaElaboracion || ''}
+            value={getFechaElaboracionAuto(fechaElaboracion) || ''}
             onChange={handleChange}
             required
-            disabled={disabled}
+            disabled
           />
         </Grid>
         <Grid item xs={6}>
@@ -231,6 +248,7 @@ ModalCertificado.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
+  fechaElaboracion: PropTypes.string.isRequired,
   rowData: PropTypes.shape({
     alumno: PropTypes.shape({
       id: PropTypes.number,

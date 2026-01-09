@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Grid, Typography } from '@mui/material';
+import {
+  Grid, Typography,
+  Button,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import { ButtonsForm, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
 
@@ -9,8 +12,18 @@ export default function ButtonsFolios({
   send,
   disabled,
   saved,
+  alumnos,
 }) {
-  const [open, setOpen] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [openWarning, setOpenWarning] = useState(false);
+
+  const handleEnviarClick = () => {
+    if (!alumnos || alumnos.length === 0) {
+      setOpenWarning(true);
+      return;
+    }
+    setOpenConfirm(true);
+  };
 
   return (
     <Grid container spacing={2} alignItems="center">
@@ -34,28 +47,48 @@ export default function ButtonsFolios({
               <Grid item>
                 <ButtonSimple
                   text="Enviar Solicitud"
-                  onClick={() => setOpen(true)}
+                  onClick={handleEnviarClick}
                 />
               </Grid>
             )
           )}
         </Grid>
       </Grid>
-
-      <DefaultModal title="Enviar solicitud" open={open} setOpen={setOpen}>
+      <DefaultModal
+        title="Sin alumnos registrados"
+        open={openWarning}
+        setOpen={setOpenWarning}
+      >
         <Typography sx={{ mb: 2 }}>
-          ¿Está seguro de enviar la solicitud? Una vez enviada, ya no podrá ser
-          editada.
+          No hay alumnos registrados para esta solicitud.
+          Por favor, agrega al menos un alumno antes de continuar.
         </Typography>
+
+        <Button
+          variant="contained"
+          onClick={() => setOpenWarning(false)}
+        >
+          Entendido
+        </Button>
+      </DefaultModal>
+      <DefaultModal
+        title="Enviar solicitud"
+        open={openConfirm}
+        setOpen={setOpenConfirm}
+      >
+        <Typography sx={{ mb: 2 }}>
+          ¿Está seguro de enviar la solicitud? Una vez enviada, ya no podrá ser editada.
+        </Typography>
+
         <ButtonsForm
-          cancel={() => setOpen(false)}
+          cancel={() => setOpenConfirm(false)}
           confirm={async () => {
             const response = await send();
             if (
               response
               && (response.statusCode === 200 || response.statusCode === 201)
             ) {
-              setOpen(false);
+              setOpenConfirm(false);
             }
           }}
         />
@@ -70,4 +103,22 @@ ButtonsFolios.propTypes = {
   send: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   saved: PropTypes.bool.isRequired,
+  alumnos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      alumnoId: PropTypes.number,
+      solicitudFolioId: PropTypes.number,
+      fechaExpedicion: PropTypes.string,
+      alumno: PropTypes.shape({
+        id: PropTypes.number,
+        matricula: PropTypes.string,
+        persona: PropTypes.shape({
+          nombre: PropTypes.string,
+          apellidoPaterno: PropTypes.string,
+          apellidoMaterno: PropTypes.string,
+          curp: PropTypes.string,
+        }),
+      }),
+    }),
+  ).isRequired,
 };

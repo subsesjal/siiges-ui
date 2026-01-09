@@ -33,7 +33,7 @@ const columns = (handleEdit, handleConsultar) => [
     valueGetter: (params) => params.row.rvoe || 'N/A',
   },
   { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 150 },
-  { field: 'plantel', headerName: 'Plantel', width: 300 },
+  { field: 'plantelNombre', headerName: 'Plantel', width: 300 },
   {
     field: 'actions',
     headerName: 'Acciones',
@@ -65,6 +65,10 @@ function FoliosTable({
   const { session } = useContext(Context);
 
   const showCrearFolio = process.env.NEXT_PUBLIC_SHOW_CREAR_FOLIO !== 'false';
+  const filtrosCompletos = tipoDocumento
+    && tipoSolicitud
+    && programa
+    && plantel;
 
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
@@ -96,10 +100,9 @@ function FoliosTable({
         ...solicitud,
         programaNombre: solicitud.programa.nombre,
         estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio.nombre,
-        plantel:
-          solicitud.programa?.plantel?.institucion?.nombre
-          || solicitud.plantel?.institucion?.nombre
-          || 'Sin nombre',
+        plantelNombre: solicitud.programa?.plantel
+          ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
+          : '',
         tipoSolicitudFolio: tipoSolicitudNombre,
         tipoDocumentoNombre: solicitud.tipoDocumento?.nombre || '',
         rvoe: solicitud.programa?.acuerdoRvoe || '',
@@ -113,6 +116,7 @@ function FoliosTable({
           buttonAdd={showCrearFolio}
           buttonClick={() => navigateTo(null, 'create')}
           buttonText="Agregar Solicitud"
+          buttonDisabled={!filtrosCompletos}
           title="Solicitudes de Títulos"
           rows={formattedSolicitudes}
           columns={columns(handleEdit, handleConsultar)}
