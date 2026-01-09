@@ -51,7 +51,7 @@ export default function AdminTable({
 
         const goToConsult = () => {
           router.push(
-            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios?mode=consult`,
+            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios?`,
           );
         };
 
