@@ -120,7 +120,7 @@ export default function ModalCertificado({
                 type: 'warning',
               });
 
-              return; // ⛔ cortar flujo
+              return;
             }
 
             const fullName = `${response.data.persona.nombre} ${response.data.persona.apellidoPaterno} ${response.data.persona.apellidoMaterno}`;
