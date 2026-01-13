@@ -44,8 +44,18 @@ export default function AdminTable({
       width: 150,
       renderCell: (params) => {
         const handleAddClick = () => {
-          router.push(`/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios`);
+          router.push(
+            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios`,
+          );
         };
+
+        const goToConsult = () => {
+          router.push(
+            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios?`,
+          );
+        };
+
+        const canConsult = isAdmin || isCeSicyt;
 
         let IconComponent = ArticleIcon;
         let tooltipTitle = '';
@@ -55,7 +65,7 @@ export default function AdminTable({
             IconComponent = EditIcon;
             tooltipTitle = 'Editar solicitud';
           } else if (params.row.estatusSolicitudFolioId === 2) {
-            IconComponent = VisibilityOutlined;
+            IconComponent = ArticleIcon;
             tooltipTitle = 'Revisar';
           } else if (params.row.estatusSolicitudFolioId === 3) {
             IconComponent = Send;
@@ -67,19 +77,31 @@ export default function AdminTable({
             IconComponent = DoneAll;
             tooltipTitle = 'Envío completo';
           }
-        }
 
-        return (
-          <Tooltip title={tooltipTitle} placement="top">
-            <IconButton onClick={handleAddClick}>
-              <IconComponent />
-            </IconButton>
-          </Tooltip>
-        );
+          return (
+            <>
+              {canConsult && (
+              <Tooltip title="Consultar" placement="top">
+                <IconButton onClick={goToConsult}>
+                  <VisibilityOutlined />
+                </IconButton>
+              </Tooltip>
+              )}
+
+              {IconComponent && (
+              <Tooltip title={tooltipTitle} placement="top">
+                <IconButton onClick={handleAddClick}>
+                  <IconComponent />
+                </IconButton>
+              </Tooltip>
+              )}
+            </>
+          );
+        }
+        return null;
       },
     },
   ];
-
   const mappedSolicitudes = solicitudes
     .filter((solicitud) => {
       if (isCeSicyt) {
