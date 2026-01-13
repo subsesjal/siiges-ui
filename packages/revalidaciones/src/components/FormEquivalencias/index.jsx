@@ -159,12 +159,19 @@ export default function FormEquivalencias() {
         throw new Error('¡Error al enviar el formulario!');
       }
 
+      const result = await response.json();
+      const folio = result?.data?.folioSolicitud;
+
+      if (!folio) {
+        throw new Error('No se recibió el folio de la solicitud');
+      }
+
       setNoti({
         open: true,
         message: 'Se envió la solicitud con éxito',
         type: 'success',
       });
-      router.reload();
+      router.push(`/consultaRevEquiv/${folio}/consultarFolio`);
     } catch {
       setNoti({
         open: true,
