@@ -604,6 +604,7 @@ export default function FoliosData({ type }) {
           setAlumnoResponse={setAlumnoResponse}
           fechaExpedicion={solicitudFolioCreatedAt}
           disabled={disabled}
+          alumnosAgregados={alumnosData}
         />
       ) : (
         <ModalCertificado
@@ -616,6 +617,7 @@ export default function FoliosData({ type }) {
           setAlumnoResponse={setAlumnoResponse}
           fechaElaboracion={solicitudFolioCreatedAt}
           disabled={disabled}
+          alumnosAgregados={alumnosData}
         />
       )}
     </Box>

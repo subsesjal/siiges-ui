@@ -39,6 +39,7 @@ export default function ModalCertificado({
   rowData,
   disabled,
   fechaElaboracion,
+  alumnosAgregados,
 }) {
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
@@ -103,6 +104,25 @@ export default function ModalCertificado({
       })
         .then((response) => {
           if (response.data) {
+            const alumnoEncontradoId = response.data.id;
+
+            const alumnoYaAgregado = alumnosAgregados.some(
+              (item) => item.alumnoId === alumnoEncontradoId,
+            );
+
+            if (alumnoYaAgregado) {
+              setAlumno(null);
+              setAlumnoId(null);
+
+              setNoti({
+                open: true,
+                message: 'Este alumno ya fue agregado a la solicitud',
+                type: 'warning',
+              });
+
+              return; // ⛔ cortar flujo
+            }
+
             const fullName = `${response.data.persona.nombre} ${response.data.persona.apellidoPaterno} ${response.data.persona.apellidoMaterno}`;
             setAlumno(fullName);
             setAlumnoId(response.data.id);
@@ -238,6 +258,7 @@ ModalCertificado.defaultProps = {
   programaId: null,
   rowData: {},
   disabled: false,
+  alumnosAgregados: [],
 };
 
 ModalCertificado.propTypes = {
@@ -249,6 +270,11 @@ ModalCertificado.propTypes = {
   id: PropTypes.number,
   programaId: PropTypes.number,
   fechaElaboracion: PropTypes.string.isRequired,
+  alumnosAgregados: PropTypes.arrayOf(
+    PropTypes.shape({
+      alumnoId: PropTypes.number.isRequired,
+    }),
+  ),
   rowData: PropTypes.shape({
     alumno: PropTypes.shape({
       id: PropTypes.number,
