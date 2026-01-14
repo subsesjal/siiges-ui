@@ -69,6 +69,7 @@ export default function ModalTitulo({
   setAlumnoResponse,
   fechaExpedicion,
   disabled,
+  alumnosAgregados = [],
 }) {
   const [position, setPosition] = useState('first');
   const [modalTitulo, setModalTitulo] = useState('Agregar Alumno');
@@ -76,6 +77,17 @@ export default function ModalTitulo({
   const [alumno, setAlumno] = useState(null);
   const [alumnoId, setAlumnoId] = useState(null);
   const { setNoti, setLoading } = useContext(Context);
+  const getEmptyForm = () => ({
+    matricula: '',
+    fechaInicio: '',
+    fechaTerminacion: '',
+    fechaElaboracion: '',
+    fechaExamenProfesional: '',
+    modalidadTitulacionId: '',
+    cumplioServicioSocial: '',
+    fundamentoServicioSocialId: '',
+    fechaExpedicion: getFechaExpedicionAuto(fechaExpedicion),
+  });
 
   useEffect(() => {
     if (type !== 'create' && rowData) {
@@ -86,12 +98,11 @@ export default function ModalTitulo({
       }
       setAlumnoId(rowData.alumnoId);
     } else {
-      setForm({
-        fechaExpedicion: getFechaExpedicionAuto(fechaExpedicion),
-      });
-      setAlumno();
-      setAlumnoId();
+      setForm(getEmptyForm(fechaExpedicion));
+      setAlumno(null);
+      setAlumnoId(null);
     }
+
     if (type === 'edit') setModalTitulo('Editar Alumno');
     else if (type === 'consult') setModalTitulo('Consultar Alumno');
     else setModalTitulo('Agregar Alumno');
@@ -151,6 +162,10 @@ export default function ModalTitulo({
                 : 'Registro creado exitosamente',
             type: 'success',
           });
+          setForm(getEmptyForm(fechaExpedicion));
+          setAlumno(null);
+          setAlumnoId(null);
+          setPosition('first');
           setAlumnoResponse(true);
           setOpen(false);
         } else {
@@ -184,7 +199,22 @@ export default function ModalTitulo({
     if (position === 'last') setPosition('first');
   };
 
+  const alumnoYaAgregado = (idAlumno) => alumnosAgregados.some(
+    (item) => item.alumnoId === idAlumno,
+  );
+
   const handleNext = () => {
+    if (!alumnoId) return;
+
+    if (alumnoYaAgregado(alumnoId)) {
+      setNoti({
+        open: true,
+        message: 'Este alumno ya fue agregado a la solicitud',
+        type: 'warning',
+      });
+      return;
+    }
+
     if (position === 'first') setPosition('last');
   };
 
@@ -327,6 +357,7 @@ export default function ModalTitulo({
 }
 
 ModalTitulo.defaultProps = {
+  alumnosAgregados: [],
   id: null,
   rowData: {},
   programaId: null,
@@ -341,6 +372,12 @@ ModalTitulo.propTypes = {
   id: PropTypes.number,
   programaId: PropTypes.number,
   fechaExpedicion: PropTypes.string.isRequired,
+  alumnosAgregados: PropTypes.arrayOf(
+    PropTypes.shape({
+      alumnoId: PropTypes.number.isRequired,
+    }),
+  ),
+
   rowData: PropTypes.shape({
     alumno: PropTypes.shape({
       id: PropTypes.number,
