@@ -157,6 +157,7 @@ export default function ExpedienteAlumno({ alumno, setAlumno, type }) {
             </Grid>
             <Grid item xs={4}>
               <InputDate
+                marginTop={1}
                 id="fechaResolucionParcial"
                 name="fechaResolucionParcial"
                 label="Fecha de Resolución Parcial"

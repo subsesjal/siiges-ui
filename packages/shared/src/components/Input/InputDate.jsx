@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import 'dayjs/locale/es';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
 function InputDate({
   value,
@@ -18,6 +19,7 @@ function InputDate({
   size,
   type,
   variant,
+  marginTop,
 }) {
   const handleDateChange = (newDate) => {
     const isValidDate = newDate && dayjs(newDate).isValid();
@@ -35,8 +37,8 @@ function InputDate({
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+      <DesktopDatePicker
         label={label}
         value={value ? dayjs(value) : null}
         name={name}
@@ -46,7 +48,7 @@ function InputDate({
         maxDate={dayjs('2100-01-01')}
         minDate={dayjs('1900-01-01')}
         format="DD/MM/YYYY"
-        sx={{ width: '100%', mt: 2 }}
+        sx={{ width: '100%', mt: marginTop }}
         slotProps={{
           textField: {
             disabled,
@@ -77,6 +79,7 @@ InputDate.propTypes = {
   required: PropTypes.bool,
   type: PropTypes.string,
   variant: PropTypes.string,
+  marginTop: PropTypes.number,
 };
 
 InputDate.defaultProps = {
@@ -90,6 +93,7 @@ InputDate.defaultProps = {
   required: false,
   size: 'small',
   variant: 'outlined',
+  marginTop: 2,
 };
 
 export default InputDate;
