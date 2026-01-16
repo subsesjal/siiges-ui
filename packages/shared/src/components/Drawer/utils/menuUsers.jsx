@@ -12,9 +12,18 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import SchoolIcon from '@mui/icons-material/School';
-// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 
+const canViewAsignacionFolios = (rol, nombre) => {
+  if (rol === 'admin' || rol === 'ce_sicyt') return true;
+
+  if (rol === 'representante' && nombre === 'obedc') return true;
+
+  if (rol === 'ce_ies' && nombre === 'roberto_ies') return true;
+
+  return false;
+};
 const options = [
   {
     id: 1,
@@ -58,7 +67,7 @@ const solicitudesMenu = (rol) => ({
   key: 'solicitudes',
 });
 
-const panelMenuOptions = (rol) => [
+const panelMenuOptions = (rol, nombre) => [
   ...(rol !== 'sicyt_editar' ? [{
     userId: 1,
     text: textPanelMenuOptions(rol).usuarios,
@@ -126,7 +135,26 @@ const panelMenuOptions = (rol) => [
     ],
     key: 'titulacion',
   },
-  /* {
+  ...(canViewAsignacionFolios(rol, nombre)
+    ? [{
+      userId: 2,
+      text: 'Asignación de Folios',
+      icon: <AssignmentLateIcon />,
+      type: 'dropdown',
+      options: [
+        {
+          text: 'Solicitud de Folios',
+          route: '/serviciosEscolares/solicitudesFolios',
+        },
+        {
+          text: 'Folios Asignados',
+          route: '/serviciosEscolares/reporte/foliosAsignados',
+        },
+      ],
+      key: 'asignacionFolios',
+    }]
+    : []),
+  {
     userId: 2,
     text: 'Otros Trámites',
     icon: <MoreHorizIcon />,
@@ -144,13 +172,9 @@ const panelMenuOptions = (rol) => [
         text: 'Servicio Social',
         route: '/serviciosEscolares/servicioSocial',
       },
-      {
-        text: 'Solicitud de Folios',
-        route: '/serviciosEscolares/solicitudesFolios',
-      },
     ],
     key: 'otrosTramites',
-  }, */
+  },
   ...(rol !== 'ce_ies' ? [{
     userId: 2,
     text: 'Reportes',
@@ -158,7 +182,6 @@ const panelMenuOptions = (rol) => [
     type: 'dropdown',
     options: [
       { text: 'Extraordinarios', route: '/serviciosEscolares/reporte/extraordinario' },
-      { text: 'Folios Asignados', route: '/serviciosEscolares/reporte/foliosAsignados' },
     ],
     key: 'reporte',
   }] : []),
@@ -297,12 +320,11 @@ const optionsMenuFilter = {
 
 const getOptionsRoles = (rol) => options.filter(({ roles }) => roles.includes(rol));
 
-const optionsAdminMenuFilterRol = (rol) => {
+const optionsAdminMenuFilterRol = (rol, username) => {
   const user = getOptionsRoles(rol);
-  const usersMenu = panelMenuOptions(rol);
-  const optionsMultiplerMenuFilter = user
-    .map(({ id }) => usersMenu.filter(({ userId }) => userId === id));
-  return optionsMultiplerMenuFilter;
+  const usersMenu = panelMenuOptions(rol, username).filter(Boolean);
+
+  return user.map(({ id }) => usersMenu.filter((item) => item && item.userId === id));
 };
 
 /**
@@ -311,19 +333,22 @@ const optionsAdminMenuFilterRol = (rol) => {
  * @param {string} path - The path to search for.
  * @returns {number} - The userId associated with the path.
  */
-const findRoute = (path, rol) => {
+const findRoute = (path, rol, username) => {
   const wordSearch = path.split('/')[1];
-  const usersMenu = panelMenuOptions(rol);
+  const usersMenu = panelMenuOptions(rol, username).filter(Boolean);
+
   let foundItem = usersMenu.find(
-    ({ route }) => route && route.startsWith(`/${wordSearch}`),
+    (item) => item?.route && item.route.startsWith(`/${wordSearch}`),
   );
+
   if (!foundItem && usersMenu.length) {
-    foundItem = optionsAdminMenuFilterRol(rol).flat()[0]?.userId;
+    // eslint-disable-next-line prefer-destructuring
+    foundItem = optionsAdminMenuFilterRol(rol, username)
+      .flat()
+      .filter(Boolean)[0];
   }
-  if (foundItem?.userId) {
-    foundItem = foundItem?.userId;
-  }
-  return foundItem;
+
+  return foundItem?.userId;
 };
 
 export {
