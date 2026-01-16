@@ -12,23 +12,34 @@ const userMultiRol = [
 
 export default function useUserRol(session, setUsers, section) {
   const router = useRouter();
-  const usersFindIndex = (usersData, findData) => usersData.flat()
-    .filter(({ userId }) => userId === findData);
+
+  // eslint-disable-next-line max-len
+  const usersFindIndex = (usersData, findData) => usersData.flat().filter(({ userId }) => userId === findData);
+
   useEffect(() => {
-    const findIndex = findRoute(router.route, session.rol);
-    if (userMultiRol.includes(session.rol)) {
-      const users = optionsAdminMenuFilterRol(session.rol);
+    if (!session) return;
+
+    const { rol, nombre } = session;
+
+    const findIndex = findRoute(router.route, rol, nombre);
+
+    if (userMultiRol.includes(rol)) {
+      const users = optionsAdminMenuFilterRol(rol, nombre);
+
       const validateNumberUsers = users.flat().reduce((acc, user) => {
-        if (!acc.includes(user.userId)) {
+        if (user && !acc.includes(user.userId)) {
           acc.push(user.userId);
         }
         return acc;
       }, []);
+
       if (!validateNumberUsers.includes(section)) {
         setUsers(usersFindIndex(users, findIndex));
-      } else setUsers(usersFindIndex(users, section));
+      } else {
+        setUsers(usersFindIndex(users, section));
+      }
     } else {
-      setUsers(optionsMenuFilter[session.rol] || []);
+      setUsers(optionsMenuFilter[rol] || []);
     }
   }, [session, section]);
 }
