@@ -39,21 +39,37 @@ function DataTable({
   };
 
   const debouncedSearch = useCallback(
-    debounce((value) => {
-      const filteredData = rows.filter(
-        (row) => Object.values(row || {}).some(
-          (data) => data?.toString().toLowerCase().includes(value),
-        ),
-      );
-      setFilteredRows(value ? filteredData : rows);
+    debounce((value, dataRows = []) => {
+      const filteredData = dataRows.filter((row) => {
+        const primitiveValues = Object.values(row || {}).filter(
+          (data) => data != null && typeof data !== 'object',
+        );
+
+        const getterValues = (columns || [])
+          .filter((col) => typeof col.valueGetter === 'function')
+          .map((col) => {
+            try {
+              return col.valueGetter({ row });
+            } catch {
+              return null;
+            }
+          })
+          .filter((val) => val != null);
+
+        const allValues = [...primitiveValues, ...getterValues];
+
+        return allValues.some((data) => data.toString().toLowerCase().includes(value));
+      });
+
+      setFilteredRows(value ? filteredData : dataRows);
     }, 300),
-    [rows],
+    [columns],
   );
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchText(value);
-    debouncedSearch(value);
+    debouncedSearch(value, rows);
   };
 
   const localeText = {
