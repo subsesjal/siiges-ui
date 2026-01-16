@@ -154,27 +154,27 @@ const panelMenuOptions = (rol, nombre) => [
       key: 'asignacionFolios',
     }]
     : []),
-  // {
-  //   userId: 2,
-  //   text: 'Otros Trámites',
-  //   icon: <MoreHorizIcon />,
-  //   type: 'dropdown',
-  //   options: [
-  //     {
-  //       text: 'Revalidación y Equivalencias',
-  //       route: '/serviciosEscolares/revalidacionEquivalencias',
-  //     },
-  //     {
-  //       text: 'Becas',
-  //       route: '/solicitudesBecas',
-  //     },
-  //     {
-  //       text: 'Servicio Social',
-  //       route: '/serviciosEscolares/servicioSocial',
-  //     },
-  //   ],
-  //   key: 'otrosTramites',
-  // },
+  /* {
+    userId: 2,
+    text: 'Otros Trámites',
+    icon: <MoreHorizIcon />,
+    type: 'dropdown',
+    options: [
+      {
+        text: 'Revalidación y Equivalencias',
+        route: '/serviciosEscolares/revalidacionEquivalencias',
+      },
+      {
+        text: 'Becas',
+        route: '/solicitudesBecas',
+      },
+      {
+        text: 'Servicio Social',
+        route: '/serviciosEscolares/servicioSocial',
+      },
+    ],
+    key: 'otrosTramites',
+  }, */
   ...(rol !== 'ce_ies' ? [{
     userId: 2,
     text: 'Reportes',
