@@ -12,7 +12,7 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import SchoolIcon from '@mui/icons-material/School';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 
 const canViewAsignacionFolios = (rol, nombre) => {
@@ -154,7 +154,7 @@ const panelMenuOptions = (rol, nombre) => [
       key: 'asignacionFolios',
     }]
     : []),
-  {
+  /* {
     userId: 2,
     text: 'Otros Trámites',
     icon: <MoreHorizIcon />,
@@ -174,7 +174,7 @@ const panelMenuOptions = (rol, nombre) => [
       },
     ],
     key: 'otrosTramites',
-  },
+  }, */
   ...(rol !== 'ce_ies' ? [{
     userId: 2,
     text: 'Reportes',
