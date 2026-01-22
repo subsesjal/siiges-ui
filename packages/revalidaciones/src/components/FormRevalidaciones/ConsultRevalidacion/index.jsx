@@ -17,8 +17,9 @@ export default function ConsultRevalidacion() {
   const [estados, setEstados] = useState([]);
   const [paises, setPaises] = useState([]);
   const [error, setError] = useState(false);
+  const [calificacionesReglas, setCalificacionesReglas] = useState([]);
 
-  const totalPositions = 4;
+  const totalPositions = form.tipoTramiteId === 3 ? 4 : 3;
 
   useEffect(() => {
     if (!query.id) return;
@@ -85,6 +86,12 @@ export default function ConsultRevalidacion() {
     }
   };
 
+  useEffect(() => {
+    if (currentPosition > totalPositions) {
+      setCurrentPosition(totalPositions);
+    }
+  }, [totalPositions, currentPosition]);
+
   const renderCurrentPage = () => {
     switch (currentPosition) {
       case 1:
@@ -96,28 +103,32 @@ export default function ConsultRevalidacion() {
             disabled
           />
         );
+
       case 2:
         return (
           <DatosInstitucion
             form={form}
             estados={estados}
             paises={paises}
+            setCalificacionesReglas={setCalificacionesReglas}
             disabled
           />
         );
+
       case 3:
-        return (
-          <ConsultDocumentos
-            id={query.id}
-          />
-        );
+        return <ConsultDocumentos id={query.id} />;
+
       case 4:
+        if (form.tipoTramiteId !== 3) return null;
+
         return (
           <CargaMateriasEquivalentes
             form={form}
+            calificacionesReglas={calificacionesReglas}
             disabled
           />
         );
+
       default:
         return null;
     }

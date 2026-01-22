@@ -24,7 +24,7 @@ const TIPO_SOLICITUDES = {
   equivalencia: tipoSolicitudesEquiv,
 };
 
-const sexo = [
+const generos = [
   { id: 1, nombre: 'Masculino' },
   { id: 2, nombre: 'Femenino' },
   { id: 3, nombre: 'Otro' },
@@ -127,6 +127,24 @@ export default function DatosSolicitante({
     }
   }, [form.interesado?.persona?.domicilio?.estadoId]);
 
+  const getGeneroValue = (sexo) => {
+    if (typeof sexo === 'string') {
+      const parsed = Number(sexo);
+
+      if (!Number.isNaN(parsed)) {
+        return generos.find((g) => g.id === parsed)?.nombre || '';
+      }
+
+      return sexo;
+    }
+
+    if (typeof sexo === 'number') {
+      return generos.find((g) => g.id === sexo)?.nombre || '';
+    }
+
+    return '';
+  };
+
   const handleChange = (e, path) => {
     const { name, value } = e.target;
     const fieldName = [...path, name].join('.');
@@ -213,7 +231,11 @@ export default function DatosSolicitante({
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
-        <Subtitle>{tipoSolicitud === 'revalidacion' ? 'Trámite de Revalidación' : 'Trámite de Equivalencia'}</Subtitle>
+        <Subtitle>
+          {tipoSolicitud === 'revalidacion'
+            ? 'Trámite de Revalidación'
+            : 'Trámite de Equivalencia'}
+        </Subtitle>
       </Grid>
       <Grid item xs={4}>
         <Select
@@ -292,10 +314,11 @@ export default function DatosSolicitante({
       <Grid item xs={3}>
         <Select
           id="sexo"
-          title="Sexo"
-          options={sexo}
+          title="Género"
+          options={generos || []}
           name="sexo"
-          value={form.interesado?.persona?.sexo || ''}
+          textValue
+          value={getGeneroValue(form.interesado?.persona?.sexo)}
           onChange={(e) => handleChange(e, ['interesado', 'persona'])}
           required
           errorMessage={getError(['interesado', 'persona'], 'sexo')}
@@ -440,8 +463,8 @@ export default function DatosSolicitante({
 
 DatosSolicitante.defaultProps = {
   disabled: false,
-  handleOnChange: () => { },
-  setNextDisabled: () => { },
+  handleOnChange: () => {},
+  setNextDisabled: () => {},
   validateFields: false,
 };
 

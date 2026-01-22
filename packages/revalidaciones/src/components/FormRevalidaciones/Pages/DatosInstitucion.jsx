@@ -3,7 +3,7 @@ import {
   Input, InputDate, Select, Subtitle,
 } from '@siiges-ui/shared';
 import React, {
-  useEffect, useState, useCallback, useMemo,
+  useEffect, useState, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../../utils/FetchData';
@@ -132,72 +132,69 @@ export default function DatosInstitucion({
   setNextDisabled,
   validateFields,
   disabled,
+  setCalificacionesReglas,
 }) {
   const [programas, setProgramas] = useState([]);
   const [instituciones, setInstituciones] = useState([]);
   const [grados, setGrados] = useState([]);
   const [rvoes, setRvoes] = useState([]);
+  const [rvoesList, setRvoesList] = useState([]);
+  const [calificacionesReglasList, setCalificacionesReglasList] = useState([]);
   const [rvoeError, setRvoeError] = useState('');
-  const [institucionId, setInstitucionId] = useState();
-  const [loadingRvoes, setLoadingRvoes] = useState(false);
   const [touched, setTouched] = useState({});
 
-  // Fetch RVOEs when institucionId changes
+  const tipoInstitucionId = form.interesado?.institucionDestino?.tipoInstitucionId || '';
+  const carrera = form.interesado?.institucionDestino?.nombreCarrera || '';
+  const institucionId = form.interesado?.institucionDestino?.institucionId
+    || form.interesado?.institucionDestino?.institucionDestinoPrograma
+      ?.programa?.plantel?.institucionId
+    || '';
+  const programaId = form.interesado?.institucionDestino?.programaId
+    || form.interesado?.institucionDestino?.institucionDestinoPrograma
+      ?.programaId
+    || '';
+
   useEffect(() => {
-    if (institucionId) {
-      setLoadingRvoes(true);
-      fetchData(
-        `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
-        (data) => {
-          setRvoes(Array.isArray(data) ? data : []);
-          setLoadingRvoes(false);
-        },
-        (item) => ({
-          id: item?.id || '',
-          acuerdoRvoe: item?.acuerdoRvoe || '',
-          nombre: item?.nombre || '',
-        }),
-      );
-    } else {
+    if (!institucionId) {
       setRvoes([]);
-      setLoadingRvoes(false);
+      return;
     }
+    fetchData(
+      `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
+      setRvoes,
+    );
   }, [institucionId]);
 
-  // Initialize institucionId from form
   useEffect(() => {
-    setInstitucionId(
-      form.interesado?.institucionDestino?.id
-        || form.interesado?.institucionDestino?.institucionId
-        || '',
+    if (!rvoes?.length) {
+      setRvoesList([]);
+      return;
+    }
+    setRvoesList(
+      rvoes.map(({ id, acuerdoRvoe, nombre }) => ({
+        id,
+        nombre: acuerdoRvoe,
+        carrera: nombre,
+      })),
     );
-  }, [form]);
-
-  const tipoInstitucionId = useMemo(
-    () => form.interesado?.institucionDestino?.tipoInstitucionId || '',
-    [form.interesado?.institucionDestino?.tipoInstitucionId],
-  );
-
-  const rvoesList = useMemo(
-    () => rvoes.map((item) => ({
-      id: item.id,
-      nombre: item.acuerdoRvoe || item.nombre || 'Sin nombre',
-    })),
-    [rvoes],
-  );
-
-  const selectedRvoe = useMemo(() => {
-    if (!Array.isArray(rvoes)) return undefined;
-    return rvoes.find(
-      (item) => item?.id?.toString()
-        === form.interesado?.institucionDestino?.programaId?.toString(),
+    setCalificacionesReglasList(
+      rvoes.map(
+        ({
+          id,
+          calificacionAprobatoria,
+          calificacionDecimal,
+          calificacionMaxima,
+          calificacionMinima,
+        }) => ({
+          id,
+          calificacionAprobatoria,
+          calificacionDecimal,
+          calificacionMaxima,
+          calificacionMinima,
+        }),
+      ),
     );
-  }, [rvoes, form.interesado?.institucionDestino?.programaId]);
-
-  const carrera = useMemo(
-    () => selectedRvoe?.nombre || selectedRvoe?.acuerdoRvoe || '',
-    [selectedRvoe],
-  );
+  }, [rvoes]);
 
   const mapNivelesData = useCallback(
     (item) => ({
@@ -277,31 +274,47 @@ export default function DatosInstitucion({
     [tipoInstitucionId, fetchProgramas, handleOnChange],
   );
 
-  const handleRvoeChange = useCallback(
-    (e) => {
-      handleOnChange(e, ['interesado', 'institucionDestino']);
-    },
-    [handleOnChange],
-  );
+  const handleRvoeChange = (event) => {
+    const selectedId = Number(event.target.value);
+    const selectedRvoe = rvoesList.find((r) => r.id === selectedId);
+    const reglas = calificacionesReglasList.find((cr) => cr.id === selectedId);
+    setCalificacionesReglas(reglas);
 
-  const handleInstitucionChange = useCallback(
-    (e) => {
-      const resetProgramaIdEvent = {
-        target: {
-          name: 'programaId',
-          value: '',
-        },
-      };
+    if (selectedRvoe) {
+      handleOnChange(
+        { target: { name: 'acuerdoRvoe', value: selectedRvoe.nombre } },
+        ['interesado', 'institucionDestino'],
+      );
+      handleOnChange(
+        { target: { name: 'nombreCarrera', value: selectedRvoe.carrera } },
+        ['interesado', 'institucionDestino'],
+      );
+      setRvoeError('');
+    } else {
+      setRvoeError('RVOE inválido');
+    }
 
-      handleOnChange(e, ['interesado', 'institucionDestino']);
-      handleOnChange(resetProgramaIdEvent, [
+    handleOnChange(event, ['interesado', 'institucionDestino']);
+  };
+
+  const handleInstitucionChange = (event) => {
+    handleOnChange(event, ['interesado', 'institucionDestino']);
+
+    if (tipoInstitucionId === 1) {
+      handleOnChange({ target: { name: 'programaId', value: '' } }, [
         'interesado',
         'institucionDestino',
       ]);
-      setInstitucionId(e.target.value);
-    },
-    [handleOnChange],
-  );
+      handleOnChange({ target: { name: 'acuerdoRvoe', value: '' } }, [
+        'interesado',
+        'institucionDestino',
+      ]);
+      handleOnChange({ target: { name: 'nombreCarrera', value: '' } }, [
+        'interesado',
+        'institucionDestino',
+      ]);
+    }
+  };
 
   const validateField = useCallback(
     (value, required, fieldName) => (touched[fieldName] && required && !value
@@ -528,37 +541,30 @@ export default function DatosInstitucion({
       )}
 
       {tipoInstitucionId === 1 && (
-        <>
-          <Grid item xs={3}>
-            <Select
-              title="RVOE"
-              options={
-                loadingRvoes
-                  ? [{ id: 'loading', nombre: 'Cargando...' }]
-                  : rvoesList
-              }
-              name="programaId"
-              value={getFormValue([
-                'interesado',
-                'institucionDestino',
-                'programaId',
-              ])}
-              onChange={handleRvoeChange}
-              errorMessage={rvoeError}
-              required
-              disabled={disabled || loadingRvoes}
-            />
-          </Grid>
-          <Grid item xs={9}>
-            <Input
-              id="nombreCarreraDestino"
-              label="Nombre de la Carrera (Destino)"
-              name="nombreCarrera"
-              value={carrera}
-              disabled
-            />
-          </Grid>
-        </>
+      <>
+        <Grid item xs={3}>
+          <Select
+            title="RVOE"
+            options={rvoesList || []}
+            name="programaId"
+            value={programaId}
+            onChange={handleRvoeChange}
+            errorMessage={rvoeError}
+            disabled={disabled}
+            required
+          />
+        </Grid>
+
+        <Grid item xs={9}>
+          <Input
+            id="nombreCarreraDestino"
+            label="Nombre de la Carrera (Destino)"
+            name="nombreCarrera"
+            value={carrera}
+            disabled
+          />
+        </Grid>
+      </>
       )}
     </Grid>
   );
@@ -586,6 +592,23 @@ DatosInstitucion.propTypes = {
         correoInstitucion: PropTypes.string,
       }),
       institucionDestino: PropTypes.shape({
+        institucionDestinoPrograma: PropTypes.shape({
+          institucionDestinoId: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+          ]),
+          programaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+          programa: PropTypes.shape({
+            nombre: PropTypes.string,
+            acuerdoRvoe: PropTypes.string,
+            plantel: PropTypes.shape({
+              institucionId: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number,
+              ]),
+            }),
+          }),
+        }),
         id: PropTypes.number,
         tipoInstitucionId: PropTypes.oneOfType([
           PropTypes.string,
@@ -612,6 +635,7 @@ DatosInstitucion.propTypes = {
     }),
   ).isRequired,
   setNextDisabled: PropTypes.func,
+  setCalificacionesReglas: PropTypes.func.isRequired,
   validateFields: PropTypes.bool,
   disabled: PropTypes.bool,
 };
