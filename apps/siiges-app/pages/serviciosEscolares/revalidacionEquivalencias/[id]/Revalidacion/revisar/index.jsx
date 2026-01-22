@@ -1,10 +1,7 @@
 import { Grid } from '@mui/material'; // Changed from @mui/system to @mui/material
 import { ConsultRevalidacion } from '@siiges-ui/revalidaciones';
 import {
-  ButtonSimple,
-  Layout,
-  updateRecord,
-  Context,
+  ButtonSimple, Layout, updateRecord, Context,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
@@ -31,7 +28,8 @@ export default function RevisarRevalidacion() {
       } else {
         setNoti({
           open: true,
-          message: response.errorMessage || '¡Error al actualizar la solicitud!',
+          message:
+            response.errorMessage || '¡Error al actualizar la solicitud!',
           type: 'error',
         });
       }
@@ -50,14 +48,7 @@ export default function RevisarRevalidacion() {
         <Grid item xs={12}>
           <ConsultRevalidacion />
         </Grid>
-        <Grid item xs={6}>
-          <ButtonSimple
-            text="Regresar"
-            onClick={() => router.back()}
-            design="warning"
-          />
-        </Grid>
-        <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Grid item xs={9.45}>
           <ButtonSimple
             text="Pasar a Firma"
             onClick={handleSubmit}
