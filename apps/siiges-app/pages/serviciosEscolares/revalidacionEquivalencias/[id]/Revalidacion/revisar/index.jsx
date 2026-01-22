@@ -48,7 +48,7 @@ export default function RevisarRevalidacion() {
         <Grid item xs={12}>
           <ConsultRevalidacion />
         </Grid>
-        <Grid item xs={9.45}>
+        <Grid item xs={12}>
           <ButtonSimple
             text="Pasar a Firma"
             onClick={handleSubmit}
