@@ -38,7 +38,13 @@ const columnsTitulo = (handleEdit, handleConsult, status) => [
     headerName: 'ID',
     hide: true,
   },
+  {
+    field: 'consecutivo',
+    headerName: 'Consecutivo',
+    width: 150,
+  },
   { field: 'name', headerName: 'Nombre', width: 250 },
+  { field: 'numeroFolioActa', headerName: 'Folio Acta', width: 150 },
   { field: 'matricula', headerName: 'Matrícula', width: 250 },
   {
     field: 'fechaTerminacion',
@@ -83,6 +89,11 @@ const columnsCertificado = (handleEdit, handleConsult, status) => [
     field: 'id',
     headerName: 'ID',
     hide: true,
+  },
+  {
+    field: 'consecutivo',
+    headerName: 'Consecutivo',
+    width: 100,
   },
   { field: 'name', headerName: 'Nombre', width: 250 },
   { field: 'matricula', headerName: 'Matrícula', width: 250 },
@@ -315,7 +326,9 @@ export default function FoliosData({ type }) {
 
               return {
                 id: alumnos.id,
+                consecutivo: alumnos.consecutivo,
                 name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
+                numeroFolioActa: alumnos.folioActa || '',
                 matricula: alumnos.alumno.matricula,
                 fechaTerminacion: dayjs(alumnos.fechaTerminacion).format(
                   'DD/MM/YYYY',
@@ -520,6 +533,7 @@ export default function FoliosData({ type }) {
                     <ListTitle text="Periodo" />
                     <ListTitle text="Tipo de Documento" />
                     <ListTitle text="Tipo de Solicitud" />
+                    <ListTitle text="Alumnos" />
                   </List>
                 </Grid>
                 <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -529,6 +543,9 @@ export default function FoliosData({ type }) {
                     <ListSubtitle text={PERIODOS[etiquetas.periodos] || 'N/A'} />
                     <ListSubtitle text={etiquetas.tipoDocumento || 'N/A'} />
                     <ListSubtitle text={etiquetas.tipoSolicitudFolio || 'N/A'} />
+                    <ListSubtitle
+                      text={Array.isArray(alumnosData) ? alumnosData.length : 0}
+                    />
                   </List>
                 </Grid>
               </Grid>

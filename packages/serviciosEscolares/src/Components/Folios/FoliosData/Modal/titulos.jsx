@@ -91,7 +91,10 @@ export default function ModalTitulo({
 
   useEffect(() => {
     if (type !== 'create' && rowData) {
-      setForm(rowData);
+      setForm({
+        ...rowData,
+        numeroFolioActaTitulacion: rowData.folioActa,
+      });
       if (rowData.alumno) {
         const fullName = `${rowData.alumno.persona.nombre} ${rowData.alumno.persona.apellidoPaterno} ${rowData.alumno.persona.apellidoMaterno}`;
         setAlumno(fullName);
@@ -128,6 +131,7 @@ export default function ModalTitulo({
 
     const formattedForm = {
       ...form,
+      folioActa: form.numeroFolioActaTitulacion || '',
       fechaInicio: form.fechaInicio
         ? dayjs(form.fechaInicio).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
@@ -296,6 +300,17 @@ export default function ModalTitulo({
               />
             </Grid>
             <Grid item xs={6}>
+              <Input
+                label="Número de folio de acta de titulación"
+                id="numeroFolioActaTitulacion"
+                name="numeroFolioActaTitulacion"
+                type="String"
+                value={form.numeroFolioActaTitulacion || ''}
+                onChange={handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+            <Grid item xs={6}>
               <Select
                 title="Modalidad de titulación"
                 options={modalidadTitulacion}
@@ -390,6 +405,7 @@ ModalTitulo.propTypes = {
     }),
     alumnoId: PropTypes.number,
     id: PropTypes.number,
+    folioActa: PropTypes.string,
     name: PropTypes.string,
     fechaTermino: PropTypes.string,
     fechaElaboracion: PropTypes.string,
