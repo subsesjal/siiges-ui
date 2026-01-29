@@ -1,9 +1,12 @@
-import Tooltip from '@mui/material/Tooltip';
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState, useEffect, useRef, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
-import router from 'next/router';
 import Image from 'next/image';
-import { Grid, IconButton, Typography } from '@mui/material';
+import {
+  Grid, IconButton, Typography, Tooltip,
+} from '@mui/material';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import {
   ButtonsForm,
   SubmitDocument,
@@ -12,7 +15,6 @@ import {
   NavigationButtons,
 } from '@siiges-ui/shared';
 import { getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import InstitucionFields from '../InstitucionFields';
 import {
   submitInstitucion,
@@ -22,7 +24,8 @@ import {
 } from '../../../utils/institucionHandler';
 import BiografiaBibliografiaModal from '../../utils/BiografiaBibliografiaModal';
 
-const domain = process.env.NEXT_PUBLIC_URL;
+const DOMAIN = process.env.NEXT_PUBLIC_URL;
+const FALLBACK_IMAGE = '/logoschool.png';
 
 export default function InstitucionForm({
   session,
@@ -32,23 +35,85 @@ export default function InstitucionForm({
   setTitle,
   setNoti,
 }) {
-  const [institucion, setInstitucion] = useState(initialInstitucion || {});
-  const [errorFields, setErrorFields] = useState({});
   const [form, setForm] = useState({});
-  const [openModal, setOpenModal] = useState(false);
+  const [institucion, setInstitucion] = useState(initialInstitucion || {});
+  const [errors, setErrors] = useState({});
   const [page, setPage] = useState(1);
   const [imageUrl, setImageUrl] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [file, setFile] = useState(null);
+  const [confirmImageModal, setConfirmImageModal] = useState(false);
+  const [openFinalModal, setOpenFinalModal] = useState(false);
+
   const fileInputRef = useRef(null);
-  const [openModalPhoto, setOpenModalPhoto] = useState(false);
-  const [confirmDisabled, setConfirmDisabled] = useState(true);
-  const initialized = useRef(false);
+
+  const getInstitutionPhoto = useCallback(async (institucionId) => {
+    try {
+      const response = await getData({
+        endpoint: '/files/',
+        query: `?tipoEntidad=INSTITUCION&entidadId=${institucionId}&tipoDocumento=LOGOTIPO`,
+      });
+
+      if (response.statusCode === 200 && response.data?.ubicacion) {
+        setImageUrl(`${DOMAIN}${response.data.ubicacion}`);
+      } else {
+        setImageUrl(null);
+      }
+    } catch {
+      setImageUrl(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+
+      if (accion === 'crear') {
+        setTitle('Registrar Institución');
+        setForm({
+          usuarioId: session.id,
+          tipoInstitucionId: 1,
+          esNombreAutorizado: false,
+        });
+      }
+
+      if (accion === 'editar' && initialInstitucion?.id) {
+        setTitle('Modificar Institución');
+        setForm(initialInstitucion);
+        setInstitucion(initialInstitucion);
+        await getInstitutionPhoto(initialInstitucion.id);
+      }
+
+      setLoading(false);
+    };
+
+    init();
+  }, [accion, initialInstitucion, session.id, getInstitutionPhoto, setLoading, setTitle]);
+
+  const handleUploadImage = async () => {
+    const formData = new FormData();
+    formData.append('archivoAdjunto', file);
+    formData.append('tipoEntidad', 'INSTITUCION');
+    formData.append('entidadId', institucion.id);
+    formData.append('tipoDocumento', 'LOGOTIPO');
+
+    try {
+      setLoading(true);
+      await SubmitDocument(formData);
+      await getInstitutionPhoto(institucion.id);
+    } catch (error) {
+      setNoti({ open: true, message: 'Error al subir imagen', type: 'error' });
+    } finally {
+      setLoading(false);
+      setConfirmImageModal(false);
+      setFile(null);
+    }
+  };
 
   const handleConfirm = async () => {
     const success = await submitInstitucion({
       form,
       accion,
-      errorFields,
+      errorFields: errors,
       setNoti,
       setLoading,
       institucion,
@@ -56,106 +121,37 @@ export default function InstitucionForm({
     });
 
     if (success && accion === 'crear') {
-      setOpenModal(true);
+      setOpenFinalModal(true);
     }
   };
 
-  useEffect(() => {
-    setConfirmDisabled(page <= 1);
-  }, [page]);
-
-  const getInstitutionPhoto = async (institucionId) => {
-    try {
-      const endpoint = '/files/';
-      const query = `?tipoEntidad=INSTITUCION&entidadId=${institucionId}&tipoDocumento=LOGOTIPO`;
-      const response = await getData({ endpoint, query });
-      if (response.statusCode === 200 && response.data?.url) {
-        const { ubicacion } = response.data;
-        const url = `${domain}${ubicacion}`;
-        const imageBlob = await fetch(url).then((res) => res.blob());
-        setImageUrl(URL.createObjectURL(imageBlob));
-      } else {
-        setImageUrl(null);
-      }
-    } catch (error) {
-      setImageUrl(null);
-    }
-  };
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-    setOpenModalPhoto(true);
-  };
-
-  const handleUploadClick = async () => {
-    const formData = new FormData();
-    formData.append('archivoAdjunto', selectedFile);
-    formData.append('tipoEntidad', 'INSTITUCION');
-    formData.append('entidadId', institucion.id);
-    formData.append('tipoDocumento', 'LOGOTIPO');
-    try {
-      await SubmitDocument(formData);
-    } catch (error) {
-      router.reload();
-    } finally {
-      setOpenModalPhoto(false);
-      setSelectedFile(null);
-    }
-  };
-
-  const handleModalClose = () => {
-    setOpenModalPhoto(false);
-  };
-
-  useEffect(() => {
-    if (!initialized.current) {
-      const initializeForm = async () => {
-        setLoading(true);
-        if (accion === 'crear' && session.id) {
-          setForm({
-            usuarioId: session.id,
-            tipoInstitucionId: 1,
-            esNombreAutorizado: false,
-          });
-          setTitle('Registrar Institución');
-        } else if (accion === 'editar' && initialInstitucion.id) {
-          setForm(initialInstitucion);
-          setInstitucion(initialInstitucion);
-          setTitle('Modificar Institución');
-          await getInstitutionPhoto(initialInstitucion.id);
-        } else {
-          router.back();
-        }
-        setLoading(false);
-      };
-
-      initializeForm();
-      initialized.current = true;
-    }
-  }, [accion, initialInstitucion, session.id, setLoading, setTitle]);
+  const proxiedImage = imageUrl
+    ? `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`
+    : FALLBACK_IMAGE;
 
   return (
     <Grid container>
-      <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
-        <div style={{ position: 'relative', width: '300px', height: '300px' }}>
+      <Grid item xs={4} sx={{ textAlign: 'center', mt: 10 }}>
+        <div style={{ position: 'relative', width: 300, height: 300 }}>
           <Image
+            src={proxiedImage}
             alt="institucion-logo"
-            src={imageUrl || '/logoschool.png'}
+            width={300}
+            height={300}
             quality={100}
-            width="300px"
-            height="300px"
-            style={{ zIndex: 1, overflow: 'hidden' }}
+            style={{ objectFit: 'contain' }}
+            priority
           />
+
           {accion !== 'crear' && (
-            <Tooltip title="Agregar imagen" placement="top">
+            <Tooltip title="Cambiar imagen">
               <IconButton
                 onClick={() => fileInputRef.current.click()}
                 sx={{
                   position: 'absolute',
-                  top: '255px',
-                  right: '10px',
-                  zIndex: 2,
-                  backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                  bottom: 10,
+                  right: 10,
+                  backgroundColor: 'rgba(255,255,255,0.8)',
                 }}
                 size="small"
               >
@@ -165,20 +161,25 @@ export default function InstitucionForm({
           )}
 
           <input
-            type="file"
             ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleFileChange}
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={(e) => {
+              setFile(e.target.files[0]);
+              setConfirmImageModal(true);
+            }}
           />
         </div>
       </Grid>
+
       <Grid item xs={8}>
         <InstitucionFields
           handleOnChange={handleOnChange}
           handleOnBlur={handleOnBlur}
           institucion={institucion}
-          errors={errorFields}
-          setError={setErrorFields}
+          errors={errors}
+          setError={setErrors}
           setForm={setForm}
           form={form}
           setLoading={setLoading}
@@ -186,14 +187,11 @@ export default function InstitucionForm({
           page={page}
         />
       </Grid>
+
       <Grid item xs={6} sx={{ mt: 2 }}>
-        <ButtonsForm
-          confirm={handleConfirm}
-          confirmDisabled={confirmDisabled}
-          cancel={handleCancel}
-          justifyContent="flex-start"
-        />
+        <ButtonsForm justifyContent="flex-start" confirm={handleConfirm} cancel={handleCancel} />
       </Grid>
+
       <Grid item xs={6} sx={{ mt: 2 }}>
         <NavigationButtons
           currentPosition={page}
@@ -202,32 +200,26 @@ export default function InstitucionForm({
           onPrevious={() => setPage(1)}
         />
       </Grid>
+
       <DefaultModal
-        open={openModalPhoto}
-        setOpen={handleModalClose}
+        open={confirmImageModal}
+        setOpen={() => setConfirmImageModal(false)}
         title="Confirmar cambio de imagen"
       >
-        <Typography>¿Estás seguro de cambiar la imagen?</Typography>
-        <Grid container spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
+        <Typography>¿Deseas actualizar el logotipo?</Typography>
+        <Grid container justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
           <Grid item>
-            <ButtonSimple
-              text="Cancelar"
-              alt="Cancelar"
-              onClick={handleModalClose}
-            />
+            <ButtonSimple text="Cancelar" onClick={() => setConfirmImageModal(false)} />
           </Grid>
           <Grid item>
-            <ButtonSimple
-              text="Confirmar"
-              alt="Confirmar"
-              onClick={handleUploadClick}
-            />
+            <ButtonSimple text="Confirmar" onClick={handleUploadImage} />
           </Grid>
         </Grid>
       </DefaultModal>
+
       <BiografiaBibliografiaModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
+        open={openFinalModal}
+        onClose={() => setOpenFinalModal(false)}
         institucionId={form.id}
         setNoti={setNoti}
         setLoading={setLoading}
