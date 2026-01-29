@@ -44,14 +44,18 @@ export default function AdminTable({
       width: 150,
       renderCell: (params) => {
         const handleAddClick = () => {
+          let accion = 'consultar';
+          if (params.row.estatusSolicitudFolioId === 2) accion = 'revisar';
+          if (params.row.estatusSolicitudFolioId === 3) accion = 'envio';
+
           router.push(
-            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios`,
+            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios?accion=${accion}`,
           );
         };
 
         const goToConsult = () => {
           router.push(
-            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios?`,
+            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios?accion=consultar`,
           );
         };
 

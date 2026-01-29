@@ -26,6 +26,7 @@ import Divider from '@mui/material/Divider';
 
 export default function Folios() {
   const { setNoti, setLoading } = useContext(Context);
+
   const [url, setUrl] = useState(null);
   const [etiquetas, setEtiquetas] = useState({
     tipoDocumento: '',
@@ -54,7 +55,7 @@ export default function Folios() {
   });
 
   const router = useRouter();
-  const { id } = router.query;
+  const { id, accion } = router.query;
 
   useEffect(() => {
     if (id) {
@@ -306,12 +307,21 @@ export default function Folios() {
   ];
 
   let title = '';
+
   if (estatus === 2) {
-    title = 'Consultar Solicitud';
-  } else if (estatus === 3) {
-    title = `Envío de Solicitud a ${etiquetas.tipoDocumento}`;
-  } else if (estatus === 4) {
-    title = 'Atender Observaciones de Solicitud';
+    title = accion === 'revisar'
+      ? 'Revisar Solicitud'
+      : 'Consultar Solicitud';
+  }
+
+  if (estatus === 3) {
+    title = accion === 'envio'
+      ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
+      : 'Consultar Solicitud';
+  }
+
+  if (estatus === 4) {
+    title = accion === 'observaciones' ? 'Atender Observaciones de Solicitud' : 'Consultar Solicitud';
   }
 
   const PERIODOS = {
