@@ -26,6 +26,7 @@ import Divider from '@mui/material/Divider';
 
 export default function Folios() {
   const { setNoti, setLoading } = useContext(Context);
+
   const [url, setUrl] = useState(null);
   const [etiquetas, setEtiquetas] = useState({
     tipoDocumento: '',
@@ -305,11 +306,19 @@ export default function Folios() {
     },
   ];
 
+  const accion = typeof window !== 'undefined'
+    ? sessionStorage.getItem('foliosAccion')
+    : null;
   let title = '';
+
   if (estatus === 2) {
-    title = 'Consultar Solicitud';
+    title = accion === 'revisar'
+      ? 'Revisar Solicitud'
+      : 'Consultar Solicitud';
   } else if (estatus === 3) {
-    title = `Envío de Solicitud a ${etiquetas.tipoDocumento}`;
+    title = accion === 'envio'
+      ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
+      : 'Consultar Envio de Solicitud a Titulación';
   } else if (estatus === 4) {
     title = 'Atender Observaciones de Solicitud';
   }
