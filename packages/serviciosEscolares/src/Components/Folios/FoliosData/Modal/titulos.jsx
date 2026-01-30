@@ -210,7 +210,7 @@ export default function ModalTitulo({
   const handleNext = () => {
     if (!alumnoId) return;
 
-    if (alumnoYaAgregado(alumnoId)) {
+    if (type === 'create' && alumnoYaAgregado(alumnoId)) {
       setNoti({
         open: true,
         message: 'Este alumno ya fue agregado a la solicitud',
