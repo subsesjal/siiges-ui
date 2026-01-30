@@ -21,6 +21,9 @@ import {
   ListTitle,
   ListSubtitle,
   updateRecord,
+  deleteRecord,
+  DefaultModal,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
@@ -28,11 +31,12 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
+import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import ButtonsFolios from '../ButtonsFolios';
 import ModalCertificado from './Modal/certificados';
 import ModalTitulo from './Modal/titulos';
 
-const columnsTitulo = (handleEdit, handleConsult, status) => [
+const columnsTitulo = (handleEdit, handleConsult, handleDeleteAlumno, status) => [
   {
     field: 'id',
     headerName: 'ID',
@@ -73,12 +77,22 @@ const columnsTitulo = (handleEdit, handleConsult, status) => [
             </IconButton>
           </Tooltip>
         )}
+        {status !== 'consult' && (
+        <Tooltip title="Eliminar alumno" placement="top">
+          <IconButton
+            onClick={() => handleDeleteAlumno(params.row.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+        )}
+
       </div>
     ),
   },
 ];
 
-const columnsCertificado = (handleEdit, handleConsult, status) => [
+const columnsCertificado = (handleEdit, handleConsult, handleDeleteAlumno, status) => [
   {
     field: 'id',
     headerName: 'ID',
@@ -113,6 +127,15 @@ const columnsCertificado = (handleEdit, handleConsult, status) => [
               <EditIcon />
             </IconButton>
           </Tooltip>
+        )}
+        {status !== 'consult' && (
+        <Tooltip title="Eliminar alumno" placement="top">
+          <IconButton
+            onClick={() => handleDeleteAlumno(params.row.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
         )}
       </div>
     ),
@@ -179,6 +202,8 @@ export default function FoliosData({ type }) {
   const [alumnoType, setAlumnoType] = useState('create');
   const [alumnosData, setAlumnosData] = useState({});
   const [alumnoResponse, setAlumnoResponse] = useState(true);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [alumnoToDelete, setAlumnoToDelete] = useState(null);
   const [solicitudFolioCreatedAt, setSolicitudFolioCreatedAt] = useState(null);
   const [formData, setFormData] = useState({
     folioPago: '',
@@ -385,6 +410,42 @@ export default function FoliosData({ type }) {
       });
     }
   };
+  const handleDeleteAlumno = (alumnoId) => {
+    setAlumnoToDelete(alumnoId);
+    setOpenDeleteModal(true);
+  };
+
+  const confirmDeleteAlumno = async () => {
+    if (!alumnoToDelete) return;
+
+    setLoading(true);
+    try {
+      const response = await deleteRecord({
+        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${alumnoToDelete}`,
+      });
+
+      if (response.statusCode === 200) {
+        setNoti({
+          open: true,
+          message: 'Alumno eliminado correctamente',
+          type: 'success',
+        });
+
+        setRows((prev) => prev.filter((row) => row.id !== alumnoToDelete));
+        setAlumnosData((prev) => prev.filter((row) => row.id !== alumnoToDelete));
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: 'Error al eliminar el alumno',
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
+      setOpenDeleteModal(false);
+      setAlumnoToDelete(null);
+    }
+  };
 
   const handleAddAlumno = () => {
     setAlumnoType('create');
@@ -567,8 +628,8 @@ export default function FoliosData({ type }) {
               title="Alumnos"
               rows={rows}
               columns={formData.tipoDocumentoId === 1
-                ? columnsTitulo(handleEdit, handleConsult, status)
-                : columnsCertificado(handleEdit, handleConsult, status)}
+                ? columnsTitulo(handleEdit, handleConsult, handleDeleteAlumno, status)
+                : columnsCertificado(handleEdit, handleConsult, handleDeleteAlumno, status)}
             />
           </Grid>
         </Grid>
@@ -620,6 +681,22 @@ export default function FoliosData({ type }) {
           alumnosAgregados={alumnosData}
         />
       )}
+      <DefaultModal
+        title="Eliminar alumno"
+        open={openDeleteModal}
+        setOpen={setOpenDeleteModal}
+      >
+        <Typography>
+          ¿Está seguro de eliminar este alumno de la solicitud?
+        </Typography>
+
+        <ButtonsForm
+          cancel={() => setOpenDeleteModal(false)}
+          confirm={confirmDeleteAlumno}
+          confirmText="Confirmar"
+        />
+      </DefaultModal>
+
     </Box>
   );
 }
