@@ -444,8 +444,23 @@ export default function FoliosData({ type }) {
           type: 'success',
         });
 
-        setRows((prev) => prev.filter((row) => row.id !== alumnoToDelete));
-        setAlumnosData((prev) => prev.filter((row) => row.id !== alumnoToDelete));
+        setRows((prev) => {
+          const filtrados = prev.filter((row) => row.id !== alumnoToDelete);
+
+          return filtrados.map((row, index) => ({
+            ...row,
+            consecutivo: index + 1,
+          }));
+        });
+
+        setAlumnosData((prev) => {
+          const filtrados = prev.filter((row) => row.id !== alumnoToDelete);
+
+          return filtrados.map((row, index) => ({
+            ...row,
+            consecutivo: index + 1,
+          }));
+        });
       }
     } catch (error) {
       setNoti({

@@ -245,7 +245,14 @@ export default function Folios() {
           type: 'success',
         });
 
-        setAlumnosRows((prev) => prev.filter((row) => row.id !== alumnoId));
+        setAlumnosRows((prev) => {
+          const filtrados = prev.filter((row) => row.id !== alumnoId);
+
+          return filtrados.map((row, index) => ({
+            ...row,
+            consecutivo: index + 1,
+          }));
+        });
       }
     } catch (error) {
       setNoti({
