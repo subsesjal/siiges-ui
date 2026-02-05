@@ -117,8 +117,8 @@ export default function CargaMateriasEquivalentes({
 
   const handleEdit = async (row) => {
     const index = asignaturas.findIndex(
-      (item) => (item.id
-        || item.asignaturaEquivalentePrograma?.asignaturaAntecedenteEquivalenteId)
+      (item) => (item.asignaturaId
+        || item.asignaturaEquivalentePrograma?.asignaturaId)
       === row.asignaturaId,
     );
 
@@ -131,7 +131,7 @@ export default function CargaMateriasEquivalentes({
     setCalificacionEquivalente(row.calificacionEquivalente);
     setAsignaturaId(row.asignaturaId);
 
-    const asignaturaBackendId = asignaturas[index]?.asignaturaAntecedenteEquivalenteId;
+    const asignaturaBackendId = asignaturas[index]?.id;
 
     if (asignaturaBackendId) {
       fetchData(
@@ -361,42 +361,44 @@ export default function CargaMateriasEquivalentes({
             />
           </Grid>
 
-          <Grid item xs={4}>
-            <LabelData title="Academia" subtitle={asignaturaPrograma?.academia || '—'} />
-          </Grid>
-          <Grid item xs={4}>
-            <LabelData title="Consecutivo" subtitle={asignaturaPrograma?.consecutivo || '—'} />
-          </Grid>
-          <Grid item xs={4}>
-            <LabelData title="Nombre" subtitle={asignaturaPrograma?.nombre || '—'} />
-          </Grid>
+          {asignaturaPrograma && (
+          <>
+            <Grid item xs={6}>
+              <LabelData title="Academia" subtitle={asignaturaPrograma?.academia || '—'} />
+            </Grid>
+            <Grid item xs={6}>
+              <LabelData title="Nombre" subtitle={asignaturaPrograma?.nombre || '—'} />
+            </Grid>
 
-          <Grid item xs={4}>
-            <LabelData title="Clave" subtitle={asignaturaPrograma?.clave || '—'} />
-          </Grid>
-          <Grid item xs={4}>
-            <LabelData title="Seriación" subtitle={asignaturaPrograma?.seriacion || '—'} />
-          </Grid>
-          <Grid item xs={4}>
-            <LabelData title="Objetivo" subtitle={asignaturaPrograma?.objetivo || '—'} />
-          </Grid>
+            <Grid item xs={6}>
+              <LabelData title="Clave" subtitle={asignaturaPrograma?.clave || '—'} />
+            </Grid>
+            <Grid item xs={6}>
+              <LabelData title="Seriación" subtitle={asignaturaPrograma?.seriacion || '—'} />
+            </Grid>
 
-          <Grid item xs={4}>
-            <LabelData title="Temas" subtitle={asignaturaPrograma?.temas || '—'} />
-          </Grid>
-          <Grid item xs={4}>
-            <LabelData title="Actividades" subtitle={asignaturaPrograma?.actividades || '—'} />
-          </Grid>
-          <Grid item xs={4}>
-            <LabelData title="Modelo Institucional" subtitle={asignaturaPrograma?.modeloInstitucional || '—'} />
-          </Grid>
+            <Grid item xs={6}>
+              <LabelData title="Objetivo" subtitle={asignaturaPrograma?.objetivo || '—'} />
+            </Grid>
+            <Grid item xs={6}>
+              <LabelData title="Temas" subtitle={asignaturaPrograma?.temas || '—'} />
+            </Grid>
 
-          <Grid item xs={4}>
-            <LabelData title="Tipo" subtitle={asignaturaPrograma?.tipo || '—'} />
-          </Grid>
-          <Grid item xs={4}>
-            <LabelData title="Fecha Autorización" subtitle={asignaturaPrograma?.fechaAutorizacion || '—'} />
-          </Grid>
+            <Grid item xs={6}>
+              <LabelData title="Actividades" subtitle={asignaturaPrograma?.actividades || '—'} />
+            </Grid>
+            <Grid item xs={6}>
+              <LabelData title="Modelo Institucional" subtitle={asignaturaPrograma?.modeloInstitucional || '—'} />
+            </Grid>
+
+            <Grid item xs={6}>
+              <LabelData title="Tipo" subtitle={asignaturaPrograma?.tipo || '—'} />
+            </Grid>
+            <Grid item xs={6}>
+              <LabelData title="Fecha Autorización" subtitle={asignaturaPrograma?.fechaAutorizacion || '—'} />
+            </Grid>
+          </>
+          )}
 
           <Grid item xs={12}>
             <ButtonsForm
