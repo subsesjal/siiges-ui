@@ -10,12 +10,8 @@ const columnsReporteFoliosAsignados = () => [
   },
   { field: 'Folio_Documento', headerName: 'Folio', width: 150 },
   { field: 'Fecha_Elaboracion', headerName: 'Fecha elaboración', width: 150 },
-  {
-    field: 'Libro', headerName: 'Libro', width: 150,
-  },
-  {
-    field: 'Foja', headerName: 'Foja', width: 150,
-  },
+  { field: 'Libro', headerName: 'Libro', width: 150 },
+  { field: 'Foja', headerName: 'Foja', width: 150 },
   { field: 'Fecha_Registro', headerName: 'Fecha registro', width: 150 },
   { field: 'RVOE', headerName: 'RVOE', width: 150 },
   { field: 'Nivel_Estudio_Nombre', headerName: 'Grado académico', width: 150 },
@@ -24,12 +20,20 @@ const columnsReporteFoliosAsignados = () => [
   {
     field: 'actions',
     headerName: 'Acciones',
-    width: 150,
-    renderCell: () => (
-      <ButtonsReporteFoliosAsig />
-    ),
+    width: 180,
     sortable: false,
     filterable: false,
+    renderCell: (params) => {
+      const { row } = params;
+      return (
+        <ButtonsReporteFoliosAsig
+          id={row.id}
+          tipoDocumento={row.Tipo_Documento}
+          estatusFirmado={row.Estatus_Firma}
+          solicitudFolioAlumnoId={row.Solicitud_Folio_Alumno_Id}
+        />
+      );
+    },
   },
 ];
 
