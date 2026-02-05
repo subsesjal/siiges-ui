@@ -1,6 +1,9 @@
 import { Grid } from '@mui/material';
 import {
-  Context, getData, Input, PositionDisplay,
+  Context,
+  getData,
+  Input,
+  PositionDisplay,
   Subtitle,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
@@ -27,6 +30,7 @@ export default function ConsultEquivalencia({
   const [form, setForm] = useState({});
   const [estados, setEstados] = useState([]);
   const [error, setError] = useState(false);
+  const [calificacionesReglas, setCalificacionesReglas] = useState({});
 
   const totalPositions = 4;
 
@@ -42,11 +46,17 @@ export default function ConsultEquivalencia({
         }
         setEstados(estadosResponse.data);
 
-        const equivalenciaResponse = await getData({ endpoint: `/solicitudesRevEquiv/${query.id}` });
+        const equivalenciaResponse = await getData({
+          endpoint: `/solicitudesRevEquiv/${query.id}`,
+        });
         if (equivalenciaResponse.statusCode !== 200) {
           setError('¡No se encontró esta equivalencia!');
         }
         setForm(equivalenciaResponse.data);
+        setCalificacionesReglas(
+          equivalenciaResponse.data.interesado?.institucionDestino
+            ?.institucionDestinoPrograma?.programa,
+        );
       } catch (err) {
         setError(true);
         setNoti({
@@ -108,7 +118,9 @@ export default function ConsultEquivalencia({
     });
   };
 
-  const isObservacionesDisabled = ![2].includes(form.estatusSolicitudRevEquivId);
+  const isObservacionesDisabled = ![2].includes(
+    form.estatusSolicitudRevEquivId,
+  );
 
   const renderCurrentPage = () => {
     switch (currentPosition) {
@@ -149,6 +161,7 @@ export default function ConsultEquivalencia({
             form={form}
             handleOnChange={handleChange}
             disabled={!edit}
+            calificacionesReglas={calificacionesReglas}
           />
         );
       default:
