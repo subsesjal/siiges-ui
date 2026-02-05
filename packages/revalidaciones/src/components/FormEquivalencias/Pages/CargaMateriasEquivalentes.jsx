@@ -10,7 +10,7 @@ import {
   LabelData,
   Select,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import fetchData from '../../../utils/FetchData';
@@ -44,28 +44,19 @@ const columns = (handleDelete, handleEdit, disabled) => [
     renderCell: (params) => (!disabled ? (
       <>
         <Tooltip title="Editar" placement="top">
-          <IconButton
-            onClick={() => handleEdit(params.row)}
-            aria-label="editar"
-          >
+          <IconButton onClick={() => handleEdit(params.row)}>
             <EditIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Eliminar" placement="top">
-          <IconButton
-            onClick={() => handleDelete(params.row.id)}
-            aria-label="eliminar"
-          >
+          <IconButton onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       </>
     ) : (
       <Tooltip title="Consultar" placement="top">
-        <IconButton
-          onClick={() => handleEdit(params.row)}
-          aria-label="consultar"
-        >
+        <IconButton onClick={() => handleEdit(params.row)}>
           <VisibilityOutlinedIcon />
         </IconButton>
       </Tooltip>
@@ -81,10 +72,12 @@ export default function CargaMateriasEquivalentes({
   disabled,
   calificacionesReglas,
 }) {
+  const asignaturas = form?.interesado?.asignaturasAntecedenteEquivalente || [];
+
   const [open, setOpen] = useState(false);
-  const [nombreAsignaturaAntecedente, setMateriaAntecedente] = useState('');
+  const [materiaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
-  const [nombreAsignaturaEquivalente, setMateriaEquivalente] = useState('');
+  const [materiaEquivalente, setMateriaEquivalente] = useState('');
   const [asignaturaId, setAsignaturaId] = useState(null);
   const [programa, setPrograma] = useState({});
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
@@ -92,39 +85,7 @@ export default function CargaMateriasEquivalentes({
   const [rows, setRows] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
-  const handleDelete = (id) => {
-    if (form?.interesado?.asignaturasAntecedentesEquivalentes) {
-      const updatedList = form.interesado.asignaturasAntecedentesEquivalentes.filter(
-        (_, index) => index !== id,
-      );
-
-      handleOnChange(
-        {
-          target: {
-            name: 'asignaturasAntecedentesEquivalentes',
-            value: updatedList,
-          },
-        },
-        ['interesado'],
-      );
-    }
-  };
-
-  const handleEdit = (row) => {
-    const index = form.interesado.asignaturasAntecedentesEquivalentes.findIndex(
-      (item) => item.asignaturaId === row.asignaturaId,
-    );
-    setEditingId(index);
-    setIsEditing(true);
-
-    setMateriaAntecedente(row.materiasAntecedente);
-    setCalificacionAntecedente(row.calificacionAntecedente);
-    setMateriaEquivalente(row.materiasEquivalentes);
-    setCalificacionEquivalente(row.calificacionEquivalente);
-    setAsignaturaId(row.asignaturaId);
-    setOpen(true);
-  };
+  const [detalleAsignatura, setDetalleAsignatura] = useState(null);
 
   const resetForm = () => {
     setOpen(false);
@@ -135,20 +96,65 @@ export default function CargaMateriasEquivalentes({
     setCalificacionAntecedente('');
     setMateriaEquivalente('');
     setCalificacionEquivalente('');
+    setDetalleAsignatura(null);
+  };
+
+  const handleDelete = (id) => {
+    if (!Array.isArray(asignaturas)) return;
+
+    const updatedList = asignaturas.filter((_, index) => index !== id);
+
+    handleOnChange(
+      {
+        target: {
+          name: 'asignaturasAntecedenteEquivalente',
+          value: updatedList,
+        },
+      },
+      ['interesado'],
+    );
+  };
+
+  const handleEdit = async (row) => {
+    const index = asignaturas.findIndex(
+      (item) => (item.id
+        || item.asignaturaEquivalentePrograma?.asignaturaAntecedenteEquivalenteId)
+      === row.asignaturaId,
+    );
+
+    setEditingId(index);
+    setIsEditing(true);
+
+    setMateriaAntecedente(row.materiasAntecedente);
+    setCalificacionAntecedente(row.calificacionAntecedente);
+    setMateriaEquivalente(row.materiasEquivalentes);
+    setCalificacionEquivalente(row.calificacionEquivalente);
+    setAsignaturaId(row.asignaturaId);
+
+    const asignaturaBackendId = asignaturas[index]?.asignaturaAntecedenteEquivalenteId;
+
+    if (asignaturaBackendId) {
+      fetchData(
+        `${domain}/api/v1/public/asignaturasAntecedenteEquivalente/${asignaturaBackendId}`,
+        setDetalleAsignatura,
+      );
+    } else {
+      setDetalleAsignatura(null);
+    }
+
+    setOpen(true);
   };
 
   const handleConfirm = () => {
     const newEntry = {
       asignaturaId,
-      nombreAsignaturaEquivalente,
+      nombreAsignaturaEquivalente: materiaEquivalente,
       calificacionEquivalente,
-      nombreAsignaturaAntecedente,
+      nombreAsignaturaAntecedente: materiaAntecedente,
       calificacionAntecedente,
     };
 
-    const updatedList = [
-      ...form.interesado.asignaturasAntecedentesEquivalentes,
-    ];
+    const updatedList = [...asignaturas];
 
     if (isEditing && editingId !== null) {
       updatedList[editingId] = newEntry;
@@ -159,7 +165,7 @@ export default function CargaMateriasEquivalentes({
     handleOnChange(
       {
         target: {
-          name: 'asignaturasAntecedentesEquivalentes',
+          name: 'asignaturasAntecedenteEquivalente',
           value: updatedList,
         },
       },
@@ -170,61 +176,40 @@ export default function CargaMateriasEquivalentes({
   };
 
   useEffect(() => {
-    if (form?.interesado?.asignaturasAntecedentesEquivalentes) {
-      setRows(
-        form.interesado.asignaturasAntecedentesEquivalentes.map(
-          (item, index) => ({
-            id: index,
-            asignaturaId: item.asignaturaId,
-            materiasAntecedente: item.nombreAsignaturaAntecedente,
-            calificacionAntecedente: item.calificacionAntecedente,
-            materiasEquivalentes: item.nombreAsignaturaEquivalente,
-            calificacionEquivalente: item.calificacionEquivalente,
-          }),
-        ),
-      );
-    } else if (form?.interesado?.asignaturasAntecedenteEquivalente) {
-      setRows(
-        form.interesado.asignaturasAntecedenteEquivalente.map(
-          (item, index) => ({
-            id: index,
-            asignaturaId: item.asignaturaId,
-            materiasAntecedente: item.nombreAsignaturaAntecedente,
-            calificacionAntecedente: item.calificacionAntecedente,
-            materiasEquivalentes: item.nombreAsignaturaEquivalente,
-            calificacionEquivalente: item.calificacionEquivalente,
-          }),
-        ),
-      );
-    }
-  }, [form]);
+    setRows(
+      asignaturas.map((item, index) => ({
+        id: index,
+        asignaturaId:
+          item.asignaturaId
+          || item.asignaturaEquivalentePrograma?.asignaturaId,
+        materiasAntecedente: item.nombreAsignaturaAntecedente,
+        calificacionAntecedente: item.calificacionAntecedente,
+        materiasEquivalentes: item.nombreAsignaturaEquivalente,
+        calificacionEquivalente: item.calificacionEquivalente,
+      })),
+    );
+  }, [asignaturas]);
 
   useEffect(() => {
-    if (asignaturaId && materiasList?.length > 0) {
-      const selectedMateria = materiasList.find(
-        (materia) => materia.id === parseInt(asignaturaId, 10),
+    if (asignaturaId && materiasList.length > 0) {
+      const selected = materiasList.find(
+        (m) => m.id === Number(asignaturaId),
       );
-      if (selectedMateria) {
-        setMateriaEquivalente(selectedMateria.nombre);
-      } else {
-        setMateriaEquivalente('');
-      }
+      setMateriaEquivalente(selected?.nombre || '');
     } else {
       setMateriaEquivalente('');
     }
   }, [asignaturaId, materiasList]);
 
   useEffect(() => {
-    if (
-      form.interesado?.institucionDestino?.programaId !== null
-      && form.interesado?.institucionDestino?.tipoInstitucionId === 1
-    ) {
+    const destino = form?.interesado?.institucionDestino;
+    if (destino?.institucionDestinoPrograma?.programaId && destino?.tipoInstitucionId === 1) {
       fetchData(
-        `${domain}/api/v1/public/asignaturas/programas/${form.interesado?.institucionDestino?.programaId}`,
+        `${domain}/api/v1/public/asignaturas/programas/${destino.institucionDestinoPrograma?.programaId}`,
         setMateriasList,
       );
       fetchData(
-        `${domain}/api/v1/public/programas?acuerdoRvoe=${form.interesado?.institucionDestino?.acuerdoRvoe}`,
+        `${domain}/api/v1/public/programas?acuerdoRvoe=${destino.acuerdoRvoe}`,
         setPrograma,
       );
     } else {
@@ -232,43 +217,48 @@ export default function CargaMateriasEquivalentes({
       setAsignaturaId(null);
     }
   }, [
-    form.interesado?.institucionDestino?.programaId,
-    form.interesado?.institucionDestino?.tipoInstitucionId,
+    form?.interesado?.institucionDestino?.programaId,
+    form?.interesado?.institucionDestino?.tipoInstitucionId,
   ]);
 
-  const materiasDisponibles = materiasList?.filter((materia) => {
-    const usados = form?.interesado?.asignaturasAntecedentesEquivalentes?.map(
-      (item) => item.asignaturaId,
-    ) || [];
+  const materiasDisponibles = useMemo(() => {
+    const usados = asignaturas.map(
+      (item) => item.asignaturaId
+        || item.asignaturaEquivalentePrograma?.asignaturaId,
+    );
 
-    if (isEditing && asignaturaId) {
-      return !usados.includes(materia.id) || materia.id === asignaturaId;
-    }
+    return materiasList.filter((materia) => {
+      if (isEditing && asignaturaId) {
+        return !usados.includes(materia.id) || materia.id === asignaturaId;
+      }
+      return !usados.includes(materia.id);
+    });
+  }, [materiasList, asignaturas, isEditing, asignaturaId]);
 
-    return !usados.includes(materia.id);
-  });
+  const asignaturaPrograma = detalleAsignatura?.asignaturaEquivalentePrograma?.asignatura;
 
   return (
     <>
       <Grid container spacing={1}>
         <Grid item xs={4}>
           <LabelData
-            title="Calificacion minima"
+            title="Calificación mínima"
             subtitle={calificacionesReglas.calificacionMinima}
           />
         </Grid>
         <Grid item xs={4}>
           <LabelData
-            title="Calificacion maxima"
+            title="Calificación máxima"
             subtitle={calificacionesReglas.calificacionMaxima}
           />
         </Grid>
         <Grid item xs={4}>
           <LabelData
-            title="Calificacion aprobatoria"
+            title="Calificación aprobatoria"
             subtitle={calificacionesReglas.calificacionAprobatoria}
           />
         </Grid>
+
         <Grid item xs={12}>
           <DataTable
             buttonAdd={!disabled}
@@ -283,99 +273,131 @@ export default function CargaMateriasEquivalentes({
           />
         </Grid>
       </Grid>
+
       <DefaultModal
-        title={
-          isEditing ? 'Editar Materia Equivalente' : 'Materias Equivalentes'
-        }
+        title={isEditing ? 'Editar Materia Equivalente' : 'Materias Equivalentes'}
         open={open}
         setOpen={setOpen}
       >
         <Grid container spacing={1}>
-          {programa && (
+          {Object.keys(programa).length > 0 && (
             <>
               <Grid item xs={4}>
                 <LabelData
-                  title="Calificación Minima"
+                  title="Calificación mínima"
                   subtitle={programa.calificacionMinima}
                 />
               </Grid>
               <Grid item xs={4}>
                 <LabelData
-                  title="Calificación Maxima"
+                  title="Calificación máxima"
                   subtitle={programa.calificacionMaxima}
                 />
               </Grid>
               <Grid item xs={4}>
                 <LabelData
-                  title="Calificación Aprobatoria"
+                  title="Calificación aprobatoria"
                   subtitle={programa.calificacionAprobatoria}
                 />
               </Grid>
             </>
           )}
+
           <Grid item xs={6}>
             <Input
-              id="nombreAsignaturaAntecedente"
-              name="nombreAsignaturaAntecedente"
               label="Materias de Antecedente"
-              value={nombreAsignaturaAntecedente}
+              value={materiaAntecedente}
               onChange={(e) => setMateriaAntecedente(e.target.value)}
               disabled={disabled}
             />
           </Grid>
+
           <Grid item xs={6}>
             <CalificacionInput
-              id="calificacionAntecedente"
-              name="calificacionAntecedente"
               label="Calificación de Antecedente"
               value={calificacionAntecedente}
               onChange={(e) => setCalificacionAntecedente(e.target.value)}
               disabled={disabled}
             />
           </Grid>
+
           <Grid item xs={6}>
-            {materiasList?.length > 0 ? (
+            {materiasList.length > 0 ? (
               <Select
                 title="Materias de Equivalente"
                 options={materiasDisponibles}
-                name="nombreAsignaturaEquivalente"
                 value={asignaturaId || ''}
                 onChange={(e) => setAsignaturaId(e.target.value)}
                 disabled={disabled}
               />
             ) : (
               <Input
-                id="nombreAsignaturaEquivalente"
-                name="nombreAsignaturaEquivalente"
                 label="Materias de Equivalente"
-                value={nombreAsignaturaEquivalente}
+                value={materiaEquivalente}
                 onChange={(e) => setMateriaEquivalente(e.target.value)}
                 disabled={disabled}
               />
             )}
           </Grid>
+
           <Grid item xs={6}>
             <CalificacionInput
-              id="calificacionEquivalente"
-              name="calificacionEquivalente"
               label="Calificación de Equivalente"
               value={calificacionEquivalente}
               onChange={(e) => setCalificacionEquivalente(e.target.value)}
               disabled={disabled}
               calificacionMinima={
-                programa?.calificacionMinima
-                || calificacionesReglas.calificacionMinima
+                programa.calificacionMinima
+                ?? calificacionesReglas.calificacionMinima
               }
               calificacionMaxima={
-                programa?.calificacionMaxima
-                || calificacionesReglas.calificacionMaxima
+                programa.calificacionMaxima
+                ?? calificacionesReglas.calificacionMaxima
               }
               calificacionDecimal={
-                programa?.calificacionDecimal
-                || calificacionesReglas.calificacionDecimal
+                programa.calificacionDecimal
+                ?? calificacionesReglas.calificacionDecimal
               }
             />
           </Grid>
+
+          <Grid item xs={4}>
+            <LabelData title="Academia" subtitle={asignaturaPrograma?.academia || '—'} />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData title="Consecutivo" subtitle={asignaturaPrograma?.consecutivo || '—'} />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData title="Nombre" subtitle={asignaturaPrograma?.nombre || '—'} />
+          </Grid>
+
+          <Grid item xs={4}>
+            <LabelData title="Clave" subtitle={asignaturaPrograma?.clave || '—'} />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData title="Seriación" subtitle={asignaturaPrograma?.seriacion || '—'} />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData title="Objetivo" subtitle={asignaturaPrograma?.objetivo || '—'} />
+          </Grid>
+
+          <Grid item xs={4}>
+            <LabelData title="Temas" subtitle={asignaturaPrograma?.temas || '—'} />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData title="Actividades" subtitle={asignaturaPrograma?.actividades || '—'} />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData title="Modelo Institucional" subtitle={asignaturaPrograma?.modeloInstitucional || '—'} />
+          </Grid>
+
+          <Grid item xs={4}>
+            <LabelData title="Tipo" subtitle={asignaturaPrograma?.tipo || '—'} />
+          </Grid>
+          <Grid item xs={4}>
+            <LabelData title="Fecha Autorización" subtitle={asignaturaPrograma?.fechaAutorizacion || '—'} />
+          </Grid>
+
           <Grid item xs={12}>
             <ButtonsForm
               confirm={handleConfirm}
@@ -390,54 +412,43 @@ export default function CargaMateriasEquivalentes({
   );
 }
 
-CargaMateriasEquivalentes.defaultProps = {
-  handleOnChange: () => {},
-  disabled: false,
-  calificacionesReglas: {},
-};
-
 CargaMateriasEquivalentes.propTypes = {
   form: PropTypes.shape({
     interesado: PropTypes.shape({
-      asignaturasAntecedentesEquivalentes: PropTypes.arrayOf(
-        PropTypes.shape({
-          asignaturaId: PropTypes.number,
-          nombreAsignaturaEquivalente: PropTypes.string,
-          calificacionEquivalente: PropTypes.string,
-          nombreAsignaturaAntecedente: PropTypes.string,
-          calificacionAntecedente: PropTypes.string,
-        }),
-      ),
       asignaturasAntecedenteEquivalente: PropTypes.arrayOf(
         PropTypes.shape({
           asignaturaId: PropTypes.number,
-          nombreAsignaturaEquivalente: PropTypes.string,
-          calificacionEquivalente: PropTypes.string,
           nombreAsignaturaAntecedente: PropTypes.string,
+          nombreAsignaturaEquivalente: PropTypes.string,
           calificacionAntecedente: PropTypes.string,
+          calificacionEquivalente: PropTypes.string,
+          asignaturaEquivalentePrograma: PropTypes.shape({
+            asignaturaId: PropTypes.number,
+          }),
         }),
       ),
       institucionDestino: PropTypes.shape({
         programaId: PropTypes.number,
         acuerdoRvoe: PropTypes.string,
         tipoInstitucionId: PropTypes.number,
-        institucionDestinoPrograma: PropTypes.shape({
-          programa: PropTypes.shape({
-            calificacionMinima: PropTypes.number,
-            calificacionMaxima: PropTypes.number,
-            calificacionAprobatoria: PropTypes.number,
-          }),
-        }),
+        institucionDestinoPrograma: PropTypes.shape({ programaId: PropTypes.number }),
       }),
     }),
   }).isRequired,
+
+  handleOnChange: PropTypes.func,
+  disabled: PropTypes.bool,
+
   calificacionesReglas: PropTypes.shape({
-    id: PropTypes.number,
-    calificacionDecimal: PropTypes.bool,
     calificacionMinima: PropTypes.number,
     calificacionMaxima: PropTypes.number,
     calificacionAprobatoria: PropTypes.number,
+    calificacionDecimal: PropTypes.bool,
   }),
-  handleOnChange: PropTypes.func,
-  disabled: PropTypes.bool,
+};
+
+CargaMateriasEquivalentes.defaultProps = {
+  handleOnChange: () => {},
+  disabled: false,
+  calificacionesReglas: {},
 };
