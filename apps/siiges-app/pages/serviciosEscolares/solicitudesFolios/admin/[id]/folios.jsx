@@ -48,7 +48,6 @@ export default function Folios() {
   const [rowData, setRowData] = useState({});
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [solicitudFolioCreatedAt, setSolicitudFolioCreatedAt] = useState(null);
   const [tipoDocumento, setTipoDocumento] = useState();
   const [formData, setFormData] = useState({
     folioPago: '',
@@ -66,7 +65,6 @@ export default function Folios() {
             endpoint: `/solicitudesFolios/${id}`,
           });
           const { data } = response;
-          setSolicitudFolioCreatedAt(data.createdAt);
           setObservaciones(data.observaciones || '');
           setEtiquetas({
             tipoDocumento: data.tipoDocumento?.nombre || '',
@@ -109,10 +107,10 @@ export default function Folios() {
               foja: res.folioDocumentoAlumno?.foja?.nombre,
               libro: res.folioDocumentoAlumno?.libro?.nombre,
               envio: res.folioDocumentoAlumno?.envioExitoso ? 'Enviado' : 'Pendiente',
-              fechaElaboracion: dayjs(res.fechaElaboracion).format(
+              fechaExpedicion: dayjs(res.fechaExpedicion).format(
                 'DD/MM/YYYY',
               ),
-              fechaTermino: dayjs(res.fechaTermino).format('DD/MM/YYYY'),
+              fechaTerminacion: dayjs(res.fechaTerminacion).format('DD/MM/YYYY'),
             }));
 
             setAlumnosRows(mappedAlumnos);
@@ -269,11 +267,11 @@ export default function Folios() {
     { field: 'foja', headerName: 'Foja', width: 200 },
     { field: 'libro', headerName: 'Libro', width: 200 },
     {
-      field: 'fechaElaboracion',
-      headerName: 'Fecha de Elaboración',
+      field: 'fechaExpedicion',
+      headerName: 'Fecha de Expedición de certificado',
       width: 300,
     },
-    { field: 'fechaTermino', headerName: 'Fecha de Término', width: 300 },
+    { field: 'fechaTerminacion', headerName: 'Fecha de Término', width: 300 },
     {
       field: 'actions',
       headerName: 'Acciones',
@@ -451,7 +449,6 @@ export default function Folios() {
                 id={id}
                 rowData={rowData}
                 setAlumnoResponse={() => { }}
-                fechaExpedicion={solicitudFolioCreatedAt}
                 disabled={disabled}
               />
             ) : (
@@ -463,7 +460,6 @@ export default function Folios() {
                 rowData={rowData}
                 title="Agregar Alumno"
                 setAlumnoResponse={() => { }}
-                fechaElaboracion={solicitudFolioCreatedAt}
                 disabled={disabled}
               />
             )}
