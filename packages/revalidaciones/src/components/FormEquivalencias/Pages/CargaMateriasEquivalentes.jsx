@@ -4,13 +4,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   ButtonsForm,
+  Context,
   DataTable,
   DefaultModal,
   Input,
   LabelData,
   Select,
 } from '@siiges-ui/shared';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import fetchData from '../../../utils/FetchData';
@@ -65,6 +68,7 @@ const columns = (handleDelete, handleEdit, disabled) => [
 ];
 
 const domain = process.env.NEXT_PUBLIC_URL;
+const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
 export default function CargaMateriasEquivalentes({
   form,
@@ -74,7 +78,12 @@ export default function CargaMateriasEquivalentes({
 }) {
   const asignaturas = form?.interesado?.asignaturasAntecedenteEquivalente || [];
 
+  const { setNoti, setLoading } = useContext(Context);
+
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
+
   const [materiaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
   const [materiaEquivalente, setMateriaEquivalente] = useState('');
@@ -86,6 +95,7 @@ export default function CargaMateriasEquivalentes({
   const [editingId, setEditingId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [detalleAsignatura, setDetalleAsignatura] = useState(null);
+  const [editingBackendId, setEditingBackendId] = useState(null);
 
   const resetForm = () => {
     setOpen(false);
@@ -99,20 +109,44 @@ export default function CargaMateriasEquivalentes({
     setDetalleAsignatura(null);
   };
 
-  const handleDelete = (id) => {
-    if (!Array.isArray(asignaturas)) return;
+  const handleDelete = (index) => {
+    setDeleteIndex(index);
+    setOpenDelete(true);
+  };
 
-    const updatedList = asignaturas.filter((_, index) => index !== id);
+  const confirmDelete = () => {
+    setLoading(true);
+    setOpenDelete(false);
 
-    handleOnChange(
-      {
-        target: {
-          name: 'asignaturasAntecedenteEquivalente',
-          value: updatedList,
+    try {
+      const updatedList = asignaturas.filter((_, i) => i !== deleteIndex);
+
+      handleOnChange(
+        {
+          target: {
+            name: 'asignaturasAntecedenteEquivalente',
+            value: updatedList,
+          },
         },
-      },
-      ['interesado'],
-    );
+        ['interesado'],
+      );
+
+      setNoti({
+        open: true,
+        type: 'success',
+        message: 'Materia equivalente eliminada',
+      });
+    } catch (error) {
+      console.error(error);
+      setNoti({
+        open: true,
+        type: 'error',
+        message: 'Error al eliminar la materia equivalente',
+      });
+    } finally {
+      setLoading(false);
+      setDeleteIndex(null);
+    }
   };
 
   const handleEdit = async (row) => {
@@ -121,6 +155,8 @@ export default function CargaMateriasEquivalentes({
         || item.asignaturaEquivalentePrograma?.asignaturaId)
       === row.asignaturaId,
     );
+
+    const backendId = asignaturas[index]?.id || null;
 
     setEditingId(index);
     setIsEditing(true);
@@ -131,11 +167,11 @@ export default function CargaMateriasEquivalentes({
     setCalificacionEquivalente(row.calificacionEquivalente);
     setAsignaturaId(row.asignaturaId);
 
-    const asignaturaBackendId = asignaturas[index]?.id;
+    setEditingBackendId(backendId);
 
-    if (asignaturaBackendId) {
+    if (backendId) {
       fetchData(
-        `${domain}/api/v1/public/asignaturasAntecedenteEquivalente/${asignaturaBackendId}`,
+        `${domain}/api/v1/public/asignaturasAntecedenteEquivalente/${backendId}`,
         setDetalleAsignatura,
       );
     } else {
@@ -145,34 +181,92 @@ export default function CargaMateriasEquivalentes({
     setOpen(true);
   };
 
-  const handleConfirm = () => {
-    const newEntry = {
-      asignaturaId,
-      nombreAsignaturaEquivalente: materiaEquivalente,
-      calificacionEquivalente,
-      nombreAsignaturaAntecedente: materiaAntecedente,
-      calificacionAntecedente,
-    };
-
-    const updatedList = [...asignaturas];
-
-    if (isEditing && editingId !== null) {
-      updatedList[editingId] = newEntry;
-    } else {
-      updatedList.push(newEntry);
+  const handleConfirm = async () => {
+    if (
+      !materiaAntecedente
+    || !materiaEquivalente
+    || !calificacionAntecedente
+    || !calificacionEquivalente
+    || !form?.interesado?.id
+    ) {
+      setNoti({
+        open: true,
+        type: 'warning',
+        message: 'Completa todos los campos obligatorios',
+      });
+      return;
     }
 
-    handleOnChange(
-      {
-        target: {
-          name: 'asignaturasAntecedenteEquivalente',
-          value: updatedList,
-        },
-      },
-      ['interesado'],
-    );
+    const payload = {
+      interesadoId: form.interesado.id,
+      nombreAsignaturaAntecedente: materiaAntecedente,
+      calificacionAntecedente,
+      nombreAsignaturaEquivalente: materiaEquivalente,
+      calificacionEquivalente,
+      ...(asignaturaId && { asignaturaId }),
+    };
 
-    resetForm();
+    setLoading(true);
+    setOpen(false);
+
+    try {
+      const url = isEditing
+        ? `${domain}/api/v1/public/asignaturasAntecedenteEquivalente/${editingBackendId}`
+        : `${domain}/api/v1/public/asignaturasAntecedenteEquivalente`;
+
+      const method = isEditing ? 'PATCH' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', api_key: apiKey },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al guardar asignatura equivalente');
+      }
+
+      const updatedList = [...asignaturas];
+
+      if (isEditing && editingId !== null) {
+        updatedList[editingId] = {
+          ...updatedList[editingId],
+          ...payload,
+        };
+      } else {
+        updatedList.push(payload);
+      }
+
+      handleOnChange(
+        {
+          target: {
+            name: 'asignaturasAntecedenteEquivalente',
+            value: updatedList,
+          },
+        },
+        ['interesado'],
+      );
+
+      setNoti({
+        open: true,
+        type: 'success',
+        message: isEditing
+          ? 'Materia equivalente actualizada correctamente'
+          : 'Materia equivalente agregada correctamente',
+      });
+
+      resetForm();
+    } catch (error) {
+      console.error(error);
+
+      setNoti({
+        open: true,
+        type: 'error',
+        message: 'Ocurrió un error al guardar la materia equivalente',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -196,16 +290,18 @@ export default function CargaMateriasEquivalentes({
         (m) => m.id === Number(asignaturaId),
       );
       setMateriaEquivalente(selected?.nombre || '');
-    } else {
-      setMateriaEquivalente('');
     }
   }, [asignaturaId, materiasList]);
 
   useEffect(() => {
     const destino = form?.interesado?.institucionDestino;
-    if (destino?.institucionDestinoPrograma?.programaId && destino?.tipoInstitucionId === 1) {
+
+    if (
+      destino?.institucionDestinoPrograma?.programaId
+      && destino?.tipoInstitucionId === 1
+    ) {
       fetchData(
-        `${domain}/api/v1/public/asignaturas/programas/${destino.institucionDestinoPrograma?.programaId}`,
+        `${domain}/api/v1/public/asignaturas/programas/${destino.institucionDestinoPrograma.programaId}`,
         setMateriasList,
       );
       fetchData(
@@ -216,10 +312,7 @@ export default function CargaMateriasEquivalentes({
       setMateriasList([]);
       setAsignaturaId(null);
     }
-  }, [
-    form?.interesado?.institucionDestino?.programaId,
-    form?.interesado?.institucionDestino?.tipoInstitucionId,
-  ]);
+  }, [form?.interesado?.institucionDestino]);
 
   const materiasDisponibles = useMemo(() => {
     const usados = asignaturas.map(
@@ -227,12 +320,9 @@ export default function CargaMateriasEquivalentes({
         || item.asignaturaEquivalentePrograma?.asignaturaId,
     );
 
-    return materiasList.filter((materia) => {
-      if (isEditing && asignaturaId) {
-        return !usados.includes(materia.id) || materia.id === asignaturaId;
-      }
-      return !usados.includes(materia.id);
-    });
+    return materiasList.filter((m) => (isEditing && asignaturaId
+      ? !usados.includes(m.id) || m.id === asignaturaId
+      : !usados.includes(m.id)));
   }, [materiasList, asignaturas, isEditing, asignaturaId]);
 
   const asignaturaPrograma = detalleAsignatura?.asignaturaEquivalentePrograma?.asignatura;
@@ -410,6 +500,24 @@ export default function CargaMateriasEquivalentes({
           </Grid>
         </Grid>
       </DefaultModal>
+      <DefaultModal
+        title="Eliminar materia equivalente"
+        open={openDelete}
+        setOpen={setOpenDelete}
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            ¿Estás seguro de eliminar esta materia equivalente?
+          </Grid>
+          <Grid item xs={12}>
+            <ButtonsForm
+              confirm={confirmDelete}
+              cancel={() => setOpenDelete(false)}
+              confirmText="Eliminar"
+            />
+          </Grid>
+        </Grid>
+      </DefaultModal>
     </>
   );
 }
@@ -417,6 +525,7 @@ export default function CargaMateriasEquivalentes({
 CargaMateriasEquivalentes.propTypes = {
   form: PropTypes.shape({
     interesado: PropTypes.shape({
+      id: PropTypes.number.isRequired,
       asignaturasAntecedenteEquivalente: PropTypes.arrayOf(
         PropTypes.shape({
           asignaturaId: PropTypes.number,
