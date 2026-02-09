@@ -55,6 +55,7 @@ export default function ModalTitulo({
   rowData,
   programaId,
   setAlumnoResponse,
+  fechaExpedicion,
   disabled,
   alumnosAgregados = [],
 }) {
@@ -72,6 +73,7 @@ export default function ModalTitulo({
     modalidadTitulacionId: '',
     cumplioServicioSocial: '',
     fundamentoServicioSocialId: '',
+    fechaExpedicion: fechaExpedicion || '',
   });
 
   useEffect(() => {
@@ -91,7 +93,7 @@ export default function ModalTitulo({
     if (type === 'edit') setModalTitulo('Editar Alumno');
     else if (type === 'consult') setModalTitulo('Consultar Alumno');
     else setModalTitulo('Agregar Alumno');
-  }, [type, rowData]);
+  }, [type, rowData, fechaExpedicion]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -119,6 +121,9 @@ export default function ModalTitulo({
       fechaTerminacion: form.fechaTerminacion
         ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
+      fechaExpedicion: form.fechaExpedicion
+        ? dayjs(form.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
       fechaExamenProfesional: form.fechaExamenProfesional
         ? dayjs(form.fechaExamenProfesional).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
@@ -141,7 +146,7 @@ export default function ModalTitulo({
                 : 'Registro creado exitosamente',
             type: 'success',
           });
-          setForm(getEmptyForm());
+          setForm(getEmptyForm(fechaExpedicion));
           setAlumno(null);
           setAlumnoId(null);
           setPosition('first');
@@ -270,7 +275,7 @@ export default function ModalTitulo({
                 label="Fecha de expedición de título"
                 id="fechaExpedicion"
                 name="fechaExpedicion"
-                value=""
+                value={form.fechaExpedicion || ''}
                 disabled
               />
             </Grid>
@@ -350,6 +355,7 @@ ModalTitulo.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
+  fechaExpedicion: PropTypes.string.isRequired,
   alumnosAgregados: PropTypes.arrayOf(
     PropTypes.shape({
       alumnoId: PropTypes.number.isRequired,
@@ -371,6 +377,7 @@ ModalTitulo.propTypes = {
     name: PropTypes.string,
     fechaInicio: PropTypes.string,
     fechaTerminacion: PropTypes.string,
+    fechaExpedicion: PropTypes.string,
     fechaExamenProfesional: PropTypes.string,
   }),
 };

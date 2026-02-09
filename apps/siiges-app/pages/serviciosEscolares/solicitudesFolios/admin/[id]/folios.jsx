@@ -48,6 +48,7 @@ export default function Folios() {
   const [rowData, setRowData] = useState({});
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [solicitudFolioCreatedAt, setSolicitudFolioCreatedAt] = useState(null);
   const [tipoDocumento, setTipoDocumento] = useState();
   const [formData, setFormData] = useState({
     folioPago: '',
@@ -65,6 +66,7 @@ export default function Folios() {
             endpoint: `/solicitudesFolios/${id}`,
           });
           const { data } = response;
+          setSolicitudFolioCreatedAt(data.createdAt);
           setObservaciones(data.observaciones || '');
           setEtiquetas({
             tipoDocumento: data.tipoDocumento?.nombre || '',
@@ -449,6 +451,7 @@ export default function Folios() {
                 id={id}
                 rowData={rowData}
                 setAlumnoResponse={() => { }}
+                fechaExpedicion={solicitudFolioCreatedAt}
                 disabled={disabled}
               />
             ) : (
