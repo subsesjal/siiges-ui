@@ -36,6 +36,7 @@ export default function FormAlumno({
   const [errorMail, setErrorMail] = useState('');
   const [errorCurp, setErrorCurp] = useState('');
   const ifRepresentantes = (session.rol === 'representante' || session.rol === 'ce_ies');
+  const optionalFields = ['apellidoMaterno', 'telefono', 'celular'];
 
   const getErrorMessage = (campoId) => {
     if (campoId === 'correoPrimario') return errorMail;
@@ -65,6 +66,10 @@ export default function FormAlumno({
   }, [alumno, session.rol]);
 
   const validator = (name, value) => {
+    if (optionalFields.includes(name)) {
+      return true;
+    }
+
     if (name === 'correoPrimario') {
       if (mailValidator(value)) {
         setErrorMail('');
@@ -97,25 +102,38 @@ export default function FormAlumno({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    const isValid = validator(name, value);
-    if (isValid) {
-      setForm({ ...form, [name]: value.toString().trim() });
-      const field = campos.find((campo) => campo.id === name);
-      if (field?.type === 'select') {
-        setFormSelect({ ...formSelect, [name]: value });
-      }
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value?.toString().trim() ?? '',
+    }));
+
+    if (!optionalFields.includes(name)) {
+      validator(name, value);
+    }
+
+    const field = campos.find((campo) => campo.id === name);
+    if (field?.type === 'select') {
+      setFormSelect({ ...formSelect, [name]: value });
     }
   };
 
   const validateFormBeforeSubmit = () => {
     let isValid = true;
+
     campos.forEach((field) => {
-      const value = form?.[field.id] || alumno?.[field.id];
-      if (
-        field.id !== 'apellidoMaterno'
-        && field.type !== 'select'
-        && (!value || value.trim() === '')
-      ) {
+      if (optionalFields.includes(field.id)) return;
+
+      const hasValueInForm = Object.prototype.hasOwnProperty.call(
+        form || {},
+        field.id,
+      );
+
+      const value = hasValueInForm
+        ? form?.[field.id]
+        : alumno?.[field.id];
+
+      if (!value || value.toString().trim() === '') {
         setNoti({
           open: true,
           message: `El campo ${field.label} es obligatorio.`,
@@ -124,6 +142,7 @@ export default function FormAlumno({
         isValid = false;
       }
     });
+
     return isValid;
   };
 
@@ -171,6 +190,7 @@ export default function FormAlumno({
   const renderCampo = (campo) => {
     const value = formSelect?.[campo.id] || '';
     const errorMessage = getErrorMessage(campo.id);
+    const isRequired = !optionalFields.includes(campo.id);
 
     if (campo.type === 'text') {
       return (
@@ -184,6 +204,7 @@ export default function FormAlumno({
           type="text"
           disabled={campo.disabled}
           errorMessage={errorMessage}
+          required={isRequired}
         />
       );
     }
@@ -199,6 +220,7 @@ export default function FormAlumno({
           disabled={campo.disabled}
           errorMessage={errorMessage}
           type="datetime"
+          required
         />
       );
     }
@@ -214,6 +236,7 @@ export default function FormAlumno({
           value={value}
           onChange={handleOnChange}
           errorMessage={errorMessage}
+          required
         />
       );
     }
@@ -227,6 +250,7 @@ export default function FormAlumno({
         value={value}
         onChange={handleOnChange}
         errorMessage={errorMessage}
+        required
       />
     );
   };
