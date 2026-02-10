@@ -130,12 +130,16 @@ export default function FormRevalidaciones() {
 
   const handleNext = () => {
     setValidateFields(true);
-    if (!nextDisabled) {
-      if (currentPosition < totalPositions) {
-        setCurrentPosition((prevPosition) => prevPosition + 1);
-      }
-    }
   };
+
+  useEffect(() => {
+    if (validateFields && !nextDisabled) {
+      if (currentPosition < totalPositions) {
+        setCurrentPosition((prev) => prev + 1);
+      }
+      setValidateFields(false);
+    }
+  }, [validateFields, nextDisabled]);
 
   const handlePrevious = () => {
     if (currentPosition > 1) {
