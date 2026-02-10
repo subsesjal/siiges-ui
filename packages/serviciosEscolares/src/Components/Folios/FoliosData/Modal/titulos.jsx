@@ -55,7 +55,6 @@ export default function ModalTitulo({
   rowData,
   programaId,
   setAlumnoResponse,
-  fechaExpedicion,
   disabled,
   alumnosAgregados = [],
 }) {
@@ -73,7 +72,7 @@ export default function ModalTitulo({
     modalidadTitulacionId: '',
     cumplioServicioSocial: '',
     fundamentoServicioSocialId: '',
-    fechaExpedicion: fechaExpedicion || '',
+    fechaExpedicion: '',
   });
 
   useEffect(() => {
@@ -96,7 +95,7 @@ export default function ModalTitulo({
     if (type === 'edit') setModalTitulo('Editar Alumno');
     else if (type === 'consult') setModalTitulo('Consultar Alumno');
     else setModalTitulo('Agregar Alumno');
-  }, [type, rowData, fechaExpedicion]);
+  }, [type, rowData]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -150,7 +149,7 @@ export default function ModalTitulo({
                 : 'Registro creado exitosamente',
             type: 'success',
           });
-          setForm(getEmptyForm(fechaExpedicion));
+          setForm(getEmptyForm());
           setAlumno(null);
           setAlumnoId(null);
           setPosition('first');
@@ -370,7 +369,6 @@ ModalTitulo.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
-  fechaExpedicion: PropTypes.string.isRequired,
   alumnosAgregados: PropTypes.arrayOf(
     PropTypes.shape({
       alumnoId: PropTypes.number.isRequired,
@@ -393,7 +391,6 @@ ModalTitulo.propTypes = {
     name: PropTypes.string,
     fechaInicio: PropTypes.string,
     fechaTerminacion: PropTypes.string,
-    fechaExpedicion: PropTypes.string,
     fechaExamenProfesional: PropTypes.string,
   }),
 };

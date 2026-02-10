@@ -24,7 +24,6 @@ export default function ModalCertificado({
   rowData,
   disabled,
   alumnosAgregados,
-  fechaExpedicion,
 }) {
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
@@ -54,7 +53,7 @@ export default function ModalCertificado({
       setForm({
         matricula: '',
         fechaTerminacion: '',
-        fechaExpedicion: fechaExpedicion || '',
+        fechaExpedicion: '',
       });
       setAlumno(null);
       setAlumnoId(null);
@@ -69,7 +68,7 @@ export default function ModalCertificado({
     } else {
       setModalTitulo('Agregar Alumno');
     }
-  }, [type, rowData, fechaExpedicion, open]);
+  }, [type, rowData, open]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -242,7 +241,6 @@ ModalCertificado.defaultProps = {
   rowData: {},
   disabled: false,
   alumnosAgregados: [],
-  fechaExpedicion: null,
 };
 
 ModalCertificado.propTypes = {
@@ -253,7 +251,6 @@ ModalCertificado.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
-  fechaExpedicion: PropTypes.string,
   alumnosAgregados: PropTypes.arrayOf(
     PropTypes.shape({
       alumnoId: PropTypes.number.isRequired,

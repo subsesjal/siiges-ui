@@ -84,13 +84,13 @@ const columnsTitulo = (handleEdit, handleConsult, handleDeleteAlumno, status) =>
           </Tooltip>
         )}
         {status !== 'consult' && (
-        <Tooltip title="Eliminar alumno" placement="top">
-          <IconButton
-            onClick={() => handleDeleteAlumno(params.row.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+          <Tooltip title="Eliminar alumno" placement="top">
+            <IconButton
+              onClick={() => handleDeleteAlumno(params.row.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         )}
 
       </div>
@@ -140,13 +140,13 @@ const columnsCertificado = (handleEdit, handleConsult, handleDeleteAlumno, statu
           </Tooltip>
         )}
         {status !== 'consult' && (
-        <Tooltip title="Eliminar alumno" placement="top">
-          <IconButton
-            onClick={() => handleDeleteAlumno(params.row.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+          <Tooltip title="Eliminar alumno" placement="top">
+            <IconButton
+              onClick={() => handleDeleteAlumno(params.row.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </div>
     ),
@@ -215,7 +215,6 @@ export default function FoliosData({ type }) {
   const [alumnoResponse, setAlumnoResponse] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [alumnoToDelete, setAlumnoToDelete] = useState(null);
-  const [solicitudFolioCreatedAt, setSolicitudFolioCreatedAt] = useState(null);
   const [formData, setFormData] = useState({
     folioPago: '',
     tipoDocumentoId: '',
@@ -264,7 +263,6 @@ export default function FoliosData({ type }) {
           response = await getData({
             endpoint: `/solicitudesFolios/${editId}`,
           });
-          setSolicitudFolioCreatedAt(response.data.createdAt);
         } else {
           response = await getData({ endpoint: `/programas/${programa}` });
         }
@@ -489,7 +487,6 @@ export default function FoliosData({ type }) {
 
       if (response.statusCode === 200 || response.statusCode === 201) {
         setId(response.data.id);
-        setSolicitudFolioCreatedAt(response.data.createdAt);
         setIsSaved(true);
         setNoti({
           open: true,
@@ -680,7 +677,6 @@ export default function FoliosData({ type }) {
           rowData={rowData}
           programaId={formData.programaId}
           setAlumnoResponse={setAlumnoResponse}
-          fechaExpedicion={solicitudFolioCreatedAt}
           disabled={disabled}
           alumnosAgregados={alumnosData}
         />
@@ -693,7 +689,6 @@ export default function FoliosData({ type }) {
           programaId={formData.programaId}
           rowData={rowData}
           setAlumnoResponse={setAlumnoResponse}
-          fechaExpedicion={solicitudFolioCreatedAt}
           disabled={disabled}
           alumnosAgregados={alumnosData}
         />
