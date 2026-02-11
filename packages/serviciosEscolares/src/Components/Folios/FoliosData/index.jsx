@@ -232,6 +232,9 @@ export default function FoliosData({ type }) {
     modalidades: '',
     periodos: '',
   });
+  const selectedAlumno = rows.find(
+    (row) => row.id === alumnoToDelete,
+  );
 
   const router = useRouter();
   const {
@@ -701,7 +704,20 @@ export default function FoliosData({ type }) {
         setOpen={setOpenDeleteModal}
       >
         <Typography>
-          ¿Está seguro de eliminar este alumno de la solicitud?
+          Está a punto de eliminar al alumno
+          {' '}
+          <strong>{selectedAlumno?.name}</strong>
+          {' '}
+          (Matrícula:
+          {' '}
+          <strong>{selectedAlumno?.matricula}</strong>
+          )
+          {' '}
+          de esta solicitud.
+          <br />
+          Esta acción no se puede deshacer.
+          <br />
+          ¿Desea continuar?
         </Typography>
 
         <ButtonsForm
