@@ -687,14 +687,9 @@ export default function FoliosData({ type }) {
         setOpen={setOpenDeleteModal}
       >
         <Typography>
-          Está a punto de eliminar al alumno
-          {' '}
-          <strong>{selectedAlumno?.name}</strong>
-          {' '}
-          (Matrícula:
+          Está a punto de eliminar al alumno con matrícula:
           {' '}
           <strong>{selectedAlumno?.matricula}</strong>
-          )
           {' '}
           de esta solicitud.
           <br />
