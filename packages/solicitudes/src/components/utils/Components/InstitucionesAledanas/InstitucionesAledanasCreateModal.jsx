@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { Grid } from '@mui/material';
 import {
   DefaultModal, ButtonSimple, Context, Input,
+  InputTime,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import errorDatosInstitucionAledanas from '../../sections/errors/errorDatosInstitucionAledanas';
@@ -46,7 +47,7 @@ export default function InstitucionesAledanasCreateModal({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'tiempo' && !value.endsWith(':00')) {
+    if (name === 'tiempo') {
       setFormInstitucionesAledanas((prevData) => ({
         ...prevData,
         [name]: `${value}:00`,
@@ -99,12 +100,12 @@ export default function InstitucionesAledanasCreateModal({
           />
         </Grid>
         <Grid item xs={6}>
-          <Input
+          <InputTime
             id="tiempo"
-            label="Tiempo"
+            label="Tiempo en llegar (hh:mm)"
             name="tiempo"
             auto="tiempo"
-            type="time"
+            ampm={false}
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
