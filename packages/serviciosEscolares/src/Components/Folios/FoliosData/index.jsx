@@ -429,8 +429,7 @@ export default function FoliosData({ type }) {
           type: 'success',
         });
 
-        setRows((prev) => prev.filter((row) => row.id !== alumnoToDelete));
-        setAlumnosData((prev) => prev.filter((row) => row.id !== alumnoToDelete));
+        setAlumnoResponse(true);
       }
     } catch (error) {
       setNoti({
@@ -627,6 +626,9 @@ export default function FoliosData({ type }) {
               columns={formData.tipoDocumentoId === 1
                 ? columnsTitulo(handleEdit, handleConsult, handleDeleteAlumno, status)
                 : columnsCertificado(handleEdit, handleConsult, handleDeleteAlumno, status)}
+              initialState={{
+                sorting: { sortModel: [{ field: 'consecutivo', sort: 'asc' }] },
+              }}
             />
           </Grid>
         </Grid>

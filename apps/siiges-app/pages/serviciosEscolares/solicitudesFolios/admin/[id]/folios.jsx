@@ -45,6 +45,7 @@ export default function Folios() {
   const [estatus, setEstatus] = useState();
   const [alumnosRows, setAlumnosRows] = useState([]);
   const [alumnoData, setAlumnoData] = useState({});
+  const [alumnoResponse, setAlumnoResponse] = useState(true);
   const [rowData, setRowData] = useState({});
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -57,7 +58,7 @@ export default function Folios() {
   const { id } = router.query;
 
   useEffect(() => {
-    if (id) {
+    if (id && alumnoResponse) {
       const fetchData = async () => {
         setLoading(true);
         try {
@@ -112,6 +113,7 @@ export default function Folios() {
             }));
             setAlumnosRows(mappedAlumnos);
             setAlumnoData(alumnosResponse.data);
+            setAlumnoResponse(false);
           }
         } catch (error) {
           setNoti({
@@ -127,7 +129,7 @@ export default function Folios() {
       };
       fetchData();
     }
-  }, [id]);
+  }, [id, alumnoResponse]);
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -240,7 +242,7 @@ export default function Folios() {
           type: 'success',
         });
 
-        setAlumnosRows((prev) => prev.filter((row) => row.id !== alumnoId));
+        setAlumnoResponse(true);
       }
     } catch (error) {
       setNoti({
@@ -282,13 +284,13 @@ export default function Folios() {
           </Tooltip>
 
           {estatus === 2 && (
-          <Tooltip title="Eliminar alumno" placement="top">
-            <IconButton
-              onClick={() => handleDeleteAlumno(params.row.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Eliminar alumno" placement="top">
+              <IconButton
+                onClick={() => handleDeleteAlumno(params.row.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
           )}
         </>
       ),
@@ -436,6 +438,9 @@ export default function Folios() {
                 title="Alumnos"
                 rows={alumnosRows}
                 columns={alumnosColumns}
+                initialState={{
+                  sorting: { sortModel: [{ field: 'consecutivo', sort: 'asc' }] },
+                }}
               />
             </Grid>
             {tipoDocumento === 1 ? (
@@ -445,7 +450,7 @@ export default function Folios() {
                 type="consult"
                 id={id}
                 rowData={rowData}
-                setAlumnoResponse={() => { }}
+                setAlumnoResponse={setAlumnoResponse}
                 disabled={disabled}
               />
             ) : (
@@ -456,7 +461,7 @@ export default function Folios() {
                 id={id}
                 rowData={rowData}
                 title="Agregar Alumno"
-                setAlumnoResponse={() => { }}
+                setAlumnoResponse={setAlumnoResponse}
                 disabled={disabled}
               />
             )}
