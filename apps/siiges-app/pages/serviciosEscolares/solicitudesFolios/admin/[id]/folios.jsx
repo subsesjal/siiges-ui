@@ -111,7 +111,6 @@ export default function Folios() {
               fechaExpedicion: dayjs(res.fechaExpedicion).format('DD/MM/YYYY'),
               fechaTerminacion: dayjs(res.fechaTerminacion).format('DD/MM/YYYY'),
             }));
-
             setAlumnosRows(mappedAlumnos);
             setAlumnoData(alumnosResponse.data);
           }
