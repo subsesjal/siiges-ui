@@ -31,6 +31,9 @@ export default function ModalFirmaElectronica({
   title,
   solicitudFolioAlumnoId,
   disabled,
+  tipoDocumento,
+  libro,
+  foja,
 }) {
   const { setNoti } = useContext(Context);
   const [certificado, setCertificado] = useState(null);
@@ -142,7 +145,6 @@ export default function ModalFirmaElectronica({
     const {
       alumno,
       folioDocumentoAlumno,
-      tipoDocumento,
       tipoSolicitudFolio,
     } = datosAlumno;
     const persona = alumno?.persona;
@@ -158,24 +160,24 @@ export default function ModalFirmaElectronica({
     ].filter(Boolean);
 
     return {
-      folioInterno: folioDocumentoAlumno?.folioDocumento || '',
-      foja: datosAlumno?.foja || 0,
-      libro: datosAlumno?.libro || 0,
-      tipoDocumento,
-      tipoSolicitudFolio: tipoSolicitudFolio || '',
-      nombre: persona?.nombre || '',
-      apellidoPaterno: persona?.apellidoPaterno || '',
-      apellidoMaterno: persona?.apellidoMaterno || '',
-      curp: persona?.curp || '',
+      folioInterno: folioDocumentoAlumno?.folioDocumento,
+      foja,
+      libro,
+      tipoDocumento: tipoDocumento.toLowerCase(),
+      tipoSolicitudFolio,
+      nombre: persona?.nombre,
+      apellidoPaterno: persona?.apellidoPaterno,
+      apellidoMaterno: persona?.apellidoMaterno,
+      curp: persona?.curp,
       programa: {
-        rvoe: programa?.acuerdo_rvoe || '',
-        nombre: programa?.nombre || '',
-        nivel: programa?.nivel?.nombre || '',
+        rvoe: programa?.acuerdo_rvoe,
+        nombre: programa?.nombre,
+        nivel: programa?.nivel?.nombre,
       },
       institucion: {
-        nombre: plantel?.institucion?.nombre || '',
+        nombre: plantel?.institucion?.nombre,
         plantel: {
-          cct: plantel?.clave_centro_trabajo || '',
+          cct: plantel?.clave_centro_trabajo,
           direccion: direccionPartes.join(', '),
         },
       },
@@ -332,14 +334,6 @@ export default function ModalFirmaElectronica({
 
     try {
       const objetoPorFirmar = construirObjetoPorFirmar();
-
-      if (!objetoPorFirmar.tipoDocumento) {
-        throw new Error('El tipo de documento no está disponible en los datos del alumno');
-      }
-
-      if (!objetoPorFirmar.folioInterno) {
-        throw new Error('El folio interno no está disponible en los datos del alumno');
-      }
 
       const jsonString = JSON.stringify(objetoPorFirmar);
 
@@ -685,4 +679,7 @@ ModalFirmaElectronica.propTypes = {
   title: PropTypes.string,
   solicitudFolioAlumnoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   disabled: PropTypes.bool,
+  tipoDocumento: PropTypes.string.isRequired,
+  libro: PropTypes.string.isRequired,
+  foja: PropTypes.string.isRequired,
 };
