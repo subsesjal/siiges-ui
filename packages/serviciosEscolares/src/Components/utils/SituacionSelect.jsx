@@ -18,6 +18,7 @@ export default function SituacionSelect({
   options,
   name,
   title,
+  required,
 }) {
   const REPRESENTANTES_OPTION_ID = 4;
   const filteredOptions = ifRepresentantes
@@ -27,13 +28,14 @@ export default function SituacionSelect({
   return (
     <Box sx={{ minWidth: 120, mt: 2 }}>
       <FormControl fullWidth size="small" error={!!errorMessage}>
-        <InputLabel>{title}</InputLabel>
+        <InputLabel required={required}>{title}</InputLabel>
         <MuiSelect
           label={title}
           name={name}
           value={value || ''}
           onChange={onChange}
           disabled={disabled}
+          required={required}
         >
           {filteredOptions.map((option) => (
             <MenuItem key={option.id} value={option.id}>
@@ -61,6 +63,7 @@ SituacionSelect.propTypes = {
   ).isRequired,
   name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  required: PropTypes.string.isRequired,
 };
 
 SituacionSelect.defaultProps = {
