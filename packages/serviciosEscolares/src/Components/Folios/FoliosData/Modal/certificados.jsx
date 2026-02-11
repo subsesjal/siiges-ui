@@ -40,7 +40,6 @@ export default function ModalCertificado({
   useEffect(() => {
     validateForm();
   }, [form, alumno, disabled]);
-
   useEffect(() => {
     if (type !== 'create' && rowData) {
       setForm(rowData);
@@ -49,14 +48,6 @@ export default function ModalCertificado({
         setAlumno(fullName);
       }
       setAlumnoId(rowData.alumnoId);
-    } else if (type === 'create') {
-      setForm({
-        matricula: '',
-        fechaTerminacion: '',
-        fechaExpedicion: '',
-      });
-      setAlumno(null);
-      setAlumnoId(null);
     } else {
       setAlumno(null);
       setAlumnoId(null);
@@ -68,7 +59,7 @@ export default function ModalCertificado({
     } else {
       setModalTitulo('Agregar Alumno');
     }
-  }, [type, rowData, open]);
+  }, [type, rowData]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -271,7 +262,6 @@ ModalCertificado.propTypes = {
     name: PropTypes.string,
     fechaInicio: PropTypes.string,
     fechaTerminacion: PropTypes.string,
-    fechaExpedicion: PropTypes.string,
     fechaExamenProfesional: PropTypes.string,
     fechaExencionExamenProfesional: PropTypes.string,
   }),
