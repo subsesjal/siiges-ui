@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonsReporteFoliosAsig from '../Components/utils/ButtonReporteFoliosAsig';
 
-const columnsReporteFoliosAsignados = () => [
+const columnsReporteFoliosAsignados = (onFirmaSuccess) => [
   {
     field: 'Nombre',
     headerName: 'Alumno',
@@ -16,11 +16,11 @@ const columnsReporteFoliosAsignados = () => [
   { field: 'RVOE', headerName: 'RVOE', width: 150 },
   { field: 'Nivel_Estudio_Nombre', headerName: 'Grado académico', width: 150 },
   { field: 'Nombre_Carrera', headerName: 'Plan de Estudios', width: 150 },
-  { field: 'Tipo_Certificado', headerName: 'Tipo Certificado', width: 150 },
+  { field: 'Tipo_Certificado', headerName: 'Tipo Documento', width: 150 },
   {
     field: 'actions',
     headerName: 'Acciones',
-    width: 180,
+    width: 200,
     sortable: false,
     filterable: false,
     renderCell: (params) => {
@@ -29,8 +29,11 @@ const columnsReporteFoliosAsignados = () => [
         <ButtonsReporteFoliosAsig
           id={row.id}
           tipoDocumento={row.Tipo_Documento}
-          estatusFirmado={row.Estatus_Firma}
+          libro={row.Libro}
+          foja={row.Foja}
+          estatusFirmado={row.Estatus_Firmado}
           solicitudFolioAlumnoId={row.Solicitud_Folio_Alumno_Id}
+          onFirmaSuccess={onFirmaSuccess}
         />
       );
     },

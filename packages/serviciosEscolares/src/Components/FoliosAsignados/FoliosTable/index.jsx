@@ -4,12 +4,12 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import columnsReporteFoliosAsignados from '../../../Tables/reporteFoliosAsignadosTable';
 
-export default function FoliosTable({ folios }) {
+export default function FoliosTable({ folios, onFirmaSuccess }) {
   return (
     <Box sx={{ height: 500, width: '100%', mt: 2 }}>
       <DataGrid
         rows={folios}
-        columns={columnsReporteFoliosAsignados(null)}
+        columns={columnsReporteFoliosAsignados(onFirmaSuccess)}
         disableSelectionOnClick
         getRowId={(row) => row.id}
         pageSize={10}
@@ -21,4 +21,5 @@ export default function FoliosTable({ folios }) {
 
 FoliosTable.propTypes = {
   folios: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  onFirmaSuccess: PropTypes.func.isRequired,
 };
