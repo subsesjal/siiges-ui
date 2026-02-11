@@ -11,6 +11,8 @@ import ModalFirmaElectronica from '../FoliosAsignados/FoliosTable/ModalFirmaElec
 export default function ButtonsReporteFoliosAsig({
   id,
   tipoDocumento,
+  libro,
+  foja,
   solicitudFolioAlumnoId,
   estatusFirmado,
   onFirmaSuccess,
@@ -189,6 +191,9 @@ export default function ButtonsReporteFoliosAsig({
         onConfirm={handleConfirmFirma}
         title="Firmar Certificado"
         solicitudFolioAlumnoId={solicitudFolioAlumnoId}
+        tipoDocumento={tipoDocumento}
+        foja={foja}
+        libro={libro}
       />
     </>
   );
@@ -204,6 +209,8 @@ ButtonsReporteFoliosAsig.defaultProps = {
 ButtonsReporteFoliosAsig.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tipoDocumento: PropTypes.string,
+  libro: PropTypes.string.isRequired,
+  foja: PropTypes.string.isRequired,
   solicitudFolioAlumnoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   estatusFirmado: PropTypes.string,
   onFirmaSuccess: PropTypes.func,
