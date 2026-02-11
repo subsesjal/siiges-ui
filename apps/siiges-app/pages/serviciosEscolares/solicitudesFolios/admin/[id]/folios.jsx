@@ -15,6 +15,8 @@ import {
   GetFile,
   createRecord,
   deleteRecord,
+  DefaultModal,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -46,6 +48,8 @@ export default function Folios() {
   const [alumnosRows, setAlumnosRows] = useState([]);
   const [alumnoData, setAlumnoData] = useState({});
   const [alumnoResponse, setAlumnoResponse] = useState(true);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [alumnoToDelete, setAlumnoToDelete] = useState(null);
   const [rowData, setRowData] = useState({});
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -53,6 +57,9 @@ export default function Folios() {
   const [formData, setFormData] = useState({
     folioPago: '',
   });
+  const selectedAlumno = alumnosRows.find(
+    (row) => row.id === alumnoToDelete,
+  );
 
   const router = useRouter();
   const { id } = router.query;
@@ -229,17 +236,23 @@ export default function Folios() {
       });
     }
   };
-  const handleDeleteAlumno = async (alumnoId) => {
+  const handleDeleteAlumno = (alumnoId) => {
+    setAlumnoToDelete(alumnoId);
+    setOpenDeleteModal(true);
+  };
+  const confirmDeleteAlumno = async () => {
+    if (!alumnoToDelete) return;
+
     setLoading(true);
     try {
       const response = await deleteRecord({
-        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${alumnoId}`,
+        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${alumnoToDelete}`,
       });
 
       if (response.statusCode === 200) {
         setNoti({
           open: true,
-          message: 'Alumno eliminado correctamente',
+          message: `Alumno ${selectedAlumno?.nombre} eliminado correctamente`,
           type: 'success',
         });
 
@@ -253,9 +266,10 @@ export default function Folios() {
       });
     } finally {
       setLoading(false);
+      setOpenDeleteModal(false);
+      setAlumnoToDelete(null);
     }
   };
-
   const alumnosColumns = [
     {
       field: 'id', headerName: 'ID', width: 100, hide: true,
@@ -500,6 +514,29 @@ export default function Folios() {
             folios={handleFoliosSubmit}
             estatus={estatus}
           />
+          <DefaultModal
+            title="Eliminar alumno"
+            open={openDeleteModal}
+            setOpen={setOpenDeleteModal}
+          >
+            <Typography>
+              Está a punto de eliminar al alumno con matrícula:
+              {' '}
+              <strong>{selectedAlumno?.matricula}</strong>
+              {' '}
+              de esta solicitud.
+              <br />
+              Esta acción no se puede deshacer.
+              <br />
+              ¿Desea continuar?
+            </Typography>
+
+            <ButtonsForm
+              cancel={() => setOpenDeleteModal(false)}
+              confirm={confirmDeleteAlumno}
+              confirmText="Confirmar"
+            />
+          </DefaultModal>
         </Grid>
       </Grid>
     </Layout>
