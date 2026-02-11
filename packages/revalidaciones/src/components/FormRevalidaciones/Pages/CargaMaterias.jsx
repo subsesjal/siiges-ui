@@ -44,7 +44,7 @@ export default function CargaMaterias({ filesData, setFilesData }) {
             label={doc.label}
             id={`file-input-${index}`}
             tipoDocumento={doc.key}
-            tipoEntidad="REVALIDACIONES"
+            tipoEntidad="SOLICITUD_REV_EQUIV"
             url={formatUrl(doc.key)}
             onChange={(files) => handleFileChange(files, doc.key)}
             isUploaded={isFileUploaded(doc.key)}

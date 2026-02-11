@@ -323,6 +323,8 @@ export default function DatosInstitucion({
     [touched],
   );
 
+  console.log(form);
+
   // Validate fields when validateFields changes
   useEffect(() => {
     if (validateFields) {

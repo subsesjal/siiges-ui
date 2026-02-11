@@ -2,6 +2,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import {
   ButtonsForm,
   Context,
@@ -15,60 +16,48 @@ import React, {
   useContext, useEffect, useMemo, useState,
 } from 'react';
 import PropTypes from 'prop-types';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import fetchData from '../../../utils/FetchData';
 import CalificacionInput from '../../../utils/CalificacionInput';
 
-const columns = (handleDelete, handleEdit, disabled) => [
-  {
-    field: 'materiasAntecedente',
-    headerName: 'Materias de Antecedente',
-    width: 280,
-  },
-  {
-    field: 'calificacionAntecedente',
-    headerName: 'Calificación Antecedente',
-    width: 200,
-  },
-  {
-    field: 'materiasEquivalentes',
-    headerName: 'Materias Equivalentes',
-    width: 280,
-  },
-  {
-    field: 'calificacionEquivalente',
-    headerName: 'Calificación Equivalente',
-    width: 200,
-  },
+const domain = process.env.NEXT_PUBLIC_URL;
+
+/* ----------------------------- columnas ----------------------------- */
+
+const columns = (onDelete, onEdit, disabled) => [
+  { field: 'materiasAntecedente', headerName: 'Materias de Antecedente', width: 280 },
+  { field: 'calificacionAntecedente', headerName: 'Calificación Antecedente', width: 200 },
+  { field: 'materiasEquivalentes', headerName: 'Materias Equivalentes', width: 280 },
+  { field: 'calificacionEquivalente', headerName: 'Calificación Equivalente', width: 200 },
   {
     field: 'actions',
     headerName: 'Acciones',
     width: 120,
-    renderCell: (params) => (!disabled ? (
-      <>
-        <Tooltip title="Editar" placement="top">
-          <IconButton onClick={() => handleEdit(params.row)}>
-            <EditIcon />
+    renderCell: ({ row }) => (
+      !disabled ? (
+        <>
+          <Tooltip title="Editar">
+            <IconButton onClick={() => onEdit(row)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Eliminar">
+            <IconButton onClick={() => onDelete(row.id)}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </>
+      ) : (
+        <Tooltip title="Consultar">
+          <IconButton onClick={() => onEdit(row)}>
+            <VisibilityOutlinedIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Eliminar" placement="top">
-          <IconButton onClick={() => handleDelete(params.row.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </>
-    ) : (
-      <Tooltip title="Consultar" placement="top">
-        <IconButton onClick={() => handleEdit(params.row)}>
-          <VisibilityOutlinedIcon />
-        </IconButton>
-      </Tooltip>
-    )),
+      )
+    ),
   },
 ];
 
-const domain = process.env.NEXT_PUBLIC_URL;
-const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+/* -------------------------- componente -------------------------- */
 
 export default function CargaMateriasEquivalentes({
   form,
@@ -76,38 +65,111 @@ export default function CargaMateriasEquivalentes({
   disabled,
   calificacionesReglas,
 }) {
-  const asignaturas = form?.interesado?.asignaturasAntecedenteEquivalente || [];
-
   const { setNoti, setLoading } = useContext(Context);
+
+  const asignaturas = form?.interesado?.asignaturasAntecedenteEquivalente || [];
+  const destino = form?.interesado?.institucionDestino;
+
+  /* ---------------------------- UI ---------------------------- */
 
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
 
+  /* -------------------------- estados del modal -------------------------- */
+
   const [materiaAntecedente, setMateriaAntecedente] = useState('');
   const [calificacionAntecedente, setCalificacionAntecedente] = useState('');
   const [materiaEquivalente, setMateriaEquivalente] = useState('');
-  const [asignaturaId, setAsignaturaId] = useState(null);
-  const [programa, setPrograma] = useState({});
   const [calificacionEquivalente, setCalificacionEquivalente] = useState('');
-  const [materiasList, setMateriasList] = useState([]);
-  const [rows, setRows] = useState([]);
-  const [editingId, setEditingId] = useState(null);
+  const [asignaturaId, setAsignaturaId] = useState(null);
+
   const [isEditing, setIsEditing] = useState(false);
-  const [detalleAsignatura, setDetalleAsignatura] = useState(null);
-  const [editingBackendId, setEditingBackendId] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
+
+  const [materiasList, setMateriasList] = useState([]);
+  const [programa, setPrograma] = useState({});
+  const [asignaturaPrograma, setAsignaturaPrograma] = useState(null);
+
+  /* ---------------------------- helpers ---------------------------- */
 
   const resetForm = () => {
     setOpen(false);
-    setEditingId(null);
     setIsEditing(false);
-    setAsignaturaId(null);
+    setEditingIndex(null);
+    setAsignaturaPrograma(null);
+
     setMateriaAntecedente('');
     setCalificacionAntecedente('');
     setMateriaEquivalente('');
     setCalificacionEquivalente('');
-    setDetalleAsignatura(null);
+    setAsignaturaId(null);
   };
+
+  /* ---------------------------- filas tabla ---------------------------- */
+
+  const rows = useMemo(
+    () => asignaturas.map((item, index) => ({
+      id: index,
+      asignaturaId: item.asignaturaId
+        || item.asignaturaEquivalentePrograma?.asignaturaId,
+      materiasAntecedente: item.nombreAsignaturaAntecedente,
+      calificacionAntecedente: item.calificacionAntecedente,
+      materiasEquivalentes: item.nombreAsignaturaEquivalente,
+      calificacionEquivalente: item.calificacionEquivalente,
+    })),
+    [asignaturas],
+  );
+
+  /* -------------------------- fetch materias destino -------------------------- */
+
+  const programaId = destino?.institucionDestinoPrograma?.programaId || destino?.programaId;
+  const acuerdoRvoe = destino?.acuerdoRvoe;
+  const tipoInstitucionId = destino?.tipoInstitucionId;
+
+  useEffect(() => {
+    if (programaId && tipoInstitucionId === 1) {
+      fetchData(
+        `${domain}/api/v1/public/asignaturas/programas/${programaId}`,
+        setMateriasList,
+      );
+
+      if (acuerdoRvoe) {
+        fetchData(
+          `${domain}/api/v1/public/programas?acuerdoRvoe=${acuerdoRvoe}`,
+          setPrograma,
+        );
+      }
+    }
+  }, [programaId, tipoInstitucionId, acuerdoRvoe]);
+
+  /* -------------------------- materia seleccionada -------------------------- */
+
+  useEffect(() => {
+    if (asignaturaId && materiasList.length) {
+      const selected = materiasList.find(
+        (m) => m.id === Number(asignaturaId),
+      );
+      setMateriaEquivalente(selected?.nombre || '');
+      setAsignaturaPrograma(selected || null);
+    }
+  }, [asignaturaId, materiasList]);
+
+  /* -------------------------- materias disponibles -------------------------- */
+
+  const materiasDisponibles = useMemo(() => {
+    const usadas = asignaturas.map(
+      (a) => a.asignaturaId
+        || a.asignaturaEquivalentePrograma?.asignaturaId,
+    );
+
+    return materiasList.filter(
+      (m) => !usadas.includes(m.id)
+        || (isEditing && m.id === asignaturaId),
+    );
+  }, [materiasList, asignaturas, isEditing, asignaturaId]);
+
+  /* -------------------------- acciones -------------------------- */
 
   const handleDelete = (index) => {
     setDeleteIndex(index);
@@ -116,216 +178,83 @@ export default function CargaMateriasEquivalentes({
 
   const confirmDelete = () => {
     setLoading(true);
-    setOpenDelete(false);
-
     try {
-      const updatedList = asignaturas.filter((_, i) => i !== deleteIndex);
-
       handleOnChange(
         {
           target: {
             name: 'asignaturasAntecedenteEquivalente',
-            value: updatedList,
+            value: asignaturas.filter((_, i) => i !== deleteIndex),
           },
         },
         ['interesado'],
       );
 
-      setNoti({
-        open: true,
-        type: 'success',
-        message: 'Materia equivalente eliminada',
-      });
-    } catch (error) {
-      console.error(error);
-      setNoti({
-        open: true,
-        type: 'error',
-        message: 'Error al eliminar la materia equivalente',
-      });
+      setNoti({ open: true, type: 'success', message: 'Materia eliminada' });
     } finally {
       setLoading(false);
+      setOpenDelete(false);
       setDeleteIndex(null);
     }
   };
 
-  const handleEdit = async (row) => {
+  const handleEdit = (row) => {
     const index = asignaturas.findIndex(
-      (item) => (item.asignaturaId
-        || item.asignaturaEquivalentePrograma?.asignaturaId)
-      === row.asignaturaId,
+      (a) => (a.asignaturaId
+        || a.asignaturaEquivalentePrograma?.asignaturaId)
+        === row.asignaturaId,
     );
 
-    const backendId = asignaturas[index]?.id || null;
+    const item = asignaturas[index];
 
-    setEditingId(index);
     setIsEditing(true);
+    setEditingIndex(index);
 
-    setMateriaAntecedente(row.materiasAntecedente);
-    setCalificacionAntecedente(row.calificacionAntecedente);
-    setMateriaEquivalente(row.materiasEquivalentes);
-    setCalificacionEquivalente(row.calificacionEquivalente);
+    setMateriaAntecedente(item.nombreAsignaturaAntecedente);
+    setCalificacionAntecedente(item.calificacionAntecedente);
+    setMateriaEquivalente(item.nombreAsignaturaEquivalente);
+    setCalificacionEquivalente(item.calificacionEquivalente);
     setAsignaturaId(row.asignaturaId);
-
-    setEditingBackendId(backendId);
-
-    if (backendId) {
-      fetchData(
-        `${domain}/api/v1/public/asignaturasAntecedenteEquivalente/${backendId}`,
-        setDetalleAsignatura,
-      );
-    } else {
-      setDetalleAsignatura(null);
-    }
 
     setOpen(true);
   };
 
-  const handleConfirm = async () => {
-    if (
-      !materiaAntecedente
-    || !materiaEquivalente
-    || !calificacionAntecedente
-    || !calificacionEquivalente
-    || !form?.interesado?.id
-    ) {
-      setNoti({
-        open: true,
-        type: 'warning',
-        message: 'Completa todos los campos obligatorios',
-      });
-      return;
-    }
+  /* -------------------------- confirmar -------------------------- */
 
-    const payload = {
-      interesadoId: form.interesado.id,
+  const handleConfirm = () => {
+    const nueva = {
+      asignaturaId: asignaturaId ? Number(asignaturaId) : null,
       nombreAsignaturaAntecedente: materiaAntecedente,
-      calificacionAntecedente,
       nombreAsignaturaEquivalente: materiaEquivalente,
+      calificacionAntecedente,
       calificacionEquivalente,
-      ...(asignaturaId && { asignaturaId }),
     };
 
-    setLoading(true);
-    setOpen(false);
+    const nuevas = [...asignaturas];
 
-    try {
-      const url = isEditing
-        ? `${domain}/api/v1/public/asignaturasAntecedenteEquivalente/${editingBackendId}`
-        : `${domain}/api/v1/public/asignaturasAntecedenteEquivalente`;
-
-      const method = isEditing ? 'PATCH' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', api_key: apiKey },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al guardar asignatura equivalente');
-      }
-
-      const updatedList = [...asignaturas];
-
-      if (isEditing && editingId !== null) {
-        updatedList[editingId] = {
-          ...updatedList[editingId],
-          ...payload,
-        };
-      } else {
-        updatedList.push(payload);
-      }
-
-      handleOnChange(
-        {
-          target: {
-            name: 'asignaturasAntecedenteEquivalente',
-            value: updatedList,
-          },
-        },
-        ['interesado'],
-      );
-
-      setNoti({
-        open: true,
-        type: 'success',
-        message: isEditing
-          ? 'Materia equivalente actualizada correctamente'
-          : 'Materia equivalente agregada correctamente',
-      });
-
-      resetForm();
-    } catch (error) {
-      console.error(error);
-
-      setNoti({
-        open: true,
-        type: 'error',
-        message: 'Ocurrió un error al guardar la materia equivalente',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    setRows(
-      asignaturas.map((item, index) => ({
-        id: index,
-        asignaturaId:
-          item.asignaturaId
-          || item.asignaturaEquivalentePrograma?.asignaturaId,
-        materiasAntecedente: item.nombreAsignaturaAntecedente,
-        calificacionAntecedente: item.calificacionAntecedente,
-        materiasEquivalentes: item.nombreAsignaturaEquivalente,
-        calificacionEquivalente: item.calificacionEquivalente,
-      })),
-    );
-  }, [asignaturas]);
-
-  useEffect(() => {
-    if (asignaturaId && materiasList.length > 0) {
-      const selected = materiasList.find(
-        (m) => m.id === Number(asignaturaId),
-      );
-      setMateriaEquivalente(selected?.nombre || '');
-    }
-  }, [asignaturaId, materiasList]);
-
-  useEffect(() => {
-    const destino = form?.interesado?.institucionDestino;
-
-    if (
-      destino?.institucionDestinoPrograma?.programaId
-      && destino?.tipoInstitucionId === 1
-    ) {
-      fetchData(
-        `${domain}/api/v1/public/asignaturas/programas/${destino.institucionDestinoPrograma.programaId}`,
-        setMateriasList,
-      );
-      fetchData(
-        `${domain}/api/v1/public/programas?acuerdoRvoe=${destino.acuerdoRvoe}`,
-        setPrograma,
-      );
+    if (isEditing) {
+      nuevas[editingIndex] = { ...nuevas[editingIndex], ...nueva };
     } else {
-      setMateriasList([]);
-      setAsignaturaId(null);
+      nuevas.push(nueva);
     }
-  }, [form?.interesado?.institucionDestino]);
 
-  const materiasDisponibles = useMemo(() => {
-    const usados = asignaturas.map(
-      (item) => item.asignaturaId
-        || item.asignaturaEquivalentePrograma?.asignaturaId,
+    handleOnChange(
+      {
+        target: {
+          name: 'asignaturasAntecedentesEquivalentes',
+          value: nuevas,
+        },
+      },
+      ['interesado'],
     );
 
-    return materiasList.filter((m) => (isEditing && asignaturaId
-      ? !usados.includes(m.id) || m.id === asignaturaId
-      : !usados.includes(m.id)));
-  }, [materiasList, asignaturas, isEditing, asignaturaId]);
+    setNoti({
+      open: true,
+      type: 'success',
+      message: isEditing ? 'Materia actualizada' : 'Materia agregada',
+    });
 
-  const asignaturaPrograma = detalleAsignatura?.asignaturaEquivalentePrograma?.asignatura;
+    resetForm();
+  };
 
   return (
     <>
