@@ -84,13 +84,13 @@ const columnsTitulo = (handleEdit, handleConsult, handleDeleteAlumno, status) =>
           </Tooltip>
         )}
         {status !== 'consult' && (
-        <Tooltip title="Eliminar alumno" placement="top">
-          <IconButton
-            onClick={() => handleDeleteAlumno(params.row.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+          <Tooltip title="Eliminar alumno" placement="top">
+            <IconButton
+              onClick={() => handleDeleteAlumno(params.row.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         )}
 
       </div>
@@ -140,13 +140,13 @@ const columnsCertificado = (handleEdit, handleConsult, handleDeleteAlumno, statu
           </Tooltip>
         )}
         {status !== 'consult' && (
-        <Tooltip title="Eliminar alumno" placement="top">
-          <IconButton
-            onClick={() => handleDeleteAlumno(params.row.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+          <Tooltip title="Eliminar alumno" placement="top">
+            <IconButton
+              onClick={() => handleDeleteAlumno(params.row.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </div>
     ),
@@ -442,8 +442,7 @@ export default function FoliosData({ type }) {
           type: 'success',
         });
 
-        setRows((prev) => prev.filter((row) => row.id !== alumnoToDelete));
-        setAlumnosData((prev) => prev.filter((row) => row.id !== alumnoToDelete));
+        setAlumnoResponse(true);
       }
     } catch (error) {
       setNoti({
@@ -644,6 +643,9 @@ export default function FoliosData({ type }) {
               columns={formData.tipoDocumentoId === 1
                 ? columnsTitulo(handleEdit, handleConsult, handleDeleteAlumno, status)
                 : columnsCertificado(handleEdit, handleConsult, handleDeleteAlumno, status)}
+              initialState={{
+                sorting: { sortModel: [{ field: 'consecutivo', sort: 'asc' }] },
+              }}
             />
           </Grid>
         </Grid>

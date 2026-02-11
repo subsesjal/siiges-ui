@@ -72,6 +72,7 @@ export default function ModalTitulo({
     modalidadTitulacionId: '',
     cumplioServicioSocial: '',
     fundamentoServicioSocialId: '',
+    fechaExpedicion: '',
   });
 
   useEffect(() => {
@@ -122,6 +123,9 @@ export default function ModalTitulo({
         : null,
       fechaTerminacion: form.fechaTerminacion
         ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      fechaExpedicion: form.fechaExpedicion
+        ? dayjs(form.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
       fechaExamenProfesional: form.fechaExamenProfesional
         ? dayjs(form.fechaExamenProfesional).format('YYYY-MM-DDTHH:mm:ssZ')
@@ -274,7 +278,7 @@ export default function ModalTitulo({
                 label="Fecha de expedición de título"
                 id="fechaExpedicion"
                 name="fechaExpedicion"
-                value=""
+                value={form.fechaExpedicion || ''}
                 disabled
               />
             </Grid>
