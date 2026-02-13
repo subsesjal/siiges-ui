@@ -16,6 +16,7 @@ function InputTime({
   disabled,
   required,
   size,
+  ampm,
 }) {
   const handleDateChange = (newDate) => {
     if (newDate && newDate.isValid && newDate.isValid()) {
@@ -41,6 +42,7 @@ function InputTime({
         onAccept={handleAccept}
         onFocus={onfocus}
         disabled={disabled}
+        ampm={ampm}
         sx={{ width: '100%', mt: 2 }}
         slotProps={{
           textField: {
@@ -70,6 +72,7 @@ InputTime.propTypes = {
   errorMessage: PropTypes.string,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
+  ampm: PropTypes.bool,
 };
 
 InputTime.defaultProps = {
@@ -81,6 +84,7 @@ InputTime.defaultProps = {
   disabled: false,
   required: false,
   size: 'small',
+  ampm: true, // por defecto usa formato 12h
 };
 
 export default InputTime;
