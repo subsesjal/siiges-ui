@@ -22,9 +22,10 @@ export default function FormRevalidaciones() {
   const [nextDisabled, setNextDisabled] = useState(true);
   const [validateFields, setValidateFields] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [calificacionesReglas, setCalificacionesReglas] = useState([]);
   const [form, setForm] = useState({
     tipoTramiteId: null,
-    estatusSolicitudRevEquivId: 2,
+    estatusSolicitudRevEquivId: 1,
     fecha: new Date().toISOString().split('T')[0],
     interesado: {
       persona: {
@@ -195,12 +196,19 @@ export default function FormRevalidaciones() {
         throw new Error('¡Error al enviar el formulario!');
       }
 
+      const result = await response.json();
+      const folio = result?.data?.folioSolicitud;
+
+      if (!folio) {
+        throw new Error('No se recibió el folio de la solicitud');
+      }
+
       setNoti({
         open: true,
         message: 'Se envió la solicitud con éxito',
         type: 'success',
       });
-      router.reload();
+      router.push(`/consultaRevEquiv/${folio}/consultarFolio`);
     } catch (error) {
       console.error('¡Error al enviar el formulario!', error);
       setNoti({
@@ -234,6 +242,7 @@ export default function FormRevalidaciones() {
             paises={paises}
             validateFields={validateFields}
             setNextDisabled={setNextDisabled}
+            setCalificacionesReglas={setCalificacionesReglas}
           />
         );
       case 3:
@@ -248,6 +257,7 @@ export default function FormRevalidaciones() {
         return [1, 2, 3].includes(form.tipoTramiteId) ? (
           <CargaMateriasEquivalentes
             form={form}
+            calificacionesReglas={calificacionesReglas}
             handleOnChange={handleOnChange}
           />
         ) : null;
