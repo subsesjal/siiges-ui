@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth, useUI, getToken } from '@siiges-ui/shared';
+import { useAuth, getToken } from '@siiges-ui/shared';
 import { grados } from './Mocks/mockAsignaturas';
 
 export default function useAsignaturas(programaId) {

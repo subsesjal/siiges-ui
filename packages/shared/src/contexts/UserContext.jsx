@@ -23,7 +23,7 @@ class AvatarCache {
 
   get(userId) {
     if (!this.cache.has(userId)) return null;
-    
+
     // Mover al final (LRU)
     const value = this.cache.get(userId);
     this.cache.delete(userId);
@@ -41,12 +41,12 @@ class AvatarCache {
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value;
       const firstValue = this.cache.get(firstKey);
-      
+
       // Liberar blob URL si existe
       if (firstValue && typeof firstValue === 'string' && firstValue.startsWith('blob:')) {
         URL.revokeObjectURL(firstValue);
       }
-      
+
       this.cache.delete(firstKey);
     }
 
@@ -124,10 +124,10 @@ export function UserProvider({ children }) {
           const url = `${domain}${data.data.ubicacion}`;
           const imageResponse = await fetch(url);
           const blob = await imageResponse.blob();
-          
+
           // Crear blob URL en lugar de base64
           const blobUrl = URL.createObjectURL(blob);
-          
+
           return blobUrl;
         }
 

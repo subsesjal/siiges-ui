@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { DataTable, getData } from '@siiges-ui/shared';
 import columns from './Mocks/InstitucionesAledanas';
-import PlantelContext from '../utils/Context/plantelContext';
+import { usePlantel } from '../../../hooks/usePlantel';
 import InstitucionesAledanasCreateModal from '../utils/Components/InstitucionesAledanas/InstitucionesAledanasCreateModal';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function InstitucionesAledanas({ disabled, programaId, type }) {
   const [modal, setModal] = useState(false);
   const [rows, setRows] = useState([]);
-  const { institucionesAledanas, setInstitucionesAledanas, plantelId } = useContext(PlantelContext);
+  const { institucionesAledanas, setInstitucionesAledanas, plantelId } = usePlantel();
   const [loading, setLoading] = useState(true);
 
   const isSectionDisabled = useSectionDisabled(17);

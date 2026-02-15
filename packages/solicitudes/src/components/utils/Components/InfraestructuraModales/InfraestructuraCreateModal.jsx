@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, useAuth, useUI, Select,
+  DefaultModal, useUI, Select,
   ButtonsForm,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
 import handleCreate from '../../submitNewInfraestructuras';
-import PlantelContext from '../../Context/plantelContext';
+import { usePlantel } from '../../../../../hooks/usePlantel';
 import getAsignaturas from '../../getAsignaturas';
 
 export default function InfraestructuraCreateModal({
@@ -29,7 +29,7 @@ export default function InfraestructuraCreateModal({
     initialValues,
     setInitialValues,
     plantelId,
-  } = useContext(PlantelContext);
+  } = usePlantel();
 
   const [tipoInstalacion, setTipoInstalacion] = useState('');
   const [asignaturasDisabled, setAsignaturasDisabled] = useState(false);

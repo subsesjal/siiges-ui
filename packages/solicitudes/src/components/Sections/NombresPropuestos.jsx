@@ -1,15 +1,15 @@
 import { Grid, Typography } from '@mui/material';
 import { GetFile, Input, InputFile } from '@siiges-ui/shared';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import PlantelContext from '../utils/Context/plantelContext';
+import { usePlantel } from '../../../hooks/usePlantel';
 import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function NombresPropuestos({ disabled, institucion }) {
   const {
     form, setForm, setValidNombres, setArchivosNombres, archivosNombres,
-  } = useContext(PlantelContext);
+  } = usePlantel();
   const [fileURLs, setFileURLs] = useState([null, null]);
 
   const isSectionDisabled = useSectionDisabled(19);
