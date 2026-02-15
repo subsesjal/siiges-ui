@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, TextField, Typography } from '@mui/material';
-import { Input } from '@siiges-ui/shared';
+import { Input, usePlantel } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import getPlantelesUsuario from '../utils/getPlantelesUsuario';
-import { usePlantel } from '@siiges-ui/shared';
 import formPrograma from '../utils/sections/forms/formPrograma';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 

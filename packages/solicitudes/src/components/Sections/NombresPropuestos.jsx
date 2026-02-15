@@ -1,8 +1,9 @@
 import { Grid, Typography } from '@mui/material';
-import { GetFile, Input, InputFile } from '@siiges-ui/shared';
+import {
+  GetFile, Input, InputFile, usePlantel,
+} from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { usePlantel } from '@siiges-ui/shared';
 import formDatosSolicitud from '../utils/sections/forms/formDatosSolicitud';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 

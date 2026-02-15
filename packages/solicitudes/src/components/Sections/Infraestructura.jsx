@@ -1,5 +1,7 @@
 import { Grid, Typography } from '@mui/material';
-import { DataTable, getData, useUI } from '@siiges-ui/shared';
+import {
+  DataTable, getData, useUI, usePlantel,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, {
   useState,
@@ -8,7 +10,6 @@ import React, {
   useMemo,
 } from 'react';
 import columns from './Mocks/Infraestructura';
-import { usePlantel } from '@siiges-ui/shared';
 import InfraestructuraCreateModal from '../utils/Components/InfraestructuraModales/InfraestructuraCreateModal';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
