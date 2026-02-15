@@ -3,16 +3,15 @@ import React, {
   useState,
   useMemo,
   useEffect,
-  useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
-import { Context } from '@siiges-ui/shared';
+import { useAuth, useUI } from '@siiges-ui/shared';
 
 const DatosGeneralesContext = createContext();
 
 export function DatosGeneralesProvider({ children, solicitud }) {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const { institucion: fetchedInstitucion } = getInstitucionUsuario(session);
   const [institucion, setInstitucion] = useState({});
   const [form, setForm] = useState({

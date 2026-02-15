@@ -1,12 +1,14 @@
 import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
-  ButtonSimple, Context, Select, useApi,
+  ButtonSimple, useAuth, useUI, Select, useApi,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function ChangeAddress() {
-  const { setNoti, session: { id } } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
+  const { id } = session;
   const router = useRouter();
   const [programaData, setProgramaData] = useState([]);
   const [programaSelect, setProgramaSelect] = useState('');

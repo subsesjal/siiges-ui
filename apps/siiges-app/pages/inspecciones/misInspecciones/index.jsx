@@ -1,12 +1,13 @@
 import {
-  Context, DataTable, Layout, useApi,
+  useAuth, DataTable, Layout, useApi, useUI,
 } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MisInspeccionesColumns } from '@siiges-ui/inspecciones';
 
 export default function MisInspecciones() {
-  const { setLoading, setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setLoading, setNoti } = useUI();
   const { id: userId } = session;
   const [inspecciones, setInspecciones] = useState([]);
 

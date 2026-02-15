@@ -11,7 +11,8 @@ import {
 } from '@mui/material';
 import {
   ButtonsForm,
-  Context,
+  useAuth,
+  useUI,
   DefaultModal,
   GetFile,
   Input,
@@ -23,7 +24,7 @@ import {
 } from '@siiges-ui/shared';
 import { getSolicitudDetalles } from '@siiges-ui/solicitudes';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const initialCheckboxes = {
   fda01: false,
@@ -37,7 +38,8 @@ const initialCheckboxes = {
 const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 export default function RecepcionFormatos() {
-  const { session, setNoti, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const router = useRouter();
   const { query } = router;
   const [form, setForm] = useState({ estatusSolicitudId: 6 });

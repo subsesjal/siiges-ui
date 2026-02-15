@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import router from 'next/router';
 import { Divider } from '@mui/material';
-import { Layout, Context } from '@siiges-ui/shared';
+import { Layout, useAuth } from '@siiges-ui/shared';
 import { InstitucionesTable, getInstituciones } from '@siiges-ui/instituciones';
 
 export default function Instituciones() {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 

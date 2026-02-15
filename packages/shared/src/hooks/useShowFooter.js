@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function useShowFooter() {
+const useShowFooter = () => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
@@ -30,4 +30,6 @@ export default function useShowFooter() {
   }, []);
 
   return show;
-}
+};
+
+export default useShowFooter;

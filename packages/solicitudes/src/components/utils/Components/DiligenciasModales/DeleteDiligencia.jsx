@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonSimple, Context, DefaultModal, deleteRecord,
+  ButtonSimple, useUI, DefaultModal, deleteRecord,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
@@ -11,7 +11,7 @@ function DeleteDiligencia({ modal, hideModal, id }) {
     diligenciasRows,
     setDiligenciasRows,
   } = useContext(DatosGeneralesContext);
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const handleDelete = () => {
     const endpoint = `/diligencias/${id}`;

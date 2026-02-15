@@ -1,9 +1,9 @@
 import React, {
-  useState, useMemo, useContext, useEffect,
+  useState, useMemo, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
-import { Context, SnackAlert, Loading } from '@siiges-ui/shared';
+import { useAuth, useUI, SnackAlert, Loading } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import pagination from '../../../events/pagination';
 import SectionLayout from '../../SectionLayout';
@@ -32,7 +32,7 @@ export default function PlanEstudios({
   isDisabled: parentDisabled,
   tipoSolicitudId,
 }) {
-  const { session, loading } = useContext(Context);
+  const { session } = useAuth(); const { loading } = useUI();
   const router = useRouter();
   const { query } = router;
   const [form, setForm] = useState({

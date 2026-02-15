@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import {
   ButtonSimple,
-  Context,
+  useAuth, useUI,
   DefaultModal,
   deleteRecord,
 } from '@siiges-ui/shared';
@@ -10,7 +10,7 @@ import React, { useContext } from 'react';
 import PlantelContext from '../../Context/plantelContext';
 
 function DeleteInfraestructura({ modal, hideModal, id }) {
-  const { setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
   const { plantelId, setInfraestructuras } = useContext(PlantelContext);
 
   const handleDelete = async () => {

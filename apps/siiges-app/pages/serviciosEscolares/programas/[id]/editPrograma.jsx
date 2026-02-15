@@ -1,5 +1,5 @@
 import {
-  ButtonSimple, Context, DefaultModal, Layout,
+  ButtonSimple, useAuth, DefaultModal, Layout,
 } from '@siiges-ui/shared';
 import {
   Asignaturas,
@@ -10,13 +10,13 @@ import {
 } from '@siiges-ui/serviciosescolares';
 import { useRouter } from 'next/router';
 import { useProgramaById } from '@siiges-ui/solicitudes';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, Grid, Tab, Tabs, Typography,
 } from '@mui/material';
 
 export default function EditPrograma() {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(true);
