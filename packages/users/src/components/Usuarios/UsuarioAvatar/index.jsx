@@ -1,12 +1,7 @@
 import Tooltip from '@mui/material/Tooltip';
-import React, {
-  useContext, useState, useRef,
-} from 'react';
+import React, { useState, useRef } from 'react';
 import {
-  Context,
-  SubmitDocument,
-  DefaultModal,
-  ButtonSimple,
+  SubmitDocument, DefaultModal, ButtonSimple, useAuth, useUser,
 } from '@siiges-ui/shared';
 import { Typography, Grid, IconButton } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -16,7 +11,9 @@ import Divider from '@mui/material/Divider';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 export default function UsuarioAvatar({ usuario }) {
-  const { session, avatarUrl, refreshAvatar } = useContext(Context);
+  const { session } = useAuth();
+  const { avatarUrl, refreshAvatar } = useUser();
+
   const { persona = undefined, rol = undefined } = usuario || {};
   const fullName = `${persona?.nombre} ${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`;
   const [selectedFile, setSelectedFile] = useState(null);
