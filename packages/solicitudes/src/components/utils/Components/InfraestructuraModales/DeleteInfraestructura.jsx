@@ -4,10 +4,10 @@ import {
   useUI,
   DefaultModal,
   deleteRecord,
+  usePlantel,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { usePlantel } from '@siiges-ui/shared';
 
 function DeleteInfraestructura({ modal, hideModal, id }) {
   const { setLoading, setNoti } = useUI();

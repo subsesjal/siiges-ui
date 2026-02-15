@@ -1,9 +1,8 @@
 import { Grid, Typography } from '@mui/material';
-import { InputNumber, getData } from '@siiges-ui/shared';
+import { InputNumber, getData, usePlantel } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from '@mui/material/CircularProgress';
-import { usePlantel } from '@siiges-ui/shared';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function HigienePlantel({ disabled }) {

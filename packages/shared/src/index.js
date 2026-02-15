@@ -94,6 +94,7 @@ export {
   useApi,
   useNotification,
   useCheckMobileScreen,
+  usePlantel,
 } from './hooks';
 
 // ============================================================================

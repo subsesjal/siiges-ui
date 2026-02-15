@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
-import { DataTable, getData } from '@siiges-ui/shared';
+import { DataTable, getData, usePlantel } from '@siiges-ui/shared';
 import columns from './Mocks/InstitucionesAledanas';
-import { usePlantel } from '@siiges-ui/shared';
 import InstitucionesAledanasCreateModal from '../utils/Components/InstitucionesAledanas/InstitucionesAledanasCreateModal';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 

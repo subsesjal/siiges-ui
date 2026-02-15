@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { IconButton, Stack } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { usePlantel } from '@siiges-ui/shared';
 import DeleteInstitucionesAledanas from './InstitucionesAledanas/DeleteInstitucionesAledanas';
 import InstitucionAledanaEditModal from './InstitucionesAledanas/InstitucionAledanaEditModal';
-import { usePlantel } from '@siiges-ui/shared';
 
 export default function InstitucionesAledanasButtons({ id, type, isDisabled }) {
   const [modalOpen, setModalOpen] = useState(false);
