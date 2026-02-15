@@ -4,11 +4,11 @@ import {
   DefaultModal, useUI, Select,
   getData,
   ButtonsForm,
+  usePlantel,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import handleEdit from '../../submitEditInfraestructuras';
-import { usePlantel } from '../../../../../hooks/usePlantel.jsx';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
 import getAsignaturas from '../../getAsignaturas';
 

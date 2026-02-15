@@ -12,6 +12,7 @@ export { AuthProvider, useAuth } from './AuthContext';
 export { UIProvider, useUI } from './UIContext';
 export { UserProvider, useUser } from './UserContext';
 export { NavigationProvider, useNavigation } from './NavigationContext';
+export { PlantelProvider, usePlantel } from './PlantelContext';
 export { AppProvider, withAppProvider } from './AppProvider';
 
 // Re-export para compatibilidad con código legacy

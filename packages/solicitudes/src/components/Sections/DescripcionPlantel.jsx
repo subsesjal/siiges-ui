@@ -9,7 +9,7 @@ import { InputNumber, getData } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { usePlantel } from '../../../hooks/usePlantel.jsx';
+import { usePlantel } from '@siiges-ui/shared';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function DescripcionPlantel({ plantelesData, disabled }) {

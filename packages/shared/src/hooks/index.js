@@ -13,3 +13,4 @@ export { useAuth } from '../contexts/AuthContext';
 export { useUI } from '../contexts/UIContext';
 export { useUser } from '../contexts/UserContext';
 export { useNavigation } from '../contexts/NavigationContext';
+export { usePlantel } from '../contexts/PlantelContext';
