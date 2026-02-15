@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { Card, CardContent } from '@mui/material';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
-import { useAuth } from '@siiges-ui/shared';
+import { useAuth, PlantelProvider } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
@@ -14,7 +14,6 @@ import InstitucionesAledanas from '../../Sections/InstitucionesAledanas';
 import Infraestructura from '../../Sections/Infraestructura';
 import RatificacionNombre from '../../Sections/RatificacionNombre';
 import NombresPropuestos from '../../Sections/NombresPropuestos';
-import { PlantelProvider } from '../../utils/Context/plantelContext';
 import Observaciones from '../../Sections/Observaciones';
 
 export default function Plantel({

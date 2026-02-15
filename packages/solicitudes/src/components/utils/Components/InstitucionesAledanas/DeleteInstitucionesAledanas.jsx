@@ -7,7 +7,7 @@ import {
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { usePlantel } from '../../../../../hooks/usePlantel.jsx';
+import { usePlantel } from '@siiges-ui/shared';
 
 function DeleteInstitucionesAledanas({
   modal, hideModal, id, setInstitucionesAledanas,

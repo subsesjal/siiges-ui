@@ -3,13 +3,13 @@ import { Grid } from '@mui/material';
 import {
   DefaultModal, useUI, Select,
   ButtonsForm,
+  usePlantel,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
 import handleCreate from '../../submitNewInfraestructuras';
-import { usePlantel } from '../../../../../hooks/usePlantel.jsx';
 import getAsignaturas from '../../getAsignaturas';
 
 export default function InfraestructuraCreateModal({
