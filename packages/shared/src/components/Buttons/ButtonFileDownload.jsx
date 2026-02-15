@@ -1,16 +1,16 @@
 import { Button } from '@mui/material';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import GetFile from '../../utils/handlers/getFile';
-import { Context } from '../../utils/handlers/context';
+import { useUI } from '../../contexts';
 
 const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 export default function ButtonFileDownload({
   entidadId, tipoEntidad, tipoDocumento, children,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const handleDownload = async () => {
     try {
       const fileUrl = await GetFile({

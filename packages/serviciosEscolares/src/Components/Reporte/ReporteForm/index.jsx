@@ -1,10 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Divider } from '@mui/material';
 import {
-  Select,
-  Context,
-  getData,
-  LabelData,
+  Select, getData, LabelData, useUI, useAuth,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import {
@@ -22,7 +19,8 @@ export default function ReporteForm({
     setLoading,
   });
 
-  const { setNoti, session } = useContext(Context);
+  const { setNoti } = useUI();
+  const { session } = useAuth();
   const [instituciones, setInstituciones] = useState([]);
   const [ciclosEscolares, setCiclosEscolares] = useState([]);
   const [selectedCiclo, setSelectedCiclo] = useState('');

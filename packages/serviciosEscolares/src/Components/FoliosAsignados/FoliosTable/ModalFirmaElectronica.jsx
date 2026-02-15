@@ -1,17 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Typography,
-  IconButton,
-  Box,
-  CircularProgress,
-  LinearProgress,
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography,
+  IconButton, Box, CircularProgress, LinearProgress,
 } from '@mui/material';
 import { DropzoneArea } from 'mui-file-dropzone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -19,8 +10,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { getData, updateRecord, useUI } from '@siiges-ui/shared';
 import forge from 'node-forge';
-import { Context, updateRecord, getData } from '@siiges-ui/shared';
 
 export default function ModalFirmaElectronica({
   open,
@@ -31,7 +22,7 @@ export default function ModalFirmaElectronica({
   solicitudData,
   disabled,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [certificado, setCertificado] = useState(null);
   const [llavePrivada, setLlavePrivada] = useState(null);
   const [password, setPassword] = useState('');
@@ -41,6 +32,7 @@ export default function ModalFirmaElectronica({
   const [progreso, setProgreso] = useState(0);
   const [firmando, setFirmando] = useState(false);
   const [datosCertificado, setDatosCertificado] = useState(null);
+  const CERT_NAME = process.env.NEXT_PUBLIC_CERT_NAME;
 
   const extraerDatosCertificado = (certFile) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -229,7 +221,7 @@ export default function ModalFirmaElectronica({
       folioInterno: folioDocumentoAlumno?.folioDocumento,
       foja: folioDocumentoAlumno?.foja?.nombre,
       libro: folioDocumentoAlumno?.libro?.nombre,
-      tipoDocumento: 'certificado',
+      tipoDocumento: CERT_NAME,
       tipoSolicitudFolio: solicitudData.tipoSolicitudFolio?.nombre,
       nombre: persona?.nombre,
       apellidoPaterno: persona?.apellidoPaterno,
@@ -373,7 +365,7 @@ export default function ModalFirmaElectronica({
           pkcs7: pkcs7Base64,
           folioInterno: objetoPorFirmar.folioInterno,
           objetoPorFirmar,
-          tipoDocumento: 'certificado',
+          tipoDocumento: CERT_NAME,
           autoridad: {
             tipoFirmante: 'ies',
             cargoFirmante: 'director',

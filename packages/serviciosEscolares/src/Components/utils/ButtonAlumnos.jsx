@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from '@mui/material/Tooltip';
 import {
@@ -12,10 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Link from 'next/link';
 import {
-  DefaultModal,
-  Context,
-  ButtonSimple,
-  deleteRecord,
+  DefaultModal, ButtonSimple, deleteRecord, useUI, useAuth,
 } from '@siiges-ui/shared';
 
 export default function ButtonsAlumnos({
@@ -24,7 +21,8 @@ export default function ButtonsAlumnos({
   matricula,
   onDeleteSuccess,
 }) {
-  const { session, setNoti } = useContext(Context);
+  const { setNoti } = useUI();
+  const { session } = useAuth();
   const [openModal, setOpenModal] = useState(false);
 
   const validUser = session?.rol === 'admin' || session?.rol === 'ce_sicyt';

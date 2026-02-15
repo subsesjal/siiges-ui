@@ -1,13 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
   Button,
   ButtonSimple,
-  Context,
   DataTable,
   DefaultModal,
   getData,
+  useUI,
 } from '@siiges-ui/shared';
 import Router, { useRouter } from 'next/router';
 import columnsInscritosExtra from '../../../Tables/columnsInscritosExtra';
@@ -36,7 +36,7 @@ export default function calificacionesExtraordinarias({
 
   const url = '/serviciosEscolares/programas';
 
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const router = useRouter();
 
   useEffect(() => {

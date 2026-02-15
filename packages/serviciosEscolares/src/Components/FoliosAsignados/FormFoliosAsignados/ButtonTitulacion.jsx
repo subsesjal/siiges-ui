@@ -1,10 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Context,
-  getToken,
-  ButtonSimple,
-} from '@siiges-ui/shared';
+import { getToken, ButtonSimple, useUI } from '@siiges-ui/shared';
 
 const apiUrl = process.env.NEXT_PUBLIC_URL;
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
@@ -15,7 +11,7 @@ export default function ButtonTitulacion({
   fojaInicio,
   fojaFin,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const handleClick = async () => {
     try {

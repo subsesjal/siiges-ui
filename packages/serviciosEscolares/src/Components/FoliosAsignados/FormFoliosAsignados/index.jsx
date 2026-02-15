@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid } from '@mui/material';
 import {
-  Select, InputNumber, ButtonSimple, getData,
-  Context,
+  Select, InputNumber, ButtonSimple, getData, useUI,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import ButtonTitulacion from './ButtonTitulacion';
@@ -12,7 +11,7 @@ export default function FormFoliosAsignados({ setFolios, folios }) {
   const [libro, setLibro] = useState('');
   const [fojaInicio, setFojaInicio] = useState('');
   const [fojaFin, setFojaFin] = useState('');
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const documentos = [
     { id: 'titulo', nombre: 'Título' },

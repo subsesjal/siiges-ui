@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import { Button, DataTable, Context } from '@siiges-ui/shared';
-import React, { useState, useEffect, useContext } from 'react';
+import { Button, DataTable, useUI } from '@siiges-ui/shared';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import getColumnsCiclosEscolares from '../../../Tables/ciclosEscolaresTable';
 import CiclosEscolaresModal from '../../utils/CiclosEscolaresModal';
@@ -10,7 +10,7 @@ export default function CiclosEscolares() {
   const [open, setOpen] = useState(false);
   const [ciclos, setCiclos] = useState([]);
   const [fetchCiclos, setFetchCiclos] = useState(false);
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const router = useRouter();
   const { id: programaId } = router.query;

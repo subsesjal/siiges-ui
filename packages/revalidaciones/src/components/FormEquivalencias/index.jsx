@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import { Context, PositionDisplay } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import { PositionDisplay, useUI } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import DatosSolicitante from './Pages/DatosSolicitante';
 import DatosInstitucion from './Pages/DatosInstitucion';
@@ -12,7 +12,7 @@ const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function FormEquivalencias() {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const router = useRouter();
   const [currentPosition, setCurrentPosition] = useState(1);
   const [filesData, setFilesData] = useState({});

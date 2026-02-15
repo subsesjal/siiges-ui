@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid } from '@mui/material';
-import { Button, DataTable, Context } from '@siiges-ui/shared';
+import { Button, DataTable, useUI } from '@siiges-ui/shared';
 import GruposForm from '../../utils/GruposForm';
 import getColumnsGrupos from '../../../Tables/gruposTable';
 import GruposModal from '../../utils/GruposModal';
@@ -10,7 +10,7 @@ export default function Grupos() {
   const [grupos, setGrupos] = useState([]);
   const [parametros, setParametros] = useState([]);
   const [fetchGrupos, setFetchGrupos] = useState(true);
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const handleSuccess = () => {
     setOpen(false);
