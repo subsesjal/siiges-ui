@@ -1,9 +1,9 @@
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  Select, Context, Input, GetFile, InputFile,
+  Select, Input, GetFile, InputFile, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import getMunicipios from '@siiges-ui/instituciones/src/components/utils/getMunicipios';
 import { fetchCiclosData } from '../../../utils';
 
@@ -15,7 +15,7 @@ export default function DatosSolicitud({
   formData,
   disabled,
 }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [ciclos, setCiclos] = useState([]);
   const [fileUrl, setFileUrl] = useState(null);
   const fileData = {

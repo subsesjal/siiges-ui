@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Select, Context } from '@siiges-ui/shared';
+import { Select, useAuth, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import {
   getInstituciones,
@@ -11,7 +11,8 @@ import getBecasByPrograma from '@siiges-ui/instituciones/src/utils/getProgramas'
 import getInstitucionIdFromSession from '../../../utils/getInstitucionId';
 
 export default function SolicitudesBecasFilter({ setBecas, setPrograma, setInstitucion }) {
-  const { setNoti, session, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,
