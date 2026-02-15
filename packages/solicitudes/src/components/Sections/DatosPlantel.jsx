@@ -4,7 +4,7 @@ import { Grid, TextField, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import getPlantelesUsuario from '../utils/getPlantelesUsuario';
-import { usePlantel } from '../../../hooks/usePlantel';
+import { usePlantel } from '../../../hooks/usePlantel.jsx';
 import formPrograma from '../utils/sections/forms/formPrograma';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 

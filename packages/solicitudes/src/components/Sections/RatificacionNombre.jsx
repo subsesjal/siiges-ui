@@ -2,7 +2,7 @@ import { Grid, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { usePlantel } from '../../../hooks/usePlantel';
+import { usePlantel } from '../../../hooks/usePlantel.jsx';
 
 export default function RatificacionNombre({ disabled }) {
   const { form } = usePlantel();

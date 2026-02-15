@@ -7,7 +7,7 @@ import {
 import PropTypes from 'prop-types';
 import errorDatosInstitucionAledanas from '../../sections/errors/errorDatosInstitucionAledanas';
 import handleCreate from '../../submitNewInstitucionAledanas';
-import { usePlantel } from '../../../../../hooks/usePlantel';
+import { usePlantel } from '../../../../../hooks/usePlantel.jsx';
 
 export default function InstitucionesAledanasCreateModal({
   open,

@@ -2,7 +2,7 @@ import {
   ButtonSimple, useAuth, useUI, createRecord,
 } from '@siiges-ui/shared';
 import React, {
-  useCallback, useState, useEffect, useContext,
+  useCallback, useState, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -24,7 +24,7 @@ import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularCo
 import { ObservacionesContext } from '../utils/Context/observacionesContext';
 import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
 import submitTrayectoriaEducativa from '../utils/submitTrayectoriaeducativa';
-import { usePlantel } from '../../../hooks/usePlantel';
+import { usePlantel } from '../../../hooks/usePlantel.jsx';
 
 export default function ButtonSection({
   type,

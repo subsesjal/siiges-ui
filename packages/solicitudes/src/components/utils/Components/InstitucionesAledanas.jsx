@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteInstitucionesAledanas from './InstitucionesAledanas/DeleteInstitucionesAledanas';
 import InstitucionAledanaEditModal from './InstitucionesAledanas/InstitucionAledanaEditModal';
-import { usePlantel } from '../../../../hooks/usePlantel';
+import { usePlantel } from '../../../../hooks/usePlantel.jsx';
 
 export default function InstitucionesAledanasButtons({ id, type, isDisabled }) {
   const [modalOpen, setModalOpen] = useState(false);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import { DataTable, getData } from '@siiges-ui/shared';
 import columns from './Mocks/InstitucionesAledanas';
-import { usePlantel } from '../../../hooks/usePlantel';
+import { usePlantel } from '../../../hooks/usePlantel.jsx';
 import InstitucionesAledanasCreateModal from '../utils/Components/InstitucionesAledanas/InstitucionesAledanasCreateModal';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
