@@ -1,11 +1,9 @@
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  Select, Context, Input, ButtonFile, GetFile,
+  Select, Input, ButtonFile, GetFile, useUI,
 } from '@siiges-ui/shared';
-import React, {
-  useContext, useState, useEffect, useCallback,
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { fetchCiclosData } from '../../../utils';
 
 const baseUrl = process.env.NEXT_PUBLIC_URL;
@@ -13,7 +11,7 @@ const baseUrl = process.env.NEXT_PUBLIC_URL;
 export default function DatosSolicitud({
   programa, setReqData, formData, disabled,
 }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [ciclos, setCiclos] = useState([]);
   const [fileUrls, setFileUrls] = useState({
     reporteBecas: null,

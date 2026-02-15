@@ -1,18 +1,9 @@
 import { Grid } from '@mui/material';
 import {
-  BinarySelect,
-  ButtonsSections,
-  Context,
-  DefaultModal,
-  Input,
-  InputDate,
-  LabelData,
-  Select,
-  createRecord,
-  getData,
-  updateRecord,
+  BinarySelect, ButtonsSections, DefaultModal, Input, InputDate, LabelData, Select, createRecord,
+  getData, updateRecord, useUI,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -63,7 +54,7 @@ export default function ModalTitulo({
   const [form, setForm] = useState({});
   const [alumno, setAlumno] = useState(null);
   const [alumnoId, setAlumnoId] = useState(null);
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const getEmptyForm = () => ({
     matricula: '',
     fechaInicio: '',

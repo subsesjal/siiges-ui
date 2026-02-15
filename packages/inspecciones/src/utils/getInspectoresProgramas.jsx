@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { Context, getToken } from '@siiges-ui/shared';
+import { useEffect, useState } from 'react';
+import { getToken, useAuth, useUI } from '@siiges-ui/shared';
 
 export default function getInspectoresProgramas() {
-  const { session, setLoading } = useContext(Context);
+  const { setLoading } = useUI();
+  const { session } = useAuth();
   const token = getToken();
   const [inspectoresProgramas, setInspectoresProgramas] = useState();
   let solicitudData = {};

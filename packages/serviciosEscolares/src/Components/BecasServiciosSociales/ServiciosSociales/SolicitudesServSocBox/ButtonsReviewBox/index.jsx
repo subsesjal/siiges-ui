@@ -1,15 +1,15 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm, ButtonSimple, Context, Input,
+  ButtonsForm, ButtonSimple, Input, useUI,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React, { useContext, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { handleUpdateSolicitud } from '../../utils';
 
 export default function ButtonsReviewBox({
   router, solicitudId, formData, reqData,
 }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [form, setForm] = useState({
     observaciones: '',
     estatusSolicitudServicioSocialId: null,

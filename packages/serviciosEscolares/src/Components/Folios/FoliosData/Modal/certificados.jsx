@@ -1,16 +1,9 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm,
-  Context,
-  DefaultModal,
-  Input,
-  InputDate,
-  LabelData,
-  createRecord,
-  getData,
-  updateRecord,
+  ButtonsForm, DefaultModal, Input, InputDate, LabelData, createRecord, getData,
+  updateRecord, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
@@ -29,7 +22,7 @@ export default function ModalCertificado({
   const [alumno, setAlumno] = useState(null);
   const [alumnoId, setAlumnoId] = useState(null);
   const [disabledButton, setDisabledButton] = useState(true);
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [modalTitulo, setModalTitulo] = useState('Agregar Alumno');
 
   const validateForm = () => {
