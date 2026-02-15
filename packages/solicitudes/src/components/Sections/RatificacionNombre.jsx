@@ -1,11 +1,11 @@
 import { Grid, Typography } from '@mui/material';
 import { Input } from '@siiges-ui/shared';
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import PlantelContext from '../utils/Context/plantelContext';
+import { usePlantel } from '../../../hooks/usePlantel';
 
 export default function RatificacionNombre({ disabled }) {
-  const { form } = useContext(PlantelContext);
+  const { form } = usePlantel();
 
   return (
     <Grid container spacing={2}>

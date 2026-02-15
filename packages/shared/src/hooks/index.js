@@ -1,6 +1,6 @@
 /**
  * Custom Hooks Module
- * 
+ *
  * Colección de hooks personalizados reutilizables
  */
 

@@ -1,9 +1,9 @@
 /**
  * Contexts Module
- * 
+ *
  * Proporciona contextos especializados para manejar diferentes aspectos
  * del estado global de la aplicación de manera eficiente.
- * 
+ *
  * @module contexts
  */
 

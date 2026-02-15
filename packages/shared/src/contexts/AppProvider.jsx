@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AuthProvider } from './AuthContext';
-import { UIProvider } from './UIContext';
+import { UIProvider, useUI } from './UIContext';
 import { UserProvider } from './UserContext';
 import { NavigationProvider } from './NavigationContext';
 import SnackAlert from '../components/Alert';
-import { useUI } from './UIContext';
 
 /**
  * Componente interno que renderiza el SnackAlert

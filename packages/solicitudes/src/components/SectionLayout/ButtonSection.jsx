@@ -1,4 +1,6 @@
-import { ButtonSimple, useAuth, useUI, createRecord } from '@siiges-ui/shared';
+import {
+  ButtonSimple, useAuth, useUI, createRecord,
+} from '@siiges-ui/shared';
 import React, {
   useCallback, useState, useEffect, useContext,
 } from 'react';
@@ -15,7 +17,6 @@ import SolicitudContext from '../utils/Context/solicitudContext';
 import submitInstitucion from '../utils/submitInstitucion';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import submitRepresentante from '../utils/submitRepresentante';
-import PlantelContext from '../utils/Context/plantelContext';
 import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
 import submitHigienesPlantel from '../utils/submitHigienesPlantel';
 import submitRatificacion from '../utils/submitRatificacion';
@@ -23,6 +24,7 @@ import { useEvaluacionCurricular } from '../utils/Context/evaluacionCurricularCo
 import { ObservacionesContext } from '../utils/Context/observacionesContext';
 import submitEvaluacionCurricular from '../utils/submitEvaluacionCurricular';
 import submitTrayectoriaEducativa from '../utils/submitTrayectoriaeducativa';
+import { usePlantel } from '../../../hooks/usePlantel';
 
 export default function ButtonSection({
   type,
@@ -43,7 +45,7 @@ export default function ButtonSection({
   const institucion = getInstitucionUsuario(session);
   const validations = useContext(SolicitudContext);
   const evaluacionCurricular = useEvaluacionCurricular();
-  const plantelesValidations = useContext(PlantelContext);
+  const plantelesValidations = usePlantel();
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
   const {
     setCreateObservaciones,

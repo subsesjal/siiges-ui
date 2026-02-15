@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import MenuDrawer from '../Drawer/MenuDrawer';
 import MainNavbar from '../Navbar/MainNavbar';
 import Loading from '../Loading';
-import useCheckMobileScreen from '../../hooks/useCheckMobileScreen.js';
+import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
 import Title from '../Title';
 import { Context } from '../../utils/handlers/context';
 

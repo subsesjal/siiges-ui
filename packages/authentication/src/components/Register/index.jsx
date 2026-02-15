@@ -114,7 +114,6 @@ export default function Register() {
         router.push('/autenticacion/login');
       }, 2000); // 2-second delay before redirecting to the login page
     } catch (error) {
-      console.error('Error:', error);
       setNoti({
         open: true,
         type: 'error',

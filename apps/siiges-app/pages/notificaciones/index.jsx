@@ -132,6 +132,7 @@ export default function Notificaciones() {
                     style={{
                       maxHeight: '400px', overflowY: 'auto', fontFamily: 'Arial, sans-serif', fontSize: '14px', lineHeight: '1.6',
                     }}
+                    // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{ __html: modalData.emailHtml }}
                   />
                 </Grid>

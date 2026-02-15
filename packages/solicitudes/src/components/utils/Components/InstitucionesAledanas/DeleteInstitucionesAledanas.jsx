@@ -1,19 +1,19 @@
 import { Grid, Typography } from '@mui/material';
 import {
   ButtonSimple,
-  useAuth, useUI,
+  useUI,
   DefaultModal,
   deleteRecord,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
-import PlantelContext from '../../Context/plantelContext';
+import React from 'react';
+import { usePlantel } from '../../../../../hooks/usePlantel';
 
 function DeleteInstitucionesAledanas({
   modal, hideModal, id, setInstitucionesAledanas,
 }) {
   const { setNoti, setLoading } = useUI();
-  const { plantelId } = useContext(PlantelContext);
+  const { plantelId } = usePlantel();
 
   const handleDelete = async () => {
     setLoading(true);

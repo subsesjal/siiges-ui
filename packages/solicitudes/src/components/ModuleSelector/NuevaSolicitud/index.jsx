@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
-import { ButtonSimple, useAuth, useUI, useApi } from '@siiges-ui/shared';
+import {
+  ButtonSimple, useAuth, useUI, useApi,
+} from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import formData from '../../utils/sections/forms/formData';
 import errorDatosNuevaSolicitud from '../../utils/sections/errors/errorDatosNuevaSolicitud';

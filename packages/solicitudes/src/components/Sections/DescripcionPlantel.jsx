@@ -7,9 +7,9 @@ import {
 } from '@mui/material';
 import { InputNumber, getData } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import PlantelContext from '../utils/Context/plantelContext';
+import { usePlantel } from '../../../hooks/usePlantel';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function DescripcionPlantel({ plantelesData, disabled }) {
@@ -19,7 +19,7 @@ export default function DescripcionPlantel({ plantelesData, disabled }) {
     setSelectedCheckboxes,
     seguridad,
     setSeguridad,
-  } = useContext(PlantelContext);
+  } = usePlantel();
 
   const isSectionDisabled = useSectionDisabled(15);
 

@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
-import { useAuth, useUI } from '@siiges-ui/shared';
+import { useAuth } from '@siiges-ui/shared';
 
 const DatosGeneralesContext = createContext();
 
