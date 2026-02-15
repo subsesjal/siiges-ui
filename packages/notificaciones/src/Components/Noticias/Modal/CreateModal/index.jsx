@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ButtonsForm, Context, createRecord, DefaultModal, Input,
+  ButtonsForm, createRecord, DefaultModal, Input, useUI,
 } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 
@@ -12,7 +12,7 @@ export default function CreateModal({ open, setOpen, onSuccess }) {
     urlImagen: '',
   });
 
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

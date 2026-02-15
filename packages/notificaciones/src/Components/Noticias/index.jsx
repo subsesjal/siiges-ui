@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
-  DataTable, getData, deleteRecord, Context,
+  DataTable, getData, deleteRecord, useUI,
 } from '@siiges-ui/shared';
 
 import CreateModal from './Modal/CreateModal';
@@ -49,7 +49,7 @@ export default function NoticiasTable() {
   const [rows, setRows] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [noticiaId, setNoticiaId] = useState();
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);

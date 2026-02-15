@@ -1,12 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Select, Context } from '@siiges-ui/shared';
+import { Select, useAuth, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import {
-  getInstituciones,
-  getPlantelesByInstitucion,
-  getProgramas,
-} from '@siiges-ui/instituciones';
+import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
 import getAlumnosByPrograma from '@siiges-ui/instituciones/src/utils/getAlumnosByPrograma';
 import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
@@ -16,7 +12,8 @@ export default function AlumnosForm({ setAlumnos, setPrograma, setLoading }) {
     tipoInstitucionId: 1,
     setLoading,
   });
-  const { setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
 
   const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('alumnos_selectedInstitucion')
     ? localStorage.getItem('alumnos_selectedInstitucion')

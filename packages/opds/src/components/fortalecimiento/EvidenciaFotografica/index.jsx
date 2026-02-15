@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button, ButtonGroup, Grid, Typography,
@@ -6,7 +6,7 @@ import {
 import { DropzoneDialog } from 'mui-file-dropzone';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import { fileToFormData, SubmitDocument, Context } from '@siiges-ui/shared';
+import { fileToFormData, SubmitDocument, useUI } from '@siiges-ui/shared';
 
 export default function EvidenciaFotografica({
   label,
@@ -16,7 +16,7 @@ export default function EvidenciaFotografica({
   disabled,
 }) {
   const [files, setFiles] = useState([]);
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);

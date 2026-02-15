@@ -5,15 +5,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import {
   ButtonsForm,
-  Context,
   DataTable,
   DefaultModal,
   Input,
   LabelData,
   Select,
+  useUI,
 } from '@siiges-ui/shared';
 import React, {
-  useContext, useEffect, useMemo, useState,
+  useEffect, useMemo, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../../utils/FetchData';
@@ -65,7 +65,7 @@ export default function CargaMateriasEquivalentes({
   disabled,
   calificacionesReglas,
 }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   const asignaturas = form?.interesado?.asignaturasAntecedenteEquivalente || [];
   const destino = form?.interesado?.institucionDestino;

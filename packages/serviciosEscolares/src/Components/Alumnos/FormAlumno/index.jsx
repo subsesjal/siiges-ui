@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@mui/material';
 import {
   Select,
   Input,
-  Context,
   ButtonSimple,
   InputDate,
+  useAuth,
+  useUI,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import {
@@ -29,7 +30,8 @@ export default function FormAlumno({
   const router = useRouter();
   const { query } = router;
   const [form, setForm] = useState();
-  const { session, setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
+  const { session } = useAuth();
   const [formSelect, setFormSelect] = useState({
     situacionId: alumno?.situacionId || 2,
   });

@@ -1,6 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Select, Context, getData } from '@siiges-ui/shared';
+import {
+  Select, getData, useUI, useAuth,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import {
   getInstituciones,
@@ -17,7 +19,8 @@ export default function TitulosForm({
     tipoInstitucionId: 1,
     setLoading,
   });
-  const { setNoti, session } = useContext(Context);
+  const { setNoti } = useUI();
+  const { session } = useAuth();
 
   const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined'
     && localStorage.getItem('alumnos_selectedInstitucion')

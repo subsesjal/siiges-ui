@@ -1,7 +1,7 @@
 import {
-  Button, Context, DataTable, InputSearch, LabelData, getData,
+  Button, DataTable, InputSearch, LabelData, getData, useUI,
 } from '@siiges-ui/shared';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
@@ -17,7 +17,7 @@ export default function InscripcionesTable({
   grupoId,
   cicloTxt,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [matriculaValue, setMatriculaValue] = useState('');
   const [alumnoByMatricula, setAlumnoByMatricula] = useState();
   const [selectedAsignaturas, setSelectedAsignaturas] = useState([]);

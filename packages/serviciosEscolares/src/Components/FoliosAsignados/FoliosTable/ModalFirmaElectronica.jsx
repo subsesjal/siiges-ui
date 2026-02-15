@@ -1,18 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  TextField,
-  Typography,
-  IconButton,
-  Box,
-  Collapse,
-  CircularProgress,
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography,
+  IconButton, Box, Collapse, CircularProgress,
 } from '@mui/material';
 import { DropzoneArea } from 'mui-file-dropzone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -22,7 +12,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Context, getData } from '@siiges-ui/shared';
+import { getData, useUI } from '@siiges-ui/shared';
 
 export default function ModalFirmaElectronica({
   open,
@@ -35,7 +25,7 @@ export default function ModalFirmaElectronica({
   libro,
   foja,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [certificado, setCertificado] = useState(null);
   const [llavePrivada, setLlavePrivada] = useState(null);
   const [password, setPassword] = useState('');

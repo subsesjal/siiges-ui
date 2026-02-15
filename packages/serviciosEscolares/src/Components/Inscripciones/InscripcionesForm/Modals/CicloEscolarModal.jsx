@@ -1,13 +1,8 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm,
-  Context,
-  DefaultModal,
-  Input,
-  Select,
-  createRecord,
+  ButtonsForm, DefaultModal, Input, Select, createRecord, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import nombresCiclos from '../../../../Utils/nombresCiclos';
 
@@ -17,7 +12,7 @@ export default function CicloEscolarModal({
   programaId,
   fetchCiclosEscolares,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const [formCicloEscolar, setFormCicloEscolar] = useState({});
   useEffect(() => {

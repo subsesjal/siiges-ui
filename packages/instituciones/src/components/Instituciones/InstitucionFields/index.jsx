@@ -1,10 +1,10 @@
 import { Grid, Typography, Divider } from '@mui/material';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   GetFile,
   Input,
   InputFile,
-  Context,
+  useUI,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -22,7 +22,7 @@ export default function InstitucionFields({
   page,
 }) {
   const router = useRouter();
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const [urlBiografia, setUrlBiografia] = useState();
   const [urlBibliografia, setUrlBibliografia] = useState();

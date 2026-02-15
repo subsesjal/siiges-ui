@@ -1,12 +1,7 @@
 import {
-  ButtonSimple,
-  ButtonsForm,
-  Context,
-  DataTable,
-  DefaultModal,
-  LabelData,
+  ButtonSimple, ButtonsForm, DataTable, DefaultModal, LabelData, useUI,
 } from '@siiges-ui/shared';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import { postAsignaturasAlumno } from '@siiges-ui/instituciones';
@@ -22,7 +17,7 @@ export default function ModalAlumnosInscritos({
   grupoId,
   alumnoInfo,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const transformToAsignaturaIds = (arr) => arr.map((item) => item.asignaturaId);
 
   const [selectedAsignaturas, setSelectedAsignaturas] = useState(
