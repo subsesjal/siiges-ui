@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { Layout, Context } from '@siiges-ui/shared';
+import React from 'react';
+import { Layout, useUI } from '@siiges-ui/shared';
 import { ServicioSocialComponents } from '@siiges-ui/serviciosescolares';
 
 export default function AgregarSolicitudBecas() {
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
 
   return (
     <Layout title="Agregar Solicitud Servicio Social">

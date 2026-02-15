@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonSimple, Context } from '@siiges-ui/shared';
+import { DefaultModal, ButtonSimple, useUI } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import handleEdit from '../../submitEditInstitucionAledana';
@@ -26,7 +26,7 @@ export default function InstitucionAledanaEditModal({
     plantelId,
   } = useContext(PlantelContext);
 
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   useEffect(() => {
     if (rowItem) {

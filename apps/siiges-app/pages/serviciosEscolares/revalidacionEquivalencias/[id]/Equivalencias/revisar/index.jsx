@@ -4,17 +4,17 @@ import {
   ButtonSimple,
   Layout,
   updateRecord,
-  Context,
+  useUI,
   DefaultModal,
   ButtonsForm,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 
 export default function RevisarEquivalencia() {
   const router = useRouter();
   const { query } = router;
-  const { setNoti, setLoading, loading } = useContext(Context);
+  const { setNoti, setLoading, loading } = useUI();
   const [form, setForm] = useState({ observaciones: '' });
   const [estatus, setEstatus] = useState({ estatus: null });
   const [open, setOpen] = useState(false);

@@ -1,9 +1,9 @@
 import React, {
-  useContext, useEffect, useMemo, useState,
+  useEffect, useMemo, useState,
 } from 'react';
 import { Card, CardContent } from '@mui/material';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
-import { Context } from '@siiges-ui/shared';
+import { useAuth } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import SectionLayout from '../../SectionLayout';
 import pagination from '../../../events/pagination';
@@ -27,7 +27,7 @@ export default function Plantel({
   tipoSolicitudId,
 }) {
   const [disabled, setDisabled] = useState(true);
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const { institucion } = getInstitucionUsuario(session, solicitud?.usuarioId);
   const [plantelesData, setPlantelesData] = useState({});
   const [selectedPlantel, setSelectedPlantel] = useState();

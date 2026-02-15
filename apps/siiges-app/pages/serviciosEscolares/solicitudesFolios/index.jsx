@@ -1,9 +1,12 @@
 import { AdminTable, FoliosForm, FoliosTable } from '@siiges-ui/serviciosescolares';
-import { Context, getData, Layout } from '@siiges-ui/shared';
-import React, { useState, useContext, useEffect } from 'react';
+import {
+  useAuth, useUI, getData, Layout,
+} from '@siiges-ui/shared';
+import React, { useState, useEffect } from 'react';
 
 export default function SolicitudesFolios() {
-  const { setLoading, setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setLoading, setNoti } = useUI();
 
   const [tipoSolicitud, setTipoSolicitud] = useState(null);
   const [tipoDocumento, setTipoDocumento] = useState(null);

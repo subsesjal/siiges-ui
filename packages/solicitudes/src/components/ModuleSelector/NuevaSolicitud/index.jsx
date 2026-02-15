@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
-import { ButtonSimple, Context, useApi } from '@siiges-ui/shared';
+import { ButtonSimple, useAuth, useUI, useApi } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import formData from '../../utils/sections/forms/formData';
 import errorDatosNuevaSolicitud from '../../utils/sections/errors/errorDatosNuevaSolicitud';
 import modalidades from '../../utils/Mocks/mockModalidades';
 
 function NewRequest() {
-  const { session, setNoti } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const { data: planteles } = useApi({
     endpoint: `api/v1/planteles/usuarios/${session.id}`,
   });

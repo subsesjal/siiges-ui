@@ -1,12 +1,12 @@
 import { Grid, Typography } from '@mui/material';
-import { DataTable, getData, Context } from '@siiges-ui/shared';
+import { DataTable, getData, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, {
   useState,
-  useContext,
   useEffect,
   useCallback,
   useMemo,
+  useContext,
 } from 'react';
 import columns from './Mocks/Infraestructura';
 import PlantelContext from '../utils/Context/plantelContext';
@@ -16,7 +16,7 @@ import useSectionDisabled from './Hooks/useSectionDisabled';
 export default function Infraestructura({ disabled, programaId, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const { infraestructuras, setInfraestructuras, plantelId } = useContext(PlantelContext);
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const isSectionDisabled = useSectionDisabled(18);
 
   const isDisabled = disabled || isSectionDisabled;

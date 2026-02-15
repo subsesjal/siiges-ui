@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, Context, Select,
+  DefaultModal, useAuth, useUI, Select,
   ButtonsForm,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -38,7 +38,7 @@ export default function InfraestructuraCreateModal({
     setFormInfraestructuras({});
   }, []);
 
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const { asignaturasTotal } = getAsignaturas(programaId);
 
   const errorsInfraestructura = errorDatosInfraestructuras(

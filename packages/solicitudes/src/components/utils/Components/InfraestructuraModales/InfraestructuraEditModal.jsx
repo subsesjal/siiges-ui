@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, Context, Select,
+  DefaultModal, useAuth, useUI, Select,
   getData,
   ButtonsForm,
 } from '@siiges-ui/shared';
@@ -31,7 +31,7 @@ export default function InfraestructuraEditModal({
     setInitialValues,
   } = useContext(PlantelContext);
   const disabled = edit === 'Consultar Infraestructura';
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const { plantelId } = useContext(PlantelContext);
   const { asignaturasTotal } = getAsignaturas(programaId);
 

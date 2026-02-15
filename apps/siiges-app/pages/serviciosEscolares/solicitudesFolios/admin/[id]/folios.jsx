@@ -4,7 +4,7 @@ import {
   IconButton, Typography,
 } from '@mui/material';
 import {
-  Context,
+  useUI,
   DataTable,
   getData,
   Input,
@@ -18,7 +18,7 @@ import {
   DefaultModal,
   ButtonsForm,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
@@ -27,7 +27,7 @@ import dayjs from 'dayjs';
 import Divider from '@mui/material/Divider';
 
 export default function Folios() {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   const [url, setUrl] = useState(null);
   const [etiquetas, setEtiquetas] = useState({

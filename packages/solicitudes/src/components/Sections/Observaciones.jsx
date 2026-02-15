@@ -1,5 +1,10 @@
 import { Grid, TextField, Typography } from '@mui/material';
-import { useApi, LabelData, Context } from '@siiges-ui/shared';
+import {
+  useApi,
+  LabelData,
+  useAuth,
+  useUI,
+} from '@siiges-ui/shared';
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { ObservacionesContext } from '../utils/Context/observacionesContext';
@@ -10,7 +15,8 @@ function Observaciones({ id, section }) {
     setCreateObservaciones,
     setSections,
   } = useContext(ObservacionesContext);
-  const { setNoti, session, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
+  const { session } = useAuth();
   const { rol } = session;
   const [path, setPath] = useState('');
   const [body, setBody] = useState(null);

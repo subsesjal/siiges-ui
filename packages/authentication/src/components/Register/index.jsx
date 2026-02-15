@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ButtonLogin,
-  Context,
   Input,
   InputPassword,
   LinkButton,
+  useUI,
 } from '@siiges-ui/shared';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 export default function Register() {
-  const { setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
   const router = useRouter();
   const [formValues, setFormValues] = useState({
     usuario: '',

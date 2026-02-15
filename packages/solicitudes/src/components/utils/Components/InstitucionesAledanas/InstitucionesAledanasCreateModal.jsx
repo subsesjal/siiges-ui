@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonSimple, Context, Input,
+  DefaultModal, ButtonSimple, useAuth, useUI, Input,
   InputTime,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
@@ -26,7 +26,7 @@ export default function InstitucionesAledanasCreateModal({
     setInitialValues,
     plantelId,
   } = useContext(PlantelContext);
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   const errorsInstitucionesAledanas = errorDatosInstitucionAledanas(
     formInstitucionesAledanas,

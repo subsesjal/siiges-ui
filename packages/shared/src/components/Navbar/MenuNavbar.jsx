@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -10,12 +10,13 @@ import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Link from 'next/link';
-import { Context } from '@siiges-ui/shared';
+import { useAuth, useUser } from '@siiges-ui/shared';
 import setHandler from '../../utils/handlers/set-anchor';
 import StyledBadge from '../../styles/Navbar/MenuNavbarStyle';
 
 export default function MenuNavbar() {
-  const { removeAuth, session, avatarUrl } = useContext(Context);
+  const { removeAuth, session } = useAuth();
+  const { avatarUrl } = useUser();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 

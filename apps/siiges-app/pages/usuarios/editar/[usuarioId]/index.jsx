@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider } from '@mui/material';
 import { useRouter } from 'next/router';
-import { Context, Layout, useApi } from '@siiges-ui/shared';
+import { useAuth, Layout, useApi } from '@siiges-ui/shared';
 import { UsuarioForm } from '@siiges-ui/users';
 
 export default function EditUser() {
   const router = useRouter();
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const [endpoint, setEndpoint] = useState();
 
   useEffect(() => {

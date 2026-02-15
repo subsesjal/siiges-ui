@@ -1,6 +1,6 @@
-import { ButtonSimple, Context, createRecord } from '@siiges-ui/shared';
+import { ButtonSimple, useAuth, useUI, createRecord } from '@siiges-ui/shared';
 import React, {
-  useContext, useCallback, useState, useEffect,
+  useCallback, useState, useEffect, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -36,9 +36,10 @@ export default function ButtonSection({
   const [newSubmit, setNewSubmit] = useState(true);
   const [currentSectionStatus, setCurrentSectionStatus] = useState(null);
 
+  const { session } = useAuth();
   const {
-    setNoti, session, loading, setLoading,
-  } = useContext(Context);
+    setNoti, loading, setLoading,
+  } = useUI();
   const institucion = getInstitucionUsuario(session);
   const validations = useContext(SolicitudContext);
   const evaluacionCurricular = useEvaluacionCurricular();
