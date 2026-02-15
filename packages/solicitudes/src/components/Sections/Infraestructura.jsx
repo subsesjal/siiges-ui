@@ -8,7 +8,7 @@ import React, {
   useMemo,
 } from 'react';
 import columns from './Mocks/Infraestructura';
-import { usePlantel } from '../../../hooks/usePlantel';
+import { usePlantel } from '../../../hooks/usePlantel.jsx';
 import InfraestructuraCreateModal from '../utils/Components/InfraestructuraModales/InfraestructuraCreateModal';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 

@@ -4,7 +4,7 @@ import { DefaultModal, ButtonSimple, useUI } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import handleEdit from '../../submitEditInstitucionAledana';
-import { usePlantel } from '../../../../../hooks/usePlantel';
+import { usePlantel } from '../../../../../hooks/usePlantel.jsx';
 import errorDatosInstitucionAledanas from '../../sections/errors/errorDatosInstitucionAledanas';
 
 export default function InstitucionAledanaEditModal({
