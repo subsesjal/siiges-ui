@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Context, DataTable } from '@siiges-ui/shared';
+import React, { useState, useEffect } from 'react';
+import { DataTable, useAuth, useUI } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import {
-  handleCreateClick, fetchSolicitudesData,
-} from '../utils';
+import { handleCreateClick, fetchSolicitudesData } from '../utils';
 import SolicitudesBecasTableButtons from '../utils/SolicitudesBecasTableButtons';
 
 export default function SolicitudesBecasTable({ programa, institucion }) {
-  const {
-    loading, setLoading, setNoti, session,
-  } = useContext(Context);
+  const { session } = useAuth();
+  const { loading, setLoading, setNoti } = useUI();
   const [data, setData] = useState([]);
   const router = useRouter();
   const isBecasSicyt = session.rol === 'becas_sicyt' || session.rol === 'admin';
