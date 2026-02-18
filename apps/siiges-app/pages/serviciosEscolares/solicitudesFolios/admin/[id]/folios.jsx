@@ -56,8 +56,8 @@ export default function Folios() {
   const [tipoDocumento, setTipoDocumento] = useState();
   const [formData, setFormData] = useState({
     folioPago: '',
-    claveDgp: '',
-    claveCarrera: '',
+    claveInstitucionDGP: '',
+    claveCarreraDGP: '',
   });
   const selectedAlumno = alumnosRows.find(
     (row) => row.id === alumnoToDelete,
@@ -93,8 +93,8 @@ export default function Folios() {
           setTipoDocumento(data.tipoDocumentoId);
           setFormData({
             folioPago: data.folioPago || '',
-            claveDgp: data.claveDgp || '',
-            claveCarrera: data.claveCarrera || '',
+            claveInstitucionDGP: data.claveInstitucionDGP || '',
+            claveCarreraDGP: data.claveCarreraDGP || '',
           });
 
           GetFile(
@@ -451,9 +451,9 @@ export default function Folios() {
             <Grid item xs={4}>
               <Input
                 label="Clave de institución"
-                id="claveDgp"
-                name="claveDgp"
-                value={formData.claveDgp}
+                id="claveInstitucionDGP"
+                name="claveInstitucionDGP"
+                value={formData.claveInstitucionDGP}
                 onChange={handleChange}
                 disabled
               />
@@ -461,9 +461,9 @@ export default function Folios() {
             <Grid item xs={4}>
               <Input
                 label="Clave de carrera"
-                id="claveCarrera"
-                name="claveCarrera"
-                value={formData.claveCarrera}
+                id="claveCarreraDGP"
+                name="claveCarreraDGP"
+                value={formData.claveCarreraDGP}
                 onChange={handleChange}
                 disabled
               />
