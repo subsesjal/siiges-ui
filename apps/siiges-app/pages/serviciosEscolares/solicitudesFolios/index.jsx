@@ -72,7 +72,6 @@ export default function SolicitudesFolios() {
   useEffect(() => {
     if (isAdmin || isCeSicyt) {
       setEstatus([2]);
-      fetchData();
     }
   }, [isAdmin, isCeSicyt]);
 
