@@ -64,7 +64,7 @@ export default function Folios() {
   );
 
   const router = useRouter();
-  const { id } = router.query;
+  const { id, status } = router.query;
 
   useEffect(() => {
     if (id && alumnoResponse) {
@@ -322,9 +322,11 @@ export default function Folios() {
     },
   ];
 
-  const accion = typeof window !== 'undefined'
-    ? sessionStorage.getItem('foliosAccion')
-    : null;
+  const accion = status || (
+    typeof window !== 'undefined'
+      ? sessionStorage.getItem('foliosAccion')
+      : null
+  );
   let title = '';
 
   if (estatus === 2) {
@@ -529,6 +531,7 @@ export default function Folios() {
               rows={4}
               value={observaciones}
               onChange={handleObservacionesChange}
+              isConsult={accion === 'consultar'}
             />
           </Grid>
         )}
@@ -538,6 +541,7 @@ export default function Folios() {
             observaciones={handleObservacionesSubmit}
             folios={handleFoliosSubmit}
             estatus={estatus}
+            isConsult={accion === 'consultar'}
           />
           <DefaultModal
             title="Eliminar alumno"
