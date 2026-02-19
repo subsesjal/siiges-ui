@@ -12,11 +12,13 @@ const withTM = require('next-transpile-modules')([
   '@siiges-ui/opds',
 ]);
 
+const apiUrl = process.env.NEXT_PUBLIC_URL;
+const hostname = apiUrl ? new URL(apiUrl).hostname : '';
+
 module.exports = withPlugins([withTM()], {
   webpack: (config) => config,
-  experimental: {
-    images: {
-      unoptimized: true,
-    },
+
+  images: {
+    domains: hostname ? [hostname] : [],
   },
 });
