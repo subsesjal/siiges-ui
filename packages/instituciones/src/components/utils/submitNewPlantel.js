@@ -7,7 +7,8 @@ export default function submitNewPlantel({
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const isValid = Object.keys(errors).every((campo) => errors[campo]());
+
+  const isValid = Object.values(errors).every((fn) => fn());
 
   if (!isValid) {
     setNoti({
@@ -37,20 +38,22 @@ export default function submitNewPlantel({
       }
       throw new Error('¡Error al enviar la solicitud!');
     })
-    .then(
+    .then(() => {
       setNoti({
         open: true,
         message: '¡Se creó el plantel exitosamente!',
         type: 'success',
-      }),
+      });
+
       setTimeout(() => {
         setLoading(true);
-      }, 2000),
+      }, 2000);
+
       setTimeout(() => {
         setLoading(false);
         router.back();
-      }, 3000),
-    )
+      }, 3000);
+    })
     .catch(() => {
       setNoti({
         open: true,
