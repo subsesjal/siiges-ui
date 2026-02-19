@@ -35,15 +35,14 @@ export default function InstitucionView({ institucion }) {
       const endpoint = '/files/';
       const query = `?tipoEntidad=INSTITUCION&entidadId=${institucionId}&tipoDocumento=LOGOTIPO`;
       const response = await getData({ endpoint, query });
-      if (response.statusCode === 200 && response.data?.url) {
-        const { ubicacion } = response.data;
-        const url = `${domain}${ubicacion}`;
-        const imageBlob = await fetch(url).then((res) => res.blob());
-        setImageUrl(URL.createObjectURL(imageBlob));
+
+      if (response.statusCode === 200 && response.data?.ubicacion) {
+        const url = `${domain.replace(/\/$/, '')}${response.data.ubicacion}`;
+        setImageUrl(url);
       } else {
         setImageUrl(null);
       }
-    } catch (error) {
+    } catch {
       setImageUrl(null);
     }
   };
@@ -132,18 +131,26 @@ export default function InstitucionView({ institucion }) {
   return (
     <Grid container>
       <Grid item xs={4} sx={{ textAlign: 'center', marginTop: 10 }}>
-        <Image
-          alt="institucion-logo"
-          src={imageUrl || '/logoschool.png'}
-          quality={100}
-          width="300px"
-          height="300px"
+        <div
           style={{
-            zIndex: 1,
-            overflow: 'hidden',
+            display: 'inline-block',
+            padding: 12,
+            border: '1px solid #e0e0e0',
+            borderRadius: 8,
+            backgroundColor: '#fff',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
           }}
-        />
+        >
+          <Image
+            alt="institucion-logo"
+            src={imageUrl || '/logoschool.png'}
+            width={300}
+            height={300}
+            style={{ objectFit: 'contain' }}
+          />
+        </div>
       </Grid>
+
       {page === 1 && (
         <Grid item xs={8} sx={{ marginTop: 3 }}>
           <Typography variant="h5" gutterBottom component="div">
