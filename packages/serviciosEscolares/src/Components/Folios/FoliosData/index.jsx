@@ -246,9 +246,9 @@ export default function FoliosData({ type }) {
   } = router.query;
 
   const tipoSolicitudFolioOptions = [
-    { id: 1, label: 'Total' },
+    { id: 1, label: 'Duplicado' },
     { id: 2, label: 'Parcial' },
-    { id: 3, label: 'Duplicado' },
+    { id: 3, label: 'Total' },
   ];
 
   useEffect(() => {
