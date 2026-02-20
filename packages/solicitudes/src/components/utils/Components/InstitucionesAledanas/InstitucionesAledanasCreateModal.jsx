@@ -1,13 +1,13 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonSimple, Context, Input,
+  DefaultModal, ButtonSimple, useUI, Input,
   InputTime,
+  usePlantel,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import errorDatosInstitucionAledanas from '../../sections/errors/errorDatosInstitucionAledanas';
 import handleCreate from '../../submitNewInstitucionAledanas';
-import PlantelContext from '../../Context/plantelContext';
 
 export default function InstitucionesAledanasCreateModal({
   open,
@@ -25,8 +25,8 @@ export default function InstitucionesAledanasCreateModal({
     initialValues,
     setInitialValues,
     plantelId,
-  } = useContext(PlantelContext);
-  const { setNoti, setLoading } = useContext(Context);
+  } = usePlantel();
+  const { setNoti, setLoading } = useUI();
 
   const errorsInstitucionesAledanas = errorDatosInstitucionAledanas(
     formInstitucionesAledanas,

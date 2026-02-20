@@ -10,22 +10,10 @@ import {
   Divider,
 } from '@mui/material';
 import {
-  ButtonSimple,
-  Context,
-  createRecord,
-  DataTable,
-  getData,
-  GetFile,
-  Input,
-  InputFile,
-  ListTitle,
-  ListSubtitle,
-  updateRecord,
-  deleteRecord,
-  DefaultModal,
-  ButtonsForm,
+  ButtonSimple, createRecord, DataTable, getData, GetFile, Input, InputFile, ListTitle,
+  ListSubtitle, updateRecord, deleteRecord, DefaultModal, ButtonsForm, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PropTypes from 'prop-types';
@@ -201,7 +189,7 @@ const NIVEL = {
 };
 
 export default function FoliosData({ type }) {
-  const { setNoti, loading, setLoading } = useContext(Context);
+  const { setNoti, loading, setLoading } = useUI();
   const [url, setUrl] = useState(null);
   const [id, setId] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);

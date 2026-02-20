@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { Context, getToken } from '@siiges-ui/shared';
+import { useEffect, useState } from 'react';
+import { useAuth, useUI, getToken } from '@siiges-ui/shared';
 
 export default function useTrayectoriasEducativas(programaId) {
-  const { session, setNoti } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const [trayectorias, setTrayectorias] = useState({});
   const [loadingTrayectoria, setLoading] = useState(true);
 

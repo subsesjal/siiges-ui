@@ -3,12 +3,12 @@ import {
   Box, IconButton, Stack, Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
-  Context, DefaultModal, ButtonsForm, deleteRecord,
+  DefaultModal, ButtonsForm, deleteRecord, useUI,
 } from '@siiges-ui/shared';
 import ModalAlumnosInscritos from './ModalAlumnosInscritos';
 
@@ -19,7 +19,7 @@ export default function ButtonsAlumnosInscritos({
   fetchAlumnosInscritos,
   alumnoInfo,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [openDeleteModal, setOpenDeleteModal] = useState(false);

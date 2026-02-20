@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
-  Select, Input, Context,
+  Select, Input, useUI, useAuth,
 } from '@siiges-ui/shared';
 import {
   campos,
@@ -14,7 +14,8 @@ import {
 
 export default function FormAlumnoTitulacion({ alumno }) {
   const [form, setForm] = useState();
-  const { session, setNoti } = useContext(Context);
+  const { setNoti } = useUI();
+  const { session } = useAuth();
   const [formSelect, setFormSelect] = useState({
     situacionId: alumno?.situacionId || 2,
   });

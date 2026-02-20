@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { Context, getToken } from '@siiges-ui/shared';
+import { useEffect, useState } from 'react';
+import { useAuth, useUI, getToken } from '@siiges-ui/shared';
 
 export default function useCumplimiento(modalidad, puntuacion) {
-  const { session, setNoti } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const token = getToken();
 
   const [cumplimiento, setCumplimiento] = useState({});

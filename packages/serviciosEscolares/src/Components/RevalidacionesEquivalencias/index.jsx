@@ -1,16 +1,10 @@
 import Tooltip from '@mui/material/Tooltip';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Divider, Grid, IconButton, Paper, Typography,
 } from '@mui/material';
 import {
-  ButtonsForm,
-  Context,
-  DataTable,
-  DefaultModal,
-  getData,
-  Select,
-  updateRecord,
+  ButtonsForm, DataTable, DefaultModal, getData, Select, updateRecord, useUI,
 } from '@siiges-ui/shared';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import GradingIcon from '@mui/icons-material/Grading';
@@ -101,7 +95,7 @@ const getColumns = (
 
 export default function RevalidacionEquivalencias() {
   const [tipoConsultaId, setTipoConsultaId] = useState(null);
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(false);

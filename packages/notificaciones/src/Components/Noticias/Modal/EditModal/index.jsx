@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ButtonsForm, Context, DefaultModal, Input, updateRecord,
+  ButtonsForm, DefaultModal, Input, updateRecord, useUI,
 } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 
@@ -14,7 +14,7 @@ export default function EditModal({
     urlImagen: '',
   });
 
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   useEffect(() => {
     if (data) {

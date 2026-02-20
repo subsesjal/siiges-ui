@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  ButtonLogin, Context, Input, InputPassword, LinkButton,
+  ButtonLogin, Input, InputPassword, LinkButton, useAuth, useUI,
 } from '@siiges-ui/shared';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -9,7 +9,8 @@ import Link from 'next/link';
 import submitNewLogin from '../../utils/submitNewLogin';
 
 export default function SignIn() {
-  const { activateAuth, setLoading } = useContext(Context);
+  const { activateAuth } = useAuth();
+  const { setLoading } = useUI();
   const [errorMessages, setErrorMessages] = useState({});
   const [form, setForm] = useState({ usuario: '', contrasena: '' });
 

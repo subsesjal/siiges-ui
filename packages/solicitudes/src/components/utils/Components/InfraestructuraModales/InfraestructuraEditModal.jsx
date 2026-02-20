@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, Context, Select,
+  DefaultModal, useUI, Select,
   getData,
   ButtonsForm,
+  usePlantel,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import handleEdit from '../../submitEditInfraestructuras';
-import PlantelContext from '../../Context/plantelContext';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
 import getAsignaturas from '../../getAsignaturas';
 
@@ -29,10 +29,10 @@ export default function InfraestructuraEditModal({
     setErrors,
     initialValues,
     setInitialValues,
-  } = useContext(PlantelContext);
+    plantelId,
+  } = usePlantel();
   const disabled = edit === 'Consultar Infraestructura';
-  const { setNoti, setLoading } = useContext(Context);
-  const { plantelId } = useContext(PlantelContext);
+  const { setNoti, setLoading } = useUI();
   const { asignaturasTotal } = getAsignaturas(programaId);
 
   useEffect(() => {

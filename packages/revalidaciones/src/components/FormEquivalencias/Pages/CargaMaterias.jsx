@@ -1,14 +1,14 @@
 import { Grid } from '@mui/material';
 import {
-  Context, GetFile, InputFile, fileToFormData,
+  GetFile, InputFile, fileToFormData, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 export default function CargaMaterias({
   form, filesData, setFilesData, setNextDisabled, edit,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   useEffect(() => {
     if (!edit) return;

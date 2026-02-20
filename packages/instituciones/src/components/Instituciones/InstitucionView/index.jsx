@@ -6,7 +6,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import {
@@ -15,15 +15,15 @@ import {
   ListTitle,
   formattedDate,
   InputFile,
-  Context,
   getData,
+  useUI,
 } from '@siiges-ui/shared';
 import NavigationButtons from '../../utils/NavigationButtons';
 
 const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function InstitucionView({ institucion }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [page, setPage] = useState(1);
   const [urlBiografia, setUrlBiografia] = useState('');
   const [urlBibliografia, setUrlBibliografia] = useState('');

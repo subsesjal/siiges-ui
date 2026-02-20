@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Stack, Tooltip, IconButton } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DownloadIcon from '@mui/icons-material/Download';
 import CreateIcon from '@mui/icons-material/Create';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import { Context, createRecord, getData } from '@siiges-ui/shared';
+import { createRecord, getData, useUI } from '@siiges-ui/shared';
 import ModalFirmaElectronica from '../FoliosAsignados/FoliosTable/ModalFirmaElectronica';
 
 export default function ButtonsReporteFoliosAsig({
@@ -17,7 +17,7 @@ export default function ButtonsReporteFoliosAsig({
   estatusFirmado,
   onFirmaSuccess,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [openFirmaModal, setOpenFirmaModal] = useState(false);
   const [loadingPdf, setLoadingPdf] = useState(false);
 

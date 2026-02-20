@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import { Context, getData, PositionDisplay } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import { getData, PositionDisplay, useUI } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import DatosSolicitante from '../Pages/DatosSolicitante';
 import DatosInstitucion from '../Pages/DatosInstitucion';
@@ -12,7 +12,7 @@ export default function ConsultRevalidacion() {
   const [currentPosition, setCurrentPosition] = useState(1);
   const router = useRouter();
   const { query } = router;
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [form, setForm] = useState({});
   const [estados, setEstados] = useState([]);
   const [paises, setPaises] = useState([]);

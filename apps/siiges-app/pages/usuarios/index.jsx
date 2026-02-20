@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Layout, Context, useApi } from '@siiges-ui/shared';
+import { Layout, useApi, useAuth } from '@siiges-ui/shared';
 import { UsuariosTable } from '@siiges-ui/users';
 import { Divider } from '@mui/material';
 
@@ -11,7 +11,7 @@ const ENDPOINT_MAPPING = {
 };
 
 function Usuarios() {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const [endpoint, setEndpoint] = useState('/');
   const [method, setMethod] = useState('');
 

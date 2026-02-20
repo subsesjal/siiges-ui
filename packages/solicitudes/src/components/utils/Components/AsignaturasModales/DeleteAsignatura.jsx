@@ -1,17 +1,17 @@
 import { Grid, Typography } from '@mui/material';
 import {
   ButtonsForm,
-  Context,
+  useUI,
   DefaultModal,
   getToken,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React from 'react';
 
 function DeleteAsignatura({
   modal, hideModal, id, setAsignaturasList,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const handleDelete = async () => {
     const apikey = process.env.NEXT_PUBLIC_API_KEY;

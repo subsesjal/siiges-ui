@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Context, Layout, useApi, ButtonSimple,
+  useAuth, Layout, useApi, ButtonSimple,
 } from '@siiges-ui/shared';
 import { UsuarioAvatar, UsuarioView } from '@siiges-ui/users';
 import { useRouter } from 'next/router';
@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 
 export default function ConsultarUsuario() {
   const router = useRouter();
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const [endpoint, setEndpoint] = useState();
 
   useEffect(() => {

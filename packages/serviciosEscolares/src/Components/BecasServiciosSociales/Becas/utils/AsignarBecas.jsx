@@ -1,10 +1,9 @@
 import Tooltip from '@mui/material/Tooltip';
 import { Grid, Typography, IconButton } from '@mui/material';
 import {
-  ButtonsForm, Context, DataTable, DefaultModal, getData, Input, LabelData,
-  Select,
+  ButtonsForm, DataTable, DefaultModal, getData, Input, LabelData, Select, useUI,
 } from '@siiges-ui/shared';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
@@ -12,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function AsignarBecas({ type }) {
   const router = useRouter();
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [open, setOpen] = useState(false);
   const [institucion, setInstitucion] = useState(null);
   const [form, setForm] = useState({});

@@ -2,17 +2,18 @@ import {
   List, ListItem, ListItemText, Grid, Typography, Divider,
 } from '@mui/material';
 import {
-  ButtonSimple, Layout, Title, useApi, Context, getData,
+  ButtonSimple, Layout, Title, useApi, useAuth, useUI, getData,
   ListTitle, ListSubtitle,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import OficioModal from '@siiges-ui/solicitudes/src/components/Modal/ModalOficio';
 
 const url = process.env.NEXT_PUBLIC_URL;
 
 export default function detallesSolicitudes() {
-  const { session, setNoti } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
   const showOficioModal = () => setIsOficioModalOpen(true);
   const hideOficioModal = () => setIsOficioModalOpen(false);

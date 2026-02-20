@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
-import { Context, Layout } from '@siiges-ui/shared';
+import React, { useState } from 'react';
+import { useAuth, useUI, Layout } from '@siiges-ui/shared';
 import { InstitucionForm, getInstitucionHook } from '@siiges-ui/instituciones';
 
 export default function EditarInstitucion() {
-  const { session, setNoti } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const [institucion, setInstitucion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');

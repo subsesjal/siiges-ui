@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  ButtonLogin, Context, Input, LinkButton,
+  ButtonLogin, Input, LinkButton, useUI,
 } from '@siiges-ui/shared';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -12,7 +12,7 @@ const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function RecoverPass() {
   const [user, setUser] = useState('');
-  const { setNoti, setLoading, loading } = useContext(Context);
+  const { setNoti, setLoading, loading } = useUI();
 
   const handleInputChange = (e) => {
     setUser(e.target.value);

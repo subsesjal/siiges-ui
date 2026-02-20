@@ -1,8 +1,8 @@
 import { Grid, List, Divider } from '@mui/material';
 import {
-  Context, ListSubtitle, ListTitle, Subtitle,
+  ListSubtitle, ListTitle, Subtitle, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
@@ -31,7 +31,7 @@ export default function ConsultPublicFolio() {
   const { folio } = router.query;
 
   const [data, setData] = useState(null);
-  const { setLoading, loading, setNoti } = useContext(Context);
+  const { setLoading, loading, setNoti } = useUI();
 
   useEffect(() => {
     if (!folio) return;

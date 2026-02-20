@@ -1,7 +1,7 @@
 import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton } from '@mui/material';
-import { Context, DataTable } from '@siiges-ui/shared';
-import React, { useContext } from 'react';
+import { DataTable, useAuth } from '@siiges-ui/shared';
+import React from 'react';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
@@ -62,7 +62,7 @@ function FoliosTable({
   tipoDocumento, tipoSolicitud, programa, plantel, solicitudes,
 }) {
   const router = useRouter();
-  const { session } = useContext(Context);
+  const { session } = useAuth();
 
   const showCrearFolio = process.env.NEXT_PUBLIC_SHOW_CREAR_FOLIO !== 'false';
   const filtrosCompletos = tipoDocumento

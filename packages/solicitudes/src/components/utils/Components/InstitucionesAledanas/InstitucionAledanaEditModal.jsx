@@ -1,10 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonSimple, Context } from '@siiges-ui/shared';
+import {
+  DefaultModal, ButtonSimple, useUI, usePlantel,
+} from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import handleEdit from '../../submitEditInstitucionAledana';
-import PlantelContext from '../../Context/plantelContext';
 import errorDatosInstitucionAledanas from '../../sections/errors/errorDatosInstitucionAledanas';
 
 export default function InstitucionAledanaEditModal({
@@ -24,9 +25,9 @@ export default function InstitucionAledanaEditModal({
     initialValues,
     setInitialValues,
     plantelId,
-  } = useContext(PlantelContext);
+  } = usePlantel();
 
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   useEffect(() => {
     if (rowItem) {

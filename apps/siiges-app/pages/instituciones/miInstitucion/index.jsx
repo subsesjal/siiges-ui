@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Context, Layout } from '@siiges-ui/shared';
+import { useAuth, useUI, Layout } from '@siiges-ui/shared';
 import { InstitucionBox, InstitucionForm, getInstitucionHook } from '@siiges-ui/instituciones';
 
 function InstitucionWrapper({
@@ -32,7 +32,8 @@ function InstitucionWrapper({
 }
 
 export default function MiInstitucion() {
-  const { session, setNoti } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const [institucion, setInstitucion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');

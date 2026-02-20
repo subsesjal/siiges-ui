@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
   DefaultModal,
-  Context,
+  useUI,
   Input,
   validateField,
   InputTime,
@@ -31,7 +31,7 @@ export default function DiligenciasFormModal({
     setError,
     error,
   } = useContext(DatosGeneralesContext);
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {

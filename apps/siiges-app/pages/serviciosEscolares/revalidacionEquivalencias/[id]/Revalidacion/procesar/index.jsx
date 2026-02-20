@@ -4,15 +4,15 @@ import {
   ButtonSimple,
   Layout,
   updateRecord,
-  Context,
+  useUI,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
+import React from 'react';
 
 export default function ProcesarRevalidacion() {
   const router = useRouter();
   const { query } = router;
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const handleSubmit = async () => {
     try {

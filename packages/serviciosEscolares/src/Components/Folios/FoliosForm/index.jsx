@@ -1,8 +1,6 @@
-import React, {
-  useState, useContext, useEffect, useCallback,
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Grid } from '@mui/material';
-import { Select, Context } from '@siiges-ui/shared';
+import { Select, useAuth, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
 import getInstitucionIdFromSession from '../../utils/getInstitucionId';
@@ -19,7 +17,8 @@ export default function FoliosForm({
 }) {
   // eslint-disable-next-line max-len
   const { instituciones } = getInstituciones({ esNombreAutorizado: true, tipoInstitucionId: 1, setLoading });
-  const { setNoti, session } = useContext(Context);
+  const { setNoti } = useUI();
+  const { session } = useAuth();
 
   const isRepresentante = session?.rol === 'representante' || session?.rol === 'ce_ies';
   const isAdminOrCeSicyt = session?.rol === 'admin' || session?.rol === 'ce_sicyt';

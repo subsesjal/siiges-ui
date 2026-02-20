@@ -1,10 +1,10 @@
 import { AlumnosForm, TitulacionTable } from '@siiges-ui/serviciosescolares';
-import { Context, Layout } from '@siiges-ui/shared';
+import { Layout, useUI } from '@siiges-ui/shared';
 import { Divider } from '@mui/material';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 
 export default function Egresados() {
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
   const [alumnos, setAlumnos] = useState();
   const [programa, setPrograma] = useState();
 

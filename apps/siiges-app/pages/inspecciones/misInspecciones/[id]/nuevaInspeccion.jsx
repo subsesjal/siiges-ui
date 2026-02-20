@@ -1,10 +1,10 @@
 import React, {
-  useContext, useEffect, useState, useRef,
+  useEffect, useState, useRef,
 } from 'react';
 import { useRouter } from 'next/router';
 import TextField from '@mui/material/TextField';
 import {
-  ButtonsInspeccionSection, Context, Layout, useApi,
+  ButtonsInspeccionSection, useUI, Layout, useApi,
 } from '@siiges-ui/shared';
 import {
   Box, Grid, Tabs, Tab,
@@ -16,7 +16,7 @@ import {
 import { createRecord, getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function NuevaInspeccion() {
-  const { setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
   const [selectedTab, setSelectedTab] = useState(0);
   const [form, setForm] = useState([]);
   const [preguntas, setPreguntas] = useState([]);

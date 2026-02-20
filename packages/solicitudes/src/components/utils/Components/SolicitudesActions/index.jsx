@@ -2,7 +2,7 @@ import Tooltip from '@mui/material/Tooltip';
 import {
   Grid, IconButton, Typography, TextField,
 } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -12,12 +12,13 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import GradingIcon from '@mui/icons-material/Grading';
 import PrintIcon from '@mui/icons-material/Print';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
-import { ButtonsForm, Context, DefaultModal } from '@siiges-ui/shared';
+import { ButtonsForm, useAuth, useUI, DefaultModal } from '@siiges-ui/shared';
 import { deleteRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import { useRouter } from 'next/router';
 
 function SolicitudesActions({ id, estatus }) {
-  const { session, setNoti } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const [openDelete, setOpenDelete] = useState(false);
   const [openDownload, setOpenDownload] = useState(false);
   const [comments, setComments] = useState('');
