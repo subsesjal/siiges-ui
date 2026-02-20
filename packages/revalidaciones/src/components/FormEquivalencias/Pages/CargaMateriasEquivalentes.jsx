@@ -240,7 +240,7 @@ export default function CargaMateriasEquivalentes({
     handleOnChange(
       {
         target: {
-          name: 'asignaturasAntecedentesEquivalentes',
+          name: 'asignaturasAntecedenteEquivalente',
           value: nuevas,
         },
       },
