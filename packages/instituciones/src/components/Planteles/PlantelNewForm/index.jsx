@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  ButtonsForm, Input, SnackAlert, Context,
+  ButtonsForm, Input, Context,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
@@ -14,6 +14,7 @@ import submitEditPlantel from '../../utils/submitEditPlantel';
 
 export default function PlantelNewForm({ plantel }) {
   const router = useRouter();
+  const { setNoti } = useContext(Context);
   const [form, setForm] = useState({
     domicilio: { estadoId: 14 },
     director: { persona: {} },
@@ -22,17 +23,19 @@ export default function PlantelNewForm({ plantel }) {
     setLoading,
   } = useContext(Context);
   const [error, setError] = useState({});
-  const [noti, setNoti] = useState({ open: false, message: '', type: '' });
   const { municipios } = getMunicipios();
+  const [confirmDisabled, setConfirmDisabled] = useState(false);
+
+  const errors = plantelErrors(form, setError);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    formPlantel(name, form, setForm, value);
-  };
 
-  const errors = plantelErrors(form, setError, error);
-  const handleOnBlur = (e) => {
-    const { name, value } = e.target;
-    errors[name](value);
+    formPlantel(name, form, setForm, value);
+
+    if (errors[name]) {
+      errors[name](value);
+    }
   };
 
   const inmuebles = [
@@ -46,6 +49,29 @@ export default function PlantelNewForm({ plantel }) {
     { id: 'femenino', nombre: 'Femenino' },
     { id: 'prefiero no decirlo', nombre: 'Prefiero no decirlo' },
   ];
+
+  const handleSubmit = async () => {
+    try {
+      setConfirmDisabled(true);
+
+      if (plantel) {
+        await submitEditPlantel({
+          form,
+          setNoti,
+          setLoading,
+        });
+      } else {
+        await submitNewPlantel({
+          errors,
+          form,
+          setNoti,
+          setLoading,
+        });
+      }
+    } finally {
+      setConfirmDisabled(false);
+    }
+  };
 
   return (
     <>
@@ -64,7 +90,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.domicilio.calle
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.calle}
               required
             />
@@ -79,7 +104,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.domicilio.numeroExterior
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.numeroExterior}
               required
             />
@@ -108,7 +132,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.domicilio.colonia
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.colonia}
               required
             />
@@ -123,7 +146,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.domicilio.codigoPostal
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.codigoPostal}
               required
             />
@@ -137,7 +159,6 @@ export default function PlantelNewForm({ plantel }) {
                 : ''}
               options={municipios}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.municipioId}
               required
             />
@@ -150,7 +171,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.tipoInmuebleId
                 : ''}
               options={inmuebles}
-              onblur={handleOnBlur}
               onChange={handleOnChange}
               errorMessage={error.tipoInmuebleId}
               required
@@ -171,7 +191,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.correo1
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.correo1}
               required
             />
@@ -186,7 +205,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.correo2
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.correo2}
               required
             />
@@ -201,7 +219,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.correo3
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.correo3}
             />
           </Grid>
@@ -217,7 +234,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.telefono1
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.telefono1}
               required
             />
@@ -232,7 +248,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.telefono2
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.telefono2}
               required
             />
@@ -261,7 +276,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.claveCentroTrabajo
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.claveCentroTrabajo}
               required
             />
@@ -305,7 +319,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.directores[0]?.persona.nombre
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.nombre}
               required
             />
@@ -320,7 +333,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.directores[0]?.persona.apellidoPaterno
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.apellidoPaterno}
               required
             />
@@ -335,7 +347,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.directores[0]?.persona.apellidoMaterno
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.apellidoMaterno}
               required
             />
@@ -350,7 +361,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.directores[0]?.persona.nacionalidad
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.nacionalidad}
               required
             />
@@ -366,7 +376,6 @@ export default function PlantelNewForm({ plantel }) {
                 : ''}
               onChange={handleOnChange}
               errorMessage={error.curp}
-              onblur={handleOnBlur}
               required
             />
           </Grid>
@@ -379,7 +388,6 @@ export default function PlantelNewForm({ plantel }) {
                 : ''}
               options={sexo}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.sexo}
               required
             />
@@ -394,7 +402,6 @@ export default function PlantelNewForm({ plantel }) {
                 ? plantel.directores[0]?.persona.correoPrimario
                 : ''}
               onChange={handleOnChange}
-              onblur={handleOnBlur}
               errorMessage={error.correoPrimario}
               required
             />
@@ -402,21 +409,10 @@ export default function PlantelNewForm({ plantel }) {
         </Grid>
         <ButtonsForm
           cancel={router.back}
-          confirm={plantel
-            ? () => submitEditPlantel(form, setNoti)
-            : () => submitNewPlantel({
-              errors, form, setNoti, setLoading,
-            })}
+          confirm={handleSubmit}
+          confirmDisabled={confirmDisabled}
         />
       </Grid>
-      <SnackAlert
-        open={noti.open}
-        close={() => {
-          setNoti(false);
-        }}
-        type={noti.type}
-        mensaje={noti.message}
-      />
     </>
   );
 }
