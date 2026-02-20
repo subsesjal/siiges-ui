@@ -230,7 +230,7 @@ export default function NavigationButtons({
             <ButtonsForm
               cancel={() => setOpen(false)}
               confirm={handleOnSubmit}
-              disabled={isSubmitting}
+              confirmDisabled={isSubmitting}
             />
           </Grid>
         </Grid>
