@@ -24,36 +24,50 @@ const domain = process.env.NEXT_PUBLIC_URL;
 /* ----------------------------- columnas ----------------------------- */
 
 const columns = (onDelete, onEdit, disabled) => [
-  { field: 'materiasAntecedente', headerName: 'Materias de Antecedente', width: 280 },
-  { field: 'calificacionAntecedente', headerName: 'Calificación Antecedente', width: 200 },
-  { field: 'materiasEquivalentes', headerName: 'Materias Equivalentes', width: 280 },
-  { field: 'calificacionEquivalente', headerName: 'Calificación Equivalente', width: 200 },
+  {
+    field: 'materiasAntecedente',
+    headerName: 'Materias de Antecedente',
+    width: 280,
+  },
+  {
+    field: 'calificacionAntecedente',
+    headerName: 'Calificación Antecedente',
+    width: 200,
+  },
+  {
+    field: 'materiasEquivalentes',
+    headerName: 'Materias Equivalentes',
+    width: 280,
+  },
+  {
+    field: 'calificacionEquivalente',
+    headerName: 'Calificación Equivalente',
+    width: 200,
+  },
   {
     field: 'actions',
     headerName: 'Acciones',
     width: 120,
-    renderCell: ({ row }) => (
-      !disabled ? (
-        <>
-          <Tooltip title="Editar">
-            <IconButton onClick={() => onEdit(row)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Eliminar">
-            <IconButton onClick={() => onDelete(row.id)}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </>
-      ) : (
-        <Tooltip title="Consultar">
+    renderCell: ({ row }) => (!disabled ? (
+      <>
+        <Tooltip title="Editar">
           <IconButton onClick={() => onEdit(row)}>
-            <VisibilityOutlinedIcon />
+            <EditIcon />
           </IconButton>
         </Tooltip>
-      )
-    ),
+        <Tooltip title="Eliminar">
+          <IconButton onClick={() => onDelete(row.id)}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </>
+    ) : (
+      <Tooltip title="Consultar">
+        <IconButton onClick={() => onEdit(row)}>
+          <VisibilityOutlinedIcon />
+        </IconButton>
+      </Tooltip>
+    )),
   },
 ];
 
@@ -67,7 +81,9 @@ export default function CargaMateriasEquivalentes({
 }) {
   const { setNoti, setLoading } = useContext(Context);
 
-  const asignaturas = form?.interesado?.asignaturasAntecedenteEquivalente || [];
+  const asignaturas = form?.interesado?.asignaturasAntecedentesEquivalentes
+    || form?.interesado?.asignaturasAntecedenteEquivalente
+    || [];
   const destino = form?.interesado?.institucionDestino;
 
   /* ---------------------------- UI ---------------------------- */
@@ -111,8 +127,8 @@ export default function CargaMateriasEquivalentes({
   const rows = useMemo(
     () => asignaturas.map((item, index) => ({
       id: index,
-      asignaturaId: item.asignaturaId
-        || item.asignaturaEquivalentePrograma?.asignaturaId,
+      asignaturaId:
+          item.asignaturaId || item.asignaturaEquivalentePrograma?.asignaturaId,
       materiasAntecedente: item.nombreAsignaturaAntecedente,
       calificacionAntecedente: item.calificacionAntecedente,
       materiasEquivalentes: item.nombreAsignaturaEquivalente,
@@ -147,9 +163,7 @@ export default function CargaMateriasEquivalentes({
 
   useEffect(() => {
     if (asignaturaId && materiasList.length) {
-      const selected = materiasList.find(
-        (m) => m.id === Number(asignaturaId),
-      );
+      const selected = materiasList.find((m) => m.id === Number(asignaturaId));
       setMateriaEquivalente(selected?.nombre || '');
       setAsignaturaPrograma(selected || null);
     }
@@ -159,13 +173,11 @@ export default function CargaMateriasEquivalentes({
 
   const materiasDisponibles = useMemo(() => {
     const usadas = asignaturas.map(
-      (a) => a.asignaturaId
-        || a.asignaturaEquivalentePrograma?.asignaturaId,
+      (a) => a.asignaturaId || a.asignaturaEquivalentePrograma?.asignaturaId,
     );
 
     return materiasList.filter(
-      (m) => !usadas.includes(m.id)
-        || (isEditing && m.id === asignaturaId),
+      (m) => !usadas.includes(m.id) || (isEditing && m.id === asignaturaId),
     );
   }, [materiasList, asignaturas, isEditing, asignaturaId]);
 
@@ -182,7 +194,7 @@ export default function CargaMateriasEquivalentes({
       handleOnChange(
         {
           target: {
-            name: 'asignaturasAntecedenteEquivalente',
+            name: 'asignaturasAntecedentesEquivalentes',
             value: asignaturas.filter((_, i) => i !== deleteIndex),
           },
         },
@@ -199,8 +211,7 @@ export default function CargaMateriasEquivalentes({
 
   const handleEdit = (row) => {
     const index = asignaturas.findIndex(
-      (a) => (a.asignaturaId
-        || a.asignaturaEquivalentePrograma?.asignaturaId)
+      (a) => (a.asignaturaId || a.asignaturaEquivalentePrograma?.asignaturaId)
         === row.asignaturaId,
     );
 
@@ -294,7 +305,9 @@ export default function CargaMateriasEquivalentes({
       </Grid>
 
       <DefaultModal
-        title={isEditing ? 'Editar Materia Equivalente' : 'Materias Equivalentes'}
+        title={
+          isEditing ? 'Editar Materia Equivalente' : 'Materias Equivalentes'
+        }
         open={open}
         setOpen={setOpen}
       >
@@ -381,42 +394,72 @@ export default function CargaMateriasEquivalentes({
           </Grid>
 
           {asignaturaPrograma && (
-          <>
-            <Grid item xs={6}>
-              <LabelData title="Academia" subtitle={asignaturaPrograma?.academia || '—'} />
-            </Grid>
-            <Grid item xs={6}>
-              <LabelData title="Nombre" subtitle={asignaturaPrograma?.nombre || '—'} />
-            </Grid>
+            <>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Academia"
+                  subtitle={asignaturaPrograma?.academia || '—'}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Nombre"
+                  subtitle={asignaturaPrograma?.nombre || '—'}
+                />
+              </Grid>
 
-            <Grid item xs={6}>
-              <LabelData title="Clave" subtitle={asignaturaPrograma?.clave || '—'} />
-            </Grid>
-            <Grid item xs={6}>
-              <LabelData title="Seriación" subtitle={asignaturaPrograma?.seriacion || '—'} />
-            </Grid>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Clave"
+                  subtitle={asignaturaPrograma?.clave || '—'}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Seriación"
+                  subtitle={asignaturaPrograma?.seriacion || '—'}
+                />
+              </Grid>
 
-            <Grid item xs={6}>
-              <LabelData title="Objetivo" subtitle={asignaturaPrograma?.objetivo || '—'} />
-            </Grid>
-            <Grid item xs={6}>
-              <LabelData title="Temas" subtitle={asignaturaPrograma?.temas || '—'} />
-            </Grid>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Objetivo"
+                  subtitle={asignaturaPrograma?.objetivo || '—'}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Temas"
+                  subtitle={asignaturaPrograma?.temas || '—'}
+                />
+              </Grid>
 
-            <Grid item xs={6}>
-              <LabelData title="Actividades" subtitle={asignaturaPrograma?.actividades || '—'} />
-            </Grid>
-            <Grid item xs={6}>
-              <LabelData title="Modelo Institucional" subtitle={asignaturaPrograma?.modeloInstitucional || '—'} />
-            </Grid>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Actividades"
+                  subtitle={asignaturaPrograma?.actividades || '—'}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Modelo Institucional"
+                  subtitle={asignaturaPrograma?.modeloInstitucional || '—'}
+                />
+              </Grid>
 
-            <Grid item xs={6}>
-              <LabelData title="Tipo" subtitle={asignaturaPrograma?.tipo || '—'} />
-            </Grid>
-            <Grid item xs={6}>
-              <LabelData title="Fecha Autorización" subtitle={asignaturaPrograma?.fechaAutorizacion || '—'} />
-            </Grid>
-          </>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Tipo"
+                  subtitle={asignaturaPrograma?.tipo || '—'}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <LabelData
+                  title="Fecha Autorización"
+                  subtitle={asignaturaPrograma?.fechaAutorizacion || '—'}
+                />
+              </Grid>
+            </>
           )}
 
           <Grid item xs={12}>
@@ -455,6 +498,18 @@ CargaMateriasEquivalentes.propTypes = {
   form: PropTypes.shape({
     interesado: PropTypes.shape({
       id: PropTypes.number.isRequired,
+      asignaturasAntecedentesEquivalentes: PropTypes.arrayOf(
+        PropTypes.shape({
+          asignaturaId: PropTypes.number,
+          nombreAsignaturaAntecedente: PropTypes.string,
+          nombreAsignaturaEquivalente: PropTypes.string,
+          calificacionAntecedente: PropTypes.string,
+          calificacionEquivalente: PropTypes.string,
+          asignaturaEquivalentePrograma: PropTypes.shape({
+            asignaturaId: PropTypes.number,
+          }),
+        }),
+      ),
       asignaturasAntecedenteEquivalente: PropTypes.arrayOf(
         PropTypes.shape({
           asignaturaId: PropTypes.number,
@@ -471,7 +526,9 @@ CargaMateriasEquivalentes.propTypes = {
         programaId: PropTypes.number,
         acuerdoRvoe: PropTypes.string,
         tipoInstitucionId: PropTypes.number,
-        institucionDestinoPrograma: PropTypes.shape({ programaId: PropTypes.number }),
+        institucionDestinoPrograma: PropTypes.shape({
+          programaId: PropTypes.number,
+        }),
       }),
     }),
   }).isRequired,
