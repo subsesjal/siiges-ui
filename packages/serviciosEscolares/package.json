@@ -26,7 +26,7 @@
 		"lint:fix": "eslint --fix .",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"precommit": "yarn lint && yarn test"
+		"precommit": "npm run lint && npm run test"
   },
   "bugs": {
     "url": "https://github.com/elmejorlui/siiges-ui/issues"
