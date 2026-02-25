@@ -36,7 +36,10 @@ export default function InstitucionView({ institucion }) {
       const query = `?tipoEntidad=INSTITUCION&entidadId=${institucionId}&tipoDocumento=LOGOTIPO`;
       const response = await getData({ endpoint, query });
 
-      if (response.statusCode === 200 && response.data?.ubicacion) {
+      if (
+        (response.statusCode === 200 || response.statusCode === 201)
+        && response.data?.ubicacion
+      ) {
         const url = `${domain.replace(/\/$/, '')}${response.data.ubicacion}`;
         setImageUrl(url);
       } else {
