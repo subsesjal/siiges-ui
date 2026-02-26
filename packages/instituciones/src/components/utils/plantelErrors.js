@@ -1,179 +1,304 @@
-export default function plantelErrors(form, setError, error) {
+export default function plantelErrors(form, setError) {
   const validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
   const validNumber = /^[0-9]+$/;
 
   const errors = {
-    calle: () => {
-      if (form.domicilio.calle === undefined || form.domicilio.calle === '') {
-        setError({ ...error, calle: '¡Calle inválida!' });
+    calle: (valueParam) => {
+      const value = valueParam ?? form.domicilio?.calle;
+
+      if (!value) {
+        setError((prev) => ({ ...prev, calle: '¡Calle inválida!' }));
         return false;
       }
-      setError({ ...error, calle: '' });
+
+      setError((prev) => ({ ...prev, calle: '' }));
       return true;
     },
-    numeroExterior: () => {
-      if (form.domicilio.numeroExterior === undefined || form.domicilio.numeroExterior === '') {
-        setError({ ...error, numeroExterior: '¡Número exterior inválido!' });
+
+    numeroExterior: (valueParam) => {
+      const value = valueParam ?? form.domicilio?.numeroExterior;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
+          numeroExterior: '¡Número exterior inválido!',
+        }));
         return false;
       }
-      setError({ ...error, numeroExterior: '' });
+
+      setError((prev) => ({ ...prev, numeroExterior: '' }));
       return true;
     },
-    colonia: () => {
-      if (form.domicilio.colonia === undefined || form.domicilio.colonia === '') {
-        setError({ ...error, colonia: '¡Colonia inválida!' });
+
+    colonia: (valueParam) => {
+      const value = valueParam ?? form.domicilio?.colonia;
+
+      if (!value) {
+        setError((prev) => ({ ...prev, colonia: '¡Colonia inválida!' }));
         return false;
       }
-      setError({ ...error, colonia: '' });
+
+      setError((prev) => ({ ...prev, colonia: '' }));
       return true;
     },
-    codigoPostal: () => {
-      if (form.domicilio.codigoPostal === undefined || form.domicilio.codigoPostal === '') {
-        setError({
-          ...error,
+
+    codigoPostal: (valueParam) => {
+      const value = valueParam ?? form.domicilio?.codigoPostal;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
           codigoPostal: '¡Código postal inválido!',
-        });
+        }));
         return false;
       }
-      if (!String(form.domicilio.codigoPostal).match(validNumber)) {
-        setError({
-          ...error,
+
+      if (!validNumber.test(String(value))) {
+        setError((prev) => ({
+          ...prev,
           codigoPostal: '¡Ingrese solo números!',
-        });
+        }));
         return false;
       }
-      setError({ ...error, codigoPostal: '' });
+
+      setError((prev) => ({ ...prev, codigoPostal: '' }));
       return true;
     },
-    municipioId: () => {
-      if (form.domicilio.municipioId === undefined || form.domicilio.municipioId === '') {
-        setError({ ...error, municipioId: '¡Por favor seleccione un municipio!' });
+
+    municipioId: (valueParam) => {
+      const value = valueParam ?? form.domicilio?.municipioId;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
+          municipioId: '¡Por favor seleccione un municipio!',
+        }));
         return false;
       }
-      setError({ ...error, municipioId: '' });
+
+      setError((prev) => ({ ...prev, municipioId: '' }));
       return true;
     },
-    tipoInmuebleId: () => {
-      if (form.tipoInmuebleId === undefined || form.tipoInmuebleId === '') {
-        setError({
-          ...error,
+
+    tipoInmuebleId: (valueParam) => {
+      const value = valueParam ?? form.tipoInmuebleId;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
           tipoInmuebleId: '¡Por favor seleccione un tipo de inmueble!',
-        });
+        }));
         return false;
       }
-      setError({ ...error, tipoInmuebleId: '' });
+
+      setError((prev) => ({ ...prev, tipoInmuebleId: '' }));
       return true;
     },
-    correo1: () => {
-      if (form.correo1 === undefined || form.correo1 === '' || !form.correo1.match(validEmail)) {
-        setError({ ...error, correo1: '¡Correo institucional inválido!' });
+
+    correo1: (valueParam) => {
+      const value = valueParam ?? form.correo1;
+
+      if (!value || !validEmail.test(value)) {
+        setError((prev) => ({
+          ...prev,
+          correo1: '¡Correo institucional inválido!',
+        }));
         return false;
       }
-      setError({ ...error, correo1: '' });
+
+      setError((prev) => ({ ...prev, correo1: '' }));
       return true;
     },
-    correo2: () => {
-      if (form.correo2 === undefined || form.correo2 === '' || !form.correo2.match(validEmail)) {
-        setError({ ...error, correo2: '¡Correo de contacto inválido!' });
+
+    correo2: (valueParam) => {
+      const value = valueParam ?? form.correo2;
+
+      if (!value || !validEmail.test(value)) {
+        setError((prev) => ({
+          ...prev,
+          correo2: '¡Correo de contacto inválido!',
+        }));
         return false;
       }
-      setError({ ...error, correo2: '' });
+
+      setError((prev) => ({ ...prev, correo2: '' }));
       return true;
     },
-    correo3: () => {
-      if (form.correo3 !== undefined && form.correo3 !== '' && !form.correo3.match(validEmail)) {
-        setError({ ...error, correo3: '¡Correo secundario inválido!' });
+
+    correo3: (valueParam) => {
+      const value = valueParam ?? form.correo3;
+
+      if (value && !validEmail.test(value)) {
+        setError((prev) => ({
+          ...prev,
+          correo3: '¡Correo secundario inválido!',
+        }));
         return false;
       }
-      setError({ ...error, correo3: '' });
+
+      setError((prev) => ({ ...prev, correo3: '' }));
       return true;
     },
-    telefono1: () => {
-      if (form.telefono1 === undefined || form.telefono1 === '' || !form.telefono1.match(validNumber)) {
-        setError({ ...error, telefono1: '¡Teléfono 1 inválido!' });
+
+    telefono1: (valueParam) => {
+      const value = valueParam ?? form.telefono1;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
+          telefono1: '¡Teléfono 1 es obligatorio!',
+        }));
         return false;
       }
-      if (form.telefono1.length !== 10) {
-        setError({ ...error, telefono1: '¡Por favor, ingrese 10 dígitos!' });
+
+      if (!/^\d{10}$/.test(value)) {
+        setError((prev) => ({
+          ...prev,
+          telefono1: '¡Debe contener exactamente 10 dígitos numéricos!',
+        }));
         return false;
       }
-      setError({ ...error, telefono1: '' });
+
+      setError((prev) => ({ ...prev, telefono1: '' }));
       return true;
     },
-    telefono2: () => {
-      if (form.telefono2 === undefined || form.telefono2 === '' || !form.telefono2.match(validNumber)) {
-        setError({ ...error, telefono2: '¡Teléfono 2 inválido!' });
+
+    telefono2: (valueParam) => {
+      const value = valueParam ?? form.telefono2;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
+          telefono2: '¡Teléfono 2 es obligatorio!',
+        }));
         return false;
       }
-      if (form.telefono2.length !== 10) {
-        setError({ ...error, telefono2: '¡Por favor, ingrese 10 dígitos!' });
+
+      if (!/^\d{10}$/.test(value)) {
+        setError((prev) => ({
+          ...prev,
+          telefono2: '¡Debe contener exactamente 10 dígitos numéricos!',
+        }));
         return false;
       }
-      setError({ ...error, telefono2: '' });
+
+      setError((prev) => ({ ...prev, telefono2: '' }));
       return true;
     },
-    claveCentroTrabajo: () => {
-      if (form.claveCentroTrabajo === undefined || form.claveCentroTrabajo === '') {
-        setError({ ...error, claveCentroTrabajo: '¡Clave de centro de trabajo inválido!' });
+
+    claveCentroTrabajo: (valueParam) => {
+      const value = valueParam ?? form.claveCentroTrabajo;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
+          claveCentroTrabajo:
+            '¡Clave de centro de trabajo inválido!',
+        }));
         return false;
       }
-      setError({ ...error, claveCentroTrabajo: '' });
+
+      setError((prev) => ({ ...prev, claveCentroTrabajo: '' }));
       return true;
     },
-    nombre: () => {
-      if (form.director.persona.nombre === undefined || form.director.persona.nombre === '') {
-        setError({ ...error, nombre: '¡Nombre inválido!' });
+
+    nombre: (valueParam) => {
+      const value = valueParam ?? form.director?.persona?.nombre;
+
+      if (!value) {
+        setError((prev) => ({ ...prev, nombre: '¡Nombre inválido!' }));
         return false;
       }
-      setError({ ...error, nombre: '' });
+
+      setError((prev) => ({ ...prev, nombre: '' }));
       return true;
     },
-    apellidoPaterno: () => {
-      if (form.director.persona.apellidoPaterno === undefined || form.director.persona.apellidoPaterno === '') {
-        setError({ ...error, apellidoPaterno: '¡Primer Apellido inválido!' });
+
+    apellidoPaterno: (valueParam) => {
+      const value = valueParam ?? form.director?.persona?.apellidoPaterno;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
+          apellidoPaterno: '¡Primer Apellido inválido!',
+        }));
         return false;
       }
-      setError({ ...error, apellidoPaterno: '' });
+
+      setError((prev) => ({ ...prev, apellidoPaterno: '' }));
       return true;
     },
-    apellidoMaterno: () => {
-      if (form.director.persona.apellidoMaterno === undefined || form.director.persona.apellidoMaterno === '') {
-        setError({ ...error, apellidoMaterno: '¡Segundo Apellido inválido!' });
+
+    apellidoMaterno: (valueParam) => {
+      const value = valueParam ?? form.director?.persona?.apellidoMaterno;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
+          apellidoMaterno: '¡Segundo Apellido inválido!',
+        }));
         return false;
       }
-      setError({ ...error, apellidoMaterno: '' });
+
+      setError((prev) => ({ ...prev, apellidoMaterno: '' }));
       return true;
     },
-    nacionalidad: () => {
-      if (form.director.persona.nacionalidad === undefined || form.director.persona.nacionalidad === '') {
-        setError({ ...error, nacionalidad: '¡Nacionalidad inválida!' });
+
+    nacionalidad: (valueParam) => {
+      const value = valueParam ?? form.director?.persona?.nacionalidad;
+
+      if (!value) {
+        setError((prev) => ({
+          ...prev,
+          nacionalidad: '¡Nacionalidad inválida!',
+        }));
         return false;
       }
-      setError({ ...error, nacionalidad: '' });
+
+      setError((prev) => ({ ...prev, nacionalidad: '' }));
       return true;
     },
-    curp: () => {
-      if (form.director.persona.curp === undefined || form.director.persona.curp === '' || form.director.persona.curp.length !== 18) {
-        setError({ ...error, curp: '¡La Curp debe contener 18 caracteres!' });
+
+    curp: (valueParam) => {
+      const value = valueParam ?? form.director?.persona?.curp;
+
+      if (!value || value.length !== 18) {
+        setError((prev) => ({
+          ...prev,
+          curp: '¡La CURP debe contener 18 caracteres!',
+        }));
         return false;
       }
-      setError({ ...error, curp: '' });
+
+      setError((prev) => ({ ...prev, curp: '' }));
       return true;
     },
-    sexo: () => {
-      if (form.director.persona.sexo === undefined || form.director.persona.sexo === '') {
-        setError({ ...error, sexo: '¡Género inválido!' });
+
+    sexo: (valueParam) => {
+      const value = valueParam ?? form.director?.persona?.sexo;
+
+      if (!value) {
+        setError((prev) => ({ ...prev, sexo: '¡Género inválido!' }));
         return false;
       }
-      setError({ ...error, sexo: '' });
+
+      setError((prev) => ({ ...prev, sexo: '' }));
       return true;
     },
-    correoPrimario: () => {
-      if (form.director.persona.correoPrimario === undefined || form.director.persona.correoPrimario === '' || !form.director.persona.correoPrimario.match(validEmail)) {
-        setError({ ...error, correoPrimario: '¡Correo inválido!' });
+
+    correoPrimario: (valueParam) => {
+      const value = valueParam ?? form.director?.persona?.correoPrimario;
+
+      if (!value || !validEmail.test(value)) {
+        setError((prev) => ({
+          ...prev,
+          correoPrimario: '¡Correo inválido!',
+        }));
         return false;
       }
-      setError({ ...error, correoPrimario: '' });
+
+      setError((prev) => ({ ...prev, correoPrimario: '' }));
       return true;
     },
   };
