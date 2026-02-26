@@ -217,6 +217,8 @@ export default function FoliosData({ type }) {
   const [alumnoToDelete, setAlumnoToDelete] = useState(null);
   const [formData, setFormData] = useState({
     folioPago: '',
+    claveInstitucionDGP: '',
+    claveCarreraDGP: '',
     tipoDocumentoId: '',
     tipoSolicitudFolioId: '',
     estatusSolicitudFolioId: 1,
@@ -273,6 +275,8 @@ export default function FoliosData({ type }) {
         if (type === 'edit') {
           setFormData({
             folioPago: data.folioPago,
+            claveInstitucionDGP: data.claveInstitucionDGP,
+            claveCarreraDGP: data.claveCarreraDGP,
             tipoDocumentoId: data.tipoDocumentoId,
             tipoSolicitudFolioId: data.tipoSolicitudFolioId,
             estatusSolicitudFolioId: data.estatusSolicitudFolioId,
@@ -617,6 +621,26 @@ export default function FoliosData({ type }) {
               id="folioPago"
               name="folioPago"
               value={formData.folioPago}
+              onChange={handleChange}
+              disabled={status === 'consult'}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Input
+              label="Clave de institución"
+              id="claveInstitucionDGP"
+              name="claveInstitucionDGP"
+              value={formData.claveInstitucionDGP}
+              onChange={handleChange}
+              disabled={status === 'consult'}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Input
+              label="Clave de carrera"
+              id="claveCarreraDGP"
+              name="claveCarreraDGP"
+              value={formData.claveCarreraDGP}
               onChange={handleChange}
               disabled={status === 'consult'}
             />
