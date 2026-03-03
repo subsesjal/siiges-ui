@@ -57,9 +57,10 @@ export default function AdminTable({
 
         const goToConsult = () => {
           sessionStorage.setItem('foliosAccion', 'consultar');
-          router.push(
-            `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios?mode=consult`,
-          );
+          router.push({
+            pathname: `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios`,
+            query: { status: 'consultar' },
+          });
         };
 
         const canConsult = isAdmin || isCeSicyt;

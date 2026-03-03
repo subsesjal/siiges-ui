@@ -49,6 +49,7 @@ export default function ModalCertificado({
       }
       setAlumnoId(rowData.alumnoId);
     } else {
+      setForm({});
       setAlumno(null);
       setAlumnoId(null);
     }
@@ -59,7 +60,7 @@ export default function ModalCertificado({
     } else {
       setModalTitulo('Agregar Alumno');
     }
-  }, [type, rowData]);
+  }, [type, rowData, open]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
