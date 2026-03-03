@@ -114,7 +114,7 @@ export default function SignIn() {
         </Typography>
         <Typography variant="body2" style={{ color: '#3b4245' }}>
           <Link
-            href="https://info.jalisco.gob.mx/politicas/?remote=true"
+            href="https://transparenciasitgej.jalisco.gob.mx/api/api/archivos/1908/download?inline=true"
             passHref
             target="_blank"
             rel="noopener noreferrer"
