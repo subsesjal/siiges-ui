@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { DefaultModal, ButtonSimple, Context } from '@siiges-ui/shared';
+import {
+  DefaultModal, ButtonSimple, Context, InputTime,
+} from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import handleEdit from '../../submitEditInstitucionAledana';
@@ -48,10 +50,23 @@ export default function InstitucionAledanaEditModal({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFormInstitucionesAledanas((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    if (name === 'tiempo') {
+      const date = new Date(value);
+
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+
+      setFormInstitucionesAledanas((prevData) => ({
+        ...prevData,
+        [name]: `${hours}:${minutes}:00`,
+      }));
+    } else {
+      setFormInstitucionesAledanas((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleOnBlur = (e) => {
@@ -100,13 +115,13 @@ export default function InstitucionAledanaEditModal({
           />
         </Grid>
         <Grid item xs={6}>
-          <Input
+          <InputTime
             id="tiempo"
-            label="Tiempo"
+            label="Tiempo en llegar (hh:mm)"
             name="tiempo"
             auto="tiempo"
-            type="time"
-            value={formInstitucionesAledanas.tiempo || ''}
+            ampm={false}
+            value={formInstitucionesAledanas.tiempo?.slice(0, 5) || ''}
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
