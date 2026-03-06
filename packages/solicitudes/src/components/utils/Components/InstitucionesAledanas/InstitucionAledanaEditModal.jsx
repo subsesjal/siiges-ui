@@ -121,7 +121,7 @@ export default function InstitucionAledanaEditModal({
             name="tiempo"
             auto="tiempo"
             ampm={false}
-            value={formInstitucionesAledanas.tiempo || ''}
+            value={formInstitucionesAledanas.tiempo?.slice(0, 5) || ''}
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
