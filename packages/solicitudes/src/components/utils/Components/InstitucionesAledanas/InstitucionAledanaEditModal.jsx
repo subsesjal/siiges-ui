@@ -97,8 +97,6 @@ export default function InstitucionAledanaEditModal({
     );
   };
 
-  console.log(formInstitucionesAledanas);
-
   return (
     <DefaultModal open={open} setOpen={hideModal} title={edit}>
       <Grid container spacing={2}>
