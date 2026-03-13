@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
-import { Grid, IconButton } from '@mui/material';
+import { Grid, IconButton, Typography } from '@mui/material';
 import {
-  DataTable, createRecord, Context,
+  DataTable, createRecord, Context, DefaultModal, ButtonsForm,
 } from '@siiges-ui/shared';
 import ArticleIcon from '@mui/icons-material/Article';
 import {
@@ -24,6 +24,7 @@ export default function AdminTable({
 }) {
   const router = useRouter();
   const { setNoti } = useContext(Context);
+  const [confirmModal, setConfirmModal] = useState({ open: false, id: null, folio: null });
 
   const columns = [
     {
@@ -58,37 +59,12 @@ export default function AdminTable({
           );
         };
 
-        const handleResendEmail = async () => {
-          setNoti({
+        const handleOpenConfirm = () => {
+          setConfirmModal({
             open: true,
-            message: 'Enviando correo, por favor espere...',
-            type: 'info',
+            id: params.id,
+            folio: params.row.folioSolicitud,
           });
-          try {
-            const response = await createRecord({
-              data: { tipoNotificacion: 'foliosAsignados' },
-              endpoint: `/solicitudesFolios/${params.id}/envioNotificacion`,
-            });
-            if (response.statusCode === 200 || response.statusCode === 201) {
-              setNoti({
-                open: true,
-                message: '¡Correo reenviado correctamente!',
-                type: 'success',
-              });
-            } else {
-              setNoti({
-                open: true,
-                message: response.message || '¡Error al reenviar el correo!',
-                type: 'error',
-              });
-            }
-          } catch (error) {
-            setNoti({
-              open: true,
-              message: `¡Error al reenviar el correo!: ${error.message}`,
-              type: 'error',
-            });
-          }
         };
 
         const goToConsult = () => {
@@ -142,7 +118,7 @@ export default function AdminTable({
 
               {params.row.estatusSolicitudFolioId === 3 && (
               <Tooltip title="Reenviar correo" placement="top">
-                <IconButton onClick={handleResendEmail}>
+                <IconButton onClick={handleOpenConfirm}>
                   <ForwardToInbox />
                 </IconButton>
               </Tooltip>
@@ -189,12 +165,67 @@ export default function AdminTable({
     return matchesTipoDocumento && matchesTipoSolicitud && matchesEstatus && matchesPrograma && matchesPlantel;
   });
 
+  const handleResendEmail = async () => {
+    const { id: solicitudId } = confirmModal;
+    setConfirmModal({ open: false, id: null, folio: null });
+    setNoti({
+      open: true,
+      message: 'Enviando correo, por favor espere...',
+      type: 'info',
+    });
+    try {
+      const response = await createRecord({
+        data: { tipoNotificacion: 'foliosAsignados' },
+        endpoint: `/solicitudesFolios/${solicitudId}/envioNotificacion`,
+      });
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        setNoti({
+          open: true,
+          message: '¡Correo reenviado correctamente!',
+          type: 'success',
+        });
+      } else {
+        setNoti({
+          open: true,
+          message: response.message || '¡Error al reenviar el correo!',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `¡Error al reenviar el correo!: ${error.message}`,
+        type: 'error',
+      });
+    }
+  };
+
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <DataTable title="Solicitudes de Folios" rows={filteredSolicitudes} columns={columns} />
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <DataTable title="Solicitudes de Folios" rows={filteredSolicitudes} columns={columns} />
+        </Grid>
       </Grid>
-    </Grid>
+
+      <DefaultModal
+        title="Reenviar notificación"
+        open={confirmModal.open}
+        setOpen={(val) => setConfirmModal((prev) => ({ ...prev, open: val }))}
+      >
+        <Typography>
+          ¿Estás seguro de reenviar la notificación de folios asignados de la solicitud
+          {' '}
+          <strong>{confirmModal.folio}</strong>
+          ?
+        </Typography>
+        <ButtonsForm
+          cancel={() => setConfirmModal({ open: false, id: null, folio: null })}
+          confirm={handleResendEmail}
+          confirmText="Confirmar"
+        />
+      </DefaultModal>
+    </>
   );
 }
 
