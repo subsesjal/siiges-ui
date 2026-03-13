@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton } from '@mui/material';
-import { DataTable } from '@siiges-ui/shared';
+import {
+  DataTable, createRecord, Context,
+} from '@siiges-ui/shared';
 import ArticleIcon from '@mui/icons-material/Article';
 import {
-  RuleOutlined, Send, VisibilityOutlined, DoneAll,
+  RuleOutlined, Send, VisibilityOutlined, DoneAll, ForwardToInbox,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -21,6 +23,7 @@ export default function AdminTable({
   isCeSicyt,
 }) {
   const router = useRouter();
+  const { setNoti } = useContext(Context);
 
   const columns = [
     {
@@ -53,6 +56,39 @@ export default function AdminTable({
           router.push(
             `/serviciosEscolares/solicitudesFolios/admin/${params.id}/folios`,
           );
+        };
+
+        const handleResendEmail = async () => {
+          setNoti({
+            open: true,
+            message: 'Enviando correo, por favor espere...',
+            type: 'info',
+          });
+          try {
+            const response = await createRecord({
+              data: { tipoNotificacion: 'foliosAsignados' },
+              endpoint: `/solicitudesFolios/${params.id}/envioNotificacion`,
+            });
+            if (response.statusCode === 200 || response.statusCode === 201) {
+              setNoti({
+                open: true,
+                message: '¡Correo reenviado correctamente!',
+                type: 'success',
+              });
+            } else {
+              setNoti({
+                open: true,
+                message: response.message || '¡Error al reenviar el correo!',
+                type: 'error',
+              });
+            }
+          } catch (error) {
+            setNoti({
+              open: true,
+              message: `¡Error al reenviar el correo!: ${error.message}`,
+              type: 'error',
+            });
+          }
         };
 
         const goToConsult = () => {
@@ -100,6 +136,14 @@ export default function AdminTable({
               <Tooltip title={tooltipTitle} placement="top">
                 <IconButton onClick={handleAddClick}>
                   <IconComponent />
+                </IconButton>
+              </Tooltip>
+              )}
+
+              {params.row.estatusSolicitudFolioId === 3 && (
+              <Tooltip title="Reenviar correo" placement="top">
+                <IconButton onClick={handleResendEmail}>
+                  <ForwardToInbox />
                 </IconButton>
               </Tooltip>
               )}
