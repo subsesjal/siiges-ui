@@ -31,6 +31,8 @@ function Provider({ children }) {
     '/tituloElectronico/[folio]/consultarFolio',
     '/consultaRevEquiv',
     '/consultaRevEquiv/[folio]/consultarFolio',
+    '/ies',
+    '/ies/dashboard',
   ];
 
   const fetchAvatar = async (userId) => {
