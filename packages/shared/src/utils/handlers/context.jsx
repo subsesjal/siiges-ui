@@ -33,6 +33,13 @@ function Provider({ children }) {
     '/consultaRevEquiv/[folio]/consultarFolio',
     '/ies',
     '/ies/dashboard',
+    '/admin',
+    '/admin/dashboard',
+    '/admin/cuentas',
+    '/admin/centros',
+    '/admin/programas',
+    '/admin/usuarios',
+    '/admin/documentos',
   ];
 
   const fetchAvatar = async (userId) => {
