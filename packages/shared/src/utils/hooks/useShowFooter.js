@@ -7,7 +7,7 @@ export default function useShowFooter() {
     const container = document.getElementById('main-scroll');
 
     if (!container) {
-      return () => {};
+      return;
     }
 
     const handleScroll = () => {
