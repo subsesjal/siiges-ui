@@ -10,7 +10,7 @@ import Loading from '../Loading';
 import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 import Title from '../Title';
 import { Context } from '../../utils/handlers/context';
-import useShowFooter from '../../utils/hooks/useShowFooter'; // 👈 IMPORTANTE
+import useShowFooter from '../../utils/hooks/useShowFooter';
 
 export default function Overlay({
   children, title, subtitle, type,
@@ -21,7 +21,7 @@ export default function Overlay({
     session, section, setSection, loading,
   } = useContext(Context);
 
-  const showFooter = useShowFooter(); // 👈 HOOK
+  const showFooter = useShowFooter();
 
   const onClickChange = () => {
     setOpen(!open);
