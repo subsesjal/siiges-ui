@@ -50,18 +50,18 @@ const PROCEEDING_INSTITUTION_SELECTS = [
 
 const DESTINATION_INSTITUTION_FIELDS = [
   {
-    id: 'anoFinalizacionCarrera',
-    label: 'Año de Finalización de la Carrera',
-    name: 'anoFinalizacionCarrera',
+    id: 'anoInicioCarrera',
+    label: 'Año de Inicio de Realización de Estudios',
+    name: 'anoInicioCarrera',
     path: ['interesado', 'institucionProcedencia'],
     xs: 4,
     component: InputDate,
     required: false,
   },
   {
-    id: 'anoInicioCarrera',
-    label: 'Año de Inicio de Realización de Estudios',
-    name: 'anoInicioCarrera',
+    id: 'anoFinalizacionCarrera',
+    label: 'Año de Finalización de la Carrera',
+    name: 'anoFinalizacionCarrera',
     path: ['interesado', 'institucionProcedencia'],
     xs: 4,
     component: InputDate,
@@ -323,8 +323,6 @@ export default function DatosInstitucion({
     [touched],
   );
 
-  console.log(form);
-
   // Validate fields when validateFields changes
   useEffect(() => {
     if (validateFields) {
@@ -388,7 +386,7 @@ export default function DatosInstitucion({
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Subtitle>Datos de la Institución de procedencia</Subtitle>
+        <Subtitle>Datos de institución de procedencia en el extranjero</Subtitle>
       </Grid>
 
       {PROCEEDING_INSTITUTION_FIELDS.map(
@@ -434,7 +432,7 @@ export default function DatosInstitucion({
       )}
 
       <Grid item xs={12}>
-        <Subtitle>Datos de la Institución de destino</Subtitle>
+        <Subtitle>Deseo revalidar mis estudios como</Subtitle>
       </Grid>
 
       <Grid item xs={3}>
