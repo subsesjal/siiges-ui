@@ -174,13 +174,17 @@ export default function AdminCuentas() {
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     {
-      field: 'name', headerName: 'Nombre', flex: 1, minWidth: 150,
+      field: 'name', headerName: 'Nombre', flex: 1.2, minWidth: 150,
     },
     {
-      field: 'email', headerName: 'Correo', flex: 1, minWidth: 200,
+      field: 'email', headerName: 'Correo', flex: 1.5, minWidth: 200,
     },
-    { field: 'phone', headerName: 'Teléfono', width: 130 },
-    { field: 'rolName', headerName: 'Rol', width: 150 },
+    {
+      field: 'phone', headerName: 'Teléfono', flex: 0.8, minWidth: 120,
+    },
+    {
+      field: 'rolName', headerName: 'Rol', flex: 0.8, minWidth: 120,
+    },
     {
       field: 'actions',
       headerName: 'Acciones',

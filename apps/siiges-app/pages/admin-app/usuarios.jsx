@@ -21,7 +21,7 @@ import AdminLayout from '../../components/admin/AdminLayout';
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import FormModal from '../../components/admin/FormModal';
 
-export default function AdminCentros() {
+export default function AdminUsuarios() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -31,6 +31,9 @@ export default function AdminCentros() {
   const [totalRows, setTotalRows] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [editData, setEditData] = useState(null);
+  const [centers, setCenters] = useState([]);
+  const [positions, setPositions] = useState([]);
+  const [levels, setLevels] = useState([]);
   const [snackbar, setSnackbar] = useState({ open: false, mensaje: '', type: 'info' });
 
   const getToken = () => sessionStorage.getItem('adminToken');
@@ -46,7 +49,7 @@ export default function AdminCentros() {
       });
       if (search) params.append('search', search);
 
-      const response = await fetch(`${baseUrl}/admin/org/getOrgGrid?${params}`, {
+      const response = await fetch(`${baseUrl}/admin/usr/getUsrGrid?${params}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
 
@@ -68,19 +71,52 @@ export default function AdminCentros() {
     }
   }, [search, page, pageSize, baseUrl]);
 
+  const fetchOptions = useCallback(async () => {
+    try {
+      const [centersRes, positionsRes, levelsRes] = await Promise.all([
+        fetch(`${baseUrl}/admin/usr/getUsrPop`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        }),
+        fetch(`${baseUrl}/admin/usr/getUsrOpc?entity=position`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        }),
+        fetch(`${baseUrl}/admin/usr/getUsrOpc?entity=level`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        }),
+      ]);
+
+      if (centersRes.ok) {
+        const data = await centersRes.json();
+        setCenters((data.data || []).map((c) => ({ value: c.id, label: c.name })));
+      }
+      if (positionsRes.ok) {
+        const data = await positionsRes.json();
+        setPositions((data.data || []).map((p) => ({ value: p.id, label: p.name })));
+      }
+      if (levelsRes.ok) {
+        const data = await levelsRes.json();
+        setLevels((data.data || []).map((l) => ({ value: l.id, label: l.name })));
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error cargando opciones:', err);
+    }
+  }, [baseUrl]);
+
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    fetchOptions();
+  }, [fetchData, fetchOptions]);
 
   const handleEdit = async (id) => {
     try {
-      const response = await fetch(`${baseUrl}/admin/org/getOrgJson`, {
+      const response = await fetch(`${baseUrl}/admin/usr/getUsrJson`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ entity: 'center', id }),
+        body: JSON.stringify({ entity: 'user', id }),
       });
       if (response.ok) {
         const data = await response.json();
@@ -95,18 +131,18 @@ export default function AdminCentros() {
 
   const handleDelete = async (id) => {
     // eslint-disable-next-line no-alert
-    if (!window.confirm('¿Está seguro de desactivar este centro?')) return;
+    if (!window.confirm('¿Está seguro de desactivar este usuario?')) return;
     try {
-      const response = await fetch(`${baseUrl}/admin/org/dropOrg`, {
+      const response = await fetch(`${baseUrl}/admin/usr/dropUsr`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ entity: 'center', id }),
+        body: JSON.stringify({ entity: 'user', id }),
       });
       if (response.ok) {
-        setSnackbar({ open: true, mensaje: 'Centro desactivado', type: 'success' });
+        setSnackbar({ open: true, mensaje: 'Usuario desactivado', type: 'success' });
         fetchData();
       } else {
         setSnackbar({ open: true, mensaje: 'Error al desactivar', type: 'error' });
@@ -122,7 +158,7 @@ export default function AdminCentros() {
     const body = { ...formData };
     if (id) body.id = id;
 
-    const response = await fetch(`${baseUrl}/admin/org/addCenter`, {
+    const response = await fetch(`${baseUrl}/admin/usr/addUser`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -136,24 +172,53 @@ export default function AdminCentros() {
       throw new Error(data.message || 'Error al guardar');
     }
 
-    setSnackbar({ open: true, mensaje: id ? 'Centro actualizado' : 'Centro creado', type: 'success' });
+    setSnackbar({ open: true, mensaje: id ? 'Usuario actualizado' : 'Usuario creado', type: 'success' });
     fetchData();
   };
 
   const fields = [
     {
-      name: 'name', label: 'Nombre del Centro', required: true, fullWidth: true,
+      name: 'center', label: 'Centro / IES', required: true, options: centers,
     },
-    { name: 'code', label: 'Código', required: true },
+    {
+      name: 'position', label: 'Cargo', required: true, options: positions,
+    },
+    { name: 'level', label: 'Nivel', options: levels },
+    { name: 'name', label: 'Nombre', required: true },
+    { name: 'firstName', label: 'Apellido Paterno', required: true },
+    { name: 'secondName', label: 'Apellido Materno' },
+    { name: 'CURP', label: 'CURP', required: true },
+    {
+      name: 'email', label: 'Correo Electrónico', required: true, type: 'email',
+    },
+    {
+      name: 'NIP', label: 'NIP', type: 'password', required: !editData,
+    },
   ];
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     {
-      field: 'name', headerName: 'Nombre', flex: 1, minWidth: 250,
+      field: 'name', headerName: 'Nombre', flex: 1, minWidth: 110,
     },
-    { field: 'code', headerName: 'Código', width: 150 },
-    { field: 'status', headerName: 'Estado', width: 100 },
+    {
+      field: 'firstName', headerName: 'Paterno', flex: 0.9, minWidth: 100,
+    },
+    {
+      field: 'secondName', headerName: 'Materno', flex: 0.9, minWidth: 100,
+    },
+    {
+      field: 'CURP', headerName: 'CURP', flex: 1.3, minWidth: 180,
+    },
+    {
+      field: 'email', headerName: 'Correo', flex: 1.3, minWidth: 180,
+    },
+    {
+      field: 'centerName', headerName: 'Centro', flex: 1, minWidth: 130,
+    },
+    {
+      field: 'positionName', headerName: 'Cargo', flex: 0.7, minWidth: 100,
+    },
     {
       field: 'actions',
       headerName: 'Acciones',
@@ -178,7 +243,7 @@ export default function AdminCentros() {
   };
 
   return (
-    <AdminLayout title="Centros / Instituciones">
+    <AdminLayout title="Usuarios / Responsables">
       <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6} md={4}>
@@ -212,7 +277,7 @@ export default function AdminCentros() {
         }}
         >
           <Typography variant="h6">
-            Centros (
+            Usuarios (
             {totalRows}
             )
           </Typography>
@@ -221,7 +286,7 @@ export default function AdminCentros() {
             startIcon={<AddIcon />}
             onClick={() => { setEditData(null); setOpenModal(true); }}
           >
-            Nuevo Centro
+            Nuevo Usuario
           </Button>
         </Box>
 
@@ -253,7 +318,7 @@ export default function AdminCentros() {
       <FormModal
         open={openModal}
         onClose={() => setOpenModal(false)}
-        title={editData ? 'Editar Centro' : 'Nuevo Centro'}
+        title={editData ? 'Editar Usuario' : 'Nuevo Usuario'}
         fields={fields}
         onSubmit={handleSubmit}
         initialData={editData}

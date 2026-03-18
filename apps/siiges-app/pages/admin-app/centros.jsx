@@ -21,7 +21,7 @@ import AdminLayout from '../../components/admin/AdminLayout';
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import FormModal from '../../components/admin/FormModal';
 
-export default function AdminProgramas() {
+export default function AdminCentros() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -31,7 +31,6 @@ export default function AdminProgramas() {
   const [totalRows, setTotalRows] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [editData, setEditData] = useState(null);
-  const [centers, setCenters] = useState([]);
   const [snackbar, setSnackbar] = useState({ open: false, mensaje: '', type: 'info' });
 
   const getToken = () => sessionStorage.getItem('adminToken');
@@ -47,7 +46,7 @@ export default function AdminProgramas() {
       });
       if (search) params.append('search', search);
 
-      const response = await fetch(`${baseUrl}/admin/prg/getPrgGrid?${params}`, {
+      const response = await fetch(`${baseUrl}/admin/org/getOrgGrid?${params}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
 
@@ -69,35 +68,19 @@ export default function AdminProgramas() {
     }
   }, [search, page, pageSize, baseUrl]);
 
-  const fetchCenters = useCallback(async () => {
-    try {
-      const response = await fetch(`${baseUrl}/admin/prg/getPrgPop`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setCenters((data.data || []).map((c) => ({ value: c.id, label: c.name })));
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Error cargando centros:', err);
-    }
-  }, [baseUrl]);
-
   useEffect(() => {
     fetchData();
-    fetchCenters();
-  }, [fetchData, fetchCenters]);
+  }, [fetchData]);
 
   const handleEdit = async (id) => {
     try {
-      const response = await fetch(`${baseUrl}/admin/prg/getPrgJson`, {
+      const response = await fetch(`${baseUrl}/admin/org/getOrgJson`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ entity: 'program', id }),
+        body: JSON.stringify({ entity: 'center', id }),
       });
       if (response.ok) {
         const data = await response.json();
@@ -112,18 +95,18 @@ export default function AdminProgramas() {
 
   const handleDelete = async (id) => {
     // eslint-disable-next-line no-alert
-    if (!window.confirm('¿Está seguro de desactivar este programa?')) return;
+    if (!window.confirm('¿Está seguro de desactivar este centro?')) return;
     try {
-      const response = await fetch(`${baseUrl}/admin/prg/dropPrg`, {
+      const response = await fetch(`${baseUrl}/admin/org/dropOrg`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ entity: 'program', id }),
+        body: JSON.stringify({ entity: 'center', id }),
       });
       if (response.ok) {
-        setSnackbar({ open: true, mensaje: 'Programa desactivado', type: 'success' });
+        setSnackbar({ open: true, mensaje: 'Centro desactivado', type: 'success' });
         fetchData();
       } else {
         setSnackbar({ open: true, mensaje: 'Error al desactivar', type: 'error' });
@@ -139,7 +122,7 @@ export default function AdminProgramas() {
     const body = { ...formData };
     if (id) body.id = id;
 
-    const response = await fetch(`${baseUrl}/admin/prg/addProgram`, {
+    const response = await fetch(`${baseUrl}/admin/org/addCenter`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -153,30 +136,28 @@ export default function AdminProgramas() {
       throw new Error(data.message || 'Error al guardar');
     }
 
-    setSnackbar({ open: true, mensaje: id ? 'Programa actualizado' : 'Programa creado', type: 'success' });
+    setSnackbar({ open: true, mensaje: id ? 'Centro actualizado' : 'Centro creado', type: 'success' });
     fetchData();
   };
 
   const fields = [
     {
-      name: 'center', label: 'Centro / IES', required: true, options: centers,
+      name: 'name', label: 'Nombre del Centro', required: true, fullWidth: true,
     },
     { name: 'code', label: 'Código', required: true },
-    {
-      name: 'name', label: 'Nombre del Programa', required: true, fullWidth: true,
-    },
-    { name: 'RVOE', label: 'RVOE', required: true },
   ];
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     {
-      field: 'name', headerName: 'Programa', flex: 1, minWidth: 200,
+      field: 'name', headerName: 'Nombre', flex: 2, minWidth: 250,
     },
-    { field: 'code', headerName: 'Código', width: 120 },
-    { field: 'RVOE', headerName: 'RVOE', width: 150 },
-    { field: 'centerName', headerName: 'Centro', width: 180 },
-    { field: 'status', headerName: 'Estado', width: 100 },
+    {
+      field: 'code', headerName: 'Código', flex: 0.8, minWidth: 120,
+    },
+    {
+      field: 'status', headerName: 'Estado', flex: 0.6, minWidth: 90,
+    },
     {
       field: 'actions',
       headerName: 'Acciones',
@@ -201,7 +182,7 @@ export default function AdminProgramas() {
   };
 
   return (
-    <AdminLayout title="Programas Académicos">
+    <AdminLayout title="Centros / Instituciones">
       <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6} md={4}>
@@ -235,7 +216,7 @@ export default function AdminProgramas() {
         }}
         >
           <Typography variant="h6">
-            Programas (
+            Centros (
             {totalRows}
             )
           </Typography>
@@ -244,7 +225,7 @@ export default function AdminProgramas() {
             startIcon={<AddIcon />}
             onClick={() => { setEditData(null); setOpenModal(true); }}
           >
-            Nuevo Programa
+            Nuevo Centro
           </Button>
         </Box>
 
@@ -276,7 +257,7 @@ export default function AdminProgramas() {
       <FormModal
         open={openModal}
         onClose={() => setOpenModal(false)}
-        title={editData ? 'Editar Programa' : 'Nuevo Programa'}
+        title={editData ? 'Editar Centro' : 'Nuevo Centro'}
         fields={fields}
         onSubmit={handleSubmit}
         initialData={editData}

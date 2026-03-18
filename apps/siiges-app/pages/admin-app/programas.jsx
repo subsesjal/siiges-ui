@@ -21,7 +21,7 @@ import AdminLayout from '../../components/admin/AdminLayout';
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import FormModal from '../../components/admin/FormModal';
 
-export default function AdminUsuarios() {
+export default function AdminProgramas() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -32,8 +32,6 @@ export default function AdminUsuarios() {
   const [openModal, setOpenModal] = useState(false);
   const [editData, setEditData] = useState(null);
   const [centers, setCenters] = useState([]);
-  const [positions, setPositions] = useState([]);
-  const [levels, setLevels] = useState([]);
   const [snackbar, setSnackbar] = useState({ open: false, mensaje: '', type: 'info' });
 
   const getToken = () => sessionStorage.getItem('adminToken');
@@ -49,7 +47,7 @@ export default function AdminUsuarios() {
       });
       if (search) params.append('search', search);
 
-      const response = await fetch(`${baseUrl}/admin/usr/getUsrGrid?${params}`, {
+      const response = await fetch(`${baseUrl}/admin/prg/getPrgGrid?${params}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
 
@@ -71,52 +69,35 @@ export default function AdminUsuarios() {
     }
   }, [search, page, pageSize, baseUrl]);
 
-  const fetchOptions = useCallback(async () => {
+  const fetchCenters = useCallback(async () => {
     try {
-      const [centersRes, positionsRes, levelsRes] = await Promise.all([
-        fetch(`${baseUrl}/admin/usr/getUsrPop`, {
-          headers: { Authorization: `Bearer ${getToken()}` },
-        }),
-        fetch(`${baseUrl}/admin/usr/getUsrOpc?entity=position`, {
-          headers: { Authorization: `Bearer ${getToken()}` },
-        }),
-        fetch(`${baseUrl}/admin/usr/getUsrOpc?entity=level`, {
-          headers: { Authorization: `Bearer ${getToken()}` },
-        }),
-      ]);
-
-      if (centersRes.ok) {
-        const data = await centersRes.json();
+      const response = await fetch(`${baseUrl}/admin/prg/getPrgPop`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
         setCenters((data.data || []).map((c) => ({ value: c.id, label: c.name })));
-      }
-      if (positionsRes.ok) {
-        const data = await positionsRes.json();
-        setPositions((data.data || []).map((p) => ({ value: p.id, label: p.name })));
-      }
-      if (levelsRes.ok) {
-        const data = await levelsRes.json();
-        setLevels((data.data || []).map((l) => ({ value: l.id, label: l.name })));
       }
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.error('Error cargando opciones:', err);
+      console.error('Error cargando centros:', err);
     }
   }, [baseUrl]);
 
   useEffect(() => {
     fetchData();
-    fetchOptions();
-  }, [fetchData, fetchOptions]);
+    fetchCenters();
+  }, [fetchData, fetchCenters]);
 
   const handleEdit = async (id) => {
     try {
-      const response = await fetch(`${baseUrl}/admin/usr/getUsrJson`, {
+      const response = await fetch(`${baseUrl}/admin/prg/getPrgJson`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ entity: 'user', id }),
+        body: JSON.stringify({ entity: 'program', id }),
       });
       if (response.ok) {
         const data = await response.json();
@@ -131,18 +112,18 @@ export default function AdminUsuarios() {
 
   const handleDelete = async (id) => {
     // eslint-disable-next-line no-alert
-    if (!window.confirm('¿Está seguro de desactivar este usuario?')) return;
+    if (!window.confirm('¿Está seguro de desactivar este programa?')) return;
     try {
-      const response = await fetch(`${baseUrl}/admin/usr/dropUsr`, {
+      const response = await fetch(`${baseUrl}/admin/prg/dropPrg`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ entity: 'user', id }),
+        body: JSON.stringify({ entity: 'program', id }),
       });
       if (response.ok) {
-        setSnackbar({ open: true, mensaje: 'Usuario desactivado', type: 'success' });
+        setSnackbar({ open: true, mensaje: 'Programa desactivado', type: 'success' });
         fetchData();
       } else {
         setSnackbar({ open: true, mensaje: 'Error al desactivar', type: 'error' });
@@ -158,7 +139,7 @@ export default function AdminUsuarios() {
     const body = { ...formData };
     if (id) body.id = id;
 
-    const response = await fetch(`${baseUrl}/admin/usr/addUser`, {
+    const response = await fetch(`${baseUrl}/admin/prg/addProgram`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -172,7 +153,7 @@ export default function AdminUsuarios() {
       throw new Error(data.message || 'Error al guardar');
     }
 
-    setSnackbar({ open: true, mensaje: id ? 'Usuario actualizado' : 'Usuario creado', type: 'success' });
+    setSnackbar({ open: true, mensaje: id ? 'Programa actualizado' : 'Programa creado', type: 'success' });
     fetchData();
   };
 
@@ -180,31 +161,30 @@ export default function AdminUsuarios() {
     {
       name: 'center', label: 'Centro / IES', required: true, options: centers,
     },
+    { name: 'code', label: 'Código', required: true },
     {
-      name: 'position', label: 'Cargo', required: true, options: positions,
+      name: 'name', label: 'Nombre del Programa', required: true, fullWidth: true,
     },
-    { name: 'level', label: 'Nivel', options: levels },
-    { name: 'name', label: 'Nombre', required: true },
-    { name: 'firstName', label: 'Apellido Paterno', required: true },
-    { name: 'secondName', label: 'Apellido Materno' },
-    { name: 'CURP', label: 'CURP', required: true },
-    {
-      name: 'email', label: 'Correo Electrónico', required: true, type: 'email',
-    },
-    {
-      name: 'NIP', label: 'NIP', type: 'password', required: !editData,
-    },
+    { name: 'RVOE', label: 'RVOE', required: true },
   ];
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Nombre', width: 130 },
-    { field: 'firstName', headerName: 'Paterno', width: 130 },
-    { field: 'secondName', headerName: 'Materno', width: 130 },
-    { field: 'CURP', headerName: 'CURP', width: 200 },
-    { field: 'email', headerName: 'Correo', width: 200 },
-    { field: 'centerName', headerName: 'Centro', width: 150 },
-    { field: 'positionName', headerName: 'Cargo', width: 120 },
+    {
+      field: 'name', headerName: 'Programa', flex: 1.5, minWidth: 200,
+    },
+    {
+      field: 'code', headerName: 'Código', flex: 0.7, minWidth: 100,
+    },
+    {
+      field: 'RVOE', headerName: 'RVOE', flex: 0.8, minWidth: 120,
+    },
+    {
+      field: 'centerName', headerName: 'Centro', flex: 1.2, minWidth: 150,
+    },
+    {
+      field: 'status', headerName: 'Estado', flex: 0.6, minWidth: 90,
+    },
     {
       field: 'actions',
       headerName: 'Acciones',
@@ -229,7 +209,7 @@ export default function AdminUsuarios() {
   };
 
   return (
-    <AdminLayout title="Usuarios / Responsables">
+    <AdminLayout title="Programas Académicos">
       <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6} md={4}>
@@ -263,7 +243,7 @@ export default function AdminUsuarios() {
         }}
         >
           <Typography variant="h6">
-            Usuarios (
+            Programas (
             {totalRows}
             )
           </Typography>
@@ -272,7 +252,7 @@ export default function AdminUsuarios() {
             startIcon={<AddIcon />}
             onClick={() => { setEditData(null); setOpenModal(true); }}
           >
-            Nuevo Usuario
+            Nuevo Programa
           </Button>
         </Box>
 
@@ -304,7 +284,7 @@ export default function AdminUsuarios() {
       <FormModal
         open={openModal}
         onClose={() => setOpenModal(false)}
-        title={editData ? 'Editar Usuario' : 'Nuevo Usuario'}
+        title={editData ? 'Editar Programa' : 'Nuevo Programa'}
         fields={fields}
         onSubmit={handleSubmit}
         initialData={editData}

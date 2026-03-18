@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
   Box,
   Paper,
@@ -49,7 +50,7 @@ export default function AdminLogin() {
       if (response.ok) {
         const data = await response.json();
         sessionStorage.setItem('adminToken', data.token || data.data?.token);
-        router.push('/admin/dashboard');
+        router.push('/admin-app/dashboard');
       } else if (response.status === 401) {
         setError('Credenciales incorrectas');
       } else if (response.status === 404) {
@@ -167,13 +168,25 @@ export default function AdminLogin() {
             backgroundColor: 'rgb(206, 209, 212)',
             py: 2,
             textAlign: 'center',
+            color: 'white',
           }}
         >
-          <Typography variant="body2" sx={{ color: '#3b4245' }}>
+          <Typography variant="body2" style={{ color: '#3b4245' }}>
             &copy; 2026 Secretaría General de Gobierno - Todos los derechos reservados.
           </Typography>
-          <Typography variant="caption" sx={{ color: '#3b4245' }}>
-            ADMIN - 2.0.0
+          <Typography variant="body2" style={{ color: '#3b4245' }}>
+            Edificio MIND Av. Faro #2350 , Colonia: Verde Valle , CP: 44540, Guadalajara, Jalisco
+            Lunes a Viernes de 09:00:00 a 17:00:00 horas
+          </Typography>
+          <Typography variant="body2" style={{ color: '#3b4245' }}>
+            <Link
+              href="https://transparenciasitgej.jalisco.gob.mx/api/api/archivos/1908/download?inline=true"
+              passHref
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Avisos de privacidad
+            </Link>
           </Typography>
         </Box>
       </Box>

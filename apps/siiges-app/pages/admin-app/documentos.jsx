@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
@@ -8,8 +9,17 @@ import {
   Alert,
   TextField,
   Grid,
+  Autocomplete,
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Chip,
+  Divider,
 } from '@mui/material';
 import { DataGrid, esES } from '@mui/x-data-grid';
+
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -26,6 +36,24 @@ import AdminLayout from '../../components/admin/AdminLayout';
 import FormModal from '../../components/admin/FormModal';
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import FirmaValidacionModal from '../../components/admin/FirmaAdminModal';
+
+const toDateInput = (val) => {
+  if (!val) return '';
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toISOString().split('T')[0];
+};
+
+const normalize = (str) => str
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .toLowerCase();
+
+const filterCenters = (options, state) => {
+  const input = normalize(state.inputValue);
+  if (!input) return options;
+  return options.filter((opt) => normalize(opt.label || '').includes(input));
+};
 
 const STATUS_OPTIONS = [
   { value: '', label: 'Todos', color: '#555' },
@@ -44,6 +72,7 @@ export default function AdminDocumentos() {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [centerFilter, setCenterFilter] = useState(null);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(50);
   const [totalRows, setTotalRows] = useState(0);
@@ -51,6 +80,7 @@ export default function AdminDocumentos() {
   const [editData, setEditData] = useState(null);
   const [selectedIds, setSelectedIds] = useState([]);
   const [openFirma, setOpenFirma] = useState(false);
+  const [uploadResult, setUploadResult] = useState(null);
   const [centers, setCenters] = useState([]);
   const [programs, setPrograms] = useState([]);
   const [modes, setModes] = useState([]);
@@ -74,6 +104,7 @@ export default function AdminDocumentos() {
       });
       if (search) params.append('search', search);
       if (statusFilter) params.append('status', statusFilter);
+      if (centerFilter) params.append('center', centerFilter.value);
 
       const response = await fetch(`${baseUrl}/admin/doc/getDocGrid?${params}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
@@ -95,7 +126,7 @@ export default function AdminDocumentos() {
     } finally {
       setLoading(false);
     }
-  }, [search, statusFilter, page, pageSize, baseUrl]);
+  }, [search, statusFilter, centerFilter, page, pageSize, baseUrl]);
 
   const fetchOptions = useCallback(async () => {
     try {
@@ -112,7 +143,14 @@ export default function AdminDocumentos() {
         ? res.json().then((d) => (d.data || []).map((i) => ({ value: i.id, label: i.name })))
         : Promise.resolve([]));
 
-      setCenters(await mapOptions(centersRes));
+      const mapOptionsCenter = (res) => (res.ok
+        ? res.json().then((d) => (d.data || []).map((i) => ({
+          value: i.code,
+          label: `${i.name} (${i.code})`,
+        })))
+        : Promise.resolve([]));
+
+      setCenters(await mapOptionsCenter(centersRes));
       setModes(await mapOptions(modesRes));
       setSocOptions(await mapOptions(socRes));
       setStudyLevels(await mapOptions(levelsRes));
@@ -156,8 +194,32 @@ export default function AdminDocumentos() {
       });
       if (response.ok) {
         const data = await response.json();
-        const doc = data.data || data;
-        if (doc.center) await fetchPrograms(doc.center);
+        const raw = data.data || data;
+        if (raw.center) await fetchPrograms(raw.center);
+        // Mapear campos del API a campos del formulario
+        const doc = {
+          id: raw.id,
+          center: raw.ies,
+          program: raw.program,
+          code: raw.code,
+          name: raw.name,
+          firstName: raw.firstName,
+          secondName: raw.secondName,
+          CURP: raw.CURP,
+          email: raw.email,
+          date: toDateInput(raw.date),
+          start: toDateInput(raw.start2),
+          end: toDateInput(raw.end2),
+          mode: raw.mode,
+          study_state: raw.state,
+          study_level: raw.level,
+          study_center: raw.center2,
+          study_start: toDateInput(raw.start1),
+          study_end: toDateInput(raw.end1),
+          study_code: raw.ced,
+          soc: raw.soc,
+          proto: toDateInput(raw.proto),
+        };
         setEditData(doc);
         setOpenModal(true);
       }
@@ -194,6 +256,7 @@ export default function AdminDocumentos() {
   };
 
   const handleSendKey = async (id) => {
+    const body = id ? { id } : { ids: selectedIds.join(',') };
     try {
       const response = await fetch(`${baseUrl}/admin/doc/sendKey`, {
         method: 'POST',
@@ -201,10 +264,16 @@ export default function AdminDocumentos() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify(body),
       });
       if (response.ok) {
-        setSnackbar({ open: true, mensaje: 'Folio enviado a SEP', type: 'success' });
+        const data = await response.json().catch(() => ({}));
+        if (data && (data['registros recibidos'] !== undefined || data['folios recibidos'] !== undefined)) {
+          setUploadResult(data);
+        } else {
+          setSnackbar({ open: true, mensaje: 'Folio(s) enviado(s) a SEP', type: 'success' });
+        }
+        setSelectedIds([]);
         fetchData();
       } else {
         const data = await response.json().catch(() => ({}));
@@ -218,6 +287,7 @@ export default function AdminDocumentos() {
   };
 
   const handleGetKey = async (id) => {
+    const body = id ? { id } : { ids: selectedIds.join(',') };
     try {
       const response = await fetch(`${baseUrl}/admin/doc/getKey`, {
         method: 'POST',
@@ -225,10 +295,16 @@ export default function AdminDocumentos() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify(body),
       });
       if (response.ok) {
-        setSnackbar({ open: true, mensaje: 'Resultado descargado', type: 'success' });
+        const data = await response.json().catch(() => ({}));
+        if (data && (data['registros recibidos'] !== undefined || data['folios recibidos'] !== undefined)) {
+          setUploadResult(data);
+        } else {
+          setSnackbar({ open: true, mensaje: 'Resultado(s) consultado(s)', type: 'success' });
+        }
+        setSelectedIds([]);
         fetchData();
       } else {
         const data = await response.json().catch(() => ({}));
@@ -255,7 +331,8 @@ export default function AdminDocumentos() {
         body: formData,
       });
       if (response.ok) {
-        setSnackbar({ open: true, mensaje: 'Archivo cargado exitosamente', type: 'success' });
+        const data = await response.json().catch(() => ({}));
+        setUploadResult(data);
         fetchData();
       } else {
         const data = await response.json().catch(() => ({}));
@@ -292,8 +369,12 @@ export default function AdminDocumentos() {
     fetchData();
   };
 
-  const handleFirmaSuccess = () => {
-    setSnackbar({ open: true, mensaje: 'Documentos firmados correctamente', type: 'success' });
+  const handleFirmaSuccess = (data) => {
+    if (data && data['folios recibidos'] !== undefined) {
+      setUploadResult(data);
+    } else {
+      setSnackbar({ open: true, mensaje: 'Documentos firmados correctamente', type: 'success' });
+    }
     setSelectedIds([]);
     fetchData();
   };
@@ -326,18 +407,35 @@ export default function AdminDocumentos() {
   ];
 
   const columns = [
-    { field: 'code', headerName: 'Folio', width: 120 },
-    { field: 'name', headerName: 'Nombre', width: 130 },
-    { field: 'firstName', headerName: 'Paterno', width: 120 },
-    { field: 'secondName', headerName: 'Materno', width: 120 },
-    { field: 'CURP', headerName: 'CURP', width: 200 },
-    { field: 'programName', headerName: 'Programa', width: 130 },
-    { field: 'ies', headerName: 'Institución', width: 130 },
-    { field: 'rvoe', headerName: 'RVOE', width: 120 },
+    {
+      field: 'code', headerName: 'Folio', flex: 0.7, minWidth: 120,
+    },
+    {
+      field: 'name', headerName: 'Nombre', flex: 1, minWidth: 120,
+    },
+    {
+      field: 'firstName', headerName: 'Paterno', flex: 0.8, minWidth: 100,
+    },
+    {
+      field: 'secondName', headerName: 'Materno', flex: 0.8, minWidth: 100,
+    },
+    {
+      field: 'CURP', headerName: 'CURP', flex: 1.2, minWidth: 180,
+    },
+    {
+      field: 'programName', headerName: 'Programa', flex: 1, minWidth: 120,
+    },
+    {
+      field: 'ies', headerName: 'Institución', flex: 1, minWidth: 120,
+    },
+    {
+      field: 'rvoe', headerName: 'RVOE', flex: 0.7, minWidth: 100,
+    },
     {
       field: 'status',
       headerName: 'Status',
-      width: 130,
+      flex: 0.7,
+      minWidth: 110,
       renderCell: (params) => {
         const colorMap = {
           ELABORADO: '#ff9800',
@@ -363,35 +461,44 @@ export default function AdminDocumentos() {
       sortable: false,
       renderCell: (params) => (
         <Box>
-          <IconButton size="small" color="primary" onClick={() => handleEdit(params.row.id)}>
-            <EditIcon fontSize="small" />
-          </IconButton>
-          <IconButton
-            size="small"
-            color="info"
-            onClick={() => handleSendKey(params.row.id)}
-            title="Enviar a SEP"
-            disabled={params.row.status !== 'ELABORADO'}
-          >
-            <SendIcon fontSize="small" />
-          </IconButton>
-          <IconButton
-            size="small"
-            color="success"
-            onClick={() => handleGetKey(params.row.id)}
-            title="Consultar resultado"
-            disabled={params.row.status !== 'ENVIADO'}
-          >
-            <DownloadIcon fontSize="small" />
-          </IconButton>
-          <IconButton
-            size="small"
-            color="error"
-            onClick={() => handleDelete(params.row.id, 1)}
-            title="Eliminar"
-          >
-            <DeleteIcon fontSize="small" />
-          </IconButton>
+          <Tooltip title="Editar documento" arrow>
+            <IconButton size="small" color="primary" onClick={() => handleEdit(params.row.id)}>
+              <EditIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Enviar folio a SEP" arrow>
+            <span>
+              <IconButton
+                size="small"
+                color="info"
+                onClick={() => handleSendKey(params.row.id)}
+                disabled={params.row.status !== 'ELABORADO'}
+              >
+                <SendIcon fontSize="small" />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title="Consultar resultado SEP" arrow>
+            <span>
+              <IconButton
+                size="small"
+                color="success"
+                onClick={() => handleGetKey(params.row.id)}
+                disabled={params.row.status !== 'ENVIADO'}
+              >
+                <DownloadIcon fontSize="small" />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title="Eliminar documento" arrow>
+            <IconButton
+              size="small"
+              color="error"
+              onClick={() => handleDelete(params.row.id, 1)}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
         </Box>
       ),
     },
@@ -409,7 +516,7 @@ export default function AdminDocumentos() {
     <AdminLayout title="Documentos / Títulos Electrónicos">
       <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               size="small"
@@ -424,6 +531,25 @@ export default function AdminDocumentos() {
               }}
             />
           </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Autocomplete
+              size="small"
+              options={centers}
+              getOptionLabel={(opt) => (typeof opt === 'string' ? opt : opt.label || '')}
+              filterOptions={filterCenters}
+              noOptionsText="Sin resultados"
+              value={centerFilter}
+              onChange={(_, newVal) => {
+                setCenterFilter(newVal);
+                setPage(0);
+              }}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField {...params} label="Institución" />
+              )}
+              isOptionEqualToValue={(opt, val) => opt.value === val.value}
+            />
+          </Grid>
           <Grid item>
             <IconButton color="primary" onClick={() => { setPage(0); fetchData(); }}>
               <SearchIcon />
@@ -433,6 +559,7 @@ export default function AdminDocumentos() {
               onClick={() => {
                 setSearch('');
                 setStatusFilter('');
+                setCenterFilter(null);
                 setPage(0);
               }}
             >
@@ -485,7 +612,7 @@ export default function AdminDocumentos() {
             {totalRows}
             )
           </Typography>
-          <Box sx={{ display: 'flex', gap: 1 }}>
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
             <Button
               variant="outlined"
               component="label"
@@ -495,6 +622,38 @@ export default function AdminDocumentos() {
               Carga Masiva
               <input type="file" accept=".xlsx,.xls" hidden onChange={handleUploadXls} />
             </Button>
+            <Tooltip title="Enviar seleccionados a SEP" arrow>
+              <span>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  startIcon={<SendIcon />}
+                  size="small"
+                  disabled={selectedIds.length === 0}
+                  onClick={() => handleSendKey(null)}
+                >
+                  Enviar SEP (
+                  {selectedIds.length}
+                  )
+                </Button>
+              </span>
+            </Tooltip>
+            <Tooltip title="Consultar resultado SEP de seleccionados" arrow>
+              <span>
+                <Button
+                  variant="outlined"
+                  color="success"
+                  startIcon={<DownloadIcon />}
+                  size="small"
+                  disabled={selectedIds.length === 0}
+                  onClick={() => handleGetKey(null)}
+                >
+                  Consultar SEP (
+                  {selectedIds.length}
+                  )
+                </Button>
+              </span>
+            </Tooltip>
             <Button
               variant="contained"
               color="secondary"
@@ -561,6 +720,123 @@ export default function AdminDocumentos() {
         selectedIds={selectedIds}
         onSuccess={handleFirmaSuccess}
       />
+
+      {/* Dialog resultado carga masiva / firma */}
+      <Dialog
+        open={!!uploadResult}
+        onClose={() => setUploadResult(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {uploadResult?.['folios recibidos'] !== undefined
+            ? 'Resultado de Firma'
+            : 'Resultado de Carga Masiva'}
+        </DialogTitle>
+        <DialogContent dividers>
+          {uploadResult && uploadResult['registros recibidos'] !== undefined && (
+            <Box>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Registros recibidos:
+                {' '}
+                <strong>{uploadResult['registros recibidos']}</strong>
+              </Typography>
+
+              <Divider sx={{ my: 1.5 }} />
+
+              <Typography variant="subtitle2" sx={{ mb: 1, color: '#2e7d32' }}>
+                Generados (
+                {(uploadResult['registros generados'] || []).length}
+                ):
+              </Typography>
+              <Box sx={{
+                display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2,
+              }}
+              >
+                {(uploadResult['registros generados'] || []).map((folio) => (
+                  <Chip key={folio} label={folio} size="small" color="success" variant="outlined" />
+                ))}
+                {(uploadResult['registros generados'] || []).length === 0 && (
+                  <Typography variant="body2" color="textSecondary">Ninguno</Typography>
+                )}
+              </Box>
+
+              {(uploadResult['registros no generados'] || []).length > 0 && (
+                <>
+                  <Divider sx={{ my: 1.5 }} />
+                  <Typography variant="subtitle2" sx={{ mb: 1, color: '#c62828' }}>
+                    No generados (
+                    {(uploadResult['registros no generados'] || []).length}
+                    ):
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                    {(uploadResult['registros no generados'] || []).map((msg) => (
+                      <Chip
+                        key={msg}
+                        label={msg}
+                        size="small"
+                        color="error"
+                        variant="outlined"
+                        sx={{ justifyContent: 'flex-start' }}
+                      />
+                    ))}
+                  </Box>
+                </>
+              )}
+            </Box>
+          )}
+
+          {uploadResult && uploadResult['folios recibidos'] !== undefined && (
+            <Box>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Folios recibidos:
+                {' '}
+                <strong>{uploadResult['folios recibidos']}</strong>
+              </Typography>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Autenticados:
+                {' '}
+                <strong style={{ color: '#2e7d32' }}>
+                  {uploadResult['folios autenticados'] || 0}
+                </strong>
+              </Typography>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                No autenticados:
+                {' '}
+                <strong style={{ color: '#c62828' }}>
+                  {uploadResult['folios no autenticados'] || 0}
+                </strong>
+              </Typography>
+
+              {(uploadResult.errores || []).length > 0 && (
+                <>
+                  <Divider sx={{ my: 1.5 }} />
+                  <Typography variant="subtitle2" sx={{ mb: 1, color: '#c62828' }}>
+                    Errores (
+                    {uploadResult.errores.length}
+                    ):
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                    {uploadResult.errores.map((err) => (
+                      <Chip
+                        key={`${err.folio}-${err.error}`}
+                        label={`${err.folio}: ${err.error}`}
+                        size="small"
+                        color="error"
+                        variant="outlined"
+                        sx={{ justifyContent: 'flex-start' }}
+                      />
+                    ))}
+                  </Box>
+                </>
+              )}
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setUploadResult(null)}>Cerrar</Button>
+        </DialogActions>
+      </Dialog>
 
       <SnackAlert
         open={snackbar.open}
