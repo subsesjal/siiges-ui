@@ -56,7 +56,7 @@ export default function FormRevalidaciones() {
         nombreCarrera: '',
       },
       institucionDestino: {
-        tipoInstitucionId: '',
+        tipoInstitucionId: 4,
         programaId: '',
         nombre: '',
         acuerdoRvoe: '',
