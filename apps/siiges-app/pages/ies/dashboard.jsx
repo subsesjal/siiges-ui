@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
   Box,
   Grid,
@@ -9,6 +10,12 @@ import {
   Button,
   IconButton,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Chip,
+  Divider,
 } from '@mui/material';
 import { DataGrid, esES } from '@mui/x-data-grid';
 import SearchIcon from '@mui/icons-material/Search';
@@ -18,6 +25,17 @@ import { Logo, SnackAlert } from '@siiges-ui/shared';
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import FirmaValidacionModal from '../../components/ies/FirmaValidacionModal';
 
+const STATUS_OPTIONS = [
+  { value: '', label: 'Todos', color: '#555' },
+  { value: 'ELABORADO', label: 'Elaborado', color: '#ff9800' },
+  { value: 'ENVIADO', label: 'Enviado', color: '#2196f3' },
+  { value: 'ACEPTADO', label: 'Aceptado', color: '#4caf50' },
+  { value: 'AUTORIZADO', label: 'Autorizado', color: '#1b5e20' },
+  { value: 'VALIDADO', label: 'Validado', color: '#00897b' },
+  { value: 'RECHAZADO', label: 'Rechazado', color: '#f44336' },
+  { value: 'CANCELADO', label: 'Cancelado', color: '#9e9e9e' },
+];
+
 export default function IESDashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -25,7 +43,10 @@ export default function IESDashboard() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [error, setError] = useState('');
   const [openModal, setOpenModal] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, mensaje: '', type: 'info' });
+  const [firmaResult, setFirmaResult] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false, mensaje: '', type: 'info',
+  });
 
   // Filtros
   const [filters, setFilters] = useState({
@@ -37,8 +58,8 @@ export default function IESDashboard() {
     carrera: '',
     institucion: '',
     rvoe: '',
-    status: '',
   });
+  const [statusFilter, setStatusFilter] = useState('');
 
   const fetchData = useCallback(async () => {
     const token = sessionStorage.getItem('iesToken');
@@ -54,13 +75,13 @@ export default function IESDashboard() {
     try {
       const url = process.env.NEXT_PUBLIC_URL_TITULOS;
 
-      // Construir query params
       const queryParams = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
         if (value) {
           queryParams.append(key, value);
         }
       });
+      if (statusFilter) queryParams.append('status', statusFilter);
 
       const queryString = queryParams.toString();
       const endpoint = `${url}/doc/getDocGrid${queryString ? `?${queryString}` : ''}`;
@@ -93,7 +114,7 @@ export default function IESDashboard() {
     } finally {
       setLoading(false);
     }
-  }, [filters, router]);
+  }, [filters, statusFilter, router]);
 
   useEffect(() => {
     fetchData();
@@ -118,8 +139,8 @@ export default function IESDashboard() {
       carrera: '',
       institucion: '',
       rvoe: '',
-      status: '',
     });
+    setStatusFilter('');
   };
 
   const handleLogout = () => {
@@ -144,39 +165,72 @@ export default function IESDashboard() {
     setOpenModal(true);
   };
 
-  const handleFirmaSuccess = () => {
-    setSnackbar({
-      open: true,
-      mensaje: 'Documentos firmados correctamente',
-      type: 'success',
-    });
+  const handleFirmaSuccess = (data) => {
+    if (data && data.foliosRecibidos !== undefined) {
+      setFirmaResult(data);
+    } else {
+      setSnackbar({
+        open: true,
+        mensaje: 'Documentos firmados correctamente',
+        type: 'success',
+      });
+    }
     setSelectedIds([]);
     fetchData();
   };
 
   const columns = [
-    { field: 'code', headerName: 'Folio', width: 130 },
-    { field: 'name', headerName: 'Nombre', width: 150 },
-    { field: 'firstName', headerName: 'Paterno', width: 130 },
-    { field: 'secondName', headerName: 'Materno', width: 130 },
-    { field: 'CURP', headerName: 'CURP', width: 200 },
-    { field: 'programName', headerName: 'Carrera', width: 100 },
-    { field: 'ies', headerName: 'Institución', width: 100 },
-    { field: 'rvoe', headerName: 'RVOE', width: 130 },
+    {
+      field: 'code', headerName: 'Folio', flex: 0.7, minWidth: 120,
+    },
+    {
+      field: 'name', headerName: 'Nombre', flex: 1, minWidth: 120,
+    },
+    {
+      field: 'firstName', headerName: 'Paterno', flex: 0.8, minWidth: 100,
+    },
+    {
+      field: 'secondName', headerName: 'Materno', flex: 0.8, minWidth: 100,
+    },
+    {
+      field: 'CURP', headerName: 'CURP', flex: 1.2, minWidth: 180,
+    },
+    {
+      field: 'programName', headerName: 'Carrera', flex: 0.8, minWidth: 100,
+    },
+    {
+      field: 'ies', headerName: 'Institución', flex: 1, minWidth: 100,
+    },
+    {
+      field: 'rvoe', headerName: 'RVOE', flex: 0.7, minWidth: 100,
+    },
     {
       field: 'status',
       headerName: 'Status',
-      width: 130,
-      renderCell: (params) => (
-        <Typography
-          sx={{
-            color: params.value === 'AUTORIZADO' ? 'green' : 'orange',
-            fontWeight: 'bold',
-          }}
-        >
-          {params.value}
-        </Typography>
-      ),
+      flex: 0.7,
+      minWidth: 110,
+      renderCell: (params) => {
+        const colorMap = {
+          ELABORADO: '#ff9800',
+          ENVIADO: '#2196f3',
+          ACEPTADO: '#4caf50',
+          RECHAZADO: '#f44336',
+          AUTORIZADO: '#1b5e20',
+          VALIDADO: '#00897b',
+          CANCELADO: '#9e9e9e',
+        };
+        return (
+          <Typography
+            sx={{
+              color: colorMap[params.value] || 'inherit',
+              fontWeight: 'bold',
+              fontSize: '0.85rem',
+            }}
+          >
+            {params.value}
+          </Typography>
+        );
+      },
     },
   ];
 
@@ -184,7 +238,9 @@ export default function IESDashboard() {
     ...esES.components.MuiDataGrid.defaultProps.localeText,
     noRowsLabel: 'No hay registros',
     rowsPerPage: 'Filas por página:',
-    footerRowSelected: (count) => (count !== 1 ? `${count.toLocaleString()} filas seleccionadas` : `${count.toLocaleString()} fila seleccionada`),
+    footerRowSelected: (count) => (count !== 1
+      ? `${count.toLocaleString()} filas seleccionadas`
+      : `${count.toLocaleString()} fila seleccionada`),
   };
 
   return (
@@ -301,16 +357,6 @@ export default function IESDashboard() {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Status"
-                name="status"
-                value={filters.status}
-                onChange={handleFilterChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={1}>
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <IconButton color="primary" onClick={handleSearch}>
                   <SearchIcon />
@@ -321,6 +367,34 @@ export default function IESDashboard() {
               </Box>
             </Grid>
           </Grid>
+
+          {/* Filtros de Status */}
+          <Box sx={{
+            display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2,
+          }}
+          >
+            {STATUS_OPTIONS.map((opt) => (
+              <Button
+                key={opt.value}
+                size="small"
+                variant={statusFilter === opt.value ? 'contained' : 'outlined'}
+                onClick={() => setStatusFilter(opt.value)}
+                sx={{
+                  borderColor: opt.color,
+                  color: statusFilter === opt.value ? 'white' : opt.color,
+                  backgroundColor: statusFilter === opt.value ? opt.color : 'transparent',
+                  '&:hover': {
+                    backgroundColor: opt.color,
+                    color: 'white',
+                  },
+                  textTransform: 'none',
+                  fontWeight: statusFilter === opt.value ? 'bold' : 'normal',
+                }}
+              >
+                {opt.label}
+              </Button>
+            ))}
+          </Box>
         </Paper>
 
         {error && (
@@ -392,6 +466,70 @@ export default function IESDashboard() {
         onSuccess={handleFirmaSuccess}
       />
 
+      {/* Dialog resultado firma */}
+      <Dialog
+        open={!!firmaResult}
+        onClose={() => setFirmaResult(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Resultado de Firma</DialogTitle>
+        <DialogContent dividers>
+          {firmaResult && (
+            <Box>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Folios recibidos:
+                {' '}
+                <strong>{firmaResult.foliosRecibidos || 0}</strong>
+              </Typography>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Generados:
+                {' '}
+                <strong style={{ color: '#2e7d32' }}>
+                  {firmaResult.foliosGenerados || 0}
+                </strong>
+              </Typography>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                No generados:
+                {' '}
+                <strong style={{ color: '#c62828' }}>
+                  {firmaResult.foliosNoGenerados || 0}
+                </strong>
+              </Typography>
+
+              {(firmaResult.errores || []).length > 0 && (
+                <>
+                  <Divider sx={{ my: 1.5 }} />
+                  <Typography variant="subtitle2" sx={{ mb: 1, color: '#c62828' }}>
+                    Errores (
+                    {firmaResult.errores.length}
+                    ):
+                  </Typography>
+                  <Box sx={{
+                    display: 'flex', flexDirection: 'column', gap: 0.5,
+                  }}
+                  >
+                    {firmaResult.errores.map((err) => (
+                      <Chip
+                        key={`${err.folio}-${err.error}`}
+                        label={`${err.folio}: ${err.error}`}
+                        size="small"
+                        color="error"
+                        variant="outlined"
+                        sx={{ justifyContent: 'flex-start' }}
+                      />
+                    ))}
+                  </Box>
+                </>
+              )}
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setFirmaResult(null)}>Cerrar</Button>
+        </DialogActions>
+      </Dialog>
+
       {/* Snackbar */}
       <SnackAlert
         open={snackbar.open}
@@ -403,17 +541,30 @@ export default function IESDashboard() {
       {/* Footer */}
       <Box
         sx={{
+          width: '100%',
           backgroundColor: 'rgb(206, 209, 212)',
           py: 2,
           textAlign: 'center',
+          color: 'white',
           mt: 3,
         }}
       >
-        <Typography variant="body2" sx={{ color: '#3b4245' }}>
+        <Typography variant="body2" style={{ color: '#3b4245' }}>
           &copy; 2026 Secretaría General de Gobierno - Todos los derechos reservados.
         </Typography>
-        <Typography variant="caption" sx={{ color: '#3b4245' }}>
-          DOC01 - 2.0.0
+        <Typography variant="body2" style={{ color: '#3b4245' }}>
+          Edificio MIND Av. Faro #2350 , Colonia: Verde Valle , CP: 44540, Guadalajara, Jalisco
+          Lunes a Viernes de 09:00:00 a 17:00:00 horas
+        </Typography>
+        <Typography variant="body2" style={{ color: '#3b4245' }}>
+          <Link
+            href="https://transparenciasitgej.jalisco.gob.mx/api/api/archivos/1908/download?inline=true"
+            passHref
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Avisos de privacidad
+          </Link>
         </Typography>
       </Box>
     </Box>
