@@ -97,9 +97,10 @@ export default function FirmaValidacionModal({
       });
 
       if (response.ok) {
+        const data = await response.json().catch(() => ({}));
         handleClose();
         if (onSuccess) {
-          onSuccess();
+          onSuccess(data);
         }
       } else if (response.status === 401) {
         setError('Sesión expirada. Por favor, inicie sesión nuevamente.');
