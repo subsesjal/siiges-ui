@@ -76,26 +76,29 @@ export default function AdminTable({
         };
 
         const canConsult = isAdmin || isCeSicyt;
+        const esTitulo = params.row.tipoDocumentoId === 1;
 
-        let IconComponent = ArticleIcon;
+        let IconComponent = null;
         let tooltipTitle = '';
 
         if (isAdmin || isCeSicyt) {
-          if (params.row.estatusSolicitudFolioId === 1 && isAdmin) {
-            IconComponent = EditIcon;
-            tooltipTitle = 'Editar solicitud';
-          } else if (params.row.estatusSolicitudFolioId === 2) {
-            IconComponent = ArticleIcon;
-            tooltipTitle = 'Revisar';
-          } else if (params.row.estatusSolicitudFolioId === 3) {
-            IconComponent = Send;
-            tooltipTitle = 'Envío a titulación';
-          } else if (params.row.estatusSolicitudFolioId === 7) {
-            IconComponent = RuleOutlined;
-            tooltipTitle = 'Envío parcial';
-          } else if (params.row.estatusSolicitudFolioId === 6) {
-            IconComponent = DoneAll;
-            tooltipTitle = 'Envío completo';
+          if (esTitulo) {
+            if (params.row.estatusSolicitudFolioId === 1 && isAdmin) {
+              IconComponent = EditIcon;
+              tooltipTitle = 'Editar solicitud';
+            } else if (params.row.estatusSolicitudFolioId === 2) {
+              IconComponent = ArticleIcon;
+              tooltipTitle = 'Revisar';
+            } else if (params.row.estatusSolicitudFolioId === 3) {
+              IconComponent = Send;
+              tooltipTitle = 'Envío a titulación';
+            } else if (params.row.estatusSolicitudFolioId === 7) {
+              IconComponent = RuleOutlined;
+              tooltipTitle = 'Envío parcial';
+            } else if (params.row.estatusSolicitudFolioId === 6) {
+              IconComponent = DoneAll;
+              tooltipTitle = 'Envío completo';
+            }
           }
 
           return (
