@@ -6,7 +6,7 @@ import {
 } from '@siiges-ui/shared';
 import ArticleIcon from '@mui/icons-material/Article';
 import {
-  RuleOutlined, Send, VisibilityOutlined, DoneAll, ForwardToInbox,
+  RuleOutlined, Send, VisibilityOutlined, DoneAll, ForwardToInbox, EditOutlined,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -45,7 +45,7 @@ export default function AdminTable({
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: 150,
+      width: 180,
       renderCell: (params) => {
         const handleAddClick = () => {
           let accion = 'consultar';
@@ -106,6 +106,14 @@ export default function AdminTable({
                   <VisibilityOutlined />
                 </IconButton>
               </Tooltip>
+              )}
+
+              {canConsult && (
+                <Tooltip title="Ir a Firmar" placement="top">
+                  <IconButton onClick={goToConsult}>
+                    <EditOutlined />
+                  </IconButton>
+                </Tooltip>
               )}
 
               {IconComponent && (

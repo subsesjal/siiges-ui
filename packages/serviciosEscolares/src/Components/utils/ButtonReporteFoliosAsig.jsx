@@ -8,11 +8,16 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { Context, createRecord, getData } from '@siiges-ui/shared';
 import ModalFirmaElectronica from '../FoliosAsignados/FoliosTable/ModalFirmaElectronica';
 
+const AUTORIDAD_HARDCODED = {
+  tipoFirmante: 'ies',
+  cargoFirmante: 'director',
+  curp: 'CURP_FIRMANTE_PLACEHOLDER',
+  nombre: 'NOMBRE FIRMANTE PLACEHOLDER',
+};
+
 export default function ButtonsReporteFoliosAsig({
   id,
   tipoDocumento,
-  libro,
-  foja,
   solicitudFolioAlumnoId,
   estatusFirmado,
   onFirmaSuccess,
@@ -34,13 +39,19 @@ export default function ButtonsReporteFoliosAsig({
 
   const handleConfirmFirma = async ({ pkcs7, objetoPorFirmar }) => {
     try {
-      const response = await createRecord({
-        endpoint: `/solicitudesFolios/firmaDocumento?folioInterno=${objetoPorFirmar.folioInterno}`,
-        data: {
+      const payload = [
+        {
           pkcs7,
+          folioInterno: objetoPorFirmar.folioInterno,
           objetoPorFirmar,
           tipoDocumento: tipoDocumento.toLowerCase(),
+          autoridad: AUTORIDAD_HARDCODED,
         },
+      ];
+
+      const response = await createRecord({
+        endpoint: '/solicitudesFolios/firmaDocumento',
+        data: payload,
       });
 
       if (response.errorMessage) {
@@ -52,7 +63,9 @@ export default function ButtonsReporteFoliosAsig({
         return;
       }
 
-      if (response.data?.estatusFirmado === 'exitoso') {
+      const resultado = response.data?.[0];
+
+      if (resultado?.estatusFirmado === 'exitoso') {
         setNoti({
           open: true,
           message: '¡Documento firmado exitosamente!',
@@ -64,7 +77,7 @@ export default function ButtonsReporteFoliosAsig({
         }
 
         handleCloseFirmaModal();
-      } else if (response.data?.estatusFirmado === 'rechazado') {
+      } else if (resultado?.estatusFirmado === 'rechazado') {
         setNoti({
           open: true,
           message: 'La firma fue rechazada por el servicio',
@@ -191,9 +204,6 @@ export default function ButtonsReporteFoliosAsig({
         onConfirm={handleConfirmFirma}
         title="Firmar Certificado"
         solicitudFolioAlumnoId={solicitudFolioAlumnoId}
-        tipoDocumento={tipoDocumento}
-        foja={foja}
-        libro={libro}
       />
     </>
   );
@@ -209,8 +219,6 @@ ButtonsReporteFoliosAsig.defaultProps = {
 ButtonsReporteFoliosAsig.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tipoDocumento: PropTypes.string,
-  libro: PropTypes.string.isRequired,
-  foja: PropTypes.string.isRequired,
   solicitudFolioAlumnoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   estatusFirmado: PropTypes.string,
   onFirmaSuccess: PropTypes.func,
