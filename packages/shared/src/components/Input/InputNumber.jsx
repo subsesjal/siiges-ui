@@ -22,43 +22,76 @@ function InputNumber({
   max,
   sx,
 }) {
-  const [input, setInput] = useState(value || 0);
-  const [rangeError, setRangeError] = useState(null);
+  const [input, setInput] = useState(value ?? '');
 
   useEffect(() => {
-    setInput(value || 0);
+    setInput(value ?? '');
   }, [value]);
+
+  const clamp = (val) => {
+    let result = val;
+
+    if (min !== null && result < min) result = min;
+    if (max !== null && result > max) result = max;
+
+    return result;
+  };
+
+  const isValidFormat = (val) => {
+    const regex = negative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
+    return regex.test(val);
+  };
 
   const handleOnChange = (e) => {
     const newValue = e.target.value;
-    const numberRegex = negative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
-    const floatValue = newValue === '' ? 0 : parseFloat(newValue);
 
-    if (numberRegex.test(newValue)) {
+    // Permitir escritura libre mientras sea formato válido
+    if (isValidFormat(newValue)) {
       setInput(newValue);
-      onChange({
-        target: {
-          name,
-          value: floatValue,
-        },
-      });
 
-      if (
-        (min !== null && floatValue < min)
-        || (max !== null && floatValue > max)
-      ) {
-        setRangeError(`Number must be between ${min} and ${max}`);
-      } else {
-        setRangeError(null);
+      // Solo emitir si no es algo "incompleto"
+      if (newValue !== '' && newValue !== '-' && newValue !== '.') {
+        const floatValue = parseFloat(newValue);
+
+        if (!Number.isNaN(floatValue)) {
+          onChange({
+            target: {
+              name,
+              value: floatValue,
+            },
+          });
+        }
       }
     }
   };
 
+  const handleOnBlur = (e) => {
+    let finalValue = parseFloat(input);
+
+    if (input === '' || input === '-' || Number.isNaN(finalValue)) {
+      finalValue = min ?? 0;
+    }
+
+    finalValue = clamp(finalValue);
+
+    setInput(finalValue);
+
+    onChange({
+      target: {
+        name,
+        value: finalValue,
+      },
+    });
+
+    if (onblur) onblur(e);
+  };
+
   const increment = () => {
     const currentValue = parseFloat(input) || 0;
-    const newValue = currentValue + 1;
-    if (max !== null && newValue > max) return;
+    const newValue = clamp(currentValue + 1);
+
     setInput(newValue);
+
     onChange({
       target: {
         name,
@@ -69,9 +102,10 @@ function InputNumber({
 
   const decrement = () => {
     const currentValue = parseFloat(input) || 0;
-    const newValue = currentValue - 1;
-    if (min !== null && newValue < min) return;
+    const newValue = clamp(currentValue - 1);
+
     setInput(newValue);
+
     onChange({
       target: {
         name,
@@ -93,10 +127,10 @@ function InputNumber({
       size={size}
       value={input}
       onChange={handleOnChange}
-      onBlur={onblur}
+      onBlur={handleOnBlur}
       onFocus={onfocus}
-      helperText={rangeError || errorMessage}
-      error={!!rangeError || !!errorMessage}
+      helperText={errorMessage}
+      error={!!errorMessage}
       className="data-form"
       type="text"
       sx={sx}

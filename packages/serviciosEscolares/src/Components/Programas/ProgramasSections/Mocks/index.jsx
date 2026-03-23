@@ -27,6 +27,7 @@ const columns = (
   const gradoMap = createGradoMap(grados);
 
   return [
+    { field: 'consecutivo', headerName: 'Consecutivo', width: 120 },
     {
       field: 'grado',
       headerName: 'Grado',
