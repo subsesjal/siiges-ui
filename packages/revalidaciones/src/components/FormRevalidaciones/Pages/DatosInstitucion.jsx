@@ -27,6 +27,30 @@ const PROCEEDING_INSTITUTION_FIELDS = [
     xs: 6,
     required: true,
   },
+  {
+    id: 'telefono',
+    label: 'Teléfono',
+    name: 'telefono',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 4,
+    required: false,
+  },
+  {
+    id: 'paginaWeb',
+    label: 'Página web',
+    name: 'paginaWeb',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 4,
+    required: false,
+  },
+  {
+    id: 'correo',
+    label: 'Correo electrónico',
+    name: 'correo',
+    path: ['interesado', 'institucionProcedencia'],
+    xs: 4,
+    required: false,
+  },
 ];
 
 const PROCEEDING_INSTITUTION_SELECTS = [
@@ -112,6 +136,11 @@ export default function DatosInstitucion({
 
   const tipoInstitucionId = form.interesado?.institucionDestino?.tipoInstitucionId || '';
 
+  const isValidEmail = (email) => {
+    if (!email) return true;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const mapNivelesData = useCallback(
     (item) => ({
       id: item.id,
@@ -143,9 +172,19 @@ export default function DatosInstitucion({
   );
 
   const validateField = useCallback(
-    (value, required, fieldName) => (touched[fieldName] && required && !value
-      ? '¡Este campo es requerido!'
-      : ''),
+    (value, required, fieldName) => {
+      if (!touched[fieldName]) return '';
+
+      if (required && !value) {
+        return '¡Este campo es requerido!';
+      }
+
+      if (fieldName === 'correo' && value && !isValidEmail(value)) {
+        return 'Correo electrónico inválido';
+      }
+
+      return '';
+    },
     [touched],
   );
 
