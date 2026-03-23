@@ -6,13 +6,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   TextField,
   Typography,
   IconButton,
   Box,
-  Collapse,
   CircularProgress,
+  LinearProgress,
 } from '@mui/material';
 import { DropzoneArea } from 'mui-file-dropzone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -20,55 +19,34 @@ import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Context, getData } from '@siiges-ui/shared';
+import { Context } from '@siiges-ui/shared';
+
+// TODO: Estos datos se extraerán del .cer con una dependencia
+const AUTORIDAD_HARDCODED = {
+  tipoFirmante: 'ies',
+  cargoFirmante: 'director',
+  curp: 'CURP_FIRMANTE_PLACEHOLDER',
+  nombre: 'NOMBRE FIRMANTE PLACEHOLDER',
+};
 
 export default function ModalFirmaElectronica({
   open,
   onClose,
   onConfirm,
   title,
-  solicitudFolioAlumnoId,
+  alumnosData,
+  solicitudData,
   disabled,
-  tipoDocumento,
-  libro,
-  foja,
 }) {
   const { setNoti } = useContext(Context);
   const [certificado, setCertificado] = useState(null);
   const [llavePrivada, setLlavePrivada] = useState(null);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showDatosAlumno, setShowDatosAlumno] = useState(false);
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
   const [scriptsLoading, setScriptsLoading] = useState(false);
-
-  const [datosAlumno, setDatosAlumno] = useState(null);
-  const [loadingDatos, setLoadingDatos] = useState(false);
-
-  const fetchDatosAlumno = async () => {
-    if (!solicitudFolioAlumnoId) return;
-
-    setLoadingDatos(true);
-    try {
-      const response = await getData({
-        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${solicitudFolioAlumnoId}`,
-      });
-
-      if (response.data) {
-        setDatosAlumno(response.data);
-      }
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: 'Error al obtener los datos del alumno',
-        type: 'error',
-      });
-    } finally {
-      setLoadingDatos(false);
-    }
-  };
+  const [progreso, setProgreso] = useState(0);
+  const [firmando, setFirmando] = useState(false);
 
   const loadSeguriSignScripts = async () => {
     if (typeof window.pkcs7FromContent === 'function') {
@@ -129,60 +107,10 @@ export default function ModalFirmaElectronica({
   };
 
   useEffect(() => {
-    if (open) {
-      if (!scriptsLoaded && !scriptsLoading) {
-        loadSeguriSignScripts();
-      }
-      if (solicitudFolioAlumnoId && !datosAlumno) {
-        fetchDatosAlumno();
-      }
+    if (open && !scriptsLoaded && !scriptsLoading) {
+      loadSeguriSignScripts();
     }
-  }, [open, solicitudFolioAlumnoId]);
-
-  const construirObjetoPorFirmar = () => {
-    if (!datosAlumno) return null;
-
-    const {
-      alumno,
-      folioDocumentoAlumno,
-      tipoSolicitudFolio,
-    } = datosAlumno;
-    const persona = alumno?.persona;
-    const programa = alumno?.programa;
-    const plantel = programa?.plantel;
-    const domicilio = plantel?.domicilio;
-
-    const direccionPartes = [
-      domicilio?.calle,
-      domicilio?.numero_exterior ? `No. ${domicilio.numero_exterior}` : null,
-      domicilio?.numero_interior ? `Int. ${domicilio.numero_interior}` : null,
-      domicilio?.colonia ? `Col. ${domicilio.colonia}` : null,
-    ].filter(Boolean);
-
-    return {
-      folioInterno: folioDocumentoAlumno?.folioDocumento,
-      foja,
-      libro,
-      tipoDocumento: tipoDocumento.toLowerCase(),
-      tipoSolicitudFolio,
-      nombre: persona?.nombre,
-      apellidoPaterno: persona?.apellidoPaterno,
-      apellidoMaterno: persona?.apellidoMaterno,
-      curp: persona?.curp,
-      programa: {
-        rvoe: programa?.acuerdo_rvoe,
-        nombre: programa?.nombre,
-        nivel: programa?.nivel?.nombre,
-      },
-      institucion: {
-        nombre: plantel?.institucion?.nombre,
-        plantel: {
-          cct: plantel?.clave_centro_trabajo,
-          direccion: direccionPartes.join(', '),
-        },
-      },
-    };
-  };
+  }, [open]);
 
   const arrayBufferToString = (buffer) => {
     let result = '';
@@ -200,30 +128,7 @@ export default function ModalFirmaElectronica({
     reader.readAsArrayBuffer(file);
   });
 
-  const generarPKCS7 = async (certFile, keyFile, pass, dataToSign) => {
-    const certificateBuffer = await readFileAsArrayBuffer(certFile);
-    const privateKeyBuffer = await readFileAsArrayBuffer(keyFile);
-
-    const privateKeyBufferString = arrayBufferToString(privateKeyBuffer);
-    const pKey = privateKeyBufferString.replace(/(-----(BEGIN|END) PRIVATE KEY-----|\r\n|\n)/g, '');
-
-    let cipheredKey;
-    if (pKey.charAt(0) === 'M') {
-      cipheredKey = window.atob(pKey);
-    } else {
-      cipheredKey = privateKeyBufferString;
-    }
-
-    const certKeyBufferString = arrayBufferToString(certificateBuffer);
-    const pCert = certKeyBufferString.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r\n|\n)/g, '');
-
-    let certKey;
-    if (pCert.charAt(0) === 'M') {
-      certKey = window.atob(pCert);
-    } else {
-      certKey = certKeyBufferString;
-    }
-
+  const generarPKCS7 = async (cipheredKey, certKey, pass, dataToSign) => {
     if (typeof window.pkcs7FromContent !== 'function') {
       throw new Error('La función pkcs7FromContent no está disponible');
     }
@@ -237,9 +142,46 @@ export default function ModalFirmaElectronica({
       false,
     );
 
-    const b64PKCS7Message = window.btoa(arrayBufferToString(pkcs7Result));
+    return window.btoa(arrayBufferToString(pkcs7Result));
+  };
 
-    return b64PKCS7Message;
+  const construirObjetoPorFirmar = (alumno) => {
+    const { programa } = solicitudData;
+    const { plantel } = programa;
+    const { domicilio } = plantel;
+    const { persona } = alumno.alumno;
+    const { folioDocumentoAlumno } = alumno;
+
+    const direccionPartes = [
+      domicilio?.calle,
+      domicilio?.numeroExterior ? `No. ${domicilio.numeroExterior}` : null,
+      domicilio?.numeroInterior ? `Int. ${domicilio.numeroInterior}` : null,
+      domicilio?.colonia ? `Col. ${domicilio.colonia}` : null,
+    ].filter(Boolean);
+
+    return {
+      folioInterno: folioDocumentoAlumno?.folioDocumento,
+      foja: folioDocumentoAlumno?.foja?.nombre,
+      libro: folioDocumentoAlumno?.libro?.nombre,
+      tipoDocumento: 'certificado',
+      tipoSolicitudFolio: solicitudData.tipoSolicitudFolio?.nombre,
+      nombre: persona?.nombre,
+      apellidoPaterno: persona?.apellidoPaterno,
+      apellidoMaterno: persona?.apellidoMaterno,
+      curp: persona?.curp,
+      programa: {
+        rvoe: programa?.acuerdoRvoe,
+        nombre: programa?.nombre,
+        nivel: programa?.nivelId,
+      },
+      institucion: {
+        nombre: plantel?.institucion?.nombre,
+        plantel: {
+          cct: plantel?.claveCentroTrabajo,
+          direccion: direccionPartes.join(', '),
+        },
+      },
+    };
   };
 
   const handleCertificadoChange = (files) => {
@@ -262,16 +204,12 @@ export default function ModalFirmaElectronica({
     setLlavePrivada(null);
   };
 
-  const handleToggleDatosAlumno = () => {
-    setShowDatosAlumno(!showDatosAlumno);
-  };
-
   const handleCancel = () => {
     setCertificado(null);
     setLlavePrivada(null);
     setPassword('');
-    setShowDatosAlumno(false);
-    setDatosAlumno(null);
+    setProgreso(0);
+    setFirmando(false);
     onClose();
   };
 
@@ -312,10 +250,10 @@ export default function ModalFirmaElectronica({
       return;
     }
 
-    if (!datosAlumno) {
+    if (!alumnosData || alumnosData.length === 0) {
       setNoti({
         open: true,
-        message: 'Los datos del alumno aún se están cargando',
+        message: 'No hay alumnos para firmar',
         type: 'error',
       });
       return;
@@ -331,42 +269,77 @@ export default function ModalFirmaElectronica({
     }
 
     setLoading(true);
+    setFirmando(true);
+    setProgreso(0);
 
     try {
-      const objetoPorFirmar = construirObjetoPorFirmar();
+      // Procesar certificado y llave una sola vez
+      const certificateBuffer = await readFileAsArrayBuffer(certificado);
+      const privateKeyBuffer = await readFileAsArrayBuffer(llavePrivada);
 
-      const jsonString = JSON.stringify(objetoPorFirmar);
+      const privateKeyBufferString = arrayBufferToString(privateKeyBuffer);
+      const pKey = privateKeyBufferString.replace(/(-----(BEGIN|END) PRIVATE KEY-----|\r\n|\n)/g, '');
 
-      const pkcs7Base64 = await generarPKCS7(
-        certificado,
-        llavePrivada,
-        password,
-        jsonString,
-      );
+      let cipheredKey;
+      if (pKey.charAt(0) === 'M') {
+        cipheredKey = window.atob(pKey);
+      } else {
+        cipheredKey = privateKeyBufferString;
+      }
 
-      await onConfirm({
-        pkcs7: pkcs7Base64,
-        objetoPorFirmar,
-      });
+      const certKeyBufferString = arrayBufferToString(certificateBuffer);
+      const pCert = certKeyBufferString.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r\n|\n)/g, '');
+
+      let certKey;
+      if (pCert.charAt(0) === 'M') {
+        certKey = window.atob(pCert);
+      } else {
+        certKey = certKeyBufferString;
+      }
+
+      // Generar PKCS7 para cada alumno
+      const documentosPayload = [];
+      const totalAlumnos = alumnosData.length;
+
+      for (let i = 0; i < totalAlumnos; i += 1) {
+        const alumno = alumnosData[i];
+        const objetoPorFirmar = construirObjetoPorFirmar(alumno);
+        const jsonString = JSON.stringify(objetoPorFirmar);
+
+        // eslint-disable-next-line no-await-in-loop
+        const pkcs7Base64 = await generarPKCS7(cipheredKey, certKey, password, jsonString);
+
+        documentosPayload.push({
+          pkcs7: pkcs7Base64,
+          folioInterno: objetoPorFirmar.folioInterno,
+          objetoPorFirmar,
+          tipoDocumento: 'certificado',
+          autoridad: AUTORIDAD_HARDCODED,
+        });
+
+        setProgreso(Math.round(((i + 1) / totalAlumnos) * 100));
+      }
+
+      await onConfirm(documentosPayload);
 
       setCertificado(null);
       setLlavePrivada(null);
       setPassword('');
-      setShowDatosAlumno(false);
-      setDatosAlumno(null);
+      setProgreso(0);
+      setFirmando(false);
     } catch (error) {
       setNoti({
         open: true,
         message: error.message || 'Error al procesar la firma',
         type: 'error',
       });
+      setFirmando(false);
     } finally {
       setLoading(false);
     }
   };
 
-  const persona = datosAlumno?.alumno?.persona;
-  const programa = datosAlumno?.alumno?.programa;
+  const totalAlumnos = alumnosData?.length || 0;
 
   return (
     <Dialog
@@ -406,131 +379,41 @@ export default function ModalFirmaElectronica({
           </Box>
         )}
 
-        {loadingDatos && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 2,
-              mb: 2,
-              p: 2,
-              backgroundColor: '#e3f2fd',
-              borderRadius: '8px',
-            }}
-          >
-            <CircularProgress size={20} />
-            <Typography variant="body2">
-              Cargando datos del alumno...
+        <Box
+          sx={{
+            mb: 3,
+            p: 2,
+            backgroundColor: '#e3f2fd',
+            borderRadius: '8px',
+          }}
+        >
+          <Typography variant="body2" color="primary" fontWeight="bold">
+            {`Se firmarán ${totalAlumnos} documento(s)`}
+          </Typography>
+        </Box>
+
+        {firmando && (
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="body2" gutterBottom>
+              {`Generando firmas... ${progreso}%`}
             </Typography>
+            <LinearProgress variant="determinate" value={progreso} />
           </Box>
         )}
 
         <Box sx={{ mb: 3 }}>
-          <Box
+          <Typography
+            variant="subtitle2"
             sx={{
+              fontWeight: 'bold',
+              mb: 1.5,
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
-              mb: 1.5,
             }}
           >
-            <Typography
-              variant="subtitle2"
-              sx={{
-                fontWeight: 'bold',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <BadgeIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
-              Certificado (.cer)
-            </Typography>
-            {datosAlumno && (
-              <IconButton
-                size="small"
-                onClick={handleToggleDatosAlumno}
-                sx={{ color: 'primary.main' }}
-              >
-                {showDatosAlumno ? <VisibilityOffIcon /> : <VisibilityIcon />}
-              </IconButton>
-            )}
-          </Box>
-
-          {datosAlumno && (
-            <Collapse in={showDatosAlumno}>
-              <Box
-                sx={{
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '8px',
-                  p: 2,
-                  mb: 2,
-                  backgroundColor: '#fafafa',
-                }}
-              >
-                <Typography
-                  variant="subtitle2"
-                  color="primary"
-                  gutterBottom
-                  sx={{ fontWeight: 'bold', mb: 2 }}
-                >
-                  Datos del alumno
-                </Typography>
-                <Grid container spacing={1}>
-                  {datosAlumno?.folioDocumentoAlumno?.folioDocumento && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Folio asignado
-                      </Typography>
-                      <Typography variant="body2">
-                        {datosAlumno.folioDocumentoAlumno.folioDocumento}
-                      </Typography>
-                    </Grid>
-                  )}
-                  {programa?.acuerdo_rvoe && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        RVOE
-                      </Typography>
-                      <Typography variant="body2">{programa.acuerdo_rvoe}</Typography>
-                    </Grid>
-                  )}
-                  {datosAlumno?.alumno?.matricula && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Matrícula
-                      </Typography>
-                      <Typography variant="body2">{datosAlumno.alumno.matricula}</Typography>
-                    </Grid>
-                  )}
-                  {persona?.nombre && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Nombre
-                      </Typography>
-                      <Typography variant="body2">{persona.nombre}</Typography>
-                    </Grid>
-                  )}
-                  {persona?.apellidoPaterno && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Apellido Paterno
-                      </Typography>
-                      <Typography variant="body2">{persona.apellidoPaterno}</Typography>
-                    </Grid>
-                  )}
-                  {persona?.apellidoMaterno && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Apellido Materno
-                      </Typography>
-                      <Typography variant="body2">{persona.apellidoMaterno}</Typography>
-                    </Grid>
-                  )}
-                </Grid>
-              </Box>
-            </Collapse>
-          )}
+            <BadgeIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
+            Certificado (.cer)
+          </Typography>
 
           {certificado ? (
             <Box
@@ -623,7 +506,6 @@ export default function ModalFirmaElectronica({
           )}
         </Box>
 
-        {/* Contraseña */}
         <Box>
           <Typography
             variant="subtitle2"
@@ -655,11 +537,11 @@ export default function ModalFirmaElectronica({
         </Button>
         <Button
           onClick={handleConfirm}
-          disabled={loading || disabled || scriptsLoading || loadingDatos}
+          disabled={loading || disabled || scriptsLoading || totalAlumnos === 0}
           variant="contained"
           color="primary"
         >
-          {loading ? 'Firmando...' : 'Firmar'}
+          {loading ? `Firmando ${totalAlumnos} documentos...` : `Firmar ${totalAlumnos} documentos`}
         </Button>
       </DialogActions>
     </Dialog>
@@ -667,8 +549,9 @@ export default function ModalFirmaElectronica({
 }
 
 ModalFirmaElectronica.defaultProps = {
-  title: 'Firma Electrónica',
-  solicitudFolioAlumnoId: null,
+  title: 'Firma Electrónica Masiva',
+  alumnosData: [],
+  solicitudData: null,
   disabled: false,
 };
 
@@ -677,9 +560,7 @@ ModalFirmaElectronica.propTypes = {
   onClose: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   title: PropTypes.string,
-  solicitudFolioAlumnoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  alumnosData: PropTypes.arrayOf(PropTypes.shape()),
+  solicitudData: PropTypes.shape(),
   disabled: PropTypes.bool,
-  tipoDocumento: PropTypes.string.isRequired,
-  libro: PropTypes.string.isRequired,
-  foja: PropTypes.string.isRequired,
 };
