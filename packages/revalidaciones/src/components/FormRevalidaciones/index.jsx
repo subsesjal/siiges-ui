@@ -253,6 +253,8 @@ export default function FormRevalidaciones() {
         return (
           <CargaMaterias
             filesData={filesData}
+            form={form}
+            handleOnChange={handleOnChange}
             setFilesData={setFilesData}
             setNextDisabled={setNextDisabled}
           />

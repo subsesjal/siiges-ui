@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
-import { fileToFormData, InputFile } from '@siiges-ui/shared';
+import { fileToFormData, Input, InputFile } from '@siiges-ui/shared';
 
-export default function CargaMaterias({ filesData, setFilesData }) {
+export default function CargaMaterias({
+  filesData,
+  setFilesData,
+  form,
+  handleOnChange,
+}) {
   const handleFileChange = async (files, name) => {
     try {
       const formData = await fileToFormData(files[0]);
@@ -18,7 +23,9 @@ export default function CargaMaterias({ filesData, setFilesData }) {
 
   const formatUrl = (fileKey) => {
     const fileUrl = filesData[fileKey]?.url || '';
-    return fileUrl.startsWith('blob:') ? `${fileUrl.replace('blob:', '')}` : fileUrl;
+    return fileUrl.startsWith('blob:')
+      ? `${fileUrl.replace('blob:', '')}`
+      : fileUrl;
   };
 
   const isFileUploaded = (fileKey) => !!filesData[fileKey]?.formData;
@@ -33,13 +40,12 @@ export default function CargaMaterias({ filesData, setFilesData }) {
     { label: 'Antecedente académico revalidado', key: 'ANTECEDENTE_ACADEMICO_REVALIDADO' },
     { label: 'Comprobante de pago', key: 'COMPROBANTE_PAGO' },
     { label: 'Traducción al español', key: 'TRADUCCION_ESPANOL' },
-    { label: 'Folio de pago', key: 'FOLIO_PAGO' },
   ];
 
   return (
     <Grid container spacing={1}>
       {documents.map((doc, index) => (
-        <Grid item xs={6} key={doc.key}>
+        <Grid item xs={12} key={doc.key}>
           <InputFile
             label={doc.label}
             id={`file-input-${index}`}
@@ -52,6 +58,17 @@ export default function CargaMaterias({ filesData, setFilesData }) {
           />
         </Grid>
       ))}
+
+      <Grid item xs={12}>
+        <Input
+          label="Folio de pago"
+          id="folioPago"
+          name="folioPago"
+          value={form.folioPago || ''}
+          onChange={handleOnChange}
+          required
+        />
+      </Grid>
     </Grid>
   );
 }
@@ -64,4 +81,9 @@ CargaMaterias.propTypes = {
     }),
   ).isRequired,
   setFilesData: PropTypes.func.isRequired,
+  form: PropTypes.shape({
+    id: PropTypes.number,
+    folioPago: PropTypes.string,
+  }).isRequired,
+  handleOnChange: PropTypes.func.isRequired,
 };
