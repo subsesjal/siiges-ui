@@ -19,15 +19,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
+import forge from 'node-forge';
 import { Context } from '@siiges-ui/shared';
-
-// TODO: Estos datos se extraerán del .cer con una dependencia
-const AUTORIDAD_HARDCODED = {
-  tipoFirmante: 'ies',
-  cargoFirmante: 'director',
-  curp: 'CURP_FIRMANTE_PLACEHOLDER',
-  nombre: 'NOMBRE FIRMANTE PLACEHOLDER',
-};
 
 export default function ModalFirmaElectronica({
   open,
@@ -47,6 +40,53 @@ export default function ModalFirmaElectronica({
   const [scriptsLoading, setScriptsLoading] = useState(false);
   const [progreso, setProgreso] = useState(0);
   const [firmando, setFirmando] = useState(false);
+  const [datosCertificado, setDatosCertificado] = useState(null);
+
+  const extraerDatosCertificado = (certFile) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      try {
+        const arrayBuffer = event.target.result;
+        const bytes = new Uint8Array(arrayBuffer);
+        let binary = '';
+        for (let i = 0; i < bytes.byteLength; i += 1) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+
+        const forgeBuffer = forge.util.createBuffer(binary);
+
+        let cert;
+        try {
+          const asn1 = forge.asn1.fromDer(forgeBuffer);
+          cert = forge.pki.certificateFromAsn1(asn1);
+        } catch (derError) {
+          cert = forge.pki.certificateFromPem(binary);
+        }
+
+        const atributos = cert.subject.attributes;
+
+        const cnField = atributos.find((attr) => attr.type === '2.5.4.3');
+        const nombreCompleto = cnField?.value || '';
+
+        const curpField = atributos.find((attr) => attr.type === '2.5.4.5');
+        const curp = curpField?.value || '';
+
+        resolve({
+          nombre: nombreCompleto,
+          curp,
+          serie: cert.serialNumber,
+          vencimiento: cert.validity.notAfter,
+          emisor: cert.issuer.getField('CN')?.value || '',
+        });
+      } catch (err) {
+        reject(new Error(`Error al leer el certificado: ${err.message}`));
+      }
+    };
+
+    reader.onerror = () => reject(new Error('Error al leer el archivo'));
+    reader.readAsArrayBuffer(certFile);
+  });
 
   const loadSeguriSignScripts = async () => {
     if (typeof window.pkcs7FromContent === 'function') {
@@ -184,9 +224,22 @@ export default function ModalFirmaElectronica({
     };
   };
 
-  const handleCertificadoChange = (files) => {
+  const handleCertificadoChange = async (files) => {
     if (files && files.length > 0) {
-      setCertificado(files[0]);
+      const file = files[0];
+      setCertificado(file);
+
+      try {
+        const datos = await extraerDatosCertificado(file);
+        setDatosCertificado(datos);
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: error.message,
+          type: 'error',
+        });
+        setDatosCertificado(null);
+      }
     }
   };
 
@@ -198,6 +251,7 @@ export default function ModalFirmaElectronica({
 
   const handleRemoveCertificado = () => {
     setCertificado(null);
+    setDatosCertificado(null);
   };
 
   const handleRemoveLlavePrivada = () => {
@@ -210,61 +264,37 @@ export default function ModalFirmaElectronica({
     setPassword('');
     setProgreso(0);
     setFirmando(false);
+    setDatosCertificado(null);
     onClose();
   };
 
   const handleConfirm = async () => {
     if (!certificado) {
-      setNoti({
-        open: true,
-        message: 'Debe seleccionar un archivo de certificado (.cer)',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Debe seleccionar un archivo de certificado (.cer)', type: 'error' });
       return;
     }
-
     if (!llavePrivada) {
-      setNoti({
-        open: true,
-        message: 'Debe seleccionar un archivo de llave privada (.key)',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Debe seleccionar un archivo de llave privada (.key)', type: 'error' });
       return;
     }
-
     if (!password || password.trim() === '') {
-      setNoti({
-        open: true,
-        message: 'Debe ingresar la contraseña de la llave privada',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Debe ingresar la contraseña de la llave privada', type: 'error' });
       return;
     }
-
     if (!scriptsLoaded) {
-      setNoti({
-        open: true,
-        message: 'Las librerías criptográficas aún se están cargando',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Las librerías criptográficas aún se están cargando', type: 'error' });
       return;
     }
-
     if (!alumnosData || alumnosData.length === 0) {
-      setNoti({
-        open: true,
-        message: 'No hay alumnos para firmar',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'No hay alumnos para firmar', type: 'error' });
       return;
     }
-
+    if (!datosCertificado || !datosCertificado.curp || !datosCertificado.nombre) {
+      setNoti({ open: true, message: 'No se pudieron extraer los datos del firmante del certificado', type: 'error' });
+      return;
+    }
     if (typeof window.isWCAPISupported === 'function' && !window.isWCAPISupported()) {
-      setNoti({
-        open: true,
-        message: 'Tu navegador no soporta la API Web Crypto necesaria',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Tu navegador no soporta la API Web Crypto necesaria', type: 'error' });
       return;
     }
 
@@ -273,7 +303,6 @@ export default function ModalFirmaElectronica({
     setProgreso(0);
 
     try {
-      // Procesar certificado y llave una sola vez
       const certificateBuffer = await readFileAsArrayBuffer(certificado);
       const privateKeyBuffer = await readFileAsArrayBuffer(llavePrivada);
 
@@ -297,7 +326,6 @@ export default function ModalFirmaElectronica({
         certKey = certKeyBufferString;
       }
 
-      // Generar PKCS7 para cada alumno
       const documentosPayload = [];
       const totalAlumnos = alumnosData.length;
 
@@ -314,7 +342,12 @@ export default function ModalFirmaElectronica({
           folioInterno: objetoPorFirmar.folioInterno,
           objetoPorFirmar,
           tipoDocumento: 'certificado',
-          autoridad: AUTORIDAD_HARDCODED,
+          autoridad: {
+            tipoFirmante: 'ies',
+            cargoFirmante: 'director',
+            curp: datosCertificado.curp,
+            nombre: datosCertificado.nombre,
+          },
         });
 
         setProgreso(Math.round(((i + 1) / totalAlumnos) * 100));
@@ -327,6 +360,7 @@ export default function ModalFirmaElectronica({
       setPassword('');
       setProgreso(0);
       setFirmando(false);
+      setDatosCertificado(null);
     } catch (error) {
       setNoti({
         open: true,
@@ -347,9 +381,7 @@ export default function ModalFirmaElectronica({
       onClose={handleCancel}
       maxWidth="sm"
       fullWidth
-      PaperProps={{
-        sx: { borderRadius: '12px' },
-      }}
+      PaperProps={{ sx: { borderRadius: '12px' } }}
     >
       <DialogTitle sx={{ pb: 1 }}>
         <Box display="flex" alignItems="center" gap={1}>
@@ -360,32 +392,18 @@ export default function ModalFirmaElectronica({
 
       <DialogContent dividers sx={{ pt: 3 }}>
         {scriptsLoading && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 2,
-              mb: 2,
-              p: 2,
-              backgroundColor: '#fff3e0',
-              borderRadius: '8px',
-            }}
+          <Box sx={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2, p: 2, backgroundColor: '#fff3e0', borderRadius: '8px',
+          }}
           >
             <CircularProgress size={20} />
-            <Typography variant="body2">
-              Cargando librerías criptográficas...
-            </Typography>
+            <Typography variant="body2">Cargando librerías criptográficas...</Typography>
           </Box>
         )}
 
-        <Box
-          sx={{
-            mb: 3,
-            p: 2,
-            backgroundColor: '#e3f2fd',
-            borderRadius: '8px',
-          }}
+        <Box sx={{
+          mb: 3, p: 2, backgroundColor: '#e3f2fd', borderRadius: '8px',
+        }}
         >
           <Typography variant="body2" color="primary" fontWeight="bold">
             {`Se firmarán ${totalAlumnos} documento(s)`}
@@ -400,15 +418,11 @@ export default function ModalFirmaElectronica({
             <LinearProgress variant="determinate" value={progreso} />
           </Box>
         )}
-
         <Box sx={{ mb: 3 }}>
           <Typography
             variant="subtitle2"
             sx={{
-              fontWeight: 'bold',
-              mb: 1.5,
-              display: 'flex',
-              alignItems: 'center',
+              fontWeight: 'bold', mb: 1.5, display: 'flex', alignItems: 'center',
             }}
           >
             <BadgeIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
@@ -416,26 +430,15 @@ export default function ModalFirmaElectronica({
           </Typography>
 
           {certificado ? (
-            <Box
-              sx={{
-                border: '1px solid #4caf50',
-                borderRadius: '8px',
-                p: 2,
-                backgroundColor: '#f1f8e9',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
+            <Box sx={{
+              border: '1px solid #4caf50', borderRadius: '8px', p: 2, backgroundColor: '#f1f8e9', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}
             >
               <Box display="flex" alignItems="center" gap={1}>
                 <CheckCircleIcon color="success" />
                 <Typography variant="body2">{certificado.name}</Typography>
               </Box>
-              <IconButton
-                size="small"
-                onClick={handleRemoveCertificado}
-                disabled={loading}
-              >
+              <IconButton size="small" onClick={handleRemoveCertificado} disabled={loading}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Box>
@@ -453,41 +456,27 @@ export default function ModalFirmaElectronica({
             />
           )}
         </Box>
-
         <Box sx={{ mb: 3 }}>
           <Typography
             variant="subtitle2"
             sx={{
-              fontWeight: 'bold',
-              mb: 1.5,
-              display: 'flex',
-              alignItems: 'center',
+              fontWeight: 'bold', mb: 1.5, display: 'flex', alignItems: 'center',
             }}
           >
             <VpnKeyIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
             Llave privada (.key)
           </Typography>
+
           {llavePrivada ? (
-            <Box
-              sx={{
-                border: '1px solid #4caf50',
-                borderRadius: '8px',
-                p: 2,
-                backgroundColor: '#f1f8e9',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
+            <Box sx={{
+              border: '1px solid #4caf50', borderRadius: '8px', p: 2, backgroundColor: '#f1f8e9', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}
             >
               <Box display="flex" alignItems="center" gap={1}>
                 <CheckCircleIcon color="success" />
                 <Typography variant="body2">{llavePrivada.name}</Typography>
               </Box>
-              <IconButton
-                size="small"
-                onClick={handleRemoveLlavePrivada}
-                disabled={loading}
-              >
+              <IconButton size="small" onClick={handleRemoveLlavePrivada} disabled={loading}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Box>
@@ -505,15 +494,11 @@ export default function ModalFirmaElectronica({
             />
           )}
         </Box>
-
         <Box>
           <Typography
             variant="subtitle2"
             sx={{
-              fontWeight: 'bold',
-              mb: 1.5,
-              display: 'flex',
-              alignItems: 'center',
+              fontWeight: 'bold', mb: 1.5, display: 'flex', alignItems: 'center',
             }}
           >
             <LockIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
@@ -530,7 +515,6 @@ export default function ModalFirmaElectronica({
           />
         </Box>
       </DialogContent>
-
       <DialogActions sx={{ p: 2 }}>
         <Button onClick={handleCancel} disabled={loading} color="inherit">
           Cancelar
