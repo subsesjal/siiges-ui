@@ -423,10 +423,10 @@ export default function AdminDocumentos() {
       field: 'CURP', headerName: 'CURP', flex: 1.2, minWidth: 180,
     },
     {
-      field: 'programName', headerName: 'Programa', flex: 1, minWidth: 120,
+      field: 'programName', headerName: 'Programa', flex: 1, minWidth: 80,
     },
     {
-      field: 'ies', headerName: 'Institución', flex: 1, minWidth: 120,
+      field: 'ies', headerName: 'Institución', flex: 1, minWidth: 80,
     },
     {
       field: 'rvoe', headerName: 'RVOE', flex: 0.7, minWidth: 100,
@@ -501,6 +501,9 @@ export default function AdminDocumentos() {
           </Tooltip>
         </Box>
       ),
+    },
+    {
+      field: 'note', headerName: 'Nota', flex: 1.2, minWidth: 380,
     },
   ];
 
