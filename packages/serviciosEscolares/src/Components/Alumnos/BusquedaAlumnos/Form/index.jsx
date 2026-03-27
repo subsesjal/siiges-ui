@@ -29,6 +29,7 @@ export default function BusquedaAlumnosForm() {
           text="Buscar"
           onClick={() => {}}
           design="buscar"
+          fullWidth
         >
           <SearchIcon />
         </ButtonSimple>
