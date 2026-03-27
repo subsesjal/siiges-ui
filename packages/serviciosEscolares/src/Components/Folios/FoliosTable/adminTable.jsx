@@ -76,28 +76,21 @@ export default function AdminTable({
         };
 
         const canConsult = isAdmin || isCeSicyt;
+        const esDocumentoTitulo = params.row.tipoDocumentoId === 1;
 
-        let IconComponent = ArticleIcon;
-        let tooltipTitle = '';
+        const estatusIconMap = {
+          ...(isAdmin && { 1: { icon: EditIcon, tooltip: 'Editar solicitud' } }),
+          2: { icon: ArticleIcon, tooltip: 'Revisar' },
+          ...(esDocumentoTitulo && { 3: { icon: Send, tooltip: 'Envío a titulación' } }),
+          6: { icon: DoneAll, tooltip: 'Envío completo' },
+          7: { icon: RuleOutlined, tooltip: 'Envío parcial' },
+        };
+
+        const estatusConfig = estatusIconMap[params.row.estatusSolicitudFolioId] ?? null;
+        const IconComponent = estatusConfig?.icon ?? null;
+        const tooltipTitle = estatusConfig?.tooltip ?? '';
 
         if (isAdmin || isCeSicyt) {
-          if (params.row.estatusSolicitudFolioId === 1 && isAdmin) {
-            IconComponent = EditIcon;
-            tooltipTitle = 'Editar solicitud';
-          } else if (params.row.estatusSolicitudFolioId === 2) {
-            IconComponent = ArticleIcon;
-            tooltipTitle = 'Revisar';
-          } else if (params.row.estatusSolicitudFolioId === 3) {
-            IconComponent = Send;
-            tooltipTitle = 'Envío a titulación';
-          } else if (params.row.estatusSolicitudFolioId === 7) {
-            IconComponent = RuleOutlined;
-            tooltipTitle = 'Envío parcial';
-          } else if (params.row.estatusSolicitudFolioId === 6) {
-            IconComponent = DoneAll;
-            tooltipTitle = 'Envío completo';
-          }
-
           return (
             <>
               {canConsult && (
