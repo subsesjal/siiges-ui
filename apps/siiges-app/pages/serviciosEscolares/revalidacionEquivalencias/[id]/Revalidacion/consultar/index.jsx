@@ -1,4 +1,4 @@
-import { Grid } from '@mui/system';
+import { Grid } from '@mui/material';
 import { ConsultRevalidacion } from '@siiges-ui/revalidaciones';
 import { Layout } from '@siiges-ui/shared';
 import React from 'react';
