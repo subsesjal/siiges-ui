@@ -14,12 +14,13 @@ export default function ButtonSimple({
 
   return (
     <Grid container justifyContent={justifyContent}>
-      <Grid item>
+      <Grid item sx={{ width: '100%' }}>
         <Button
           onClick={onClick}
           className={`buttonAdd ${design}`}
           variant="text"
           disabled={disabled}
+          fullWidth
         >
           <Typography variant="body1" style={{ textTransform: 'none' }}>
             {text}

@@ -76,3 +76,22 @@
   background-color: #FF8300;
 }
 
+.buttonAdd.buscar {
+  border-color: #FF8300;
+  justify-content: space-between;
+  padding-left: 16px;
+  padding-right: 16px;
+  width: 100%;
+}
+
+.buttonAdd.buscar:hover {
+  background-color: #FF8300;
+}
+
+.buttonAdd.buscar:disabled {
+  pointer-events: none;
+  border-color: gray;
+  background-color: gray;
+  color: white;
+}
+
