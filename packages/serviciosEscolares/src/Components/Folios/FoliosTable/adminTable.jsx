@@ -6,7 +6,7 @@ import {
 } from '@siiges-ui/shared';
 import ArticleIcon from '@mui/icons-material/Article';
 import {
-  RuleOutlined, Send, VisibilityOutlined, DoneAll, ForwardToInbox, EditOutlined,
+  RuleOutlined, Send, VisibilityOutlined, DoneAll, ForwardToInbox,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -45,7 +45,7 @@ export default function AdminTable({
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: 180,
+      width: 150,
       renderCell: (params) => {
         const handleAddClick = () => {
           let accion = 'consultar';
@@ -94,35 +94,27 @@ export default function AdminTable({
           return (
             <>
               {canConsult && (
-              <Tooltip title="Consultar" placement="top">
-                <IconButton onClick={goToConsult}>
-                  <VisibilityOutlined />
-                </IconButton>
-              </Tooltip>
-              )}
-
-              {canConsult && (
-                <Tooltip title="Ir a Firmar" placement="top">
+                <Tooltip title="Consultar" placement="top">
                   <IconButton onClick={goToConsult}>
-                    <EditOutlined />
+                    <VisibilityOutlined />
                   </IconButton>
                 </Tooltip>
               )}
 
               {IconComponent && (
-              <Tooltip title={tooltipTitle} placement="top">
-                <IconButton onClick={handleAddClick}>
-                  <IconComponent />
-                </IconButton>
-              </Tooltip>
+                <Tooltip title={tooltipTitle} placement="top">
+                  <IconButton onClick={handleAddClick}>
+                    <IconComponent />
+                  </IconButton>
+                </Tooltip>
               )}
 
               {params.row.estatusSolicitudFolioId === 3 && (
-              <Tooltip title="Reenviar correo" placement="top">
-                <IconButton onClick={handleOpenConfirm}>
-                  <ForwardToInbox />
-                </IconButton>
-              </Tooltip>
+                <Tooltip title="Reenviar correo" placement="top">
+                  <IconButton onClick={handleOpenConfirm}>
+                    <ForwardToInbox />
+                  </IconButton>
+                </Tooltip>
               )}
             </>
           );
