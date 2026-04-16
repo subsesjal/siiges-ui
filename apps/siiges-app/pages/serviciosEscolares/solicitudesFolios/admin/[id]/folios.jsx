@@ -22,7 +22,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { ModalCertificado, ModalTitulo, ButtonsFoliosAdmin } from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 import Divider from '@mui/material/Divider';
@@ -47,8 +46,7 @@ export default function Folios() {
   const [observaciones, setObservaciones] = useState('');
   const [estatus, setEstatus] = useState();
   const [alumnosRows, setAlumnosRows] = useState([]);
-  const [alumnoData, setAlumnoData] = useState([]);
-  const [solicitudData, setSolicitudData] = useState(null);
+  const [alumnoData, setAlumnoData] = useState({});
   const [alumnoResponse, setAlumnoResponse] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [alumnoToDelete, setAlumnoToDelete] = useState(null);
@@ -77,7 +75,6 @@ export default function Folios() {
             endpoint: `/solicitudesFolios/${id}`,
           });
           const { data } = response;
-          setSolicitudData(data);
           setObservaciones(data.observaciones || '');
           setEtiquetas({
             tipoDocumento: data.tipoDocumento?.nombre || '',
@@ -123,7 +120,6 @@ export default function Folios() {
               foja: res.folioDocumentoAlumno?.foja?.nombre,
               libro: res.folioDocumentoAlumno?.libro?.nombre,
               envio: res.folioDocumentoAlumno?.envioExitoso ? 'Enviado' : 'Pendiente',
-              estatusFirmado: res.folioDocumentoAlumno?.estatusFirmado || null,
               fechaExpedicion: dayjs(res.fechaExpedicion).format('DD/MM/YYYY'),
               fechaTerminacion: dayjs(res.fechaTerminacion).format('DD/MM/YYYY'),
             }));
@@ -222,60 +218,6 @@ export default function Folios() {
     }
   };
 
-  const handleFirmaSuccess = async (documentosPayload) => {
-    setLoading(true);
-    try {
-      const response = await createRecord({
-        endpoint: '/solicitudesFolios/firmaDocumento',
-        data: documentosPayload,
-      });
-
-      if (response.errorMessage) {
-        setNoti({
-          open: true,
-          message: response.errorMessage,
-          type: 'error',
-        });
-        return;
-      }
-
-      const resultados = response.data || [];
-      const exitosos = resultados.filter((r) => r.estatusFirmado === 'exitoso').length;
-      const rechazados = resultados.filter((r) => r.estatusFirmado === 'rechazado').length;
-
-      if (exitosos > 0 && rechazados === 0) {
-        setNoti({
-          open: true,
-          message: `¡${exitosos} documento(s) firmado(s) exitosamente!`,
-          type: 'success',
-        });
-      } else if (exitosos > 0 && rechazados > 0) {
-        setNoti({
-          open: true,
-          message: `${exitosos} firmado(s), ${rechazados} rechazado(s)`,
-          type: 'warning',
-        });
-      } else {
-        setNoti({
-          open: true,
-          message: 'No se pudo firmar ningún documento',
-          type: 'error',
-        });
-      }
-
-      // Recargar datos para actualizar la tabla
-      setAlumnoResponse(true);
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: error.message || 'Error al firmar los documentos',
-        type: 'error',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -298,50 +240,10 @@ export default function Folios() {
       });
     }
   };
-
   const handleDeleteAlumno = (alumnoId) => {
     setAlumnoToDelete(alumnoId);
     setOpenDeleteModal(true);
   };
-
-  const handleGenerarPDF = async (alumnoId) => {
-    setLoading(true);
-    try {
-      const response = await getData({
-        endpoint: `/files?tipoEntidad=FOLIO_DOCUMENTO_ALUMNO&entidadId=${alumnoId}&tipoDocumento=CERTIFICADO_ELECTRONICO_PDF`,
-      });
-
-      if (response.errorMessage) {
-        setNoti({
-          open: true,
-          message: response.errorMessage,
-          type: 'error',
-        });
-        return;
-      }
-
-      if (response.data?.url) {
-        window.open(response.data.url, '_blank');
-      } else if (typeof response.data === 'string') {
-        window.open(response.data, '_blank');
-      } else {
-        setNoti({
-          open: true,
-          message: 'No se pudo obtener el PDF',
-          type: 'error',
-        });
-      }
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: error.message || 'Error al generar el PDF',
-        type: 'error',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const confirmDeleteAlumno = async () => {
     if (!alumnoToDelete) return;
 
@@ -372,9 +274,6 @@ export default function Folios() {
       setAlumnoToDelete(null);
     }
   };
-
-  const esCertificado = etiquetas.tipoDocumento === 'Certificado';
-
   const alumnosColumns = [
     {
       field: 'id', headerName: 'ID', width: 100, hide: true,
@@ -401,46 +300,25 @@ export default function Folios() {
       field: 'actions',
       headerName: 'Acciones',
       width: 150,
-      renderCell: (params) => {
-        const firmadoExitoso = params.row.estatusFirmado === 'exitoso';
+      renderCell: (params) => (
+        <>
+          <Tooltip title="Consultar" placement="top">
+            <IconButton onClick={() => handleConsult(params.row.id)}>
+              <VisibilityOutlinedIcon />
+            </IconButton>
+          </Tooltip>
 
-        return (
-          <>
-            <Tooltip title="Consultar" placement="top">
-              <IconButton onClick={() => handleConsult(params.row.id)}>
-                <VisibilityOutlinedIcon />
+          {estatus === 2 && (
+            <Tooltip title="Eliminar alumno" placement="top">
+              <IconButton
+                onClick={() => handleDeleteAlumno(params.row.id)}
+              >
+                <DeleteIcon />
               </IconButton>
             </Tooltip>
-
-            {estatus === 2 && (
-              <Tooltip title="Eliminar alumno" placement="top">
-                <IconButton
-                  onClick={() => handleDeleteAlumno(params.row.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-
-            {esCertificado && estatus === 3 && (
-              <Tooltip
-                title={firmadoExitoso ? 'Generar PDF' : 'Debe firmar primero'}
-                placement="top"
-              >
-                <span>
-                  <IconButton
-                    onClick={() => handleGenerarPDF(params.row.id)}
-                    disabled={!firmadoExitoso}
-                    color={firmadoExitoso ? 'primary' : 'default'}
-                  >
-                    <PictureAsPdfIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
-            )}
-          </>
-        );
-      },
+          )}
+        </>
+      ),
     },
   ];
 
@@ -664,9 +542,6 @@ export default function Folios() {
             folios={handleFoliosSubmit}
             estatus={estatus}
             isConsult={accion === 'consultar'}
-            alumnosData={alumnoData}
-            solicitudData={solicitudData}
-            onFirmaSuccess={handleFirmaSuccess}
           />
           <DefaultModal
             title="Eliminar alumno"

@@ -20,7 +20,7 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
 import forge from 'node-forge';
-import { Context } from '@siiges-ui/shared';
+import { Context, updateRecord } from '@siiges-ui/shared';
 
 export default function ModalFirmaElectronica({
   open,
@@ -87,6 +87,38 @@ export default function ModalFirmaElectronica({
     reader.onerror = () => reject(new Error('Error al leer el archivo'));
     reader.readAsArrayBuffer(certFile);
   });
+
+  const validarRepresentante = async (curp) => {
+    const apiUrl = process.env.NEXT_PUBLIC_URL_API_TITULO;
+    const apiKey = process.env.NEXT_PUBLIC_API_KEY_REPRESENTANTES;
+
+    const response = await fetch(`${apiUrl}/representantes-legales/${curp}`, {
+      method: 'GET',
+      headers: {
+        'x-api-key': apiKey,
+      },
+    });
+
+    if (response.status === 404) {
+      throw new Error('El firmante no está registrado como representante legal.');
+    }
+    if (response.status === 400) {
+      throw new Error('El CURP del certificado tiene un formato inválido.');
+    }
+    if (response.status === 401) {
+      throw new Error('No autorizado para consultar representantes legales.');
+    }
+    if (!response.ok) {
+      throw new Error('Error al validar el representante legal.');
+    }
+
+    const data = await response.json();
+    const nombreFirmante = [data.nombre, data.primerApellido, data.segundoApellido]
+      .filter(Boolean)
+      .join(' ');
+
+    return nombreFirmante;
+  };
 
   const loadSeguriSignScripts = async () => {
     if (typeof window.pkcs7FromContent === 'function') {
@@ -303,6 +335,9 @@ export default function ModalFirmaElectronica({
     setProgreso(0);
 
     try {
+      // Validar representante legal antes de firmar
+      const nombreFirmante = await validarRepresentante(datosCertificado.curp);
+
       const certificateBuffer = await readFileAsArrayBuffer(certificado);
       const privateKeyBuffer = await readFileAsArrayBuffer(llavePrivada);
 
@@ -346,14 +381,31 @@ export default function ModalFirmaElectronica({
             tipoFirmante: 'ies',
             cargoFirmante: 'director',
             curp: datosCertificado.curp,
-            nombre: datosCertificado.nombre,
+            nombre: nombreFirmante,
           },
         });
 
         setProgreso(Math.round(((i + 1) / totalAlumnos) * 100));
       }
 
-      await onConfirm(documentosPayload);
+      const resultados = await onConfirm(documentosPayload);
+
+      const todosExitosos = resultados.every((r) => r.estatusFirmado === 'exitoso');
+      const estatusActual = solicitudData.estatusSolicitudFolioId;
+
+      let nuevoEstatusId = null;
+      if (estatusActual === 3) {
+        nuevoEstatusId = todosExitosos ? 9 : 8;
+      } else if (estatusActual === 9) {
+        nuevoEstatusId = todosExitosos ? 11 : 10;
+      }
+
+      if (nuevoEstatusId) {
+        await updateRecord({
+          endpoint: `/solicitudesFolios/${solicitudData.id}`,
+          data: { estatusSolicitudFolioId: nuevoEstatusId },
+        });
+      }
 
       setCertificado(null);
       setLlavePrivada(null);
@@ -418,6 +470,7 @@ export default function ModalFirmaElectronica({
             <LinearProgress variant="determinate" value={progreso} />
           </Box>
         )}
+
         <Box sx={{ mb: 3 }}>
           <Typography
             variant="subtitle2"
@@ -456,6 +509,7 @@ export default function ModalFirmaElectronica({
             />
           )}
         </Box>
+
         <Box sx={{ mb: 3 }}>
           <Typography
             variant="subtitle2"
@@ -494,6 +548,7 @@ export default function ModalFirmaElectronica({
             />
           )}
         </Box>
+
         <Box>
           <Typography
             variant="subtitle2"
@@ -515,6 +570,7 @@ export default function ModalFirmaElectronica({
           />
         </Box>
       </DialogContent>
+
       <DialogActions sx={{ p: 2 }}>
         <Button onClick={handleCancel} disabled={loading} color="inherit">
           Cancelar

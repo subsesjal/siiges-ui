@@ -5,6 +5,7 @@ import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import DriveFileRenameOutline from '@mui/icons-material/DriveFileRenameOutline';
 import PropTypes from 'prop-types';
 
 const solicitudesTitulos = [
@@ -18,7 +19,10 @@ const solicitudesCertificados = [
   { id: 3, nombre: 'Total' },
 ];
 
-const columns = (handleEdit, handleConsultar) => [
+const ESTATUS_FIRMA = [3, 6, 7, 8, 9];
+const ESTATUS_EDICION = ['EN CAPTURA', 'ATENDER OBSERVACIONES'];
+
+const columns = (handleEdit, handleConsultar, handleFirmar) => [
   {
     field: 'id', headerName: 'ID', width: 70, hide: true,
   },
@@ -37,24 +41,40 @@ const columns = (handleEdit, handleConsultar) => [
   {
     field: 'actions',
     headerName: 'Acciones',
-    width: 150,
-    renderCell: (params) => (
-      <>
-        <Tooltip title="Consultar" placement="top">
-          <IconButton onClick={() => handleConsultar(params.row.id)}>
-            <VisibilityOutlinedIcon />
-          </IconButton>
-        </Tooltip>
-        {(params.row.estatusSolicitudFolioNombre === 'EN CAPTURA'
-          || params.row.estatusSolicitudFolioNombre === 'ATENDER OBSERVACIONES') && (
+    width: 180,
+    renderCell: (params) => {
+      console.log('tipoDocumento recibido:', params.row.tipoDocumentoId, typeof params.row.tipoDocumentoId);
+      const esCertificado = Number(params.row.tipoDocumentoId) === 2;
+      const puedeEditar = ESTATUS_EDICION.includes(params.row.estatusSolicitudFolioNombre);
+      const puedeFirmar = esCertificado
+        && ESTATUS_FIRMA.includes(params.row.estatusSolicitudFolioId);
+
+      return (
+        <>
+          <Tooltip title="Consultar" placement="top">
+            <IconButton onClick={() => handleConsultar(params.row.id)}>
+              <VisibilityOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+
+          {puedeEditar && (
             <Tooltip title="Editar" placement="top">
               <IconButton onClick={() => handleEdit(params.row.id)}>
                 <EditIcon />
               </IconButton>
             </Tooltip>
-        )}
-      </>
-    ),
+          )}
+
+          {puedeFirmar && (
+            <Tooltip title="Firmar" placement="top">
+              <IconButton onClick={() => handleFirmar(params.row.id)}>
+                <DriveFileRenameOutline />
+              </IconButton>
+            </Tooltip>
+          )}
+        </>
+      );
+    },
   },
 ];
 
@@ -89,17 +109,21 @@ function FoliosTable({
 
   const handleEdit = (id) => navigateTo(id, 'edit');
   const handleConsultar = (id) => navigateTo(id, 'consult');
+  const handleFirmar = (id) => navigateTo(id, 'edit');
 
   const formattedSolicitudes = solicitudes
     .filter((solicitud) => !(session?.rol === 'ce_sicyt' && solicitud.estatusSolicitudFolio.id === 1))
     .map((solicitud) => {
       const mapArray = tipoDocumento === 1 ? solicitudesTitulos : solicitudesCertificados;
-      const tipoSolicitudNombre = mapArray.find((s) => s.id === solicitud.tipoSolicitudFolio?.id)?.nombre || 'Sin tipo';
+      const tipoSolicitudNombre = mapArray.find(
+        (s) => s.id === solicitud.tipoSolicitudFolio?.id,
+      )?.nombre || 'Sin tipo';
 
       return {
         ...solicitud,
         programaNombre: solicitud.programa.nombre,
         estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio.nombre,
+        estatusSolicitudFolioId: solicitud.estatusSolicitudFolio.id,
         plantelNombre: solicitud.programa?.plantel
           ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
           : '',
@@ -119,7 +143,7 @@ function FoliosTable({
           buttonDisabled={!filtrosCompletos}
           title="Solicitudes de Títulos"
           rows={formattedSolicitudes}
-          columns={columns(handleEdit, handleConsultar)}
+          columns={columns(handleEdit, handleConsultar, handleFirmar, tipoDocumento)}
         />
       </Grid>
     </Grid>
@@ -142,8 +166,10 @@ FoliosTable.propTypes = {
           institucion: PropTypes.shape({ nombre: PropTypes.string.isRequired }),
         }),
       }).isRequired,
-      // eslint-disable-next-line max-len
-      estatusSolicitudFolio: PropTypes.shape({ id: PropTypes.number, nombre: PropTypes.string.isRequired }).isRequired,
+      estatusSolicitudFolio: PropTypes.shape({
+        id: PropTypes.number,
+        nombre: PropTypes.string.isRequired,
+      }).isRequired,
       plantel: PropTypes.shape({
         institucion: PropTypes.shape({ nombre: PropTypes.string }),
       }),
