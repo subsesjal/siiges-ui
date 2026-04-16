@@ -6,14 +6,13 @@ import NavigationButtons from '../../utils/NavigationButtons';
 import DatosSolicitante from './Pages/DatosSolicitante';
 import DatosInstitucion from './Pages/DatosInstitucion';
 import CargaMaterias from './Pages/CargaMaterias';
-import CargaMateriasEquivalentes from '../FormEquivalencias/Pages/CargaMateriasEquivalentes';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
 export default function FormRevalidaciones() {
   const [currentPosition, setCurrentPosition] = useState(1);
-  const [totalPositions, setTotalPositions] = useState(4);
+  const totalPositions = 3;
   const { setNoti } = useContext(Context);
   const router = useRouter();
   const [filesData, setFilesData] = useState({});
@@ -22,7 +21,6 @@ export default function FormRevalidaciones() {
   const [nextDisabled, setNextDisabled] = useState(true);
   const [validateFields, setValidateFields] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [calificacionesReglas, setCalificacionesReglas] = useState([]);
   const [form, setForm] = useState({
     tipoTramiteId: null,
     estatusSolicitudRevEquivId: 1,
@@ -56,7 +54,7 @@ export default function FormRevalidaciones() {
         nombreCarrera: '',
       },
       institucionDestino: {
-        tipoInstitucionId: '',
+        tipoInstitucionId: 4,
         programaId: '',
         nombre: '',
         acuerdoRvoe: '',
@@ -65,30 +63,6 @@ export default function FormRevalidaciones() {
       },
     },
   });
-
-  useEffect(() => {
-    if ([1, 2, 3].includes(form.tipoTramiteId)) {
-      setTotalPositions(4);
-
-      setForm((prevForm) => ({
-        ...prevForm,
-        interesado: {
-          ...prevForm.interesado,
-          asignaturasAntecedentesEquivalentes: [],
-        },
-      }));
-    } else {
-      setTotalPositions(3);
-
-      setForm((prevForm) => {
-        const { asignaturasAntecedentesEquivalentes, ...restInteresado } = prevForm.interesado;
-        return {
-          ...prevForm,
-          interesado: restInteresado,
-        };
-      });
-    }
-  }, [form.tipoTramiteId]);
 
   useEffect(() => {
     const fetchEstados = async () => {
@@ -246,25 +220,18 @@ export default function FormRevalidaciones() {
             paises={paises}
             validateFields={validateFields}
             setNextDisabled={setNextDisabled}
-            setCalificacionesReglas={setCalificacionesReglas}
           />
         );
       case 3:
         return (
           <CargaMaterias
             filesData={filesData}
+            form={form}
+            handleOnChange={handleOnChange}
             setFilesData={setFilesData}
             setNextDisabled={setNextDisabled}
           />
         );
-      case 4:
-        return [1, 2, 3].includes(form.tipoTramiteId) ? (
-          <CargaMateriasEquivalentes
-            form={form}
-            calificacionesReglas={calificacionesReglas}
-            handleOnChange={handleOnChange}
-          />
-        ) : null;
       default:
         return null;
     }

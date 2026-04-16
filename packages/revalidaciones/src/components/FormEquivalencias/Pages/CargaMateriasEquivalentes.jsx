@@ -270,24 +270,6 @@ export default function CargaMateriasEquivalentes({
   return (
     <>
       <Grid container spacing={1}>
-        <Grid item xs={4}>
-          <LabelData
-            title="Calificación mínima"
-            subtitle={calificacionesReglas.calificacionMinima}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <LabelData
-            title="Calificación máxima"
-            subtitle={calificacionesReglas.calificacionMaxima}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <LabelData
-            title="Calificación aprobatoria"
-            subtitle={calificacionesReglas.calificacionAprobatoria}
-          />
-        </Grid>
 
         <Grid item xs={12}>
           <DataTable
