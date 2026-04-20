@@ -1,25 +1,21 @@
-import {
-  Grid,
-  Typography,
-  Divider,
-} from '@mui/material';
+import { Grid, Typography, Divider } from '@mui/material';
 import { Context, ListTitle, ListSubtitle } from '@siiges-ui/shared';
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { HistorialTable } from '@siiges-ui/serviciosescolares';
 
-export default function HistorialAcademico({ alumno, historial }) {
+export default function HistorialAcademico({ alumno, historial, simple }) {
   const { setLoading } = useContext(Context);
 
   useEffect(() => {
     setLoading(!alumno);
   }, [alumno, setLoading]);
 
-  if (!alumno) {
-    return null;
-  }
+  if (!alumno) return null;
 
-  const totalCreditosPrograma = Number(alumno?.programa?.creditos ?? alumno?.creditos ?? 0);
+  const totalCreditosPrograma = Number(
+    alumno?.programa?.creditos ?? alumno?.creditos ?? 0,
+  );
 
   const asignaturasMap = new Map();
   (historial ?? [])
@@ -33,38 +29,54 @@ export default function HistorialAcademico({ alumno, historial }) {
       }
     });
 
-  const creditosObtenidos = [...asignaturasMap.values()]
-    .reduce((sum, r) => sum + Number(r?.asignatura?.creditos ?? 0), 0);
+  const creditosObtenidos = [...asignaturasMap.values()].reduce(
+    (sum, r) => sum + Number(r?.asignatura?.creditos ?? 0),
+    0,
+  );
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6}>
-        <Typography variant="h6">Calificaciones</Typography>
-      </Grid>
-      <Grid
-        item
-        xs={6}
-        sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
-      >
-        <Grid container alignItems="center" sx={{ width: 'auto' }}>
-          <Grid item>
-            <ListTitle text="Créditos Obtenidos" />
+      {!simple && (
+        <>
+          <Grid item xs={6}>
+            <Typography variant="h6">Calificaciones</Typography>
           </Grid>
-          <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
-          <Grid item>
-            <ListSubtitle text={`${creditosObtenidos} de ${totalCreditosPrograma}`} />
+          <Grid
+            item
+            xs={6}
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
+          >
+            <Grid container alignItems="center" sx={{ width: 'auto' }}>
+              <Grid item>
+                <ListTitle text="Créditos Obtenidos" />
+              </Grid>
+              <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
+              <Grid item>
+                <ListSubtitle
+                  text={`${creditosObtenidos} de ${totalCreditosPrograma}`}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-        </Grid>
-      </Grid>
-
+        </>
+      )}
       <Grid item xs={12}>
-        <HistorialTable alumno={historial} />
+        <HistorialTable alumno={historial} simple={simple} />
       </Grid>
     </Grid>
   );
 }
 
+HistorialAcademico.defaultProps = {
+  simple: false,
+};
+
 HistorialAcademico.propTypes = {
+  simple: PropTypes.bool,
   alumno: PropTypes.shape({
     id: PropTypes.number.isRequired,
     nombre: PropTypes.string.isRequired,
