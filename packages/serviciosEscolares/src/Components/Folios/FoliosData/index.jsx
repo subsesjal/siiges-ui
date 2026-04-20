@@ -267,6 +267,7 @@ export default function FoliosData({ type }) {
               );
               return {
                 id: alumno.id,
+                folioDocumentoAlumnoId: alumno.folioDocumentoAlumno?.id || null,
                 consecutivo: alumno.consecutivo,
                 name: `${alumno.alumno.persona.nombre} ${alumno.alumno.persona.apellidoPaterno} ${alumno.alumno.persona.apellidoMaterno}`,
                 numeroFolioActa: alumno.folioActa || '',
@@ -587,7 +588,7 @@ export default function FoliosData({ type }) {
               >
                 <span>
                   <IconButton
-                    onClick={() => handleGenerarPDF(params.row.id)}
+                    onClick={() => handleGenerarPDF(params.row.folioDocumentoAlumnoId)}
                     disabled={!firmadoExitoso}
                     color={firmadoExitoso ? 'primary' : 'default'}
                   >
