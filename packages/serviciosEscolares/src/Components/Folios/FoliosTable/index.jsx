@@ -19,7 +19,7 @@ const solicitudesCertificados = [
   { id: 3, nombre: 'Total' },
 ];
 
-const ESTATUS_FIRMA = [3, 6, 7, 8, 9];
+const ESTATUS_FIRMA = [3, 6];
 const ESTATUS_EDICION = ['EN CAPTURA', 'ATENDER OBSERVACIONES'];
 
 const columns = (handleEdit, handleConsultar, handleFirmar) => [
@@ -43,7 +43,6 @@ const columns = (handleEdit, handleConsultar, handleFirmar) => [
     headerName: 'Acciones',
     width: 180,
     renderCell: (params) => {
-      console.log('tipoDocumento recibido:', params.row.tipoDocumentoId, typeof params.row.tipoDocumentoId);
       const esCertificado = Number(params.row.tipoDocumentoId) === 2;
       const puedeEditar = ESTATUS_EDICION.includes(params.row.estatusSolicitudFolioNombre);
       const puedeFirmar = esCertificado
@@ -143,7 +142,7 @@ function FoliosTable({
           buttonDisabled={!filtrosCompletos}
           title="Solicitudes de Títulos"
           rows={formattedSolicitudes}
-          columns={columns(handleEdit, handleConsultar, handleFirmar, tipoDocumento)}
+          columns={columns(handleEdit, handleConsultar, handleFirmar)}
         />
       </Grid>
     </Grid>

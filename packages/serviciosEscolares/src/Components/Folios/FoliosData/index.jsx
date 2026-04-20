@@ -160,10 +160,10 @@ export default function FoliosData({ type }) {
       : 'Consultar Envio de Solicitud a Titulación';
   } else if (estatus === 4) {
     title = 'Atender Observaciones de Solicitud';
-  } else if (estatus === 8 || estatus === 9) {
+  } else if (estatus === 6) {
+    title = 'Firma Parcial de Certificados IES';
+  } else if (estatus === 7) {
     title = 'Firma de Certificados IES';
-  } else if (estatus === 10 || estatus === 11) {
-    title = 'Firma de Certificados SICYT';
   }
 
   useEffect(() => {
@@ -501,6 +501,8 @@ export default function FoliosData({ type }) {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
+  const estaEnModoFirma = estatus === 6 || estatus === 7;
+
   const columnsTitulo = (handleEditFn, handleConsultFn, handleDeleteFn) => [
     { field: 'id', headerName: 'ID', hide: true },
     { field: 'consecutivo', headerName: 'Consecutivo', width: 150 },
@@ -564,23 +566,21 @@ export default function FoliosData({ type }) {
                 <VisibilityOutlinedIcon />
               </IconButton>
             </Tooltip>
-            {status !== 'consult' && estatus !== 8 && estatus !== 9
-              && estatus !== 10 && estatus !== 11 && (
-                <Tooltip title="Editar" placement="top">
-                  <IconButton onClick={() => handleEditFn(params.row.id)}>
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
+            {status !== 'consult' && !estaEnModoFirma && (
+              <Tooltip title="Editar" placement="top">
+                <IconButton onClick={() => handleEditFn(params.row.id)}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
             )}
-            {status !== 'consult' && estatus !== 8 && estatus !== 9
-              && estatus !== 10 && estatus !== 11 && (
-                <Tooltip title="Eliminar alumno" placement="top">
-                  <IconButton onClick={() => handleDeleteFn(params.row.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
+            {status !== 'consult' && !estaEnModoFirma && (
+              <Tooltip title="Eliminar alumno" placement="top">
+                <IconButton onClick={() => handleDeleteFn(params.row.id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
             )}
-            {esCertificado && estatus === 11 && (
+            {esCertificado && estatus === 7 && (
               <Tooltip
                 title={firmadoExitoso ? 'Generar PDF' : 'Debe firmar primero'}
                 placement="top"
@@ -602,13 +602,11 @@ export default function FoliosData({ type }) {
     },
   ];
 
-  const debesMostrarFirma = esCertificado && (
-    estatus === 3 || estatus === 8 || estatus === 9
-  );
+  const debesMostrarFirma = esCertificado && (estatus === 3 || estatus === 6);
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h5">{title}</Typography>
         <Tabs value={tabIndex} onChange={handleTabChange}>
           <Tab label="Datos de la Solicitud" />
@@ -715,8 +713,7 @@ export default function FoliosData({ type }) {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <DataTable
-              buttonAdd={status !== 'consult' && estatus !== 8 && estatus !== 9
-                && estatus !== 10 && estatus !== 11}
+              buttonAdd={status !== 'consult' && !estaEnModoFirma}
               buttonClick={handleAddAlumno}
               buttonText="Agregar Alumnos"
               title="Alumnos"

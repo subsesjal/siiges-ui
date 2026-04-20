@@ -20,7 +20,7 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
 import forge from 'node-forge';
-import { Context, updateRecord } from '@siiges-ui/shared';
+import { Context, updateRecord, getData } from '@siiges-ui/shared';
 
 export default function ModalFirmaElectronica({
   open,
@@ -89,30 +89,24 @@ export default function ModalFirmaElectronica({
   });
 
   const validarRepresentante = async (curp) => {
-    const apiUrl = process.env.NEXT_PUBLIC_URL_API_TITULO;
-    const apiKey = process.env.NEXT_PUBLIC_API_KEY_REPRESENTANTES;
-
-    const response = await fetch(`${apiUrl}/representantes-legales/${curp}`, {
-      method: 'GET',
-      headers: {
-        'x-api-key': apiKey,
-      },
+    const response = await getData({
+      endpoint: `/solicitudesFolios/representantes-legales/${encodeURIComponent(curp)}`,
     });
 
-    if (response.status === 404) {
-      throw new Error('El firmante no está registrado como representante legal.');
+    if (response.statusCode === 404 || response.errorMessage === '¡Registro no encontrado!') {
+      throw new Error('No se encontró un representante legal activo con el CURP proporcionado.');
     }
-    if (response.status === 400) {
-      throw new Error('El CURP del certificado tiene un formato inválido.');
+    if (response.statusCode === 400) {
+      throw new Error('El formato del CURP es inválido.');
     }
-    if (response.status === 401) {
+    if (response.statusCode === 401) {
       throw new Error('No autorizado para consultar representantes legales.');
     }
-    if (!response.ok) {
-      throw new Error('Error al validar el representante legal.');
+    if (response.errorMessage) {
+      throw new Error(response.errorMessage);
     }
 
-    const data = await response.json();
+    const { data } = response;
     const nombreFirmante = [data.nombre, data.primerApellido, data.segundoApellido]
       .filter(Boolean)
       .join(' ');
@@ -325,6 +319,10 @@ export default function ModalFirmaElectronica({
       setNoti({ open: true, message: 'No se pudieron extraer los datos del firmante del certificado', type: 'error' });
       return;
     }
+    if (!solicitudData || !solicitudData.id) {
+      setNoti({ open: true, message: 'No se pudo cargar la información de la solicitud', type: 'error' });
+      return;
+    }
     if (typeof window.isWCAPISupported === 'function' && !window.isWCAPISupported()) {
       setNoti({ open: true, message: 'Tu navegador no soporta la API Web Crypto necesaria', type: 'error' });
       return;
@@ -335,7 +333,6 @@ export default function ModalFirmaElectronica({
     setProgreso(0);
 
     try {
-      // Validar representante legal antes de firmar
       const nombreFirmante = await validarRepresentante(datosCertificado.curp);
 
       const certificateBuffer = await readFileAsArrayBuffer(certificado);
@@ -390,14 +387,15 @@ export default function ModalFirmaElectronica({
 
       const resultados = await onConfirm(documentosPayload);
 
-      const todosExitosos = resultados.every((r) => r.estatusFirmado === 'exitoso');
+      const hayResultados = resultados.length > 0;
+      const todosExitosos = hayResultados
+        && resultados.every((r) => r.estatusFirmado === 'exitoso');
+
       const estatusActual = solicitudData.estatusSolicitudFolioId;
 
       let nuevoEstatusId = null;
-      if (estatusActual === 3) {
-        nuevoEstatusId = todosExitosos ? 9 : 8;
-      } else if (estatusActual === 9) {
-        nuevoEstatusId = todosExitosos ? 11 : 10;
+      if (estatusActual === 3 || estatusActual === 6) {
+        nuevoEstatusId = todosExitosos ? 7 : 6;
       }
 
       if (nuevoEstatusId) {
