@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useRouter } from 'next/router';
 
 const columns = (handleVerDetalle) => [
   {
@@ -14,7 +15,7 @@ const columns = (handleVerDetalle) => [
   {
     field: 'curp',
     headerName: 'CURP',
-    width: 150,
+    width: 200,
   },
   {
     field: 'claveTrabajo',
@@ -29,7 +30,7 @@ const columns = (handleVerDetalle) => [
   {
     field: 'matricula',
     headerName: 'Matricula',
-    width: 150,
+    width: 120,
   },
   {
     field: 'acciones',
@@ -45,8 +46,10 @@ const columns = (handleVerDetalle) => [
 ];
 
 export default function BusquedaAlumnosTable({ alumnos }) {
+  const router = useRouter();
+
   const handleVerDetalle = (alumno) => {
-    console.log('Ver detalle de alumno:', alumno);
+    router.push(`/serviciosEscolares/alumnos/${alumno.id}/BusquedaAlumno`);
   };
 
   return (

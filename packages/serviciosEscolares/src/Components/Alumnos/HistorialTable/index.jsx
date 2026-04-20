@@ -11,7 +11,7 @@ import historialColumns from '../../../Tables/historialAlumnosTable';
 
 const url = process.env.NEXT_PUBLIC_URL;
 
-export default function HistorialTable({ alumno }) {
+export default function HistorialTable({ alumno, simple }) {
   const { setNoti } = useContext(Context);
 
   const TIPO_LABEL = Object.freeze({
@@ -45,14 +45,11 @@ export default function HistorialTable({ alumno }) {
         });
         return;
       }
-
       const response = await getData({
         endpoint: `/files/?tipoEntidad=ALUMNO&entidadId=${alumnoId}&tipoDocumento=HISTORIAL_ACADEMICO`,
       });
-
       const ubicacion = response?.data?.ubicacion;
       const finalUrl = ubicacion ? `${url}${ubicacion}` : null;
-
       if (finalUrl && finalUrl !== 'undefined') {
         window.open(finalUrl, '_blank');
       } else {
@@ -73,20 +70,27 @@ export default function HistorialTable({ alumno }) {
 
   return (
     <Grid container sx={{ marginTop: 2 }}>
-      <Grid item xs={12}>
-        <ButtonSimple
-          onClick={downloadHistorialAcademico}
-          text="Descargar"
-          align="left"
-          design="guardar"
-        />
-      </Grid>
+      {!simple && (
+        <Grid item xs={12}>
+          <ButtonSimple
+            onClick={downloadHistorialAcademico}
+            text="Descargar"
+            align="left"
+            design="guardar"
+          />
+        </Grid>
+      )}
       <DataTable rows={rows} columns={historialColumns} title="Historial del Alumno" />
     </Grid>
   );
 }
 
+HistorialTable.defaultProps = {
+  simple: false,
+};
+
 HistorialTable.propTypes = {
+  simple: PropTypes.bool,
   alumno: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
