@@ -28,130 +28,17 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
-import DeleteIcon from '@mui/icons-material/DeleteOutline';
-import ButtonsFolios from '../ButtonsFolios';
-import ModalCertificado from './Modal/certificados';
-import ModalTitulo from './Modal/titulos';
-
-const columnsTitulo = (handleEdit, handleConsult, handleDeleteAlumno, status) => [
-  {
-    field: 'id',
-    headerName: 'ID',
-    hide: true,
-  },
-  {
-    field: 'consecutivo',
-    headerName: 'Consecutivo',
-    width: 150,
-  },
-  { field: 'name', headerName: 'Nombre', width: 250 },
-  { field: 'numeroFolioActa', headerName: 'Folio Acta', width: 150 },
-  { field: 'matricula', headerName: 'Matrícula', width: 250 },
-  {
-    field: 'fechaTerminacion',
-    headerName: 'Terminación de plan de estudios',
-    width: 250,
-  },
-  {
-    field: 'fechaInicio',
-    headerName: 'Inicio de Plan de Estudios',
-    width: 250,
-  },
-  { field: 'fundamento', headerName: 'Fundamento S.S.', width: 250 },
-  { field: 'folio', headerName: 'Folio', width: 250 },
-  { field: 'foja', headerName: 'Foja', width: 250 },
-  { field: 'libro', headerName: 'Libro', width: 250 },
-  { field: 'titulacion', headerName: 'Titulacion', width: 250 },
-  {
-    field: 'actions',
-    headerName: 'Acciones',
-    width: 150,
-    renderCell: (params) => (
-      <div>
-        <Tooltip title="Consultar" placement="top">
-          <IconButton onClick={() => handleConsult(params.row.id)}>
-            <VisibilityOutlinedIcon />
-          </IconButton>
-        </Tooltip>
-        {status !== 'consult' && (
-          <Tooltip title="Editar" placement="top">
-            <IconButton onClick={() => handleEdit(params.row.id)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-        {status !== 'consult' && (
-          <Tooltip title="Eliminar alumno" placement="top">
-            <IconButton
-              onClick={() => handleDeleteAlumno(params.row.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-
-      </div>
-    ),
-  },
-];
-
-const columnsCertificado = (handleEdit, handleConsult, handleDeleteAlumno, status) => [
-  {
-    field: 'id',
-    headerName: 'ID',
-    hide: true,
-  },
-  {
-    field: 'consecutivo',
-    headerName: 'Consecutivo',
-    width: 100,
-  },
-  { field: 'name', headerName: 'Nombre', width: 250 },
-  { field: 'matricula', headerName: 'Matrícula', width: 250 },
-  {
-    field: 'fechaTerminacion',
-    headerName: 'Fecha de Terminación',
-    width: 250,
-  },
-  {
-    field: 'fechaExpedicion',
-    headerName: 'Fecha de Elaboración',
-    width: 250,
-  },
-  {
-    field: 'actions',
-    headerName: 'Acciones',
-    width: 150,
-    renderCell: (params) => (
-      <div>
-        <Tooltip title="Consultar" placement="top">
-          <IconButton onClick={() => handleConsult(params.row.id)}>
-            <VisibilityOutlinedIcon />
-          </IconButton>
-        </Tooltip>
-        {status !== 'consult' && (
-          <Tooltip title="Editar" placement="top">
-            <IconButton onClick={() => handleEdit(params.row.id)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-        {status !== 'consult' && (
-          <Tooltip title="Eliminar alumno" placement="top">
-            <IconButton
-              onClick={() => handleDeleteAlumno(params.row.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </div>
-    ),
-  },
-];
+import {
+  ModalCertificado,
+  ModalTitulo,
+  ModalFirmaElectronica,
+  ButtonsFolios,
+} from '@siiges-ui/serviciosescolares';
 
 const fundamentoLegal = [
   { id: 1, nombre: 'ART. 52 LRART. 5 CONST' },
@@ -159,8 +46,7 @@ const fundamentoLegal = [
   { id: 3, nombre: 'ART. 91 LRART. 5 CONST' },
   {
     id: 4,
-    nombre:
-      'ART. 10 REGLAMENTO PARA LA PRESTACIÓN DEL SERVICIO SOCIAL DE LOS ESTUDIANTES DE LAS INSTITUCIONES DE EDUCACIÓN SUPERIOR EN LA REPÚBLICA MEXICANA',
+    nombre: 'ART. 10 REGLAMENTO PARA LA PRESTACIÓN DEL SERVICIO SOCIAL DE LOS ESTUDIANTES DE LAS INSTITUCIONES DE EDUCACIÓN SUPERIOR EN LA REPÚBLICA MEXICANA',
   },
   { id: 5, nombre: 'NO APLICA' },
 ];
@@ -200,6 +86,12 @@ const NIVEL = {
   8: 'Educación Continua',
 };
 
+const tipoSolicitudFolioOptions = [
+  { id: 1, label: 'Duplicado' },
+  { id: 2, label: 'Parcial' },
+  { id: 3, label: 'Total' },
+];
+
 export default function FoliosData({ type }) {
   const { setNoti, loading, setLoading } = useContext(Context);
   const [url, setUrl] = useState(null);
@@ -207,14 +99,28 @@ export default function FoliosData({ type }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openFirmaModal, setOpenFirmaModal] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [rowData, setRowData] = useState({});
   const [alumnoType, setAlumnoType] = useState('create');
-  const [alumnosData, setAlumnosData] = useState({});
+  const [alumnosData, setAlumnosData] = useState([]);
+  const [solicitudData, setSolicitudData] = useState(null);
   const [alumnoResponse, setAlumnoResponse] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [alumnoToDelete, setAlumnoToDelete] = useState(null);
+  const [estatus, setEstatus] = useState(null);
+  const [etiquetas, setEtiquetas] = useState({
+    tipoDocumento: '',
+    tipoSolicitudFolio: '',
+    acuerdoRvoe: '',
+    planEstudios: '',
+    gradoAcademico: '',
+    modalidades: '',
+    periodos: '',
+    institucion: '',
+    claveCentroTrabajo: '',
+  });
   const [formData, setFormData] = useState({
     folioPago: '',
     claveInstitucionDGP: '',
@@ -225,18 +131,8 @@ export default function FoliosData({ type }) {
     programaId: '',
     fecha: dayjs(),
   });
-  const [etiquetas, setEtiquetas] = useState({
-    tipoDocumento: '',
-    tipoSolicitudFolio: '',
-    acuerdoRvoe: '',
-    planEstudios: '',
-    gradoAcademico: '',
-    modalidades: '',
-    periodos: '',
-  });
-  const selectedAlumno = rows.find(
-    (row) => row.id === alumnoToDelete,
-  );
+
+  const selectedAlumno = rows.find((row) => row.id === alumnoToDelete);
 
   const router = useRouter();
   const {
@@ -247,11 +143,28 @@ export default function FoliosData({ type }) {
     status,
   } = router.query;
 
-  const tipoSolicitudFolioOptions = [
-    { id: 1, label: 'Duplicado' },
-    { id: 2, label: 'Parcial' },
-    { id: 3, label: 'Total' },
-  ];
+  const esCertificado = etiquetas.tipoDocumento === 'Certificado';
+
+  const accion = status || (
+    typeof window !== 'undefined'
+      ? sessionStorage.getItem('foliosAccion')
+      : null
+  );
+
+  let title = '';
+  if (estatus === 2) {
+    title = accion === 'revisar' ? 'Revisar Solicitud' : 'Consultar Solicitud';
+  } else if (estatus === 3) {
+    title = accion === 'envio'
+      ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
+      : 'Consultar Envio de Solicitud a Titulación';
+  } else if (estatus === 4) {
+    title = 'Atender Observaciones de Solicitud';
+  } else if (estatus === 6) {
+    title = 'Firma Parcial de Certificados IES';
+  } else if (estatus === 7) {
+    title = 'Firma de Certificados IES';
+  }
 
   useEffect(() => {
     if (type === 'edit') {
@@ -265,14 +178,14 @@ export default function FoliosData({ type }) {
       try {
         let response;
         if (type === 'edit' && editId) {
-          response = await getData({
-            endpoint: `/solicitudesFolios/${editId}`,
-          });
+          response = await getData({ endpoint: `/solicitudesFolios/${editId}` });
         } else {
           response = await getData({ endpoint: `/programas/${programa}` });
         }
         const { data } = response;
         if (type === 'edit') {
+          setSolicitudData(data);
+          setEstatus(data.estatusSolicitudFolioId);
           setFormData({
             folioPago: data.folioPago,
             claveInstitucionDGP: data.claveInstitucionDGP,
@@ -289,8 +202,8 @@ export default function FoliosData({ type }) {
             acuerdoRvoe: data.programa?.acuerdoRvoe || '',
             planEstudios: data.programa?.nombre || '',
             gradoAcademico: data.programa?.nivelId || '',
-            institucion: data.programa?.plantel?.institucion?.nombre,
-            claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo,
+            institucion: data.programa?.plantel?.institucion?.nombre || '',
+            claveCentroTrabajo: data.programa?.plantel?.claveCentroTrabajo || '',
             modalidades: data.programa?.modalidadId,
             periodos: data.programa?.cicloId,
           });
@@ -345,40 +258,31 @@ export default function FoliosData({ type }) {
       getData({ endpoint: `/solicitudesFolios/${id}/alumnos` })
         .then((response) => {
           if (response.data) {
-            const mappedRows = response.data.map((alumnos) => {
+            const mappedRows = response.data.map((alumno) => {
               const fundamentoObj = fundamentoLegal.find(
-                (f) => f.id === alumnos.fundamentoServicioSocialId,
+                (f) => f.id === alumno.fundamentoServicioSocialId,
               );
-
               const titulacionObj = modalidadTitulacion.find(
-                (t) => t.id === alumnos.modalidadTitulacionId,
+                (t) => t.id === alumno.modalidadTitulacionId,
               );
-
               return {
-                id: alumnos.id,
-                consecutivo: alumnos.consecutivo,
-                name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
-                numeroFolioActa: alumnos.folioActa || '',
-                matricula: alumnos.alumno.matricula,
-                fechaTerminacion: dayjs(alumnos.fechaTerminacion).format(
-                  'DD/MM/YYYY',
-                ),
-                fechaExpedicion: dayjs(alumnos.fechaExpedicion).format(
-                  'DD/MM/YYYY',
-                ),
-                fechaInicio: dayjs(alumnos.fechaInicio).format('DD/MM/YYYY'),
-                fundamento: fundamentoObj
-                  ? fundamentoObj.nombre
-                  : 'Desconocido',
-                folio: alumnos.folioDocumentoAlumno?.folioDocumento,
-                foja: alumnos.folioDocumentoAlumno?.foja?.nombre,
-                libro: alumnos.folioDocumentoAlumno?.libro?.nombre,
-                titulacion: titulacionObj
-                  ? titulacionObj.nombre
-                  : 'Desconocido',
+                id: alumno.id,
+                folioDocumentoAlumnoId: alumno.folioDocumentoAlumno?.id || null,
+                consecutivo: alumno.consecutivo,
+                name: `${alumno.alumno.persona.nombre} ${alumno.alumno.persona.apellidoPaterno} ${alumno.alumno.persona.apellidoMaterno}`,
+                numeroFolioActa: alumno.folioActa || '',
+                matricula: alumno.alumno.matricula,
+                fechaTerminacion: dayjs(alumno.fechaTerminacion).format('DD/MM/YYYY'),
+                fechaExpedicion: dayjs(alumno.fechaExpedicion).format('DD/MM/YYYY'),
+                fechaInicio: dayjs(alumno.fechaInicio).format('DD/MM/YYYY'),
+                fundamento: fundamentoObj ? fundamentoObj.nombre : 'Desconocido',
+                folio: alumno.folioDocumentoAlumno?.folioDocumento,
+                foja: alumno.folioDocumentoAlumno?.foja?.nombre,
+                libro: alumno.folioDocumentoAlumno?.libro?.nombre,
+                titulacion: titulacionObj ? titulacionObj.nombre : 'Desconocido',
+                estatusFirmado: alumno.folioDocumentoAlumno?.estatusFirmado || null,
               };
             });
-
             setRows(mappedRows);
             setAlumnosData(response.data);
             setAlumnoResponse(false);
@@ -428,6 +332,7 @@ export default function FoliosData({ type }) {
       });
     }
   };
+
   const handleDeleteAlumno = (alumnoId) => {
     setAlumnoToDelete(alumnoId);
     setOpenDeleteModal(true);
@@ -435,20 +340,17 @@ export default function FoliosData({ type }) {
 
   const confirmDeleteAlumno = async () => {
     if (!alumnoToDelete) return;
-
     setLoading(true);
     try {
       const response = await deleteRecord({
         endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${alumnoToDelete}`,
       });
-
       if (response.statusCode === 200) {
         setNoti({
           open: true,
           message: 'Alumno eliminado correctamente',
           type: 'success',
         });
-
         setAlumnoResponse(true);
       }
     } catch (error) {
@@ -474,40 +376,97 @@ export default function FoliosData({ type }) {
     setTabIndex(newValue);
   };
 
+  const handleGenerarPDF = async (alumnoId) => {
+    setLoading(true);
+    try {
+      const response = await getData({
+        endpoint: `/files?tipoEntidad=FOLIO_DOCUMENTO_ALUMNO&entidadId=${alumnoId}&tipoDocumento=CERTIFICADO_ELECTRONICO_PDF`,
+      });
+      if (response.errorMessage) {
+        setNoti({ open: true, message: response.errorMessage, type: 'error' });
+        return;
+      }
+      if (response.data?.url) {
+        window.open(response.data.url, '_blank');
+      } else if (typeof response.data === 'string') {
+        window.open(response.data, '_blank');
+      } else {
+        setNoti({ open: true, message: 'No se pudo obtener el PDF', type: 'error' });
+      }
+    } catch (error) {
+      setNoti({ open: true, message: error.message || 'Error al generar el PDF', type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFirmaSuccess = async (documentosPayload) => {
+    try {
+      const response = await createRecord({
+        endpoint: '/solicitudesFolios/firmaDocumento',
+        data: documentosPayload,
+      });
+
+      if (response.errorMessage) {
+        setNoti({ open: true, message: response.errorMessage, type: 'error' });
+        return [];
+      }
+
+      const resultados = response.data || [];
+      const exitosos = resultados.filter((r) => r.estatusFirmado === 'exitoso').length;
+      const rechazados = resultados.filter((r) => r.estatusFirmado === 'rechazado').length;
+
+      if (exitosos > 0 && rechazados === 0) {
+        setNoti({
+          open: true,
+          message: `¡${exitosos} documento(s) firmado(s) exitosamente!`,
+          type: 'success',
+        });
+      } else if (exitosos > 0 && rechazados > 0) {
+        setNoti({
+          open: true,
+          message: `${exitosos} firmado(s), ${rechazados} rechazado(s)`,
+          type: 'warning',
+        });
+      } else {
+        setNoti({ open: true, message: 'No se pudo firmar ningún documento', type: 'error' });
+      }
+
+      setAlumnoResponse(true);
+      return resultados;
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: error.message || 'Error al firmar los documentos',
+        type: 'error',
+      });
+      return [];
+    }
+  };
+
   const handleConfirm = async (data = formData) => {
     if (loading) return;
-
     setLoading(true);
     try {
       const requestData = isSaved ? data : formData;
-
       const response = isSaved
-        ? await updateRecord({
-          data: requestData,
-          endpoint: `/solicitudesFolios/${id}`,
-        })
-        : await createRecord({
-          data: requestData,
-          endpoint: '/solicitudesFolios',
-        });
+        ? await updateRecord({ data: requestData, endpoint: `/solicitudesFolios/${id}` })
+        : await createRecord({ data: requestData, endpoint: '/solicitudesFolios' });
 
       if (response.statusCode === 200 || response.statusCode === 201) {
         setId(response.data.id);
         setIsSaved(true);
         setNoti({
           open: true,
-          message:
-            type === 'edit'
-              ? '¡Éxito al actualizar la solicitud!'
-              : '¡Éxito al crear la solicitud!, ya puede agregar alumnos',
+          message: type === 'edit'
+            ? '¡Éxito al actualizar la solicitud!'
+            : '¡Éxito al crear la solicitud!, ya puede agregar alumnos',
           type: 'success',
         });
       } else {
         setNoti({
           open: true,
-          message:
-            response.message
-            || '¡Error al procesar la solicitud, revise que los campos estén correctos!',
+          message: response.message || '¡Error al procesar la solicitud, revise que los campos estén correctos!',
           type: 'error',
         });
       }
@@ -524,11 +483,7 @@ export default function FoliosData({ type }) {
 
   const handleSend = async () => {
     try {
-      const updatedFormData = {
-        ...formData,
-        estatusSolicitudFolioId: 2,
-      };
-
+      const updatedFormData = { ...formData, estatusSolicitudFolioId: 2 };
       await handleConfirm(updatedFormData);
       router.back();
       setOpen(false);
@@ -544,31 +499,129 @@ export default function FoliosData({ type }) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
+
+  const estaEnModoFirma = estatus === 6 || estatus === 7;
+
+  const columnsTitulo = (handleEditFn, handleConsultFn, handleDeleteFn) => [
+    { field: 'id', headerName: 'ID', hide: true },
+    { field: 'consecutivo', headerName: 'Consecutivo', width: 150 },
+    { field: 'name', headerName: 'Nombre', width: 250 },
+    { field: 'numeroFolioActa', headerName: 'Folio Acta', width: 150 },
+    { field: 'matricula', headerName: 'Matrícula', width: 250 },
+    { field: 'fechaTerminacion', headerName: 'Terminación de plan de estudios', width: 250 },
+    { field: 'fechaInicio', headerName: 'Inicio de Plan de Estudios', width: 250 },
+    { field: 'fundamento', headerName: 'Fundamento S.S.', width: 250 },
+    { field: 'folio', headerName: 'Folio', width: 250 },
+    { field: 'foja', headerName: 'Foja', width: 250 },
+    { field: 'libro', headerName: 'Libro', width: 250 },
+    { field: 'titulacion', headerName: 'Titulacion', width: 250 },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      width: 150,
+      renderCell: (params) => (
+        <div>
+          <Tooltip title="Consultar" placement="top">
+            <IconButton onClick={() => handleConsultFn(params.row.id)}>
+              <VisibilityOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+          {status !== 'consult' && (
+            <Tooltip title="Editar" placement="top">
+              <IconButton onClick={() => handleEditFn(params.row.id)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {status !== 'consult' && (
+            <Tooltip title="Eliminar alumno" placement="top">
+              <IconButton onClick={() => handleDeleteFn(params.row.id)}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  const columnsCertificado = (handleEditFn, handleConsultFn, handleDeleteFn) => [
+    { field: 'id', headerName: 'ID', hide: true },
+    { field: 'consecutivo', headerName: 'Consecutivo', width: 100 },
+    { field: 'name', headerName: 'Nombre', width: 250 },
+    { field: 'matricula', headerName: 'Matrícula', width: 250 },
+    { field: 'fechaTerminacion', headerName: 'Fecha de Terminación', width: 250 },
+    { field: 'fechaExpedicion', headerName: 'Fecha de Elaboración', width: 250 },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      width: 200,
+      renderCell: (params) => {
+        const firmadoExitoso = params.row.estatusFirmado === 'exitoso';
+        return (
+          <div>
+            <Tooltip title="Consultar" placement="top">
+              <IconButton onClick={() => handleConsultFn(params.row.id)}>
+                <VisibilityOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+            {status !== 'consult' && !estaEnModoFirma && (
+              <Tooltip title="Editar" placement="top">
+                <IconButton onClick={() => handleEditFn(params.row.id)}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+            {status !== 'consult' && !estaEnModoFirma && (
+              <Tooltip title="Eliminar alumno" placement="top">
+                <IconButton onClick={() => handleDeleteFn(params.row.id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+            {esCertificado && estatus === 7 && (
+              <Tooltip
+                title={firmadoExitoso ? 'Generar PDF' : 'Debe firmar primero'}
+                placement="top"
+              >
+                <span>
+                  <IconButton
+                    onClick={() => handleGenerarPDF(params.row.folioDocumentoAlumnoId)}
+                    disabled={!firmadoExitoso}
+                    color={firmadoExitoso ? 'primary' : 'default'}
+                  >
+                    <PictureAsPdfIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            )}
+          </div>
+        );
+      },
+    },
+  ];
+
+  const debesMostrarFirma = esCertificado && (estatus === 3 || estatus === 6);
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h5">{title}</Typography>
         <Tabs value={tabIndex} onChange={handleTabChange}>
           <Tab label="Datos de la Solicitud" />
           <Tab label="Alumnos" disabled={!id} />
         </Tabs>
       </Box>
+
       {tabIndex === 0 && (
         <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item xs={12}>
             <Typography variant="h6">Datos de la institución</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Grid
-              container
-              rowSpacing={1}
-              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            >
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
               <Grid container xs={6}>
                 <Grid item xs>
                   <List>
@@ -607,9 +660,7 @@ export default function FoliosData({ type }) {
                     <ListSubtitle text={PERIODOS[etiquetas.periodos] || 'N/A'} />
                     <ListSubtitle text={etiquetas.tipoDocumento || 'N/A'} />
                     <ListSubtitle text={etiquetas.tipoSolicitudFolio || 'N/A'} />
-                    <ListSubtitle
-                      text={Array.isArray(alumnosData) ? alumnosData.length : 0}
-                    />
+                    <ListSubtitle text={Array.isArray(alumnosData) ? alumnosData.length : 0} />
                   </List>
                 </Grid>
               </Grid>
@@ -658,18 +709,19 @@ export default function FoliosData({ type }) {
           </Grid>
         </Grid>
       )}
+
       {tabIndex === 1 && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <DataTable
-              buttonAdd={status !== 'consult'}
+              buttonAdd={status !== 'consult' && !estaEnModoFirma}
               buttonClick={handleAddAlumno}
               buttonText="Agregar Alumnos"
               title="Alumnos"
               rows={rows}
               columns={formData.tipoDocumentoId === 1
-                ? columnsTitulo(handleEdit, handleConsult, handleDeleteAlumno, status)
-                : columnsCertificado(handleEdit, handleConsult, handleDeleteAlumno, status)}
+                ? columnsTitulo(handleEdit, handleConsult, handleDeleteAlumno)
+                : columnsCertificado(handleEdit, handleConsult, handleDeleteAlumno)}
               initialState={{
                 sorting: { sortModel: [{ field: 'consecutivo', sort: 'asc' }] },
               }}
@@ -677,6 +729,7 @@ export default function FoliosData({ type }) {
           </Grid>
         </Grid>
       )}
+
       <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid item xs={12}>
           {formData.estatusSolicitudFolioId === 2 ? (
@@ -686,17 +739,41 @@ export default function FoliosData({ type }) {
               onClick={() => router.back()}
             />
           ) : (
-            <ButtonsFolios
-              save={handleConfirm}
-              cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
-              send={handleSend}
-              disabled={status === 'consult'}
-              saved={isSaved}
-              alumnos={alumnosData}
-            />
+            <Grid container justifyContent="space-between" alignItems="center">
+              <Grid item>
+                <ButtonSimple
+                  text="Regresar"
+                  design="enviar"
+                  onClick={() => router.back()}
+                />
+              </Grid>
+              <Grid item>
+                <Grid container spacing={2}>
+                  {debesMostrarFirma && (
+                    <Grid item>
+                      <ButtonSimple
+                        text="Firmar Solicitud"
+                        onClick={() => setOpenFirmaModal(true)}
+                      />
+                    </Grid>
+                  )}
+                  {!debesMostrarFirma && (
+                    <ButtonsFolios
+                      save={handleConfirm}
+                      cancel={() => router.push('/serviciosEscolares/solicitudesFolios')}
+                      send={handleSend}
+                      disabled={status === 'consult'}
+                      saved={isSaved}
+                      alumnos={alumnosData}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </Grid>
           )}
         </Grid>
       </Grid>
+
       {formData.tipoDocumentoId === 1 ? (
         <ModalTitulo
           open={open}
@@ -722,6 +799,20 @@ export default function FoliosData({ type }) {
           alumnosAgregados={alumnosData}
         />
       )}
+
+      <ModalFirmaElectronica
+        open={openFirmaModal}
+        onClose={() => setOpenFirmaModal(false)}
+        onConfirm={async (documentosPayload) => {
+          const resultados = await handleFirmaSuccess(documentosPayload);
+          setOpenFirmaModal(false);
+          return resultados;
+        }}
+        title="Firmar Certificados"
+        alumnosData={alumnosData}
+        solicitudData={solicitudData}
+      />
+
       <DefaultModal
         title="Eliminar alumno"
         open={openDeleteModal}
@@ -738,14 +829,12 @@ export default function FoliosData({ type }) {
           <br />
           ¿Desea continuar?
         </Typography>
-
         <ButtonsForm
           cancel={() => setOpenDeleteModal(false)}
           confirm={confirmDeleteAlumno}
           confirmText="Confirmar"
         />
       </DefaultModal>
-
     </Box>
   );
 }
