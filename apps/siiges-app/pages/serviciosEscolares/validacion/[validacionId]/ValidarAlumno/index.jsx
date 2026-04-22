@@ -1,31 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Grid, Tab, Tabs } from '@mui/material';
 import { DatosAlumno, DatosInstitucion } from '@siiges-ui/serviciosescolares';
-import { Context, Layout } from '@siiges-ui/shared';
+import { Layout } from '@siiges-ui/shared';
 import alumnosService from '@siiges-ui/serviciosescolares/src/Components/utils/alumnosService';
 
-const ALLOWED_IDS = [2519, 336];
-
-function isAuthorized(session) {
-  return (
-    session?.rol === 'admin'
-    || ALLOWED_IDS.includes(Number(session?.id))
-  );
-}
-
 export default function ValidarAlumno() {
-  const { session } = useContext(Context);
   const router = useRouter();
   const { query } = router;
   const [alumno, setAlumno] = useState(null);
   const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    if (!isAuthorized(session)) {
-      router.replace('/serviciosEscolares/validacion');
-    }
-  }, [session]);
 
   useEffect(() => {
     async function fetchAlumno() {
@@ -40,8 +24,6 @@ export default function ValidarAlumno() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  if (!isAuthorized(session)) return null;
 
   return (
     <Layout title="Validar Alumno">
