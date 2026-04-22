@@ -121,6 +121,8 @@ export default function DatosInstitucion({ alumno }) {
 
     if (isPrivileged || (isRestrictedEditor && form.estatus === 0)) {
       setEditionDisabled(false);
+    } else {
+      setEditionDisabled(true);
     }
   }, [session, form.estatus]);
 
