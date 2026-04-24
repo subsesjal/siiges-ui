@@ -1,11 +1,13 @@
 /* Button Login style */
-.buttonLogin {
+.buttonLogin,
+.MuiButton-root.buttonLogin {
   margin-top: 1.5rem;
   text-transform: none;
   color: white;
   opacity: 1;
 }
 
-.buttonLogin:hover {
+.buttonLogin:hover,
+.MuiButton-root.buttonLogin:hover {
   background-color: #ffa34d;
 }
