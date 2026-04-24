@@ -105,10 +105,23 @@ export default function InstitucionForm({
 
     try {
       setLoading(true);
-      await SubmitDocument(formData);
-      await getInstitutionPhoto(institucion.id);
+
+      await SubmitDocument(formData, (ubicacion) => {
+        const fullUrl = `${DOMAIN}${ubicacion}`;
+        setImageUrl(fullUrl);
+      });
+
+      setNoti({
+        open: true,
+        message: 'Logotipo actualizado correctamente',
+        type: 'success',
+      });
     } catch (error) {
-      setNoti({ open: true, message: 'Error al subir imagen', type: 'error' });
+      setNoti({
+        open: true,
+        message: 'Error al subir imagen',
+        type: 'error',
+      });
     } finally {
       setLoading(false);
       setConfirmImageModal(false);
@@ -156,13 +169,13 @@ export default function InstitucionForm({
           }}
         >
           <Image
+            key={imageUrl}
             src={imageUrl || FALLBACK_IMAGE}
             alt="institucion-logo"
             width={300}
             height={300}
             quality={100}
             style={{ objectFit: 'contain' }}
-            priority
           />
 
           {accion !== 'crear' && (
