@@ -13,25 +13,30 @@ const FIELDS_MAP = {
   curp: 'curp',
   claveCentroTrabajo: 'cct',
   matricula: 'matricula',
+  acuerdoRvoe: 'acuerdoRvoe',
+  institucionId: 'institucionId',
 };
 
 export default function BusquedaAlumnos() {
-  const { setNoti } = useContext(Context);
+  const { setNoti, setLoading, loading } = useContext(Context);
   const [formData, setFormData] = useState({});
   const [alumnos, setAlumnos] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleInstitucionResolved = (id) => {
+    setFormData((prev) => ({ ...prev, institucionId: id }));
+  };
+
   const buildQuery = () => {
     const params = new URLSearchParams();
     Object.entries(FIELDS_MAP).forEach(([formKey, apiKey]) => {
       const value = formData[formKey];
-      if (value && value.trim() !== '') {
-        params.append(apiKey, value.trim());
+      if (value && String(value).trim() !== '') {
+        params.append(apiKey, String(value).trim());
       }
     });
     const queryString = params.toString();
@@ -61,7 +66,6 @@ export default function BusquedaAlumnos() {
           programa: alumno.programa?.nombre || '',
           matricula: alumno.matricula || '',
         }));
-
         if (rows.length === 0) {
           setNoti({
             open: true,
@@ -69,7 +73,6 @@ export default function BusquedaAlumnos() {
             message: 'No se encontraron alumnos con los datos proporcionados.',
           });
         }
-
         setAlumnos(rows);
       } else {
         setAlumnos([]);
@@ -92,6 +95,7 @@ export default function BusquedaAlumnos() {
             formData={formData}
             onChange={handleChange}
             onSearch={handleSearch}
+            onInstitucionResolved={handleInstitucionResolved}
           />
         </Grid>
         <Grid item xs={12}>
