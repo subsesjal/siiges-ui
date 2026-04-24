@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'; // Changed from @mui/system to @mui/material
+import { Grid } from '@mui/material';
 import { ConsultRevalidacion } from '@siiges-ui/revalidaciones';
 import {
   ButtonSimple,
