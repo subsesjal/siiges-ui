@@ -1,17 +1,23 @@
 import React, { useContext, useState } from 'react';
 import {
-  ButtonLogin, Context, Input, InputPassword, LinkButton,
+  ButtonLogin, ButtonsForm, Context, DefaultModal, Input, InputPassword, LinkButton,
+  updateRecord,
 } from '@siiges-ui/shared';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import submitNewLogin from '../../utils/submitNewLogin';
 
 export default function SignIn() {
-  const { activateAuth, setLoading } = useContext(Context);
+  const {
+    activateAuth, setLoading, removeAuth, session,
+  } = useContext(Context);
   const [errorMessages, setErrorMessages] = useState({});
+  const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ usuario: '', contrasena: '' });
+  const router = useRouter();
 
   const errors = {
     usuario: '¡Usuario equivocado!',
@@ -24,7 +30,37 @@ export default function SignIn() {
   };
 
   const handleSubmit = () => {
-    submitNewLogin(form, errors, setErrorMessages, activateAuth, setLoading);
+    submitNewLogin(
+      form,
+      errors,
+      setErrorMessages,
+      (authData) => {
+        if (authData?.data?.avisoPrivacidad === false) {
+          activateAuth(authData, true);
+          setOpen(true);
+        } else {
+          activateAuth(authData);
+        }
+      },
+      setLoading,
+    );
+  };
+
+  const handleAccept = async () => {
+    const result = await updateRecord({
+      endpoint: `/usuarios/${session.id}`,
+      data: { avisoPrivacidad: true },
+    });
+
+    if (result.statusCode === 200) {
+      setOpen(false);
+      router.push('../home');
+    }
+  };
+
+  const handleReject = () => {
+    removeAuth();
+    setOpen(false);
   };
 
   return (
@@ -123,6 +159,34 @@ export default function SignIn() {
           </Link>
         </Typography>
       </Box>
+
+      <DefaultModal open={open} setOpen={setOpen}>
+        <Box sx={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+        }}
+        >
+          <img src="/LogoJalisco.png" alt="Logo Jalisco" style={{ width: '250px' }} />
+          <Typography variant="h6" sx={{ textAlign: 'center' }}>
+            Consulta nuestro Aviso de Privacidad Integral
+          </Typography>
+          <a
+            href="https://transparenciasitgej.jalisco.gob.mx/api/api/archivos/1908/download?inline=true"
+            passHref
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#1976d2', textDecoration: 'underline', cursor: 'pointer' }}
+          >
+            Ver Aviso de Privacidad
+          </a>
+          <Divider sx={{ width: '100%' }} />
+          <ButtonsForm
+            confirm={handleAccept}
+            cancel={handleReject}
+            confirmText="Acepto"
+            cancelText="No Acepto"
+          />
+        </Box>
+      </DefaultModal>
     </Box>
   );
 }
