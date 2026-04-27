@@ -26,24 +26,24 @@ export default function ButtonsFoliosAdmin({
         />
       </Grid>
       {!isConsult && (
-      <Grid item xs={6}>
-        <Grid container justifyContent="flex-end" spacing={2}>
-          {estatus !== 3 && (
-            <Grid item>
-              <ButtonSimple text="Enviar observaciones" onClick={observaciones} />
-            </Grid>
-          )}
+        <Grid item xs={6}>
+          <Grid container justifyContent="flex-end" spacing={2}>
+            {estatus !== 3 && (
+              <Grid item>
+                <ButtonSimple text="Enviar observaciones" onClick={observaciones} />
+              </Grid>
+            )}
 
-          {estatus !== 7 && shouldRenderButtonFolios && (
-            <Grid item>
-              <ButtonSimple
-                text={buttonFolios}
-                onClick={folios}
-              />
-            </Grid>
-          )}
+            {estatus !== 7 && shouldRenderButtonFolios && (
+              <Grid item>
+                <ButtonSimple
+                  text={buttonFolios}
+                  onClick={folios}
+                />
+              </Grid>
+            )}
+          </Grid>
         </Grid>
-      </Grid>
       )}
     </Grid>
   );

@@ -94,27 +94,27 @@ export default function AdminTable({
           return (
             <>
               {canConsult && (
-              <Tooltip title="Consultar" placement="top">
-                <IconButton onClick={goToConsult}>
-                  <VisibilityOutlined />
-                </IconButton>
-              </Tooltip>
+                <Tooltip title="Consultar" placement="top">
+                  <IconButton onClick={goToConsult}>
+                    <VisibilityOutlined />
+                  </IconButton>
+                </Tooltip>
               )}
 
               {IconComponent && (
-              <Tooltip title={tooltipTitle} placement="top">
-                <IconButton onClick={handleAddClick}>
-                  <IconComponent />
-                </IconButton>
-              </Tooltip>
+                <Tooltip title={tooltipTitle} placement="top">
+                  <IconButton onClick={handleAddClick}>
+                    <IconComponent />
+                  </IconButton>
+                </Tooltip>
               )}
 
               {params.row.estatusSolicitudFolioId === 3 && (
-              <Tooltip title="Reenviar correo" placement="top">
-                <IconButton onClick={handleOpenConfirm}>
-                  <ForwardToInbox />
-                </IconButton>
-              </Tooltip>
+                <Tooltip title="Reenviar correo" placement="top">
+                  <IconButton onClick={handleOpenConfirm}>
+                    <ForwardToInbox />
+                  </IconButton>
+                </Tooltip>
               )}
             </>
           );

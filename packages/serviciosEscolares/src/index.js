@@ -25,6 +25,7 @@ import ValidacionTable from './Components/Validacion/ValidacionTable/index';
 import ModalAlumnosInscritos from './Components/utils/ModalAlumnosInscritos';
 import DatosInstitucion from './Components/Validacion/DatosInstitucion/index';
 import ButtonsFoliosAdmin from './Components/Folios/ButtonsFoliosAdmin/index';
+import ButtonsFolios from './Components/Folios/ButtonsFolios/index';
 import BecasComponents from './Components/BecasServiciosSociales/Becas/index';
 import getAlumnosAcreditacion from './Components/utils/getAlumnosAcreditacion';
 import Asignaturas from './Components/Programas/ProgramasSections/Asignaturas';
@@ -56,6 +57,7 @@ import TitulosForm from './Components/Titulacion/TitulosForm/index';
 import TitulosTable from './Components/Titulacion/catalogoTitulosTable';
 import catalogoTitulos from './Tables/catalogoTitulosTable';
 import AlumnosData from './Components/Alumnos/AlumnosData';
+import ModalFirmaElectronica from './Components/FoliosAsignados/FoliosTable/ModalFirmaElectronica';
 
 export {
   ExpedienteAlumno,
@@ -99,6 +101,7 @@ export {
   getAsignaturaById,
   CalificacionInput,
   ButtonsFoliosAdmin,
+  ButtonsFolios,
   columnsAsignaturas,
   InscripcionesTable,
   DetallesAsignatura,
@@ -116,4 +119,5 @@ export {
   ReporteForm,
   FormFoliosAsignados,
   AlumnosData,
+  ModalFirmaElectronica,
 };

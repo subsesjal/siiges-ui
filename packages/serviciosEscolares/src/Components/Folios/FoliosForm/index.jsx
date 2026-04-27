@@ -167,6 +167,10 @@ export default function FoliosForm({
     { id: 3, nombre: 'Folios asignados' },
     { id: 4, nombre: 'Con observaciones' },
     { id: 5, nombre: 'Cancelado' },
+    { id: 6, nombre: 'Firma parcial certificado IES' },
+    { id: 7, nombre: 'Firma certificado IES' },
+    { id: 8, nombre: 'Firma parcial certificado SICYT' },
+    { id: 9, nombre: 'Firma certificado SICYT' },
   ].filter((option) => !(session?.rol === 'ce_sicyt' && option.id === 1));
 
   useEffect(() => {
