@@ -1,15 +1,15 @@
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules')([
-  '@siiges-ui/shared',
   '@siiges-ui/authentication',
   '@siiges-ui/inspecciones',
-  '@siiges-ui/users',
   '@siiges-ui/instituciones',
-  '@siiges-ui/solicitudes',
-  '@siiges-ui/serviciosescolares',
-  '@siiges-ui/revalidaciones',
   '@siiges-ui/notificaciones',
   '@siiges-ui/opds',
+  '@siiges-ui/revalidaciones',
+  '@siiges-ui/serviciosescolares',
+  '@siiges-ui/shared',
+  '@siiges-ui/solicitudes',
+  '@siiges-ui/users',
 ]);
 
 const apiUrl = process.env.NEXT_PUBLIC_URL;
@@ -21,4 +21,5 @@ module.exports = withPlugins([withTM()], {
   images: {
     domains: hostname ? [hostname] : [],
   },
+  staticPageGenerationTimeout: 900, // Aumentar de 60s a 900s (15 minutos)
 });
