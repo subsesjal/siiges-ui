@@ -33,11 +33,25 @@ function InputTime({
     }
   };
 
+  const parseTimeValue = (innerValue) => {
+    if (!innerValue) return null;
+
+    if (innerValue instanceof Date) {
+      return dayjs(innerValue);
+    }
+
+    if (typeof innerValue === 'string') {
+      return dayjs(`2000-01-01T${innerValue}`);
+    }
+
+    return dayjs(innerValue);
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimePicker
         label={label}
-        value={value ? dayjs(value) : null}
+        value={parseTimeValue(value)}
         onChange={handleDateChange}
         onAccept={handleAccept}
         onFocus={onfocus}

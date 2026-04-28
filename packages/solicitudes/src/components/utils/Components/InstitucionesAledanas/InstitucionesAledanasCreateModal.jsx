@@ -47,10 +47,16 @@ export default function InstitucionesAledanasCreateModal({
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+
     if (name === 'tiempo') {
+      const date = new Date(value);
+
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+
       setFormInstitucionesAledanas((prevData) => ({
         ...prevData,
-        [name]: `${value}:00`,
+        [name]: `${hours}:${minutes}:00`,
       }));
     } else {
       setFormInstitucionesAledanas((prevData) => ({
@@ -70,8 +76,10 @@ export default function InstitucionesAledanasCreateModal({
   };
 
   const handleOnSubmit = () => {
+    const { id, ...data } = formInstitucionesAledanas;
+
     handleCreate(
-      formInstitucionesAledanas,
+      data,
       setFormInstitucionesAledanas,
       setInitialValues,
       setInstitucionesAledanas,

@@ -37,8 +37,9 @@ export default function InstitucionesAledanas({ disabled, programaId, type }) {
     const institucionesAledanasRows = institucionesAledanas.map((item) => ({
       id: item.id,
       nombre: item.nombre,
-      tiempo: item.tiempo,
+      tiempo: item.tiempo?.slice(0, 5), // hh:mm
     }));
+
     setRows(institucionesAledanasRows);
   }, [institucionesAledanas]);
 

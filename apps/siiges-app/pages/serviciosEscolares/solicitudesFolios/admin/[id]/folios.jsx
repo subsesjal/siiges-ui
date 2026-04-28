@@ -56,13 +56,15 @@ export default function Folios() {
   const [tipoDocumento, setTipoDocumento] = useState();
   const [formData, setFormData] = useState({
     folioPago: '',
+    claveInstitucionDGP: '',
+    claveCarreraDGP: '',
   });
   const selectedAlumno = alumnosRows.find(
     (row) => row.id === alumnoToDelete,
   );
 
   const router = useRouter();
-  const { id } = router.query;
+  const { id, status } = router.query;
 
   useEffect(() => {
     if (id && alumnoResponse) {
@@ -91,6 +93,8 @@ export default function Folios() {
           setTipoDocumento(data.tipoDocumentoId);
           setFormData({
             folioPago: data.folioPago || '',
+            claveInstitucionDGP: data.claveInstitucionDGP || '',
+            claveCarreraDGP: data.claveCarreraDGP || '',
           });
 
           GetFile(
@@ -318,9 +322,11 @@ export default function Folios() {
     },
   ];
 
-  const accion = typeof window !== 'undefined'
-    ? sessionStorage.getItem('foliosAccion')
-    : null;
+  const accion = status || (
+    typeof window !== 'undefined'
+      ? sessionStorage.getItem('foliosAccion')
+      : null
+  );
   let title = '';
 
   if (estatus === 2) {
@@ -443,6 +449,27 @@ export default function Folios() {
                 disabled
               />
             </Grid>
+
+            <Grid item xs={4}>
+              <Input
+                label="Clave de institución"
+                id="claveInstitucionDGP"
+                name="claveInstitucionDGP"
+                value={formData.claveInstitucionDGP}
+                onChange={handleChange}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <Input
+                label="Clave de carrera"
+                id="claveCarreraDGP"
+                name="claveCarreraDGP"
+                value={formData.claveCarreraDGP}
+                onChange={handleChange}
+                disabled
+              />
+            </Grid>
             <Grid item xs={12}>
               <InputFile
                 label="Recibo de Pago"
@@ -504,6 +531,7 @@ export default function Folios() {
               rows={4}
               value={observaciones}
               onChange={handleObservacionesChange}
+              isConsult={accion === 'consultar'}
             />
           </Grid>
         )}
@@ -513,6 +541,7 @@ export default function Folios() {
             observaciones={handleObservacionesSubmit}
             folios={handleFoliosSubmit}
             estatus={estatus}
+            isConsult={accion === 'consultar'}
           />
           <DefaultModal
             title="Eliminar alumno"

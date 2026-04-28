@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+const ALLOWED_IDS = [2519, 336];
+
 export default function DatosInstitucion({ alumno }) {
   const { session } = useAuth();
   const { setNoti, setLoading } = useUI();
@@ -101,9 +103,14 @@ export default function DatosInstitucion({ alumno }) {
   }, [alumno]);
 
   useEffect(() => {
-    if (session.rol === 'admin' || session.rol === 'ce_sicyt') {
+    const isPrivileged = session?.rol === 'admin' || ALLOWED_IDS.includes(Number(session?.id));
+    const isRestrictedEditor = session?.rol === 'representante' || session?.rol === 'ce_ies';
+
+    if (isPrivileged || session?.rol === 'ce_sicyt') {
       setDisabled(false);
-    } else if (form.estatus === 0 || form.estatus === '0') {
+    }
+
+    if (isPrivileged || (isRestrictedEditor && form.estatus === 0)) {
       setEditionDisabled(false);
     } else {
       setEditionDisabled(true);

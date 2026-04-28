@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
 export default function ButtonsFoliosAdmin({
-  observaciones, folios, estatus, tipoDocumento,
+  observaciones, folios, estatus, tipoDocumento, isConsult = false,
 }) {
   const router = useRouter();
 
@@ -25,21 +25,26 @@ export default function ButtonsFoliosAdmin({
           }}
         />
       </Grid>
-      <Grid item xs={6}>
-        <Grid container justifyContent="flex-end" spacing={2}>
-          {estatus !== 3
-          && (
-          <Grid item>
-            <ButtonSimple text="Enviar observaciones" onClick={observaciones} />
+      {!isConsult && (
+        <Grid item xs={6}>
+          <Grid container justifyContent="flex-end" spacing={2}>
+            {estatus !== 3 && (
+              <Grid item>
+                <ButtonSimple text="Enviar observaciones" onClick={observaciones} />
+              </Grid>
+            )}
+
+            {estatus !== 7 && shouldRenderButtonFolios && (
+              <Grid item>
+                <ButtonSimple
+                  text={buttonFolios}
+                  onClick={folios}
+                />
+              </Grid>
+            )}
           </Grid>
-          )}
-          {estatus !== 7 && shouldRenderButtonFolios && (
-          <Grid item>
-            <ButtonSimple text={buttonFolios} onClick={folios} />
-          </Grid>
-          )}
         </Grid>
-      </Grid>
+      )}
     </Grid>
   );
 }
@@ -49,4 +54,6 @@ ButtonsFoliosAdmin.propTypes = {
   folios: PropTypes.func.isRequired,
   estatus: PropTypes.number.isRequired,
   tipoDocumento: PropTypes.string.isRequired,
+  isConsult: PropTypes.bool.isRequired,
+
 };

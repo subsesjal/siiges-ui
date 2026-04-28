@@ -7,6 +7,7 @@
 export { default as useApi } from './useApi';
 export { default as useNotification } from './useNotification';
 export { default as useCheckMobileScreen } from './useCheckMobileScreen';
+export { default as useShowFooter } from './useShowFooter';
 
 // Re-exports de contextos para conveniencia
 export { useAuth } from '../contexts/AuthContext';

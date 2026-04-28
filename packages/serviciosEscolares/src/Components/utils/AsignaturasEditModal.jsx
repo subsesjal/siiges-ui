@@ -4,6 +4,7 @@ import React, {
 import { Grid } from '@mui/material';
 import {
   DefaultModal, validateField, ButtonsForm,
+  InputNumber,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -59,6 +60,7 @@ export default function AsignaturasEditModal({
       creditos: rowItem.creditos ?? '',
       academia: rowItem.academia ?? '',
       seriacion: rowItem.seriacion ?? '',
+      consecutivo: rowItem.consecutivo ?? '',
       horasDocente: rowItem.horasDocente ?? '',
       horasIndependiente: rowItem.horasIndependiente ?? '',
     };
@@ -219,7 +221,7 @@ export default function AsignaturasEditModal({
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <BasicSelect
             title="Seriación"
             name="seriacion"
@@ -227,6 +229,18 @@ export default function AsignaturasEditModal({
             options={seriacionOptions}
             disabled={isDisabled}
             onChange={handleOnChange}
+            textValue
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <InputNumber
+            label="Numero Consecutivo"
+            name="consecutivo"
+            value={formAsignaturas.consecutivo || 0}
+            disabled={isDisabled}
+            onChange={handleOnChange}
+            max={99}
+            min={0}
             textValue
           />
         </Grid>
@@ -288,6 +302,7 @@ AsignaturasEditModal.propTypes = {
     creditos: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     academia: PropTypes.string,
     seriacion: PropTypes.string,
+    consecutivo: PropTypes.number,
     horasDocente: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     horasIndependiente: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,

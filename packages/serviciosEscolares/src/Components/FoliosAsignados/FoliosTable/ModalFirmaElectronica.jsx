@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography,
-  IconButton, Box, Collapse, CircularProgress,
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography,
+  IconButton, Box, CircularProgress, LinearProgress,
 } from '@mui/material';
 import { DropzoneArea } from 'mui-file-dropzone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -10,54 +10,99 @@ import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { getData, useUI } from '@siiges-ui/shared';
+import { getData, updateRecord, useUI } from '@siiges-ui/shared';
+import forge from 'node-forge';
 
 export default function ModalFirmaElectronica({
   open,
   onClose,
   onConfirm,
   title,
-  solicitudFolioAlumnoId,
+  alumnosData,
+  solicitudData,
   disabled,
-  tipoDocumento,
-  libro,
-  foja,
 }) {
   const { setNoti } = useUI();
   const [certificado, setCertificado] = useState(null);
   const [llavePrivada, setLlavePrivada] = useState(null);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showDatosAlumno, setShowDatosAlumno] = useState(false);
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
   const [scriptsLoading, setScriptsLoading] = useState(false);
+  const [progreso, setProgreso] = useState(0);
+  const [firmando, setFirmando] = useState(false);
+  const [datosCertificado, setDatosCertificado] = useState(null);
 
-  const [datosAlumno, setDatosAlumno] = useState(null);
-  const [loadingDatos, setLoadingDatos] = useState(false);
+  const extraerDatosCertificado = (certFile) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-  const fetchDatosAlumno = async () => {
-    if (!solicitudFolioAlumnoId) return;
+    reader.onload = (event) => {
+      try {
+        const arrayBuffer = event.target.result;
+        const bytes = new Uint8Array(arrayBuffer);
+        let binary = '';
+        for (let i = 0; i < bytes.byteLength; i += 1) {
+          binary += String.fromCharCode(bytes[i]);
+        }
 
-    setLoadingDatos(true);
-    try {
-      const response = await getData({
-        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${solicitudFolioAlumnoId}`,
-      });
+        const forgeBuffer = forge.util.createBuffer(binary);
 
-      if (response.data) {
-        setDatosAlumno(response.data);
+        let cert;
+        try {
+          const asn1 = forge.asn1.fromDer(forgeBuffer);
+          cert = forge.pki.certificateFromAsn1(asn1);
+        } catch (derError) {
+          cert = forge.pki.certificateFromPem(binary);
+        }
+
+        const atributos = cert.subject.attributes;
+
+        const cnField = atributos.find((attr) => attr.type === '2.5.4.3');
+        const nombreCompleto = cnField?.value || '';
+
+        const curpField = atributos.find((attr) => attr.type === '2.5.4.5');
+        const curp = curpField?.value || '';
+
+        resolve({
+          nombre: nombreCompleto,
+          curp,
+          serie: cert.serialNumber,
+          vencimiento: cert.validity.notAfter,
+          emisor: cert.issuer.getField('CN')?.value || '',
+        });
+      } catch (err) {
+        reject(new Error(`Error al leer el certificado: ${err.message}`));
       }
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: 'Error al obtener los datos del alumno',
-        type: 'error',
-      });
-    } finally {
-      setLoadingDatos(false);
+    };
+
+    reader.onerror = () => reject(new Error('Error al leer el archivo'));
+    reader.readAsArrayBuffer(certFile);
+  });
+
+  const validarRepresentante = async (curp) => {
+    const response = await getData({
+      endpoint: `/solicitudesFolios/representantes-legales/${encodeURIComponent(curp)}`,
+    });
+
+    if (response.statusCode === 404 || response.errorMessage === '¡Registro no encontrado!') {
+      throw new Error('No se encontró un representante legal activo con el CURP proporcionado.');
     }
+    if (response.statusCode === 400) {
+      throw new Error('El formato del CURP es inválido.');
+    }
+    if (response.statusCode === 401) {
+      throw new Error('No autorizado para consultar representantes legales.');
+    }
+    if (response.errorMessage) {
+      throw new Error(response.errorMessage);
+    }
+
+    const { data } = response;
+    const nombreFirmante = [data.nombre, data.primerApellido, data.segundoApellido]
+      .filter(Boolean)
+      .join(' ');
+
+    return nombreFirmante;
   };
 
   const loadSeguriSignScripts = async () => {
@@ -119,60 +164,10 @@ export default function ModalFirmaElectronica({
   };
 
   useEffect(() => {
-    if (open) {
-      if (!scriptsLoaded && !scriptsLoading) {
-        loadSeguriSignScripts();
-      }
-      if (solicitudFolioAlumnoId && !datosAlumno) {
-        fetchDatosAlumno();
-      }
+    if (open && !scriptsLoaded && !scriptsLoading) {
+      loadSeguriSignScripts();
     }
-  }, [open, solicitudFolioAlumnoId]);
-
-  const construirObjetoPorFirmar = () => {
-    if (!datosAlumno) return null;
-
-    const {
-      alumno,
-      folioDocumentoAlumno,
-      tipoSolicitudFolio,
-    } = datosAlumno;
-    const persona = alumno?.persona;
-    const programa = alumno?.programa;
-    const plantel = programa?.plantel;
-    const domicilio = plantel?.domicilio;
-
-    const direccionPartes = [
-      domicilio?.calle,
-      domicilio?.numero_exterior ? `No. ${domicilio.numero_exterior}` : null,
-      domicilio?.numero_interior ? `Int. ${domicilio.numero_interior}` : null,
-      domicilio?.colonia ? `Col. ${domicilio.colonia}` : null,
-    ].filter(Boolean);
-
-    return {
-      folioInterno: folioDocumentoAlumno?.folioDocumento,
-      foja,
-      libro,
-      tipoDocumento: tipoDocumento.toLowerCase(),
-      tipoSolicitudFolio,
-      nombre: persona?.nombre,
-      apellidoPaterno: persona?.apellidoPaterno,
-      apellidoMaterno: persona?.apellidoMaterno,
-      curp: persona?.curp,
-      programa: {
-        rvoe: programa?.acuerdo_rvoe,
-        nombre: programa?.nombre,
-        nivel: programa?.nivel?.nombre,
-      },
-      institucion: {
-        nombre: plantel?.institucion?.nombre,
-        plantel: {
-          cct: plantel?.clave_centro_trabajo,
-          direccion: direccionPartes.join(', '),
-        },
-      },
-    };
-  };
+  }, [open]);
 
   const arrayBufferToString = (buffer) => {
     let result = '';
@@ -190,30 +185,7 @@ export default function ModalFirmaElectronica({
     reader.readAsArrayBuffer(file);
   });
 
-  const generarPKCS7 = async (certFile, keyFile, pass, dataToSign) => {
-    const certificateBuffer = await readFileAsArrayBuffer(certFile);
-    const privateKeyBuffer = await readFileAsArrayBuffer(keyFile);
-
-    const privateKeyBufferString = arrayBufferToString(privateKeyBuffer);
-    const pKey = privateKeyBufferString.replace(/(-----(BEGIN|END) PRIVATE KEY-----|\r\n|\n)/g, '');
-
-    let cipheredKey;
-    if (pKey.charAt(0) === 'M') {
-      cipheredKey = window.atob(pKey);
-    } else {
-      cipheredKey = privateKeyBufferString;
-    }
-
-    const certKeyBufferString = arrayBufferToString(certificateBuffer);
-    const pCert = certKeyBufferString.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r\n|\n)/g, '');
-
-    let certKey;
-    if (pCert.charAt(0) === 'M') {
-      certKey = window.atob(pCert);
-    } else {
-      certKey = certKeyBufferString;
-    }
-
+  const generarPKCS7 = async (cipheredKey, certKey, pass, dataToSign) => {
     if (typeof window.pkcs7FromContent !== 'function') {
       throw new Error('La función pkcs7FromContent no está disponible');
     }
@@ -227,14 +199,64 @@ export default function ModalFirmaElectronica({
       false,
     );
 
-    const b64PKCS7Message = window.btoa(arrayBufferToString(pkcs7Result));
-
-    return b64PKCS7Message;
+    return window.btoa(arrayBufferToString(pkcs7Result));
   };
 
-  const handleCertificadoChange = (files) => {
+  const construirObjetoPorFirmar = (alumno) => {
+    const { programa } = solicitudData;
+    const { plantel } = programa;
+    const { domicilio } = plantel;
+    const { persona } = alumno.alumno;
+    const { folioDocumentoAlumno } = alumno;
+
+    const direccionPartes = [
+      domicilio?.calle,
+      domicilio?.numeroExterior ? `No. ${domicilio.numeroExterior}` : null,
+      domicilio?.numeroInterior ? `Int. ${domicilio.numeroInterior}` : null,
+      domicilio?.colonia ? `Col. ${domicilio.colonia}` : null,
+    ].filter(Boolean);
+
+    return {
+      folioInterno: folioDocumentoAlumno?.folioDocumento,
+      foja: folioDocumentoAlumno?.foja?.nombre,
+      libro: folioDocumentoAlumno?.libro?.nombre,
+      tipoDocumento: 'certificado',
+      tipoSolicitudFolio: solicitudData.tipoSolicitudFolio?.nombre,
+      nombre: persona?.nombre,
+      apellidoPaterno: persona?.apellidoPaterno,
+      apellidoMaterno: persona?.apellidoMaterno,
+      curp: persona?.curp,
+      programa: {
+        rvoe: programa?.acuerdoRvoe,
+        nombre: programa?.nombre,
+        nivel: programa?.nivelId,
+      },
+      institucion: {
+        nombre: plantel?.institucion?.nombre,
+        plantel: {
+          cct: plantel?.claveCentroTrabajo,
+          direccion: direccionPartes.join(', '),
+        },
+      },
+    };
+  };
+
+  const handleCertificadoChange = async (files) => {
     if (files && files.length > 0) {
-      setCertificado(files[0]);
+      const file = files[0];
+      setCertificado(file);
+
+      try {
+        const datos = await extraerDatosCertificado(file);
+        setDatosCertificado(datos);
+      } catch (error) {
+        setNoti({
+          open: true,
+          message: error.message,
+          type: 'error',
+        });
+        setDatosCertificado(null);
+      }
     }
   };
 
@@ -246,117 +268,153 @@ export default function ModalFirmaElectronica({
 
   const handleRemoveCertificado = () => {
     setCertificado(null);
+    setDatosCertificado(null);
   };
 
   const handleRemoveLlavePrivada = () => {
     setLlavePrivada(null);
   };
 
-  const handleToggleDatosAlumno = () => {
-    setShowDatosAlumno(!showDatosAlumno);
-  };
-
   const handleCancel = () => {
     setCertificado(null);
     setLlavePrivada(null);
     setPassword('');
-    setShowDatosAlumno(false);
-    setDatosAlumno(null);
+    setProgreso(0);
+    setFirmando(false);
+    setDatosCertificado(null);
     onClose();
   };
 
   const handleConfirm = async () => {
     if (!certificado) {
-      setNoti({
-        open: true,
-        message: 'Debe seleccionar un archivo de certificado (.cer)',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Debe seleccionar un archivo de certificado (.cer)', type: 'error' });
       return;
     }
-
     if (!llavePrivada) {
-      setNoti({
-        open: true,
-        message: 'Debe seleccionar un archivo de llave privada (.key)',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Debe seleccionar un archivo de llave privada (.key)', type: 'error' });
       return;
     }
-
     if (!password || password.trim() === '') {
-      setNoti({
-        open: true,
-        message: 'Debe ingresar la contraseña de la llave privada',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Debe ingresar la contraseña de la llave privada', type: 'error' });
       return;
     }
-
     if (!scriptsLoaded) {
-      setNoti({
-        open: true,
-        message: 'Las librerías criptográficas aún se están cargando',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Las librerías criptográficas aún se están cargando', type: 'error' });
       return;
     }
-
-    if (!datosAlumno) {
-      setNoti({
-        open: true,
-        message: 'Los datos del alumno aún se están cargando',
-        type: 'error',
-      });
+    if (!alumnosData || alumnosData.length === 0) {
+      setNoti({ open: true, message: 'No hay alumnos para firmar', type: 'error' });
       return;
     }
-
+    if (!datosCertificado || !datosCertificado.curp || !datosCertificado.nombre) {
+      setNoti({ open: true, message: 'No se pudieron extraer los datos del firmante del certificado', type: 'error' });
+      return;
+    }
+    if (!solicitudData || !solicitudData.id) {
+      setNoti({ open: true, message: 'No se pudo cargar la información de la solicitud', type: 'error' });
+      return;
+    }
     if (typeof window.isWCAPISupported === 'function' && !window.isWCAPISupported()) {
-      setNoti({
-        open: true,
-        message: 'Tu navegador no soporta la API Web Crypto necesaria',
-        type: 'error',
-      });
+      setNoti({ open: true, message: 'Tu navegador no soporta la API Web Crypto necesaria', type: 'error' });
       return;
     }
 
     setLoading(true);
+    setFirmando(true);
+    setProgreso(0);
 
     try {
-      const objetoPorFirmar = construirObjetoPorFirmar();
+      const nombreFirmante = await validarRepresentante(datosCertificado.curp);
 
-      const jsonString = JSON.stringify(objetoPorFirmar);
+      const certificateBuffer = await readFileAsArrayBuffer(certificado);
+      const privateKeyBuffer = await readFileAsArrayBuffer(llavePrivada);
 
-      const pkcs7Base64 = await generarPKCS7(
-        certificado,
-        llavePrivada,
-        password,
-        jsonString,
-      );
+      const privateKeyBufferString = arrayBufferToString(privateKeyBuffer);
+      const pKey = privateKeyBufferString.replace(/(-----(BEGIN|END) PRIVATE KEY-----|\r\n|\n)/g, '');
 
-      await onConfirm({
-        pkcs7: pkcs7Base64,
-        objetoPorFirmar,
-      });
+      let cipheredKey;
+      if (pKey.charAt(0) === 'M') {
+        cipheredKey = window.atob(pKey);
+      } else {
+        cipheredKey = privateKeyBufferString;
+      }
+
+      const certKeyBufferString = arrayBufferToString(certificateBuffer);
+      const pCert = certKeyBufferString.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r\n|\n)/g, '');
+
+      let certKey;
+      if (pCert.charAt(0) === 'M') {
+        certKey = window.atob(pCert);
+      } else {
+        certKey = certKeyBufferString;
+      }
+
+      const documentosPayload = [];
+      const totalAlumnos = alumnosData.length;
+
+      for (let i = 0; i < totalAlumnos; i += 1) {
+        const alumno = alumnosData[i];
+        const objetoPorFirmar = construirObjetoPorFirmar(alumno);
+        const jsonString = JSON.stringify(objetoPorFirmar);
+
+        // eslint-disable-next-line no-await-in-loop
+        const pkcs7Base64 = await generarPKCS7(cipheredKey, certKey, password, jsonString);
+
+        documentosPayload.push({
+          pkcs7: pkcs7Base64,
+          folioInterno: objetoPorFirmar.folioInterno,
+          objetoPorFirmar,
+          tipoDocumento: 'certificado',
+          autoridad: {
+            tipoFirmante: 'ies',
+            cargoFirmante: 'director',
+            curp: datosCertificado.curp,
+            nombre: nombreFirmante,
+          },
+        });
+
+        setProgreso(Math.round(((i + 1) / totalAlumnos) * 100));
+      }
+
+      const resultados = await onConfirm(documentosPayload);
+
+      const hayResultados = resultados.length > 0;
+      const todosExitosos = hayResultados
+        && resultados.every((r) => r.estatusFirmado === 'exitoso');
+
+      const estatusActual = solicitudData.estatusSolicitudFolioId;
+
+      let nuevoEstatusId = null;
+      if (estatusActual === 3 || estatusActual === 6) {
+        nuevoEstatusId = todosExitosos ? 7 : 6;
+      }
+
+      if (nuevoEstatusId) {
+        await updateRecord({
+          endpoint: `/solicitudesFolios/${solicitudData.id}`,
+          data: { estatusSolicitudFolioId: nuevoEstatusId },
+        });
+      }
 
       setCertificado(null);
       setLlavePrivada(null);
       setPassword('');
-      setShowDatosAlumno(false);
-      setDatosAlumno(null);
+      setProgreso(0);
+      setFirmando(false);
+      setDatosCertificado(null);
     } catch (error) {
       setNoti({
         open: true,
         message: error.message || 'Error al procesar la firma',
         type: 'error',
       });
+      setFirmando(false);
     } finally {
       setLoading(false);
     }
   };
 
-  const persona = datosAlumno?.alumno?.persona;
-  const programa = datosAlumno?.alumno?.programa;
+  const totalAlumnos = alumnosData?.length || 0;
 
   return (
     <Dialog
@@ -364,9 +422,7 @@ export default function ModalFirmaElectronica({
       onClose={handleCancel}
       maxWidth="sm"
       fullWidth
-      PaperProps={{
-        sx: { borderRadius: '12px' },
-      }}
+      PaperProps={{ sx: { borderRadius: '12px' } }}
     >
       <DialogTitle sx={{ pb: 1 }}>
         <Box display="flex" alignItems="center" gap={1}>
@@ -377,172 +433,54 @@ export default function ModalFirmaElectronica({
 
       <DialogContent dividers sx={{ pt: 3 }}>
         {scriptsLoading && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 2,
-              mb: 2,
-              p: 2,
-              backgroundColor: '#fff3e0',
-              borderRadius: '8px',
-            }}
+          <Box sx={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2, p: 2, backgroundColor: '#fff3e0', borderRadius: '8px',
+          }}
           >
             <CircularProgress size={20} />
-            <Typography variant="body2">
-              Cargando librerías criptográficas...
-            </Typography>
+            <Typography variant="body2">Cargando librerías criptográficas...</Typography>
           </Box>
         )}
 
-        {loadingDatos && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 2,
-              mb: 2,
-              p: 2,
-              backgroundColor: '#e3f2fd',
-              borderRadius: '8px',
-            }}
-          >
-            <CircularProgress size={20} />
-            <Typography variant="body2">
-              Cargando datos del alumno...
+        <Box sx={{
+          mb: 3, p: 2, backgroundColor: '#e3f2fd', borderRadius: '8px',
+        }}
+        >
+          <Typography variant="body2" color="primary" fontWeight="bold">
+            {`Se firmarán ${totalAlumnos} documento(s)`}
+          </Typography>
+        </Box>
+
+        {firmando && (
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="body2" gutterBottom>
+              {`Generando firmas... ${progreso}%`}
             </Typography>
+            <LinearProgress variant="determinate" value={progreso} />
           </Box>
         )}
 
         <Box sx={{ mb: 3 }}>
-          <Box
+          <Typography
+            variant="subtitle2"
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              mb: 1.5,
+              fontWeight: 'bold', mb: 1.5, display: 'flex', alignItems: 'center',
             }}
           >
-            <Typography
-              variant="subtitle2"
-              sx={{
-                fontWeight: 'bold',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <BadgeIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
-              Certificado (.cer)
-            </Typography>
-            {datosAlumno && (
-              <IconButton
-                size="small"
-                onClick={handleToggleDatosAlumno}
-                sx={{ color: 'primary.main' }}
-              >
-                {showDatosAlumno ? <VisibilityOffIcon /> : <VisibilityIcon />}
-              </IconButton>
-            )}
-          </Box>
-
-          {datosAlumno && (
-            <Collapse in={showDatosAlumno}>
-              <Box
-                sx={{
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '8px',
-                  p: 2,
-                  mb: 2,
-                  backgroundColor: '#fafafa',
-                }}
-              >
-                <Typography
-                  variant="subtitle2"
-                  color="primary"
-                  gutterBottom
-                  sx={{ fontWeight: 'bold', mb: 2 }}
-                >
-                  Datos del alumno
-                </Typography>
-                <Grid container spacing={1}>
-                  {datosAlumno?.folioDocumentoAlumno?.folioDocumento && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Folio asignado
-                      </Typography>
-                      <Typography variant="body2">
-                        {datosAlumno.folioDocumentoAlumno.folioDocumento}
-                      </Typography>
-                    </Grid>
-                  )}
-                  {programa?.acuerdo_rvoe && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        RVOE
-                      </Typography>
-                      <Typography variant="body2">{programa.acuerdo_rvoe}</Typography>
-                    </Grid>
-                  )}
-                  {datosAlumno?.alumno?.matricula && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Matrícula
-                      </Typography>
-                      <Typography variant="body2">{datosAlumno.alumno.matricula}</Typography>
-                    </Grid>
-                  )}
-                  {persona?.nombre && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Nombre
-                      </Typography>
-                      <Typography variant="body2">{persona.nombre}</Typography>
-                    </Grid>
-                  )}
-                  {persona?.apellidoPaterno && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Apellido Paterno
-                      </Typography>
-                      <Typography variant="body2">{persona.apellidoPaterno}</Typography>
-                    </Grid>
-                  )}
-                  {persona?.apellidoMaterno && (
-                    <Grid item xs={6}>
-                      <Typography variant="caption" color="textSecondary">
-                        Apellido Materno
-                      </Typography>
-                      <Typography variant="body2">{persona.apellidoMaterno}</Typography>
-                    </Grid>
-                  )}
-                </Grid>
-              </Box>
-            </Collapse>
-          )}
+            <BadgeIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
+            Certificado (.cer)
+          </Typography>
 
           {certificado ? (
-            <Box
-              sx={{
-                border: '1px solid #4caf50',
-                borderRadius: '8px',
-                p: 2,
-                backgroundColor: '#f1f8e9',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
+            <Box sx={{
+              border: '1px solid #4caf50', borderRadius: '8px', p: 2, backgroundColor: '#f1f8e9', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}
             >
               <Box display="flex" alignItems="center" gap={1}>
                 <CheckCircleIcon color="success" />
                 <Typography variant="body2">{certificado.name}</Typography>
               </Box>
-              <IconButton
-                size="small"
-                onClick={handleRemoveCertificado}
-                disabled={loading}
-              >
+              <IconButton size="small" onClick={handleRemoveCertificado} disabled={loading}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Box>
@@ -565,36 +503,23 @@ export default function ModalFirmaElectronica({
           <Typography
             variant="subtitle2"
             sx={{
-              fontWeight: 'bold',
-              mb: 1.5,
-              display: 'flex',
-              alignItems: 'center',
+              fontWeight: 'bold', mb: 1.5, display: 'flex', alignItems: 'center',
             }}
           >
             <VpnKeyIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
             Llave privada (.key)
           </Typography>
+
           {llavePrivada ? (
-            <Box
-              sx={{
-                border: '1px solid #4caf50',
-                borderRadius: '8px',
-                p: 2,
-                backgroundColor: '#f1f8e9',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
+            <Box sx={{
+              border: '1px solid #4caf50', borderRadius: '8px', p: 2, backgroundColor: '#f1f8e9', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}
             >
               <Box display="flex" alignItems="center" gap={1}>
                 <CheckCircleIcon color="success" />
                 <Typography variant="body2">{llavePrivada.name}</Typography>
               </Box>
-              <IconButton
-                size="small"
-                onClick={handleRemoveLlavePrivada}
-                disabled={loading}
-              >
+              <IconButton size="small" onClick={handleRemoveLlavePrivada} disabled={loading}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Box>
@@ -613,15 +538,11 @@ export default function ModalFirmaElectronica({
           )}
         </Box>
 
-        {/* Contraseña */}
         <Box>
           <Typography
             variant="subtitle2"
             sx={{
-              fontWeight: 'bold',
-              mb: 1.5,
-              display: 'flex',
-              alignItems: 'center',
+              fontWeight: 'bold', mb: 1.5, display: 'flex', alignItems: 'center',
             }}
           >
             <LockIcon sx={{ fontSize: 20, mr: 1, color: 'text.secondary' }} />
@@ -645,11 +566,11 @@ export default function ModalFirmaElectronica({
         </Button>
         <Button
           onClick={handleConfirm}
-          disabled={loading || disabled || scriptsLoading || loadingDatos}
+          disabled={loading || disabled || scriptsLoading || totalAlumnos === 0}
           variant="contained"
           color="primary"
         >
-          {loading ? 'Firmando...' : 'Firmar'}
+          {loading ? `Firmando ${totalAlumnos} documentos...` : `Firmar ${totalAlumnos} documentos`}
         </Button>
       </DialogActions>
     </Dialog>
@@ -657,8 +578,9 @@ export default function ModalFirmaElectronica({
 }
 
 ModalFirmaElectronica.defaultProps = {
-  title: 'Firma Electrónica',
-  solicitudFolioAlumnoId: null,
+  title: 'Firma Electrónica Masiva',
+  alumnosData: [],
+  solicitudData: null,
   disabled: false,
 };
 
@@ -667,9 +589,7 @@ ModalFirmaElectronica.propTypes = {
   onClose: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   title: PropTypes.string,
-  solicitudFolioAlumnoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  alumnosData: PropTypes.arrayOf(PropTypes.shape()),
+  solicitudData: PropTypes.shape(),
   disabled: PropTypes.bool,
-  tipoDocumento: PropTypes.string.isRequired,
-  libro: PropTypes.string.isRequired,
-  foja: PropTypes.string.isRequired,
 };

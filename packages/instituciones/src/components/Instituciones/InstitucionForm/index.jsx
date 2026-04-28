@@ -87,7 +87,14 @@ export default function InstitucionForm({
     };
 
     init();
-  }, [accion, initialInstitucion, session.id, getInstitutionPhoto, setLoading, setTitle]);
+  }, [
+    accion,
+    initialInstitucion,
+    session.id,
+    getInstitutionPhoto,
+    setLoading,
+    setTitle,
+  ]);
 
   const handleUploadImage = async () => {
     const formData = new FormData();
@@ -98,10 +105,23 @@ export default function InstitucionForm({
 
     try {
       setLoading(true);
-      await SubmitDocument(formData);
-      await getInstitutionPhoto(institucion.id);
+
+      await SubmitDocument(formData, (ubicacion) => {
+        const fullUrl = `${DOMAIN}${ubicacion}`;
+        setImageUrl(fullUrl);
+      });
+
+      setNoti({
+        open: true,
+        message: 'Logotipo actualizado correctamente',
+        type: 'success',
+      });
     } catch (error) {
-      setNoti({ open: true, message: 'Error al subir imagen', type: 'error' });
+      setNoti({
+        open: true,
+        message: 'Error al subir imagen',
+        type: 'error',
+      });
     } finally {
       setLoading(false);
       setConfirmImageModal(false);
@@ -125,22 +145,37 @@ export default function InstitucionForm({
     }
   };
 
-  const proxiedImage = imageUrl
-    ? `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`
-    : FALLBACK_IMAGE;
-
   return (
     <Grid container>
-      <Grid item xs={4} sx={{ textAlign: 'center', mt: 10 }}>
-        <div style={{ position: 'relative', width: 300, height: 300 }}>
+      <Grid
+        item
+        xs={4}
+        sx={{
+          mt: 10,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <div
+          style={{
+            position: 'relative',
+            width: 300,
+            height: 300,
+            padding: 16,
+            border: '1px solid #e0e0e0',
+            borderRadius: 8,
+            backgroundColor: '#fff',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          }}
+        >
           <Image
-            src={proxiedImage}
+            key={imageUrl}
+            src={imageUrl || FALLBACK_IMAGE}
             alt="institucion-logo"
             width={300}
             height={300}
             quality={100}
             style={{ objectFit: 'contain' }}
-            priority
           />
 
           {accion !== 'crear' && (
@@ -151,7 +186,7 @@ export default function InstitucionForm({
                   position: 'absolute',
                   bottom: 10,
                   right: 10,
-                  backgroundColor: 'rgba(255,255,255,0.8)',
+                  backgroundColor: 'rgba(255,255,255,0.9)',
                 }}
                 size="small"
               >
@@ -189,7 +224,11 @@ export default function InstitucionForm({
       </Grid>
 
       <Grid item xs={6} sx={{ mt: 2 }}>
-        <ButtonsForm justifyContent="flex-start" confirm={handleConfirm} cancel={handleCancel} />
+        <ButtonsForm
+          justifyContent="flex-start"
+          confirm={handleConfirm}
+          cancel={handleCancel}
+        />
       </Grid>
 
       <Grid item xs={6} sx={{ mt: 2 }}>
@@ -209,7 +248,10 @@ export default function InstitucionForm({
         <Typography>¿Deseas actualizar el logotipo?</Typography>
         <Grid container justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
           <Grid item>
-            <ButtonSimple text="Cancelar" onClick={() => setConfirmImageModal(false)} />
+            <ButtonSimple
+              text="Cancelar"
+              onClick={() => setConfirmImageModal(false)}
+            />
           </Grid>
           <Grid item>
             <ButtonSimple text="Confirmar" onClick={handleUploadImage} />

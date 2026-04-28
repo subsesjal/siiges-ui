@@ -95,6 +95,7 @@ export {
   useNotification,
   useCheckMobileScreen,
   usePlantel,
+  useShowFooter,
 } from './hooks';
 
 // ============================================================================
