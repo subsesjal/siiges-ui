@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from '@mui/material/Tooltip';
 import { IconButton, Stack } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import { Context, GetFile } from '@siiges-ui/shared';
+import { GetFile, useUI } from '@siiges-ui/shared';
 
 const url = process.env.NEXT_PUBLIC_URL;
 export default function ButtonsCatalogoTitulo({ id }) {
-  const { setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
   const handleDownload = async (tipoDocumento) => {
     setLoading(true);
     try {

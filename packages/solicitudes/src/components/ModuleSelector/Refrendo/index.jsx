@@ -1,12 +1,14 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
 import {
-  ButtonSimple, Select, useApi, Context,
+  ButtonSimple, Select, useApi, useAuth, useUI,
 } from '@siiges-ui/shared';
 
 function Refrendo() {
-  const { setNoti, session: { id } } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
+  const { id } = session;
   const router = useRouter();
   const [options, setOptions] = useState([]);
   const [option, setOption] = useState('');

@@ -1,7 +1,9 @@
 import {
-  ButtonSimple, Context, DataTable, fileToFormData, SubmitDocument,
+  ButtonSimple, DataTable, fileToFormData, SubmitDocument,
+  useAuth,
+  useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import { DropzoneDialog } from 'mui-file-dropzone';
@@ -10,7 +12,8 @@ import catalogoTitulos from '../../Tables/catalogoTitulosTable';
 export default function TitulosTable({ titulos, reloadTitulos }) {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState([]);
-  const { setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
 
   const handleClose = () => setOpen(false);
 

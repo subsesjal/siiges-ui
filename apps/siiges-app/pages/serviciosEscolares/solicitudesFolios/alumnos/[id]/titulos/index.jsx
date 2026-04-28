@@ -1,9 +1,9 @@
 import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton } from '@mui/material';
 import {
-  ButtonSimple, Context, DataTable, getData, Layout,
+  ButtonSimple, useUI, DataTable, getData, Layout,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/router';
 import { ModalCertificado } from '@siiges-ui/serviciosescolares';
@@ -42,7 +42,7 @@ const columns = (handleEdit) => [
 ];
 
 export default function AlumnosTitulo() {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const router = useRouter();
   const { id, programa, tipoSolicitud } = router.query;
   const [rows, setRows] = useState([]);

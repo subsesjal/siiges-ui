@@ -1,7 +1,7 @@
 import Tooltip from '@mui/material/Tooltip';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Layout, DataTable, Context, DefaultModal, getData, ButtonSimple,
+  Layout, DataTable, useAuth, DefaultModal, getData, ButtonSimple,
 } from '@siiges-ui/shared';
 import {
   Divider, IconButton, Typography, Grid, CircularProgress,
@@ -43,7 +43,7 @@ function ModalState() {
 }
 
 export default function Notificaciones() {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const { rol, id } = session;
   const [rows, setRows] = useState([]);
 
@@ -132,6 +132,7 @@ export default function Notificaciones() {
                     style={{
                       maxHeight: '400px', overflowY: 'auto', fontFamily: 'Arial, sans-serif', fontSize: '14px', lineHeight: '1.6',
                     }}
+                    // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{ __html: modalData.emailHtml }}
                   />
                 </Grid>

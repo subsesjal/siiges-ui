@@ -1,13 +1,13 @@
 import Tooltip from '@mui/material/Tooltip';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import React, { useContext, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Edit, Delete,
 } from '@mui/icons-material';
 import { Typography, IconButton } from '@mui/material';
 import {
-  deleteRecord, Context, DefaultModal, ButtonsForm,
+  deleteRecord, DefaultModal, ButtonsForm, useUI,
 } from '@siiges-ui/shared';
 import { handleEditClick, handleViewClick } from '..';
 
@@ -20,7 +20,7 @@ export default function SolicitudesBecasTableButtons({
   isBecasSicyt,
   onDeleteSuccess,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [open, setOpen] = useState(false);
   const isEnRevision = estatusSolicitudBecaId === 'EN REVISION' || estatusSolicitudBecaId === 'PROCESADA' || estatusSolicitudBecaId === 'CANCELADA';
 
@@ -42,7 +42,6 @@ export default function SolicitudesBecasTableButtons({
         });
       }
     } catch (error) {
-      console.error(error);
       setNoti({
         open: true,
         message: '¡Error al eliminar la solicitud!',

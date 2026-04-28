@@ -1,12 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Divider, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  LabelData,
-  Select,
-  Context,
-  getTurnoById,
-  SelectAdd,
+  LabelData, Select, getTurnoById, SelectAdd, useAuth, useUI,
 } from '@siiges-ui/shared';
 import {
   getCiclosEscolares,
@@ -36,7 +32,8 @@ export default function InscripcionForm({
     setLoading,
   });
 
-  const { setNoti, session } = useContext(Context);
+  const { setNoti } = useUI();
+  const { session } = useAuth();
   const [open, setOpen] = useState(false);
   const [openGrupos, setOpenGrupos] = useState(false);
 

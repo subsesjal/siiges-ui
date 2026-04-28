@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Context, DataTable } from '@siiges-ui/shared';
+import React from 'react';
+import { DataTable, useUI } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import SolicitudesServSocTableButtons from '../utils/SolicitudesServSocTableButtons';
@@ -8,7 +8,7 @@ import { handleCreateClick } from '../utils';
 export default function SolicitudServSocTable({
   solicitudes, programa, institucion, setSolicitudes,
 }) {
-  const { loading, session } = useContext(Context);
+  const { loading, session } = useUI();
   const router = useRouter();
   const isIes = session.rol === 'serv_soc_ies';
   const isAdmin = session.rol === 'serv_soc_sicyt' || session.rol === 'admin';

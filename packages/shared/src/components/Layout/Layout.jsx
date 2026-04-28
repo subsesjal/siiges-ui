@@ -1,25 +1,25 @@
+import React, { useState } from 'react';
 import {
   Box, Card, CardContent, Container, Typography,
 } from '@mui/material';
-import React, { useState, useContext } from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { useShowFooter, useCheckMobileScreen } from '../../hooks';
+import { useAuth, useUI, useNavigation } from '../../contexts';
 import MenuDrawer from '../Drawer/MenuDrawer';
 import MainNavbar from '../Navbar/MainNavbar';
 import Loading from '../Loading';
-import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
 import Title from '../Title';
-import { Context } from '../../utils/handlers/context';
-import useShowFooter from '../../utils/hooks/useShowFooter';
 
 export default function Overlay({
   children, title, subtitle, type,
 }) {
   const [open, setOpen] = useState(false);
 
-  const {
-    session, section, setSection, loading,
-  } = useContext(Context);
+  // Split contexts - Solo importamos lo que necesitamos
+  const { session } = useAuth();
+  const { loading } = useUI();
+  const { section, setSection } = useNavigation();
 
   const showFooter = useShowFooter();
 

@@ -1,9 +1,21 @@
 import React, {
-  createContext, useState, useMemo, useEffect,
+  createContext, useState, useMemo, useEffect, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 
 const PlantelContext = createContext();
+
+/**
+ * Hook para acceder al contexto de Plantel
+ * @throws {Error} Si se usa fuera del PlantelProvider
+ */
+export const usePlantel = () => {
+  const context = useContext(PlantelContext);
+  if (context === undefined) {
+    throw new Error('usePlantel debe ser usado dentro de un PlantelProvider');
+  }
+  return context;
+};
 
 export function PlantelProvider({ children, selectedPlantel, institucion }) {
   const [error, setError] = useState({});

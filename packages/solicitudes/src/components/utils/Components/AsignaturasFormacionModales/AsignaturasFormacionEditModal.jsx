@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Grid } from '@mui/material';
 import {
   DefaultModal,
   ButtonSimple,
   validateField,
-  Context,
+  useUI,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -51,7 +51,7 @@ export default function AsignaturasFormacionEditModal({
     }
   }, [form]);
 
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
 
   useEffect(() => {
     const rowItemValues = {

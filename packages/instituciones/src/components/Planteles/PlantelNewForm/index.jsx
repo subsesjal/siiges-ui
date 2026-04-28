@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  ButtonsForm, Input, Context,
+  ButtonsForm, Input, useUI, Context,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import { useRouter } from 'next/router';
@@ -19,9 +19,7 @@ export default function PlantelNewForm({ plantel }) {
     domicilio: { estadoId: 14 },
     director: { persona: {} },
   });
-  const {
-    setLoading,
-  } = useContext(Context);
+  const { setLoading } = useUI();
   const [error, setError] = useState({});
   const { municipios } = getMunicipios();
   const [confirmDisabled, setConfirmDisabled] = useState(false);

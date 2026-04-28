@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, useContext, useMemo,
+  useEffect, useState, useMemo,
 } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -8,7 +8,8 @@ import {
 } from '@mui/material';
 import {
   StepperComponent,
-  Context,
+  useAuth,
+  useUI,
   updateRecord,
   DefaultModal,
   ButtonSimple,
@@ -29,7 +30,8 @@ export default function ModuleHeader({
   const [disabled, setDisabled] = useState(false);
   const [modalState, setModalState] = useState(false);
   const [modalRepresentante, setModalRepresentante] = useState(false);
-  const { session, setNoti, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const { rol } = session;
   const router = useRouter();
   const isFinalModule = useMemo(() => module === steps.length - 1, [module, steps.length]);

@@ -1,12 +1,12 @@
 import { Grid } from '@mui/material';
 import {
-  Context,
   getData,
   Input,
   PositionDisplay,
   Subtitle,
+  useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import DatosSolicitante from '../Pages/DatosSolicitante';
@@ -25,7 +25,7 @@ export default function ConsultEquivalencia({
   const [currentPosition, setCurrentPosition] = useState(1);
   const router = useRouter();
   const { query } = router;
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [filesData, setFilesData] = useState({});
   const [form, setForm] = useState({});
   const [estados, setEstados] = useState([]);

@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid, Typography, List, ListItem, ListItemText,
 } from '@mui/material';
-import { Context, GetFile } from '@siiges-ui/shared';
+import { GetFile, useUI } from '@siiges-ui/shared';
 
 const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 export default function ProgramasPDF({ solicitudId, programaId: entidadId }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   const handleDownload = (tipoDocumento) => {
     let tipoEntidad = 'SOLICITUD';

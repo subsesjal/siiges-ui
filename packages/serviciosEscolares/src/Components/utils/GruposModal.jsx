@@ -1,14 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  ButtonsForm,
-  Context,
-  DefaultModal,
-  Input,
-  InputDate,
-  LabelData,
-  Select,
+  ButtonsForm, DefaultModal, Input, InputDate, LabelData, Select, useUI,
 } from '@siiges-ui/shared';
 import grupoService from './gruposService';
 
@@ -29,7 +23,7 @@ export default function GruposModal({
   setFetchGrupos,
 }) {
   const title = type === 'new' ? 'Agregar Grupo' : 'Modificar Grupo';
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
