@@ -97,7 +97,7 @@ export default function BusquedaAlumnosForm({
         <Input
           id="apellidoPaterno"
           name="apellidoPaterno"
-          label="Apellido Paterno"
+          label="Primer Apellido"
           value={formData.apellidoPaterno || ''}
           onChange={onChange}
         />
@@ -106,7 +106,7 @@ export default function BusquedaAlumnosForm({
         <Input
           id="apellidoMaterno"
           name="apellidoMaterno"
-          label="Apellido Materno"
+          label="Segundo Apellido"
           value={formData.apellidoMaterno || ''}
           onChange={onChange}
         />
