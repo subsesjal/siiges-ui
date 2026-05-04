@@ -41,6 +41,7 @@ export default function ModalFirmaElectronica({
   const [progreso, setProgreso] = useState(0);
   const [firmando, setFirmando] = useState(false);
   const [datosCertificado, setDatosCertificado] = useState(null);
+  const CERT_NAME = process.env.NEXT_PUBLIC_CERT_NAME;
 
   const extraerDatosCertificado = (certFile) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -229,7 +230,7 @@ export default function ModalFirmaElectronica({
       folioInterno: folioDocumentoAlumno?.folioDocumento,
       foja: folioDocumentoAlumno?.foja?.nombre,
       libro: folioDocumentoAlumno?.libro?.nombre,
-      tipoDocumento: 'certificado',
+      tipoDocumento: CERT_NAME,
       tipoSolicitudFolio: solicitudData.tipoSolicitudFolio?.nombre,
       nombre: persona?.nombre,
       apellidoPaterno: persona?.apellidoPaterno,
@@ -373,7 +374,7 @@ export default function ModalFirmaElectronica({
           pkcs7: pkcs7Base64,
           folioInterno: objetoPorFirmar.folioInterno,
           objetoPorFirmar,
-          tipoDocumento: 'certificado',
+          tipoDocumento: CERT_NAME,
           autoridad: {
             tipoFirmante: 'ies',
             cargoFirmante: 'director',
