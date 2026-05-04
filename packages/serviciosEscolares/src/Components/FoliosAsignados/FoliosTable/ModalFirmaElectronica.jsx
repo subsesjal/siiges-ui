@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography,
-  IconButton, Box, CircularProgress, LinearProgress,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Typography,
+  IconButton,
+  Box,
+  CircularProgress,
+  LinearProgress,
 } from '@mui/material';
 import { DropzoneArea } from 'mui-file-dropzone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -10,8 +19,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getData, updateRecord, useUI } from '@siiges-ui/shared';
 import forge from 'node-forge';
+import { Context, updateRecord, getData } from '@siiges-ui/shared';
 
 export default function ModalFirmaElectronica({
   open,
@@ -22,7 +31,7 @@ export default function ModalFirmaElectronica({
   solicitudData,
   disabled,
 }) {
-  const { setNoti } = useUI();
+  const { setNoti } = useContext(Context);
   const [certificado, setCertificado] = useState(null);
   const [llavePrivada, setLlavePrivada] = useState(null);
   const [password, setPassword] = useState('');
