@@ -1,14 +1,15 @@
 import { Grid } from '@mui/material';
 import {
   ButtonSimple,
-  Context,
   getParentUserById,
   Input,
   getToken,
+  useAuth,
+  useUI,
 } from '@siiges-ui/shared';
 import SearchIcon from '@mui/icons-material/Search';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 const SINGLE_FIELDS = ['curp', 'matricula'];
 
@@ -44,7 +45,8 @@ export default function BusquedaAlumnosForm({
   onSearch,
   onInstitucionResolved,
 }) {
-  const { setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
 
   useEffect(() => {
     if (session.rol !== 'representante' && session.rol !== 'ce_ies') return;

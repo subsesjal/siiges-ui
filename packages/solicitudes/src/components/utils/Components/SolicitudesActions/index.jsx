@@ -12,7 +12,9 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import GradingIcon from '@mui/icons-material/Grading';
 import PrintIcon from '@mui/icons-material/Print';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
-import { ButtonsForm, useAuth, useUI, DefaultModal } from '@siiges-ui/shared';
+import {
+  ButtonsForm, useAuth, useUI, DefaultModal,
+} from '@siiges-ui/shared';
 import { deleteRecord } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 import { useRouter } from 'next/router';
 
