@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
-import { Context, getToken } from '@siiges-ui/shared';
+import { useEffect, useState } from 'react';
+import { useAuth, getToken } from '@siiges-ui/shared';
 
 export default function useDocente(id) {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const [docente, setDocente] = useState();
 
   useEffect(() => {

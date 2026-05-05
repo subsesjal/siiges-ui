@@ -1,13 +1,14 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonSimple, Context, GetFile, InputFile,
+  ButtonSimple, GetFile, InputFile,
+  useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
 export default function DocumentosAlumno({ id, type }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [fileURLs, setFileURLs] = useState([null, null, null]);
   const router = useRouter();
 

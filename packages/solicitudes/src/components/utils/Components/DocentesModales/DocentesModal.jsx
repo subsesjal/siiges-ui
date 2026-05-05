@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Divider, Grid, Typography, Button,
 } from '@mui/material';
@@ -6,7 +6,7 @@ import {
   DefaultModal,
   validateField,
   ButtonSimple,
-  Context,
+  useUI,
   Select,
   Input,
   InputNumber,
@@ -75,7 +75,7 @@ export default function DocentesModal({
   mode,
   id,
 }) {
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
   const [showFormacion2, setShowFormacion2] = useState(false);
   const [currentSection, setCurrentSection] = useState(1);
 
@@ -621,4 +621,3 @@ DocentesModal.propTypes = {
   setDocentesList: PropTypes.func.isRequired,
   mode: PropTypes.oneOf(['create', 'edit', 'consult']).isRequired,
 };
-

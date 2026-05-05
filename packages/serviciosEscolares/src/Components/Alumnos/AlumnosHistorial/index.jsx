@@ -1,11 +1,11 @@
-import { Grid, Typography, Divider } from '@mui/material';
-import { Context, ListTitle, ListSubtitle } from '@siiges-ui/shared';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Grid, Typography, Divider } from '@mui/material';
+import { ListTitle, ListSubtitle, useUI } from '@siiges-ui/shared';
 import { HistorialTable } from '@siiges-ui/serviciosescolares';
 
 export default function HistorialAcademico({ alumno, historial, simple }) {
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
 
   useEffect(() => {
     setLoading(!alumno);

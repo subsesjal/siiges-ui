@@ -1,3 +1,6 @@
+// ============================================================================
+// COMPONENTES UI
+// ============================================================================
 import Title from './components/Title';
 import Input from './components/Input';
 import Header from './components/Header';
@@ -10,13 +13,10 @@ import HomePage from './components/HomePage';
 import Carousel from './components/Carousel';
 import DefaultModal from './components/Modal';
 import LabelData from './components/LabelData';
-import GetFile from './utils/handlers/getFile';
 import DataTable from './components/DataTable';
 import Layout from './components/Layout/Layout';
 import LinkButton from './components/LinkButton';
 import Button from './components/Buttons/Button';
-import { Context } from './utils/handlers/context';
-import getTurnoById from './utils/handlers/turnos';
 import StepperComponent from './components/Stepper';
 import InputFile from './components/Input/InputFile';
 import InputDate from './components/Input/InputDate';
@@ -28,7 +28,6 @@ import MainNavbar from './components/Navbar/MainNavbar';
 import ListTitle from './components/ListItems/ListTitle';
 import InputNumber from './components/Input/InputNumber';
 import ButtonIcon from './components/Buttons/ButtonIcon';
-import ParseCookies from './utils/handlers/cookieHandler';
 import LoginLayout from './components/Layout/LoginLayout';
 import ButtonsForm from './components/Buttons/ButtonsForm';
 import ButtonLogin from './components/Buttons/ButtonLogin';
@@ -39,26 +38,12 @@ import InputPassword from './components/Input/InputPassword';
 import ButtonStyled from './components/Buttons/ButtonStyled';
 import ButtonsModal from './components/Buttons/ButtonsModal';
 import ButtonSimple from './components/Buttons/ButtonSimple';
-import getCurrentUser from './utils/handlers/getCurrentUser';
-import { setToken, getToken } from './utils/handlers/globals';
 import ActionButtons from './components/Buttons/ActionButtons';
 import ListSubtitle from './components/ListItems/ListSubtitle';
 import SubmitDocument from './components/Submit/SubmitDocument';
 import fileToFormData from './components/Submit/FileToFormData';
 import PaperInstitucion from './components/Paper/PaperInstitucion';
 import ButtonsSections from './components/Buttons/ButtonsSections';
-import useCheckMobileScreen from './utils/handlers/useCheckMobileScreen';
-import formattedDate from './utils/handlers/formattedDate';
-import useApi from './utils/hooks/useApi';
-import { validateFormData } from './utils/handlers/validateFormData';
-import validateField from './utils/handlers/validateField';
-import {
-  getData,
-  createRecord,
-  updateRecord,
-  deleteRecord,
-} from './utils/handlers/apiUtils';
-import estadosMexico from './utils/mocks/estadosMexico';
 import ButtonFile from './components/Buttons/ButtonFile';
 import ButtonsInspeccionSection from './components/Buttons/ButtonsInspeccionSection';
 import SelectAdd from './components/Select/SelectAdd';
@@ -69,22 +54,56 @@ import BinarySelect from './components/Select/BinarySelect';
 import NavigationButtons from './components/Buttons/NavigationButtons';
 import InputSearch from './components/Input/InputSearch';
 import ButtonFileDownload from './components/Buttons/ButtonFileDownload';
+
+// ============================================================================
+// UTILIDADES
+// ============================================================================
+import GetFile from './utils/handlers/getFile';
+import getTurnoById from './utils/handlers/turnos';
+import ParseCookies from './utils/handlers/cookieHandler';
+import getCurrentUser from './utils/handlers/getCurrentUser';
+import { setToken, getToken } from './utils/handlers/globals';
+import formattedDate from './utils/handlers/formattedDate';
+import { validateFormData } from './utils/handlers/validateFormData';
+import validateField from './utils/handlers/validateField';
+import {
+  getData,
+  createRecord,
+  updateRecord,
+  deleteRecord,
+} from './utils/handlers/apiUtils';
+import estadosMexico from './utils/mocks/estadosMexico';
 import getParentUserById from './utils/handlers/getParentUserById';
 
+// ============================================================================
+// CONTEXTOS (NUEVOS)
+// ============================================================================
 export {
-  getParentUserById,
-  ButtonFileDownload,
-  InputSearch,
-  NavigationButtons,
-  BinarySelect,
-  Subtitle,
-  PositionDisplay,
-  InputTime,
-  SelectAdd,
-  ButtonsInspeccionSection,
-  ButtonsSections,
-  estadosMexico,
-  ButtonFile,
+  AppProvider,
+  useAuth,
+  useUI,
+  useUser,
+  useNavigation,
+  PlantelProvider,
+  Context, // Legacy - mantener para retrocompatibilidad
+} from './contexts';
+
+// ============================================================================
+// HOOKS PERSONALIZADOS (NUEVOS)
+// ============================================================================
+export {
+  useApi,
+  useNotification,
+  useCheckMobileScreen,
+  usePlantel,
+  useShowFooter,
+} from './hooks';
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+export {
+  // Componentes UI
   Logo,
   Input,
   Title,
@@ -95,11 +114,8 @@ export {
   Button,
   Loading,
   GetFile,
-  Context,
   Overlay,
   Carousel,
-  setToken,
-  getToken,
   HomePage,
   LabelData,
   InputFile,
@@ -125,7 +141,6 @@ export {
   ParseCookies,
   DefaultModal,
   ButtonStyled,
-  getTurnoById,
   InputPassword,
   ActionButtons,
   InputDateTime,
@@ -134,13 +149,29 @@ export {
   getCurrentUser,
   StepperComponent,
   PaperInstitucion,
-  useCheckMobileScreen,
+  ButtonsSections,
+  ButtonFile,
+  ButtonsInspeccionSection,
+  SelectAdd,
+  InputTime,
+  PositionDisplay,
+  Subtitle,
+  BinarySelect,
+  NavigationButtons,
+  InputSearch,
+  ButtonFileDownload,
+  getParentUserById,
+
+  // Utilidades
+  setToken,
+  getToken,
+  getTurnoById,
   formattedDate,
-  useApi,
   validateFormData,
   validateField,
   getData,
   updateRecord,
   createRecord,
   deleteRecord,
+  estadosMexico,
 };

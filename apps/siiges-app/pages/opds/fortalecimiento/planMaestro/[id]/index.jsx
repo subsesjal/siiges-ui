@@ -1,9 +1,10 @@
 import { Grid } from '@mui/material';
-import { DataTable, Layout, Select } from '@siiges-ui/shared';
+import {
+  DataTable, Layout, Select, useApi,
+} from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import { columnsPlanMaestro } from '@siiges-ui/opds';
 import { useRouter } from 'next/router';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 import { periodData, sessionData } from '@siiges-ui/opds/src/utils/constants';
 
 export default function PlanMaestro() {

@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import { getInstituciones } from '@siiges-ui/instituciones';
 import columns from '@siiges-ui/serviciosescolares/src/Tables/institucionesAutorizadas';
 
-export default function serviciosEscolares() {
+export default function ServiciosEscolares() {
   const [loading, setLoading] = useState(true);
 
   const { instituciones } = getInstituciones({

@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton, Typography } from '@mui/material';
 import {
-  DataTable, createRecord, Context, DefaultModal, ButtonsForm,
+  DataTable, createRecord, DefaultModal, ButtonsForm, useUI,
 } from '@siiges-ui/shared';
 import ArticleIcon from '@mui/icons-material/Article';
 import {
@@ -23,7 +23,7 @@ export default function AdminTable({
   isCeSicyt,
 }) {
   const router = useRouter();
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [confirmModal, setConfirmModal] = useState({ open: false, id: null, folio: null });
 
   const columns = [

@@ -1,8 +1,8 @@
 import {
   Tabs, Tab, Box,
 } from '@mui/material';
-import { Context } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import { useAuth, useUI } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import ButtonsBox from './ButtonsBox';
@@ -17,7 +17,8 @@ export default function SolicitudesServSocBox({ type }) {
   const EN_CAPTURA = 1;
   const DATOS_SOLICITUD = 0;
   const ALUMNOS = 1;
-  const { setNoti, session, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const [tabIndex, setTabIndex] = useState(DATOS_SOLICITUD);
   const [data, setData] = useState({});
   const [solicitudId, setSolicitudId] = useState('');

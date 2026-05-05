@@ -1,14 +1,14 @@
-import { Context, GetFile, InputFile } from '@siiges-ui/shared';
+import { GetFile, InputFile, useUI } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import React, {
-  useCallback, useContext, useEffect, useState,
+  useCallback, useEffect, useState,
 } from 'react';
 
 const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 export default function ActaComiteSection({ formData, solicitudId, disabled }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [fileUrls, setFileUrls] = useState({
     actaComite: null,
   });

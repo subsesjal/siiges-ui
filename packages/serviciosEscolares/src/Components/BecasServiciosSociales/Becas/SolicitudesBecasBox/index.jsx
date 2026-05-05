@@ -1,6 +1,6 @@
 import { Tabs, Tab, Box } from '@mui/material';
-import { Context } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import { useAuth, useUI } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import SolicitudBecasSection from './SolicitudBecasSection';
@@ -21,7 +21,8 @@ export default function SolicitudesBecasBox({ type }) {
   const DATOS_SOLICTUD = 0;
   const ACTA_COMITE = 1;
   const ALUMNOS = 2;
-  const { setNoti, session, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const [tabIndex, setTabIndex] = useState(DATOS_SOLICTUD);
   const [data, setData] = useState({});
   const [solicitudId, setSolicitudId] = useState('');

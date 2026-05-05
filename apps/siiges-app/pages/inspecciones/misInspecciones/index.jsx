@@ -1,24 +1,23 @@
 import {
-  Context, DataTable, Layout, useApi,
+  useAuth, DataTable, Layout, useApi, useUI,
 } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MisInspeccionesColumns } from '@siiges-ui/inspecciones';
 
+const INSPECCIONES_ESTATUS = [
+  { id: 1, descripcion: 'Inspección asignada' },
+  { id: 2, descripcion: 'Inspección en proceso' },
+  { id: 3, descripcion: 'Inspección completa' },
+  { id: 4, descripcion: 'Inspección terminada, pero por atender observaciones' },
+  { id: 5, descripcion: 'Acta de cierre expedida' },
+];
+
 export default function MisInspecciones() {
-  const { setLoading, setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setLoading, setNoti } = useUI();
   const { id: userId } = session;
   const [inspecciones, setInspecciones] = useState([]);
-
-  const inspeccionesEstatus = [
-    { id: 1, descripcion: 'Inspección asignada' },
-    { id: 2, descripcion: 'Inspección en proceso' },
-    { id: 3, descripcion: 'Inspección completa' },
-    { id: 4, descripcion: 'Inspección terminada, pero por atender observaciones' },
-    { id: 5, descripcion: 'Acta de cierre expedida' },
-  ];
-
-  const getEstatus = (id) => inspeccionesEstatus.find((estatus) => estatus.id === id).descripcion;
   const { data, loading, error } = useApi({ endpoint: `api/v1/inspecciones/inspectores-programas/${userId}` });
 
   useEffect(() => {
@@ -26,7 +25,9 @@ export default function MisInspecciones() {
     if (data) {
       setInspecciones(data.map((row) => ({
         ...row,
-        status: getEstatus(row.estatusInspeccionId),
+        status: INSPECCIONES_ESTATUS.find(
+          (estatus) => estatus.id === row.estatusInspeccionId,
+        )?.descripcion,
         folioInspeccion: row.programa.solicitud.folio,
         planEstudios: row.programa.nombre,
         fechaAsignada: new Date(row.fechaAsignada).toISOString().split('T')[0],

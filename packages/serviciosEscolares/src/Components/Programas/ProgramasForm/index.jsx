@@ -1,12 +1,13 @@
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import { getInstituciones, getPlantelesByInstitucion, getProgramas } from '@siiges-ui/instituciones';
-import { Context, Select } from '@siiges-ui/shared';
-import React, { useState, useEffect, useContext } from 'react';
+import { Select, useAuth, useUI } from '@siiges-ui/shared';
+import React, { useState, useEffect } from 'react';
 import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 export default function ProgramasForm({ setProgramas, setLoading }) {
-  const { setNoti, session } = useContext(Context);
+  const { setNoti } = useUI();
+  const { session } = useAuth();
 
   const [selectedInstitucion, setSelectedInstitucion] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('selectedInstitucion')
     ? localStorage.getItem('selectedInstitucion')

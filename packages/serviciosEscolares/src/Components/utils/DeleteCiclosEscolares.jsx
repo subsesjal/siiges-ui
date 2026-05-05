@@ -2,14 +2,15 @@ import {
   Grid, Typography, IconButton, Tooltip,
 } from '@mui/material';
 import {
-  ButtonsForm, Context, DefaultModal, getToken,
+  ButtonsForm, DefaultModal, getToken, useAuth, useUI,
 } from '@siiges-ui/shared';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 
 function DeleteCicloEscolar({ id, onSuccess }) {
-  const { setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
 
   const [open, setOpen] = useState(false);
   const allowedRoles = ['admin', 'serv_soc_ies', 'representante'];
@@ -48,7 +49,7 @@ function DeleteCicloEscolar({ id, onSuccess }) {
           setNoti({ open: true, message, type: 'error' });
         }
       } else {
-        const { message } = await response.json();
+        await response.json();
         setNoti({
           open: true,
           message: '¡No se ha podido eliminar el ciclo escolar!',
@@ -56,7 +57,6 @@ function DeleteCicloEscolar({ id, onSuccess }) {
         });
       }
     } catch (error) {
-      console.error('Error de eliminación:', error);
       setNoti({ open: true, message: error.toString(), type: 'error' });
     }
   };

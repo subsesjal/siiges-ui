@@ -1,9 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
-  DataTable,
-  getData,
-  Context,
-  ButtonSimple,
+  DataTable, getData, ButtonSimple, useUI,
 } from '@siiges-ui/shared';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -12,7 +9,7 @@ import historialColumns from '../../../Tables/historialAlumnosTable';
 const url = process.env.NEXT_PUBLIC_URL;
 
 export default function HistorialTable({ alumno, simple }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const TIPO_LABEL = Object.freeze({
     1: 'Ordinario',

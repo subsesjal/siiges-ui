@@ -1,9 +1,24 @@
 import { AdminTable, FoliosForm, FoliosTable } from '@siiges-ui/serviciosescolares';
-import { Context, getData, Layout } from '@siiges-ui/shared';
-import React, { useState, useContext, useEffect } from 'react';
+import {
+  useAuth, useUI, getData, Layout,
+} from '@siiges-ui/shared';
+import React, { useState, useEffect, useCallback } from 'react';
+
+const ESTATUS_MAP = {
+  1: [1],
+  2: [2],
+  3: [3],
+  4: [4],
+  5: [5],
+  6: [6],
+  7: [7],
+  8: [8],
+  9: [9],
+};
 
 export default function SolicitudesFolios() {
-  const { setLoading, setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setLoading, setNoti } = useUI();
 
   const [tipoSolicitud, setTipoSolicitud] = useState(null);
   const [tipoDocumento, setTipoDocumento] = useState(null);
@@ -18,19 +33,7 @@ export default function SolicitudesFolios() {
   const isCeIes = session.rol === 'ce_ies';
   const isCeSicyt = session.rol === 'ce_sicyt';
 
-  const estatusMap = {
-    1: [1],
-    2: [2],
-    3: [3],
-    4: [4],
-    5: [5],
-    6: [6],
-    7: [7],
-    8: [8],
-    9: [9],
-  };
-
-  const buildEndpoint = () => {
+  const buildEndpoint = useCallback(() => {
     const params = new URLSearchParams();
     if (institucion) params.append('institucionId', institucion);
     if (plantel) params.append('plantelId', plantel);
@@ -39,14 +42,14 @@ export default function SolicitudesFolios() {
     if (tipoSolicitud) params.append('tipoSolicitudFolioId', tipoSolicitud);
 
     if (estatus.length > 0) {
-      const mapped = estatus.flatMap((id) => estatusMap[id] || []);
+      const mapped = estatus.flatMap((id) => ESTATUS_MAP[id] || []);
       if (mapped.length > 0) params.append('estatus', mapped.join(','));
     }
 
     return `/solicitudesFolios?${params.toString()}`;
-  };
+  }, [institucion, plantel, programa, tipoDocumento, tipoSolicitud, estatus]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!institucion && !plantel && !isAdmin && !isCeSicyt) return;
 
     try {
@@ -71,7 +74,7 @@ export default function SolicitudesFolios() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [institucion, plantel, isAdmin, isCeSicyt, setLoading, buildEndpoint, setNoti]);
 
   useEffect(() => {
     if (isAdmin || isCeSicyt) {
@@ -86,7 +89,7 @@ export default function SolicitudesFolios() {
     } else {
       setSolicitudes([]);
     }
-  }, [institucion, plantel, programa, tipoDocumento, tipoSolicitud, estatus]);
+  }, [institucion, plantel, programa, tipoDocumento, tipoSolicitud, estatus, fetchData]);
 
   const renderTable = () => {
     if (isAdmin || isCeSicyt) {

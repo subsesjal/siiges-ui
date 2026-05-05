@@ -1,10 +1,10 @@
-import { Context, getToken } from '@siiges-ui/shared';
-import { useContext, useEffect, useState } from 'react';
+import { getToken, useAuth } from '@siiges-ui/shared';
+import { useEffect, useState } from 'react';
 
 export default function getCurrentUser() {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;

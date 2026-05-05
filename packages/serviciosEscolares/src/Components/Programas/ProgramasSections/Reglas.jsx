@@ -1,5 +1,5 @@
 import React, {
-  useState, useContext, useEffect,
+  useState, useEffect,
   useRef,
 } from 'react';
 import {
@@ -10,9 +10,7 @@ import {
   FormHelperText,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import {
-  ButtonSimple, Context, updateRecord,
-} from '@siiges-ui/shared';
+import { ButtonSimple, updateRecord, useUI } from '@siiges-ui/shared';
 
 export default function Reglas({
   programa,
@@ -20,7 +18,7 @@ export default function Reglas({
   rules,
   onRulesChange,
 }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   const [form, setForm] = useState({
     id: id || '',

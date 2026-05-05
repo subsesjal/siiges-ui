@@ -11,7 +11,8 @@ import {
 } from '@mui/material';
 import {
   ButtonsForm,
-  Context,
+  useAuth,
+  useUI,
   DefaultModal,
   GetFile,
   Input,
@@ -23,7 +24,7 @@ import {
 } from '@siiges-ui/shared';
 import { getSolicitudDetalles } from '@siiges-ui/solicitudes';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const initialCheckboxes = {
   fda01: false,
@@ -37,7 +38,8 @@ const initialCheckboxes = {
 const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 export default function RecepcionFormatos() {
-  const { session, setNoti, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const router = useRouter();
   const { query } = router;
   const [form, setForm] = useState({ estatusSolicitudId: 6 });
@@ -230,7 +232,7 @@ export default function RecepcionFormatos() {
       </Typography>
       <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid container xs={6}>
+        <Grid item container xs={6}>
           <Grid item xs>
             <List>
               <ListTitle text="Tipo de trámite" />
@@ -251,7 +253,7 @@ export default function RecepcionFormatos() {
             </List>
           </Grid>
         </Grid>
-        <Grid container xs={5}>
+        <Grid item container xs={5}>
           <Grid item xs>
             <List>
               <ListTitle text="Modalidad" />
@@ -261,7 +263,7 @@ export default function RecepcionFormatos() {
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-          <Grid item xs={{ mx: 3 }}>
+          <Grid item sx={{ mx: 3 }}>
             <List>
               <ListSubtitle text={solicitud?.programa?.modalidad?.nombre || 'N/A'} />
               <ListSubtitle text={PERIODOS[solicitud.programa?.cicloId] || 'N/A'} />
@@ -276,7 +278,7 @@ export default function RecepcionFormatos() {
       </Typography>
       <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid container xs={6}>
+        <Grid item container xs={6}>
           <Grid item xs>
             <List>
               <ListTitle text="Institución" />
@@ -299,7 +301,7 @@ export default function RecepcionFormatos() {
             </List>
           </Grid>
         </Grid>
-        <Grid container xs={5}>
+        <Grid item container xs={5}>
           <Grid item xs>
             <List>
               <ListTitle text="Calle" />
@@ -311,7 +313,7 @@ export default function RecepcionFormatos() {
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-          <Grid item xs={{ mx: 3 }}>
+          <Grid item sx={{ mx: 3 }}>
             <List>
               <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.calle || 'N/A'} />
               <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.numeroExterior || 'N/A'} />

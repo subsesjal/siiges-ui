@@ -1,19 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, IconButton } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import GradingIcon from '@mui/icons-material/Grading';
 import {
   ButtonsForm,
-  Context,
   DefaultModal,
   Input,
   updateRecord,
+  useUI,
 } from '@siiges-ui/shared';
 import Link from 'next/link';
 
 export default function BotonesInpeccion({ id, solicitudId }) {
-  const { setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
   const [open, setOpen] = useState(false);
   const [observaciones, setObservaciones] = useState('');
 

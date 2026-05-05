@@ -1,10 +1,10 @@
 import React, {
-  useContext, useEffect, useState, useRef,
+  useEffect, useState, useRef, useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
 import TextField from '@mui/material/TextField';
 import {
-  ButtonsInspeccionSection, Context, Layout, useApi,
+  ButtonsInspeccionSection, useUI, Layout, useApi,
 } from '@siiges-ui/shared';
 import {
   Box, Grid, Tabs, Tab,
@@ -16,7 +16,7 @@ import {
 import { createRecord, getData } from '@siiges-ui/shared/src/utils/handlers/apiUtils';
 
 export default function NuevaInspeccion() {
-  const { setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
   const [selectedTab, setSelectedTab] = useState(0);
   const [form, setForm] = useState([]);
   const [preguntas, setPreguntas] = useState([]);
@@ -27,13 +27,13 @@ export default function NuevaInspeccion() {
   const [method] = useState('GET');
   const router = useRouter();
   const { query } = router;
-  const { data, loading, error } = useApi({
+  const { data, loading } = useApi({
     endpoint: url || 'api/v1/inspecciones/preguntas',
     method,
     dataBody: body,
   });
   const commentRefs = useRef([]);
-  const fetchRespuestas = async () => {
+  const fetchRespuestas = useCallback(async () => {
     try {
       const endpoint = `/inspecciones/inspeccionesPreguntas/${query.id}`;
       const response = await getData({ endpoint });
@@ -46,8 +46,8 @@ export default function NuevaInspeccion() {
     } catch (errorRespuestas) {
       setRespuestas([]);
     }
-  };
-  const fetchObservaciones = async () => {
+  }, [query.id]);
+  const fetchObservaciones = useCallback(async () => {
     try {
       const endpoint = `/inspecciones/${query.id}/observaciones`;
       const response = await getData({ endpoint });
@@ -60,7 +60,7 @@ export default function NuevaInspeccion() {
     } catch (errorObservaciones) {
       setObservaciones([]);
     }
-  };
+  }, [query.id]);
   const saveAnswers = async () => {
     setLoading(loading);
     try {
@@ -98,7 +98,7 @@ export default function NuevaInspeccion() {
     }
     fetchRespuestas();
     fetchObservaciones();
-  }, [data, loading, method, error, setLoading, setNoti, router, query.id]);
+  }, [data, loading, method, setLoading, setNoti, router, query.id]);
 
   const getPosition = (index) => {
     if (index === 0) {

@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, ButtonSimple, validateField, Context,
+  DefaultModal, ButtonSimple, validateField, useUI,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -29,7 +29,7 @@ export default function AsignaturasEditModal({
     setNoti,
     programaId,
   } = useContext(TablesPlanEstudiosContext);
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
   const { form } = useContext(SolicitudContext);
   const [selectedGrade, setSelectedGrade] = useState(grados.semestral);
 

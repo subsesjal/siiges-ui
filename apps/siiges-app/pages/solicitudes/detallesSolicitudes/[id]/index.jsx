@@ -2,17 +2,18 @@ import {
   List, ListItem, ListItemText, Grid, Typography, Divider,
 } from '@mui/material';
 import {
-  ButtonSimple, Layout, Title, useApi, Context, getData,
+  ButtonSimple, Layout, Title, useApi, useAuth, useUI, getData,
   ListTitle, ListSubtitle,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import OficioModal from '@siiges-ui/solicitudes/src/components/Modal/ModalOficio';
 
 const url = process.env.NEXT_PUBLIC_URL;
 
-export default function detallesSolicitudes() {
-  const { session, setNoti } = useContext(Context);
+export default function DetallesSolicitudes() {
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const [isOficioModalOpen, setIsOficioModalOpen] = useState(false);
   const showOficioModal = () => setIsOficioModalOpen(true);
   const hideOficioModal = () => setIsOficioModalOpen(false);
@@ -123,7 +124,7 @@ export default function detallesSolicitudes() {
       </Typography>
       <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid container xs={6}>
+        <Grid item container xs={6}>
           <Grid item xs>
             <List>
               <ListTitle text="Tipo de trámite" />
@@ -144,7 +145,7 @@ export default function detallesSolicitudes() {
             </List>
           </Grid>
         </Grid>
-        <Grid container xs={5}>
+        <Grid item container xs={5}>
           <Grid item xs>
             <List>
               <ListTitle text="Modalidad" />
@@ -155,7 +156,7 @@ export default function detallesSolicitudes() {
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-          <Grid item xs={{ mx: 3 }}>
+          <Grid item sx={{ mx: 3 }}>
             <List>
               <ListSubtitle text={solicitud?.programa?.modalidad?.nombre || 'N/A'} />
               <ListSubtitle text={PERIODOS[solicitud.programa?.cicloId] || 'N/A'} />
@@ -171,7 +172,7 @@ export default function detallesSolicitudes() {
       </Typography>
       <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid container xs={6}>
+        <Grid item container xs={6}>
           <Grid item xs>
             <List>
               <ListTitle text="Institución" />
@@ -194,7 +195,7 @@ export default function detallesSolicitudes() {
             </List>
           </Grid>
         </Grid>
-        <Grid container xs={5}>
+        <Grid item container xs={5}>
           <Grid item xs>
             <List>
               <ListTitle text="Calle" />
@@ -206,7 +207,7 @@ export default function detallesSolicitudes() {
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-          <Grid item xs={{ mx: 3 }}>
+          <Grid item sx={{ mx: 3 }}>
             <List>
               <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.calle || 'N/A'} />
               <ListSubtitle text={solicitud.programa?.plantel?.domicilio?.numeroExterior || 'N/A'} />

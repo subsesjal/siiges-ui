@@ -1,27 +1,18 @@
 import { Divider, Grid, Typography } from '@mui/material';
 import {
-  BinarySelect,
-  ButtonsForm,
-  Context,
-  GetFile,
-  Input,
-  InputDate,
-  InputFile,
-  Select,
-  createRecord,
-  estadosMexico,
-  getData,
-  updateRecord,
+  BinarySelect, ButtonsForm, GetFile, Input, InputDate, InputFile, Select, createRecord,
+  estadosMexico, getData, updateRecord, useAuth, useUI,
 } from '@siiges-ui/shared';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 const ALLOWED_IDS = [2519, 336];
 
 export default function DatosInstitucion({ alumno }) {
-  const { setNoti, session, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const [url, setUrl] = useState();
   const [formSent, setFormSent] = useState(false);
   const [openDropzone, setOpenDropzone] = useState(false);
