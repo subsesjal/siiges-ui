@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ButtonLogin, Input, InputPassword, LinkButton, useAuth, useUI,
-  ButtonsForm, Context, DefaultModal, updateRecord,
+  ButtonsForm, DefaultModal, updateRecord,
 } from '@siiges-ui/shared';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -11,9 +11,8 @@ import { useRouter } from 'next/router';
 import submitNewLogin from '../../utils/submitNewLogin';
 
 export default function SignIn() {
-  const { activateAuth } = useAuth();
+  const { activateAuth, removeAuth, session } = useAuth();
   const { setLoading } = useUI();
-  const { removeAuth, session } = useContext(Context);
   const [errorMessages, setErrorMessages] = useState({});
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ usuario: '', contrasena: '' });
@@ -171,7 +170,6 @@ export default function SignIn() {
           </Typography>
           <a
             href="https://transparenciasitgej.jalisco.gob.mx/api/api/archivos/1908/download?inline=true"
-            passHref
             target="_blank"
             rel="noopener noreferrer"
             style={{ color: '#1976d2', textDecoration: 'underline', cursor: 'pointer' }}
