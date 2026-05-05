@@ -610,7 +610,7 @@ export default function FoliosData({ type }) {
           </Grid>
           <Grid item xs={12}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              <Grid container xs={6}>
+              <Grid item container xs={6}>
                 <Grid item xs>
                   <List>
                     <ListTitle text="Institucion" />
@@ -631,7 +631,7 @@ export default function FoliosData({ type }) {
                   </List>
                 </Grid>
               </Grid>
-              <Grid container xs={5}>
+              <Grid item container xs={5}>
                 <Grid item xs>
                   <List>
                     <ListTitle text="Modalidad" />

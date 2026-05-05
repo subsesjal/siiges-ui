@@ -1,8 +1,7 @@
 /* eslint-disable react/no-array-index-key */
-import { Carousel, PaperInstitucion } from '@siiges-ui/shared';
+import { Carousel, PaperInstitucion, useApi } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 
 export default function InstitucionesCarousel({ opdType }) {
   const { data, loading } = useApi({

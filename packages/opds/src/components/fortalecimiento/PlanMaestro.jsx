@@ -1,7 +1,8 @@
 import { Grid, Typography } from '@mui/material';
-import { ButtonsForm, DataTable, Input } from '@siiges-ui/shared';
+import {
+  ButtonsForm, DataTable, Input, useApi,
+} from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import EvidenciaFotografica from './EvidenciaFotografica';
@@ -99,8 +100,8 @@ export default function PlanMaestro({ type }) {
     }
   }, [data, error]);
 
-  const generateInput = (id, label, value, xs) => (
-    <Grid item xs={xs}>
+  const generateInput = (id, label, value, xs, key) => (
+    <Grid key={key} item xs={xs}>
       <Input
         id={id}
         label={label}
@@ -116,13 +117,13 @@ export default function PlanMaestro({ type }) {
       <Grid item xs={12}>
         <Typography variant="h6">Responsable de planeación</Typography>
       </Grid>
-      {inputPlanMaestro.map((input) => generateInput(input.id, input.label, 'Planeacion', input.xs))}
+      {inputPlanMaestro.map((input) => generateInput(input.id, input.label, 'Planeacion', input.xs, `planeacion-${input.id}`))}
       <Grid item xs={12}>
         <Typography variant="h6">
           Responsable de Obra y mantenimiento
         </Typography>
       </Grid>
-      {inputPlanMaestro.map((input) => generateInput(input.id, input.label, 'Obra', input.xs))}
+      {inputPlanMaestro.map((input) => generateInput(input.id, input.label, 'Obra', input.xs, `obra-${input.id}`))}
       <Grid item xs={12}>
         <DataTable
           buttonAdd

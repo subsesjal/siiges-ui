@@ -1,11 +1,10 @@
 import { Grid } from '@mui/material';
 import {
-  DataTable, Layout, Select, ButtonsForm,
+  DataTable, Layout, Select, ButtonsForm, useApi,
 } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { columnsAnteproyecto } from '@siiges-ui/opds';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 import { presupuestosData } from '@siiges-ui/opds/src/utils/constants';
 import { filterRows } from '@siiges-ui/opds/src/utils/helpers';
 import Modal from '@siiges-ui/opds/src/components/presupuesto/modal';
@@ -14,7 +13,13 @@ export default function Anteproyecto() {
   const router = useRouter();
   const { id } = router.query;
   const [recursos, setRecursos] = useState(1);
-  const [modalState, setModalState] = useState(false);
+  const [modalState, setModalState] = useState({
+    open: false,
+    title: '',
+    disabled: false,
+    edit: true,
+    confirmAction: () => {},
+  });
   const [createRow, SetCreateRow] = useState(false);
   const [rowsData, setRowsData] = useState({});
   const [method, setMethod] = useState('GET');
@@ -42,18 +47,18 @@ export default function Anteproyecto() {
     if (createRow) {
       setMethod('PATCH');
       setBody([rowsData]);
-      setReload(!reload);
+      setReload((previousReload) => !previousReload);
       SetCreateRow(false);
     }
-  }, [createRow]);
+  }, [createRow, rowsData]);
 
   useEffect(() => {
     if (method === 'PATCH') {
       setMethod('GET');
       setBody(null);
-      setReload(!reload);
+      setReload((previousReload) => !previousReload);
     }
-  }, [data]);
+  }, [data, method]);
 
   return (
     <>

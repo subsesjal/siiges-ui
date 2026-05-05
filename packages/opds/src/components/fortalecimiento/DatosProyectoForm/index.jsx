@@ -1,8 +1,9 @@
 import {
   Checkbox, FormControlLabel, Grid, Typography,
 } from '@mui/material';
-import { DataTable, Input, ButtonsForm } from '@siiges-ui/shared';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
+import {
+  DataTable, Input, ButtonsForm, useApi,
+} from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
