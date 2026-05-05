@@ -1,12 +1,13 @@
-import { DataTable, Layout, Select } from '@siiges-ui/shared';
+import {
+  DataTable, Layout, Select, useApi,
+} from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import { columnsOrganosColegiados } from '@siiges-ui/opds';
 import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 import { periodData, sessionData } from '@siiges-ui/opds/src/utils/constants';
 
-export default function organosColegiados() {
+export default function OrganosColegiados() {
   const router = useRouter();
   const [periodo, setPeriodo] = useState('');
   const [session, setSession] = useState('');

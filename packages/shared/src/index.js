@@ -84,6 +84,7 @@ export {
   useUI,
   useUser,
   useNavigation,
+  PlantelProvider,
   Context, // Legacy - mantener para retrocompatibilidad
 } from './contexts';
 

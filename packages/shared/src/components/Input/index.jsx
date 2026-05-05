@@ -2,6 +2,26 @@ import { TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+function normalizeInputValue(value, type) {
+  if (value == null) {
+    return '';
+  }
+
+  if (value instanceof Date) {
+    if (type === 'time') {
+      const hours = value.getHours().toString().padStart(2, '0');
+      const minutes = value.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+
+    if (type === 'datetime') {
+      return value.toISOString().slice(0, 16);
+    }
+  }
+
+  return value;
+}
+
 function Input({
   id,
   label,
@@ -22,22 +42,10 @@ function Input({
   maxRows,
   sx,
 }) {
-  const [input, setInput] = useState(value);
+  const [input, setInput] = useState(() => normalizeInputValue(value, type));
 
   useEffect(() => {
-    if (value instanceof Date) {
-      if (type === 'time') {
-        const hours = value.getHours().toString().padStart(2, '0');
-        const minutes = value.getMinutes().toString().padStart(2, '0');
-        setInput(`${hours}:${minutes}`);
-      } else if (type === 'datetime') {
-        setInput(value.toISOString().slice(0, 16));
-      } else {
-        setInput(value);
-      }
-    } else {
-      setInput(value);
-    }
+    setInput(normalizeInputValue(value, type));
   }, [type, value]);
 
   const handleOnChange = (e) => {
