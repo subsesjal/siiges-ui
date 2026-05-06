@@ -58,8 +58,14 @@ import TitulosTable from './Components/Titulacion/catalogoTitulosTable';
 import catalogoTitulos from './Tables/catalogoTitulosTable';
 import AlumnosData from './Components/Alumnos/AlumnosData';
 import ModalFirmaElectronica from './Components/FoliosAsignados/FoliosTable/ModalFirmaElectronica';
+import BusquedaAlumnosForm from './Components/Alumnos/BusquedaAlumnos/Form';
+import BusquedaAlumnosTable from './Components/Alumnos/BusquedaAlumnos/Table';
+import HistorialAcademico from './Components/Alumnos/AlumnosHistorial/index';
 
 export {
+  BusquedaAlumnosForm,
+  BusquedaAlumnosTable,
+  HistorialAcademico,
   ExpedienteAlumno,
   catalogoTitulos,
   TitulosTable,

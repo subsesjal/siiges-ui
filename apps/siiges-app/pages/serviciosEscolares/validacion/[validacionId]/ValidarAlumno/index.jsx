@@ -16,7 +16,6 @@ export default function ValidarAlumno() {
       const { dataForm } = await alumnosService({ id: query.validacionId, method: 'GET' });
       setAlumno(dataForm);
     }
-
     if (query.validacionId) {
       fetchAlumno();
     }
