@@ -145,17 +145,32 @@ export default function FoliosForm({
     return [];
   };
 
-  const estatusOptions = [
+  const estatusOptionsTitulo = [
     { id: 1, nombre: 'En captura' },
     { id: 2, nombre: 'En revisión' },
     { id: 3, nombre: 'Folios asignados' },
     { id: 4, nombre: 'Con observaciones' },
     { id: 5, nombre: 'Cancelado' },
-    { id: 6, nombre: 'Firma parcial certificado IES' },
-    { id: 7, nombre: 'Firma certificado IES' },
-    { id: 8, nombre: 'Firma parcial certificado SICYT' },
-    { id: 9, nombre: 'Firma certificado SICYT' },
-  ].filter((option) => !(session?.rol === 'ce_sicyt' && option.id === 1));
+  // { id: 6, nombre: 'Envíado a titulación' },
+  // { id: 7, nombre: 'Envío parcial a titulación' },
+  ];
+
+  const estatusOptionsCertificado = [
+    { id: 1, nombre: 'En captura' },
+    { id: 2, nombre: 'En revisión' },
+    { id: 3, nombre: 'Folios asignados' },
+    { id: 4, nombre: 'Con observaciones' },
+    { id: 5, nombre: 'Cancelado' },
+    { id: 8, nombre: 'Firma parcial certificado IES' },
+    { id: 9, nombre: 'Firma certificado IES' },
+    { id: 10, nombre: 'Firma parcial certificado SICYT' },
+    { id: 11, nombre: 'Firma certificado SICYT' },
+  ];
+
+  const getEstatusOptions = () => {
+    const options = tipoDocumento === 1 ? estatusOptionsTitulo : estatusOptionsCertificado;
+    return options.filter((option) => !(session?.rol === 'ce_sicyt' && option.id === 1));
+  };
 
   useEffect(() => {
     if (state.selectedInstitucion) fetchPlanteles(state.selectedInstitucion);
@@ -214,7 +229,7 @@ export default function FoliosForm({
           name="estatus"
           multiple
           value={estatus}
-          options={estatusOptions}
+          options={getEstatusOptions()}
           onChange={handleEstatusChange}
         />
       </Grid>

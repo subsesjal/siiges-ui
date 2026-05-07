@@ -6,18 +6,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const TIPO_DOCUMENTO_CERTIFICADO = 2;
 
-const ESTATUS_MAP = {
-  1: [1],
-  2: [2],
-  3: [3],
-  4: [4],
-  5: [5],
-  6: [6],
-  7: [7],
-  8: [8],
-  9: [9],
-};
-
 export default function SolicitudesFoliosCertificado() {
   const { session } = useAuth();
   const { setLoading, setNoti } = useUI();
@@ -43,8 +31,7 @@ export default function SolicitudesFoliosCertificado() {
     if (tipoSolicitud) params.append('tipoSolicitudFolioId', tipoSolicitud);
 
     if (estatus.length > 0) {
-      const mapped = estatus.flatMap((id) => ESTATUS_MAP[id] || []);
-      if (mapped.length > 0) params.append('estatus', mapped.join(','));
+      params.append('estatus', estatus.join(','));
     }
 
     return `/solicitudesFolios?${params.toString()}`;
