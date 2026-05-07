@@ -19,7 +19,7 @@ import LinkIcon from '@mui/icons-material/Link';
 const canViewAsignacionFolios = (rol, nombre) => {
   if (rol === 'admin' || rol === 'ce_sicyt') return true;
 
-  if (rol === 'representante') return true;
+  if (rol === 'representante' && nombre === 'obedc') return true;
 
   if (rol === 'ce_ies' && nombre === 'roberto_ies') return true;
 
