@@ -7,16 +7,19 @@ import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 export default function FoliosForm({
   setTipoSolicitud,
-  setTipoDocumento,
   setEstatus,
   estatus,
   setPrograma,
   setPlantel,
   setInstitucion,
   setLoading,
+  tipoDocumento,
 }) {
-  // eslint-disable-next-line max-len
-  const { instituciones } = getInstituciones({ esNombreAutorizado: true, tipoInstitucionId: 1, setLoading });
+  const { instituciones } = getInstituciones({
+    esNombreAutorizado: true,
+    tipoInstitucionId: 1,
+    setLoading,
+  });
   const { setNoti } = useUI();
   const { session } = useAuth();
 
@@ -27,7 +30,6 @@ export default function FoliosForm({
     selectedInstitucion: '',
     selectedPlantel: '',
     selectedPrograma: '',
-    selectedDocumento: '',
     selectedSolicitud: '',
   };
 
@@ -86,7 +88,6 @@ export default function FoliosForm({
     setInstitucion(selectedInstitucion);
     setPlantel('');
     setPrograma('');
-    setTipoDocumento('');
     setTipoSolicitud('');
   };
 
@@ -96,12 +97,10 @@ export default function FoliosForm({
       ...prev,
       selectedPlantel,
       selectedPrograma: '',
-      selectedDocumento: '',
       selectedSolicitud: '',
     }));
     setPlantel(selectedPlantel);
     setPrograma('');
-    setTipoDocumento('');
     setTipoSolicitud('');
     if (selectedPlantel) fetchProgramas(selectedPlantel);
     else setArrays((prev) => ({ ...prev, programas: [] }));
@@ -112,18 +111,9 @@ export default function FoliosForm({
     setState((prev) => ({
       ...prev,
       selectedPrograma,
-      selectedDocumento: '',
       selectedSolicitud: '',
     }));
     setPrograma(selectedPrograma);
-    setTipoDocumento('');
-    setTipoSolicitud('');
-  };
-
-  const handleDocumentoChange = (e) => {
-    const selectedDocumento = e.target.value;
-    setState((prev) => ({ ...prev, selectedDocumento, selectedSolicitud: '' }));
-    setTipoDocumento(selectedDocumento);
     setTipoSolicitud('');
   };
 
@@ -138,11 +128,6 @@ export default function FoliosForm({
     setEstatus(selectedIds);
   };
 
-  const documentos = [
-    { id: 1, nombre: 'Títulos' },
-    { id: 2, nombre: 'Certificados' },
-  ];
-
   const solicitudesTitulos = [
     { id: 1, nombre: 'Duplicado' },
     { id: 3, nombre: 'Total' },
@@ -155,22 +140,37 @@ export default function FoliosForm({
   ];
 
   const getSolicitudesOptions = () => {
-    if (state.selectedDocumento === 1) return solicitudesTitulos;
-    if (state.selectedDocumento === 2) return solicitudesCertificados;
+    if (tipoDocumento === 1) return solicitudesTitulos;
+    if (tipoDocumento === 2) return solicitudesCertificados;
     return [];
   };
 
-  const estatusOptions = [
+  const estatusOptionsTitulo = [
     { id: 1, nombre: 'En captura' },
     { id: 2, nombre: 'En revisión' },
     { id: 3, nombre: 'Folios asignados' },
     { id: 4, nombre: 'Con observaciones' },
     { id: 5, nombre: 'Cancelado' },
-    { id: 6, nombre: 'Firma parcial certificado IES' },
-    { id: 7, nombre: 'Firma certificado IES' },
-    { id: 8, nombre: 'Firma parcial certificado SICYT' },
-    { id: 9, nombre: 'Firma certificado SICYT' },
-  ].filter((option) => !(session?.rol === 'ce_sicyt' && option.id === 1));
+  // { id: 6, nombre: 'Envíado a titulación' },
+  // { id: 7, nombre: 'Envío parcial a titulación' },
+  ];
+
+  const estatusOptionsCertificado = [
+    { id: 1, nombre: 'En captura' },
+    { id: 2, nombre: 'En revisión' },
+    { id: 3, nombre: 'Folios asignados' },
+    { id: 4, nombre: 'Con observaciones' },
+    { id: 5, nombre: 'Cancelado' },
+    { id: 8, nombre: 'Firma parcial certificado IES' },
+    { id: 9, nombre: 'Firma certificado IES' },
+    { id: 10, nombre: 'Firma parcial certificado SICYT' },
+    { id: 11, nombre: 'Firma certificado SICYT' },
+  ];
+
+  const getEstatusOptions = () => {
+    const options = tipoDocumento === 1 ? estatusOptionsTitulo : estatusOptionsCertificado;
+    return options.filter((option) => !(session?.rol === 'ce_sicyt' && option.id === 1));
+  };
 
   useEffect(() => {
     if (state.selectedInstitucion) fetchPlanteles(state.selectedInstitucion);
@@ -216,22 +216,11 @@ export default function FoliosForm({
       </Grid>
       <Grid item xs={4}>
         <Select
-          title="Tipo de documento"
-          name="documento"
-          value={state.selectedDocumento}
-          options={documentos}
-          onChange={handleDocumentoChange}
-          disabled={!state.selectedPrograma}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <Select
           title="Tipo de solicitud"
           name="solicitud"
           value={state.selectedSolicitud}
           options={getSolicitudesOptions()}
           onChange={handleSolicitudChange}
-          disabled={!state.selectedDocumento}
         />
       </Grid>
       <Grid item xs={4}>
@@ -240,7 +229,7 @@ export default function FoliosForm({
           name="estatus"
           multiple
           value={estatus}
-          options={estatusOptions}
+          options={getEstatusOptions()}
           onChange={handleEstatusChange}
         />
       </Grid>
@@ -250,13 +239,13 @@ export default function FoliosForm({
 
 FoliosForm.propTypes = {
   setTipoSolicitud: PropTypes.func.isRequired,
-  setTipoDocumento: PropTypes.func.isRequired,
   setPrograma: PropTypes.func.isRequired,
   setPlantel: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
   setEstatus: PropTypes.func.isRequired,
   estatus: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])),
   setInstitucion: PropTypes.func.isRequired,
+  tipoDocumento: PropTypes.number.isRequired,
 };
 
 FoliosForm.defaultProps = {
