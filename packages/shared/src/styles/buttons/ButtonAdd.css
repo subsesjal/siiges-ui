@@ -1,5 +1,6 @@
 /* CSS */
-.buttonAdd {
+.buttonAdd,
+.MuiButton-root.buttonAdd {
   appearance: none;
   background-color: transparent;
   border: 1px solid #FF8300;
@@ -27,56 +28,67 @@
 }
 
 
-.buttonAdd:disabled {
+.buttonAdd:disabled,
+.MuiButton-root.buttonAdd:disabled {
   pointer-events: none;
   border-color: gray;
 }
 
-.buttonAdd:hover {
+.buttonAdd:hover,
+.MuiButton-root.buttonAdd:hover {
   color: #fff;
   background-color: #FF8300;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
 
-.buttonAdd:active {
+.buttonAdd:active,
+.MuiButton-root.buttonAdd:active {
   box-shadow: none;
   transform: translateY(0);
 }
 
 /* CSS */
-.buttonAdd.cancel {
+.buttonAdd.cancel,
+.MuiButton-root.buttonAdd.cancel {
   border-color: red;
 }
 
-.buttonAdd.cancel:hover {
+.buttonAdd.cancel:hover,
+.MuiButton-root.buttonAdd.cancel:hover {
   background-color: red;
 }
 
-.buttonAdd.guardar {
+.buttonAdd.guardar,
+.MuiButton-root.buttonAdd.guardar {
   border-color: #74C8D2;
 }
 
-.buttonAdd.guardar:hover {
+.buttonAdd.guardar:hover,
+.MuiButton-root.buttonAdd.guardar:hover {
   background-color: #74C8D2;
 }
 
-.buttonAdd.guardar:disabled {
+.buttonAdd.guardar:disabled,
+.MuiButton-root.buttonAdd.guardar:disabled {
   pointer-events: none;
   border-color: gray;
   background-color: gray;
   color: white;
 }
 
-.buttonAdd.enviar {
+.buttonAdd.enviar,
+.MuiButton-root.buttonAdd.enviar {
   border-color: #FF8300;
 }
 
-.buttonAdd.enviar:hover {
+.buttonAdd.enviar:hover,
+.MuiButton-root.buttonAdd.enviar:hover {
   background-color: #FF8300;
 }
 
-.buttonAdd.buscar {
+.buttonAdd.buscar,
+.MuiButton-root.buttonAdd.buscar {
   border-color: #FF8300;
   justify-content: space-between;
   padding-left: 16px;
@@ -84,11 +96,13 @@
   width: 100%;
 }
 
-.buttonAdd.buscar:hover {
+.buttonAdd.buscar:hover,
+.MuiButton-root.buttonAdd.buscar:hover {
   background-color: #FF8300;
 }
 
-.buttonAdd.buscar:disabled {
+.buttonAdd.buscar:disabled,
+.MuiButton-root.buttonAdd.buscar:disabled {
   pointer-events: none;
   border-color: gray;
   background-color: gray;

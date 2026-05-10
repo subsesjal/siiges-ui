@@ -121,7 +121,7 @@ module.exports = withPlugins([withTM()], {
 ├── .npmrc
 ├── dotenv.config.js
 ├── lerna.json
-├── yarn.lock
+├── package-lock.json
 └── package.json
 ```
 
@@ -135,12 +135,12 @@ module.exports = withPlugins([withTM()], {
 
 
 
-| Nombre            | Descripcion                                |
-| ----------------- | ------------------------------------------ |
-| `yarn bootstrap`  | Instala las dependiendas e inicia symlinks |
-| `yarn start `     | run all packages in parallel               |
-| `yarn start:app ` | run server                                 |
-| `yarn build:app`  |                                            |
+| Nombre              | Descripcion                                |
+| ------------------- | ------------------------------------------ |
+| `npm run bootstrap`  | Instala las dependencias e inicia symlinks |
+| `npm run start`      | run all packages in parallel               |
+| `npm run start:app`  | run server                                 |
+| `npm run build`      |                                            |
 
 # Levantar Frontend
 Hacer Fork del proyecto:
@@ -149,7 +149,7 @@ Hacer Fork del proyecto:
 ### Instalaciones necesarias.
 > Git
 > Node.js
-> Yarn
+> npm
 
 ### Clonar el repositorio
 > [!NOTE]
@@ -181,11 +181,11 @@ Hacer Fork del proyecto:
 ```git fetch upstream && git rebase upstream/master```
 
 ### Instalar los módulos
-```yarn install or yarn```
-```yarn bootstrap```
+```npm install --legacy-peer-deps
+npm run bootstrap```
 
 ### Agregar los archivos en el directorio raíz de siiges-ui/apps/siiges-app/
 - .env.local
 
 ### Levantar Frontend
-```yarn start:app```
+```npm run start:app```
