@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LoginLayout } from '@siiges-ui/shared';
-import { SignIn } from '@siiges-ui/authentication';
+import { RecoverPass, SignIn } from '@siiges-ui/authentication';
 
 export default function Home() {
+  const [password, setPassword] = useState(false);
+
   return (
     <LoginLayout>
-      <SignIn />
+      {!password ? (
+        <SignIn setPassword={setPassword} />
+      ) : (
+        <RecoverPass setPassword={setPassword} />
+      )}
     </LoginLayout>
   );
 }
