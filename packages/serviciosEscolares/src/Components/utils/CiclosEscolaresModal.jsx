@@ -1,13 +1,9 @@
 import { Grid } from '@mui/material';
 import {
-  DefaultModal,
-  Input,
-  Select,
-  ButtonsForm,
-  Context,
+  DefaultModal, Input, Select, ButtonsForm, useUI,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React from 'react';
 import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
 import postCiclosEscolares from './PostCiclosEscolares';
 import nombresCiclos from '../../Utils/nombresCiclos';
@@ -20,7 +16,7 @@ export default function CiclosEscolaresModal({
   onSuccess,
 }) {
   const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Modificar Ciclo Escolar';
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
 
   const [form, setForm] = React.useState({
     id: data?.id,

@@ -1,23 +1,12 @@
 import Tooltip from '@mui/material/Tooltip';
 import { Grid, Typography, IconButton } from '@mui/material';
 import {
-  ButtonsForm,
-  Context,
-  createRecord,
-  updateRecord,
-  DataTable,
-  DefaultModal,
-  getData,
-  Input,
-  LabelData,
-  Select,
-  InputSearch,
-  deleteRecord,
-  InputDate,
+  ButtonsForm, createRecord, updateRecord, DataTable, DefaultModal, getData, Input, LabelData,
+  Select, InputSearch, deleteRecord, InputDate, useUI,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React, {
-  useEffect, useState, useContext, useCallback,
+  useEffect, useState, useCallback,
 } from 'react';
 import { VisibilityOutlined, Edit, Delete } from '@mui/icons-material';
 
@@ -89,7 +78,7 @@ const modalidades = [
 ];
 
 export default function AlumnosServicioSection({ programa, solicitudId, disabled }) {
-  const { setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
   const [alumno, setAlumno] = useState({});
   const [alumnoId, setAlumnoId] = useState(null);
   const [type, setType] = useState('create');

@@ -1,6 +1,6 @@
 import Tooltip from '@mui/material/Tooltip';
 import React, {
-  useState, useEffect, useContext, useCallback,
+  useState, useEffect, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, IconButton } from '@mui/material';
@@ -8,11 +8,11 @@ import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import {
   ButtonsForm,
-  Context,
   DefaultModal,
   Input,
   InputDate,
   getToken,
+  useUI,
 } from '@siiges-ui/shared';
 import dayjs from 'dayjs';
 
@@ -55,7 +55,7 @@ const fetchData = async ({
 };
 
 function ModalInspecciones({ params: { row }, solicitud }) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [open, setOpen] = useState(false);
   const [inspector, setInspector] = useState({});
   const [isLoading, setIsLoading] = useState(true);

@@ -10,22 +10,10 @@ import {
   Divider,
 } from '@mui/material';
 import {
-  ButtonSimple,
-  Context,
-  createRecord,
-  DataTable,
-  getData,
-  GetFile,
-  Input,
-  InputFile,
-  ListTitle,
-  ListSubtitle,
-  updateRecord,
-  deleteRecord,
-  DefaultModal,
-  ButtonsForm,
+  ButtonSimple, createRecord, DataTable, getData, GetFile, Input, InputFile, ListTitle,
+  ListSubtitle, updateRecord, deleteRecord, DefaultModal, ButtonsForm, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -93,7 +81,7 @@ const tipoSolicitudFolioOptions = [
 ];
 
 export default function FoliosData({ type }) {
-  const { setNoti, loading, setLoading } = useContext(Context);
+  const { setNoti, loading, setLoading } = useUI();
   const [url, setUrl] = useState(null);
   const [id, setId] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
@@ -622,7 +610,7 @@ export default function FoliosData({ type }) {
           </Grid>
           <Grid item xs={12}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              <Grid container xs={6}>
+              <Grid item container xs={6}>
                 <Grid item xs>
                   <List>
                     <ListTitle text="Institucion" />
@@ -643,7 +631,7 @@ export default function FoliosData({ type }) {
                   </List>
                 </Grid>
               </Grid>
-              <Grid container xs={5}>
+              <Grid item container xs={5}>
                 <Grid item xs>
                   <List>
                     <ListTitle text="Modalidad" />

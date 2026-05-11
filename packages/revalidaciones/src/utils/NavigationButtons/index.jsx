@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid, IconButton, Divider, Typography,
@@ -9,11 +9,11 @@ import { useRouter } from 'next/router';
 import {
   ButtonsForm,
   ButtonSimple,
-  Context,
   createRecord,
   DefaultModal,
   Input,
   InputDate,
+  useUI,
 } from '@siiges-ui/shared';
 
 const CircularIconButton = styled(IconButton)(({ theme, disabled }) => ({
@@ -46,7 +46,7 @@ export default function NavigationButtons({
 }) {
   const [open, setOpen] = useState(false);
   const [openProcesarModal, setOpenProcesarModal] = useState(false);
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const router = useRouter();
 
   const [formProcesar, setFormProcesar] = useState({

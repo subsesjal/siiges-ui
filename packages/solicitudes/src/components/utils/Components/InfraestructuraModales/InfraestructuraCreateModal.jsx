@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, Context, Select,
+  DefaultModal, useUI, Select,
   ButtonsForm,
+  usePlantel,
 } from '@siiges-ui/shared';
 import Input from '@siiges-ui/shared/src/components/Input';
 import PropTypes from 'prop-types';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import errorDatosInfraestructuras from '../../sections/errors/errorDatosInfraestructuras';
 import handleCreate from '../../submitNewInfraestructuras';
-import PlantelContext from '../../Context/plantelContext';
 import getAsignaturas from '../../getAsignaturas';
 
 export default function InfraestructuraCreateModal({
@@ -29,7 +29,7 @@ export default function InfraestructuraCreateModal({
     initialValues,
     setInitialValues,
     plantelId,
-  } = useContext(PlantelContext);
+  } = usePlantel();
 
   const [tipoInstalacion, setTipoInstalacion] = useState('');
   const [asignaturasDisabled, setAsignaturasDisabled] = useState(false);
@@ -38,7 +38,7 @@ export default function InfraestructuraCreateModal({
     setFormInfraestructuras({});
   }, []);
 
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const { asignaturasTotal } = getAsignaturas(programaId);
 
   const errorsInfraestructura = errorDatosInfraestructuras(

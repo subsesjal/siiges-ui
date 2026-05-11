@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import {
   DefaultModal,
   ButtonSimple,
   validateField,
-  Context,
+  useUI,
 } from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import Input from '@siiges-ui/shared/src/components/Input';
@@ -26,7 +26,7 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
     setInitialValues,
     setNoti,
   } = useContext(TablesPlanEstudiosContext);
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
   const { form } = useContext(SolicitudContext);
   const [selectedGrade, setSelectedGrade] = useState(grados.semestral);
 

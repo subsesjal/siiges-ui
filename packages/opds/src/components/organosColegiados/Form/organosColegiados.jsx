@@ -5,11 +5,11 @@ import {
   InputFile,
   LabelData,
   ButtonsForm,
+  useApi,
 } from '@siiges-ui/shared';
 import { ModalAcuerdos, columnsAcuerdos } from '@siiges-ui/opds';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 
 export default function OrganosColegiados({ type }) {
   const [open, setOpen] = useState(false);

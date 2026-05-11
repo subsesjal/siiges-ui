@@ -1,6 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Select, Context, getData } from '@siiges-ui/shared';
+import {
+  Select, getData, useAuth, useUI,
+} from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import {
@@ -16,7 +18,8 @@ export default function SolicitudServSocFilter({
   setInstitucion,
   setTableEnabled,
 }) {
-  const { setNoti, session, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,

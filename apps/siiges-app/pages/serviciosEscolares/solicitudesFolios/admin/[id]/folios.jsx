@@ -4,7 +4,7 @@ import {
   IconButton, Typography,
 } from '@mui/material';
 import {
-  Context,
+  useUI,
   DataTable,
   getData,
   Input,
@@ -18,7 +18,7 @@ import {
   DefaultModal,
   ButtonsForm,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
@@ -27,7 +27,7 @@ import dayjs from 'dayjs';
 import Divider from '@mui/material/Divider';
 
 export default function Folios() {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
 
   const [url, setUrl] = useState(null);
   const [etiquetas, setEtiquetas] = useState({
@@ -392,7 +392,7 @@ export default function Folios() {
             </Grid>
             <Grid item xs={12}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                <Grid container xs={6}>
+                <Grid item container xs={6}>
                   <Grid item xs>
                     <List>
                       <ListTitle text="Institucion" />
@@ -413,7 +413,7 @@ export default function Folios() {
                     </List>
                   </Grid>
                 </Grid>
-                <Grid container xs={5}>
+                <Grid item container xs={5}>
                   <Grid item xs>
                     <List>
                       <ListTitle text="Modalidad" />

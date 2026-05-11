@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
-  Context,
+  useAuth,
   Layout,
   getCurrentUser,
   ButtonSimple,
@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 
 export default function UserProfile() {
   const router = useRouter();
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const { user, loading } = getCurrentUser(session.id);
   return (
     <Layout>

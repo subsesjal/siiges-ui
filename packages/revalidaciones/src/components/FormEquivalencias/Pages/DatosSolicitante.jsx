@@ -1,9 +1,8 @@
 import { Grid } from '@mui/material';
 import {
-  Context,
-  Input, InputDate, Select, Subtitle,
+  Input, InputDate, Select, Subtitle, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import validateField from '../../../utils/ValidateField';
 
@@ -122,7 +121,7 @@ export default function DatosSolicitante({
   validateFields,
   setNextDisabled,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [municipios, setMunicipios] = useState([]);
   const [estadoId, setEstadoId] = useState('');
   const [municipiosDisabled, setMunicipiosDisabled] = useState(!estadoId);

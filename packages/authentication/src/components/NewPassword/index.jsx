@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  ButtonLogin, Context, InputPassword, LinkButton,
+  ButtonLogin, InputPassword, LinkButton, useUI,
 } from '@siiges-ui/shared';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -14,7 +14,7 @@ const domain = process.env.NEXT_PUBLIC_URL;
 export default function NewPassword() {
   const router = useRouter();
   const { token } = router.query;
-  const { setNoti, setLoading, loading } = useContext(Context);
+  const { setNoti, setLoading, loading } = useUI();
   const [passwords, setPasswords] = useState({
     newPassword: '',
     repeatNewPassword: '',

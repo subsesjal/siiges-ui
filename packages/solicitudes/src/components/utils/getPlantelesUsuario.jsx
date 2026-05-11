@@ -1,12 +1,12 @@
-import { Context, getToken } from '@siiges-ui/shared';
+import { useAuth, useUI, getToken } from '@siiges-ui/shared';
 import {
-  useContext, useEffect, useState, useCallback,
+  useEffect, useState, useCallback,
 } from 'react';
 
 export default function usePlantelesUsuario(usuarioId) {
   const [planteles, setPlanteles] = useState(null);
   const [error, setError] = useState(null);
-  const { session, setNoti, setLoading } = useContext(Context);
+  const { session } = useAuth(); const { setNoti, setLoading } = useUI();
   const token = getToken();
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const baseUrl = process.env.NEXT_PUBLIC_URL;

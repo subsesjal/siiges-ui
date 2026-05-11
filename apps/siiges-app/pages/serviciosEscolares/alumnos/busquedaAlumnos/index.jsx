@@ -1,10 +1,10 @@
-import { Layout, getData, Context } from '@siiges-ui/shared';
+import { Layout, getData, useUI } from '@siiges-ui/shared';
 import {
   BusquedaAlumnosForm,
   BusquedaAlumnosTable,
 } from '@siiges-ui/serviciosescolares';
 import { Divider, Grid } from '@mui/material';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 
 const FIELDS_MAP = {
   apellidoPaterno: 'apellidoPaterno',
@@ -18,7 +18,7 @@ const FIELDS_MAP = {
 };
 
 export default function BusquedaAlumnos() {
-  const { setNoti, setLoading, loading } = useContext(Context);
+  const { setNoti, setLoading, loading } = useUI();
   const [formData, setFormData] = useState({});
   const [alumnos, setAlumnos] = useState([]);
 

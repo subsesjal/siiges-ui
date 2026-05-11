@@ -1,13 +1,8 @@
 import { Grid } from '@mui/material';
 import {
-  ButtonsForm,
-  Context,
-  DefaultModal,
-  Input,
-  Select,
-  createRecord,
+  ButtonsForm, DefaultModal, Input, Select, createRecord, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext } from 'react';
+import React from 'react';
 
 export default function GruposModal({
   openGrupo,
@@ -16,7 +11,7 @@ export default function GruposModal({
   setFormGrupo,
   fetchGrupos,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const turnos = [
     { id: 1, nombre: 'Matutino' },
     { id: 2, nombre: 'Vespertino' },

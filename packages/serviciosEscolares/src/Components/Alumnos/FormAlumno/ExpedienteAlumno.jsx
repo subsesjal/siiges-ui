@@ -4,24 +4,16 @@ import {
   List,
 } from '@mui/material';
 import {
-  ButtonSimple,
-  Context,
-  createRecord,
-  GetFile,
-  Input,
-  InputDate,
-  InputFile,
-  updateRecord,
-  ListTitle,
-  ListSubtitle,
+  ButtonSimple, createRecord, GetFile, Input, InputDate, InputFile, updateRecord, ListTitle,
+  ListSubtitle, useUI,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
 export default function ExpedienteAlumno({ alumno, setAlumno, type }) {
   const { id, equivalencia } = alumno || {};
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const router = useRouter();
 
   const [certificadoFile, setCertificadoFile] = useState(null);

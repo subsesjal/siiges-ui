@@ -1,11 +1,13 @@
 import { Grid } from '@mui/material';
 import { getInstituciones } from '@siiges-ui/instituciones';
-import { Context, Select } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import { Select, useAuth, useUI } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function BecasForm({ setBecas, setInstitucion }) {
-  const { setLoading, setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
+
   const [state, setState] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedState = localStorage.getItem('becasFormState');

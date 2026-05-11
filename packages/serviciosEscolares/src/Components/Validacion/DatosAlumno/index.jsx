@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Divider, Grid, Typography } from '@mui/material';
-import { Context, LabelData } from '@siiges-ui/shared';
+import { LabelData, useUI } from '@siiges-ui/shared';
 
 export default function DatosAlumno({ alumno }) {
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
   useEffect(() => {
     setLoading(!alumno);
   }, [alumno, setLoading]);
