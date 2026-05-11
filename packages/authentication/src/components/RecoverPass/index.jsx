@@ -5,12 +5,13 @@ import {
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import Link from 'next/link';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const domain = process.env.NEXT_PUBLIC_URL;
 
-export default function RecoverPass() {
+export default function RecoverPass({ setPassword }) {
   const [user, setUser] = useState('');
   const { setNoti, setLoading, loading } = useUI();
 
@@ -70,56 +71,97 @@ export default function RecoverPass() {
     <Box
       sx={{
         display: 'flex',
-        flexWrap: 'wrap',
-        '& > :not(style)': {
-          mt: 3,
-          py: 3,
-          px: 3,
-          height: 'auto',
-          minHeight: '260px',
-          width: '320px',
-        },
+        flexDirection: 'column',
+        minHeight: '75.3vh',
+        justifyContent: 'space-between',
+        alignItems: 'center',
       }}
-      justifyContent="center"
     >
-      <Paper
-        elevation={5}
+      <Box
         sx={{
-          fontSize: 12,
-          '&:hover': {
-            boxShadow: '15',
+          display: 'flex',
+          flexWrap: 'wrap',
+          '& > :not(style)': {
+            mt: 3,
+            py: 3,
+            px: 3,
+            height: 'auto',
+            minHeight: '260px',
+            width: '320px',
           },
         }}
+        justifyContent="center"
       >
-        <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>Recuperar contraseña</Typography>
-        <Input
-          label="Usuario"
-          id="user"
-          name="user"
-          auto="user"
-          size="normal"
-          onChange={handleInputChange}
-          value={user}
-        />
-
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ zIndex: 1, position: 'relative', mt: 2 }}
+        <Paper
+          elevation={5}
+          sx={{
+            fontSize: 12,
+            '&:hover': {
+              boxShadow: '15',
+            },
+          }}
         >
-          <Link href="/autenticacion/login" passHref>
-            <LinkButton text="¿Tienes cuenta? Inicia sesión" />
+          <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>Recuperar contraseña</Typography>
+          <Input
+            label="Usuario"
+            id="user"
+            name="user"
+            auto="user"
+            size="normal"
+            onChange={handleInputChange}
+            value={user}
+          />
+
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+              zIndex: 1, position: 'relative', mt: 2, cursor: 'pointer',
+            }}
+          >
+            <LinkButton style={{ cursor: 'pointer' }} text="¿Tienes cuenta? Inicia sesión" onClick={() => setPassword(false)} />
+          </Box>
+          <ButtonLogin
+            color="secondary"
+            type="submit"
+            text="Enviar correo"
+            click={handleSubmit}
+            disabled={loading}
+          />
+        </Paper>
+      </Box>
+      <Box
+        sx={{
+          width: '100%',
+          backgroundColor: 'rgb(206, 209, 212)',
+          py: 2,
+          textAlign: 'center',
+          color: 'white',
+        }}
+      >
+        <Typography variant="body2" style={{ color: '#3b4245' }}>
+          &copy; 2025 Secretaría General de Gobierno - Todos los derechos reservados.
+        </Typography>
+        <Typography variant="body2" style={{ color: '#3b4245' }}>
+          Edificio MIND Av. Faro #2350 , Colonia: Verde Valle , CP: 44540, Guadalajara, Jalisco
+          Lunes a Viernes de 09:00:00 a 17:00:00 horas
+        </Typography>
+        <Typography variant="body2" style={{ color: '#3b4245' }}>
+          <Link
+            href="https://transparenciasitgej.jalisco.gob.mx/api/api/archivos/1908/download?inline=true"
+            passHref
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Avisos de privacidad
           </Link>
-        </Box>
-        <ButtonLogin
-          color="secondary"
-          type="submit"
-          text="Enviar correo"
-          click={handleSubmit}
-          disabled={loading}
-        />
-      </Paper>
+        </Typography>
+      </Box>
     </Box>
   );
 }
+
+RecoverPass.propTypes = {
+  setPassword: PropTypes.func.isRequired,
+};
