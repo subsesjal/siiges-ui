@@ -39,8 +39,8 @@ export default function AlumnoData({ alumno }) {
           <List>
             <ListTitle text="Matrícula" />
             <ListTitle text="Nombre" />
-            <ListTitle text="Apellido Paterno" />
-            <ListTitle text="Apellido Materno" />
+            <ListTitle text="Primer Apellido" />
+            <ListTitle text="Segundo Apellido" />
             <ListTitle text="CURP" />
             <ListTitle text="Situación" />
             <ListTitle text="Fecha de registro" />
