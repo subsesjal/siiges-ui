@@ -11,10 +11,7 @@ const PlantelContext = createContext();
  */
 export const usePlantel = () => {
   const context = useContext(PlantelContext);
-  if (context === undefined) {
-    throw new Error('usePlantel debe ser usado dentro de un PlantelProvider');
-  }
-  return context;
+  return context ?? {};
 };
 
 export function PlantelProvider({ children, selectedPlantel, institucion }) {
