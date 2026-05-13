@@ -3,9 +3,9 @@ import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
   ButtonSimple,
-  Context, DefaultModal, useApi,
+  useUI, DefaultModal, useApi,
 } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import '@siiges-ui/shared/src/styles/buttons/ButtonAdd.css';
 
@@ -15,7 +15,7 @@ function Modal({
   setModalState,
 }) {
   const router = useRouter();
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [endpoint, setEndpoint] = useState('');
   const [dataBody, setDataBody] = useState([]);
   const [method, setMethod] = useState('POST');

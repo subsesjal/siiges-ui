@@ -189,6 +189,14 @@ const panelMenuOptions = (rol, nombre) => {
     ] : []),
 
     {
+      userId: 2,
+      text: 'Busqueda de Alumnos',
+      icon: <AssignmentIcon />,
+      route: '/serviciosEscolares/alumnos/busquedaAlumnos',
+      key: 'busquedaAlumnos',
+    },
+
+    {
       userId: 3,
       text: 'Instituciones',
       icon: <BusinessIcon />,

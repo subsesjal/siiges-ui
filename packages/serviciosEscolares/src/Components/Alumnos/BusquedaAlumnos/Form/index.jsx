@@ -1,0 +1,179 @@
+import { Grid } from '@mui/material';
+import {
+  ButtonSimple,
+  getParentUserById,
+  Input,
+  getToken,
+  useAuth,
+  useUI,
+} from '@siiges-ui/shared';
+import SearchIcon from '@mui/icons-material/Search';
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+
+const SINGLE_FIELDS = ['curp', 'matricula'];
+
+const isValidSearch = (formData) => {
+  const filled = Object.entries(formData).filter(
+    ([, value]) => value !== null && value !== undefined && String(value).trim() !== '',
+  );
+  const hasSingleField = filled.some(([key]) => SINGLE_FIELDS.includes(key));
+  return hasSingleField || filled.length >= 2;
+};
+
+async function fetchInstitucionByUsuarioId(usuarioId) {
+  const token = getToken();
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const basePath = process.env.NEXT_PUBLIC_URL;
+  const url = `${basePath}/api/v1/instituciones/usuarios/${usuarioId}`;
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      api_key: apikey,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  const { data } = await response.json();
+  return data;
+}
+
+export default function BusquedaAlumnosForm({
+  formData,
+  onChange,
+  onSearch,
+  onInstitucionResolved,
+}) {
+  const { session } = useAuth();
+  const { setNoti } = useUI();
+
+  useEffect(() => {
+    if (session.rol !== 'representante' && session.rol !== 'ce_ies') return;
+
+    async function resolveInstitucion() {
+      try {
+        let usuarioId = session.id;
+
+        if (session.rol === 'ce_ies') {
+          const parentResult = await getParentUserById(session.id);
+          if (parentResult.errorMessage) throw new Error(parentResult.errorMessage);
+          usuarioId = parentResult.data?.id;
+        }
+
+        const data = await fetchInstitucionByUsuarioId(usuarioId);
+        const id = data?.id ?? null;
+        onInstitucionResolved(id);
+      } catch (err) {
+        setNoti({ open: true, type: 'error', message: err.message });
+      }
+    }
+
+    resolveInstitucion();
+  }, [session.rol, session.id]);
+
+  const handleSearch = () => {
+    if (!isValidSearch(formData)) {
+      setNoti({
+        open: true,
+        type: 'warning',
+        message: 'Ingresa al menos 2 datos, o bien la CURP o Matrícula completa.',
+      });
+      return;
+    }
+    onSearch();
+  };
+
+  return (
+    <Grid container spacing={2}>
+      <Grid item xs={3}>
+        <Input
+          id="nombre"
+          name="nombre"
+          label="Nombre"
+          value={formData.nombre || ''}
+          onChange={onChange}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Input
+          id="apellidoPaterno"
+          name="apellidoPaterno"
+          label="Apellido Paterno"
+          value={formData.apellidoPaterno || ''}
+          onChange={onChange}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Input
+          id="apellidoMaterno"
+          name="apellidoMaterno"
+          label="Apellido Materno"
+          value={formData.apellidoMaterno || ''}
+          onChange={onChange}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Input
+          id="curp"
+          name="curp"
+          label="CURP"
+          value={formData.curp || ''}
+          onChange={onChange}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Input
+          id="claveCentroTrabajo"
+          name="claveCentroTrabajo"
+          label="Clave Centro Trabajo"
+          value={formData.claveCentroTrabajo || ''}
+          onChange={onChange}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Input
+          id="acuerdoRvoe"
+          name="acuerdoRvoe"
+          label="RVOE"
+          value={formData.acuerdoRvoe || ''}
+          onChange={onChange}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <Input
+          id="matricula"
+          name="matricula"
+          label="Matricula"
+          value={formData.matricula || ''}
+          onChange={onChange}
+        />
+      </Grid>
+      <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center' }}>
+        <ButtonSimple
+          text="Buscar"
+          onClick={handleSearch}
+          design="buscar"
+          fullWidth
+        >
+          <SearchIcon />
+        </ButtonSimple>
+      </Grid>
+    </Grid>
+  );
+}
+
+BusquedaAlumnosForm.propTypes = {
+  formData: PropTypes.shape({
+    nombre: PropTypes.string,
+    apellidoPaterno: PropTypes.string,
+    apellidoMaterno: PropTypes.string,
+    curp: PropTypes.string,
+    claveCentroTrabajo: PropTypes.string,
+    acuerdoRvoe: PropTypes.string,
+    matricula: PropTypes.string,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  onInstitucionResolved: PropTypes.func.isRequired,
+};

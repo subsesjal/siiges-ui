@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,13 +10,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { getOptionsRoles } from '@siiges-ui/shared/src/components/Drawer/utils/menuUsers';
+import { useAuth } from '@siiges-ui/shared';
 import LogoWhite from '../Images/LogoWhite';
 import MenuNavbar from './MenuNavbar';
-import useCheckMobileScreen from '../../utils/handlers/useCheckMobileScreen';
-import { Context } from '../../utils/handlers/context';
+import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
 
 export default function MainNavbar({ menuSwitch, section, setSection }) {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const options = getOptionsRoles(session.rol);
   const menuDown = options.some(({ roles }) => roles.includes(session.rol));
 

@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { Context, getToken } from '@siiges-ui/shared';
+import { useEffect, useState } from 'react';
+import { useAuth, getToken } from '@siiges-ui/shared';
 import { grados } from './Mocks/mockAsignaturas';
 
 export default function useAsignaturas(programaId) {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const [asignaturas, setAsignaturas] = useState([]);
   const [asignaturasFormacion, setAsignaturasFormacion] = useState([]);
   const [asignaturasTotal, setAsignaturasTotal] = useState([]);

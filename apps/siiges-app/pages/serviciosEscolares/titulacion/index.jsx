@@ -1,10 +1,10 @@
 import { TitulosForm, TitulosTable } from '@siiges-ui/serviciosescolares';
-import { Context, Layout } from '@siiges-ui/shared';
+import { useUI, Layout } from '@siiges-ui/shared';
 import { Divider } from '@mui/material';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 
 export default function Titulacion() {
-  const { setLoading } = useContext(Context);
+  const { setLoading } = useUI();
   const [titulos, setTitulos] = useState();
   const [programa, setPrograma] = useState();
   const [reloadFlag, setReloadFlag] = useState(false);

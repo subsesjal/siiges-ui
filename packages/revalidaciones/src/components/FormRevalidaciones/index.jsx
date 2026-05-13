@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import { Context, PositionDisplay } from '@siiges-ui/shared';
-import React, { useContext, useEffect, useState } from 'react';
+import { PositionDisplay, useUI } from '@siiges-ui/shared';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NavigationButtons from '../../utils/NavigationButtons';
 import DatosSolicitante from './Pages/DatosSolicitante';
@@ -14,7 +14,7 @@ const domain = process.env.NEXT_PUBLIC_URL;
 export default function FormRevalidaciones() {
   const [currentPosition, setCurrentPosition] = useState(1);
   const [totalPositions, setTotalPositions] = useState(4);
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const router = useRouter();
   const [filesData, setFilesData] = useState({});
   const [estados, setEstados] = useState([]);

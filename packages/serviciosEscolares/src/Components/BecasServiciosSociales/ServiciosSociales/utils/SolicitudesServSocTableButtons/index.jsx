@@ -1,13 +1,13 @@
 import Tooltip from '@mui/material/Tooltip';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import React, { useContext, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Edit, Delete,
 } from '@mui/icons-material';
 import { Typography, IconButton } from '@mui/material';
 import {
-  deleteRecord, Context, DefaultModal, ButtonsForm,
+  deleteRecord, DefaultModal, ButtonsForm, useUI,
 } from '@siiges-ui/shared';
 import { handleEditClick, handleViewClick } from '..';
 
@@ -20,7 +20,7 @@ export default function SolicitudesServSocTableButtons({
   isAdmin,
   onDeleteSuccess,
 }) {
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [open, setOpen] = useState(false);
   const isEnRevision = estatusSolicitudId === 'EN REVISIÓN' || estatusSolicitudId === 'LISTA PARA ENTREGA' || estatusSolicitudId === 'CANCELADA';
 

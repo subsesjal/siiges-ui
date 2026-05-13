@@ -1,14 +1,14 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonSimple, Context, DefaultModal, deleteRecord,
+  ButtonSimple, useUI, DefaultModal, deleteRecord,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React from 'react';
 
 function DeleteDocentes({
   modal, hideModal, id, setDocentesList,
 }) {
-  const { setLoading, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
 
   const deleteDocente = () => {
     setLoading(true);

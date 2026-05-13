@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import '../../styles/Inputs/InputFile.css';
@@ -11,7 +11,7 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import fileToFormData from '../Submit/FileToFormData';
 import SubmitDocument from '../Submit/SubmitDocument';
-import { Context } from '../../utils/handlers/context';
+import { useUI } from '../../contexts';
 
 export default function InputFile({
   label,
@@ -29,7 +29,7 @@ export default function InputFile({
   fileType,
 }) {
   const [files, setFiles] = useState([]);
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [open, setOpen] = useState(false);
   const domain = process.env.NEXT_PUBLIC_URL;
 

@@ -147,7 +147,7 @@ function Provider({ children }) {
       loading,
       avatarUrl,
       refreshAvatar: () => session.id && fetchAvatar(session.id),
-      activateAuth: (userData) => {
+      activateAuth: (userData, skipRedirect = false) => {
         const newSession = {
           id: userData.data.id,
           nombre: userData.data.usuario,
@@ -160,7 +160,9 @@ function Provider({ children }) {
         getAvatar(userData.data.id).then((url) => {
           if (url) setAvatarUrl(url);
         });
-        router.push('../home');
+        if (!skipRedirect) {
+          router.push('../home');
+        }
       },
       removeAuth,
     }),

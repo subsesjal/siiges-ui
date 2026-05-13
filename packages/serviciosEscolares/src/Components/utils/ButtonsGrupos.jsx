@@ -3,16 +3,17 @@ import { IconButton, Stack } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  ButtonsForm, Context, DefaultModal, deleteRecord,
+  ButtonsForm, DefaultModal, deleteRecord, useAuth, useUI,
 } from '@siiges-ui/shared';
 import GruposModal from './GruposModal';
 
 export default function ButtonsGrupos({ id, handleSuccess }) {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const { setLoading, setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setLoading, setNoti } = useUI();
   const params = {
     cicloEscolarId: id.cicloEscolarId,
     gradoId: id.gradoId,

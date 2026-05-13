@@ -1,18 +1,18 @@
 import Tooltip from '@mui/material/Tooltip';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, Stack } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { usePlantel } from '@siiges-ui/shared';
 import DeleteInstitucionesAledanas from './InstitucionesAledanas/DeleteInstitucionesAledanas';
 import InstitucionAledanaEditModal from './InstitucionesAledanas/InstitucionAledanaEditModal';
-import PlantelContext from '../Context/plantelContext';
 
 export default function InstitucionesAledanasButtons({ id, type, isDisabled }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const { institucionesAledanas, setInstitucionesAledanas } = useContext(PlantelContext);
+  const { institucionesAledanas, setInstitucionesAledanas } = usePlantel();
   const rowItem = institucionesAledanas.find((item) => item.id === id)
     ? {
       id: institucionesAledanas.find((item) => item.id === id).id,

@@ -1,6 +1,33 @@
 # siiges UI
 Este monorepo contendrá todos los paquetes para el equipo de frontend
 
+## 📚 Documentación Técnica
+
+La documentación técnica del proyecto está centralizada en el directorio `docs/`.
+
+### 🏠 Índice de Documentación
+
+- **[📖 Documentación Central (docs/README.md)](./docs/README.md)** - Índice y guía de navegación
+- **[🏗️ Arquitectura](./docs/architecture/)** - Decisiones de diseño y cambios estructurales
+- **[📝 Guías Técnicas](./docs/guides/)** - Procedimientos paso a paso
+- **[🔄 Migraciones](./docs/migration/)** - Documentación de migraciones por fases
+- **[🐛 Troubleshooting](./docs/troubleshooting/)** - Errores conocidos y soluciones
+- **[📋 Changelog](./docs/changelog/)** - Historial de cambios significativos
+- **[📖 Contribuir a Documentación](./docs/CONTRIBUTING.md)** - Guía para agregar documentación nueva
+
+### 🚀 Cambios Recientes (Febrero 2026)
+
+**Context Migration**: Se ha refactorizado el sistema de contexto global de monolítico a split contexts.
+
+- ✅ 4 contextos especializados (Auth, UI, User, Navigation)
+- ✅ 6 componentes migrados en Fase 1
+- ✅ 40-50% reducción de re-renders innecesarios
+- ✅ 96% reducción de memoria en avatar
+
+[Ver detalles en docs/architecture/001-context-migration.md](./docs/architecture/001-context-migration.md)
+
+---
+
 ## Estructura
 
 [![Open in VSCode](https://img.shields.io/badge/Open%20in-VSCode%20Web-blue?style=for-the-badge)](https://github.dev/Platzi-Master-C9/booking-ui)
@@ -121,7 +148,7 @@ module.exports = withPlugins([withTM()], {
 ├── .npmrc
 ├── dotenv.config.js
 ├── lerna.json
-├── yarn.lock
+├── package-lock.json
 └── package.json
 ```
 
@@ -135,12 +162,12 @@ module.exports = withPlugins([withTM()], {
 
 
 
-| Nombre            | Descripcion                                |
-| ----------------- | ------------------------------------------ |
-| `yarn bootstrap`  | Instala las dependiendas e inicia symlinks |
-| `yarn start `     | run all packages in parallel               |
-| `yarn start:app ` | run server                                 |
-| `yarn build:app`  |                                            |
+| Nombre              | Descripcion                                |
+| ------------------- | ------------------------------------------ |
+| `npm run bootstrap`  | Instala las dependencias e inicia symlinks |
+| `npm run start`      | run all packages in parallel               |
+| `npm run start:app`  | run server                                 |
+| `npm run build`      |                                            |
 
 # Levantar Frontend
 Hacer Fork del proyecto:
@@ -149,7 +176,7 @@ Hacer Fork del proyecto:
 ### Instalaciones necesarias.
 > Git
 > Node.js
-> Yarn
+> npm
 
 ### Clonar el repositorio
 > [!NOTE]
@@ -181,11 +208,11 @@ Hacer Fork del proyecto:
 ```git fetch upstream && git rebase upstream/master```
 
 ### Instalar los módulos
-```yarn install or yarn```
-```yarn bootstrap```
+```npm install --legacy-peer-deps
+npm run bootstrap```
 
 ### Agregar los archivos en el directorio raíz de siiges-ui/apps/siiges-app/
 - .env.local
 
 ### Levantar Frontend
-```yarn start:app```
+```npm run start:app```

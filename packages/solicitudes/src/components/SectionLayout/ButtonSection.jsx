@@ -1,6 +1,8 @@
-import { ButtonSimple, Context, createRecord } from '@siiges-ui/shared';
+import {
+  ButtonSimple, useAuth, useUI, createRecord, usePlantel,
+} from '@siiges-ui/shared';
 import React, {
-  useContext, useCallback, useState, useEffect,
+  useCallback, useState, useEffect, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -15,7 +17,6 @@ import SolicitudContext from '../utils/Context/solicitudContext';
 import submitInstitucion from '../utils/submitInstitucion';
 import DatosGeneralesContext from '../utils/Context/datosGeneralesContext';
 import submitRepresentante from '../utils/submitRepresentante';
-import PlantelContext from '../utils/Context/plantelContext';
 import submitDescripcionPlantel from '../utils/submitDescripcionPlantel';
 import submitHigienesPlantel from '../utils/submitHigienesPlantel';
 import submitRatificacion from '../utils/submitRatificacion';
@@ -36,13 +37,14 @@ export default function ButtonSection({
   const [newSubmit, setNewSubmit] = useState(true);
   const [currentSectionStatus, setCurrentSectionStatus] = useState(null);
 
+  const { session } = useAuth();
   const {
-    setNoti, session, loading, setLoading,
-  } = useContext(Context);
+    setNoti, loading, setLoading,
+  } = useUI();
   const institucion = getInstitucionUsuario(session);
   const validations = useContext(SolicitudContext);
   const evaluacionCurricular = useEvaluacionCurricular();
-  const plantelesValidations = useContext(PlantelContext);
+  const plantelesValidations = usePlantel();
   const datosGeneralesValidations = useContext(DatosGeneralesContext);
   const {
     setCreateObservaciones,

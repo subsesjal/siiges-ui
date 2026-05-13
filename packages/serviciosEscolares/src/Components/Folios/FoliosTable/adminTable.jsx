@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
-import { Grid, IconButton } from '@mui/material';
-import { DataTable } from '@siiges-ui/shared';
+import { Grid, IconButton, Typography } from '@mui/material';
+import {
+  DataTable, createRecord, DefaultModal, ButtonsForm, useUI,
+} from '@siiges-ui/shared';
 import ArticleIcon from '@mui/icons-material/Article';
 import {
-  RuleOutlined, Send, VisibilityOutlined, DoneAll,
+  RuleOutlined, Send, VisibilityOutlined, DoneAll, ForwardToInbox,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -21,6 +23,8 @@ export default function AdminTable({
   isCeSicyt,
 }) {
   const router = useRouter();
+  const { setNoti } = useUI();
+  const [confirmModal, setConfirmModal] = useState({ open: false, id: null, folio: null });
 
   const columns = [
     {
@@ -55,6 +59,14 @@ export default function AdminTable({
           );
         };
 
+        const handleOpenConfirm = () => {
+          setConfirmModal({
+            open: true,
+            id: params.id,
+            folio: params.row.folioSolicitud,
+          });
+        };
+
         const goToConsult = () => {
           sessionStorage.setItem('foliosAccion', 'consultar');
           router.push({
@@ -64,44 +76,45 @@ export default function AdminTable({
         };
 
         const canConsult = isAdmin || isCeSicyt;
+        const esDocumentoTitulo = params.row.tipoDocumentoId === 1;
 
-        let IconComponent = ArticleIcon;
-        let tooltipTitle = '';
+        const estatusIconMap = {
+          ...(isAdmin && { 1: { icon: EditIcon, tooltip: 'Editar solicitud' } }),
+          2: { icon: ArticleIcon, tooltip: 'Revisar' },
+          ...(esDocumentoTitulo && { 3: { icon: Send, tooltip: 'Envío a titulación' } }),
+          6: { icon: DoneAll, tooltip: 'Envío completo' },
+          7: { icon: RuleOutlined, tooltip: 'Envío parcial' },
+        };
+
+        const estatusConfig = estatusIconMap[params.row.estatusSolicitudFolioId] ?? null;
+        const IconComponent = estatusConfig?.icon ?? null;
+        const tooltipTitle = estatusConfig?.tooltip ?? '';
 
         if (isAdmin || isCeSicyt) {
-          if (params.row.estatusSolicitudFolioId === 1 && isAdmin) {
-            IconComponent = EditIcon;
-            tooltipTitle = 'Editar solicitud';
-          } else if (params.row.estatusSolicitudFolioId === 2) {
-            IconComponent = ArticleIcon;
-            tooltipTitle = 'Revisar';
-          } else if (params.row.estatusSolicitudFolioId === 3) {
-            IconComponent = Send;
-            tooltipTitle = 'Envío a titulación';
-          } else if (params.row.estatusSolicitudFolioId === 7) {
-            IconComponent = RuleOutlined;
-            tooltipTitle = 'Envío parcial';
-          } else if (params.row.estatusSolicitudFolioId === 6) {
-            IconComponent = DoneAll;
-            tooltipTitle = 'Envío completo';
-          }
-
           return (
             <>
               {canConsult && (
-              <Tooltip title="Consultar" placement="top">
-                <IconButton onClick={goToConsult}>
-                  <VisibilityOutlined />
-                </IconButton>
-              </Tooltip>
+                <Tooltip title="Consultar" placement="top">
+                  <IconButton onClick={goToConsult}>
+                    <VisibilityOutlined />
+                  </IconButton>
+                </Tooltip>
               )}
 
               {IconComponent && (
-              <Tooltip title={tooltipTitle} placement="top">
-                <IconButton onClick={handleAddClick}>
-                  <IconComponent />
-                </IconButton>
-              </Tooltip>
+                <Tooltip title={tooltipTitle} placement="top">
+                  <IconButton onClick={handleAddClick}>
+                    <IconComponent />
+                  </IconButton>
+                </Tooltip>
+              )}
+
+              {params.row.estatusSolicitudFolioId === 3 && (
+                <Tooltip title="Reenviar correo" placement="top">
+                  <IconButton onClick={handleOpenConfirm}>
+                    <ForwardToInbox />
+                  </IconButton>
+                </Tooltip>
               )}
             </>
           );
@@ -145,12 +158,67 @@ export default function AdminTable({
     return matchesTipoDocumento && matchesTipoSolicitud && matchesEstatus && matchesPrograma && matchesPlantel;
   });
 
+  const handleResendEmail = async () => {
+    const { id: solicitudId } = confirmModal;
+    setConfirmModal({ open: false, id: null, folio: null });
+    setNoti({
+      open: true,
+      message: 'Enviando correo, por favor espere...',
+      type: 'info',
+    });
+    try {
+      const response = await createRecord({
+        data: { tipoNotificacion: 'foliosAsignados' },
+        endpoint: `/solicitudesFolios/${solicitudId}/envioNotificacion`,
+      });
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        setNoti({
+          open: true,
+          message: '¡Correo reenviado correctamente!',
+          type: 'success',
+        });
+      } else {
+        setNoti({
+          open: true,
+          message: response.message || '¡Error al reenviar el correo!',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `¡Error al reenviar el correo!: ${error.message}`,
+        type: 'error',
+      });
+    }
+  };
+
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <DataTable title="Solicitudes de Folios" rows={filteredSolicitudes} columns={columns} />
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <DataTable title="Solicitudes de Folios" rows={filteredSolicitudes} columns={columns} />
+        </Grid>
       </Grid>
-    </Grid>
+
+      <DefaultModal
+        title="Reenviar notificación"
+        open={confirmModal.open}
+        setOpen={(val) => setConfirmModal((prev) => ({ ...prev, open: val }))}
+      >
+        <Typography>
+          ¿Estás seguro de reenviar la notificación de folios asignados de la solicitud
+          {' '}
+          <strong>{confirmModal.folio}</strong>
+          ?
+        </Typography>
+        <ButtonsForm
+          cancel={() => setConfirmModal({ open: false, id: null, folio: null })}
+          confirm={handleResendEmail}
+          confirmText="Confirmar"
+        />
+      </DefaultModal>
+    </>
   );
 }
 

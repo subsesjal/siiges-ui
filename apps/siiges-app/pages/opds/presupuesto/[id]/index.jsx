@@ -11,7 +11,18 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { sessionData, periodData } from '@siiges-ui/opds/src/utils/constants';
 
-export default function presupuesto() {
+const ANIO = [
+  { id: 1, nombre: 2022 },
+  { id: 2, nombre: 2023 },
+  { id: 3, nombre: 2024 },
+  { id: 4, nombre: 2025 },
+];
+
+const getYear = (yearParam) => ANIO.find(({ id: idYear }) => idYear === yearParam).nombre;
+
+const getFullYear = (yearParam) => new Date(yearParam).getFullYear();
+
+export default function Presupuesto() {
   const year = new Date().getFullYear();
   const router = useRouter();
   const { id } = router.query;
@@ -32,14 +43,6 @@ export default function presupuesto() {
     dataBody: body,
   });
 
-  // Constants
-  const anio = [
-    { id: 1, nombre: 2022 },
-    { id: 2, nombre: 2023 },
-    { id: 3, nombre: 2024 },
-    { id: 4, nombre: 2025 },
-  ];
-
   // Functions
   const updateForm = (field, value) => {
     setForm((prevForm) => ({
@@ -48,11 +51,7 @@ export default function presupuesto() {
     }));
   };
 
-  const getYear = (yearParam) => anio.find(({ id: idYear }) => idYear === yearParam).nombre;
-
   const dateFormat = (yearParam) => new Date(getYear(yearParam), 0);
-
-  const getFullYear = (yearParam) => new Date(yearParam).getFullYear();
 
   const createPresupuesto = () => {
     const { cantidadEstatal, cantidadFederal, observacion } = form;
@@ -99,7 +98,7 @@ export default function presupuesto() {
       setForm({});
       setPath(`api/v1/presupuestos/instituciones/${id}`);
     }
-  }, [data]);
+  }, [data, id, method]);
 
   useEffect(() => {
     if (dataFilter) {
@@ -135,7 +134,7 @@ export default function presupuesto() {
         <Grid item xs={4}>
           <Select
             title="Año"
-            options={anio}
+            options={ANIO}
             name="ano"
             value={fecha}
             onChange={(event) => setFecha(event.target.value || '')}

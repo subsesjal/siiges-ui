@@ -6,14 +6,9 @@ import {
   Button,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  getData,
-  GetFile,
-  InputFile,
-  ListSubtitle,
-  ListTitle,
-  Context,
+  getData, GetFile, InputFile, ListSubtitle, ListTitle, useAuth, useUI,
 } from '@siiges-ui/shared';
 
 const baseUrl = process.env.NEXT_PUBLIC_URL;
@@ -25,7 +20,8 @@ export default function titulacion({
 }) {
   const [programa, setPrograma] = useState({});
   const [url, setUrl] = useState(null);
-  const { setNoti, session } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti } = useUI();
   const [fileDisabled, setFileDisabled] = useState(false);
 
   useEffect(() => {

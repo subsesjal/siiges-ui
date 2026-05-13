@@ -90,10 +90,8 @@ ActionCell.propTypes = {
       PropTypes.number,
     ]),
   }).isRequired,
-  setRowsData: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
-  SetCreateRow: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
+  setRowsData: PropTypes.func.isRequired,
+  SetCreateRow: PropTypes.func.isRequired,
 };
 
 export default ActionCell;

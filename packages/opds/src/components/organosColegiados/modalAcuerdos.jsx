@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, TextField } from '@mui/material';
 import {
-  ButtonsForm, DefaultModal, Input, Select,
+  ButtonsForm, DefaultModal, Input, Select, useApi,
 } from '@siiges-ui/shared';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 // import findAcuerdoById from '../../utils/organosColegiados/fetchAcuerdoById';
 
 export default function ModalAcuerdos({

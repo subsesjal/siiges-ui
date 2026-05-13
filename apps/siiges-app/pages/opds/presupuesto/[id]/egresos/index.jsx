@@ -1,12 +1,10 @@
 import { Grid } from '@mui/material';
 import {
-  DataTable, Layout, Select, ButtonsForm,
+  DataTable, Layout, Select, ButtonsForm, useApi,
 } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import { columnsAnteproyecto } from '@siiges-ui/opds';
-import useApi from '@siiges-ui/shared/src/utils/hooks/useApi';
 import { presupuestosData } from '@siiges-ui/opds/src/utils/constants';
 import { filterRows } from '@siiges-ui/opds/src/utils/helpers';
 import Modal from '@siiges-ui/opds/src/components/presupuesto/modal';
@@ -15,7 +13,13 @@ export default function Egresos() {
   const router = useRouter();
   const { id } = router.query;
   const [recursos, setRecursos] = useState(1);
-  const [modalState, setModalState] = useState(false);
+  const [modalState, setModalState] = useState({
+    open: false,
+    title: '',
+    disabled: false,
+    edit: true,
+    confirmAction: () => {},
+  });
   const [createRow, SetCreateRow] = useState(false);
   const [rowsData, setRowsData] = useState({});
   const [method, setMethod] = useState('GET');
@@ -43,18 +47,18 @@ export default function Egresos() {
     if (createRow) {
       setMethod('PATCH');
       setBody([rowsData]);
-      setReload(!reload);
+      setReload((previousReload) => !previousReload);
       SetCreateRow(false);
     }
-  }, [createRow]);
+  }, [createRow, rowsData]);
 
   useEffect(() => {
     if (method === 'PATCH') {
       setMethod('GET');
       setBody(null);
-      setReload(!reload);
+      setReload((previousReload) => !previousReload);
     }
-  }, [data]);
+  }, [data, method]);
 
   return (
     <>
@@ -100,29 +104,3 @@ export default function Egresos() {
     </>
   );
 }
-
-Modal.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  modalState: PropTypes.shape({
-    title: PropTypes.string,
-    open: PropTypes.bool,
-    disabled: PropTypes.bool,
-    confirmAction: PropTypes.func,
-    edit: PropTypes.bool,
-  }),
-  setModalState: PropTypes.func.isRequired,
-  setRowsData: PropTypes.func.isRequired,
-  SetCreateRow: PropTypes.func.isRequired,
-  tipoEgresoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  params: PropTypes.shape({
-    cantidad: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    tipoPresupuestoId: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    tipoRecursoPresupuestoId: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-  }),
-};

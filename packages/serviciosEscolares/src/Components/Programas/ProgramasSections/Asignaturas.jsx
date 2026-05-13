@@ -1,9 +1,9 @@
-import React, {
-  useContext, useEffect, useMemo, useState,
-} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
-import { getData, Context, DataTable } from '@siiges-ui/shared';
+import {
+  getData, DataTable, useUI, useAuth,
+} from '@siiges-ui/shared';
 import useAsignaturas from '@siiges-ui/solicitudes/src/components/utils/getAsignaturas';
 import { grados } from '@siiges-ui/solicitudes/src/components/utils/Mocks/mockAsignaturas';
 import columns from './Mocks/index';
@@ -11,7 +11,8 @@ import columns from './Mocks/index';
 export default function Asignaturas() {
   const router = useRouter();
   const { id: programaId } = router.query;
-  const { setLoading, session, setNoti } = useContext(Context);
+  const { setLoading, setNoti } = useUI();
+  const { session } = useAuth();
 
   const [asignaturasList, setAsignaturasList] = useState([]);
   const [programaData, setProgramaData] = useState({});

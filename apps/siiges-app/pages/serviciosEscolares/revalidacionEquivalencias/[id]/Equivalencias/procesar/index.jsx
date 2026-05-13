@@ -1,18 +1,18 @@
-import { Grid } from '@mui/material'; // Changed from @mui/system to @mui/material
+import { Grid } from '@mui/material';
 import { ConsultEquivalencia } from '@siiges-ui/revalidaciones';
 import {
   ButtonSimple,
   Layout,
   updateRecord,
-  Context,
+  useUI,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 
 export default function ProcesarEquivalencia() {
   const router = useRouter();
   const { query } = router;
-  const { setNoti } = useContext(Context);
+  const { setNoti } = useUI();
   const [estatus, setEstatus] = useState({ estatus: null });
 
   const handleSubmit = async () => {

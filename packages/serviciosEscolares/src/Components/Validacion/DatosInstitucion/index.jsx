@@ -1,25 +1,18 @@
 import { Divider, Grid, Typography } from '@mui/material';
 import {
-  BinarySelect,
-  ButtonsForm,
-  Context,
-  GetFile,
-  Input,
-  InputDate,
-  InputFile,
-  Select,
-  createRecord,
-  estadosMexico,
-  getData,
-  updateRecord,
+  BinarySelect, ButtonsForm, GetFile, Input, InputDate, InputFile, Select, createRecord,
+  estadosMexico, getData, updateRecord, useAuth, useUI,
 } from '@siiges-ui/shared';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+const ALLOWED_IDS = [2519, 336];
+
 export default function DatosInstitucion({ alumno }) {
-  const { setNoti, session, setLoading } = useContext(Context);
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
   const [url, setUrl] = useState();
   const [formSent, setFormSent] = useState(false);
   const [openDropzone, setOpenDropzone] = useState(false);
@@ -110,9 +103,14 @@ export default function DatosInstitucion({ alumno }) {
   }, [alumno]);
 
   useEffect(() => {
-    if (session.rol === 'admin' || session.rol === 'ce_sicyt') {
+    const isPrivileged = session?.rol === 'admin' || ALLOWED_IDS.includes(Number(session?.id));
+    const isRestrictedEditor = session?.rol === 'representante' || session?.rol === 'ce_ies';
+
+    if (isPrivileged || session?.rol === 'ce_sicyt') {
       setDisabled(false);
-    } else if (form.estatus === 0 || form.estatus === '0') {
+    }
+
+    if (isPrivileged || (isRestrictedEditor && form.estatus === 0)) {
       setEditionDisabled(false);
     } else {
       setEditionDisabled(true);

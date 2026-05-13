@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useMemo, useState,
+  useEffect, useMemo, useState,
 } from 'react';
 import {
   NewRequest,
@@ -9,12 +9,12 @@ import {
   columnsSolicitudes,
 } from '@siiges-ui/solicitudes';
 import {
-  Layout, Select, DataTable, Context,
+  Layout, Select, DataTable, useAuth,
 } from '@siiges-ui/shared';
 import { Divider } from '@mui/material';
 
 export default function Solicitudes() {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const [newSolicitud, setNewSolicitud] = useState(false);
   const [option, setOption] = useState();
   const [NewRequestContentVisible, setNewRequestContentVisible] = useState(false);

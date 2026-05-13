@@ -1,9 +1,9 @@
 // Rename to useProgramaById.js
-import { useContext, useEffect, useState } from 'react';
-import { Context, getData } from '@siiges-ui/shared';
+import { useEffect, useState } from 'react';
+import { useUI, getData } from '@siiges-ui/shared';
 
 export default function useProgramaById(id) {
-  const { setNoti, setLoading } = useContext(Context);
+  const { setNoti, setLoading } = useUI();
   const [programa, setPrograma] = useState(null);
 
   useEffect(() => {

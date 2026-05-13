@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Typography,
   Grid,
@@ -9,7 +9,7 @@ import {
   TableRow,
   Paper,
 } from '@mui/material';
-import { ButtonSimple, Context, Layout } from '@siiges-ui/shared';
+import { ButtonSimple, useUI, Layout } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
@@ -18,7 +18,7 @@ const domain = process.env.NEXT_PUBLIC_URL;
 export default function ConsultarFolio() {
   const router = useRouter();
   const { folio } = router.query;
-  const { setLoading, loading, setNoti } = useContext(Context);
+  const { setLoading, loading, setNoti } = useUI();
 
   const [data, setData] = useState(null);
 

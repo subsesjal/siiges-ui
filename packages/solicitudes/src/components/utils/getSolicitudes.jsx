@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
-import { Context, getToken } from '@siiges-ui/shared';
+import { useEffect, useState } from 'react';
+import { useAuth, getToken } from '@siiges-ui/shared';
 
 export default function getSolicitudes() {
-  const { session } = useContext(Context);
+  const { session } = useAuth();
   const token = getToken();
   const [solicitudes, setSolicitudes] = useState();
   const [loading, setLoading] = useState(false);
