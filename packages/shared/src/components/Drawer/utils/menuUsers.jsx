@@ -354,7 +354,12 @@ const findRoute = (path, rol, username) => {
   const usersMenu = panelMenuOptions(rol, username).filter(Boolean);
 
   let foundItem = usersMenu.find(
-    (item) => item?.route && item.route.startsWith(`/${wordSearch}`),
+    (item) => {
+      if (!item?.route) return false;
+
+      const routeSegment = item.route.replace('/', '');
+      return item.route.startsWith(`/${wordSearch}`) || wordSearch.startsWith(routeSegment);
+    },
   );
 
   if (!foundItem && usersMenu.length) {
