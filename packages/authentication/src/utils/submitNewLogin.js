@@ -13,12 +13,16 @@ function submitNewLogin(form, errors, setErrorMessages, activateAuth, setLoading
           return response.json();
         }
         if (response.status === 404) {
-          setErrorMessages({ usuario: errors.usuario });
-          throw new Error('¡No se encontró!');
+          setErrorMessages({
+            usuario: 'Usuario o contraseña incorrectos',
+            contrasena: 'Usuario o contraseña incorrectos',
+          });
         }
         if (response.status === 401) {
-          setErrorMessages({ contrasena: errors.contrasena });
-          throw new Error('¡No autorizado!');
+          setErrorMessages({
+            usuario: 'Usuario o contraseña incorrectos',
+            contrasena: 'Usuario o contraseña incorrectos',
+          });
         }
         throw new Error(response.status);
       })
