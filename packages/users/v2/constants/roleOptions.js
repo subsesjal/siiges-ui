@@ -3,8 +3,6 @@ const ROLE_OPTIONS = {
     { id: '', nombre: '' },
     { id: '4', nombre: 'Gestor' },
     { id: '12', nombre: 'Control escolar IES' },
-    { id: '19', nombre: 'Becas IES' },
-    { id: '21', nombre: 'Servicio Social IES' },
   ],
   admin: [
     { id: '', nombre: '' },

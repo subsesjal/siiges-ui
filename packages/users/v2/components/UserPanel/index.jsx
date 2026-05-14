@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import VIEW_STATE from '../../constants/viewState';
 import UserForm from '../UserForm';
-import UserDetails from '../UserDetails';
 import useUserForm from '../../hooks/useUserForm';
 import RoleChangeConfirmDialog from '../RoleChangeConfirmDialog';
 import UsersSkeleton from '../UsersSkeleton';
@@ -37,6 +36,7 @@ export default function UserPanel({
 
   const isCreate = mode === VIEW_STATE.CREATE;
   const isEdit = mode === VIEW_STATE.EDIT;
+  const isView = mode === VIEW_STATE.VIEW;
 
   const submitAction = async () => {
     if (actionLoading) {
@@ -99,12 +99,10 @@ export default function UserPanel({
     <Box sx={{ paddingTop: 1 }}>
       <Stack direction="row" justifyContent="space-between" sx={{ paddingX: 2, paddingBottom: 1 }}>
         <Typography variant="h6">
-          {mode === VIEW_STATE.VIEW ? 'Detalle de usuario' : 'Formulario de usuario'}
+          {isView ? 'Consultar usuario' : 'Formulario de usuario'}
         </Typography>
-        <Button variant="outlined" onClick={onClose}>Volver a tabla</Button>
+        {!isView && <Button variant="outlined" onClick={onClose}>Volver a tabla</Button>}
       </Stack>
-
-      {mode === VIEW_STATE.VIEW && user && <UserDetails user={user} />}
 
       {(mode === VIEW_STATE.CREATE || mode === VIEW_STATE.EDIT) && (
         <UserForm
@@ -119,7 +117,20 @@ export default function UserPanel({
         />
       )}
 
-      {!user && mode === VIEW_STATE.VIEW && (
+      {mode === VIEW_STATE.VIEW && user && (
+        <UserForm
+          mode={mode}
+          form={form}
+          errors={errors}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onSubmit={handleSubmit}
+          onCancel={onClose}
+          sessionRole={sessionRole}
+        />
+      )}
+
+      {!user && isView && (
         <Stack spacing={2} sx={{ padding: 2 }}>
           <Typography variant="body2">No hay informacion para mostrar.</Typography>
         </Stack>
