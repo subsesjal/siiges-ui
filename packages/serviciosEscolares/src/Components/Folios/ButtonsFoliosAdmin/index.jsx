@@ -1,17 +1,25 @@
 import { Grid } from '@mui/material';
-import { ButtonSimple } from '@siiges-ui/shared';
+import { ButtonSimple, useAuth } from '@siiges-ui/shared';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
 export default function ButtonsFoliosAdmin({
-  observaciones, folios, estatus, tipoDocumento, isConsult = false,
+  observaciones,
+  folios,
+  estatus,
+  tipoDocumento,
+  isConsult,
+  onFirmarClick,
 }) {
   const router = useRouter();
-
+  const { session } = useAuth();
+  const { rol } = session;
   const buttonFolios = estatus !== 3 ? 'Generar Folios' : 'Envio Titulación';
-
   const shouldRenderButtonFolios = !(estatus === 3 && tipoDocumento === 'Certificado');
+
+  const esCertificado = tipoDocumento === 'Certificado';
+  const mostrarBotonFirma = esCertificado && (estatus === 9 || estatus === 10) && rol === 'admin';
 
   return (
     <Grid container spacing={2} alignItems="center">
@@ -25,20 +33,27 @@ export default function ButtonsFoliosAdmin({
           }}
         />
       </Grid>
-      {!isConsult && (
+      {(!isConsult || mostrarBotonFirma) && (
         <Grid item xs={6}>
           <Grid container justifyContent="flex-end" spacing={2}>
-            {estatus !== 3 && (
+            {estatus !== 3 && !mostrarBotonFirma && (
               <Grid item>
                 <ButtonSimple text="Enviar observaciones" onClick={observaciones} />
               </Grid>
             )}
-
-            {estatus !== 7 && shouldRenderButtonFolios && (
+            {estatus !== 7 && shouldRenderButtonFolios && !mostrarBotonFirma && (
               <Grid item>
                 <ButtonSimple
                   text={buttonFolios}
                   onClick={folios}
+                />
+              </Grid>
+            )}
+            {mostrarBotonFirma && (
+              <Grid item>
+                <ButtonSimple
+                  text="Firmar Solicitud SICYT"
+                  onClick={onFirmarClick}
                 />
               </Grid>
             )}
@@ -49,11 +64,16 @@ export default function ButtonsFoliosAdmin({
   );
 }
 
+ButtonsFoliosAdmin.defaultProps = {
+  isConsult: false,
+  onFirmarClick: () => { },
+};
+
 ButtonsFoliosAdmin.propTypes = {
   observaciones: PropTypes.func.isRequired,
   folios: PropTypes.func.isRequired,
   estatus: PropTypes.number.isRequired,
   tipoDocumento: PropTypes.string.isRequired,
-  isConsult: PropTypes.bool.isRequired,
-
+  isConsult: PropTypes.bool,
+  onFirmarClick: PropTypes.func,
 };

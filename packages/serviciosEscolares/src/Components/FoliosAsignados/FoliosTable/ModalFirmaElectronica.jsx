@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography,
-  IconButton, Box, CircularProgress, LinearProgress,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Typography,
+  IconButton,
+  Box,
+  CircularProgress,
+  LinearProgress,
 } from '@mui/material';
 import { DropzoneArea } from 'mui-file-dropzone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -10,8 +19,23 @@ import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import BadgeIcon from '@mui/icons-material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getData, updateRecord, useUI } from '@siiges-ui/shared';
 import forge from 'node-forge';
+import {
+  updateRecord, getData, useUI,
+} from '@siiges-ui/shared';
+
+const FIRMANTE_CONFIG = {
+  ies: {
+    cargoFirmante: 'director',
+    estatusExitoso: 9,
+    estatusParcial: 8,
+  },
+  sicyt: {
+    cargoFirmante: 'secretaria',
+    estatusExitoso: 11,
+    estatusParcial: 10,
+  },
+};
 
 export default function ModalFirmaElectronica({
   open,
@@ -21,6 +45,7 @@ export default function ModalFirmaElectronica({
   alumnosData,
   solicitudData,
   disabled,
+  tipoFirmante,
 }) {
   const { setNoti } = useUI();
   const [certificado, setCertificado] = useState(null);
@@ -32,7 +57,9 @@ export default function ModalFirmaElectronica({
   const [progreso, setProgreso] = useState(0);
   const [firmando, setFirmando] = useState(false);
   const [datosCertificado, setDatosCertificado] = useState(null);
-  const CERT_NAME = process.env.NEXT_PUBLIC_CERT_NAME;
+
+  const config = FIRMANTE_CONFIG[tipoFirmante] || FIRMANTE_CONFIG.ies;
+  const esIES = tipoFirmante === 'ies';
 
   const extraerDatosCertificado = (certFile) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -81,9 +108,9 @@ export default function ModalFirmaElectronica({
   });
 
   const validarRepresentante = async (curp) => {
-    const response = await getData({
-      endpoint: `/solicitudesFolios/representantes-legales/${encodeURIComponent(curp)}`,
-    });
+    const endpoint = `/solicitudesFolios/representantes-legales/${encodeURIComponent(curp)}`;
+
+    const response = await getData({ endpoint });
 
     if (response.statusCode === 404 || response.errorMessage === '¡Registro no encontrado!') {
       throw new Error('No se encontró un representante legal activo con el CURP proporcionado.');
@@ -92,7 +119,7 @@ export default function ModalFirmaElectronica({
       throw new Error('El formato del CURP es inválido.');
     }
     if (response.statusCode === 401) {
-      throw new Error('No autorizado para consultar representantes legales.');
+      throw new Error('No autorizado para consultar firmantes.');
     }
     if (response.errorMessage) {
       throw new Error(response.errorMessage);
@@ -221,7 +248,7 @@ export default function ModalFirmaElectronica({
       folioInterno: folioDocumentoAlumno?.folioDocumento,
       foja: folioDocumentoAlumno?.foja?.nombre,
       libro: folioDocumentoAlumno?.libro?.nombre,
-      tipoDocumento: CERT_NAME,
+      tipoDocumento: process.env.NEXT_PUBLIC_CERT_NAME,
       tipoSolicitudFolio: solicitudData.tipoSolicitudFolio?.nombre,
       nombre: persona?.nombre,
       apellidoPaterno: persona?.apellidoPaterno,
@@ -325,7 +352,11 @@ export default function ModalFirmaElectronica({
     setProgreso(0);
 
     try {
-      const nombreFirmante = await validarRepresentante(datosCertificado.curp);
+      let nombreFirmante = datosCertificado.nombre;
+
+      if (esIES) {
+        nombreFirmante = await validarRepresentante(datosCertificado.curp);
+      }
 
       const certificateBuffer = await readFileAsArrayBuffer(certificado);
       const privateKeyBuffer = await readFileAsArrayBuffer(llavePrivada);
@@ -365,10 +396,11 @@ export default function ModalFirmaElectronica({
           pkcs7: pkcs7Base64,
           folioInterno: objetoPorFirmar.folioInterno,
           objetoPorFirmar,
-          tipoDocumento: CERT_NAME,
+          tipoDocumento: process.env.NEXT_PUBLIC_CERT_NAME,
+          programaId: solicitudData.programaId,
           autoridad: {
-            tipoFirmante: 'ies',
-            cargoFirmante: 'director',
+            tipoFirmante,
+            cargoFirmante: config.cargoFirmante,
             curp: datosCertificado.curp,
             nombre: nombreFirmante,
           },
@@ -381,21 +413,14 @@ export default function ModalFirmaElectronica({
 
       const hayResultados = resultados.length > 0;
       const todosExitosos = hayResultados
-        && resultados.every((r) => r.estatusFirmado === 'exitoso');
+      && resultados.every((r) => r.estatusFirmado === 'exitoso');
 
-      const estatusActual = solicitudData.estatusSolicitudFolioId;
+      const nuevoEstatusId = todosExitosos ? config.estatusExitoso : config.estatusParcial;
 
-      let nuevoEstatusId = null;
-      if (estatusActual === 3 || estatusActual === 8) {
-        nuevoEstatusId = todosExitosos ? 9 : 8;
-      }
-
-      if (nuevoEstatusId) {
-        await updateRecord({
-          endpoint: `/solicitudesFolios/${solicitudData.id}`,
-          data: { estatusSolicitudFolioId: nuevoEstatusId },
-        });
-      }
+      await updateRecord({
+        endpoint: `/solicitudesFolios/${solicitudData.id}`,
+        data: { estatusSolicitudFolioId: nuevoEstatusId },
+      });
 
       setCertificado(null);
       setLlavePrivada(null);
@@ -416,6 +441,7 @@ export default function ModalFirmaElectronica({
   };
 
   const totalAlumnos = alumnosData?.length || 0;
+  const tituloModal = esIES ? 'Firma Electrónica - IES' : 'Firma Electrónica - SICYT';
 
   return (
     <Dialog
@@ -428,7 +454,7 @@ export default function ModalFirmaElectronica({
       <DialogTitle sx={{ pb: 1 }}>
         <Box display="flex" alignItems="center" gap={1}>
           <LockIcon color="primary" />
-          <Typography variant="h6">{title}</Typography>
+          <Typography variant="h6">{title || tituloModal}</Typography>
         </Box>
       </DialogTitle>
 
@@ -444,11 +470,11 @@ export default function ModalFirmaElectronica({
         )}
 
         <Box sx={{
-          mb: 3, p: 2, backgroundColor: '#e3f2fd', borderRadius: '8px',
+          mb: 3, p: 2, backgroundColor: esIES ? '#e3f2fd' : '#f3e5f5', borderRadius: '8px',
         }}
         >
-          <Typography variant="body2" color="primary" fontWeight="bold">
-            {`Se firmarán ${totalAlumnos} documento(s)`}
+          <Typography variant="body2" color={esIES ? 'primary' : 'secondary'} fontWeight="bold">
+            {`Se firmarán ${totalAlumnos} documento(s) como ${esIES ? 'IES.' : 'SICYT.'}`}
           </Typography>
         </Box>
 
@@ -497,6 +523,32 @@ export default function ModalFirmaElectronica({
               dropzoneText="Arrastre el certificado aquí o haga clic"
               showAlerts={false}
             />
+          )}
+
+          {datosCertificado && (
+            <Box
+              sx={{
+                mt: 2,
+                p: 2,
+                backgroundColor: '#e8f5e9',
+                borderRadius: '8px',
+                border: '1px solid #c8e6c9',
+              }}
+            >
+              <Typography variant="subtitle2" color="success.dark" fontWeight="bold" gutterBottom>
+                Datos del firmante extraídos:
+              </Typography>
+              <Typography variant="body2">
+                <strong>Nombre:</strong>
+                {' '}
+                {datosCertificado.nombre || 'No encontrado'}
+              </Typography>
+              <Typography variant="body2">
+                <strong>CURP:</strong>
+                {' '}
+                {datosCertificado.curp || 'No encontrado'}
+              </Typography>
+            </Box>
           )}
         </Box>
 
@@ -569,7 +621,7 @@ export default function ModalFirmaElectronica({
           onClick={handleConfirm}
           disabled={loading || disabled || scriptsLoading || totalAlumnos === 0}
           variant="contained"
-          color="primary"
+          color={esIES ? 'primary' : 'secondary'}
         >
           {loading ? `Firmando ${totalAlumnos} documentos...` : `Firmar ${totalAlumnos} documentos`}
         </Button>
@@ -579,10 +631,11 @@ export default function ModalFirmaElectronica({
 }
 
 ModalFirmaElectronica.defaultProps = {
-  title: 'Firma Electrónica Masiva',
+  title: '',
   alumnosData: [],
   solicitudData: null,
   disabled: false,
+  tipoFirmante: 'ies',
 };
 
 ModalFirmaElectronica.propTypes = {
@@ -593,4 +646,5 @@ ModalFirmaElectronica.propTypes = {
   alumnosData: PropTypes.arrayOf(PropTypes.shape()),
   solicitudData: PropTypes.shape(),
   disabled: PropTypes.bool,
+  tipoFirmante: PropTypes.oneOf(['ies', 'sicyt']),
 };
