@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Box } from '@mui/material';
-import { DataGrid, esES } from '@mui/x-data-grid';
+import { DataTable } from '@siiges-ui/shared';
 import mapUsersToRows from '../../utils/userRows';
 import UsersActionIcons from '../UsersActionIcons';
 
-function UsersTable({ data, loading, canEdit, onView, onEdit }) {
+function UsersTable({
+  data, loading, canEdit, onView, onEdit, canCreate, onCreate, onReload,
+}) {
   const rows = useMemo(() => mapUsersToRows(data), [data]);
 
   const columns = useMemo(() => [
@@ -31,27 +32,25 @@ function UsersTable({ data, loading, canEdit, onView, onEdit }) {
     },
   ], [canEdit, onEdit, onView]);
 
-  const localeText = {
-    ...esES.components.MuiDataGrid.defaultProps.localeText,
-    noRowsLabel: 'No hay registros',
-    rowsPerPage: 'Filas por pagina:',
-  };
-
   return (
-    <Box sx={{ width: '100%', padding: 2, minHeight: 420 }}>
-      <DataGrid
-        localeText={localeText}
-        rows={rows}
-        columns={columns}
-        loading={loading}
-        autoHeight
-        pageSize={10}
-        rowsPerPageOptions={[5, 10, 25, 50, 100]}
-        disableSelectionOnClick
-      />
-    </Box>
+    <DataTable
+      rows={rows}
+      columns={columns}
+      loading={loading}
+      buttonAdd={canCreate}
+      buttonText="Nuevo usuario"
+      buttonClick={onCreate}
+      buttonType="add"
+      onReloadClick={onReload}
+    />
   );
 }
+
+UsersTable.defaultProps = {
+  canCreate: false,
+  onCreate: () => {},
+  onReload: () => {},
+};
 
 UsersTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -59,6 +58,9 @@ UsersTable.propTypes = {
   canEdit: PropTypes.bool.isRequired,
   onView: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  canCreate: PropTypes.bool,
+  onCreate: PropTypes.func,
+  onReload: PropTypes.func,
 };
 
 export default React.memo(UsersTable);

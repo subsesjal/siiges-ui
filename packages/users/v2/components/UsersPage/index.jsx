@@ -3,7 +3,6 @@ import { Box } from '@mui/material';
 import { Layout } from '@siiges-ui/shared';
 import VIEW_STATE from '../../constants/viewState';
 import useUsersController from '../../hooks/useUsersController';
-import UsersToolbar from '../UsersToolbar';
 import UsersTable from '../UsersTable';
 import UsersSkeleton from '../UsersSkeleton';
 import UsersEmptyState from '../UsersEmptyState';
@@ -28,8 +27,8 @@ export default function UsersPage() {
     notify,
   } = useUsersController();
 
-  const canCreate = permissions.canCreate;
-  const canEdit = permissions.canEdit;
+  const { canCreate } = permissions;
+  const { canEdit } = permissions;
   const isSessionReady = Boolean(session?.rol);
   const isListView = state.view === VIEW_STATE.LIST;
   const hasError = Boolean(listState.error);
@@ -49,11 +48,6 @@ export default function UsersPage() {
   } else if (isListView) {
     content = (
       <>
-        <UsersToolbar
-          canCreate={canCreate}
-          onCreate={openCreate}
-          onReload={reloadUsers}
-        />
         {listState.loading && <UsersSkeleton />}
         {hasError && (
           <UsersErrorState message={errorMessage} onRetry={reloadUsers} />
@@ -66,8 +60,11 @@ export default function UsersPage() {
             data={listState.data}
             loading={listState.loading}
             canEdit={canEdit}
+            canCreate={canCreate}
             onView={openView}
             onEdit={openEdit}
+            onCreate={openCreate}
+            onReload={reloadUsers}
           />
         )}
       </>

@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Grid, Typography } from '@mui/material';
+import {
+  Box, Button, Grid, Typography,
+} from '@mui/material';
 import {
   BinarySelect,
   ButtonsForm,
@@ -27,6 +29,7 @@ export default function UserForm({
   sessionRole,
 }) {
   const isCreate = mode === VIEW_STATE.CREATE;
+  const isView = mode === VIEW_STATE.VIEW;
   const options = useMemo(() => {
     const roleOptions = ROLE_OPTIONS[sessionRole] || [{ id: '', nombre: '' }];
     if (!form.rolId) return roleOptions;
@@ -40,7 +43,7 @@ export default function UserForm({
   return (
     <Box sx={{ padding: 2 }}>
       <Typography variant="h6" sx={{ marginBottom: 2 }}>
-        {isCreate ? 'Crear usuario' : 'Editar usuario'}
+        {isCreate ? 'Crear usuario' : isView ? 'Consultar usuario' : 'Editar usuario'}
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
@@ -51,6 +54,7 @@ export default function UserForm({
             auto="nombre"
             value={form.persona?.nombre || ''}
             required
+            disabled={isView}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.nombre}
@@ -64,6 +68,7 @@ export default function UserForm({
             auto="apellidoPaterno"
             value={form.persona?.apellidoPaterno || ''}
             required
+            disabled={isView}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.apellidoPaterno}
@@ -76,6 +81,7 @@ export default function UserForm({
             name="apellidoMaterno"
             auto="apellidoMaterno"
             value={form.persona?.apellidoMaterno || ''}
+            disabled={isView}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.apellidoMaterno}
@@ -89,6 +95,7 @@ export default function UserForm({
             name="rolId"
             value={form.rolId || ''}
             required
+            disabled={isView}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.rolId}
@@ -101,6 +108,7 @@ export default function UserForm({
             name="tituloCargo"
             auto="tituloCargo"
             value={form.persona?.tituloCargo || ''}
+            disabled={isView}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.tituloCargo}
@@ -114,6 +122,7 @@ export default function UserForm({
             auto="correo"
             value={form.correo || ''}
             required
+            disabled={isView}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.correo}
@@ -121,7 +130,7 @@ export default function UserForm({
         </Grid>
         <Grid item xs={12} md={6}>
           <Input
-            disabled={!isCreate}
+            disabled={!isCreate || isView}
             label="Usuario"
             id="usuario"
             name="usuario"
@@ -154,6 +163,7 @@ export default function UserForm({
               name="estatus"
               value={form.estatus ?? 1}
               onChange={onChange}
+              disabled={isView}
               required
             />
           </Grid>
@@ -182,10 +192,14 @@ export default function UserForm({
         )}
       </Grid>
       <Box sx={{ marginTop: 2 }}>
-        <ButtonsForm
-          cancel={onCancel}
-          confirm={onSubmit}
-        />
+        {isView ? (
+          <Button variant="outlined" onClick={onCancel}>Volver a tabla</Button>
+        ) : (
+          <ButtonsForm
+            cancel={onCancel}
+            confirm={onSubmit}
+          />
+        )}
       </Box>
     </Box>
   );
