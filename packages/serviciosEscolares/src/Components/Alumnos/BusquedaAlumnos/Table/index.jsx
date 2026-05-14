@@ -33,6 +33,11 @@ const columns = (handleVerDetalle) => [
     width: 120,
   },
   {
+    field: 'institucion',
+    headerName: 'Institución',
+    width: 300,
+  },
+  {
     field: 'acciones',
     headerName: 'Acciones',
     width: 100,

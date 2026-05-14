@@ -65,6 +65,7 @@ export default function BusquedaAlumnos() {
           claveTrabajo: alumno.programa?.plantel?.claveCentroTrabajo || '',
           programa: alumno.programa?.nombre || '',
           matricula: alumno.matricula || '',
+          institucion: alumno.programa?.plantel?.institucion?.nombre || '',
         }));
         if (rows.length === 0) {
           setNoti({
