@@ -158,8 +158,12 @@ const panelMenuOptions = (rol, nombre) => {
           type: 'dropdown',
           options: [
             {
-              text: 'Solicitud de Folios',
-              route: '/serviciosEscolares/solicitudesFolios',
+              text: 'Solicitud de Folios Certificado',
+              route: '/serviciosEscolares/solicitudesFolios/certificado',
+            },
+            {
+              text: 'Solicitud de Folios Titulo',
+              route: '/serviciosEscolares/solicitudesFolios/titulo',
             },
             {
               text: 'Folios Asignados',
