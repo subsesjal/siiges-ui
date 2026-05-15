@@ -395,8 +395,8 @@ export default function ModalFirmaElectronica({
       const estatusActual = solicitudData.estatusSolicitudFolioId;
 
       let nuevoEstatusId = null;
-      if (estatusActual === 3 || estatusActual === 6) {
-        nuevoEstatusId = todosExitosos ? 7 : 6;
+      if (estatusActual === 3 || estatusActual === 8) {
+        nuevoEstatusId = todosExitosos ? 9 : 8;
       }
 
       if (nuevoEstatusId) {

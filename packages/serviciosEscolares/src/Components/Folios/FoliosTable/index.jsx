@@ -19,7 +19,7 @@ const solicitudesCertificados = [
   { id: 3, nombre: 'Total' },
 ];
 
-const ESTATUS_FIRMA = [3, 6];
+const ESTATUS_FIRMA = [3, 8];
 const ESTATUS_EDICION = ['EN CAPTURA', 'ATENDER OBSERVACIONES'];
 
 const columns = (handleEdit, handleConsultar, handleFirmar) => [
