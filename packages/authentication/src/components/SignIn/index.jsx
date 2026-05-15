@@ -7,17 +7,16 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Divider, Typography } from '@mui/material';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import submitNewLogin from '../../utils/submitNewLogin';
 
 export default function SignIn({ setPassword }) {
-  const { activateAuth, removeAuth, session } = useAuth();
+  const { activateAuth } = useAuth();
+  const [pendingAuthData, setPendingAuthData] = useState(null);
   const { setLoading } = useUI();
   const [errorMessages, setErrorMessages] = useState({});
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ usuario: '', contrasena: '' });
-  const router = useRouter();
 
   const errors = {
     usuario: '¡Usuario equivocado!',
@@ -36,7 +35,7 @@ export default function SignIn({ setPassword }) {
       setErrorMessages,
       (authData) => {
         if (authData?.data?.avisoPrivacidad === false) {
-          activateAuth(authData, true);
+          setPendingAuthData(authData);
           setOpen(true);
         } else {
           activateAuth(authData);
@@ -47,19 +46,23 @@ export default function SignIn({ setPassword }) {
   };
 
   const handleAccept = async () => {
+    localStorage.setItem('token', JSON.stringify(pendingAuthData.token));
+
     const result = await updateRecord({
-      endpoint: `/usuarios/${session.id}`,
+      endpoint: `/usuarios/${pendingAuthData.data.id}`,
       data: { avisoPrivacidad: true },
     });
 
     if (result.statusCode === 200) {
       setOpen(false);
-      router.push('../home');
+      activateAuth(pendingAuthData);
+    } else {
+      localStorage.removeItem('token');
     }
   };
 
   const handleReject = () => {
-    removeAuth();
+    setPendingAuthData(null);
     setOpen(false);
   };
 
