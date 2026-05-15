@@ -8,9 +8,10 @@ import Paper from '@mui/material/Paper';
 import { Divider, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import submitNewLogin from '../../utils/submitNewLogin';
 
-export default function SignIn() {
+export default function SignIn({ setPassword }) {
   const { activateAuth, removeAuth, session } = useAuth();
   const { setLoading } = useUI();
   const [errorMessages, setErrorMessages] = useState({});
@@ -121,11 +122,11 @@ export default function SignIn() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            sx={{ zIndex: 1, position: 'relative', mt: 2 }}
+            sx={{
+              zIndex: 1, position: 'relative', mt: 2, cursor: 'pointer',
+            }}
           >
-            <Link href="/autenticacion/contrasena" passHref>
-              <LinkButton text="¿Has olvidado tu contraseña?" />
-            </Link>
+            <LinkButton text="¿Has olvidado tu contraseña?" onClick={() => setPassword(true)} />
           </Box>
           <ButtonLogin click={handleSubmit} color="secondary" type="submit" text="Entrar" />
         </Paper>
@@ -188,3 +189,7 @@ export default function SignIn() {
     </Box>
   );
 }
+
+SignIn.propTypes = {
+  setPassword: PropTypes.func.isRequired,
+};
