@@ -66,6 +66,7 @@ export default function Folios() {
   const selectedAlumno = alumnosRows.find(
     (row) => row.id === alumnoToDelete,
   );
+  const esCertificado = etiquetas.tipoDocumento === 'Certificado';
 
   const router = useRouter();
   const { id, status } = router.query;
@@ -366,13 +367,13 @@ export default function Folios() {
           </Tooltip>
 
           {estatus === 2 && (
-          <Tooltip title="Eliminar alumno" placement="top">
-            <IconButton
-              onClick={() => handleDeleteAlumno(params.row.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Eliminar alumno" placement="top">
+              <IconButton
+                onClick={() => handleDeleteAlumno(params.row.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
           )}
         </>
       ),
@@ -385,19 +386,23 @@ export default function Folios() {
       : null
   );
 
-  let title = '';
+  let title = 'Solicitud de Folios';
   if (estatus === 2) {
     title = accion === 'revisar' ? 'Revisar Solicitud' : 'Consultar Solicitud';
   } else if (estatus === 3) {
-    title = accion === 'envio'
-      ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
-      : 'Consultar Envio de Solicitud a Titulación';
+    if (esCertificado) {
+      title = 'Folios Asignados';
+    } else {
+      title = accion === 'envio'
+        ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
+        : 'Consultar Envio de Solicitud a Titulación';
+    }
   } else if (estatus === 4) {
     title = 'Atender Observaciones de Solicitud';
   } else if (estatus === 8) {
     title = 'Firma Faltantes Certificado IES';
   } else if (estatus === 9) {
-    title = 'Firma de Certificado IES';
+    title = 'Certificado IES';
   } else if (estatus === 10) {
     title = 'Firma Faltantes Certificado SICYT';
   } else if (estatus === 11) {
