@@ -248,7 +248,7 @@ export default function ModalFirmaElectronica({
       folioInterno: folioDocumentoAlumno?.folioDocumento,
       foja: folioDocumentoAlumno?.foja?.nombre,
       libro: folioDocumentoAlumno?.libro?.nombre,
-      tipoDocumento: process.env.NEXT_PUBLIC_CERT_NAME,
+      tipoDocumento: 'Certificado Electronico',
       tipoSolicitudFolio: solicitudData.tipoSolicitudFolio?.nombre,
       nombre: persona?.nombre,
       apellidoPaterno: persona?.apellidoPaterno,
@@ -396,7 +396,7 @@ export default function ModalFirmaElectronica({
           pkcs7: pkcs7Base64,
           folioInterno: objetoPorFirmar.folioInterno,
           objetoPorFirmar,
-          tipoDocumento: process.env.NEXT_PUBLIC_CERT_NAME,
+          tipoDocumento: 'Certificado Electronico',
           programaId: solicitudData.programaId,
           autoridad: {
             tipoFirmante,

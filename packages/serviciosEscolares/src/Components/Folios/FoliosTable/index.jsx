@@ -100,15 +100,16 @@ function FoliosTable({
       ? `/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}`
       : `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`;
 
-    router.push(
-      {
-        pathname: path,
-        query: {
-          tipoDocumento, tipoSolicitud, programa, status, plantel,
-        },
+    router.push({
+      pathname: path,
+      query: {
+        tipoDocumento,
+        tipoSolicitud,
+        programa,
+        status,
+        plantel,
       },
-      path,
-    );
+    });
   };
 
   const handleEdit = (id) => navigateTo(id, 'edit');

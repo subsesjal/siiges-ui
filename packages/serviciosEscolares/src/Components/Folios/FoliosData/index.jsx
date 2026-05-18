@@ -142,19 +142,23 @@ export default function FoliosData({ type }) {
       : null
   );
 
-  let title = '';
+  let title = 'Solicitud de Folios';
   if (estatus === 2) {
     title = accion === 'revisar' ? 'Revisar Solicitud' : 'Consultar Solicitud';
   } else if (estatus === 3) {
-    title = accion === 'envio'
-      ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
-      : 'Consultar Envio de Solicitud a Titulación';
+    if (esCertificado) {
+      title = 'Folios Asignados';
+    } else {
+      title = accion === 'envio'
+        ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
+        : 'Consultar Envio de Solicitud a Titulación';
+    }
   } else if (estatus === 4) {
     title = 'Atender Observaciones de Solicitud';
   } else if (estatus === 8) {
     title = 'Firma Faltantes Certificado IES';
   } else if (estatus === 9) {
-    title = 'Firma de Certificado IES';
+    title = 'Certificado IES';
   } else if (estatus === 10) {
     title = 'Firma Faltantes Certificado SICYT';
   } else if (estatus === 11) {
@@ -306,6 +310,7 @@ export default function FoliosData({ type }) {
                 estatusFirmado: alumno.folioDocumentoAlumno?.estatusFirmado || null,
                 estadoFirmaIes: alumno.estadoFirma?.firmaIes ? 'EXITOSO' : 'PENDIENTE',
                 estadoFirmaSicyt: alumno.estadoFirma?.firmaSicyt ? 'EXITOSO' : 'PENDIENTE',
+                fechaExpedicionPdf: alumno.estadoFirma?.fechaExpedicion || null,
               };
             });
             setRows(mappedRows);
@@ -413,8 +418,15 @@ export default function FoliosData({ type }) {
       }
       if (response.data?.url) {
         window.open(response.data.url, '_blank');
+        // Actualizar rows para quitar el botón de PDF de este alumno
+        setRows((prevRows) => prevRows.map((row) => (row.folioDocumentoAlumnoId === alumnoId
+          ? { ...row, fechaExpedicionPdf: new Date().toISOString() }
+          : row)));
       } else if (typeof response.data === 'string') {
         window.open(response.data, '_blank');
+        setRows((prevRows) => prevRows.map((row) => (row.folioDocumentoAlumnoId === alumnoId
+          ? { ...row, fechaExpedicionPdf: new Date().toISOString() }
+          : row)));
       } else {
         setNoti({ open: true, message: 'No se pudo obtener el PDF', type: 'error' });
       }
@@ -464,7 +476,10 @@ export default function FoliosData({ type }) {
         setNoti({ open: true, message: 'No se pudo firmar ningún documento', type: 'error' });
       }
 
-      setAlumnoResponse(true);
+      setTimeout(() => {
+        router.push('/serviciosEscolares/solicitudesFolios/certificado');
+      }, 3000);
+
       return resultados;
     } catch (error) {
       setNoti({
@@ -535,6 +550,7 @@ export default function FoliosData({ type }) {
   };
 
   const estaEnModoFirma = estatus === 6 || estatus === 7;
+  const estaEnProcesoFirma = [3, 8, 9, 10, 11].includes(estatus);
 
   const alumnosPendientesFirmaIes = Array.isArray(alumnosData)
     ? alumnosData.filter((alumno) => {
@@ -600,7 +616,13 @@ export default function FoliosData({ type }) {
       headerName: 'Acciones',
       width: 200,
       renderCell: (params) => {
-        const firmadoExitoso = params.row.estatusFirmado === 'exitoso';
+        const firmaIesExitosa = params.row.estadoFirmaIes === 'EXITOSO';
+        const firmaSicytExitosa = params.row.estadoFirmaSicyt === 'EXITOSO';
+        const yaDescargoPdf = !!params.row.fechaExpedicionPdf;
+        const puedeVerPdf = firmaIesExitosa
+          && firmaSicytExitosa
+          && params.row.folioDocumentoAlumnoId;
+
         return (
           <div>
             <Tooltip title="Consultar" placement="top">
@@ -609,34 +631,31 @@ export default function FoliosData({ type }) {
               </IconButton>
             </Tooltip>
             {status !== 'consult' && !estaEnModoFirma && (
-              <Tooltip title="Editar" placement="top">
-                <IconButton onClick={() => handleEditFn(params.row.id)}>
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
+            <Tooltip title="Editar" placement="top">
+              <IconButton onClick={() => handleEditFn(params.row.id)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
             )}
             {status !== 'consult' && !estaEnModoFirma && (
-              <Tooltip title="Eliminar alumno" placement="top">
-                <IconButton onClick={() => handleDeleteFn(params.row.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+            <Tooltip title="Eliminar alumno" placement="top">
+              <IconButton onClick={() => handleDeleteFn(params.row.id)}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
             )}
-            {esCertificado && estatus === 7 && (
-              <Tooltip
-                title={firmadoExitoso ? 'Generar PDF' : 'Debe firmar primero'}
-                placement="top"
-              >
-                <span>
-                  <IconButton
-                    onClick={() => handleGenerarPDF(params.row.folioDocumentoAlumnoId)}
-                    disabled={!firmadoExitoso}
-                    color={firmadoExitoso ? 'primary' : 'default'}
-                  >
-                    <PictureAsPdfIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
+            {puedeVerPdf && (
+            <Tooltip title={yaDescargoPdf ? 'Ya se generó este PDF' : 'Generar PDF'} placement="top">
+              <span>
+                <IconButton
+                  onClick={() => handleGenerarPDF(params.row.folioDocumentoAlumnoId)}
+                  color={yaDescargoPdf ? 'default' : 'primary'}
+                  disabled={yaDescargoPdf}
+                >
+                  <PictureAsPdfIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
             )}
           </div>
         );
@@ -800,7 +819,7 @@ export default function FoliosData({ type }) {
                       />
                     </Grid>
                   )}
-                  {!debesMostrarFirma && (
+                  {!estaEnProcesoFirma && (
                     <ButtonsFolios
                       save={handleConfirm}
                       send={handleSend}
