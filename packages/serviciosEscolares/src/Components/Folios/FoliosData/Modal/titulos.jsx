@@ -1,7 +1,7 @@
-import { Grid } from '@mui/material';
+import { Grid, Checkbox, Typography } from '@mui/material';
 import {
-  BinarySelect, ButtonsSections, DefaultModal, Input, InputDate, LabelData, Select, createRecord,
-  getData, updateRecord, useUI,
+  ButtonSimple, DefaultModal, InputDate, DataTable, Select, Input,
+  createRecord, getData, useUI,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -12,7 +12,10 @@ import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const modalidadTitulacion = [
+const SITUACION_EGRESADO = 3;
+const TIPO_DOCUMENTO_TITULO = 1;
+
+const modalidadTitulacionOptions = [
   { id: 1, nombre: 'Por Tesis' },
   { id: 2, nombre: 'Por Promedio' },
   { id: 3, nombre: 'Por Estudios de Posgrados' },
@@ -21,19 +24,18 @@ const modalidadTitulacion = [
   { id: 6, nombre: 'Otro' },
 ];
 
-const cumplioServicioSocial = [
-  { id: 0, nombre: 'No' },
-  { id: 1, nombre: 'Si' },
+const cumplioServicioSocialOptions = [
+  { id: 1, nombre: 'Sí' },
+  { id: 2, nombre: 'No' },
 ];
 
-const fundamentoLegal = [
+const fundamentoLegalOptions = [
   { id: 1, nombre: 'ART. 52 LRART. 5 CONST' },
   { id: 2, nombre: 'ART. 55 LRART. 5 CONST' },
   { id: 3, nombre: 'ART. 91 LRART. 5 CONST' },
   {
     id: 4,
-    nombre:
-      'ART. 10 REGLAMENTO PARA LA PRESTACIÓN DEL SERVICIO SOCIAL DE LOS ESTUDIANTES DE LAS INSTITUCIONES DE EDUCACIÓN SUPERIOR EN LA REPÚBLICA MEXICANA',
+    nombre: 'ART. 10 REGLAMENTO PARA LA PRESTACIÓN DEL SERVICIO SOCIAL DE LOS ESTUDIANTES DE LAS INSTITUCIONES DE EDUCACIÓN SUPERIOR EN LA REPÚBLICA MEXICANA',
   },
   { id: 5, nombre: 'NO APLICA' },
 ];
@@ -43,50 +45,86 @@ export default function ModalTitulo({
   setOpen,
   type,
   id,
-  rowData,
   programaId,
   setAlumnoResponse,
   disabled,
-  alumnosAgregados = [],
+  alumnosAgregados,
 }) {
-  const [position, setPosition] = useState('first');
-  const [modalTitulo, setModalTitulo] = useState('Agregar Alumno');
-  const [form, setForm] = useState({});
-  const [alumno, setAlumno] = useState(null);
-  const [alumnoId, setAlumnoId] = useState(null);
-  const { setNoti, setLoading } = useUI();
-  const getEmptyForm = () => ({
-    matricula: '',
+  const [alumnos, setAlumnos] = useState([]);
+  const [selectedAlumnos, setSelectedAlumnos] = useState([]);
+  const [loadingAlumnos, setLoadingAlumnos] = useState(false);
+  const [form, setForm] = useState({
     fechaInicio: '',
     fechaTerminacion: '',
     fechaExamenProfesional: '',
     modalidadTitulacionId: '',
     cumplioServicioSocial: '',
     fundamentoServicioSocialId: '',
-    fechaExpedicion: '',
+    folioActa: '',
   });
+  const { setNoti, setLoading } = useUI();
+
+  const alumnosAgregadosIds = alumnosAgregados.map((a) => a.alumnoId);
 
   useEffect(() => {
-    if (type !== 'create' && rowData) {
-      setForm({
-        ...rowData,
-        numeroFolioActaTitulacion: rowData.folioActa,
-      });
-      if (rowData.alumno) {
-        const fullName = `${rowData.alumno.persona.nombre} ${rowData.alumno.persona.apellidoPaterno} ${rowData.alumno.persona.apellidoMaterno}`;
-        setAlumno(fullName);
-      }
-      setAlumnoId(rowData.alumnoId);
-    } else {
-      setForm(getEmptyForm());
-      setAlumno(null);
-      setAlumnoId(null);
+    if (open && type === 'create' && programaId) {
+      setLoadingAlumnos(true);
+      getData({
+        endpoint: `/solicitudesFolios/alumnos/programas/${programaId}?situacionId=${SITUACION_EGRESADO}&tipoDocumentoId=${TIPO_DOCUMENTO_TITULO}`,
+      })
+        .then((response) => {
+          if (response.data && Array.isArray(response.data)) {
+            const alumnosFiltrados = response.data.filter(
+              (alumno) => !alumnosAgregadosIds.includes(alumno.id),
+            );
+            setAlumnos(alumnosFiltrados);
+          }
+        })
+        .catch((error) => {
+          setNoti({
+            open: true,
+            message: `Error al cargar alumnos: ${error.message}`,
+            type: 'error',
+          });
+        })
+        .finally(() => {
+          setLoadingAlumnos(false);
+        });
     }
+  }, [open, type, programaId]);
 
-    if (type === 'edit') setModalTitulo('Editar Alumno');
-    else if (type === 'consult') setModalTitulo('Consultar Alumno');
-    else setModalTitulo('Agregar Alumno');
-  }, [type, rowData]);
+  useEffect(() => {
+    if (!open) {
+      setSelectedAlumnos([]);
+      setAlumnos([]);
+      setForm({
+        fechaInicio: '',
+        fechaTerminacion: '',
+        fechaExamenProfesional: '',
+        modalidadTitulacionId: '',
+        cumplioServicioSocial: '',
+        fundamentoServicioSocialId: '',
+        folioActa: '',
+      });
+    }
+  }, [open]);
+
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedAlumnos(alumnos.map((alumno) => alumno.id));
+    } else {
+      setSelectedAlumnos([]);
+    }
+  };
+
+  const handleSelectAlumno = (alumnoId) => {
+    setSelectedAlumnos((prev) => {
+      if (prev.includes(alumnoId)) {
+        return prev.filter((idAlumno) => idAlumno !== alumnoId);
+      }
+      return [...prev, alumnoId];
+    });
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -103,152 +141,155 @@ export default function ModalTitulo({
     }));
   };
 
-  const handleConfirm = () => {
-    setLoading(true);
-
-    const formattedForm = {
-      ...form,
-      folioActa: form.numeroFolioActaTitulacion || '',
-      fechaInicio: form.fechaInicio
-        ? dayjs(form.fechaInicio).format('YYYY-MM-DDTHH:mm:ssZ')
-        : null,
-      fechaTerminacion: form.fechaTerminacion
-        ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
-        : null,
-      fechaExpedicion: form.fechaExpedicion
-        ? dayjs(form.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ssZ')
-        : null,
-      fechaExamenProfesional: form.fechaExamenProfesional
-        ? dayjs(form.fechaExamenProfesional).format('YYYY-MM-DDTHH:mm:ssZ')
-        : null,
-    };
-
-    const endpoint = type === 'edit'
-      ? `/solicitudesFolios/solicitudesFoliosAlumnos/${form.id}`
-      : `/solicitudesFolios/${id}/alumnos/${alumnoId}`;
-
-    const action = type === 'edit' ? updateRecord : createRecord;
-
-    action({ data: formattedForm, endpoint })
-      .then((data) => {
-        if (data.statusCode === 200 || data.statusCode === 201) {
-          setNoti({
-            open: true,
-            message:
-              type === 'edit'
-                ? 'Registro actualizado exitosamente'
-                : 'Registro creado exitosamente',
-            type: 'success',
-          });
-          setForm(getEmptyForm());
-          setAlumno(null);
-          setAlumnoId(null);
-          setPosition('first');
-          setAlumnoResponse(true);
-          setOpen(false);
-        } else {
-          setNoti({
-            open: true,
-            message: 'El alumno registrado no esta validado',
-            type: 'warning',
-          });
-        }
-      })
-      .catch((error) => {
-        setNoti({
-          open: true,
-          message: `¡Ocurrió un error inesperado!: ${error}`,
-          type: 'error',
-        });
-      })
-      .finally(() => {
-        setPosition('first');
-        setLoading(false);
-      });
-  };
-
-  const handleCancel = () => {
-    setPosition('first');
-    setOpen(false);
-    setAlumno(null);
-  };
-
-  const handlePrev = () => {
-    if (position === 'last') setPosition('first');
-  };
-
-  const alumnoYaAgregado = (idAlumno) => alumnosAgregados.some(
-    (item) => item.alumnoId === idAlumno,
-  );
-
-  const handleNext = () => {
-    if (!alumnoId) return;
-
-    if (type === 'create' && alumnoYaAgregado(alumnoId)) {
+  const handleConfirm = async () => {
+    if (selectedAlumnos.length === 0) {
       setNoti({
         open: true,
-        message: 'Este alumno ya fue agregado a la solicitud',
+        message: 'Debe seleccionar al menos un alumno',
         type: 'warning',
       });
       return;
     }
 
-    if (position === 'first') setPosition('last');
-  };
+    if (!form.fechaTerminacion) {
+      setNoti({
+        open: true,
+        message: 'Debe ingresar la fecha de terminación',
+        type: 'warning',
+      });
+      return;
+    }
 
-  const handleBlur = (event) => {
-    const { name, value } = event.target;
-    if (name === 'matricula' && value) {
-      setLoading(true);
-      getData({ endpoint: `/alumnos/programas/${programaId}?matricula=${value}` })
-        .then((response) => {
-          if (response.data) {
-            const fullName = `${response.data.persona.nombre} ${response.data.persona.apellidoPaterno} ${response.data.persona.apellidoMaterno}`;
-            setAlumno(fullName);
-            setAlumnoId(response.data.id);
-          }
-        })
-        .catch(() => {
+    setLoading(true);
+
+    const payload = selectedAlumnos.map((alumnoId) => ({
+      alumnoId,
+      fechaInicio: form.fechaInicio
+        ? dayjs(form.fechaInicio).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      fechaTerminacion: dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ'),
+      fechaExamenProfesional: form.fechaExamenProfesional
+        ? dayjs(form.fechaExamenProfesional).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      modalidadTitulacionId: form.modalidadTitulacionId || null,
+      cumplioServicioSocial: form.cumplioServicioSocial === ''
+        ? null
+        : form.cumplioServicioSocial === 1 || form.cumplioServicioSocial === '1',
+      fundamentoServicioSocialId: form.fundamentoServicioSocialId || null,
+      folioActa: form.folioActa || '',
+    }));
+
+    try {
+      const response = await createRecord({
+        endpoint: `/solicitudesFolios/${id}/alumnos`,
+        data: payload,
+      });
+
+      if (response.statusCode === 201) {
+        const { agregados, rechazados } = response.data;
+
+        if (agregados > 0 && rechazados === 0) {
           setNoti({
             open: true,
-            message: '¡No se encontró el Alumno!',
+            message: `${agregados} alumno(s) agregado(s) exitosamente`,
+            type: 'success',
+          });
+        } else if (agregados > 0 && rechazados > 0) {
+          setNoti({
+            open: true,
+            message: `${agregados} agregado(s), ${rechazados} rechazado(s)`,
+            type: 'warning',
+          });
+        } else {
+          setNoti({
+            open: true,
+            message: 'No se pudo agregar ningún alumno',
             type: 'error',
           });
-        })
-        .finally(() => {
-          setLoading(false);
+        }
+
+        setAlumnoResponse(true);
+        setOpen(false);
+      } else {
+        setNoti({
+          open: true,
+          message: 'Error al agregar alumnos',
+          type: 'error',
         });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `Error: ${error.message}`,
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const allSelected = alumnos.length > 0 && selectedAlumnos.length === alumnos.length;
+  const someSelected = selectedAlumnos.length > 0 && selectedAlumnos.length < alumnos.length;
+
+  const columns = [
+    {
+      field: 'seleccionar',
+      headerName: '',
+      width: 90,
+      sortable: false,
+      renderHeader: () => (
+        <Checkbox
+          checked={allSelected}
+          indeterminate={someSelected}
+          onChange={handleSelectAll}
+          disabled={disabled || alumnos.length === 0}
+        />
+      ),
+      renderCell: (params) => (
+        <Checkbox
+          checked={selectedAlumnos.includes(params.row.id)}
+          onChange={() => handleSelectAlumno(params.row.id)}
+          disabled={disabled}
+        />
+      ),
+    },
+    { field: 'matricula', headerName: 'Matrícula', width: 150 },
+    { field: 'nombre', headerName: 'Nombre', width: 300 },
+    { field: 'situacion', headerName: 'Situación', width: 150 },
+  ];
+
+  const rows = alumnos.map((alumno) => ({
+    id: alumno.id,
+    matricula: alumno.matricula,
+    nombre: `${alumno.persona?.nombre || ''} ${alumno.persona?.apellidoPaterno || ''} ${alumno.persona?.apellidoMaterno || ''}`.trim(),
+    situacion: alumno.situacion?.nombre || 'Sin situación',
+  }));
+
+  const isConfirmDisabled = disabled
+    || selectedAlumnos.length === 0
+    || !form.fechaInicio
+    || !form.fechaTerminacion
+    || !form.fechaExamenProfesional
+    || !form.modalidadTitulacionId
+    || !form.cumplioServicioSocial
+    || !form.fundamentoServicioSocialId;
+
   return (
-    <DefaultModal title={modalTitulo} open={open} setOpen={setOpen}>
+    <DefaultModal title="Agregar Alumnos" open={open} setOpen={setOpen} size="lg">
       <Grid container spacing={2}>
-        {position === 'first' && (
+        {type === 'create' && (
           <>
-            <Grid item xs={12}>
-              <Input
-                label="Matrícula"
-                id="matricula"
-                name="matricula"
-                value={form.alumno?.matricula || ''}
-                onblur={handleBlur}
-                onChange={handleChange}
-                disabled={disabled}
-              />
-            </Grid>
-            {alumno && (
-              <Grid item xs={12}>
-                <LabelData title="Alumno" subtitle={alumno} />
-              </Grid>
-            )}
             <Grid item xs={6}>
               <InputDate
                 label="Fecha de inicio plan de estudios"
                 id="fechaInicio"
                 name="fechaInicio"
                 type="datetime"
-                value={form.fechaInicio || ''}
+                value={form.fechaInicio}
                 onChange={handleChange}
                 disabled={disabled}
               />
@@ -259,27 +300,19 @@ export default function ModalTitulo({
                 id="fechaTerminacion"
                 name="fechaTerminacion"
                 type="datetime"
-                value={form.fechaTerminacion || ''}
+                value={form.fechaTerminacion}
                 onChange={handleChange}
+                required
                 disabled={disabled}
               />
             </Grid>
             <Grid item xs={6}>
               <InputDate
-                label="Fecha de expedición de título"
-                id="fechaExpedicion"
-                name="fechaExpedicion"
-                value={form.fechaExpedicion || ''}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Input
-                label="Número de folio de acta de titulación"
-                id="numeroFolioActaTitulacion"
-                name="numeroFolioActaTitulacion"
-                type="String"
-                value={form.numeroFolioActaTitulacion || ''}
+                label="Fecha de examen profesional"
+                id="fechaExamenProfesional"
+                name="fechaExamenProfesional"
+                type="datetime"
+                value={form.fechaExamenProfesional}
                 onChange={handleChange}
                 disabled={disabled}
               />
@@ -287,33 +320,19 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Select
                 title="Modalidad de titulación"
-                options={modalidadTitulacion}
+                options={modalidadTitulacionOptions}
                 name="modalidadTitulacionId"
-                value={form.modalidadTitulacionId || ''}
+                value={form.modalidadTitulacionId}
                 onChange={handleSelectChange('modalidadTitulacionId')}
                 disabled={disabled}
               />
             </Grid>
-          </>
-        )}
-        {position === 'last' && (
-          <>
             <Grid item xs={6}>
-              <InputDate
-                label="Fecha de examen profesional"
-                id="fechaExamenProfesional"
-                name="fechaExamenProfesional"
-                value={form.fechaExamenProfesional || ''}
-                onChange={handleChange}
-                disabled={disabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <BinarySelect
+              <Select
                 title="Cumplió servicio social"
-                options={cumplioServicioSocial}
+                options={cumplioServicioSocialOptions}
                 name="cumplioServicioSocial"
-                value={form.cumplioServicioSocial || ''}
+                value={form.cumplioServicioSocial}
                 onChange={handleSelectChange('cumplioServicioSocial')}
                 disabled={disabled}
               />
@@ -321,24 +340,51 @@ export default function ModalTitulo({
             <Grid item xs={6}>
               <Select
                 title="Fundamento legal de servicio social"
-                options={fundamentoLegal}
+                options={fundamentoLegalOptions}
                 name="fundamentoServicioSocialId"
-                value={form.fundamentoServicioSocialId || ''}
+                value={form.fundamentoServicioSocialId}
                 onChange={handleSelectChange('fundamentoServicioSocialId')}
                 disabled={disabled}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Input
+                label="Número de folio de acta de titulación"
+                id="folioActa"
+                name="folioActa"
+                value={form.folioActa}
+                onChange={handleChange}
+                disabled={disabled}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1">
+                {`Alumnos disponibles: ${alumnos.length} | Seleccionados: ${selectedAlumnos.length}`}
+              </Typography>
+              <DataTable
+                rows={rows}
+                columns={columns}
+                loading={loadingAlumnos}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 25]}
               />
             </Grid>
           </>
         )}
         <Grid item xs={12}>
-          <ButtonsSections
-            prev={handlePrev}
-            next={handleNext}
-            confirm={handleConfirm}
-            confirmDisabled={disabled}
-            cancel={handleCancel}
-            position={position}
-          />
+          <Grid container justifyContent="space-between">
+            <Grid item>
+              <ButtonSimple text="Regresar" design="enviar" onClick={handleCancel} />
+            </Grid>
+            <Grid item>
+              <ButtonSimple
+                text="Agregar Alumnos"
+                design="guardar"
+                onClick={handleConfirm}
+                disabled={isConfirmDisabled}
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </DefaultModal>
@@ -346,15 +392,15 @@ export default function ModalTitulo({
 }
 
 ModalTitulo.defaultProps = {
-  alumnosAgregados: [],
   id: null,
-  rowData: {},
   programaId: null,
+  disabled: false,
+  alumnosAgregados: [],
 };
 
 ModalTitulo.propTypes = {
   open: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   setOpen: PropTypes.func.isRequired,
   setAlumnoResponse: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
@@ -365,23 +411,4 @@ ModalTitulo.propTypes = {
       alumnoId: PropTypes.number.isRequired,
     }),
   ),
-
-  rowData: PropTypes.shape({
-    alumno: PropTypes.shape({
-      id: PropTypes.number,
-      matricula: PropTypes.string,
-      persona: PropTypes.shape({
-        nombre: PropTypes.string,
-        apellidoPaterno: PropTypes.string,
-        apellidoMaterno: PropTypes.string,
-      }),
-    }),
-    alumnoId: PropTypes.number,
-    id: PropTypes.number,
-    folioActa: PropTypes.string,
-    name: PropTypes.string,
-    fechaInicio: PropTypes.string,
-    fechaTerminacion: PropTypes.string,
-    fechaExamenProfesional: PropTypes.string,
-  }),
 };
