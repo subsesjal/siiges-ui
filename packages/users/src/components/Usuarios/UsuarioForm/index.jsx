@@ -36,7 +36,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
 
     if (usuario && accion === 'editar') {
       const { actualizado, ...usuarioData } = usuario;
-      setForm(usuarioData);
+      setForm({ id: usuarioData.id });
     }
 
     if (endpoint) {
@@ -137,11 +137,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
               options={rolOptions || []}
               id="rolId"
               name="rolId"
-              value={
-                rolOptions.length > 1 && usuario && usuario.rol
-                  ? usuario.rol.id
-                  : ''
-              }
+              value={usuario.rolId ? String(usuario.rolId) : ''}
               required
               onChange={(e) => handleOnChange(e, { form, setForm })}
               onblur={(e) => handleOnBlur(e, { form, setError, isRequired: true })}
@@ -235,7 +231,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                 title="Estatus del usuario"
                 options={userStatus}
                 name="estatus"
-                value={form.estatus || 0}
+                value={usuario.estatus || 0}
                 onChange={(e) => setForm((prevForm) => ({
                   ...prevForm,
                   estatus: e.target.value,
@@ -282,6 +278,7 @@ UsuarioForm.propTypes = {
   accion: PropTypes.string.isRequired,
   usuario: PropTypes.shape({
     id: PropTypes.number,
+    rolId: PropTypes.number,
     usuario: PropTypes.string,
     estatus: PropTypes.number,
     actualizado: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
