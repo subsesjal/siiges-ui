@@ -61,11 +61,15 @@ import ModalFirmaElectronica from './Components/FoliosAsignados/FoliosTable/Moda
 import BusquedaAlumnosForm from './Components/Alumnos/BusquedaAlumnos/Form';
 import BusquedaAlumnosTable from './Components/Alumnos/BusquedaAlumnos/Table';
 import HistorialAcademico from './Components/Alumnos/AlumnosHistorial/index';
+import MatriculaActivaForm from './Components/Reporte/MatriculaActivaForm/index';
+import MatriculaActivaTable from './Components/Reporte/MatriculaActivaTable/index';
 
 export {
   BusquedaAlumnosForm,
   BusquedaAlumnosTable,
   HistorialAcademico,
+  MatriculaActivaForm,
+  MatriculaActivaTable,
   ExpedienteAlumno,
   catalogoTitulos,
   TitulosTable,
