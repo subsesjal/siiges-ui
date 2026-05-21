@@ -55,10 +55,12 @@ export default function MatriculaActiva() {
         <Grid item xs={12}>
           <MatriculaActivaForm
             formData={formData}
+            setFormData={setFormData}
             onChange={handleChange}
             onSearch={handleSearch}
             setBusquedaGeneral={setBusquedaGeneral}
             busquedaGeneral={busquedaGeneral}
+            setLoading={setLoading}
           />
         </Grid>
         <Grid item xs={12}>
