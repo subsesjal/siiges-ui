@@ -90,7 +90,7 @@ export default function MatriculaActivaForm({
       </Grid>
 
       {!busquedaGeneral ? (
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <Select
             title="Institución"
             name="institucion"
@@ -120,7 +120,7 @@ export default function MatriculaActivaForm({
               disabled={!formData.institucion}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5}>
             <Select
               title="Programa"
               name="programa"
@@ -133,7 +133,7 @@ export default function MatriculaActivaForm({
         </>
       )}
 
-      <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
+      <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center' }}>
         <ButtonSimple text="Buscar" onClick={onSearch} design="buscar" fullWidth>
           <SearchIcon />
         </ButtonSimple>
