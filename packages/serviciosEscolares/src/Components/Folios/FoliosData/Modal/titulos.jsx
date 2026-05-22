@@ -1,7 +1,7 @@
 import { Grid, Checkbox, Typography } from '@mui/material';
 import {
-  ButtonSimple, DefaultModal, InputDate, DataTable, Select, Input,
-  createRecord, getData, useUI,
+  ButtonSimple, DefaultModal, InputDate, DataTable, Select, Input, LabelData,
+  createRecord, getData, updateRecord, useUI,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -40,6 +40,12 @@ const fundamentoLegalOptions = [
   { id: 5, nombre: 'NO APLICA' },
 ];
 
+const booleanToSelectId = (value) => {
+  if (value === true || value === 1) return 1;
+  if (value === false || value === 0) return 2;
+  return '';
+};
+
 export default function ModalTitulo({
   open,
   setOpen,
@@ -47,12 +53,14 @@ export default function ModalTitulo({
   id,
   programaId,
   setAlumnoResponse,
+  rowData,
   disabled,
   alumnosAgregados,
 }) {
   const [alumnos, setAlumnos] = useState([]);
   const [selectedAlumnos, setSelectedAlumnos] = useState([]);
   const [loadingAlumnos, setLoadingAlumnos] = useState(false);
+  const [alumnoNombre, setAlumnoNombre] = useState('');
   const [form, setForm] = useState({
     fechaInicio: '',
     fechaTerminacion: '',
@@ -61,13 +69,25 @@ export default function ModalTitulo({
     cumplioServicioSocial: '',
     fundamentoServicioSocialId: '',
     folioActa: '',
+    fechaExpedicion: '',
   });
   const { setNoti, setLoading } = useUI();
 
+  const isCreateMode = type === 'create';
+  const isEditMode = type === 'edit';
+  const isConsultMode = type === 'consult';
+  const isDisabled = disabled || isConsultMode;
+
   const alumnosAgregadosIds = alumnosAgregados.map((a) => a.alumnoId);
 
+  const getModalTitle = () => {
+    if (isEditMode) return 'Editar Alumno';
+    if (isConsultMode) return 'Consultar Alumno';
+    return 'Agregar Alumnos';
+  };
+
   useEffect(() => {
-    if (open && type === 'create' && programaId) {
+    if (open && isCreateMode && programaId) {
       setLoadingAlumnos(true);
       getData({
         endpoint: `/solicitudesFolios/alumnos/programas/${programaId}?situacionId=${SITUACION_EGRESADO}&tipoDocumentoId=${TIPO_DOCUMENTO_TITULO}`,
@@ -94,9 +114,31 @@ export default function ModalTitulo({
   }, [open, type, programaId]);
 
   useEffect(() => {
+    if (open && (isEditMode || isConsultMode) && rowData) {
+      setForm({
+        id: rowData.id,
+        fechaInicio: rowData.fechaInicio || '',
+        fechaTerminacion: rowData.fechaTerminacion || '',
+        fechaExamenProfesional: rowData.fechaExamenProfesional || '',
+        modalidadTitulacionId: rowData.modalidadTitulacionId || '',
+        cumplioServicioSocial: booleanToSelectId(rowData.cumplioServicioSocial),
+        fundamentoServicioSocialId: rowData.fundamentoServicioSocialId || '',
+        folioActa: rowData.folioActa || '',
+        fechaExpedicion: rowData.fechaExpedicion || '',
+      });
+
+      if (rowData.alumno?.persona) {
+        const { nombre, apellidoPaterno, apellidoMaterno } = rowData.alumno.persona;
+        setAlumnoNombre(`${nombre || ''} ${apellidoPaterno || ''} ${apellidoMaterno || ''}`.trim());
+      }
+    }
+  }, [open, type, rowData]);
+
+  useEffect(() => {
     if (!open) {
       setSelectedAlumnos([]);
       setAlumnos([]);
+      setAlumnoNombre('');
       setForm({
         fechaInicio: '',
         fechaTerminacion: '',
@@ -105,6 +147,7 @@ export default function ModalTitulo({
         cumplioServicioSocial: '',
         fundamentoServicioSocialId: '',
         folioActa: '',
+        fechaExpedicion: '',
       });
     }
   }, [open]);
@@ -141,20 +184,11 @@ export default function ModalTitulo({
     }));
   };
 
-  const handleConfirm = async () => {
+  const handleConfirmCreate = async () => {
     if (selectedAlumnos.length === 0) {
       setNoti({
         open: true,
         message: 'Debe seleccionar al menos un alumno',
-        type: 'warning',
-      });
-      return;
-    }
-
-    if (!form.fechaTerminacion) {
-      setNoti({
-        open: true,
-        message: 'Debe ingresar la fecha de terminación',
         type: 'warning',
       });
       return;
@@ -228,6 +262,67 @@ export default function ModalTitulo({
     }
   };
 
+  const handleConfirmEdit = async () => {
+    setLoading(true);
+
+    const formattedForm = {
+      fechaInicio: form.fechaInicio
+        ? dayjs(form.fechaInicio).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      fechaTerminacion: form.fechaTerminacion
+        ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      fechaExamenProfesional: form.fechaExamenProfesional
+        ? dayjs(form.fechaExamenProfesional).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+      modalidadTitulacionId: form.modalidadTitulacionId || null,
+      cumplioServicioSocial: form.cumplioServicioSocial === ''
+        ? null
+        : form.cumplioServicioSocial === 1 || form.cumplioServicioSocial === '1',
+      fundamentoServicioSocialId: form.fundamentoServicioSocialId || null,
+      folioActa: form.folioActa || '',
+    };
+
+    try {
+      const response = await updateRecord({
+        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${form.id}`,
+        data: formattedForm,
+      });
+
+      if (response.statusCode === 200) {
+        setNoti({
+          open: true,
+          message: 'Registro actualizado exitosamente',
+          type: 'success',
+        });
+        setAlumnoResponse(true);
+        setOpen(false);
+      } else {
+        setNoti({
+          open: true,
+          message: 'Error al actualizar el registro',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `Error: ${error.message}`,
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirm = () => {
+    if (isCreateMode) {
+      handleConfirmCreate();
+    } else if (isEditMode) {
+      handleConfirmEdit();
+    }
+  };
+
   const handleCancel = () => {
     setOpen(false);
   };
@@ -246,14 +341,14 @@ export default function ModalTitulo({
           checked={allSelected}
           indeterminate={someSelected}
           onChange={handleSelectAll}
-          disabled={disabled || alumnos.length === 0}
+          disabled={isDisabled || alumnos.length === 0}
         />
       ),
       renderCell: (params) => (
         <Checkbox
           checked={selectedAlumnos.includes(params.row.id)}
           onChange={() => handleSelectAlumno(params.row.id)}
-          disabled={disabled}
+          disabled={isDisabled}
         />
       ),
     },
@@ -269,7 +364,7 @@ export default function ModalTitulo({
     situacion: alumno.situacion?.nombre || 'Sin situación',
   }));
 
-  const isConfirmDisabled = disabled
+  const isConfirmDisabledCreate = isDisabled
     || selectedAlumnos.length === 0
     || !form.fechaInicio
     || !form.fechaTerminacion
@@ -278,10 +373,12 @@ export default function ModalTitulo({
     || !form.cumplioServicioSocial
     || !form.fundamentoServicioSocialId;
 
+  const isConfirmDisabledEdit = isDisabled || !form.fechaTerminacion;
+
   return (
-    <DefaultModal title="Agregar Alumnos" open={open} setOpen={setOpen} size="lg">
+    <DefaultModal title={getModalTitle()} open={open} setOpen={setOpen} size={isCreateMode ? 'lg' : 'md'}>
       <Grid container spacing={2}>
-        {type === 'create' && (
+        {isCreateMode && (
           <>
             <Grid item xs={6}>
               <InputDate
@@ -291,7 +388,7 @@ export default function ModalTitulo({
                 type="datetime"
                 value={form.fechaInicio}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled={isDisabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -303,7 +400,7 @@ export default function ModalTitulo({
                 value={form.fechaTerminacion}
                 onChange={handleChange}
                 required
-                disabled={disabled}
+                disabled={isDisabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -314,7 +411,7 @@ export default function ModalTitulo({
                 type="datetime"
                 value={form.fechaExamenProfesional}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled={isDisabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -324,7 +421,7 @@ export default function ModalTitulo({
                 name="modalidadTitulacionId"
                 value={form.modalidadTitulacionId}
                 onChange={handleSelectChange('modalidadTitulacionId')}
-                disabled={disabled}
+                disabled={isDisabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -334,7 +431,7 @@ export default function ModalTitulo({
                 name="cumplioServicioSocial"
                 value={form.cumplioServicioSocial}
                 onChange={handleSelectChange('cumplioServicioSocial')}
-                disabled={disabled}
+                disabled={isDisabled}
               />
             </Grid>
             <Grid item xs={6}>
@@ -344,7 +441,7 @@ export default function ModalTitulo({
                 name="fundamentoServicioSocialId"
                 value={form.fundamentoServicioSocialId}
                 onChange={handleSelectChange('fundamentoServicioSocialId')}
-                disabled={disabled}
+                disabled={isDisabled}
               />
             </Grid>
             <Grid item xs={12}>
@@ -354,7 +451,7 @@ export default function ModalTitulo({
                 name="folioActa"
                 value={form.folioActa}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled={isDisabled}
               />
             </Grid>
             <Grid item xs={12}>
@@ -371,19 +468,115 @@ export default function ModalTitulo({
             </Grid>
           </>
         )}
+        {(isEditMode || isConsultMode) && (
+          <>
+            <Grid item xs={12}>
+              <LabelData title="Matrícula" subtitle={rowData?.alumno?.matricula || ''} />
+            </Grid>
+            <Grid item xs={12}>
+              <LabelData title="Alumno" subtitle={alumnoNombre} />
+            </Grid>
+            <Grid item xs={6}>
+              <InputDate
+                label="Fecha de inicio plan de estudios"
+                id="fechaInicio"
+                name="fechaInicio"
+                type="datetime"
+                value={form.fechaInicio}
+                onChange={handleChange}
+                disabled={isDisabled}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <InputDate
+                label="Fecha de terminación plan de estudios"
+                id="fechaTerminacion"
+                name="fechaTerminacion"
+                type="datetime"
+                value={form.fechaTerminacion}
+                onChange={handleChange}
+                required
+                disabled={isDisabled}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <InputDate
+                label="Fecha de expedición de título"
+                id="fechaExpedicion"
+                name="fechaExpedicion"
+                type="datetime"
+                value={form.fechaExpedicion}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <InputDate
+                label="Fecha de examen profesional"
+                id="fechaExamenProfesional"
+                name="fechaExamenProfesional"
+                type="datetime"
+                value={form.fechaExamenProfesional}
+                onChange={handleChange}
+                disabled={isDisabled}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Select
+                title="Modalidad de titulación"
+                options={modalidadTitulacionOptions}
+                name="modalidadTitulacionId"
+                value={form.modalidadTitulacionId}
+                onChange={handleSelectChange('modalidadTitulacionId')}
+                disabled={isDisabled}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Select
+                title="Cumplió servicio social"
+                options={cumplioServicioSocialOptions}
+                name="cumplioServicioSocial"
+                value={form.cumplioServicioSocial}
+                onChange={handleSelectChange('cumplioServicioSocial')}
+                disabled={isDisabled}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Select
+                title="Fundamento legal de servicio social"
+                options={fundamentoLegalOptions}
+                name="fundamentoServicioSocialId"
+                value={form.fundamentoServicioSocialId}
+                onChange={handleSelectChange('fundamentoServicioSocialId')}
+                disabled={isDisabled}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Input
+                label="Número de folio de acta de titulación"
+                id="folioActa"
+                name="folioActa"
+                value={form.folioActa}
+                onChange={handleChange}
+                disabled={isDisabled}
+              />
+            </Grid>
+          </>
+        )}
         <Grid item xs={12}>
           <Grid container justifyContent="space-between">
             <Grid item>
               <ButtonSimple text="Regresar" design="enviar" onClick={handleCancel} />
             </Grid>
-            <Grid item>
-              <ButtonSimple
-                text="Agregar Alumnos"
-                design="guardar"
-                onClick={handleConfirm}
-                disabled={isConfirmDisabled}
-              />
-            </Grid>
+            {!isConsultMode && (
+              <Grid item>
+                <ButtonSimple
+                  text={isCreateMode ? 'Agregar Alumnos' : 'Guardar'}
+                  design="guardar"
+                  onClick={handleConfirm}
+                  disabled={isCreateMode ? isConfirmDisabledCreate : isConfirmDisabledEdit}
+                />
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -396,6 +589,7 @@ ModalTitulo.defaultProps = {
   programaId: null,
   disabled: false,
   alumnosAgregados: [],
+  rowData: null,
 };
 
 ModalTitulo.propTypes = {
@@ -411,4 +605,25 @@ ModalTitulo.propTypes = {
       alumnoId: PropTypes.number.isRequired,
     }),
   ),
+  rowData: PropTypes.shape({
+    id: PropTypes.number,
+    alumnoId: PropTypes.number,
+    fechaInicio: PropTypes.string,
+    fechaTerminacion: PropTypes.string,
+    fechaExamenProfesional: PropTypes.string,
+    fechaExpedicion: PropTypes.string,
+    modalidadTitulacionId: PropTypes.number,
+    cumplioServicioSocial: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+    fundamentoServicioSocialId: PropTypes.number,
+    folioActa: PropTypes.string,
+    alumno: PropTypes.shape({
+      id: PropTypes.number,
+      matricula: PropTypes.string,
+      persona: PropTypes.shape({
+        nombre: PropTypes.string,
+        apellidoPaterno: PropTypes.string,
+        apellidoMaterno: PropTypes.string,
+      }),
+    }),
+  }),
 };
