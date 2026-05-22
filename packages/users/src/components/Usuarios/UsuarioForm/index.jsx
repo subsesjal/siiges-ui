@@ -36,7 +36,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
 
     if (usuario && accion === 'editar') {
       const { actualizado, ...usuarioData } = usuario;
-      setForm({ id: usuarioData.id });
+      setForm({ id: usuarioData.id, estatus: usuarioData.estatus ?? 0 });
     }
 
     if (endpoint) {
@@ -231,7 +231,7 @@ export default function UsuarioForm({ session, accion, usuario }) {
                 title="Estatus del usuario"
                 options={userStatus}
                 name="estatus"
-                value={usuario.estatus || 0}
+                value={form.estatus ?? usuario.estatus ?? 0}
                 onChange={(e) => setForm((prevForm) => ({
                   ...prevForm,
                   estatus: e.target.value,
