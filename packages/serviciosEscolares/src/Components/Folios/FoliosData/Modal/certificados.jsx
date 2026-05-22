@@ -1,10 +1,16 @@
 import { Grid, Checkbox, Typography } from '@mui/material';
 import {
-  ButtonSimple, DefaultModal, InputDate, DataTable, createRecord, getData, useUI,
+  ButtonSimple, DefaultModal, InputDate, DataTable, LabelData,
+  createRecord, getData, updateRecord, useUI,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const SITUACION_EGRESADO = 3;
 const TIPO_DOCUMENTO_CERTIFICADO = 2;
@@ -16,19 +22,35 @@ export default function ModalCertificado({
   id,
   programaId,
   setAlumnoResponse,
+  rowData,
   disabled,
   alumnosAgregados,
 }) {
   const [alumnos, setAlumnos] = useState([]);
   const [selectedAlumnos, setSelectedAlumnos] = useState([]);
-  const [fechaTerminacion, setFechaTerminacion] = useState('');
   const [loadingAlumnos, setLoadingAlumnos] = useState(false);
+  const [alumnoNombre, setAlumnoNombre] = useState('');
+  const [form, setForm] = useState({
+    fechaTerminacion: '',
+    fechaExpedicion: '',
+  });
   const { setNoti, setLoading } = useUI();
+
+  const isCreateMode = type === 'create';
+  const isEditMode = type === 'edit';
+  const isConsultMode = type === 'consult';
+  const isDisabled = disabled || isConsultMode;
 
   const alumnosAgregadosIds = alumnosAgregados.map((a) => a.alumnoId);
 
+  const getModalTitle = () => {
+    if (isEditMode) return 'Editar Alumno';
+    if (isConsultMode) return 'Consultar Alumno';
+    return 'Agregar Alumnos';
+  };
+
   useEffect(() => {
-    if (open && type === 'create' && programaId) {
+    if (open && isCreateMode && programaId) {
       setLoadingAlumnos(true);
       getData({
         endpoint: `/solicitudesFolios/alumnos/programas/${programaId}?situacionId=${SITUACION_EGRESADO}&tipoDocumentoId=${TIPO_DOCUMENTO_CERTIFICADO}`,
@@ -55,10 +77,29 @@ export default function ModalCertificado({
   }, [open, type, programaId]);
 
   useEffect(() => {
+    if (open && (isEditMode || isConsultMode) && rowData) {
+      setForm({
+        id: rowData.id,
+        fechaTerminacion: rowData.fechaTerminacion || '',
+        fechaExpedicion: rowData.fechaExpedicion || '',
+      });
+
+      if (rowData.alumno?.persona) {
+        const { nombre, apellidoPaterno, apellidoMaterno } = rowData.alumno.persona;
+        setAlumnoNombre(`${nombre || ''} ${apellidoPaterno || ''} ${apellidoMaterno || ''}`.trim());
+      }
+    }
+  }, [open, type, rowData]);
+
+  useEffect(() => {
     if (!open) {
       setSelectedAlumnos([]);
-      setFechaTerminacion('');
       setAlumnos([]);
+      setAlumnoNombre('');
+      setForm({
+        fechaTerminacion: '',
+        fechaExpedicion: '',
+      });
     }
   }, [open]);
 
@@ -79,7 +120,15 @@ export default function ModalCertificado({
     });
   };
 
-  const handleConfirm = async () => {
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  const handleConfirmCreate = async () => {
     if (selectedAlumnos.length === 0) {
       setNoti({
         open: true,
@@ -89,7 +138,7 @@ export default function ModalCertificado({
       return;
     }
 
-    if (!fechaTerminacion) {
+    if (!form.fechaTerminacion) {
       setNoti({
         open: true,
         message: 'Debe ingresar la fecha de terminación',
@@ -102,7 +151,7 @@ export default function ModalCertificado({
 
     const payload = selectedAlumnos.map((alumnoId) => ({
       alumnoId,
-      fechaTerminacion: dayjs(fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ'),
+      fechaTerminacion: dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ'),
     }));
 
     try {
@@ -154,6 +203,55 @@ export default function ModalCertificado({
     }
   };
 
+  const handleConfirmEdit = async () => {
+    setLoading(true);
+
+    const formattedForm = {
+      fechaTerminacion: form.fechaTerminacion
+        ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
+        : null,
+    };
+
+    try {
+      const response = await updateRecord({
+        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${form.id}`,
+        data: formattedForm,
+      });
+
+      if (response.statusCode === 200) {
+        setNoti({
+          open: true,
+          message: 'Registro actualizado exitosamente',
+          type: 'success',
+        });
+        setAlumnoResponse(true);
+        setOpen(false);
+      } else {
+        setNoti({
+          open: true,
+          message: 'Error al actualizar el registro',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `Error: ${error.message}`,
+        type: 'error',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirm = () => {
+    if (isCreateMode) {
+      handleConfirmCreate();
+    } else if (isEditMode) {
+      handleConfirmEdit();
+    }
+  };
+
   const handleCancel = () => {
     setOpen(false);
   };
@@ -172,14 +270,14 @@ export default function ModalCertificado({
           checked={allSelected}
           indeterminate={someSelected}
           onChange={handleSelectAll}
-          disabled={disabled || alumnos.length === 0}
+          disabled={isDisabled || alumnos.length === 0}
         />
       ),
       renderCell: (params) => (
         <Checkbox
           checked={selectedAlumnos.includes(params.row.id)}
           onChange={() => handleSelectAlumno(params.row.id)}
-          disabled={disabled}
+          disabled={isDisabled}
         />
       ),
     },
@@ -195,12 +293,16 @@ export default function ModalCertificado({
     situacion: alumno.situacion?.nombre || 'Sin situación',
   }));
 
-  const isConfirmDisabled = disabled || selectedAlumnos.length === 0 || !fechaTerminacion;
+  const isConfirmDisabledCreate = isDisabled
+    || selectedAlumnos.length === 0
+    || !form.fechaTerminacion;
+
+  const isConfirmDisabledEdit = isDisabled || !form.fechaTerminacion;
 
   return (
-    <DefaultModal title="Agregar Alumnos" open={open} setOpen={setOpen} size="lg">
+    <DefaultModal title={getModalTitle()} open={open} setOpen={setOpen} size={isCreateMode ? 'lg' : 'md'}>
       <Grid container spacing={2}>
-        {type === 'create' && (
+        {isCreateMode && (
           <>
             <Grid item xs={12}>
               <InputDate
@@ -208,15 +310,15 @@ export default function ModalCertificado({
                 id="fechaTerminacion"
                 name="fechaTerminacion"
                 type="datetime"
-                value={fechaTerminacion}
-                onChange={(e) => setFechaTerminacion(e.target.value)}
+                value={form.fechaTerminacion}
+                onChange={handleChange}
                 required
-                disabled={disabled}
+                disabled={isDisabled}
               />
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1">
-                {`Alumnos egresados disponibles: ${alumnos.length} | Seleccionados: ${selectedAlumnos.length}`}
+                {`Alumnos disponibles: ${alumnos.length} | Seleccionados: ${selectedAlumnos.length}`}
               </Typography>
               <DataTable
                 rows={rows}
@@ -228,19 +330,53 @@ export default function ModalCertificado({
             </Grid>
           </>
         )}
+        {(isEditMode || isConsultMode) && (
+          <>
+            <Grid item xs={12}>
+              <LabelData title="Matrícula" subtitle={rowData?.alumno?.matricula || ''} />
+            </Grid>
+            <Grid item xs={12}>
+              <LabelData title="Alumno" subtitle={alumnoNombre} />
+            </Grid>
+            <Grid item xs={6}>
+              <InputDate
+                label="Fecha de elaboración de certificado"
+                id="fechaExpedicion"
+                name="fechaExpedicion"
+                type="datetime"
+                value={form.fechaExpedicion}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <InputDate
+                label="Fecha de terminación plan de estudios"
+                id="fechaTerminacion"
+                name="fechaTerminacion"
+                type="datetime"
+                value={form.fechaTerminacion}
+                onChange={handleChange}
+                required
+                disabled={isDisabled}
+              />
+            </Grid>
+          </>
+        )}
         <Grid item xs={12}>
           <Grid container justifyContent="space-between">
             <Grid item>
               <ButtonSimple text="Regresar" design="enviar" onClick={handleCancel} />
             </Grid>
-            <Grid item>
-              <ButtonSimple
-                text="Agregar Alumnos"
-                design="guardar"
-                onClick={handleConfirm}
-                disabled={isConfirmDisabled}
-              />
-            </Grid>
+            {!isConsultMode && (
+              <Grid item>
+                <ButtonSimple
+                  text={isCreateMode ? 'Agregar Alumnos' : 'Guardar'}
+                  design="guardar"
+                  onClick={handleConfirm}
+                  disabled={isCreateMode ? isConfirmDisabledCreate : isConfirmDisabledEdit}
+                />
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -253,6 +389,7 @@ ModalCertificado.defaultProps = {
   programaId: null,
   disabled: false,
   alumnosAgregados: [],
+  rowData: null,
 };
 
 ModalCertificado.propTypes = {
@@ -268,4 +405,19 @@ ModalCertificado.propTypes = {
       alumnoId: PropTypes.number.isRequired,
     }),
   ),
+  rowData: PropTypes.shape({
+    id: PropTypes.number,
+    alumnoId: PropTypes.number,
+    fechaTerminacion: PropTypes.string,
+    fechaExpedicion: PropTypes.string,
+    alumno: PropTypes.shape({
+      id: PropTypes.number,
+      matricula: PropTypes.string,
+      persona: PropTypes.shape({
+        nombre: PropTypes.string,
+        apellidoPaterno: PropTypes.string,
+        apellidoMaterno: PropTypes.string,
+      }),
+    }),
+  }),
 };
