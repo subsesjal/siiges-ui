@@ -300,7 +300,7 @@ export default function FoliosData({ type }) {
                 numeroFolioActa: alumno.folioActa || '',
                 matricula: alumno.alumno.matricula,
                 fechaTerminacion: dayjs(alumno.fechaTerminacion).format('DD/MM/YYYY'),
-                fechaExpedicion: dayjs(alumno.fechaExpedicion).format('DD/MM/YYYY'),
+                fechaRegistro: dayjs(alumno.fechaRegistro).format('DD/MM/YYYY'),
                 fechaInicio: dayjs(alumno.fechaInicio).format('DD/MM/YYYY'),
                 fundamento: fundamentoObj ? fundamentoObj.nombre : 'Desconocido',
                 folio: alumno.folioDocumentoAlumno?.folioDocumento,
@@ -607,8 +607,8 @@ export default function FoliosData({ type }) {
     { field: 'consecutivo', headerName: 'Consecutivo', width: 100 },
     { field: 'name', headerName: 'Nombre', width: 250 },
     { field: 'matricula', headerName: 'Matrícula', width: 200 },
+    { field: 'fechaRegistro', headerName: 'Fecha de Elaboración', width: 180 },
     { field: 'fechaTerminacion', headerName: 'Fecha de Terminación', width: 180 },
-    { field: 'fechaExpedicion', headerName: 'Fecha de Elaboración', width: 180 },
     { field: 'estadoFirmaIes', headerName: 'Estatus Firma IES', width: 170 },
     { field: 'estadoFirmaSicyt', headerName: 'Estatus Firma SICYT', width: 170 },
     {
