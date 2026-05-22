@@ -18,6 +18,12 @@ const STATUS_OPTIONS = [
   { id: 0, nombre: 'Desactivado' },
 ];
 
+const MODE_TITLES = {
+  [VIEW_STATE.CREATE]: 'Crear usuario',
+  [VIEW_STATE.VIEW]: 'Consultar usuario',
+  [VIEW_STATE.EDIT]: 'Editar usuario',
+};
+
 export default function UserForm({
   mode,
   form,
@@ -30,6 +36,8 @@ export default function UserForm({
 }) {
   const isCreate = mode === VIEW_STATE.CREATE;
   const isView = mode === VIEW_STATE.VIEW;
+  const title = MODE_TITLES[mode] || 'Formulario de usuario';
+
   const options = useMemo(() => {
     const roleOptions = ROLE_OPTIONS[sessionRole] || [{ id: '', nombre: '' }];
     if (!form.rolId) return roleOptions;
@@ -43,7 +51,7 @@ export default function UserForm({
   return (
     <Box sx={{ padding: 2 }}>
       <Typography variant="h6" sx={{ marginBottom: 2 }}>
-        {isCreate ? 'Crear usuario' : isView ? 'Consultar usuario' : 'Editar usuario'}
+        {title}
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
