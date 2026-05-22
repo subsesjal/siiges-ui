@@ -22,6 +22,11 @@ const solicitudesCertificados = [
 const ESTATUS_FIRMA = [3, 8];
 const ESTATUS_EDICION = ['EN CAPTURA', 'ATENDER OBSERVACIONES'];
 
+const ESTATUS_LABEL_MAP = {
+  8: 'FIRMA FALTANTES CERTIFICADO IES',
+  10: 'FIRMA FALTANTES CERTIFICADO SICYT',
+};
+
 const columns = (handleEdit, handleConsultar, handleFirmar) => [
   {
     field: 'id', headerName: 'ID', width: 70, hide: true,
@@ -36,7 +41,7 @@ const columns = (handleEdit, handleConsultar, handleFirmar) => [
     width: 180,
     valueGetter: (params) => params.row.rvoe || 'N/A',
   },
-  { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 150 },
+  { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 300 },
   { field: 'plantelNombre', headerName: 'Plantel', width: 300 },
   {
     field: 'actions',
@@ -95,20 +100,21 @@ function FoliosTable({
       ? `/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}`
       : `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`;
 
-    router.push(
-      {
-        pathname: path,
-        query: {
-          tipoDocumento, tipoSolicitud, programa, status, plantel,
-        },
+    router.push({
+      pathname: path,
+      query: {
+        tipoDocumento,
+        tipoSolicitud,
+        programa,
+        status,
+        plantel,
       },
-      path,
-    );
+    });
   };
 
   const handleEdit = (id) => navigateTo(id, 'edit');
   const handleConsultar = (id) => navigateTo(id, 'consult');
-  const handleFirmar = (id) => navigateTo(id, 'edit');
+  const handleFirmar = (id) => navigateTo(id, 'consult');
 
   const formattedSolicitudes = solicitudes
     .filter((solicitud) => !(session?.rol === 'ce_sicyt' && solicitud.estatusSolicitudFolio.id === 1))
@@ -121,8 +127,9 @@ function FoliosTable({
       return {
         ...solicitud,
         programaNombre: solicitud.programa.nombre,
-        estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio.nombre,
-        estatusSolicitudFolioId: solicitud.estatusSolicitudFolio.id,
+        estatusSolicitudFolioNombre: ESTATUS_LABEL_MAP[solicitud.estatusSolicitudFolio?.id]
+          || solicitud.estatusSolicitudFolio.nombre,
+        estatusSolicitudFolioId: solicitud.estatusSolicitudFolio?.id,
         plantelNombre: solicitud.programa?.plantel
           ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
           : '',

@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import { Grid, IconButton, Typography } from '@mui/material';
 import {
-  DataTable, createRecord, DefaultModal, ButtonsForm, useUI,
+  DataTable, createRecord, DefaultModal, ButtonsForm, useUI, useAuth,
 } from '@siiges-ui/shared';
 import ArticleIcon from '@mui/icons-material/Article';
 import {
-  RuleOutlined, Send, VisibilityOutlined, DoneAll, ForwardToInbox,
+  RuleOutlined, Send, VisibilityOutlined, DoneAll, ForwardToInbox, DriveFileRenameOutline,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
+
+const ESTATUS_LABEL_MAP = {
+  8: 'FIRMA FALTANTES CERTIFICADO IES',
+  10: 'FIRMA FALTANTES CERTIFICADO SICYT',
+};
 
 export default function AdminTable({
   tipoDocumento,
@@ -24,6 +29,8 @@ export default function AdminTable({
 }) {
   const router = useRouter();
   const { setNoti } = useUI();
+  const { session } = useAuth();
+  const { rol } = session;
   const [confirmModal, setConfirmModal] = useState({ open: false, id: null, folio: null });
 
   const columns = [
@@ -40,7 +47,7 @@ export default function AdminTable({
       width: 180,
       valueGetter: (params) => params.row.rvoe || 'N/A',
     },
-    { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 250 },
+    { field: 'estatusSolicitudFolioNombre', headerName: 'Estatus', width: 300 },
     { field: 'plantelNombre', headerName: 'Plantel', width: 300 },
     {
       field: 'actions',
@@ -89,6 +96,8 @@ export default function AdminTable({
         const estatusConfig = estatusIconMap[params.row.estatusSolicitudFolioId] ?? null;
         const IconComponent = estatusConfig?.icon ?? null;
         const tooltipTitle = estatusConfig?.tooltip ?? '';
+        const puedeFirmar = (params.row.estatusSolicitudFolioId === 9
+          || params.row.estatusSolicitudFolioId === 10) && rol === 'admin';
 
         if (isAdmin || isCeSicyt) {
           return (
@@ -116,6 +125,13 @@ export default function AdminTable({
                   </IconButton>
                 </Tooltip>
               )}
+              {puedeFirmar && (
+                <Tooltip title="Ir a firmar" placement="top">
+                  <IconButton onClick={goToConsult}>
+                    <DriveFileRenameOutline />
+                  </IconButton>
+                </Tooltip>
+              )}
             </>
           );
         }
@@ -123,6 +139,7 @@ export default function AdminTable({
       },
     },
   ];
+
   const mappedSolicitudes = solicitudes
     .filter((solicitud) => {
       if (isCeSicyt) {
@@ -141,7 +158,8 @@ export default function AdminTable({
       tipoSolicitudFolio: solicitud.tipoSolicitudFolio?.nombre || '',
       tipoDocumentoNombre: solicitud.tipoDocumento?.nombre || '',
       rvoe: solicitud.programa?.acuerdoRvoe || '',
-      estatusSolicitudFolioNombre: solicitud.estatusSolicitudFolio?.nombre || '',
+      estatusSolicitudFolioNombre: ESTATUS_LABEL_MAP[solicitud.estatusSolicitudFolioId]
+        || solicitud.estatusSolicitudFolio?.nombre || '',
       plantelNombre: solicitud.programa?.plantel
         ? `${solicitud.programa.plantel.domicilio.calle} ${solicitud.programa.plantel.domicilio.numeroExterior}`
         : '',
@@ -154,8 +172,8 @@ export default function AdminTable({
     const matchesPrograma = !programa || solicitud.programaId === programa;
     const matchesPlantel = !plantel || solicitud.plantelNombre === plantel;
 
-    // eslint-disable-next-line max-len
-    return matchesTipoDocumento && matchesTipoSolicitud && matchesEstatus && matchesPrograma && matchesPlantel;
+    return matchesTipoDocumento && matchesTipoSolicitud
+      && matchesEstatus && matchesPrograma && matchesPlantel;
   });
 
   const handleResendEmail = async () => {
