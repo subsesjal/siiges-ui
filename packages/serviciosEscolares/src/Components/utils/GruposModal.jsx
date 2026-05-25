@@ -30,13 +30,18 @@ export default function GruposModal({
 
   useEffect(() => {
     if (open) {
-      setForm({
+      const newForm = {
         descripcion: params?.cicloNombre === 'EQUIV' ? 'UNICO' : data?.descripcion || '',
         turnoId: params?.cicloNombre === 'EQUIV' ? 1 : data?.turnoId || '',
         generacion: data?.generacion || '',
         generacionFechaInicio: data?.generacionFechaInicio || '',
-        generacionFechaFin: data?.generacionFechaFin || '',
-      });
+      };
+
+      if (data?.generacionFechaFin) {
+        newForm.generacionFechaFin = data.generacionFechaFin;
+      }
+
+      setForm(newForm);
       setErrors({});
     }
   }, [open, data, params]);
