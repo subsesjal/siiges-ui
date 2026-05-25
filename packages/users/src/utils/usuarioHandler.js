@@ -211,6 +211,7 @@ const submitUsuario = ({
   setMethod,
   setNoti,
   errorFields,
+  setSchema,
 }) => {
   const { endpoint, method, schema } = DATA_MAPPING[accion](form, session);
 
@@ -225,8 +226,13 @@ const submitUsuario = ({
     return false;
   }
 
-  const { valid, data } = validateFormData({
-    dataBody: form,
+  const normalizedForm = {
+    ...form,
+    rolId: form.rolId ? Number(form.rolId) : undefined,
+  };
+
+  const { valid } = validateFormData({
+    dataBody: normalizedForm,
     cleanData: true,
     schema,
   });
@@ -242,9 +248,10 @@ const submitUsuario = ({
     return false;
   }
 
-  setForm(data);
+  setForm(normalizedForm);
   setMethod(method);
   setEndpoint(endpoint);
+  setSchema(schema);
 
   return true;
 };
