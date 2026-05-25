@@ -22,7 +22,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
-import { ModalCertificado, ModalTitulo, ButtonsFoliosAdmin } from '@siiges-ui/serviciosescolares';
+import {
+  ModalCertificado, ModalTitulo, ButtonsFoliosAdmin, ModalFirmaElectronica,
+} from '@siiges-ui/serviciosescolares';
 import dayjs from 'dayjs';
 import Divider from '@mui/material/Divider';
 
@@ -46,7 +48,7 @@ export default function Folios() {
   const [observaciones, setObservaciones] = useState('');
   const [estatus, setEstatus] = useState();
   const [alumnosRows, setAlumnosRows] = useState([]);
-  const [alumnoData, setAlumnoData] = useState({});
+  const [alumnoData, setAlumnoData] = useState([]);
   const [alumnoResponse, setAlumnoResponse] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [alumnoToDelete, setAlumnoToDelete] = useState(null);
@@ -59,9 +61,12 @@ export default function Folios() {
     claveInstitucionDGP: '',
     claveCarreraDGP: '',
   });
+  const [openFirmaModal, setOpenFirmaModal] = useState(false);
+  const [solicitudData, setSolicitudData] = useState(null);
   const selectedAlumno = alumnosRows.find(
     (row) => row.id === alumnoToDelete,
   );
+  const esCertificado = etiquetas.tipoDocumento === 'Certificado';
 
   const router = useRouter();
   const { id, status } = router.query;
@@ -96,6 +101,7 @@ export default function Folios() {
             claveInstitucionDGP: data.claveInstitucionDGP || '',
             claveCarreraDGP: data.claveCarreraDGP || '',
           });
+          setSolicitudData(data);
 
           GetFile(
             {
@@ -122,6 +128,8 @@ export default function Folios() {
               envio: res.folioDocumentoAlumno?.envioExitoso ? 'Enviado' : 'Pendiente',
               fechaExpedicion: dayjs(res.fechaExpedicion).format('DD/MM/YYYY'),
               fechaTerminacion: dayjs(res.fechaTerminacion).format('DD/MM/YYYY'),
+              estadoFirmaIes: res.estadoFirma?.firmaIes ? 'EXITOSO' : 'PENDIENTE',
+              estadoFirmaSicyt: res.estadoFirma?.firmaSicyt ? 'EXITOSO' : 'PENDIENTE',
             }));
             setAlumnosRows(mappedAlumnos);
             setAlumnoData(alumnosResponse.data);
@@ -274,6 +282,54 @@ export default function Folios() {
       setAlumnoToDelete(null);
     }
   };
+  const handleFirmaSuccess = async (documentosPayload) => {
+    try {
+      const response = await createRecord({
+        endpoint: '/solicitudesFolios/firmaDocumento',
+        data: documentosPayload,
+      });
+
+      if (response.errorMessage) {
+        throw new Error(response.errorMessage);
+      }
+
+      const { data } = response;
+
+      if (data?.error) {
+        throw new Error(data.message || 'Error al firmar los documentos');
+      }
+
+      const resultados = data?.resultados || [];
+      const exitosos = resultados.filter((r) => r.estatusFirmado === 'exitoso').length;
+      const rechazados = resultados.filter((r) => r.estatusFirmado === 'rechazado').length;
+
+      if (exitosos > 0 && rechazados === 0) {
+        setNoti({
+          open: true,
+          message: `¡${exitosos} documento(s) firmado(s) exitosamente!`,
+          type: 'success',
+        });
+      } else if (exitosos > 0 && rechazados > 0) {
+        setNoti({
+          open: true,
+          message: `${exitosos} firmado(s), ${rechazados} rechazado(s)`,
+          type: 'warning',
+        });
+      } else {
+        setNoti({ open: true, message: 'No se pudo firmar ningún documento', type: 'error' });
+      }
+
+      setAlumnoResponse(true);
+      return resultados;
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: error.message || 'Error al firmar los documentos',
+        type: 'error',
+      });
+      return [];
+    }
+  };
   const alumnosColumns = [
     {
       field: 'id', headerName: 'ID', width: 100, hide: true,
@@ -288,6 +344,8 @@ export default function Folios() {
     { field: 'matricula', headerName: 'Matrícula', width: 150 },
     { field: 'folio', headerName: 'Folio', width: 200 },
     { field: 'envio', headerName: 'Estatus de envio', width: 200 },
+    { field: 'estadoFirmaIes', headerName: 'Estatus Firma IES', width: 170 },
+    { field: 'estadoFirmaSicyt', headerName: 'Estatus Firma SICYT', width: 170 },
     { field: 'foja', headerName: 'Foja', width: 200 },
     { field: 'libro', headerName: 'Libro', width: 200 },
     {
@@ -327,18 +385,28 @@ export default function Folios() {
       ? sessionStorage.getItem('foliosAccion')
       : null
   );
-  let title = '';
 
+  let title = 'Solicitud de Folios';
   if (estatus === 2) {
-    title = accion === 'revisar'
-      ? 'Revisar Solicitud'
-      : 'Consultar Solicitud';
+    title = accion === 'revisar' ? 'Revisar Solicitud' : 'Consultar Solicitud';
   } else if (estatus === 3) {
-    title = accion === 'envio'
-      ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
-      : 'Consultar Envio de Solicitud a Titulación';
+    if (esCertificado) {
+      title = 'Folios Asignados';
+    } else {
+      title = accion === 'envio'
+        ? `Envío de Solicitud a ${etiquetas.tipoDocumento}`
+        : 'Consultar Envio de Solicitud a Titulación';
+    }
   } else if (estatus === 4) {
     title = 'Atender Observaciones de Solicitud';
+  } else if (estatus === 8) {
+    title = 'Firma Faltantes Certificado IES';
+  } else if (estatus === 9) {
+    title = 'Certificado IES';
+  } else if (estatus === 10) {
+    title = 'Firma Faltantes Certificado SICYT';
+  } else if (estatus === 11) {
+    title = 'Certificado SICYT';
   }
 
   const PERIODOS = {
@@ -366,6 +434,13 @@ export default function Folios() {
     7: 'Profesional Asociado',
     8: 'Educación Continua',
   };
+
+  const alumnosPendientesFirmaSicyt = Array.isArray(alumnoData)
+    ? alumnoData.filter((alumno) => {
+      const { estadoFirma } = alumno;
+      return estadoFirma?.firmaIes && !estadoFirma?.firmaSicyt;
+    })
+    : [];
 
   return (
     <Layout title={title}>
@@ -542,6 +617,7 @@ export default function Folios() {
             folios={handleFoliosSubmit}
             estatus={estatus}
             isConsult={accion === 'consultar'}
+            onFirmarClick={() => setOpenFirmaModal(true)}
           />
           <DefaultModal
             title="Eliminar alumno"
@@ -566,6 +642,19 @@ export default function Folios() {
               confirmText="Confirmar"
             />
           </DefaultModal>
+          <ModalFirmaElectronica
+            open={openFirmaModal}
+            onClose={() => setOpenFirmaModal(false)}
+            onConfirm={async (documentosPayload) => {
+              const resultados = await handleFirmaSuccess(documentosPayload);
+              setOpenFirmaModal(false);
+              return resultados;
+            }}
+            title="Firmar Certificados - SICYT"
+            alumnosData={alumnosPendientesFirmaSicyt}
+            solicitudData={solicitudData}
+            tipoFirmante="sicyt"
+          />
         </Grid>
       </Grid>
     </Layout>

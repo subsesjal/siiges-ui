@@ -8,7 +8,6 @@ import { ButtonsForm, ButtonSimple, DefaultModal } from '@siiges-ui/shared';
 
 export default function ButtonsFolios({
   save,
-  cancel,
   send,
   disabled,
   saved,
@@ -27,16 +26,7 @@ export default function ButtonsFolios({
 
   return (
     <Grid container spacing={2} alignItems="center">
-      <Grid item xs={12} sm={6}>
-        <ButtonSimple
-          text="Regresar"
-          onClick={cancel}
-          design="cancel"
-          align="left"
-        />
-      </Grid>
-
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={12}>
         <Grid container justifyContent="flex-end" spacing={2}>
           {!disabled && (
             !saved ? (
@@ -99,7 +89,6 @@ export default function ButtonsFolios({
 
 ButtonsFolios.propTypes = {
   save: PropTypes.func.isRequired,
-  cancel: PropTypes.func.isRequired,
   send: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   saved: PropTypes.bool.isRequired,
