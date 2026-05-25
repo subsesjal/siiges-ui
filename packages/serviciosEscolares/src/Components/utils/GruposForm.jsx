@@ -11,7 +11,7 @@ const getGradoName = (grados, id) => grados.find((g) => g.id === id)?.nombre || 
 const getCicloName = (ciclos, id) => ciclos.find((g) => g.id === id)?.nombre || '';
 
 export default function GruposForm({
-  setGrupos, setParametros, setNoti, fetchGrupos,
+  setGrupos, setParametros, setNoti, fetchGrupos, setFetchGrupos,
 }) {
   const router = useRouter();
   const { query } = router;
@@ -78,6 +78,7 @@ export default function GruposForm({
     };
 
     if (selectedCicloEscolar && selectedGrado) fetchData();
+    if (fetchGrupos) setFetchGrupos(false);
   }, [selectedGrado, fetchGrupos]);
 
   // Reset grado when ciclo changes
@@ -113,6 +114,7 @@ export default function GruposForm({
 
 GruposForm.propTypes = {
   setNoti: PropTypes.func.isRequired,
+  setFetchGrupos: PropTypes.func.isRequired,
   setGrupos: PropTypes.shape({
     id: PropTypes.number,
     cicloEscolarId: PropTypes.number,
