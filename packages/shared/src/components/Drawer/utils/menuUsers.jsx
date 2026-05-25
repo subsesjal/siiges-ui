@@ -15,6 +15,7 @@ import SchoolIcon from '@mui/icons-material/School';
 // import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import LinkIcon from '@mui/icons-material/Link';
+import { USERS_ROUTE } from '../../../constants/routes';
 
 const canViewAsignacionFolios = (rol, nombre) => {
   if (rol === 'admin' || rol === 'ce_sicyt') return true;
@@ -79,7 +80,7 @@ const panelMenuOptions = (rol, nombre) => {
         userId: 1,
         text: textPanelMenuOptions(rol).usuarios,
         icon: <GroupIcon />,
-        route: '/usuarios',
+        route: USERS_ROUTE,
         key: 'users',
       }]
       : []),
