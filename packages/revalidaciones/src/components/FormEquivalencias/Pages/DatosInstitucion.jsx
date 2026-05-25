@@ -21,6 +21,7 @@ export default function DatosInstitucion({
   const [rvoesList, setRvoesList] = useState([]);
   const [calificacionesReglasList, setCalificacionesReglasList] = useState([]);
   const [rvoeError, setRvoeError] = useState('');
+  const [loadingRvoes, setLoadingRvoes] = useState(false);
 
   const tipoInstitucionId = form.interesado?.institucionDestino?.tipoInstitucionId || '';
   const carrera = form.interesado?.institucionDestino?.nombreCarrera || '';
@@ -58,9 +59,13 @@ export default function DatosInstitucion({
       setRvoes([]);
       return;
     }
+    setLoadingRvoes(true);
     fetchData(
       `${domain}/api/v1/public/programas/instituciones/${institucionId}`,
-      setRvoes,
+      (data) => {
+        setRvoes(data);
+        setLoadingRvoes(false);
+      },
     );
   }, [institucionId]);
 
@@ -103,18 +108,9 @@ export default function DatosInstitucion({
     handleOnChange(event, ['interesado', 'institucionDestino']);
 
     if (tipoInstitucionId === 1) {
-      handleOnChange({ target: { name: 'programaId', value: '' } }, [
-        'interesado',
-        'institucionDestino',
-      ]);
-      handleOnChange({ target: { name: 'acuerdoRvoe', value: '' } }, [
-        'interesado',
-        'institucionDestino',
-      ]);
-      handleOnChange({ target: { name: 'nombreCarrera', value: '' } }, [
-        'interesado',
-        'institucionDestino',
-      ]);
+      handleOnChange({ target: { name: 'programaId', value: '' } }, ['interesado', 'institucionDestino']);
+      handleOnChange({ target: { name: 'acuerdoRvoe', value: '' } }, ['interesado', 'institucionDestino']);
+      handleOnChange({ target: { name: 'nombreCarrera', value: '' } }, ['interesado', 'institucionDestino']);
     }
   };
 
@@ -366,7 +362,7 @@ export default function DatosInstitucion({
               value={programaId}
               onChange={handleRvoeChange}
               errorMessage={rvoeError}
-              disabled={disabled}
+              disabled={disabled || loadingRvoes}
               required
             />
           </Grid>

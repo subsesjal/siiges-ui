@@ -76,7 +76,7 @@ export default function CargaMaterias({
 CargaMaterias.propTypes = {
   filesData: PropTypes.objectOf(
     PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
+      formData: PropTypes.shape({ id: PropTypes.number }).isRequired,
       url: PropTypes.string,
     }),
   ).isRequired,

@@ -225,44 +225,24 @@ CargaMaterias.defaultProps = {
   edit: false,
 };
 
+const fileShape = PropTypes.shape({
+  formData: typeof FormData !== 'undefined'
+    ? PropTypes.instanceOf(FormData)
+    : PropTypes.shape({}),
+  url: PropTypes.string,
+});
+
 CargaMaterias.propTypes = {
   filesData: PropTypes.shape({
-    CURP: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
-    IDENTIFICACION_OFICIAL: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
-    ACTA_NACIMIENTO: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
-    COPIA_RESOLUCION: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
-    CERTIFICADO_PARCIAL_TOTAL: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
-    ANTECEDENTE_ACADEMICO: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
-    PROGRAMA_ESTUDIO_AUTORIZADO: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
-    PROPUESTA_EQUIVALENCIA: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
-    PAGO_EQUIVALENCIA: PropTypes.shape({
-      formData: PropTypes.instanceOf(FormData),
-      url: PropTypes.string,
-    }),
+    CURP: fileShape,
+    IDENTIFICACION_OFICIAL: fileShape,
+    ACTA_NACIMIENTO: fileShape,
+    COPIA_RESOLUCION: fileShape,
+    CERTIFICADO_PARCIAL_TOTAL: fileShape,
+    ANTECEDENTE_ACADEMICO: fileShape,
+    PROGRAMA_ESTUDIO_AUTORIZADO: fileShape,
+    PROPUESTA_EQUIVALENCIA: fileShape,
+    PAGO_EQUIVALENCIA: fileShape,
   }).isRequired,
   setFilesData: PropTypes.func.isRequired,
   setNextDisabled: PropTypes.func,
