@@ -14,7 +14,7 @@ export default function Grupos() {
 
   const handleSuccess = () => {
     setOpen(false);
-    setFetchGrupos((prev) => !prev);
+    setFetchGrupos(true);
     setNoti({
       open: true,
       message: 'Grupo guardado exitosamente.',
@@ -31,6 +31,7 @@ export default function Grupos() {
           setGrupos={setGrupos}
           setParametros={setParametros}
           fetchGrupos={fetchGrupos}
+          setFetchGrupos={setFetchGrupos}
           setNoti={setNoti}
         />
       </Grid>
