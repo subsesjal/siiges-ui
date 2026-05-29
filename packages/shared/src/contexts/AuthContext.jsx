@@ -44,6 +44,7 @@ export function AuthProvider({ children }) {
       '/tituloElectronico/[folio]/consultarFolio',
       '/consultaRevEquiv',
       '/consultaRevEquiv/[folio]/consultarFolio',
+      '/reimpresionTitulo',
     ],
     [],
   );

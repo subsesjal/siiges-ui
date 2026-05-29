@@ -146,6 +146,10 @@ const panelMenuOptions = (rol, nombre) => {
             text: 'Catálogo de Títulos Electrónicos',
             route: '/serviciosEscolares/titulacion',
           },
+          {
+            text: 'Reimpresión de Título',
+            route: '/serviciosEscolares/titulacion/ReimpresionTitulo',
+          },
         ],
         key: 'titulacion',
       },
