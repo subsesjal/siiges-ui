@@ -3,16 +3,11 @@ import { Modal, Box } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Title } from '@siiges-ui/shared';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 800,
-  bgcolor: 'background.paper',
-  borderRadius: 2,
-  boxShadow: 24,
-  p: 4,
+const SIZE_MAP = {
+  sm: 500,
+  md: 800,
+  lg: 1000,
+  xl: 1200,
 };
 
 export default function DefaultModal({
@@ -21,11 +16,24 @@ export default function DefaultModal({
   children,
   title,
   disableBackdropClick,
+  size,
 }) {
   const handleClose = (event, reason) => {
     if (!disableBackdropClick || reason !== 'backdropClick') {
       setOpen(false);
     }
+  };
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: SIZE_MAP[size] || SIZE_MAP.md,
+    bgcolor: 'background.paper',
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 4,
   };
 
   return (
@@ -51,6 +59,7 @@ DefaultModal.defaultProps = {
   open: false,
   title: null,
   disableBackdropClick: false,
+  size: 'md',
 };
 
 DefaultModal.propTypes = {
@@ -59,4 +68,5 @@ DefaultModal.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.string,
   disableBackdropClick: PropTypes.bool,
+  size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
 };
