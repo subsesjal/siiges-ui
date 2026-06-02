@@ -41,6 +41,7 @@ function Input({
   rows,
   maxRows,
   sx,
+  onlyNumbers,
 }) {
   const [input, setInput] = useState(() => normalizeInputValue(value, type));
 
@@ -49,7 +50,11 @@ function Input({
   }, [type, value]);
 
   const handleOnChange = (e) => {
-    const newValue = e.target.value;
+    let newValue = e.target.value;
+
+    if (onlyNumbers) {
+      newValue = newValue.replace(/[^0-9]/g, '');
+    }
 
     if (multiline && newValue.length > 10000) {
       return;
@@ -105,6 +110,7 @@ function Input({
           : {}
       }
       sx={sx}
+      inputProps={onlyNumbers ? { inputMode: 'numeric', pattern: '[0-9]*' } : {}}
     />
   );
 }
@@ -125,6 +131,7 @@ Input.defaultProps = {
   rows: 1,
   maxRows: 1,
   sx: {},
+  onlyNumbers: false,
 };
 
 Input.propTypes = {
@@ -151,6 +158,7 @@ Input.propTypes = {
   maxRows: PropTypes.number,
   // eslint-disable-next-line react/forbid-prop-types
   sx: PropTypes.object,
+  onlyNumbers: PropTypes.bool,
 };
 
 export default Input;
