@@ -147,7 +147,7 @@ const panelMenuOptions = (rol, nombre) => {
             route: '/serviciosEscolares/titulacion',
           },
           {
-            text: 'Reimpresión de Título',
+            text: 'Reimpresión de Certificado de Estudios',
             route: '/serviciosEscolares/titulacion/ReimpresionTitulo',
           },
         ],

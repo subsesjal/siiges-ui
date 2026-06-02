@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function ReimpresionTitulo() {
   return (
-    <Layout title="Reimpresión de Título">
+    <Layout title="Reimpresión de Certificado de Estudios">
       <ReimpresionTituloPrivate />
     </Layout>
   );

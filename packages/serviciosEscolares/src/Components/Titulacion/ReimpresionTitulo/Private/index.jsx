@@ -158,20 +158,20 @@ export default function ReimpresionTituloPrivate() {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <DataTable
-          title="Reimpresión de Título"
+          title="Reimpresión de Certificado de Estudios"
           rows={solicitudes}
           columns={columns}
           loading={loading}
         />
       </Grid>
       <DefaultModal
-        title="Confirmar Reimpresión de Título"
+        title="Confirmar Reimpresión de Certificado de Estudios"
         open={open}
         onClose={handleCloseModal}
       >
         {selectedSolicitud && (
           <p>
-            ¿Seguro que deseas reimprimir el título de
+            ¿Seguro que deseas reimprimir el certificado de estudios de
             {' '}
             <strong>{getNombreCompleto(selectedSolicitud)}</strong>
             ?
