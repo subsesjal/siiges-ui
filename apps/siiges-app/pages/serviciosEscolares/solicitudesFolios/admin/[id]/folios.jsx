@@ -60,6 +60,7 @@ export default function Folios() {
     folioPago: '',
     claveInstitucionDGP: '',
     claveCarreraDGP: '',
+    estadoCuenta: '',
   });
   const [openFirmaModal, setOpenFirmaModal] = useState(false);
   const [solicitudData, setSolicitudData] = useState(null);
@@ -100,6 +101,7 @@ export default function Folios() {
             folioPago: data.folioPago || '',
             claveInstitucionDGP: data.claveInstitucionDGP || '',
             claveCarreraDGP: data.claveCarreraDGP || '',
+            estadoCuenta: data.estadoCuenta || '',
           });
           setSolicitudData(data);
 
@@ -514,9 +516,19 @@ export default function Folios() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Input
-                label="Número de recibo de pago oficial"
+                label="Número de estado de cuenta oficial"
+                id="estadoCuenta"
+                name="estadoCuenta"
+                value={formData.estadoCuenta}
+                onChange={handleChange}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <Input
+                label="Número de folio de pago oficial"
                 id="folioPago"
                 name="folioPago"
                 value={formData.folioPago}
@@ -525,7 +537,7 @@ export default function Folios() {
               />
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Input
                 label="Clave de institución"
                 id="claveInstitucionDGP"
@@ -535,7 +547,7 @@ export default function Folios() {
                 disabled
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Input
                 label="Clave de carrera"
                 id="claveCarreraDGP"
