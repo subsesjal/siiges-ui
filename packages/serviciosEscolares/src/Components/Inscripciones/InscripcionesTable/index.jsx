@@ -37,10 +37,13 @@ export default function InscripcionesTable({
           id: alumno.alumnoId,
           alumnoId: alumno.alumnoId,
           matricula: alumno.alumno.matricula,
-          persona: alumno.alumno.persona,
+          nombre: alumno.alumno.persona?.nombre || '',
+          apellidoPaterno: alumno.alumno.persona?.apellidoPaterno || '',
+          apellidoMaterno: alumno.alumno.persona?.apellidoMaterno || '',
           alumnoAsignaturas: alumno.alumnoAsignaturas,
           ...alumno.alumno,
         }));
+
         setAlumnosInscritos(alumnosCompletos);
       } else {
         setAlumnosInscritos([]);
