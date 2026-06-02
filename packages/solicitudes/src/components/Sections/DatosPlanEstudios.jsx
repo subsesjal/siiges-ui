@@ -2,7 +2,9 @@ import React, {
   useContext, useEffect, useMemo, useState,
 } from 'react';
 import { Grid, Typography, TextField } from '@mui/material';
-import { ButtonSimple, DefaultModal, Input } from '@siiges-ui/shared';
+import {
+  ButtonSimple, DefaultModal, Input, InputNumber,
+} from '@siiges-ui/shared';
 import BasicSelect from '@siiges-ui/shared/src/components/Select';
 import PropTypes from 'prop-types';
 import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstudios';
@@ -177,7 +179,7 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
           />
         </Grid>
         <Grid item xs={3}>
-          <Input
+          <InputNumber
             id="duracionPeriodos"
             label="Duración del programa"
             name="duracionPeriodos"
