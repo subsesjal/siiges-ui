@@ -7,56 +7,60 @@ import { ListSubtitle, ListTitle } from '@siiges-ui/shared';
 export default function UsuarioView({ usuario }) {
   const { persona = undefined, rol = undefined } = usuario || {};
   return (
-    <Grid item xs={8}>
+    <Grid item xs={12} md={8}>
       <Typography variant="h5" gutterBottom component="div">
         Información Personal
       </Typography>
       <Divider sx={{ bgcolor: 'orange', marginBottom: 5 }} />
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid container xs={6}>
-          <Grid item xs>
-            <List>
-              <ListTitle text="Nombre(s)" />
-              <ListTitle text="Apellidos" />
-              <ListTitle text="Género" />
-              <ListTitle text="Nacionalidad" />
-              <ListTitle text="Correo electrónico" />
-              <ListTitle text="Celular" />
-              <ListTitle text="Teléfono" />
-            </List>
-          </Grid>
-          <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-          <Grid item xs>
-            <List>
-              <ListSubtitle text={persona?.nombre} />
-              <ListSubtitle
-                text={`${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`}
-              />
-              <ListSubtitle text={persona?.sexo} />
-              <ListSubtitle text={persona?.nacionalidad} />
-              <ListSubtitle text={usuario?.correo} />
-              <ListSubtitle text={persona?.celular} />
-              <ListSubtitle text={persona?.telefono} />
-            </List>
+        <Grid item xs={12} md={6}>
+          <Grid container>
+            <Grid item xs>
+              <List>
+                <ListTitle text="Nombre(s)" />
+                <ListTitle text="Apellidos" />
+                <ListTitle text="Género" />
+                <ListTitle text="Nacionalidad" />
+                <ListTitle text="Correo electrónico" />
+                <ListTitle text="Celular" />
+                <ListTitle text="Teléfono" />
+              </List>
+            </Grid>
+            <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+            <Grid item xs>
+              <List>
+                <ListSubtitle text={persona?.nombre} />
+                <ListSubtitle
+                  text={`${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`}
+                />
+                <ListSubtitle text={persona?.sexo} />
+                <ListSubtitle text={persona?.nacionalidad} />
+                <ListSubtitle text={usuario?.correo} />
+                <ListSubtitle text={persona?.celular} />
+                <ListSubtitle text={persona?.telefono} />
+              </List>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid container xs={5}>
-          <Grid item xs>
-            <List>
-              <ListTitle text="Rol" />
-              <ListTitle text="Cargo" />
-              <ListTitle text="RFC" />
-              <ListTitle text="Curp" />
-            </List>
-          </Grid>
-          <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
-          <Grid item xs>
-            <List>
-              <ListSubtitle text={rol?.descripcion} />
-              <ListSubtitle text={persona?.tituloCargo} />
-              <ListSubtitle text={persona?.rfc} />
-              <ListSubtitle text={persona?.curp} />
-            </List>
+        <Grid item xs={12} md={6}>
+          <Grid container>
+            <Grid item xs>
+              <List>
+                <ListTitle text="Rol" />
+                <ListTitle text="Cargo" />
+                <ListTitle text="RFC" />
+                <ListTitle text="Curp" />
+              </List>
+            </Grid>
+            <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
+            <Grid item xs>
+              <List>
+                <ListSubtitle text={rol?.descripcion} />
+                <ListSubtitle text={persona?.tituloCargo} />
+                <ListSubtitle text={persona?.rfc} />
+                <ListSubtitle text={persona?.curp} />
+              </List>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
