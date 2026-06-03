@@ -554,6 +554,18 @@ export default function FoliosData({ type }) {
   const estaEnModoFirma = estatus === 6 || estatus === 7;
   const estaEnProcesoFirma = [3, 8, 9, 10, 11].includes(estatus);
 
+  // Habilitación del botón "Enviar Solicitud": requiere los 4 campos del
+  // formulario, el recibo de pago subido y al menos un alumno agregado.
+  const tieneCamposCompletos = Boolean(
+    String(formData.estadoCuenta || '').trim()
+    && String(formData.folioPago || '').trim()
+    && String(formData.claveInstitucionDGP || '').trim()
+    && String(formData.claveCarreraDGP || '').trim(),
+  );
+  const tieneReciboPago = Boolean(url);
+  const tieneAlumnos = Array.isArray(alumnosData) && alumnosData.length > 0;
+  const puedeEnviarSolicitud = tieneCamposCompletos && tieneReciboPago && tieneAlumnos;
+
   const alumnosPendientesFirmaIes = Array.isArray(alumnosData)
     ? alumnosData.filter((alumno) => {
       const { estadoFirma } = alumno;
@@ -837,6 +849,7 @@ export default function FoliosData({ type }) {
                       save={handleConfirm}
                       send={handleSend}
                       disabled={status === 'consult'}
+                      disabledSend={!puedeEnviarSolicitud}
                       saved={isSaved}
                       alumnos={alumnosData}
                     />
