@@ -10,6 +10,7 @@ export default function ButtonsFolios({
   save,
   send,
   disabled,
+  disabledSend,
   saved,
   alumnos,
 }) {
@@ -38,6 +39,7 @@ export default function ButtonsFolios({
                 <ButtonSimple
                   text="Enviar Solicitud"
                   onClick={handleEnviarClick}
+                  disabled={disabledSend}
                 />
               </Grid>
             )
@@ -53,7 +55,6 @@ export default function ButtonsFolios({
           No hay alumnos registrados para esta solicitud.
           Por favor, agrega al menos un alumno antes de continuar.
         </Typography>
-
         <Button
           variant="contained"
           onClick={() => setOpenWarning(false)}
@@ -69,7 +70,6 @@ export default function ButtonsFolios({
         <Typography sx={{ mb: 2 }}>
           ¿Está seguro de enviar la solicitud? Una vez enviada, ya no podrá ser editada.
         </Typography>
-
         <ButtonsForm
           cancel={() => setOpenConfirm(false)}
           confirm={async () => {
@@ -87,10 +87,15 @@ export default function ButtonsFolios({
   );
 }
 
+ButtonsFolios.defaultProps = {
+  disabledSend: false,
+};
+
 ButtonsFolios.propTypes = {
   save: PropTypes.func.isRequired,
   send: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
+  disabledSend: PropTypes.bool,
   saved: PropTypes.bool.isRequired,
   alumnos: PropTypes.arrayOf(
     PropTypes.shape({
