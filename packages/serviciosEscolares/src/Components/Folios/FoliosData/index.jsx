@@ -114,6 +114,7 @@ export default function FoliosData({ type }) {
   });
   const [formData, setFormData] = useState({
     folioPago: '',
+    estadoCuenta: '',
     claveInstitucionDGP: '',
     claveCarreraDGP: '',
     tipoDocumentoId: '',
@@ -215,6 +216,7 @@ export default function FoliosData({ type }) {
           setEstatus(data.estatusSolicitudFolioId);
           setFormData({
             folioPago: data.folioPago,
+            estadoCuenta: data.estadoCuenta,
             claveInstitucionDGP: data.claveInstitucionDGP,
             claveCarreraDGP: data.claveCarreraDGP,
             tipoDocumentoId: data.tipoDocumentoId,
@@ -728,9 +730,20 @@ export default function FoliosData({ type }) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Input
-              label="Número de recibo de pago oficial"
+              label="Número de estado de cuenta oficial"
+              id="estadoCuenta"
+              name="estadoCuenta"
+              value={formData.estadoCuenta}
+              onChange={handleChange}
+              disabled={status === 'consult'}
+              onlyNumbers
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <Input
+              label="Número de folio de pago oficial"
               id="folioPago"
               name="folioPago"
               value={formData.folioPago}
@@ -738,7 +751,7 @@ export default function FoliosData({ type }) {
               disabled={status === 'consult'}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Input
               label="Clave de institución"
               id="claveInstitucionDGP"
@@ -748,7 +761,7 @@ export default function FoliosData({ type }) {
               disabled={status === 'consult'}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Input
               label="Clave de carrera"
               id="claveCarreraDGP"
