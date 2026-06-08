@@ -15,7 +15,7 @@ export default function ButtonsFoliosAdmin({
   const router = useRouter();
   const { session } = useAuth();
   const { rol } = session;
-  const buttonFolios = estatus !== 3 ? 'Generar Folios' : 'Envio Titulación';
+  const buttonFolios = estatus !== 3 ? 'Asignar Folio' : 'Envio Titulación';
   const shouldRenderButtonFolios = !(estatus === 3 && tipoDocumento === 'Certificado');
 
   const esCertificado = tipoDocumento === 'Certificado';

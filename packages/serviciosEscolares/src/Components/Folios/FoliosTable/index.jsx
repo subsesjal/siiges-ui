@@ -22,6 +22,8 @@ const solicitudesCertificados = [
 const ESTATUS_FIRMA = [3, 8];
 const ESTATUS_EDICION = ['EN CAPTURA', 'ATENDER OBSERVACIONES'];
 
+const ESTATUS_BLOQUEAN_NUEVA_SOLICITUD = [1, 2, 4];
+
 const ESTATUS_LABEL_MAP = {
   8: 'FIRMA FALTANTES CERTIFICADO IES',
   10: 'FIRMA FALTANTES CERTIFICADO SICYT',
@@ -94,6 +96,10 @@ function FoliosTable({
     && programa
     && plantel;
 
+  const tieneSolicitudActiva = solicitudes.some(
+    (s) => ESTATUS_BLOQUEAN_NUEVA_SOLICITUD.includes(s.estatusSolicitudFolio?.id),
+  );
+
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
     const path = status === 'create'
@@ -146,7 +152,7 @@ function FoliosTable({
           buttonAdd={showCrearFolio}
           buttonClick={() => navigateTo(null, 'create')}
           buttonText="Agregar Solicitud"
-          buttonDisabled={!filtrosCompletos}
+          buttonDisabled={!filtrosCompletos || tieneSolicitudActiva}
           title="Solicitudes de Títulos"
           rows={formattedSolicitudes}
           columns={columns(handleEdit, handleConsultar, handleFirmar)}
