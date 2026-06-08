@@ -161,15 +161,17 @@ const panelMenuOptions = (rol, nombre) => {
               text: 'Solicitud de Folios Certificado',
               route: '/serviciosEscolares/solicitudesFolios/certificado',
             },
-            {
-              text: 'Solicitud de Folios Titulo',
-              route: '/serviciosEscolares/solicitudesFolios/titulo',
-            },
             ...((rol === 'admin' || rol === 'ce_sicyt')
-              ? [{
-                text: 'Folios Asignados',
-                route: '/serviciosEscolares/reporte/foliosAsignados',
-              }]
+              ? [
+                {
+                  text: 'Solicitud de Folios Titulo',
+                  route: '/serviciosEscolares/solicitudesFolios/titulo',
+                },
+                {
+                  text: 'Folios Asignados',
+                  route: '/serviciosEscolares/reporte/foliosAsignados',
+                },
+              ]
               : []),
           ],
           key: 'asignacionFolios',
