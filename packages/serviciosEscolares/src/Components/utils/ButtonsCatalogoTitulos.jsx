@@ -7,8 +7,14 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { GetFile, useUI } from '@siiges-ui/shared';
 
 const url = process.env.NEXT_PUBLIC_URL;
-export default function ButtonsCatalogoTitulo({ id }) {
+
+export default function ButtonsCatalogoTitulo({ id, fechaExpedicion }) {
   const { setLoading, setNoti } = useUI();
+
+  const pdfDeshabilitado = fechaExpedicion
+    ? new Date(fechaExpedicion) <= new Date('2018-12-31')
+    : false;
+
   const handleDownload = async (tipoDocumento) => {
     setLoading(true);
     try {
@@ -45,13 +51,16 @@ export default function ButtonsCatalogoTitulo({ id }) {
             </IconButton>
           </Tooltip>
 
-          <Tooltip title="Descargar PDF" placement="top">
-            <IconButton
-              aria-label="Descargar PDF"
-              onClick={() => handleDownload('TITULO_ELECTRONICO_PDF')}
-            >
-              <PictureAsPdfIcon />
-            </IconButton>
+          <Tooltip title={pdfDeshabilitado ? 'PDF no disponible' : 'Descargar PDF'} placement="top">
+            <span>
+              <IconButton
+                aria-label="Descargar PDF"
+                onClick={() => handleDownload('TITULO_ELECTRONICO_PDF')}
+                disabled={pdfDeshabilitado}
+              >
+                <PictureAsPdfIcon />
+              </IconButton>
+            </span>
           </Tooltip>
         </>
       )}
@@ -61,4 +70,5 @@ export default function ButtonsCatalogoTitulo({ id }) {
 
 ButtonsCatalogoTitulo.propTypes = {
   id: PropTypes.number.isRequired,
+  fechaExpedicion: PropTypes.string.isRequired,
 };

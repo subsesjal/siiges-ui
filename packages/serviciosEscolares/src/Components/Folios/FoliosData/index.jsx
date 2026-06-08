@@ -301,9 +301,9 @@ export default function FoliosData({ type }) {
                 name: `${alumno.alumno.persona.nombre} ${alumno.alumno.persona.apellidoPaterno} ${alumno.alumno.persona.apellidoMaterno}`,
                 numeroFolioActa: alumno.folioActa || '',
                 matricula: alumno.alumno.matricula,
-                fechaTerminacion: dayjs(alumno.fechaTerminacion).format('DD/MM/YYYY'),
+                fechaTerminacion: alumno.fechaTerminacion ? dayjs(alumno.fechaTerminacion, 'DD/MM/YYYY').format('DD/MM/YYYY') : 'N/A',
                 fechaRegistro: dayjs(alumno.fechaRegistro).format('DD/MM/YYYY'),
-                fechaInicio: dayjs(alumno.fechaInicio).format('DD/MM/YYYY'),
+                fechaInicio: alumno.fechaInicio ? dayjs(alumno.fechaInicio, 'DD/MM/YYYY').format('DD/MM/YYYY') : 'N/A',
                 fundamento: fundamentoObj ? fundamentoObj.nombre : 'Desconocido',
                 folio: alumno.folioDocumentoAlumno?.folioDocumento,
                 foja: alumno.folioDocumentoAlumno?.foja?.nombre,
@@ -420,7 +420,6 @@ export default function FoliosData({ type }) {
       }
       if (response.data?.url) {
         window.open(response.data.url, '_blank');
-        // Actualizar rows para quitar el botón de PDF de este alumno
         setRows((prevRows) => prevRows.map((row) => (row.folioDocumentoAlumnoId === alumnoId
           ? { ...row, fechaExpedicionPdf: new Date().toISOString() }
           : row)));
@@ -554,8 +553,6 @@ export default function FoliosData({ type }) {
   const estaEnModoFirma = estatus === 6 || estatus === 7;
   const estaEnProcesoFirma = [3, 8, 9, 10, 11].includes(estatus);
 
-  // Habilitación del botón "Enviar Solicitud": requiere los 4 campos del
-  // formulario, el recibo de pago subido y al menos un alumno agregado.
   const tieneCamposCompletos = Boolean(
     String(formData.estadoCuenta || '').trim()
     && String(formData.folioPago || '').trim()
@@ -622,6 +619,7 @@ export default function FoliosData({ type }) {
     { field: 'name', headerName: 'Nombre', width: 250 },
     { field: 'matricula', headerName: 'Matrícula', width: 200 },
     { field: 'fechaRegistro', headerName: 'Fecha de Elaboración', width: 180 },
+    { field: 'fechaInicio', headerName: 'Fecha de Inicio', width: 180 },
     { field: 'fechaTerminacion', headerName: 'Fecha de Terminación', width: 180 },
     { field: 'estadoFirmaIes', headerName: 'Estatus Firma IES', width: 170 },
     { field: 'estadoFirmaSicyt', headerName: 'Estatus Firma SICYT', width: 170 },
@@ -644,13 +642,6 @@ export default function FoliosData({ type }) {
                 <VisibilityOutlinedIcon />
               </IconButton>
             </Tooltip>
-            {status !== 'consult' && !estaEnModoFirma && (
-            <Tooltip title="Editar" placement="top">
-              <IconButton onClick={() => handleEditFn(params.row.id)}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-            )}
             {status !== 'consult' && !estaEnModoFirma && (
             <Tooltip title="Eliminar alumno" placement="top">
               <IconButton onClick={() => handleDeleteFn(params.row.id)}>
