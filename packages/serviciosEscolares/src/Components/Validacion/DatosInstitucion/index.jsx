@@ -105,12 +105,13 @@ export default function DatosInstitucion({ alumno }) {
   useEffect(() => {
     const isPrivileged = session?.rol === 'admin' || ALLOWED_IDS.includes(Number(session?.id));
     const isRestrictedEditor = session?.rol === 'representante' || session?.rol === 'ce_ies';
+    const estatus = Number(form.estatus);
 
     if (isPrivileged || session?.rol === 'ce_sicyt') {
       setDisabled(false);
     }
 
-    if (isPrivileged || (isRestrictedEditor && form.estatus === 0)) {
+    if (isPrivileged || (isRestrictedEditor && estatus === 0)) {
       setEditionDisabled(false);
     } else {
       setEditionDisabled(true);
