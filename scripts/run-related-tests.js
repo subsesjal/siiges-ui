@@ -42,8 +42,46 @@ const getPendingFiles = () => {
 
 const getStagedFiles = () => readLines('git diff --cached --name-only --diff-filter=ACMR');
 
+const isBarrelFile = (file) => {
+  if (/\/src\/index\.(js|jsx|ts|tsx)$/.test(file)) {
+    return true;
+  }
+
+  try {
+    const fullPath = path.join(process.cwd(), file);
+    const content = fs.readFileSync(fullPath, 'utf8');
+    const nonEmptyLines = content
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (nonEmptyLines.length === 0) return false;
+
+    const isAllowedLine = (line) => line.startsWith('import ')
+      || line.startsWith('export ')
+      || line.startsWith('//')
+      || line.startsWith('/*')
+      || line.startsWith('*')
+      || line.startsWith('*/')
+      || line === '{'
+      || line === '}'
+      || line === '};'
+      || line === ');'
+      || line === '('
+      || line === ')'
+      || line === ','
+      || line.endsWith(',');
+
+    return nonEmptyLines.every(isAllowedLine);
+  } catch (error) {
+    return false;
+  }
+};
+
 const isTestableSource = (file) => /^(apps|packages)\//.test(file)
   && /\.(js|jsx|ts|tsx)$/.test(file)
+  && !/__tests__\//.test(file)
+  && !/setupTest\.(js|jsx|ts|tsx)$/.test(file)
   && !/\.test\.(js|jsx|ts|tsx)$/.test(file)
   && !/\.spec\.(js|jsx|ts|tsx)$/.test(file);
 
@@ -101,6 +139,11 @@ const coverageEntries = Object.entries(coverageSummary)
 const failures = [];
 
 testableFiles.forEach((changedFile) => {
+  if (isBarrelFile(changedFile)) {
+    console.log(`[coverage] Skipping threshold for barrel file: ${changedFile}`);
+    return;
+  }
+
   const normalizedChangedFile = changedFile.replace(/\\/g, '/');
   const coverageEntry = coverageEntries.find(
     ({ filePath }) => filePath.endsWith(normalizedChangedFile),
