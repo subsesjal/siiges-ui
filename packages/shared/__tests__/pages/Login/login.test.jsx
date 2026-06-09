@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Context } from '@siiges-ui/shared';
 import MockLogin from '../../setupTest';
 
 jest.mock(
@@ -8,16 +7,14 @@ jest.mock(
   () => ({ children }) => children,
 );
 
-const testFunction = jest.fn();
+jest.mock('@siiges-ui/authentication', () => ({
+  SignIn: () => <div>Mock SignIn</div>,
+}));
 
 test.todo('Some test I still need to do');
 
 describe('Login', () => {
   it('should render the login page', async () => {
-    render(
-      <Context.Provider value={testFunction}>
-        <MockLogin />
-      </Context.Provider>,
-    );
+    render(<MockLogin />);
   });
 });
