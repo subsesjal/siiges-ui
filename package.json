@@ -46,6 +46,8 @@
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix .",
 		"test": "jest",
+		"test:pending": "node scripts/run-related-tests.js --mode=pending --coverage-threshold=80",
+		"test:staged": "node scripts/run-related-tests.js --mode=staged --coverage-threshold=80",
 		"test:watch": "jest --watch",
 		"postinstall": "",
 		"dev": "cd apps/siiges-app && npm run dev"

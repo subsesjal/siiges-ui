@@ -9,10 +9,10 @@ import { UsuarioAvatar, UsuarioView } from '@siiges-ui/users';
 import Grid from '@mui/material/Grid';
 import { UserProfilePage } from '@siiges-ui/users/v2';
 import { useRouter } from 'next/router';
-import { getEnvVarValidated } from '../../../lib/config/env';
+import { config } from '../../../lib/config/env';
 
 // Determina qué versión de perfil de usuario renderizar
-const USERS_VERSION = getEnvVarValidated('NEXT_PUBLIC_USERS_VERSION', ['v1', 'v2'], 'v1');
+const USERS_VERSION = ['v1', 'v2'].includes(config.usersVersion) ? config.usersVersion : 'v1';
 
 export default function UserProfile() {
   const router = useRouter();
