@@ -33,6 +33,7 @@ export default function UserForm({
   onSubmit,
   onCancel,
   sessionRole,
+  disableRoleAndStatus,
 }) {
   const isCreate = mode === VIEW_STATE.CREATE;
   const isView = mode === VIEW_STATE.VIEW;
@@ -103,7 +104,7 @@ export default function UserForm({
             name="rolId"
             value={form.rolId || ''}
             required
-            disabled={isView}
+            disabled={isView || disableRoleAndStatus}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.rolId}
@@ -171,7 +172,7 @@ export default function UserForm({
               name="estatus"
               value={form.estatus ?? 1}
               onChange={onChange}
-              disabled={isView}
+              disabled={isView || disableRoleAndStatus}
               required
             />
           </Grid>
@@ -244,4 +245,9 @@ UserForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   sessionRole: PropTypes.string.isRequired,
+  disableRoleAndStatus: PropTypes.bool,
+};
+
+UserForm.defaultProps = {
+  disableRoleAndStatus: false,
 };

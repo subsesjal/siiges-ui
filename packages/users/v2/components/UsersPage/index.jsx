@@ -82,6 +82,7 @@ export default function UsersPage() {
         onUpdate={handleUpdate}
         onNotify={notify}
         sessionRole={session?.rol}
+        sessionUserId={session?.id}
       />
     );
   }

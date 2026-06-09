@@ -80,10 +80,16 @@ export default function UserProfilePage() {
     }
 
     try {
+      const payload = {
+        ...cleanedData,
+        rolId: profileUser?.rol?.id ?? cleanedData.rolId,
+        estatus: profileUser?.estatus ?? cleanedData.estatus,
+      };
+
       const updatedUser = await updateUser({
         session,
         usuarioId: profileUser.id,
-        data: cleanedData,
+        data: payload,
       });
 
       setProfileUser(updatedUser);
@@ -143,6 +149,7 @@ export default function UserProfilePage() {
                 onSubmit={handleSubmit}
                 onCancel={handleCancelEdit}
                 sessionRole={session?.rol || ''}
+                disableRoleAndStatus
               />
             </Grid>
           ) : (

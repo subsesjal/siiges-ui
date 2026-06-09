@@ -74,6 +74,7 @@ import {
 } from './utils/handlers/apiUtils';
 import estadosMexico from './utils/mocks/estadosMexico';
 import getParentUserById from './utils/handlers/getParentUserById';
+import dotenv from './utils/dotenv';
 
 // ============================================================================
 // CONTEXTOS (NUEVOS)
@@ -174,4 +175,5 @@ export {
   createRecord,
   deleteRecord,
   estadosMexico,
+  dotenv,
 };
