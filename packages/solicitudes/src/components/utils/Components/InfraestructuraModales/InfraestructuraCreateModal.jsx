@@ -35,8 +35,12 @@ export default function InfraestructuraCreateModal({
   const [asignaturasDisabled, setAsignaturasDisabled] = useState(false);
 
   useEffect(() => {
-    setFormInfraestructuras({});
-  }, []);
+    if (open) {
+      setFormInfraestructuras({});
+      setTipoInstalacion('');
+      setAsignaturasDisabled(false);
+    }
+  }, [open]);
 
   const { setNoti, setLoading } = useUI();
   const { asignaturasTotal } = getAsignaturas(programaId);
