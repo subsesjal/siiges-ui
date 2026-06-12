@@ -76,9 +76,17 @@ export default function ModalCertificado({
 
   useEffect(() => {
     if (open && isConsultMode && rowData) {
+      let fechaTerminacionISO = '';
+      if (rowData.fechaTerminacion) {
+        const parsed = dayjs(rowData.fechaTerminacion, 'DD/MM/YYYY');
+        if (parsed.isValid()) {
+          fechaTerminacionISO = parsed.format('YYYY-MM-DD');
+        }
+      }
+
       setForm({
         id: rowData.id,
-        fechaTerminacion: rowData.fechaTerminacion || '',
+        fechaTerminacion: fechaTerminacionISO,
         fechaExpedicion: rowData.estadoFirma?.fechaExpedicion || '',
       });
 
