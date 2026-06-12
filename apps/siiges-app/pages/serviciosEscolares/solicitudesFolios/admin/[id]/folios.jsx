@@ -22,6 +22,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import {
   ModalCertificado, ModalTitulo, ButtonsFoliosAdmin, ModalFirmaElectronica,
 } from '@siiges-ui/serviciosescolares';
@@ -125,6 +126,7 @@ export default function Folios() {
               numeroFolioActa: res.folioActa || '',
               matricula: res.alumno.matricula,
               folio: res.folioDocumentoAlumno?.folioDocumento,
+              folioDocumentoAlumnoId: res.folioDocumentoAlumno?.id || null,
               foja: res.folioDocumentoAlumno?.foja?.nombre,
               libro: res.folioDocumentoAlumno?.libro?.nombre,
               envio: res.folioDocumentoAlumno?.envioExitoso ? 'Enviado' : 'Pendiente',
@@ -162,7 +164,7 @@ export default function Folios() {
   };
 
   const handleObservacionesSubmit = async () => {
-    if (id && observaciones) {
+    if (id) {
       setLoading(true);
       try {
         const response = await createRecord({
@@ -250,10 +252,12 @@ export default function Folios() {
       });
     }
   };
+
   const handleDeleteAlumno = (alumnoId) => {
     setAlumnoToDelete(alumnoId);
     setOpenDeleteModal(true);
   };
+
   const confirmDeleteAlumno = async () => {
     if (!alumnoToDelete) return;
 
@@ -284,6 +288,31 @@ export default function Folios() {
       setAlumnoToDelete(null);
     }
   };
+
+  const handleGenerarPDF = async (alumnoId) => {
+    setLoading(true);
+    try {
+      const response = await getData({
+        endpoint: `/files?tipoEntidad=FOLIO_DOCUMENTO_ALUMNO&entidadId=${alumnoId}&tipoDocumento=CERTIFICADO_ELECTRONICO_PDF`,
+      });
+      if (response.errorMessage) {
+        setNoti({ open: true, message: response.errorMessage, type: 'error' });
+        return;
+      }
+      if (response.data?.url) {
+        window.open(response.data.url, '_blank');
+      } else if (typeof response.data === 'string') {
+        window.open(response.data, '_blank');
+      } else {
+        setNoti({ open: true, message: 'No se pudo obtener el PDF', type: 'error' });
+      }
+    } catch (error) {
+      setNoti({ open: true, message: error.message || 'Error al generar el PDF', type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleFirmaSuccess = async (documentosPayload) => {
     try {
       const response = await createRecord({
@@ -332,6 +361,7 @@ export default function Folios() {
       return [];
     }
   };
+
   const alumnosColumns = [
     {
       field: 'id', headerName: 'ID', width: 100, hide: true,
@@ -359,26 +389,43 @@ export default function Folios() {
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: 150,
-      renderCell: (params) => (
-        <>
-          <Tooltip title="Consultar" placement="top">
-            <IconButton onClick={() => handleConsult(params.row.id)}>
-              <VisibilityOutlinedIcon />
-            </IconButton>
-          </Tooltip>
+      width: 200,
+      renderCell: (params) => {
+        const firmaIesExitosa = params.row.estadoFirmaIes === 'EXITOSO';
+        const firmaSicytExitosa = params.row.estadoFirmaSicyt === 'EXITOSO';
+        const puedeVerPdf = firmaIesExitosa
+          && firmaSicytExitosa
+          && params.row.folioDocumentoAlumnoId;
 
-          {estatus === 2 && (
-            <Tooltip title="Eliminar alumno" placement="top">
-              <IconButton
-                onClick={() => handleDeleteAlumno(params.row.id)}
-              >
-                <DeleteIcon />
+        return (
+          <>
+            <Tooltip title="Consultar" placement="top">
+              <IconButton onClick={() => handleConsult(params.row.id)}>
+                <VisibilityOutlinedIcon />
               </IconButton>
             </Tooltip>
-          )}
-        </>
-      ),
+
+            {estatus === 2 && (
+              <Tooltip title="Eliminar alumno" placement="top">
+                <IconButton onClick={() => handleDeleteAlumno(params.row.id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+
+            {puedeVerPdf && (
+              <Tooltip title="Ver PDF" placement="top">
+                <IconButton
+                  onClick={() => handleGenerarPDF(params.row.folioDocumentoAlumnoId)}
+                  color="primary"
+                >
+                  <PictureAsPdfIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </>
+        );
+      },
     },
   ];
 
@@ -498,7 +545,6 @@ export default function Folios() {
                       <ListTitle text="Tipo de Documento" />
                       <ListTitle text="Tipo de Solicitud" />
                       <ListTitle text="Alumnos" />
-
                     </List>
                   </Grid>
                   <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
