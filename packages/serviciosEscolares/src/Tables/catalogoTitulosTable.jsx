@@ -17,6 +17,7 @@ const catalogoTitulos = [
     renderCell: (params) => (
       <ButtonsCatalogoTitulo
         id={params.id}
+        fechaExpedicion={params.row.fechaExpedicion}
       />
     ),
     sortable: false,
