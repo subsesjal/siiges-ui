@@ -12,7 +12,12 @@ import PropTypes from 'prop-types';
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function MatriculaActivaForm({
-  formData, setFormData, onSearch, setBusquedaGeneral, busquedaGeneral, setLoading,
+  formData,
+  setFormData,
+  onSearch,
+  setBusquedaGeneral,
+  busquedaGeneral,
+  setLoading,
 }) {
   const { setNoti } = useUI();
   const { instituciones } = getInstituciones({
@@ -26,7 +31,10 @@ export default function MatriculaActivaForm({
 
   const handleInstitucionChange = (institucionId) => {
     setFormData((prev) => ({
-      ...prev, institucion: institucionId, plantel: '', programa: '',
+      ...prev,
+      institucion: institucionId,
+      plantel: '',
+      programa: '',
     }));
     setPlanteles([]);
     setProgramas([]);
@@ -34,7 +42,11 @@ export default function MatriculaActivaForm({
     if (institucionId) {
       getPlantelesByInstitucion(institucionId, (error, data) => {
         if (error) {
-          setNoti({ open: true, message: '¡No se encontraron planteles!', type: 'warning' });
+          setNoti({
+            open: true,
+            message: '¡No se encontraron planteles!',
+            type: 'warning',
+          });
         } else {
           const sorted = data.planteles
             .map((p) => ({
@@ -55,7 +67,11 @@ export default function MatriculaActivaForm({
     if (plantelId) {
       getProgramas(plantelId, (error, data) => {
         if (error) {
-          setNoti({ open: true, message: '¡No se encontraron programas!', type: 'warning' });
+          setNoti({
+            open: true,
+            message: '¡No se encontraron programas!',
+            type: 'warning',
+          });
         } else {
           const sorted = data.programas
             .map((p) => ({
@@ -81,7 +97,17 @@ export default function MatriculaActivaForm({
           name="busquedaGeneral"
           title="Tipo de Búsqueda"
           value={busquedaGeneral}
-          onChange={(e) => setBusquedaGeneral(e.target.value === 1)}
+          onChange={(e) => {
+            const isGeneral = e.target.value === 1;
+            setBusquedaGeneral(isGeneral);
+            if (isGeneral && formData.institucion) {
+              handleInstitucionChange(formData.institucion);
+            } else {
+              setFormData((prev) => ({ ...prev, plantel: '', programa: '' }));
+              setPlanteles([]);
+              setProgramas([]);
+            }
+          }}
           options={[
             { id: 0, nombre: 'Busqueda General' },
             { id: 1, nombre: 'Busqueda por Programa' },
@@ -95,7 +121,10 @@ export default function MatriculaActivaForm({
             title="Institución"
             name="institucion"
             value={formData.institucion || ''}
-            options={instituciones?.sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
+            options={
+              instituciones?.sort((a, b) => a.nombre.localeCompare(b.nombre))
+              || []
+            }
             onChange={(e) => handleInstitucionChange(e.target.value)}
           />
         </Grid>
@@ -106,7 +135,9 @@ export default function MatriculaActivaForm({
               title="Institución"
               name="institucion"
               value={formData.institucion || ''}
-              options={instituciones?.sort((a, b) => a.nombre.localeCompare(b.nombre)) || []}
+              options={
+                instituciones?.sort((a, b) => a.nombre.localeCompare(b.nombre)) || []
+              }
               onChange={(e) => handleInstitucionChange(e.target.value)}
             />
           </Grid>
@@ -134,7 +165,12 @@ export default function MatriculaActivaForm({
       )}
 
       <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center' }}>
-        <ButtonSimple text="Buscar" onClick={onSearch} design="buscar" fullWidth>
+        <ButtonSimple
+          text="Buscar"
+          onClick={onSearch}
+          design="buscar"
+          fullWidth
+        >
           <SearchIcon />
         </ButtonSimple>
       </Grid>

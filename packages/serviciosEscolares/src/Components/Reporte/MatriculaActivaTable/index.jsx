@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { DataTable } from '@siiges-ui/shared';
+import { DataTable, LabelData } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 
 const columnsBusquedaGeneral = [
@@ -15,17 +15,32 @@ const columnsBusquedaPrograma = [
   { field: 'totalAlumnos', headerName: 'Total de Alumnos', width: 150 },
 ];
 
-export default function MatriculaActivaTable({ matriculasActivas, busquedaGeneral }) {
-  const columns = !busquedaGeneral ? columnsBusquedaGeneral : columnsBusquedaPrograma;
+export default function MatriculaActivaTable({
+  matriculasActivas,
+  busquedaGeneral,
+  totalGeneral,
+}) {
+  const columns = !busquedaGeneral
+    ? columnsBusquedaGeneral
+    : columnsBusquedaPrograma;
+
+  const rows = matriculasActivas.map((programas) => ({
+    ...programas,
+    id: programas.programaId,
+    plantel: programas.plantel?.domicilio
+      ? `${programas.plantel.domicilio.calle} ${programas.plantel.domicilio.numeroExterior}`
+      : '',
+  }));
 
   return (
     <Grid container spacing={2}>
+      {totalGeneral !== null && (
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <LabelData title="Total de matrículas activas:" subtitle={totalGeneral.toString()} />
+        </Grid>
+      )}
       <Grid item xs={12}>
-        <DataTable
-          title="Alumnos"
-          columns={columns}
-          rows={matriculasActivas}
-        />
+        <DataTable title="Alumnos" columns={columns} rows={rows} />
       </Grid>
     </Grid>
   );
@@ -33,19 +48,18 @@ export default function MatriculaActivaTable({ matriculasActivas, busquedaGenera
 
 MatriculaActivaTable.defaultProps = {
   matriculasActivas: [],
+  totalGeneral: null,
 };
 
 MatriculaActivaTable.propTypes = {
   busquedaGeneral: PropTypes.bool.isRequired,
+  totalGeneral: PropTypes.number,
   matriculasActivas: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      nombreCompleto: PropTypes.string,
-      curp: PropTypes.string,
-      claveTrabajo: PropTypes.string,
+      programaId: PropTypes.number.isRequired,
       programa: PropTypes.string,
-      matricula: PropTypes.string,
       institucion: PropTypes.string,
+      totalAlumnos: PropTypes.number,
     }),
   ),
 };
