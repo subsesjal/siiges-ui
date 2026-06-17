@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, useUI } from '@siiges-ui/shared';
+import { Layout, useUI, getData } from '@siiges-ui/shared';
 import { Divider, Grid } from '@mui/material';
 import {
   MatriculaActivaForm,
@@ -11,42 +11,47 @@ export default function MatriculaActiva() {
   const [formData, setFormData] = useState({});
   const [busquedaGeneral, setBusquedaGeneral] = useState(true);
   const [matriculasActivas, setMatriculasActivas] = useState([]);
+  const [totalGeneral, setTotalGeneral] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const buildQuery = () => {
+    const params = new URLSearchParams();
+    if (formData.institucion) params.append('institucionId', formData.institucion);
+    if (formData.plantel) params.append('plantelId', formData.plantel);
+    if (formData.programa) params.append('programaId', formData.programa);
+    const qs = params.toString();
+    return qs ? `?${qs}` : '';
+  };
+
   const handleSearch = async () => {
+    if (!formData.institucion) {
+      setNoti({
+        message: 'Selecciona una institución para realizar la búsqueda',
+        severity: 'warning',
+      });
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => {
-      setMatriculasActivas([
-        {
-          id: 1,
-          nombreCompleto: 'Juan Pérez',
-          curp: 'PEJU800101HDFLNR08',
-          claveTrabajo: '12345',
-          programa: 'Ingeniería en Computación',
-          plantel: 'Plantel Central',
-          matricula: '12345',
-          institucion: 'Institución de Prueba',
-          totalAlumnos: 150,
-        },
-        {
-          id: 2,
-          nombreCompleto: 'María López',
-          curp: 'LOLM800101HDFLNR09',
-          claveTrabajo: '67890',
-          programa: 'Licenciatura en Administración',
-          plantel: 'Plantel Norte',
-          matricula: '67890',
-          institucion: 'Institución de Prueba',
-          totalAlumnos: 200,
-        },
-      ]);
-      setLoading(false);
-      setNoti({ message: 'Búsqueda completada', severity: 'success' });
-    }, 2000);
+    const { data, errorMessage } = await getData({
+      endpoint: '/alumnos/matricula-activa/count',
+      query: buildQuery(),
+    });
+    setLoading(false);
+
+    if (errorMessage) {
+      setNoti({ message: errorMessage, severity: 'error' });
+      setMatriculasActivas([]);
+      return;
+    }
+
+    setMatriculasActivas(data?.programas || []);
+    setTotalGeneral(data?.totalGeneral ?? null); //
+    setNoti({ message: 'Búsqueda completada', severity: 'success' });
   };
 
   return (
@@ -70,6 +75,7 @@ export default function MatriculaActiva() {
           <MatriculaActivaTable
             matriculasActivas={loading ? [] : matriculasActivas}
             busquedaGeneral={busquedaGeneral}
+            totalGeneral={totalGeneral}
           />
         </Grid>
       </Grid>
