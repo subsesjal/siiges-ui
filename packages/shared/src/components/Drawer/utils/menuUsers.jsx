@@ -42,7 +42,7 @@ const options = [
     id: 4,
     nombre: 'App de Titulación Electrónica',
     roles: ['representante', 'ce_ies'],
-    externalLink: 'https://tituloelectronico.jalisco.gob.mx/ies/login.jsp',
+    externalLink: 'https://siges.jalisco.gob.mx/ies',
   },
 ];
 
