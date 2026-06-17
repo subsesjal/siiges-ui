@@ -135,7 +135,7 @@ const panelMenuOptions = (rol, nombre) => {
       },
       {
         userId: 2,
-        text: 'Titulación',
+        text: 'Documentos Electrónicos',
         icon: <SchoolIcon />,
         type: 'dropdown',
         options: [
@@ -144,8 +144,12 @@ const panelMenuOptions = (rol, nombre) => {
             route: '/serviciosEscolares/egresados',
           },
           {
-            text: 'Catálogo de Títulos Electrónicos',
+            text: 'Catálogo de Títulos',
             route: '/serviciosEscolares/titulacion',
+          },
+          {
+            text: 'Catálogo de Certificados',
+            route: '/serviciosEscolares/certificacion',
           },
         ],
         key: 'titulacion',
