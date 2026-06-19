@@ -9,22 +9,19 @@ import {
 import {
   ButtonSimple,
   Layout,
+  Loading,
   useAuth,
   useNotification,
 } from '@siiges-ui/shared';
-import { UsuarioAvatar, UsuarioView } from '@siiges-ui/users';
-import VIEW_STATE from '../../constants/viewState';
+import { UsuarioAvatar } from '@siiges-ui/users';
 import useUserDetail from '../../hooks/useUserDetail';
-import useUserForm from '../../hooks/useUserForm';
-import { updateUser } from '../../services/usuarios.service';
-import UserForm from '../UserForm';
-import UsersSkeleton from '../UsersSkeleton';
+import UserProfileSkeleton from '../UserProfileSkeleton';
+import UserProfileViewSections from '../UserProfileViewSections';
 
 export default function UserProfilePage() {
   const router = useRouter();
   const { session } = useAuth();
   const notify = useNotification();
-  const [isEditing, setIsEditing] = useState(false);
   const [profileUser, setProfileUser] = useState(null);
 
   const detailState = useUserDetail({
@@ -48,60 +45,15 @@ export default function UserProfilePage() {
     }
   }, [detailState.error, notify]);
 
-  const {
-    form,
-    errors,
-    handleChange,
-    handleBlur,
-    validate,
-  } = useUserForm({
-    mode: VIEW_STATE.EDIT,
-    initialUser: profileUser,
-    sessionRole: session?.rol || '',
-  });
+  const isInitialLoading = detailState.loading && !profileUser;
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-  };
-
-  const handleSubmit = async () => {
-    if (!profileUser?.id || detailState.loading) {
-      return;
-    }
-
-    const { valid, cleanedData, errors: validationErrors } = validate();
-    if (!valid) {
-      const firstError = validationErrors
-        ? Object.values(validationErrors).find((message) => Boolean(message))
-        : null;
-
-      notify.error(firstError || 'Revisa los campos obligatorios antes de continuar.');
-      return;
-    }
-
-    try {
-      const payload = {
-        ...cleanedData,
-        rolId: profileUser?.rol?.id ?? cleanedData.rolId,
-        estatus: profileUser?.estatus ?? cleanedData.estatus,
-      };
-
-      const updatedUser = await updateUser({
-        session,
-        usuarioId: profileUser.id,
-        data: payload,
-      });
-
-      setProfileUser(updatedUser);
-      setIsEditing(false);
-      notify.success('Perfil actualizado correctamente.');
-    } catch (error) {
-      notify.error(error?.message || 'No fue posible actualizar el perfil.');
-    }
-  };
-
-  if (detailState.loading && !profileUser) {
-    return <UsersSkeleton />;
+  if (isInitialLoading) {
+    return (
+      <Layout>
+        <Loading loading={isInitialLoading} />
+        <UserProfileSkeleton />
+      </Layout>
+    );
   }
 
   if (detailState.error && !profileUser) {
@@ -122,12 +74,13 @@ export default function UserProfilePage() {
 
   return (
     <Layout>
+      <Loading loading={detailState.loading && !profileUser} />
       <Box sx={{ paddingX: 2, paddingTop: 1 }}>
         <Grid container spacing={2}>
           <Grid
             item
             xs={12}
-            md={4}
+            md={3}
             sx={{
               mt: { xs: 2, md: 0 },
               display: 'flex',
@@ -138,36 +91,21 @@ export default function UserProfilePage() {
             <UsuarioAvatar usuario={profileUser} />
           </Grid>
 
-          {isEditing ? (
-            <Grid item xs={12} md={8}>
-              <UserForm
-                mode={VIEW_STATE.EDIT}
-                form={form}
-                errors={errors}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                onSubmit={handleSubmit}
-                onCancel={handleCancelEdit}
-                sessionRole={session?.rol || ''}
-                disableRoleAndStatus
-              />
-            </Grid>
-          ) : (
-            <UsuarioView usuario={profileUser} />
-          )}
+          <UserProfileViewSections user={profileUser} />
 
-          {!isEditing && (
-            <Grid item xs={12}>
-              <Grid container justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
-                <Grid item>
-                  <ButtonSimple onClick={() => router.back()} design="enviar" text="Regresar" />
-                </Grid>
-                <Grid item>
-                  <ButtonSimple onClick={() => setIsEditing(true)} text="Editar perfil" />
-                </Grid>
+          <Grid item xs={12}>
+            <Grid container justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
+              <Grid item>
+                <ButtonSimple onClick={() => router.back()} design="enviar" text="Regresar" />
+              </Grid>
+              <Grid item>
+                <ButtonSimple
+                  onClick={() => router.push('/usuarios/perfilUsuario/editar')}
+                  text="Editar perfil"
+                />
               </Grid>
             </Grid>
-          )}
+          </Grid>
         </Grid>
       </Box>
     </Layout>

@@ -1,6 +1,45 @@
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 const BASE_URL = process.env.NEXT_PUBLIC_URL;
 
+const getFriendlyValidationMessage = (rawMessage) => {
+  const message = String(rawMessage || '');
+  const normalized = message.toLowerCase();
+
+  if (normalized.includes('body/persona/rfc')) {
+    return 'RFC inválido. Debe contener entre 12 y 13 caracteres.';
+  }
+
+  if (normalized.includes('body/persona/curp')) {
+    return 'CURP inválida. Debe contener 18 caracteres.';
+  }
+
+  if (normalized.includes('body/correo')) {
+    return 'Correo electrónico inválido. Verifica el formato (ejemplo@dominio.com).';
+  }
+
+  if (normalized.includes('body/persona/celular')) {
+    return 'Celular inválido. Debe contener 10 dígitos numéricos.';
+  }
+
+  if (normalized.includes('body/persona/telefono')) {
+    return 'Teléfono inválido. Debe contener 10 dígitos numéricos.';
+  }
+
+  if (normalized.includes('must not have fewer than') || normalized.includes('must not have less than')) {
+    return 'Algunos campos no cumplen con la longitud mínima requerida.';
+  }
+
+  if (normalized.includes('must not have more than') || normalized.includes('must not have greater than')) {
+    return 'Algunos campos exceden la longitud máxima permitida.';
+  }
+
+  if (normalized.includes('must match pattern')) {
+    return 'Hay campos con formato inválido. Verifica la información capturada.';
+  }
+
+  return message;
+};
+
 const getAuthHeaders = (token) => {
   const headers = {
     api_key: API_KEY,
@@ -36,7 +75,8 @@ const request = async ({
   }
 
   if (!response.ok) {
-    throw new Error(payload?.message || response.statusText || 'Error de servicio.');
+    const rawMessage = payload?.message || response.statusText || 'Error de servicio.';
+    throw new Error(getFriendlyValidationMessage(rawMessage));
   }
 
   return payload?.data ?? payload;

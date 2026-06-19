@@ -3,7 +3,18 @@ import VIEW_STATE from '../constants/viewState';
 import { buildEmptyUserForm, mapUserToForm, normalizeUpdatePayload } from '../utils/userForm';
 import { getFieldErrors, validateUserForm } from '../utils/userValidation';
 
-const PERSONA_FIELDS = ['nombre', 'apellidoPaterno', 'apellidoMaterno', 'tituloCargo'];
+const PERSONA_FIELDS = [
+  'nombre',
+  'apellidoPaterno',
+  'apellidoMaterno',
+  'sexo',
+  'nacionalidad',
+  'rfc',
+  'curp',
+  'celular',
+  'telefono',
+  'tituloCargo',
+];
 
 const buildPayload = (form, mode) => {
   if (mode === VIEW_STATE.CREATE) {
@@ -31,6 +42,12 @@ const buildPayload = (form, mode) => {
       nombre: form.persona?.nombre?.trim() || '',
       apellidoPaterno: form.persona?.apellidoPaterno?.trim() || '',
       apellidoMaterno: form.persona?.apellidoMaterno?.trim() || '',
+      sexo: form.persona?.sexo?.trim() || '',
+      nacionalidad: form.persona?.nacionalidad?.trim() || '',
+      rfc: form.persona?.rfc?.trim() || '',
+      curp: form.persona?.curp?.trim() || '',
+      celular: form.persona?.celular?.trim() || '',
+      telefono: form.persona?.telefono?.trim() || '',
       tituloCargo: form.persona?.tituloCargo?.trim() || '',
     },
   });

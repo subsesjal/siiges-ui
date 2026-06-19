@@ -1,5 +1,43 @@
 import VIEW_STATE from '../constants/viewState';
 
+const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}$/i;
+const PHONE_REGEX = /^\d{10}$/;
+
+const isEmpty = (value) => value === undefined || value === null || String(value).trim() === '';
+
+const validateContactoFields = (form) => {
+  const contactoErrors = {};
+  const correo = String(form.correo || '').trim();
+  const curp = String(form.persona?.curp || '').trim();
+  const rfc = String(form.persona?.rfc || '').trim();
+  const celular = String(form.persona?.celular || '').trim();
+  const telefono = String(form.persona?.telefono || '').trim();
+
+  if (isEmpty(correo)) {
+    contactoErrors.correo = 'Correo requerido.';
+  } else if (correo.length < 3 || correo.length > 50 || !EMAIL_REGEX.test(correo)) {
+    contactoErrors.correo = 'El correo debe ser valido y tener entre 3 y 50 caracteres.';
+  }
+
+  if (curp && curp.length !== 18) {
+    contactoErrors.curp = 'La CURP debe contener 18 caracteres.';
+  }
+
+  if (rfc && rfc.length !== 12 && rfc.length !== 13) {
+    contactoErrors.rfc = 'El RFC debe contener 12 o 13 caracteres.';
+  }
+
+  if (celular && !PHONE_REGEX.test(celular)) {
+    contactoErrors.celular = 'El celular debe contener exactamente 10 digitos numericos.';
+  }
+
+  if (telefono && !PHONE_REGEX.test(telefono)) {
+    contactoErrors.telefono = 'El telefono debe contener exactamente 10 digitos numericos.';
+  }
+
+  return contactoErrors;
+};
+
 const validatePassword = (value) => {
   const simbolosPermitidos = /[@#$%^&*()\-_=+[\]{}\\|;:'",<.>/?!.]/;
 
@@ -15,16 +53,15 @@ const validatePassword = (value) => {
 };
 
 const getFieldErrors = (form, mode) => {
-  const errors = {};
-
-  if (mode === VIEW_STATE.EDIT) {
-    return errors;
-  }
+  const contactoErrors = validateContactoFields(form);
+  const errors = { ...contactoErrors };
 
   if (!form.persona?.nombre) errors.nombre = 'Nombre requerido.';
   if (!form.persona?.apellidoPaterno) errors.apellidoPaterno = 'Apellido requerido.';
-  if (!form.rolId) errors.rolId = 'Rol requerido.';
-  if (!form.correo) errors.correo = 'Correo requerido.';
+
+  if (mode !== VIEW_STATE.EDIT && !form.rolId) {
+    errors.rolId = 'Rol requerido.';
+  }
 
   if (mode === VIEW_STATE.CREATE) {
     if (!form.usuario) errors.usuario = 'Usuario requerido.';

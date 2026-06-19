@@ -20,6 +20,10 @@ function Usuarios() {
   const [method, setMethod] = useState('');
 
   useEffect(() => {
+    if (USERS_VERSION === 'v2') {
+      return;
+    }
+
     if (session && session.id) {
       const { id, rol } = session;
       setEndpoint(ENDPOINT_MAPPING[rol](id));
