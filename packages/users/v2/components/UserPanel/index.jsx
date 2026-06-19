@@ -62,7 +62,6 @@ export default function UserPanel({
         ? {
           ...cleanedData,
           rolId: user?.rol?.id ?? cleanedData.rolId,
-          estatus: user?.estatus ?? cleanedData.estatus,
         }
         : cleanedData;
 
@@ -92,15 +91,12 @@ export default function UserPanel({
     );
   }
 
+  const topAction = !isCreate
+    ? <Button variant="outlined" onClick={onClose}>Volver a tabla</Button>
+    : null;
+
   return (
     <Box sx={{ paddingTop: 1 }}>
-      <Stack direction="row" justifyContent="space-between" sx={{ paddingX: 2, paddingBottom: 1 }}>
-        <Typography variant="h6">
-          {isView ? 'Consultar usuario' : 'Formulario de usuario'}
-        </Typography>
-        {!isView && <Button variant="outlined" onClick={onClose}>Volver a tabla</Button>}
-      </Stack>
-
       {(mode === VIEW_STATE.CREATE || mode === VIEW_STATE.EDIT) && (
         <UserForm
           mode={mode}
@@ -111,7 +107,7 @@ export default function UserPanel({
           onSubmit={handleSubmit}
           onCancel={onClose}
           sessionRole={sessionRole}
-          disableRoleAndStatus={isSelfEdit}
+          topAction={topAction}
         />
       )}
 
@@ -125,7 +121,7 @@ export default function UserPanel({
           onSubmit={handleSubmit}
           onCancel={onClose}
           sessionRole={sessionRole}
-          disableRoleAndStatus={isSelfEdit}
+          topAction={topAction}
         />
       )}
 

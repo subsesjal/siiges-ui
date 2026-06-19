@@ -1,9 +1,15 @@
-const buildEmptyUserForm = (role) => ({
+const buildEmptyUserForm = () => ({
   actualizado: 1,
   persona: {
     nombre: '',
     apellidoPaterno: '',
     apellidoMaterno: '',
+    sexo: '',
+    nacionalidad: '',
+    rfc: '',
+    curp: '',
+    celular: '',
+    telefono: '',
     tituloCargo: '',
   },
   rolId: '',
@@ -11,7 +17,7 @@ const buildEmptyUserForm = (role) => ({
   usuario: '',
   contrasena: '',
   repeatContrasena: '',
-  estatus: role === 'admin' ? 1 : undefined,
+  estatus: 1,
 });
 
 const mapUserToForm = (user, sessionRole) => {
@@ -27,6 +33,12 @@ const mapUserToForm = (user, sessionRole) => {
       nombre: persona.nombre || '',
       apellidoPaterno: persona.apellidoPaterno || '',
       apellidoMaterno: persona.apellidoMaterno || '',
+      sexo: persona.sexo || '',
+      nacionalidad: persona.nacionalidad || '',
+      rfc: persona.rfc || '',
+      curp: persona.curp || '',
+      celular: persona.celular || '',
+      telefono: persona.telefono || '',
       tituloCargo: persona.tituloCargo || '',
     },
     rolId: roleId !== undefined && roleId !== null ? String(roleId) : '',
@@ -48,6 +60,12 @@ const normalizeUpdatePayload = (form) => {
       nombre: form.persona?.nombre || '',
       apellidoPaterno: form.persona?.apellidoPaterno || '',
       apellidoMaterno: form.persona?.apellidoMaterno || '',
+      sexo: form.persona?.sexo || '',
+      nacionalidad: form.persona?.nacionalidad || '',
+      rfc: form.persona?.rfc || '',
+      curp: form.persona?.curp || '',
+      celular: form.persona?.celular || '',
+      telefono: form.persona?.telefono || '',
       tituloCargo: form.persona?.tituloCargo || '',
     },
     correo: form.correo || '',
