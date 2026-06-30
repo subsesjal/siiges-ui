@@ -113,7 +113,10 @@ export default function UsuarioAvatar({ usuario }) {
             />
           )}
           <IconButton
-            onClick={handleAvatarClick}
+            onClick={(event) => {
+              event.stopPropagation();
+              handleAvatarClick();
+            }}
             sx={{
               position: 'absolute',
               bottom: 10,

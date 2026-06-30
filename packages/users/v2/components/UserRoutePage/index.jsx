@@ -88,9 +88,15 @@ export default function UserRoutePage({ mode }) {
     }
   }, []);
 
-  const canRenderMode = mode === VIEW_STATE.VIEW
-    ? permissions.canView
-    : permissions.canEdit;
+  let canRenderMode;
+
+  if (mode === VIEW_STATE.VIEW) {
+    canRenderMode = permissions.canView;
+  } else if (mode === VIEW_STATE.CREATE) {
+    canRenderMode = permissions.canCreate;
+  } else {
+    canRenderMode = permissions.canEdit;
+  }
   const isSessionReady = Boolean(session?.rol);
   const isRouteLoading = !isSessionReady
     || (needsDetail && detailState.loading && !detailState.data);

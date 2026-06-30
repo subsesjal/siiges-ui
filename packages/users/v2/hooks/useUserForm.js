@@ -55,13 +55,33 @@ const buildPayload = (form, mode) => {
 
 const useUserForm = ({ mode, initialUser, sessionRole }) => {
   const isCreate = mode === VIEW_STATE.CREATE;
+  const initialUserSignature = useMemo(() => JSON.stringify({
+    id: initialUser?.id ?? null,
+    actualizado: initialUser?.actualizado ?? null,
+    correo: initialUser?.correo ?? '',
+    usuario: initialUser?.usuario ?? '',
+    estatus: initialUser?.estatus ?? null,
+    rolId: initialUser?.rol?.id ?? initialUser?.rolId ?? null,
+    persona: {
+      nombre: initialUser?.persona?.nombre ?? '',
+      apellidoPaterno: initialUser?.persona?.apellidoPaterno ?? '',
+      apellidoMaterno: initialUser?.persona?.apellidoMaterno ?? '',
+      sexo: initialUser?.persona?.sexo ?? '',
+      nacionalidad: initialUser?.persona?.nacionalidad ?? '',
+      rfc: initialUser?.persona?.rfc ?? '',
+      curp: initialUser?.persona?.curp ?? '',
+      celular: initialUser?.persona?.celular ?? '',
+      telefono: initialUser?.persona?.telefono ?? '',
+      tituloCargo: initialUser?.persona?.tituloCargo ?? '',
+    },
+  }), [initialUser]);
   const [form, setForm] = useState(() => (isCreate
     ? buildEmptyUserForm(sessionRole)
     : mapUserToForm(initialUser, sessionRole)));
   const [errors, setErrors] = useState({});
   const initialRoleId = useMemo(
     () => mapUserToForm(initialUser, sessionRole).rolId,
-    [initialUser, sessionRole],
+    [initialUserSignature, sessionRole],
   );
 
   useEffect(() => {
@@ -71,7 +91,7 @@ const useUserForm = ({ mode, initialUser, sessionRole }) => {
       setForm(mapUserToForm(initialUser, sessionRole));
     }
     setErrors({});
-  }, [initialUser, isCreate, sessionRole]);
+  }, [initialUserSignature, isCreate, sessionRole]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;

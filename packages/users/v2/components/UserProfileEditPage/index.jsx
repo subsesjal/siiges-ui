@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
+  Stack,
+  Typography,
+} from '@mui/material';
+import {
+  ButtonSimple,
   Layout,
   Loading,
   useAuth,
@@ -17,7 +22,6 @@ export default function UserProfileEditPage() {
   const router = useRouter();
   const { session } = useAuth();
   const notify = useNotification();
-  const [profileUser, setProfileUser] = useState(null);
 
   const detailState = useUserDetail({
     session,
@@ -25,12 +29,6 @@ export default function UserProfileEditPage() {
     enabled: Boolean(session?.id),
     initialData: null,
   });
-
-  useEffect(() => {
-    if (detailState.data) {
-      setProfileUser(detailState.data);
-    }
-  }, [detailState.data]);
 
   useEffect(() => {
     if (detailState.error) {
@@ -48,9 +46,11 @@ export default function UserProfileEditPage() {
     validate,
   } = useUserForm({
     mode: VIEW_STATE.EDIT,
-    initialUser: profileUser,
+    initialUser: detailState.data,
     sessionRole: session?.rol || '',
   });
+
+  const profileUser = detailState.data;
 
   const handleCancel = () => {
     router.push('/usuarios/perfilUsuario');
@@ -97,6 +97,18 @@ export default function UserProfileEditPage() {
       <Layout title="Editar Perfil Usuario">
         <Loading loading={isInitialLoading} />
         <UserProfileSkeleton />
+      </Layout>
+    );
+  }
+
+  if (detailState.error && !profileUser) {
+    return (
+      <Layout title="Editar Perfil Usuario">
+        <Stack spacing={2} sx={{ padding: 2 }}>
+          <Typography variant="body2">No se pudo cargar el perfil.</Typography>
+          <Typography variant="body2">{detailState.error.message || 'Error desconocido'}</Typography>
+          <ButtonSimple onClick={() => router.back()} design="enviar" text="Regresar" />
+        </Stack>
       </Layout>
     );
   }

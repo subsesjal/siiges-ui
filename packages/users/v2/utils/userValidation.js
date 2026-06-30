@@ -16,7 +16,7 @@ const validateContactoFields = (form) => {
   if (isEmpty(correo)) {
     contactoErrors.correo = 'Correo requerido.';
   } else if (correo.length < 3 || correo.length > 50 || !EMAIL_REGEX.test(correo)) {
-    contactoErrors.correo = 'El correo debe ser valido y tener entre 3 y 50 caracteres.';
+    contactoErrors.correo = 'El correo debe ser válido y tener entre 3 y 50 caracteres.';
   }
 
   if (curp && curp.length !== 18) {
@@ -28,11 +28,11 @@ const validateContactoFields = (form) => {
   }
 
   if (celular && !PHONE_REGEX.test(celular)) {
-    contactoErrors.celular = 'El celular debe contener exactamente 10 digitos numericos.';
+    contactoErrors.celular = 'El celular debe contener exactamente 10 dígitos numéricos.';
   }
 
   if (telefono && !PHONE_REGEX.test(telefono)) {
-    contactoErrors.telefono = 'El telefono debe contener exactamente 10 digitos numericos.';
+    contactoErrors.telefono = 'El teléfono debe contener exactamente 10 dígitos numéricos.';
   }
 
   return contactoErrors;
@@ -41,14 +41,14 @@ const validateContactoFields = (form) => {
 const validatePassword = (value) => {
   const simbolosPermitidos = /[@#$%^&*()\-_=+[\]{}\\|;:'",<.>/?!.]/;
 
-  if (!value) return 'Contrasena invalida.';
+  if (!value) return 'Contraseña inválida.';
   if (value.length < 8 || value.length > 25) {
-    return 'La contrasena debe tener entre 8 y 25 caracteres.';
+    return 'La contraseña debe tener entre 8 y 25 caracteres.';
   }
-  if (!/[a-z]/.test(value)) return 'Debe incluir una letra minuscula.';
-  if (!/[A-Z]/.test(value)) return 'Debe incluir una letra mayuscula.';
-  if (!/[0-9]/.test(value)) return 'Debe incluir un digito.';
-  if (!simbolosPermitidos.test(value)) return 'Debe incluir un simbolo.';
+  if (!/[a-z]/.test(value)) return 'Debe incluir una letra minúscula.';
+  if (!/[A-Z]/.test(value)) return 'Debe incluir una letra mayúscula.';
+  if (!/[0-9]/.test(value)) return 'Debe incluir un dígito.';
+  if (!simbolosPermitidos.test(value)) return 'Debe incluir un símbolo.';
   return '';
 };
 
@@ -68,9 +68,9 @@ const getFieldErrors = (form, mode) => {
     const passwordError = validatePassword(form.contrasena);
     if (passwordError) errors.contrasena = passwordError;
     if (!form.repeatContrasena) {
-      errors.repeatContrasena = 'Repetir contrasena es requerido.';
+      errors.repeatContrasena = 'Repetir contraseña es requerido.';
     } else if (form.repeatContrasena !== form.contrasena) {
-      errors.repeatContrasena = 'Las contrasenas deben coincidir.';
+      errors.repeatContrasena = 'Las contraseñas deben coincidir.';
     }
   }
 
@@ -85,10 +85,10 @@ const validateUserForm = ({ form, mode, payload }) => {
 
   if (mode === VIEW_STATE.EDIT) {
     if (payload.rolId !== undefined && Number.isNaN(payload.rolId)) {
-      return { valid: false, errors: { form: 'Rol invalido.' }, cleanedData: null };
+      return { valid: false, errors: { form: 'Rol inválido.' }, cleanedData: null };
     }
     if (payload.estatus !== undefined && Number.isNaN(payload.estatus)) {
-      return { valid: false, errors: { form: 'Estatus invalido.' }, cleanedData: null };
+      return { valid: false, errors: { form: 'Estatus inválido.' }, cleanedData: null };
     }
   }
 

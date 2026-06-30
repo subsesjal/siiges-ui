@@ -1,9 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { render, screen } from '@testing-library/react';
 
+function ListTitleMock({ text }) {
+  return <span data-testid="list-title">{text}</span>;
+}
+ListTitleMock.propTypes = {
+  text: PropTypes.string.isRequired,
+};
+
+function ListSubtitleMock({ text }) {
+  return <span data-testid="list-subtitle">{text}</span>;
+}
+ListSubtitleMock.propTypes = {
+  text: PropTypes.string.isRequired,
+};
+
 jest.mock('@siiges-ui/shared', () => ({
-  ListTitle: ({ text }) => <span data-testid="list-title">{text}</span>,
-  ListSubtitle: ({ text }) => <span data-testid="list-subtitle">{text}</span>,
+  ListTitle: ListTitleMock,
+  ListSubtitle: ListSubtitleMock,
 }));
 
 // eslint-disable-next-line import/first
@@ -48,7 +63,7 @@ describe('UserProfileViewSections', () => {
     render(<UserProfileViewSections user={mockUser} />);
     expect(screen.getByText('Nombre')).toBeInTheDocument();
     expect(screen.getByText('RFC')).toBeInTheDocument();
-    expect(screen.getByText('Correo electronico')).toBeInTheDocument();
+    expect(screen.getByText('Correo electrónico')).toBeInTheDocument();
   });
 
   it('renders field values', () => {
