@@ -62,6 +62,7 @@ export default function UserPanel({
         ? {
           ...cleanedData,
           rolId: user?.rol?.id ?? cleanedData.rolId,
+          estatus: user?.estatus ?? cleanedData.estatus,
         }
         : cleanedData;
 

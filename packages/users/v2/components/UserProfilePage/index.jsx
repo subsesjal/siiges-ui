@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box,
@@ -22,7 +22,6 @@ export default function UserProfilePage() {
   const router = useRouter();
   const { session } = useAuth();
   const notify = useNotification();
-  const [profileUser, setProfileUser] = useState(null);
 
   const detailState = useUserDetail({
     session,
@@ -32,12 +31,6 @@ export default function UserProfilePage() {
   });
 
   useEffect(() => {
-    if (detailState.data) {
-      setProfileUser(detailState.data);
-    }
-  }, [detailState.data]);
-
-  useEffect(() => {
     if (detailState.error) {
       notify.error(
         detailState.error.message || 'No fue posible cargar el perfil.',
@@ -45,6 +38,7 @@ export default function UserProfilePage() {
     }
   }, [detailState.error, notify]);
 
+  const profileUser = detailState.data;
   const isInitialLoading = detailState.loading && !profileUser;
 
   if (isInitialLoading) {
