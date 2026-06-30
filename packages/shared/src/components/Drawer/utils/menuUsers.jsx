@@ -14,7 +14,8 @@ import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import SchoolIcon from '@mui/icons-material/School';
 // import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
-import LinkIcon from '@mui/icons-material/Link';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremiumOutlined';
+import { USERS_ROUTE } from '../../../constants/routes';
 
 const canViewAsignacionFolios = (rol, nombre) => {
   if (rol === 'admin' || rol === 'ce_sicyt') return true;
@@ -79,7 +80,7 @@ const panelMenuOptions = (rol, nombre) => {
         userId: 1,
         text: textPanelMenuOptions(rol).usuarios,
         icon: <GroupIcon />,
-        route: '/usuarios',
+        route: USERS_ROUTE,
         key: 'users',
       }]
       : []),
@@ -134,7 +135,7 @@ const panelMenuOptions = (rol, nombre) => {
       },
       {
         userId: 2,
-        text: 'Titulación',
+        text: 'Documentos Electrónicos',
         icon: <SchoolIcon />,
         type: 'dropdown',
         options: [
@@ -143,9 +144,17 @@ const panelMenuOptions = (rol, nombre) => {
             route: '/serviciosEscolares/egresados',
           },
           {
-            text: 'Catálogo de Títulos Electrónicos',
+            text: 'Catálogo de Títulos',
             route: '/serviciosEscolares/titulacion',
           },
+          ...((rol === 'admin' || (rol === 'representante' && nombre === 'josefina'))
+            ? [
+              {
+                text: 'Catálogo de Certificados',
+                route: '/serviciosEscolares/certificacion',
+              },
+            ]
+            : []),
         ],
         key: 'titulacion',
       },
@@ -154,7 +163,7 @@ const panelMenuOptions = (rol, nombre) => {
         ? [{
           userId: 2,
           text: 'Asignación de Folios',
-          icon: <LinkIcon />,
+          icon: <WorkspacePremiumIcon />,
           type: 'dropdown',
           options: [
             {
@@ -362,7 +371,12 @@ const findRoute = (path, rol, username) => {
   const usersMenu = panelMenuOptions(rol, username).filter(Boolean);
 
   let foundItem = usersMenu.find(
-    (item) => item?.route && item.route.startsWith(`/${wordSearch}`),
+    (item) => {
+      if (!item?.route) return false;
+
+      const routeSegment = item.route.replace('/', '');
+      return item.route.startsWith(`/${wordSearch}`) || wordSearch.startsWith(routeSegment);
+    },
   );
 
   if (!foundItem && usersMenu.length) {
