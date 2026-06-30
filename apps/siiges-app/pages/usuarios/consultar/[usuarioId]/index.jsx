@@ -5,6 +5,10 @@ import {
 import { UsuarioAvatar, UsuarioView } from '@siiges-ui/users';
 import { useRouter } from 'next/router';
 import Grid from '@mui/material/Grid';
+import { UserRoutePage } from '@siiges-ui/users/v2';
+import { config } from '../../../../lib/config/env';
+
+const USERS_VERSION = ['v1', 'v2'].includes(config.usersVersion) ? config.usersVersion : 'v1';
 
 export default function ConsultarUsuario() {
   const router = useRouter();
@@ -12,6 +16,10 @@ export default function ConsultarUsuario() {
   const [endpoint, setEndpoint] = useState();
 
   useEffect(() => {
+    if (USERS_VERSION === 'v2') {
+      return;
+    }
+
     if (session.rol !== 'admin' && session.rol !== 'representante') {
       router.back();
       return;
@@ -21,7 +29,11 @@ export default function ConsultarUsuario() {
       const { usuarioId } = router.query;
       setEndpoint(`api/v1/usuarios/${usuarioId}`);
     }
-  }, [router.isReady]);
+  }, [router.isReady, session]);
+
+  if (USERS_VERSION === 'v2') {
+    return <UserRoutePage mode="VIEW" />;
+  }
 
   const { data } = useApi({
     endpoint,
