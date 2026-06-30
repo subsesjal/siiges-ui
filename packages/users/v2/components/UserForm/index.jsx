@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Box, Button, Grid, Typography,
+  Box, Button, Grid, Stack, Typography,
 } from '@mui/material';
 import {
   BinarySelect,
@@ -33,8 +33,10 @@ export default function UserForm({
   onSubmit,
   onCancel,
   sessionRole,
+  topAction,
 }) {
   const isCreate = mode === VIEW_STATE.CREATE;
+  const isEdit = mode === VIEW_STATE.EDIT;
   const isView = mode === VIEW_STATE.VIEW;
   const title = MODE_TITLES[mode] || 'Formulario de usuario';
 
@@ -48,13 +50,28 @@ export default function UserForm({
     return [...roleOptions, { id: String(form.rolId), nombre: 'Rol actual' }];
   }, [form.rolId, sessionRole]);
 
+  let footerAction = null;
+  if (isView && !topAction) {
+    footerAction = <Button variant="outlined" onClick={onCancel}>Volver a tabla</Button>;
+  } else if (!isView) {
+    footerAction = (
+      <ButtonsForm
+        cancel={onCancel}
+        confirm={onSubmit}
+      />
+    );
+  }
+
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h6" sx={{ marginBottom: 2 }}>
-        {title}
-      </Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
+        <Typography variant="h6">
+          {title}
+        </Typography>
+        {topAction}
+      </Stack>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <Input
             label="Nombre(s)"
             id="nombre"
@@ -68,7 +85,7 @@ export default function UserForm({
             errorMessage={errors.nombre}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <Input
             label="Primer Apellido"
             id="apellidoPaterno"
@@ -82,7 +99,7 @@ export default function UserForm({
             errorMessage={errors.apellidoPaterno}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <Input
             label="Segundo Apellido"
             id="apellidoMaterno"
@@ -95,7 +112,7 @@ export default function UserForm({
             errorMessage={errors.apellidoMaterno}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <Select
             title="Rol"
             options={options}
@@ -103,7 +120,7 @@ export default function UserForm({
             name="rolId"
             value={form.rolId || ''}
             required
-            disabled={isView}
+            disabled={!isCreate}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.rolId}
@@ -124,7 +141,7 @@ export default function UserForm({
         </Grid>
         <Grid item xs={12} md={6}>
           <Input
-            label="Correo Electronico"
+            label="Correo Electrónico"
             id="correo"
             name="correo"
             auto="correo"
@@ -136,7 +153,7 @@ export default function UserForm({
             errorMessage={errors.correo}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <Input
             disabled={!isCreate || isView}
             label="Usuario"
@@ -150,10 +167,21 @@ export default function UserForm({
             errorMessage={errors.usuario}
           />
         </Grid>
-        {isCreate ? (
-          <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
+          <BinarySelect
+            title="Estatus del usuario"
+            options={STATUS_OPTIONS}
+            name="estatus"
+            value={form.estatus ?? 1}
+            onChange={onChange}
+            disabled={isView || isEdit}
+            required
+          />
+        </Grid>
+        {isCreate && (
+          <Grid item xs={12} md={3}>
             <InputPassword
-              label="Contrasena"
+              label="Contraseña"
               id="contrasena"
               name="contrasena"
               auto="contrasena"
@@ -163,21 +191,9 @@ export default function UserForm({
               errorMessage={errors.contrasena}
             />
           </Grid>
-        ) : (
-          <Grid item xs={12} md={6}>
-            <BinarySelect
-              title="Estatus del usuario"
-              options={STATUS_OPTIONS}
-              name="estatus"
-              value={form.estatus ?? 1}
-              onChange={onChange}
-              disabled={isView}
-              required
-            />
-          </Grid>
         )}
         {isCreate && (
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={3}>
             <InputPassword
               label="Repetir contrasena"
               id="repeatContrasena"
@@ -200,14 +216,7 @@ export default function UserForm({
         )}
       </Grid>
       <Box sx={{ marginTop: 2 }}>
-        {isView ? (
-          <Button variant="outlined" onClick={onCancel}>Volver a tabla</Button>
-        ) : (
-          <ButtonsForm
-            cancel={onCancel}
-            confirm={onSubmit}
-          />
-        )}
+        {footerAction}
       </Box>
     </Box>
   );
@@ -244,4 +253,9 @@ UserForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   sessionRole: PropTypes.string.isRequired,
+  topAction: PropTypes.node,
+};
+
+UserForm.defaultProps = {
+  topAction: null,
 };

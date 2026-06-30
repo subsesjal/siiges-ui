@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -9,7 +9,6 @@ import {
 import VIEW_STATE from '../../constants/viewState';
 import UserForm from '../UserForm';
 import useUserForm from '../../hooks/useUserForm';
-import RoleChangeConfirmDialog from '../RoleChangeConfirmDialog';
 import UsersSkeleton from '../UsersSkeleton';
 
 export default function UserPanel({
@@ -23,20 +22,20 @@ export default function UserPanel({
   onUpdate,
   onNotify,
   sessionRole,
+  sessionUserId,
 }) {
-  const [confirmOpen, setConfirmOpen] = useState(false);
   const {
     form,
     errors,
     handleChange,
     handleBlur,
     validate,
-    initialRoleId,
   } = useUserForm({ mode, initialUser: user, sessionRole });
 
   const isCreate = mode === VIEW_STATE.CREATE;
   const isEdit = mode === VIEW_STATE.EDIT;
   const isView = mode === VIEW_STATE.VIEW;
+  const isSelfEdit = isEdit && user?.id && String(user.id) === String(sessionUserId);
 
   const submitAction = async () => {
     if (actionLoading) {
@@ -59,7 +58,15 @@ export default function UserPanel({
     }
 
     if (isEdit && user?.id) {
-      await onUpdate(user.id, cleanedData);
+      const payload = isSelfEdit
+        ? {
+          ...cleanedData,
+          rolId: user?.rol?.id ?? cleanedData.rolId,
+          estatus: user?.estatus ?? cleanedData.estatus,
+        }
+        : cleanedData;
+
+      await onUpdate(user.id, payload);
     }
   };
 
@@ -68,16 +75,6 @@ export default function UserPanel({
       return;
     }
 
-    if (isEdit && String(initialRoleId || '') !== String(form.rolId || '')) {
-      setConfirmOpen(true);
-      return;
-    }
-
-    submitAction();
-  };
-
-  const handleConfirm = () => {
-    setConfirmOpen(false);
     submitAction();
   };
 
@@ -95,15 +92,12 @@ export default function UserPanel({
     );
   }
 
+  const topAction = !isCreate
+    ? <Button variant="outlined" onClick={onClose}>Volver a tabla</Button>
+    : null;
+
   return (
     <Box sx={{ paddingTop: 1 }}>
-      <Stack direction="row" justifyContent="space-between" sx={{ paddingX: 2, paddingBottom: 1 }}>
-        <Typography variant="h6">
-          {isView ? 'Consultar usuario' : 'Formulario de usuario'}
-        </Typography>
-        {!isView && <Button variant="outlined" onClick={onClose}>Volver a tabla</Button>}
-      </Stack>
-
       {(mode === VIEW_STATE.CREATE || mode === VIEW_STATE.EDIT) && (
         <UserForm
           mode={mode}
@@ -114,6 +108,7 @@ export default function UserPanel({
           onSubmit={handleSubmit}
           onCancel={onClose}
           sessionRole={sessionRole}
+          topAction={topAction}
         />
       )}
 
@@ -127,6 +122,7 @@ export default function UserPanel({
           onSubmit={handleSubmit}
           onCancel={onClose}
           sessionRole={sessionRole}
+          topAction={topAction}
         />
       )}
 
@@ -135,12 +131,6 @@ export default function UserPanel({
           <Typography variant="body2">No hay informacion para mostrar.</Typography>
         </Stack>
       )}
-
-      <RoleChangeConfirmDialog
-        open={confirmOpen}
-        onCancel={() => setConfirmOpen(false)}
-        onConfirm={handleConfirm}
-      />
     </Box>
   );
 }
@@ -149,6 +139,7 @@ UserPanel.propTypes = {
   mode: PropTypes.string.isRequired,
   user: PropTypes.shape({
     id: PropTypes.number,
+    estatus: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     rol: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
@@ -165,10 +156,12 @@ UserPanel.propTypes = {
     error: PropTypes.func.isRequired,
   }).isRequired,
   sessionRole: PropTypes.string.isRequired,
+  sessionUserId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 UserPanel.defaultProps = {
   user: null,
   error: null,
   actionLoading: false,
+  sessionUserId: null,
 };
