@@ -65,8 +65,12 @@ import BusquedaAlumnosTable from './Components/Alumnos/BusquedaAlumnos/Table';
 import HistorialAcademico from './Components/Alumnos/AlumnosHistorial/index';
 import MatriculaActivaForm from './Components/Reporte/MatriculaActivaForm/index';
 import MatriculaActivaTable from './Components/Reporte/MatriculaActivaTable/index';
+import AlumnosInactivosForm from './Components/Reporte/AlumnosInactivosForm/index';
+import AlumnosInactivosTable from './Components/Reporte/AlumnosInactivosTable/index';
 
 export {
+  AlumnosInactivosForm,
+  AlumnosInactivosTable,
   BusquedaAlumnosForm,
   BusquedaAlumnosTable,
   HistorialAcademico,
