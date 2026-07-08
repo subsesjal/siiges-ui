@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActionButtons } from '@siiges-ui/shared';
 
-const commonColumns = () => [
+const commonColumns = (showModal) => [
   { field: 'nombre', headerName: 'Nombre', width: 200 },
   { field: 'usuario', headerName: 'Usuario', width: 130 },
   { field: 'correo', headerName: 'Correo', width: 200 },
@@ -22,6 +22,7 @@ const commonColumns = () => [
         id={params.id}
         editar={`/usuarios/editar/${params.id}`}
         consultar={`/usuarios/consultar/${params.id}`}
+        eliminar={() => showModal(params)}
       />
     ),
     sortable: false,
