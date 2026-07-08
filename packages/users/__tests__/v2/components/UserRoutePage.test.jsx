@@ -32,11 +32,17 @@ mockUserPanel.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-function mockLayout({ children }) {
-  return <div>{children}</div>;
+function mockLayout({ title, children }) {
+  return (
+    <div>
+      <span>{title}</span>
+      {children}
+    </div>
+  );
 }
 
 mockLayout.propTypes = {
+  title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
 };
 
@@ -106,16 +112,19 @@ describe('UserRoutePage', () => {
   it('renders VIEW mode without crashing', () => {
     const { container } = render(<UserRoutePage mode="VIEW" />);
     expect(container).toBeTruthy();
+    expect(screen.getByText('Consultar usuario')).toBeInTheDocument();
   });
 
   it('renders CREATE mode without crashing', () => {
     const { container } = render(<UserRoutePage mode="CREATE" />);
     expect(container).toBeTruthy();
+    expect(screen.getByText('Agregar usuario')).toBeInTheDocument();
   });
 
   it('renders EDIT mode without crashing', () => {
     const { container } = render(<UserRoutePage mode="EDIT" />);
     expect(container).toBeTruthy();
+    expect(screen.getByText('Modificar usuario')).toBeInTheDocument();
   });
 
   it('shows the loading state when session is not ready', () => {

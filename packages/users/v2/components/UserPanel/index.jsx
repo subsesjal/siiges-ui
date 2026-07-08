@@ -92,10 +92,6 @@ export default function UserPanel({
     );
   }
 
-  const topAction = !isCreate
-    ? <Button variant="outlined" onClick={onClose}>Volver a tabla</Button>
-    : null;
-
   return (
     <Box sx={{ paddingTop: 1 }}>
       {(mode === VIEW_STATE.CREATE || mode === VIEW_STATE.EDIT) && (
@@ -108,7 +104,6 @@ export default function UserPanel({
           onSubmit={handleSubmit}
           onCancel={onClose}
           sessionRole={sessionRole}
-          topAction={topAction}
         />
       )}
 
@@ -122,7 +117,6 @@ export default function UserPanel({
           onSubmit={handleSubmit}
           onCancel={onClose}
           sessionRole={sessionRole}
-          topAction={topAction}
         />
       )}
 
