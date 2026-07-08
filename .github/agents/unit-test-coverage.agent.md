@@ -22,6 +22,31 @@ Execution policy:
 4. Execute related tests, then coverage commands for impacted packages.
 5. Return concise report with files changed, tests added, and coverage delta.
 
+Critical guardrails from recurring failures:
+- Jest factory scope safety:
+	- Do not close over non-local variables in `jest.mock()` factories.
+	- Prefer `jest.mock('x', () => jest.fn())` plus `jest.requireMock('x')` for setup.
+	- For module objects, export inline `jest.fn()` methods and capture them with `jest.requireMock`.
+- ESLint-safe test mocks:
+	- Add `propTypes` to mock React components that accept props.
+	- Add `defaultProps` for optional props when required by lint rules.
+	- Avoid JSX prop spreading when lint forbids it.
+	- Keep object formatting and line lengths lint-compliant.
+- Branch-coverage minimum checklist for UI containers:
+	- loading state
+	- error state
+	- empty/null data state
+	- permission denied state
+	- happy-path submit
+	- validation failure path
+	- cancel/back navigation path
+
+Command order (must follow):
+1. Run related tests first.
+2. Run lint on touched tests.
+3. Run related coverage.
+4. Escalate to package-level coverage only when needed.
+
 Quality bar:
 - Stable tests without time/network flakiness.
 - Clear names in Given-When-Then style.
