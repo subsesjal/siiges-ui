@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Box, Button, Grid, Stack, Typography,
+  Box, Grid, Stack, Typography,
 } from '@mui/material';
 import {
   BinarySelect,
@@ -19,9 +19,9 @@ const STATUS_OPTIONS = [
 ];
 
 const MODE_TITLES = {
-  [VIEW_STATE.CREATE]: 'Crear usuario',
-  [VIEW_STATE.VIEW]: 'Consultar usuario',
-  [VIEW_STATE.EDIT]: 'Editar usuario',
+  [VIEW_STATE.CREATE]: 'Datos del usuario',
+  [VIEW_STATE.VIEW]: 'Datos del usuario',
+  [VIEW_STATE.EDIT]: 'Datos del usuario',
 };
 
 export default function UserForm({
@@ -51,9 +51,16 @@ export default function UserForm({
   }, [form.rolId, sessionRole]);
 
   let footerAction = null;
-  if (isView && !topAction) {
-    footerAction = <Button variant="outlined" onClick={onCancel}>Volver a tabla</Button>;
-  } else if (!isView) {
+  if (isView) {
+    footerAction = (
+      <ButtonsForm
+        cancel={onCancel}
+        confirm={onSubmit}
+        confirmDisabled
+        cancelText="Regresar"
+      />
+    );
+  } else {
     footerAction = (
       <ButtonsForm
         cancel={onCancel}
