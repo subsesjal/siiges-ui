@@ -202,6 +202,10 @@ const panelMenuOptions = (rol, nombre) => {
               text: 'Matrícula Activa',
               route: '/serviciosEscolares/reporte/matriculaActiva',
             },
+            {
+              text: 'Alumnos Inactivos',
+              route: '/serviciosEscolares/reporte/alumnosInactivos',
+            },
           ],
           key: 'reporte',
         }]
