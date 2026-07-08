@@ -202,7 +202,7 @@ export default function UserForm({
         {isCreate && (
           <Grid item xs={12} md={3}>
             <InputPassword
-              label="Repetir contrasena"
+              label="Repetir contraseña"
               id="repeatContrasena"
               name="repeatContrasena"
               auto="repeatContrasena"
@@ -216,7 +216,7 @@ export default function UserForm({
         {isCreate && (
           <Grid item xs={12}>
             <Typography variant="body2" color="text.secondary">
-              La contrasena debe contener entre 8 y 25 caracteres, al menos una letra minuscula,
+              La contraseña debe contener entre 8 y 25 caracteres, al menos una letra minuscula,
               una mayuscula, un digito y un simbolo.
             </Typography>
           </Grid>
