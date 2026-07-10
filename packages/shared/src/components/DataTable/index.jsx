@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Grid, IconButton, TextField, Typography,
+  Grid, IconButton, TextField, Typography, Stack, Button as MuiButton,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { DataGrid, esES } from '@mui/x-data-grid';
 import Button from '../Buttons/Button';
 
@@ -16,6 +17,8 @@ function DataTable({
   buttonDisabled = false,
   buttonClick,
   buttonType,
+  onReloadClick,
+  buttonReloadDisabled = false,
   initialState,
 }) {
   const [searchText, setSearchText] = useState('');
@@ -67,13 +70,37 @@ function DataTable({
     <>
       <Grid container alignItems="center" spacing={2}>
         <Grid item xs={9} sx={{ mt: 2 }}>
-          {buttonAdd ? (
-            <Button
-              onClick={buttonClick}
-              disabled={buttonDisabled}
-              text={buttonText}
-              type={buttonType}
-            />
+          {buttonAdd || onReloadClick ? (
+            <Stack
+              direction="row"
+              spacing={1.5}
+              alignItems="center"
+              sx={{
+                '& > .MuiGrid-container': {
+                  width: 'auto',
+                },
+              }}
+            >
+              {buttonAdd && (
+                <Button
+                  onClick={buttonClick}
+                  disabled={buttonDisabled}
+                  text={buttonText}
+                  type={buttonType}
+                />
+              )}
+              {onReloadClick && (
+                <MuiButton
+                  variant="text"
+                  onClick={onReloadClick}
+                  disabled={buttonReloadDisabled}
+                  startIcon={<RefreshIcon />}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Actualizar
+                </MuiButton>
+              )}
+            </Stack>
           ) : (
             <Typography variant="h6">
               {title}
@@ -125,6 +152,8 @@ DataTable.defaultProps = {
   buttonDisabled: false,
   buttonText: '',
   buttonType: '',
+  onReloadClick: null,
+  buttonReloadDisabled: false,
   initialState: { sorting: { sortModel: [{ field: 'id', sort: 'asc' }] } },
   buttonClick: () => {},
 };
@@ -154,6 +183,8 @@ DataTable.propTypes = {
   buttonText: PropTypes.string,
   buttonType: PropTypes.string,
   buttonClick: PropTypes.func,
+  onReloadClick: PropTypes.func,
+  buttonReloadDisabled: PropTypes.bool,
 };
 
 export default React.memo(DataTable);

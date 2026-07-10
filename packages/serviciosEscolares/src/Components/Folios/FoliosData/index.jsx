@@ -123,6 +123,7 @@ export default function FoliosData({ type }) {
     programaId: '',
     fecha: dayjs(),
   });
+  const [observaciones, setObservaciones] = useState('');
 
   const selectedAlumno = rows.find((row) => row.id === alumnoToDelete);
 
@@ -184,6 +185,7 @@ export default function FoliosData({ type }) {
           }
 
           response = await getData({ endpoint: `/solicitudesFolios/${editId}` });
+          setObservaciones(response.data.observaciones || '');
           const institucionIdSolicitud = response.data?.programa?.plantel?.institucionId;
 
           if (institucionIdSolicitud) {
@@ -301,9 +303,9 @@ export default function FoliosData({ type }) {
                 name: `${alumno.alumno.persona.nombre} ${alumno.alumno.persona.apellidoPaterno} ${alumno.alumno.persona.apellidoMaterno}`,
                 numeroFolioActa: alumno.folioActa || '',
                 matricula: alumno.alumno.matricula,
-                fechaTerminacion: dayjs(alumno.fechaTerminacion).format('DD/MM/YYYY'),
+                fechaTerminacion: alumno.fechaTerminacion || 'N/A',
                 fechaRegistro: dayjs(alumno.fechaRegistro).format('DD/MM/YYYY'),
-                fechaInicio: dayjs(alumno.fechaInicio).format('DD/MM/YYYY'),
+                fechaInicio: alumno.fechaInicio || 'N/A',
                 fundamento: fundamentoObj ? fundamentoObj.nombre : 'Desconocido',
                 folio: alumno.folioDocumentoAlumno?.folioDocumento,
                 foja: alumno.folioDocumentoAlumno?.foja?.nombre,
@@ -420,15 +422,8 @@ export default function FoliosData({ type }) {
       }
       if (response.data?.url) {
         window.open(response.data.url, '_blank');
-        // Actualizar rows para quitar el botón de PDF de este alumno
-        setRows((prevRows) => prevRows.map((row) => (row.folioDocumentoAlumnoId === alumnoId
-          ? { ...row, fechaExpedicionPdf: new Date().toISOString() }
-          : row)));
       } else if (typeof response.data === 'string') {
         window.open(response.data, '_blank');
-        setRows((prevRows) => prevRows.map((row) => (row.folioDocumentoAlumnoId === alumnoId
-          ? { ...row, fechaExpedicionPdf: new Date().toISOString() }
-          : row)));
       } else {
         setNoti({ open: true, message: 'No se pudo obtener el PDF', type: 'error' });
       }
@@ -551,8 +546,22 @@ export default function FoliosData({ type }) {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
+  const handleObservacionesChange = (event) => {
+    setObservaciones(event.target.value);
+  };
+
   const estaEnModoFirma = estatus === 6 || estatus === 7;
   const estaEnProcesoFirma = [3, 8, 9, 10, 11].includes(estatus);
+
+  const tieneCamposCompletos = Boolean(
+    String(formData.estadoCuenta || '').trim()
+    && String(formData.folioPago || '').trim()
+    && String(formData.claveInstitucionDGP || '').trim()
+    && String(formData.claveCarreraDGP || '').trim(),
+  );
+  const tieneReciboPago = Boolean(url);
+  const tieneAlumnos = Array.isArray(alumnosData) && alumnosData.length > 0;
+  const puedeEnviarSolicitud = tieneCamposCompletos && tieneReciboPago && tieneAlumnos;
 
   const alumnosPendientesFirmaIes = Array.isArray(alumnosData)
     ? alumnosData.filter((alumno) => {
@@ -610,6 +619,7 @@ export default function FoliosData({ type }) {
     { field: 'name', headerName: 'Nombre', width: 250 },
     { field: 'matricula', headerName: 'Matrícula', width: 200 },
     { field: 'fechaRegistro', headerName: 'Fecha de Elaboración', width: 180 },
+    { field: 'fechaInicio', headerName: 'Fecha de Inicio', width: 180 },
     { field: 'fechaTerminacion', headerName: 'Fecha de Terminación', width: 180 },
     { field: 'estadoFirmaIes', headerName: 'Estatus Firma IES', width: 170 },
     { field: 'estadoFirmaSicyt', headerName: 'Estatus Firma SICYT', width: 170 },
@@ -620,7 +630,6 @@ export default function FoliosData({ type }) {
       renderCell: (params) => {
         const firmaIesExitosa = params.row.estadoFirmaIes === 'EXITOSO';
         const firmaSicytExitosa = params.row.estadoFirmaSicyt === 'EXITOSO';
-        const yaDescargoPdf = !!params.row.fechaExpedicionPdf;
         const puedeVerPdf = firmaIesExitosa
           && firmaSicytExitosa
           && params.row.folioDocumentoAlumnoId;
@@ -633,13 +642,6 @@ export default function FoliosData({ type }) {
               </IconButton>
             </Tooltip>
             {status !== 'consult' && !estaEnModoFirma && (
-            <Tooltip title="Editar" placement="top">
-              <IconButton onClick={() => handleEditFn(params.row.id)}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-            )}
-            {status !== 'consult' && !estaEnModoFirma && (
             <Tooltip title="Eliminar alumno" placement="top">
               <IconButton onClick={() => handleDeleteFn(params.row.id)}>
                 <DeleteIcon />
@@ -647,12 +649,11 @@ export default function FoliosData({ type }) {
             </Tooltip>
             )}
             {puedeVerPdf && (
-            <Tooltip title={yaDescargoPdf ? 'Ya se generó este PDF' : 'Generar PDF'} placement="top">
+            <Tooltip title="Ver PDF" placement="top">
               <span>
                 <IconButton
                   onClick={() => handleGenerarPDF(params.row.folioDocumentoAlumnoId)}
-                  color={yaDescargoPdf ? 'default' : 'primary'}
-                  disabled={yaDescargoPdf}
+                  color="primary"
                 >
                   <PictureAsPdfIcon />
                 </IconButton>
@@ -805,6 +806,21 @@ export default function FoliosData({ type }) {
         </Grid>
       )}
 
+      {estatus === 4 && (
+      <Grid item xs={12}>
+        <Input
+          id="observaciones"
+          name="observaciones"
+          label="Observaciones"
+          multiline
+          rows={4}
+          value={observaciones}
+          onChange={handleObservacionesChange}
+          disabled
+        />
+      </Grid>
+      )}
+
       <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid item xs={12}>
           {formData.estatusSolicitudFolioId === 2 ? (
@@ -837,6 +853,7 @@ export default function FoliosData({ type }) {
                       save={handleConfirm}
                       send={handleSend}
                       disabled={status === 'consult'}
+                      disabledSend={!puedeEnviarSolicitud}
                       saved={isSaved}
                       alumnos={alumnosData}
                     />

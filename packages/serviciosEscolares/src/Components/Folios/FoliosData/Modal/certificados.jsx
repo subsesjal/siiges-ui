@@ -1,7 +1,7 @@
 import { Grid, Checkbox, Typography } from '@mui/material';
 import {
   ButtonSimple, DefaultModal, InputDate, DataTable, LabelData,
-  createRecord, getData, updateRecord, useUI,
+  createRecord, getData, useUI,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -37,14 +37,12 @@ export default function ModalCertificado({
   const { setNoti, setLoading } = useUI();
 
   const isCreateMode = type === 'create';
-  const isEditMode = type === 'edit';
   const isConsultMode = type === 'consult';
   const isDisabled = disabled || isConsultMode;
 
   const alumnosAgregadosIds = alumnosAgregados.map((a) => a.alumnoId);
 
   const getModalTitle = () => {
-    if (isEditMode) return 'Editar Alumno';
     if (isConsultMode) return 'Consultar Alumno';
     return 'Agregar Alumnos';
   };
@@ -77,11 +75,19 @@ export default function ModalCertificado({
   }, [open, type, programaId]);
 
   useEffect(() => {
-    if (open && (isEditMode || isConsultMode) && rowData) {
+    if (open && isConsultMode && rowData) {
+      let fechaTerminacionISO = '';
+      if (rowData.fechaTerminacion) {
+        const parsed = dayjs(rowData.fechaTerminacion, 'DD/MM/YYYY');
+        if (parsed.isValid()) {
+          fechaTerminacionISO = parsed.format('YYYY-MM-DD');
+        }
+      }
+
       setForm({
         id: rowData.id,
-        fechaTerminacion: rowData.fechaTerminacion || '',
-        fechaExpedicion: rowData.fechaExpedicion || '',
+        fechaTerminacion: fechaTerminacionISO,
+        fechaExpedicion: rowData.estadoFirma?.fechaExpedicion || '',
       });
 
       if (rowData.alumno?.persona) {
@@ -138,20 +144,10 @@ export default function ModalCertificado({
       return;
     }
 
-    if (!form.fechaTerminacion) {
-      setNoti({
-        open: true,
-        message: 'Debe ingresar la fecha de terminación',
-        type: 'warning',
-      });
-      return;
-    }
-
     setLoading(true);
 
     const payload = selectedAlumnos.map((alumnoId) => ({
       alumnoId,
-      fechaTerminacion: dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ'),
     }));
 
     try {
@@ -203,53 +199,8 @@ export default function ModalCertificado({
     }
   };
 
-  const handleConfirmEdit = async () => {
-    setLoading(true);
-
-    const formattedForm = {
-      fechaTerminacion: form.fechaTerminacion
-        ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
-        : null,
-    };
-
-    try {
-      const response = await updateRecord({
-        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${form.id}`,
-        data: formattedForm,
-      });
-
-      if (response.statusCode === 200) {
-        setNoti({
-          open: true,
-          message: 'Registro actualizado exitosamente',
-          type: 'success',
-        });
-        setAlumnoResponse(true);
-        setOpen(false);
-      } else {
-        setNoti({
-          open: true,
-          message: 'Error al actualizar el registro',
-          type: 'error',
-        });
-      }
-    } catch (error) {
-      setNoti({
-        open: true,
-        message: `Error: ${error.message}`,
-        type: 'error',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleConfirm = () => {
-    if (isCreateMode) {
-      handleConfirmCreate();
-    } else if (isEditMode) {
-      handleConfirmEdit();
-    }
+    handleConfirmCreate();
   };
 
   const handleCancel = () => {
@@ -293,44 +244,26 @@ export default function ModalCertificado({
     situacion: alumno.situacion?.nombre || 'Sin situación',
   }));
 
-  const isConfirmDisabledCreate = isDisabled
-    || selectedAlumnos.length === 0
-    || !form.fechaTerminacion;
-
-  const isConfirmDisabledEdit = isDisabled || !form.fechaTerminacion;
+  const isConfirmDisabledCreate = isDisabled || selectedAlumnos.length === 0;
 
   return (
     <DefaultModal title={getModalTitle()} open={open} setOpen={setOpen} size={isCreateMode ? 'lg' : 'md'}>
       <Grid container spacing={2}>
         {isCreateMode && (
-          <>
-            <Grid item xs={12}>
-              <InputDate
-                label="Fecha de terminación plan de estudios"
-                id="fechaTerminacion"
-                name="fechaTerminacion"
-                type="datetime"
-                value={form.fechaTerminacion}
-                onChange={handleChange}
-                required
-                disabled={isDisabled}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="subtitle1">
-                {`Alumnos disponibles: ${alumnos.length} | Seleccionados: ${selectedAlumnos.length}`}
-              </Typography>
-              <DataTable
-                rows={rows}
-                columns={columns}
-                loading={loadingAlumnos}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 25]}
-              />
-            </Grid>
-          </>
+          <Grid item xs={12}>
+            <Typography variant="subtitle1">
+              {`Alumnos disponibles: ${alumnos.length} | Seleccionados: ${selectedAlumnos.length}`}
+            </Typography>
+            <DataTable
+              rows={rows}
+              columns={columns}
+              loading={loadingAlumnos}
+              pageSize={5}
+              rowsPerPageOptions={[5, 10, 25]}
+            />
+          </Grid>
         )}
-        {(isEditMode || isConsultMode) && (
+        {(isConsultMode) && (
           <>
             <Grid item xs={12}>
               <LabelData title="Matrícula" subtitle={rowData?.alumno?.matricula || ''} />
@@ -338,6 +271,7 @@ export default function ModalCertificado({
             <Grid item xs={12}>
               <LabelData title="Alumno" subtitle={alumnoNombre} />
             </Grid>
+            {form.fechaExpedicion && (
             <Grid item xs={6}>
               <InputDate
                 label="Fecha de elaboración de certificado"
@@ -348,7 +282,8 @@ export default function ModalCertificado({
                 disabled
               />
             </Grid>
-            <Grid item xs={6}>
+            )}
+            <Grid item xs={form.fechaExpedicion ? 6 : 12}>
               <InputDate
                 label="Fecha de terminación plan de estudios"
                 id="fechaTerminacion"
@@ -373,7 +308,7 @@ export default function ModalCertificado({
                   text={isCreateMode ? 'Agregar Alumnos' : 'Guardar'}
                   design="guardar"
                   onClick={handleConfirm}
-                  disabled={isCreateMode ? isConfirmDisabledCreate : isConfirmDisabledEdit}
+                  disabled={isConfirmDisabledCreate}
                 />
               </Grid>
             )}
@@ -409,7 +344,9 @@ ModalCertificado.propTypes = {
     id: PropTypes.number,
     alumnoId: PropTypes.number,
     fechaTerminacion: PropTypes.string,
-    fechaExpedicion: PropTypes.string,
+    estadoFirma: PropTypes.shape({
+      fechaExpedicion: PropTypes.string,
+    }),
     alumno: PropTypes.shape({
       id: PropTypes.number,
       matricula: PropTypes.string,

@@ -11,6 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Link from 'next/link';
 import { useAuth, useUser } from '@siiges-ui/shared';
+import { USERS_PROFILE_ROUTE } from '../../constants/routes';
 import setHandler from '../../utils/handlers/set-anchor';
 import StyledBadge from '../../styles/Navbar/MenuNavbarStyle';
 
@@ -79,7 +80,7 @@ export default function MenuNavbar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Link href="/usuarios/perfilUsuario">
+        <Link href={USERS_PROFILE_ROUTE}>
           <MenuItem>
             <Avatar
               alt={session.nombre}

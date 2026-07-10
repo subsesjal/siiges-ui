@@ -16,6 +16,7 @@ import Grupos from './Components/Programas/ProgramasSections/Grupos';
 import Reglas from './Components/Programas/ProgramasSections/Reglas';
 import getAsignaturaById from './Components/utils/getAsignaturaById';
 import TitulacionTable from './Components/Titulacion/titulacionTable';
+import CertificadosTable from './Components/Certificacion/CertificadosTable';
 import ModalTitulo from './Components/Folios/FoliosData/Modal/titulos';
 import ValidacionForm from './Components/Validacion/ValidacionForm/index';
 import InscripcionForm from './Components/Inscripciones/InscripcionesForm';
@@ -54,6 +55,7 @@ import DocumentosAlumnoTitulacion from './Components/Titulacion/FormAlumno/Docum
 import Titulacion from './Components/Titulacion/FormAlumno/titulacion';
 import FormFoliosAsignados from './Components/FoliosAsignados/FormFoliosAsignados';
 import TitulosForm from './Components/Titulacion/TitulosForm/index';
+import CertificadosForm from './Components/Certificacion/CertificadosForm/index';
 import TitulosTable from './Components/Titulacion/catalogoTitulosTable';
 import catalogoTitulos from './Tables/catalogoTitulosTable';
 import AlumnosData from './Components/Alumnos/AlumnosData';
@@ -67,9 +69,19 @@ import ReimpresionTituloPrivate from './Components/Titulacion/ReimpresionTitulo/
 export {
   ReimpresionTituloPublic,
   ReimpresionTituloPrivate,
+import MatriculaActivaForm from './Components/Reporte/MatriculaActivaForm/index';
+import MatriculaActivaTable from './Components/Reporte/MatriculaActivaTable/index';
+import AlumnosInactivosForm from './Components/Reporte/AlumnosInactivosForm/index';
+import AlumnosInactivosTable from './Components/Reporte/AlumnosInactivosTable/index';
+
+export {
+  AlumnosInactivosForm,
+  AlumnosInactivosTable,
   BusquedaAlumnosForm,
   BusquedaAlumnosTable,
   HistorialAcademico,
+  MatriculaActivaForm,
+  MatriculaActivaTable,
   ExpedienteAlumno,
   catalogoTitulos,
   TitulosTable,
@@ -102,6 +114,8 @@ export {
   CiclosEscolares,
   ValidacionTable,
   TitulacionTable,
+  CertificadosTable,
+  CertificadosForm,
   BecasComponents,
   DatosInstitucion,
   ModalCertificado,

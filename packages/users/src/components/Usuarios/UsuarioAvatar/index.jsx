@@ -10,12 +10,18 @@ import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
+const AVATAR_SIZE = 220;
+const DEFAULT_AVATAR_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220"><circle cx="110" cy="110" r="110" fill="#E5E7EB"/><circle cx="110" cy="85" r="42" fill="#9CA3AF"/><path d="M35 197c15-36 43-55 75-55s60 19 75 55" fill="#9CA3AF"/></svg>',
+)}`;
+
 export default function UsuarioAvatar({ usuario }) {
   const { session } = useAuth();
   const { avatarUrl, refreshAvatar } = useUser();
 
   const { persona = undefined, rol = undefined } = usuario || {};
   const fullName = `${persona?.nombre} ${persona?.apellidoPaterno} ${persona?.apellidoMaterno}`;
+  const avatarSrc = avatarUrl || DEFAULT_AVATAR_SVG;
   const [selectedFile, setSelectedFile] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const fileInputRef = useRef(null);
@@ -49,65 +55,101 @@ export default function UsuarioAvatar({ usuario }) {
     setOpenModal(false);
   };
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarKeyDown = (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleAvatarClick();
+    }
+  };
+
   return (
     <>
-      <div style={{ position: 'relative', width: '300px', height: '300px' }}>
-        {avatarUrl ? (
-          <Image
-            alt="avatar"
-            src={avatarUrl}
-            quality={100}
-            width="300px"
-            height="300px"
-            style={{
-              zIndex: 1,
-              overflow: 'hidden',
-              position: 'relative',
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              width: '300px',
-              height: '300px',
-              backgroundColor: '#ccc',
-              zIndex: 1,
-              overflow: 'hidden',
-              position: 'relative',
-            }}
-          >
-            <span>Imagen no disponible</span>
-          </div>
-        )}
-        <Tooltip title="Agregar Imagen" placement="top">
+      <Tooltip title="Agregar Imagen" placement="top">
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="Agregar Imagen"
+          onClick={handleAvatarClick}
+          onKeyDown={handleAvatarKeyDown}
+          style={{
+            position: 'relative',
+            width: `${AVATAR_SIZE}px`,
+            height: `${AVATAR_SIZE}px`,
+            borderRadius: '50%',
+            overflow: 'hidden',
+            border: '1px solid #E5E7EB',
+            cursor: 'pointer',
+          }}
+        >
+          {avatarUrl ? (
+            <Image
+              alt="avatar"
+              src={avatarUrl}
+              quality={100}
+              width={AVATAR_SIZE}
+              height={AVATAR_SIZE}
+              style={{
+                zIndex: 1,
+                objectFit: 'cover',
+              }}
+            />
+          ) : (
+            <img
+              alt="avatar"
+              src={avatarSrc}
+              width={AVATAR_SIZE}
+              height={AVATAR_SIZE}
+              style={{
+                zIndex: 1,
+                objectFit: 'cover',
+                width: `${AVATAR_SIZE}px`,
+                height: `${AVATAR_SIZE}px`,
+                display: 'block',
+              }}
+            />
+          )}
           <IconButton
-            onClick={() => fileInputRef.current.click()}
+            onClick={(event) => {
+              event.stopPropagation();
+              handleAvatarClick();
+            }}
             sx={{
               position: 'absolute',
-              top: '255px',
-              right: '10px',
+              bottom: 10,
+              right: 10,
               zIndex: 2,
-              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              border: '1px solid',
+              borderColor: 'grey.300',
+              borderRadius: '50%',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 1)',
+              },
             }}
             size="small"
           >
             <PhotoCameraIcon />
           </IconButton>
-        </Tooltip>
+        </div>
+      </Tooltip>
 
-        <input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: 'none' }}
-          onChange={handleFileChange}
-        />
-      </div>
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        accept="image/*"
+        onChange={handleFileChange}
+      />
 
       <Paper
         sx={{
           padding: 2,
           marginTop: 3,
-          width: 300,
+          width: AVATAR_SIZE,
           textAlign: 'center',
         }}
       >
