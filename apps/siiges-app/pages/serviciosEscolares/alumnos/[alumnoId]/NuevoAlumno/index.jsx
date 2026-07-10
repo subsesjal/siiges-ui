@@ -2,7 +2,11 @@ import { Grid, Tab, Tabs } from '@mui/material';
 import { getInstitucionUsuario } from '@siiges-ui/instituciones';
 import { DocumentosAlumno, FormAlumno } from '@siiges-ui/serviciosescolares';
 import {
-  getParentUserById, Layout, useAuth, useUI,
+  getData,
+  getParentUserById,
+  Layout,
+  useAuth,
+  useUI,
 } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -16,6 +20,12 @@ export default function NuevoAlumno() {
   const [value, setValue] = useState(0);
   const [id, setId] = useState();
   const [usuarioId, setUsuarioId] = useState(null);
+
+  const { alumnoId: programaId } = router.query;
+
+  const isAdmin = session?.rol === 'admin';
+  const [isAuthorized, setIsAuthorized] = useState(isAdmin);
+  const [checkingAuth, setCheckingAuth] = useState(!isAdmin);
 
   const handleChange = (event, newValue) => {
     if (newValue === 1 && !id) return;
@@ -43,7 +53,7 @@ export default function NuevoAlumno() {
   }, [loading]);
 
   useEffect(() => {
-    if (!institucion?.id) return;
+    if (isAdmin || !institucion?.id) return;
 
     const institucionId = parseInt(institucion.id, 10);
     if (Number.isNaN(institucionId)) return;
@@ -51,19 +61,53 @@ export default function NuevoAlumno() {
     if (institucionId === RESTRICTED_INSTITUCION_ID) {
       router.back();
     }
-  }, [institucion?.id]);
+  }, [institucion?.id, isAdmin]);
 
-  if (loading) return null;
-  if (institucion && parseInt(institucion.id, 10) === RESTRICTED_INSTITUCION_ID) return null;
+  useEffect(() => {
+    if (isAdmin) return;
+    if (!router.isReady) return;
+    if (!programaId) return;
+
+    let cancelled = false;
+
+    const verificarAutorizacion = async () => {
+      setCheckingAuth(true);
+
+      const response = await getData({ endpoint: `/programas/${programaId}` });
+
+      if (cancelled) return;
+
+      const autorizado = response?.data?.permisoAlumno === true;
+
+      if (!autorizado) {
+        router.push('/serviciosEscolares/alumnos');
+        return;
+      }
+
+      setIsAuthorized(true);
+      setCheckingAuth(false);
+    };
+
+    verificarAutorizacion();
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      cancelled = true;
+    };
+  }, [isAdmin, router.isReady, programaId]);
+
+  if (loading || checkingAuth) return null;
+  if (!isAuthorized) return null;
+  if (
+    institucion
+    && parseInt(institucion.id, 10) === RESTRICTED_INSTITUCION_ID
+    && !isAdmin
+  ) return null;
 
   return (
     <Layout title="Agregar Alumno">
       <Grid container>
-        <Grid
-          item
-          xs={12}
-          sx={{ display: 'flex', justifyContent: 'end' }}
-        >
+        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'end' }}>
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Información Personal" />
             <Tab label="Documentos" disabled={!id} />
