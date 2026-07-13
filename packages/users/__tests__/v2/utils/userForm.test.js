@@ -3,6 +3,7 @@ import {
   mapUserToForm,
   normalizeUpdatePayload,
   getUserDisplayName,
+  buildChangedUpdatePayload,
 } from '../../../v2/utils/userForm';
 
 describe('userForm - buildEmptyUserForm', () => {
@@ -127,5 +128,102 @@ describe('userForm - getUserDisplayName', () => {
 
   it('returns empty string for null user', () => {
     expect(getUserDisplayName(null)).toBe('');
+  });
+});
+
+describe('userForm - buildChangedUpdatePayload', () => {
+  const initialUser = {
+    id: 12,
+    actualizado: 1,
+    correo: 'base@test.com',
+    rol: { id: 3 },
+    estatus: 1,
+    persona: {
+      nombre: 'Base',
+      apellidoPaterno: 'Usuario',
+      apellidoMaterno: 'Demo',
+      sexo: '',
+      nacionalidad: '',
+      rfc: '',
+      curp: '',
+      celular: '',
+      telefono: '',
+      tituloCargo: 'Representante',
+    },
+  };
+
+  it('returns empty object when nothing changed', () => {
+    const candidatePayload = normalizeUpdatePayload(mapUserToForm(initialUser, 'admin'));
+
+    const result = buildChangedUpdatePayload({
+      initialUser,
+      candidatePayload,
+      sessionRole: 'admin',
+    });
+
+    expect(result).toEqual({});
+  });
+
+  it('returns only changed root fields', () => {
+    const result = buildChangedUpdatePayload({
+      initialUser,
+      candidatePayload: {
+        actualizado: 1,
+        correo: 'changed@test.com',
+        rolId: 7,
+        estatus: 0,
+        persona: {
+          nombre: 'Base',
+          apellidoPaterno: 'Usuario',
+          apellidoMaterno: 'Demo',
+          sexo: '',
+          nacionalidad: '',
+          rfc: '',
+          curp: '',
+          celular: '',
+          telefono: '',
+          tituloCargo: 'Representante',
+        },
+      },
+      sessionRole: 'admin',
+    });
+
+    expect(result).toEqual({
+      correo: 'changed@test.com',
+      rolId: 7,
+      estatus: 0,
+    });
+  });
+
+  it('returns only changed persona subfields', () => {
+    const result = buildChangedUpdatePayload({
+      initialUser,
+      candidatePayload: {
+        actualizado: 1,
+        correo: 'base@test.com',
+        rolId: 3,
+        estatus: 1,
+        persona: {
+          nombre: 'Nuevo',
+          apellidoPaterno: 'Usuario',
+          apellidoMaterno: 'Demo',
+          sexo: '',
+          nacionalidad: '',
+          rfc: '',
+          curp: '',
+          celular: '5512345678',
+          telefono: '',
+          tituloCargo: 'Representante',
+        },
+      },
+      sessionRole: 'admin',
+    });
+
+    expect(result).toEqual({
+      persona: {
+        nombre: 'Nuevo',
+        celular: '5512345678',
+      },
+    });
   });
 });

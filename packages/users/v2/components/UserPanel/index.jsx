@@ -10,6 +10,7 @@ import VIEW_STATE from '../../constants/viewState';
 import UserForm from '../UserForm';
 import useUserForm from '../../hooks/useUserForm';
 import UsersSkeleton from '../UsersSkeleton';
+import { buildChangedUpdatePayload } from '../../utils/userForm';
 
 export default function UserPanel({
   mode,
@@ -58,13 +59,25 @@ export default function UserPanel({
     }
 
     if (isEdit && user?.id) {
-      const payload = isSelfEdit
+      const candidatePayload = isSelfEdit
         ? {
           ...cleanedData,
           rolId: user?.rol?.id ?? cleanedData.rolId,
           estatus: user?.estatus ?? cleanedData.estatus,
         }
         : cleanedData;
+
+      const payload = buildChangedUpdatePayload({
+        initialUser: user,
+        candidatePayload,
+        sessionRole,
+      });
+
+      if (Object.keys(payload).length === 0) {
+        onNotify.success('No hay cambios para guardar.');
+        onClose();
+        return;
+      }
 
       await onUpdate(user.id, payload);
     }
@@ -148,6 +161,7 @@ UserPanel.propTypes = {
   onUpdate: PropTypes.func.isRequired,
   onNotify: PropTypes.shape({
     error: PropTypes.func.isRequired,
+    success: PropTypes.func.isRequired,
   }).isRequired,
   sessionRole: PropTypes.string.isRequired,
   sessionUserId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
