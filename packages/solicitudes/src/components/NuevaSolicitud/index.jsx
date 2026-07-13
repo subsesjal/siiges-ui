@@ -12,7 +12,9 @@ import {
   EvaluacionCurricular,
   PlataformaEducativa,
 } from '@siiges-ui/solicitudes';
-import { getData } from '@siiges-ui/shared';
+import {
+  getData, getParentUserById, getToken, useAuth, useUI,
+} from '@siiges-ui/shared';
 import { ObservacionesProvider } from '../utils/Context/observacionesContext';
 
 const componentSteps = [
@@ -49,6 +51,24 @@ const buildSteps = (modalidad, tipoSolicitudId) => {
   return modalidadMapSteps[modalidad] || [];
 };
 
+async function fetchInstitucionByUsuarioId(usuarioId) {
+  const token = getToken();
+  const apikey = process.env.NEXT_PUBLIC_API_KEY;
+  const basePath = process.env.NEXT_PUBLIC_URL;
+  const url = `${basePath}/api/v1/instituciones/usuarios/${usuarioId}`;
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      api_key: apikey,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  const { data } = await response.json();
+  return data;
+}
+
 export default function NuevaSolicitud({ type, solicitudId = '' }) {
   const router = useRouter();
   const [modalidad, setModalidad] = useState('escolarizada');
@@ -59,9 +79,69 @@ export default function NuevaSolicitud({ type, solicitudId = '' }) {
   const [displayDate, setDisplayDate] = useState('');
   const [stepsList, setStepsList] = useState([]);
   const { solicitudType } = router.query;
+  const { session } = useAuth();
+  const { setNoti, setLoading } = useUI();
 
   const READ_ONLY_MODES = ['consultar', 'observaciones'];
   const isDisabled = READ_ONLY_MODES.includes(type);
+
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [solicitudLoaded, setSolicitudLoaded] = useState(false);
+
+  useEffect(() => {
+    setId(solicitudId);
+    if (solicitudId) {
+      const fetchSolicitud = async () => {
+        const response = await getData({
+          endpoint: `/solicitudes/${solicitudId}`,
+        });
+        setSolicitud(response.data || {});
+        setSolicitudLoaded(true);
+      };
+      fetchSolicitud();
+    } else {
+      setSolicitudLoaded(true);
+    }
+  }, [solicitudId]);
+
+  useEffect(() => {
+    if (!type || session.rol === 'admin') {
+      setIsAuthorized(true);
+      return;
+    }
+
+    if (!solicitudLoaded) return;
+
+    async function resolveInstitucion() {
+      setLoading(true);
+      try {
+        let usuarioId = session.id;
+
+        if (session.rol !== 'representante') {
+          const parentResult = await getParentUserById(session.id);
+          if (parentResult.errorMessage) throw new Error(parentResult.errorMessage);
+          usuarioId = parentResult.data?.id;
+        }
+
+        const data = await fetchInstitucionByUsuarioId(usuarioId);
+        const institucionId = data?.id ?? null;
+        const solicitudInstitucionId = solicitud?.programa?.plantel?.institucionId ?? null;
+
+        if (institucionId !== null && institucionId === solicitudInstitucionId) {
+          setIsAuthorized(true);
+        } else {
+          router.push('/solicitudes');
+        }
+      } catch (err) {
+        setNoti({ open: true, type: 'error', message: err.message });
+        router.push('/solicitudes');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    resolveInstitucion();
+  }, [type, session.rol, session.id, solicitudLoaded, solicitud]);
 
   useEffect(() => {
     setId(solicitudId);
@@ -164,7 +244,7 @@ export default function NuevaSolicitud({ type, solicitudId = '' }) {
         id={id}
         switchModule={switchModule}
       />
-      {renderModule()}
+      {isAuthorized && renderModule()}
     </ObservacionesProvider>
   );
 }

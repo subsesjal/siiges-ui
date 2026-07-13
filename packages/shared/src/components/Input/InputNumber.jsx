@@ -30,10 +30,10 @@ function InputNumber({
 
   const clamp = (val) => {
     let result = val;
-
-    if (min !== null && result < min) result = min;
+    const defaultMin = negative ? -Infinity : 0;
+    const effectiveMin = min !== null ? min : defaultMin;
+    if (result < effectiveMin) result = effectiveMin;
     if (max !== null && result > max) result = max;
-
     return result;
   };
 
