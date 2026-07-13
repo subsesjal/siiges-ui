@@ -63,6 +63,12 @@ import ModalFirmaElectronica from './Components/FoliosAsignados/FoliosTable/Moda
 import BusquedaAlumnosForm from './Components/Alumnos/BusquedaAlumnos/Form';
 import BusquedaAlumnosTable from './Components/Alumnos/BusquedaAlumnos/Table';
 import HistorialAcademico from './Components/Alumnos/AlumnosHistorial/index';
+import ReimpresionTituloPublic from './Components/Titulacion/ReimpresionTitulo/Public/index';
+import ReimpresionTituloPrivate from './Components/Titulacion/ReimpresionTitulo/Private/index';
+
+export {
+  ReimpresionTituloPublic,
+  ReimpresionTituloPrivate,
 import MatriculaActivaForm from './Components/Reporte/MatriculaActivaForm/index';
 import MatriculaActivaTable from './Components/Reporte/MatriculaActivaTable/index';
 import AlumnosInactivosForm from './Components/Reporte/AlumnosInactivosForm/index';
