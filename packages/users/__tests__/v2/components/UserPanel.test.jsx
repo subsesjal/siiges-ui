@@ -250,8 +250,6 @@ describe('UserPanel', () => {
 
     expect(onUpdate).toHaveBeenCalledWith(1, {
       correo: 'changed@test.com',
-      rolId: 9,
-      estatus: 0,
     });
   });
 
@@ -299,5 +297,71 @@ describe('UserPanel', () => {
       rolId: 7,
       estatus: 1,
     });
+  });
+
+  it('does not call onUpdate when no fields changed on edit', () => {
+    const onUpdate = jest.fn();
+    const onClose = jest.fn();
+    const onNotify = { error: jest.fn(), success: jest.fn() };
+    const user = {
+      id: 55,
+      actualizado: 1,
+      estatus: 1,
+      rol: { id: 2 },
+      correo: 'user@test.com',
+      persona: {
+        nombre: 'Juan',
+        apellidoPaterno: 'Perez',
+        apellidoMaterno: 'Garcia',
+        sexo: '',
+        nacionalidad: '',
+        rfc: '',
+        curp: '',
+        celular: '',
+        telefono: '',
+        tituloCargo: '',
+      },
+    };
+
+    mockUseUserForm.mockReturnValueOnce({
+      form: {
+        correo: 'user@test.com', persona: {}, rolId: 2, estatus: 1,
+      },
+      errors: {},
+      handleChange: jest.fn(),
+      handleBlur: jest.fn(),
+      validate: jest.fn(() => ({
+        valid: true,
+        cleanedData: {
+          actualizado: 1,
+          correo: 'user@test.com',
+          rolId: 2,
+          estatus: 1,
+          persona: {
+            nombre: 'Juan',
+            apellidoPaterno: 'Perez',
+            apellidoMaterno: 'Garcia',
+            sexo: '',
+            nacionalidad: '',
+            rfc: '',
+            curp: '',
+            celular: '',
+            telefono: '',
+            tituloCargo: '',
+          },
+        },
+        errors: {},
+      })),
+    });
+
+    renderPanel({
+      mode: 'EDIT', user, sessionUserId: 1, onUpdate, onNotify, onClose,
+    });
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    expect(onUpdate).not.toHaveBeenCalled();
+    expect(onNotify.success).toHaveBeenCalledWith('No hay cambios para guardar.');
+    expect(onClose).toHaveBeenCalled();
   });
 });
