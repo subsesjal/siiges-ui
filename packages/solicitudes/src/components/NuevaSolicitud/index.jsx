@@ -26,6 +26,8 @@ const componentSteps = [
   { name: PlataformaEducativa, stepName: 'Plataforma Educativa' },
 ];
 
+const AUTHORIZED_ROLES = ['admin', 'sicyt_editar', 'sicyt_lectura'];
+
 const getStepName = (component) => componentSteps.find(
   ({ name: step }) => step.name === component.name,
 )?.stepName || '';
@@ -105,7 +107,7 @@ export default function NuevaSolicitud({ type, solicitudId = '' }) {
   }, [solicitudId]);
 
   useEffect(() => {
-    if (!type || session.rol === 'admin') {
+    if (!type || AUTHORIZED_ROLES.includes(session.rol)) {
       setIsAuthorized(true);
       return;
     }
