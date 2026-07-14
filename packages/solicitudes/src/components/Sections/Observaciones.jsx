@@ -29,7 +29,7 @@ function Observaciones({ id, section }) {
     method,
   });
 
-  const usersAuth = ['admin', 'control_documental'];
+  const usersAuth = ['admin', 'control_documental', 'sicyt_editar'];
 
   const isAuth = () => usersAuth.some((user) => user === rol);
 
