@@ -11,7 +11,7 @@ const getParentUserById = async (id, query = '') => {
   if (!id) {
     return {
       statusCode: 400,
-      errorMessage: '¡ID de usuario requerido!',
+      errorMessage: 'Acceso no autorizado.',
       data: [],
     };
   }
