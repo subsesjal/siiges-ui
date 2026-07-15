@@ -263,6 +263,7 @@ export default function ButtonSection({
             <ButtonSimple
               text={<ArrowBackIosNewIcon sx={{ height: 14 }} />}
               type="success"
+              design="circular"
               onClick={prev}
             />
           </Grid>
@@ -271,10 +272,10 @@ export default function ButtonSection({
           <Grid item>
             <ButtonSimple
               text={
-                      position === 'last' || position === 'only'
-                        ? buttonTextEndDynamic
-                        : buttonTextDynamic
-                    }
+                position === 'last' || position === 'only'
+                  ? buttonTextEndDynamic
+                  : buttonTextDynamic
+              }
               type="success"
               onClick={!loading ? submit : null}
             />
@@ -285,6 +286,7 @@ export default function ButtonSection({
             <ButtonSimple
               text={<ArrowForwardIosIcon sx={{ height: 14 }} />}
               type="success"
+              design="circular"
               onClick={next}
             />
           </Grid>
