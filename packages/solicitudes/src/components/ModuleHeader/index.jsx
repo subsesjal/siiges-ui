@@ -35,7 +35,7 @@ export default function ModuleHeader({
   const { rol } = session;
   const router = useRouter();
   const isFinalModule = useMemo(() => module === steps.length - 1, [module, steps.length]);
-  const isControlDocumental = rol === 'control_documental';
+  const isControlDocumental = rol === 'control_documental' || rol === 'sicyt_editar';
 
   const buttonText = useMemo(() => {
     if (isControlDocumental) {
