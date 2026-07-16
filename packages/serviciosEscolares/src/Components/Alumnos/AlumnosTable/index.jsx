@@ -1,4 +1,4 @@
-import { DataTable } from '@siiges-ui/shared';
+import { DataTable, useAuth } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -12,14 +12,21 @@ export default function AlumnosTable({
   onAlumnoDeleted,
 }) {
   const router = useRouter();
-  const [rows, setRows] = useState(alumnos);
+  const [rows, setRows] = useState(alumnos || []);
+  const { session } = useAuth();
+
+  const isAdmin = session?.rol === 'admin';
+
+  const buttonAdd = isAdmin
+    ? Boolean(programa)
+    : Boolean(permisoAlumno && programa);
 
   useEffect(() => {
-    setRows(alumnos);
+    setRows(alumnos || []);
   }, [alumnos]);
 
   const handleDeleteSuccess = (alumnoId) => {
-    setRows((prevRows) => prevRows.filter((row) => row.id !== alumnoId));
+    setRows((prevRows) => (prevRows || []).filter((row) => row.id !== alumnoId));
     if (onAlumnoDeleted) {
       onAlumnoDeleted(alumnoId);
     }
@@ -28,7 +35,7 @@ export default function AlumnosTable({
   return (
     <Grid container sx={{ marginTop: 2 }}>
       <DataTable
-        buttonAdd={permisoAlumno}
+        buttonAdd={buttonAdd}
         buttonText="Agregar Alumno"
         buttonClick={() => {
           router.push(

@@ -24,14 +24,12 @@ export default function Alumnos() {
         setPermisoAlumno={setPermisoAlumno}
       />
       <Divider sx={{ marginTop: 2 }} />
-      {alumnos && (
-        <AlumnosTable
-          alumnos={alumnos}
-          programa={programa}
-          permisoAlumno={permisoAlumno}
-          onAlumnoDeleted={handleAlumnoDeleted}
-        />
-      )}
+      <AlumnosTable
+        alumnos={alumnos}
+        programa={programa}
+        permisoAlumno={permisoAlumno}
+        onAlumnoDeleted={handleAlumnoDeleted}
+      />
     </Layout>
   );
 }

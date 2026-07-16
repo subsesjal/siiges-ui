@@ -141,11 +141,13 @@ export default function AlumnosForm({
 
   const handleInstitucionChange = (event) => {
     setSelectedInstitucion(event.target.value);
+    setPrograma();
   };
 
   const handlePlantelChange = (event) => {
     const plantelId = event.target.value;
     setSelectedPlantel(plantelId);
+    setPrograma();
     if (!plantelId) {
       setProgramas([]);
     }
