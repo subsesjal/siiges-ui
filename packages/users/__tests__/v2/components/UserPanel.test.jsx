@@ -148,14 +148,44 @@ describe('UserPanel', () => {
     expect(container).toBeTruthy();
   });
 
+  it('does not render "Volver a tabla" in EDIT mode', () => {
+    const user = {
+      id: 1,
+      correo: 'u@t.com',
+      rol: { id: 2 },
+      persona: { nombre: 'A', apellidoPaterno: 'B', apellidoMaterno: '' },
+    };
+
+    renderPanel({ mode: 'EDIT', user });
+
+    expect(screen.queryByText('Volver a tabla')).not.toBeInTheDocument();
+  });
+
+  it('does not render "Volver a tabla" in VIEW mode', () => {
+    const user = {
+      id: 1,
+      correo: 'u@t.com',
+      rol: { id: 2 },
+      persona: { nombre: 'A', apellidoPaterno: 'B', apellidoMaterno: '' },
+    };
+
+    renderPanel({ mode: 'VIEW', user });
+
+    expect(screen.queryByText('Volver a tabla')).not.toBeInTheDocument();
+  });
+
   it('renders loading state', () => {
     const { container } = renderPanel({ loading: true });
     expect(container).toBeTruthy();
   });
 
   it('renders error state', () => {
-    const { container } = renderPanel({ error: { message: 'Error' } });
+    const onClose = jest.fn();
+    const { container } = renderPanel({ error: { message: 'Error' }, onClose });
     expect(container).toBeTruthy();
+
+    fireEvent.click(screen.getByText('Volver'));
+    expect(onClose).toHaveBeenCalled();
   });
 
   it('calls onCreate with cleaned data in CREATE mode', () => {
@@ -220,8 +250,6 @@ describe('UserPanel', () => {
 
     expect(onUpdate).toHaveBeenCalledWith(1, {
       correo: 'changed@test.com',
-      rolId: 9,
-      estatus: 0,
     });
   });
 
@@ -232,5 +260,108 @@ describe('UserPanel', () => {
     fireEvent.click(screen.getByText('Submit'));
 
     expect(onCreate).not.toHaveBeenCalled();
+  });
+
+  it('keeps cleaned payload on edit when editing another user', () => {
+    const onUpdate = jest.fn();
+    const user = {
+      id: 55,
+      estatus: 0,
+      rol: { id: 9 },
+      correo: 'u@t.com',
+      persona: { nombre: 'A', apellidoPaterno: 'B', apellidoMaterno: '' },
+    };
+
+    mockUseUserForm.mockReturnValueOnce({
+      form: {
+        correo: 'changed@test.com', persona: {}, rolId: 7, estatus: 1,
+      },
+      errors: {},
+      handleChange: jest.fn(),
+      handleBlur: jest.fn(),
+      validate: jest.fn(() => ({
+        valid: true,
+        cleanedData: { correo: 'changed@test.com', rolId: 7, estatus: 1 },
+        errors: {},
+      })),
+    });
+
+    renderPanel({
+      mode: 'EDIT', user, sessionUserId: 1, onUpdate,
+    });
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    expect(onUpdate).toHaveBeenCalledWith(55, {
+      correo: 'changed@test.com',
+      rolId: 7,
+      estatus: 1,
+    });
+  });
+
+  it('does not call onUpdate when no fields changed on edit', () => {
+    const onUpdate = jest.fn();
+    const onClose = jest.fn();
+    const onNotify = { error: jest.fn(), success: jest.fn() };
+    const user = {
+      id: 55,
+      actualizado: 1,
+      estatus: 1,
+      rol: { id: 2 },
+      correo: 'user@test.com',
+      persona: {
+        nombre: 'Juan',
+        apellidoPaterno: 'Perez',
+        apellidoMaterno: 'Garcia',
+        sexo: '',
+        nacionalidad: '',
+        rfc: '',
+        curp: '',
+        celular: '',
+        telefono: '',
+        tituloCargo: '',
+      },
+    };
+
+    mockUseUserForm.mockReturnValueOnce({
+      form: {
+        correo: 'user@test.com', persona: {}, rolId: 2, estatus: 1,
+      },
+      errors: {},
+      handleChange: jest.fn(),
+      handleBlur: jest.fn(),
+      validate: jest.fn(() => ({
+        valid: true,
+        cleanedData: {
+          actualizado: 1,
+          correo: 'user@test.com',
+          rolId: 2,
+          estatus: 1,
+          persona: {
+            nombre: 'Juan',
+            apellidoPaterno: 'Perez',
+            apellidoMaterno: 'Garcia',
+            sexo: '',
+            nacionalidad: '',
+            rfc: '',
+            curp: '',
+            celular: '',
+            telefono: '',
+            tituloCargo: '',
+          },
+        },
+        errors: {},
+      })),
+    });
+
+    renderPanel({
+      mode: 'EDIT', user, sessionUserId: 1, onUpdate, onNotify, onClose,
+    });
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    expect(onUpdate).not.toHaveBeenCalled();
+    expect(onNotify.success).toHaveBeenCalledWith('No hay cambios para guardar.');
+    expect(onClose).toHaveBeenCalled();
   });
 });
