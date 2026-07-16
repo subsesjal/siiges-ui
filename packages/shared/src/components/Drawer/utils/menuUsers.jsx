@@ -18,7 +18,7 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import { USERS_ROUTE } from '../../../constants/routes';
 
 const canViewAsignacionFolios = (rol, nombre) => {
-  if (rol === 'admin' || rol === 'ce_sicyt') return true;
+  if (rol === 'admin' || rol === 'ce_sicyt' || rol === 'folios_sicyt') return true;
 
   if (rol === 'representante' && nombre === 'obedc') return true;
 
@@ -35,7 +35,7 @@ const options = [
   {
     id: 2,
     nombre: 'Servicios escolares',
-    roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt', 'sicyt_editar'],
+    roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt', 'sicyt_editar', 'folios_sicyt'],
   },
   // { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
   {
@@ -46,7 +46,7 @@ const options = [
   },
 ];
 
-const usersAdmin = ['admin', 'sicyt_editar'];
+const usersAdmin = ['admin', 'sicyt_editar', 'folios_sicyt'];
 const isAdminRolValidate = (rol) => usersAdmin.includes(rol);
 
 const routeInstitucionesRol = (rol) => (isAdminRolValidate(rol) ? '/instituciones' : '/instituciones/miInstitucion');
@@ -70,9 +70,11 @@ const solicitudesMenu = (rol) => ({
 });
 
 const isSicytEditar = (rol) => rol === 'sicyt_editar';
+const isFoliosSicyt = (rol) => rol === 'folios_sicyt';
 
 const panelMenuOptions = (rol, nombre) => {
   const onlyProgramas = isSicytEditar(rol);
+  const onlyFolios = isFoliosSicyt(rol);
 
   return [
     ...(rol !== 'sicyt_editar'
@@ -95,15 +97,15 @@ const panelMenuOptions = (rol, nombre) => {
 
     solicitudesMenu(rol),
 
-    {
+    ...(!onlyFolios ? [{
       userId: 2,
       text: 'Programas',
       icon: <AssignmentIcon />,
       route: '/serviciosEscolares/programas',
       key: 'programas',
-    },
+    }] : []),
 
-    ...(!onlyProgramas ? [
+    ...(!onlyProgramas && !onlyFolios ? [
 
       {
         userId: 2,
@@ -133,6 +135,10 @@ const panelMenuOptions = (rol, nombre) => {
         route: '/serviciosEscolares/acreditacion',
         key: 'acreditacion',
       },
+    ] : []),
+
+    ...(!onlyProgramas ? [
+
       {
         userId: 2,
         text: 'Documentos Electrónicos',
@@ -147,7 +153,7 @@ const panelMenuOptions = (rol, nombre) => {
             text: 'Catálogo de Títulos',
             route: '/serviciosEscolares/titulacion',
           },
-          ...((rol === 'admin' || (rol === 'representante' && nombre === 'josefina'))
+          ...((rol === 'admin' || (rol === 'folios_sicyt') || (rol === 'representante' && nombre === 'josefina'))
             ? [
               {
                 text: 'Catálogo de Certificados',
@@ -170,7 +176,7 @@ const panelMenuOptions = (rol, nombre) => {
               text: 'Solicitud de Folios Certificado',
               route: '/serviciosEscolares/solicitudesFolios/certificado',
             },
-            ...((rol === 'admin' || rol === 'ce_sicyt')
+            ...((rol === 'admin' || rol === 'ce_sicyt' || rol === 'folios_sicyt')
               ? [
                 {
                   text: 'Solicitud de Folios Titulo',
@@ -187,7 +193,7 @@ const panelMenuOptions = (rol, nombre) => {
         }]
         : []),
 
-      ...(rol !== 'ce_ies'
+      ...(rol !== 'ce_ies' && !onlyFolios
         ? [{
           userId: 2,
           text: 'Reportes',
@@ -213,13 +219,13 @@ const panelMenuOptions = (rol, nombre) => {
 
     ] : []),
 
-    {
+    ...(!onlyFolios ? [{
       userId: 2,
       text: 'Busqueda de Alumnos',
       icon: <AssignmentIcon />,
       route: '/serviciosEscolares/alumnos/busquedaAlumnos',
       key: 'busquedaAlumnos',
-    },
+    }] : []),
 
     {
       userId: 3,

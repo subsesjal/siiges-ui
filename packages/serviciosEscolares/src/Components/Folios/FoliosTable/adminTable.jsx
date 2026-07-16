@@ -31,6 +31,7 @@ export default function AdminTable({
   const { setNoti } = useUI();
   const { session } = useAuth();
   const { rol } = session;
+  const userFirma = (rol === 'admin' || rol === 'folios_sicyt');
   const [confirmModal, setConfirmModal] = useState({ open: false, id: null, folio: null });
 
   const columns = [
@@ -97,7 +98,7 @@ export default function AdminTable({
         const IconComponent = estatusConfig?.icon ?? null;
         const tooltipTitle = estatusConfig?.tooltip ?? '';
         const puedeFirmar = (params.row.estatusSolicitudFolioId === 9
-          || params.row.estatusSolicitudFolioId === 10) && rol === 'admin';
+          || params.row.estatusSolicitudFolioId === 10) && userFirma;
 
         if (isAdmin || isCeSicyt) {
           return (
