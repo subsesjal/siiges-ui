@@ -43,6 +43,7 @@ export default function AlumnosInactivos() {
     fechaFinAntecedentes: formatDate(alumno.validacion?.fechaFinAntecedente),
     fechaExpedicion: formatDate(alumno.validacion?.fechaExpedicion),
     tipoValidacion: alumno.validacion?.tipo?.nombre || 'Sin validación',
+    fechaCreacion: formatDate(alumno.createdAt),
   }));
 
   const handleSearch = async () => {

@@ -9,6 +9,7 @@ const columns = [
   { field: 'fechaInicioAntecedentes', headerName: 'Fecha de Inicio de Antecedentes', width: 260 },
   { field: 'fechaFinAntecedentes', headerName: 'Fecha de Fin de Antecedentes', width: 260 },
   { field: 'fechaExpedicion', headerName: 'Fecha de Expedición', width: 200 },
+  { field: 'fechaCreacion', headerName: 'Fecha de Creación', width: 200 },
   { field: 'tipoValidacion', headerName: 'Tipo de Validación', width: 250 },
 ];
 
