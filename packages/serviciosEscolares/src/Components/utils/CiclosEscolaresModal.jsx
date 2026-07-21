@@ -1,12 +1,13 @@
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, Input, Select, ButtonsForm, useUI,
+  DefaultModal, Select, ButtonsForm, useUI,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import React from 'react';
 import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
 import postCiclosEscolares from './PostCiclosEscolares';
 import nombresCiclos from '../../Utils/nombresCiclos';
+import descripcionesCiclos from '../../Utils/descripcionesCiclos';
 
 export default function CiclosEscolaresModal({
   open,
@@ -60,11 +61,11 @@ export default function CiclosEscolaresModal({
           />
         </Grid>
         <Grid item xs={8}>
-          <Input
-            id="descripcion"
-            label="Descripción"
+          <Select
+            title="Descripción"
             name="descripcion"
-            auto="descripcion"
+            options={descripcionesCiclos || []}
+            textValue
             onChange={handleOnChange}
             value={form?.descripcion}
           />
