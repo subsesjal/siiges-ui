@@ -3,7 +3,7 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function ButtonFile({ url, children }) {
+export default function ButtonFile({ url, children, onClick }) {
   return (
     <Button
       variant="outlined"
@@ -19,7 +19,7 @@ export default function ButtonFile({ url, children }) {
           borderColor: 'black',
         },
       }}
-      onClick={() => window.open(url, '_blank')}
+      onClick={onClick || (() => window.open(url, '_blank'))}
       endIcon={<FileOpenIcon />}
     >
       {children}
@@ -27,7 +27,13 @@ export default function ButtonFile({ url, children }) {
   );
 }
 
+ButtonFile.defaultProps = {
+  url: '',
+  onClick: null,
+};
+
 ButtonFile.propTypes = {
-  url: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  url: PropTypes.string,
   children: PropTypes.node.isRequired,
 };
