@@ -82,7 +82,12 @@ export default function AlumnosInactivos() {
           <Divider sx={{ marginTop: 2 }} />
         </Grid>
         <Grid item xs={12}>
-          <AlumnosInactivosTable matriculas={matriculas} />
+          <AlumnosInactivosTable
+            matriculas={matriculas}
+            institucionId={formData.institucion}
+            plantelId={formData.plantel}
+            programaId={formData.programa}
+          />
         </Grid>
       </Grid>
     </Layout>
