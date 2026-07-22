@@ -1,8 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import {
-  ButtonFile, DataTable, useUI,
-} from '@siiges-ui/shared';
+import { ButtonSimple, DataTable, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import GetFilePdf from '../../utils/GetFilePdf';
 
@@ -49,10 +47,8 @@ export default function AlumnosInactivosTable({
   return (
     <Grid container spacing={2}>
       {matriculas.length > 0 && (
-        <Grid item xs={12}>
-          <ButtonFile onClick={handleDescargar}>
-            Descargar Reporte
-          </ButtonFile>
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <ButtonSimple align="right" design="enviar" text="Descargar Reporte" onClick={handleDescargar} />
         </Grid>
       )}
       <Grid item xs={12}>
