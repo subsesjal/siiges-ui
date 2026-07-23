@@ -1,5 +1,5 @@
 const nombresCiclos = [
-  { id: 1, nombre: '2015A' },
+  /* { id: 1, nombre: '2015A' },
   { id: 2, nombre: '2015B' },
   { id: 3, nombre: '2015C' },
   { id: 4, nombre: '2016A' },
@@ -29,7 +29,7 @@ const nombresCiclos = [
   { id: 28, nombre: '2024A' },
   { id: 29, nombre: '2024B' },
   { id: 30, nombre: '2024C' },
-  { id: 31, nombre: '2025A' },
+  { id: 31, nombre: '2025A' }, */
   { id: 32, nombre: '2025B' },
   { id: 33, nombre: 'EQUIV' },
   { id: 34, nombre: '2025C' },
