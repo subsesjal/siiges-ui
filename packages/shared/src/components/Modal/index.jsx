@@ -10,11 +10,16 @@ const SIZE_MAP = {
   xl: 1200,
 };
 
+const COLOR_MAP = {
+  red: '#d32f2f',
+};
+
 export default function DefaultModal({
   open,
   setOpen,
   children,
   title,
+  titleColor,
   disableBackdropClick,
   size,
 }) {
@@ -36,6 +41,10 @@ export default function DefaultModal({
     p: 4,
   };
 
+  const titleStyle = {
+    color: COLOR_MAP[titleColor] || 'inherit',
+  };
+
   return (
     <Modal
       open={open}
@@ -44,9 +53,9 @@ export default function DefaultModal({
       aria-describedby="modal-confirmación-asignación-inspectores"
     >
       <Box sx={style}>
-        <div id="modal-confirmación">
+        <Box id="modal-confirmación" sx={titleStyle}>
           <Title title={title} />
-        </div>
+        </Box>
         <Box sx={{ mt: 2 }}>
           {children}
         </Box>
@@ -58,6 +67,7 @@ export default function DefaultModal({
 DefaultModal.defaultProps = {
   open: false,
   title: null,
+  titleColor: null,
   disableBackdropClick: false,
   size: 'md',
 };
@@ -67,6 +77,7 @@ DefaultModal.propTypes = {
   setOpen: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   title: PropTypes.string,
+  titleColor: PropTypes.oneOf(['red']),
   disableBackdropClick: PropTypes.bool,
   size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
 };
