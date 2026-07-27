@@ -13,7 +13,8 @@ const ALLOWED_IDS = [2519, 336];
 export default function DatosInstitucion({ alumno }) {
   const { session } = useAuth();
   const { setNoti, setLoading } = useUI();
-  const [url, setUrl] = useState();
+  const [urlValidacion, setUrlValidacion] = useState();
+  const [urlCertificado, setUrlCertificado] = useState();
   const [formSent, setFormSent] = useState(false);
   const [openDropzone, setOpenDropzone] = useState(false);
   const [cancelText, setCancelText] = useState();
@@ -40,10 +41,16 @@ export default function DatosInstitucion({ alumno }) {
   const router = useRouter();
   const isCeSicyt = session?.rol === 'ce_sicyt';
 
-  const fileData = {
+  const fileDataValidacion = {
     entidadId: alumno.id,
     tipoEntidad: 'ALUMNO',
     tipoDocumento: 'ARCHIVO_VALIDACION_ALUMNO',
+  };
+
+  const fileDataCertificado = {
+    entidadId: alumno.id,
+    tipoEntidad: 'ALUMNO',
+    tipoDocumento: 'ARCHIVO_CERTIFICADO',
   };
 
   const estatusOptions = [
@@ -98,7 +105,8 @@ export default function DatosInstitucion({ alumno }) {
       };
 
       fetchValidationData();
-      GetFile(fileData, setUrl);
+      GetFile(fileDataValidacion, setUrlValidacion);
+      GetFile(fileDataCertificado, setUrlCertificado);
     }
   }, [alumno]);
 
@@ -190,7 +198,8 @@ export default function DatosInstitucion({ alumno }) {
         const endpoint = `/alumnos/${alumno.id}/validaciones`;
         let data = {
           ...form,
-          archivoValidacion: url,
+          archivoValidacion: urlValidacion,
+          archivoCertificado: urlCertificado,
         };
 
         if (session.rol === 'representante' || session.rol === 'ce_ies') {
@@ -216,7 +225,7 @@ export default function DatosInstitucion({ alumno }) {
             type: 'success',
           });
 
-          if (!url) {
+          if (!urlValidacion || !urlCertificado) {
             setOpenDropzone(true);
             setFormSent(true);
             setLoading(false);
@@ -424,14 +433,28 @@ export default function DatosInstitucion({ alumno }) {
           </Grid>
           <Grid item xs={12}>
             <InputFile
-              label="Archivo de validación"
+              label="Archivo de Validación"
               id={alumno.id}
               tipoDocumento="ARCHIVO_VALIDACION_ALUMNO"
               tipoEntidad="ALUMNO"
-              url={url}
-              setUrl={setUrl}
+              url={urlValidacion}
+              setUrl={setUrlValidacion}
               disabled={false}
               title="Suba su archivo de validación"
+              openDropzone={openDropzone}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <InputFile
+              label="Archivo de Cédula Profesional, Título o equivalente (PDF)s"
+              id={alumno.id}
+              tipoDocumento="ARCHIVO_CERTIFICADO"
+              tipoEntidad="ALUMNO"
+              url={urlCertificado}
+              setUrl={setUrlCertificado}
+              disabled={false}
+              title="Suba su archivo de Cédula Profesional, Título o equivalente"
               openDropzone={openDropzone}
               required
             />

@@ -5,8 +5,7 @@ import {
 } from '@mui/material';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { getData, updateRecord, useUI } from '@siiges-ui/shared';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { updateRecord, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
@@ -67,35 +66,11 @@ export default function ButtonsValidacion({
     }
   };
 
-  const handleGenerarPDF = async (alumnoId) => {
-    setLoading(true);
-    try {
-      const response = await getData({
-        endpoint: `/files?tipoEntidad=ALUMNO&entidadId=${alumnoId}&tipoDocumento=ARCHIVO_VALIDACION_ALUMNO`,
-      });
-      if (response.errorMessage) {
-        setNoti({ open: true, message: response.errorMessage, type: 'error' });
-        return;
-      }
-      if (response.data?.url) {
-        window.open(response.data.url, '_blank');
-      } else if (typeof response.data === 'string') {
-        window.open(response.data, '_blank');
-      } else {
-        setNoti({ open: true, message: 'No se pudo obtener el PDF', type: 'error' });
-      }
-    } catch (error) {
-      setNoti({ open: true, message: error.message || 'Error al generar el PDF', type: 'error' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <Stack direction="row" spacing={1}>
       {id && (
         <Link href={linkUrl} passHref>
-          <Tooltip title="Validar Alumno" placement="top">
+          <Tooltip title="Consultar Alumno" placement="top">
             <IconButton aria-label="Consultar Alumno" component="a">
               <VisibilityOutlinedIcon />
             </IconButton>
@@ -129,14 +104,6 @@ export default function ButtonsValidacion({
           </Menu>
         </>
       )}
-      <Tooltip title="Ver PDF" placement="top">
-        <IconButton
-          onClick={() => handleGenerarPDF(id)}
-          color="primary"
-        >
-          <PictureAsPdfIcon />
-        </IconButton>
-      </Tooltip>
     </Stack>
   );
 }

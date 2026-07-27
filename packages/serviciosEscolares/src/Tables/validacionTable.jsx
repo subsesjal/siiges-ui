@@ -1,5 +1,6 @@
 import React from 'react';
 import ButtonsValidacion from '../Components/utils/ButtonValidacion';
+import DocumentosValidacion from '../Components/utils/DocumentosValidacion';
 
 const columnsValidacion = (programa, institucion, onSituacionValidacionUpdated) => [
   {
@@ -17,9 +18,19 @@ const columnsValidacion = (programa, institucion, onSituacionValidacionUpdated) 
     width: 450,
   },
   {
+    field: 'documentos',
+    headerName: 'Documentos',
+    width: 120,
+    sortable: false,
+    filterable: false,
+    renderCell: (params) => (
+      <DocumentosValidacion id={params.id} />
+    ),
+  },
+  {
     field: 'actions',
     headerName: 'Acciones',
-    width: 180,
+    width: 120,
     renderCell: (params) => (
       <ButtonsValidacion
         id={params.id}

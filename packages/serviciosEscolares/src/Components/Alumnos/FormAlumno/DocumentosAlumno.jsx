@@ -69,7 +69,7 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo de Cédula Profesional, Título o equivalente (PDF)"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
-            disabled={type === 'view'}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -102,7 +102,7 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo de Validación"
             url={fileURLs[3]}
             setUrl={(url) => handleFileLoaded(3, url)}
-            disabled={type === 'view'}
+            disabled
           />
         </Grid>
 
