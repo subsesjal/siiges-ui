@@ -2,7 +2,7 @@ import {
   Box, Divider, Typography, IconButton,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { getData } from '@siiges-ui/shared';
+import { ButtonSimple, DefaultModal, getData } from '@siiges-ui/shared';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PaperHome from '../Paper/PaperHome';
@@ -10,6 +10,7 @@ import PaperHome from '../Paper/PaperHome';
 function HomePage() {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [noticias, setNoticias] = useState([]);
+  const [open, setOpen] = useState(true);
   const noticiasPerPage = 3;
 
   useEffect(() => {
@@ -106,6 +107,27 @@ function HomePage() {
           <ArrowForwardIosIcon fontSize="inherit" />
         </IconButton>
       </Box>
+      <DefaultModal title="Aviso Importante" titleColor="red" open={open} setOpen={setOpen}>
+        <Typography>
+          Te recordamos que el próximo 31 de julio de 2026 es el último día para
+          completar y enviar tus solicitudes pendientes.
+        </Typography>
+        <Typography>Toma en cuenta las siguientes consideraciones:</Typography>
+        <Typography>
+          Iniciar la captura no garantiza tu participación: Tu trámite solo se
+          considerará dentro de la convocatoria una vez que haya sido completado
+          y enviado a revisión.
+        </Typography>
+        <Typography>
+          Depuración de trámites: Aquellas solicitudes que permanezcan
+          inconclusas o no enviadas al cierre del plazo serán eliminadas del
+          sistema (cancelación de folio).
+        </Typography>
+        <Typography>
+          ¡Evita contratiempos y concluye tu trámite a tiempo!
+        </Typography>
+        <ButtonSimple align="right" design="enviar" onClick={() => setOpen(false)} text="Cerrar" />
+      </DefaultModal>
     </>
   );
 }
