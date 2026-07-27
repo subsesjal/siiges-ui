@@ -3,7 +3,7 @@ const DiligenciasToRows = (item) => {
   const horaFin = new Date(item.horaFin);
   return {
     id: item.id,
-    nombre: item.persona.nombre,
+    nombre: `${item.persona.nombre} ${item.persona.apellidoPaterno} ${item.persona.apellidoMaterno}`,
     tituloCargo: item.persona.tituloCargo,
     telefono: item.persona.telefono,
     celular: item.persona.celular,
