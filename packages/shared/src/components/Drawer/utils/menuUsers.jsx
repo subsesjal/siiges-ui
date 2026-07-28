@@ -35,7 +35,7 @@ const options = [
   {
     id: 2,
     nombre: 'Servicios escolares',
-    roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt', 'sicyt_editar', 'folios_sicyt'],
+    roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt', 'sicyt_editar', 'folios_sicyt', 'avances_sicyt'],
   },
   // { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
   {
@@ -71,10 +71,12 @@ const solicitudesMenu = (rol) => ({
 
 const isSicytEditar = (rol) => rol === 'sicyt_editar';
 const isFoliosSicyt = (rol) => rol === 'folios_sicyt';
+const isAvancesSicyt = (rol) => rol === 'avances_sicyt';
 
 const panelMenuOptions = (rol, nombre) => {
   const onlyProgramas = isSicytEditar(rol);
   const onlyFolios = isFoliosSicyt(rol);
+  const excludeDocsYFolios = isAvancesSicyt(rol);
 
   return [
     ...(rol !== 'sicyt_editar'
@@ -139,7 +141,7 @@ const panelMenuOptions = (rol, nombre) => {
 
     ...(!onlyProgramas ? [
 
-      {
+      ...(!excludeDocsYFolios ? [{
         userId: 2,
         text: 'Documentos Electrónicos',
         icon: <SchoolIcon />,
@@ -163,9 +165,9 @@ const panelMenuOptions = (rol, nombre) => {
             : []),
         ],
         key: 'titulacion',
-      },
+      }] : []),
 
-      ...(canViewAsignacionFolios(rol, nombre)
+      ...(!excludeDocsYFolios && canViewAsignacionFolios(rol, nombre)
         ? [{
           userId: 2,
           text: 'Asignación de Folios',
