@@ -31,7 +31,7 @@ export default function getTokenLocalStorage() {
   }
   const parsedJwt = parseJwt(jwt);
   const {
-    exp, id, usuario, rol,
+    exp, id, usuario, rol, estatus,
   } = parsedJwt;
   if (exp * 1000 < Date.now()) {
     localStorage.removeItem('token');
@@ -42,6 +42,7 @@ export default function getTokenLocalStorage() {
     id,
     nombre: usuario,
     rol,
+    estatus,
     token,
   };
   return data;
