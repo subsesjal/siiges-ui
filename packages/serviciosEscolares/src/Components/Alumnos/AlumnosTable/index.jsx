@@ -1,9 +1,10 @@
-import { DataTable, useAuth } from '@siiges-ui/shared';
+import { useAuth } from '@siiges-ui/shared';
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import columnsAlumnos from '../../../Tables/alumnosTable';
+import AlumnosDataTable from './AlumnosDataTable';
 
 export default function AlumnosTable({
   alumnos,
@@ -32,9 +33,17 @@ export default function AlumnosTable({
     }
   };
 
+  const handleActivados = (activadosIds) => {
+    setRows((prevRows) => (prevRows || []).map((row) => (
+      activadosIds.includes(row.id)
+        ? { ...row, situacion: 'Activo' }
+        : row
+    )));
+  };
+
   return (
     <Grid container sx={{ marginTop: 2 }}>
-      <DataTable
+      <AlumnosDataTable
         buttonAdd={buttonAdd}
         buttonText="Agregar Alumno"
         buttonClick={() => {
@@ -49,6 +58,7 @@ export default function AlumnosTable({
         rows={rows}
         columns={columnsAlumnos(handleDeleteSuccess)}
         title="Tabla de alumnos"
+        onActivados={handleActivados}
       />
     </Grid>
   );

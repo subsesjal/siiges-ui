@@ -23,7 +23,7 @@ export default function DocumentosAlumno({ id, type }) {
   useEffect(() => {
     if (type === 'edit' || type === 'view') {
       const fetchFiles = async () => {
-        const fileTypes = ['ARCHIVO_CERTIFICADO', 'ARCHIVO_NACIMIENTO', 'ARCHIVO_CURP'];
+        const fileTypes = ['ARCHIVO_CERTIFICADO', 'ARCHIVO_NACIMIENTO', 'ARCHIVO_CURP', 'ARCHIVO_VALIDACION_ALUMNO'];
         const promises = fileTypes.map((tipoDocumento, index) => new Promise((resolve) => {
           GetFile({ tipoEntidad: 'ALUMNO', entidadId: id, tipoDocumento }, (url, error) => {
             if (!error && url) {
@@ -69,7 +69,7 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo de Cédula Profesional, Título o equivalente (PDF)"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
-            disabled={type === 'view'}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -92,6 +92,17 @@ export default function DocumentosAlumno({ id, type }) {
             url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
             disabled={type === 'view'}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <InputFile
+            tipoEntidad="ALUMNO"
+            tipoDocumento="ARCHIVO_VALIDACION_ALUMNO"
+            id={id}
+            label="Archivo de Validación"
+            url={fileURLs[3]}
+            setUrl={(url) => handleFileLoaded(3, url)}
+            disabled
           />
         </Grid>
 
