@@ -3,14 +3,17 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Grid, IconButton, TextField, Typography, Stack, Button as MuiButton,
+  Grid, IconButton, TextField, Typography, Stack, Button as MuiButton, Tooltip,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import EditIcon from '@mui/icons-material/EditOutlined';
 import { DataGrid, esES } from '@mui/x-data-grid';
+import { useRouter } from 'next/router';
 import {
-  ButtonSimple, useAuth, useUI, updateRecord,
+  ButtonSimple, DataTable, DefaultModal, useAuth, useUI, updateRecord,
 } from '@siiges-ui/shared';
+import DocumentsStudents from '../../utils/DocumentsStudents';
 
 function AlumnosDataTable({
   title,
@@ -25,9 +28,11 @@ function AlumnosDataTable({
   buttonReloadDisabled,
   initialState,
   onActivados,
+  onEgresados,
 }) {
   const { session } = useAuth();
   const { setNoti, setLoading: setGlobalLoading } = useUI();
+  const router = useRouter();
 
   const [searchText, setSearchText] = useState('');
   const [filteredRows, setFilteredRows] = useState(rows);
@@ -35,9 +40,15 @@ function AlumnosDataTable({
   const [pageSize, setPageSize] = useState(10);
   const [selectionModel, setSelectionModel] = useState([]);
   const [activating, setActivating] = useState(false);
+  const [egresando, setEgresando] = useState(false);
+  const [noActivadosOpen, setNoActivadosOpen] = useState(false);
+  const [noActivadosList, setNoActivadosList] = useState([]);
+  const [noEgresadosOpen, setNoEgresadosOpen] = useState(false);
+  const [noEgresadosList, setNoEgresadosList] = useState([]);
 
-  const canActivar = session?.rol === 'admin' || session?.rol === 'avances_sicyt';
-  const mostrarActivar = canActivar && selectionModel.length > 0;
+  const canGestionar = session?.rol === 'admin' || session?.rol === 'avances_sicyt';
+  const mostrarActivar = canGestionar && selectionModel.length > 0;
+  const mostrarEgresar = canGestionar && selectionModel.length > 0;
 
   useEffect(() => {
     setLoading(false);
@@ -94,6 +105,12 @@ function AlumnosDataTable({
     debouncedSearch(value, rows);
   };
 
+  const handleEditarAlumno = (alumnoId) => {
+    setNoActivadosOpen(false);
+    setNoEgresadosOpen(false);
+    router.push(`/serviciosEscolares/alumnos/${alumnoId}/EditarAlumno`);
+  };
+
   const handleActivar = async () => {
     setActivating(true);
     setGlobalLoading(true);
@@ -104,15 +121,23 @@ function AlumnosDataTable({
       });
 
       if (response && response.statusCode === 200) {
-        const { activados, totalActivados, totalNoActivados } = response.data;
+        const {
+          activados, noActivados, totalActivados, totalNoActivados,
+        } = response.data;
 
-        setNoti({
-          open: true,
-          message: totalNoActivados > 0
-            ? `Se activaron ${totalActivados} alumno(s). ${totalNoActivados} alumno(s) no se pudieron activar por no tener validación Auténtica.`
-            : `Se activaron ${totalActivados} alumno(s) correctamente.`,
-          type: totalNoActivados > 0 ? 'warning' : 'success',
-        });
+        if (totalActivados > 0) {
+          setNoti({
+            open: true,
+            message: `Se activaron ${totalActivados} alumno(s) correctamente.`,
+            type: 'success',
+          });
+        }
+
+        if (totalNoActivados > 0) {
+          const detalles = (rows || []).filter((row) => noActivados.includes(row.id));
+          setNoActivadosList(detalles);
+          setNoActivadosOpen(true);
+        }
 
         if (onActivados) onActivados(activados);
         setSelectionModel([]);
@@ -131,6 +156,51 @@ function AlumnosDataTable({
     }
   };
 
+  const handleEgresar = async () => {
+    setEgresando(true);
+    setGlobalLoading(true);
+    try {
+      const response = await updateRecord({
+        data: { alumnoIds: selectionModel },
+        endpoint: '/alumnos/egreso-masivo',
+      });
+
+      if (response && response.statusCode === 200) {
+        const {
+          egresados, noEgresados, totalEgresados, totalNoEgresados,
+        } = response.data;
+
+        if (totalEgresados > 0) {
+          setNoti({
+            open: true,
+            message: `Se egresaron ${totalEgresados} alumno(s) correctamente.`,
+            type: 'success',
+          });
+        }
+
+        if (totalNoEgresados > 0) {
+          const detalles = (rows || []).filter((row) => noEgresados.includes(row.id));
+          setNoEgresadosList(detalles);
+          setNoEgresadosOpen(true);
+        }
+
+        if (onEgresados) onEgresados(egresados);
+        setSelectionModel([]);
+      } else {
+        throw new Error('No se pudo completar el egreso');
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: error.message || 'Error al egresar alumnos',
+        type: 'error',
+      });
+    } finally {
+      setEgresando(false);
+      setGlobalLoading(false);
+    }
+  };
+
   const localeText = {
     ...esES.components.MuiDataGrid.defaultProps.localeText,
     noRowsLabel: 'No hay registros',
@@ -138,11 +208,55 @@ function AlumnosDataTable({
     footerRowSelected: (count) => (count !== 1 ? `${count.toLocaleString()} filas seleccionadas` : `${count.toLocaleString()} fila seleccionada`),
   };
 
+  const alumnosDetalleColumns = [
+    {
+      field: 'id', headerName: 'ID', width: 50, hide: true,
+    },
+    { field: 'matricula', headerName: 'Matrícula', width: 150 },
+    {
+      field: 'nombreCompleto',
+      headerName: 'Nombre',
+      width: 280,
+      valueGetter: (params) => `${params.row.nombre} ${params.row.apellidoPaterno} ${params.row.apellidoMaterno}`,
+    },
+    { field: 'situacion', headerName: 'Situación', width: 120 },
+    { field: 'validacion', headerName: 'Validación', width: 150 },
+    {
+      field: 'documentos',
+      headerName: 'Documentos',
+      width: 220,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <DocumentsStudents
+          archivoCertificadoUbicacion={params.row.archivoCertificadoUbicacion}
+          archivoNacimientoUbicacion={params.row.archivoNacimientoUbicacion}
+          archivoCurpUbicacion={params.row.archivoCurpUbicacion}
+          archivoValidacionUbicacion={params.row.archivoValidacionUbicacion}
+        />
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      width: 100,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Tooltip title="Editar alumno" placement="top">
+          <IconButton onClick={() => handleEditarAlumno(params.id)}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      ),
+    },
+  ];
+
   return (
     <>
       <Grid container alignItems="center" spacing={2}>
         <Grid item xs={9} sx={{ mt: 2 }}>
-          {buttonAdd || onReloadClick || mostrarActivar ? (
+          {buttonAdd || onReloadClick || mostrarActivar || mostrarEgresar ? (
             <Stack
               direction="row"
               spacing={1.5}
@@ -175,8 +289,16 @@ function AlumnosDataTable({
               {mostrarActivar && (
                 <ButtonSimple
                   onClick={handleActivar}
-                  disabled={activating}
+                  disabled={activating || egresando}
                   text={`Activar (${selectionModel.length})`}
+                  design="guardar"
+                />
+              )}
+              {mostrarEgresar && (
+                <ButtonSimple
+                  onClick={handleEgresar}
+                  disabled={egresando || activating}
+                  text={`Egresar (${selectionModel.length})`}
                   design="guardar"
                 />
               )}
@@ -225,6 +347,58 @@ function AlumnosDataTable({
           initialState={initialState || { sorting: { sortModel: [{ field: 'id', sort: 'asc' }] } }}
         />
       </div>
+
+      <DefaultModal
+        title="Alumnos que no se pudieron activar"
+        open={noActivadosOpen}
+        setOpen={setNoActivadosOpen}
+        size="xl"
+      >
+        <Typography variant="body2" sx={{ mb: 2 }}>
+          Los siguientes alumnos no pudieron ser activados porque su validación
+          no está en estatus Auténtico y/o les faltan documentos requeridos.
+          Puede editarlos o revisar sus documentos para corregir su información.
+        </Typography>
+        <DataTable
+          rows={noActivadosList}
+          columns={alumnosDetalleColumns}
+          title="Alumnos no activados"
+        />
+        <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
+          <ButtonSimple
+            text="Cerrar"
+            design="cancelar"
+            onClick={() => setNoActivadosOpen(false)}
+          />
+        </Grid>
+      </DefaultModal>
+
+      <DefaultModal
+        title="Alumnos que no se pudieron egresar"
+        open={noEgresadosOpen}
+        setOpen={setNoEgresadosOpen}
+        size="xl"
+      >
+        <Typography variant="body2" sx={{ mb: 2 }}>
+          Los siguientes alumnos no cumplen los requisitos de egreso: su
+          validación no está en estatus Auténtico, les faltan asignaturas
+          obligatorias por aprobar, o los créditos cursados no coinciden con
+          los requeridos por el RVOE. Puede editarlos para revisar su
+          información.
+        </Typography>
+        <DataTable
+          rows={noEgresadosList}
+          columns={alumnosDetalleColumns}
+          title="Alumnos no egresados"
+        />
+        <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
+          <ButtonSimple
+            text="Cerrar"
+            design="cancelar"
+            onClick={() => setNoEgresadosOpen(false)}
+          />
+        </Grid>
+      </DefaultModal>
     </>
   );
 }
@@ -240,6 +414,7 @@ AlumnosDataTable.defaultProps = {
   initialState: { sorting: { sortModel: [{ field: 'id', sort: 'asc' }] } },
   buttonClick: () => {},
   onActivados: null,
+  onEgresados: null,
 };
 
 AlumnosDataTable.propTypes = {
@@ -270,6 +445,7 @@ AlumnosDataTable.propTypes = {
   onReloadClick: PropTypes.func,
   buttonReloadDisabled: PropTypes.bool,
   onActivados: PropTypes.func,
+  onEgresados: PropTypes.func,
 };
 
 export default React.memo(AlumnosDataTable);
