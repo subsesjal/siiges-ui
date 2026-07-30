@@ -41,6 +41,14 @@ export default function AlumnosTable({
     )));
   };
 
+  const handleEgresados = (egresadosIds) => {
+    setRows((prevRows) => (prevRows || []).map((row) => (
+      egresadosIds.includes(row.id)
+        ? { ...row, situacion: 'Egresado' }
+        : row
+    )));
+  };
+
   return (
     <Grid container sx={{ marginTop: 2 }}>
       <AlumnosDataTable
@@ -59,6 +67,7 @@ export default function AlumnosTable({
         columns={columnsAlumnos(handleDeleteSuccess)}
         title="Tabla de alumnos"
         onActivados={handleActivados}
+        onEgresados={handleEgresados}
       />
     </Grid>
   );

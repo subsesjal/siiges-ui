@@ -1,16 +1,12 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonSimple, GetFile, InputFile,
-  useUI,
+  GetFile, InputFile,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 
 export default function DocumentosAlumno({ id, type }) {
-  const { setNoti } = useUI();
   const [fileURLs, setFileURLs] = useState([null, null, null]);
-  const router = useRouter();
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => {
@@ -39,14 +35,6 @@ export default function DocumentosAlumno({ id, type }) {
       fetchFiles();
     }
   }, [id, type]);
-
-  const saveButtonAction = async () => {
-    setNoti({
-      open: true,
-      message: 'Documentos guardados con éxito',
-      type: 'success',
-    });
-  };
 
   return (
     <div style={{ padding: '20px' }}>
@@ -80,7 +68,7 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo Acta de Nacimiento (PDF)"
             url={fileURLs[1]}
             setUrl={(url) => handleFileLoaded(1, url)}
-            disabled={type === 'view'}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -91,7 +79,7 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo CURP (PDF)"
             url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
-            disabled={type === 'view'}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -105,26 +93,6 @@ export default function DocumentosAlumno({ id, type }) {
             disabled
           />
         </Grid>
-
-        {/* Botones solo en modo edición */}
-        {type === 'edit' && (
-          <>
-            <Grid item xs={9} />
-            <Grid item>
-              <ButtonSimple
-                text="Regresar"
-                design="enviar"
-                align="right"
-                onClick={() => {
-                  router.back();
-                }}
-              />
-            </Grid>
-            <Grid item>
-              <ButtonSimple onClick={saveButtonAction} text="Guardar" />
-            </Grid>
-          </>
-        )}
       </Grid>
     </div>
   );

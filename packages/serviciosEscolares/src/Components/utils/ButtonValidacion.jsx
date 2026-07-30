@@ -4,7 +4,7 @@ import {
   IconButton, Stack, Menu, MenuItem,
 } from '@mui/material';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import EditIcon from '@mui/icons-material/EditOutlined';
 import { updateRecord, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
@@ -72,7 +72,7 @@ export default function ButtonsValidacion({
         <Link href={linkUrl} passHref>
           <Tooltip title="Consultar Alumno" placement="top">
             <IconButton aria-label="Consultar Alumno" component="a">
-              <VisibilityOutlinedIcon />
+              <EditIcon />
             </IconButton>
           </Tooltip>
         </Link>
