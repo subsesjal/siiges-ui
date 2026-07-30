@@ -72,6 +72,10 @@ export default function AlumnosForm({
           situacion: alumno.situacion.nombre,
           validacion:
             alumno.validacion?.situacionValidacion?.nombre || 'Sin validar',
+          archivoCertificadoUbicacion: alumno.archivoCertificadoUbicacion || null,
+          archivoNacimientoUbicacion: alumno.archivoNacimientoUbicacion || null,
+          archivoCurpUbicacion: alumno.archivoCurpUbicacion || null,
+          archivoValidacionUbicacion: alumno.archivoValidacionUbicacion || null,
         }));
         setAlumnos(transformedAlumnos);
       }

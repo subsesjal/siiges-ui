@@ -15,6 +15,8 @@ export default function DatosInstitucion({ alumno }) {
   const { setNoti, setLoading } = useUI();
   const [urlValidacion, setUrlValidacion] = useState();
   const [urlCertificado, setUrlCertificado] = useState();
+  const [urlCurp, setUrlCurp] = useState();
+  const [urlNac, setUrlNac] = useState();
   const [formSent, setFormSent] = useState(false);
   const [openDropzone, setOpenDropzone] = useState(false);
   const [cancelText, setCancelText] = useState();
@@ -51,6 +53,18 @@ export default function DatosInstitucion({ alumno }) {
     entidadId: alumno.id,
     tipoEntidad: 'ALUMNO',
     tipoDocumento: 'ARCHIVO_CERTIFICADO',
+  };
+
+  const fileDataCurp = {
+    entidadId: alumno.id,
+    tipoEntidad: 'ALUMNO',
+    tipoDocumento: 'ARCHIVO_CURP',
+  };
+
+  const fileDataNac = {
+    entidadId: alumno.id,
+    tipoEntidad: 'ALUMNO',
+    tipoDocumento: 'ARCHIVO_NACIMIENTO',
   };
 
   const estatusOptions = [
@@ -107,6 +121,8 @@ export default function DatosInstitucion({ alumno }) {
       fetchValidationData();
       GetFile(fileDataValidacion, setUrlValidacion);
       GetFile(fileDataCertificado, setUrlCertificado);
+      GetFile(fileDataCurp, setUrlCurp);
+      GetFile(fileDataNac, setUrlNac);
     }
   }, [alumno]);
 
@@ -420,7 +436,7 @@ export default function DatosInstitucion({ alumno }) {
           rows={4}
           value={form.observaciones}
           onChange={handleChange}
-          disabled={!isCeSicyt}
+          disabled={isCeSicyt}
         />
       </Grid>
       {formSent && (
@@ -456,6 +472,28 @@ export default function DatosInstitucion({ alumno }) {
               disabled={false}
               title="Suba su archivo de Cédula Profesional, Título o equivalente"
               openDropzone={openDropzone}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <InputFile
+              tipoEntidad="ALUMNO"
+              tipoDocumento="ARCHIVO_NACIMIENTO"
+              id={alumno.id}
+              label="Archivo Acta de Nacimiento (PDF)"
+              url={urlCurp}
+              setUrl={setUrlCurp}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <InputFile
+              tipoEntidad="ALUMNO"
+              tipoDocumento="ARCHIVO_CURP"
+              id={alumno.id}
+              label="Archivo CURP (PDF)"
+              url={urlNac}
+              setUrl={setUrlNac}
               required
             />
           </Grid>
