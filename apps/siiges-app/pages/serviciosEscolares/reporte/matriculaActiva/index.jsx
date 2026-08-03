@@ -55,7 +55,7 @@ export default function MatriculaActiva() {
   };
 
   return (
-    <Layout title="Busqueda de Matrícula Activa">
+    <Layout title="Busqueda de Alumnos Activos">
       <Grid container>
         <Grid item xs={12}>
           <MatriculaActivaForm
