@@ -38,6 +38,7 @@ export default function UserForm({
   const isCreate = mode === VIEW_STATE.CREATE;
   const isEdit = mode === VIEW_STATE.EDIT;
   const isView = mode === VIEW_STATE.VIEW;
+  const canEditRoleAndStatus = isEdit && sessionRole === 'admin';
   const title = MODE_TITLES[mode] || 'Formulario de usuario';
 
   const options = useMemo(() => {
@@ -127,7 +128,7 @@ export default function UserForm({
             name="rolId"
             value={form.rolId || ''}
             required
-            disabled={!isCreate}
+            disabled={isView || (!isCreate && !canEditRoleAndStatus)}
             onChange={onChange}
             onblur={onBlur}
             errorMessage={errors.rolId}
@@ -181,7 +182,7 @@ export default function UserForm({
             name="estatus"
             value={form.estatus ?? 1}
             onChange={onChange}
-            disabled={isView || isEdit}
+            disabled={isView || (isEdit && !canEditRoleAndStatus)}
             required
           />
         </Grid>
