@@ -207,7 +207,7 @@ const panelMenuOptions = (rol, nombre) => {
               route: '/serviciosEscolares/reporte/extraordinario',
             },
             {
-              text: 'Matrícula Activa',
+              text: 'Alumnos Activos',
               route: '/serviciosEscolares/reporte/matriculaActiva',
             },
             {

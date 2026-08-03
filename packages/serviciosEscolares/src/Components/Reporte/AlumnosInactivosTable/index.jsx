@@ -68,13 +68,13 @@ AlumnosInactivosTable.defaultProps = {
 AlumnosInactivosTable.propTypes = {
   matriculas: PropTypes.arrayOf(
     PropTypes.shape({
-      validacionId: PropTypes.number.isRequired,
+      validacionId: PropTypes.number,
       tipoValidacion: PropTypes.string,
       institucion: PropTypes.string,
       totalAlumnos: PropTypes.number,
     }),
   ),
-  institucionId: PropTypes.string,
-  plantelId: PropTypes.string,
-  programaId: PropTypes.string,
+  institucionId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  plantelId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  programaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
