@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Grid } from '@mui/material';
-import { ButtonSimple, Select, useUI } from '@siiges-ui/shared';
+import {
+  ButtonSimple, Select, useAuth, useUI,
+} from '@siiges-ui/shared';
 import {
   getInstituciones,
   getPlantelesByInstitucion,
@@ -8,6 +10,10 @@ import {
 } from '@siiges-ui/instituciones';
 import PropTypes from 'prop-types';
 import SearchIcon from '@mui/icons-material/Search';
+import getInstitucionIdFromSession from '../../utils/getInstitucionId';
+
+const LOCAL_STORAGE_KEY = 'alumnosInactivosFormState';
+const ROLES_INSTITUCION_FIJA = ['representante', 'ce_ies'];
 
 export default function AlumnosInactivosForm({
   formData,
@@ -16,6 +22,7 @@ export default function AlumnosInactivosForm({
   setLoading,
 }) {
   const { setNoti } = useUI();
+  const { session } = useAuth();
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,
@@ -24,6 +31,10 @@ export default function AlumnosInactivosForm({
 
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
+
+  const isRepresentante = ROLES_INSTITUCION_FIJA.includes(session.rol);
+
+  const hydratedRef = useRef(false);
 
   const handleInstitucionChange = (institucionId) => {
     setFormData((prev) => ({
@@ -85,6 +96,56 @@ export default function AlumnosInactivosForm({
     setFormData((prev) => ({ ...prev, programa: programaId }));
   };
 
+  useEffect(() => {
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
+
+    if (typeof window === 'undefined') return;
+
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!saved) return;
+
+    try {
+      const parsed = JSON.parse(saved);
+      const isEmpty = !formData.institucion && !formData.plantel && !formData.programa;
+
+      if (isEmpty && !isRepresentante) {
+        setFormData((prev) => ({ ...prev, ...parsed }));
+
+        if (parsed.institucion) {
+          handleInstitucionChange(parsed.institucion);
+        }
+        if (parsed.plantel) {
+          handlePlantelChange(parsed.plantel);
+        }
+      }
+    } catch {
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    const asignarInstitucionDesdeSesion = async () => {
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones,
+        session,
+      });
+
+      if (institucionId && institucionId !== formData.institucion) {
+        handleInstitucionChange(institucionId);
+      }
+    };
+
+    if (isRepresentante) {
+      asignarInstitucionDesdeSesion();
+    }
+  }, [instituciones, session]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formData));
+  }, [formData]);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -97,6 +158,7 @@ export default function AlumnosInactivosForm({
             || []
           }
           onChange={(e) => handleInstitucionChange(e.target.value)}
+          disabled={isRepresentante}
         />
       </Grid>
       <Grid item xs={4}>
@@ -136,9 +198,9 @@ export default function AlumnosInactivosForm({
 
 AlumnosInactivosForm.propTypes = {
   formData: PropTypes.shape({
-    programa: PropTypes.string,
-    institucion: PropTypes.string,
-    plantel: PropTypes.string,
+    programa: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    institucion: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    plantel: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     busquedaGeneralTexto: PropTypes.string,
   }).isRequired,
   setFormData: PropTypes.func.isRequired,
