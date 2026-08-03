@@ -19,7 +19,12 @@ const columnsAlumnos = (onDeleteSuccess) => [
     sortable: false,
     filterable: false,
     renderCell: (params) => (
-      <DocumentsStudents id={params.id} />
+      <DocumentsStudents
+        archivoCertificadoUbicacion={params.row.archivoCertificadoUbicacion}
+        archivoNacimientoUbicacion={params.row.archivoNacimientoUbicacion}
+        archivoCurpUbicacion={params.row.archivoCurpUbicacion}
+        archivoValidacionUbicacion={params.row.archivoValidacionUbicacion}
+      />
     ),
   },
   {
