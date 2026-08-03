@@ -2,16 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { render, screen } from '@testing-library/react';
 
-function MockBinarySelect({ label }) {
-  return <select aria-label={label} />;
+function MockBinarySelect({ title, name, disabled }) {
+  return <select aria-label={title} name={name} disabled={disabled} />;
 }
 
 MockBinarySelect.propTypes = {
-  label: PropTypes.string,
+  title: PropTypes.string,
+  name: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 MockBinarySelect.defaultProps = {
-  label: '',
+  title: '',
+  name: '',
+  disabled: false,
 };
 
 function MockButtonsForm({
@@ -70,9 +74,14 @@ MockInputPassword.defaultProps = {
   name: '',
 };
 
-function MockSelect({ title, name, options }) {
+function MockSelect({
+  title,
+  name,
+  options,
+  disabled,
+}) {
   return (
-    <select aria-label={title} name={name}>
+    <select aria-label={title} name={name} disabled={disabled}>
       {options.map((option) => (
         <option key={option.id} value={option.id}>{option.nombre}</option>
       ))}
@@ -83,6 +92,7 @@ function MockSelect({ title, name, options }) {
 MockSelect.propTypes = {
   title: PropTypes.string,
   name: PropTypes.string,
+  disabled: PropTypes.bool,
   options: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     nombre: PropTypes.string.isRequired,
@@ -92,6 +102,7 @@ MockSelect.propTypes = {
 MockSelect.defaultProps = {
   title: '',
   name: '',
+  disabled: false,
   options: [],
 };
 
@@ -260,5 +271,39 @@ describe('UserForm', () => {
     />);
 
     expect(screen.getByText('Rol actual')).toBeInTheDocument();
+  });
+
+  it('enables rol and estatus in EDIT mode for admin', () => {
+    render(<UserForm
+      mode="EDIT"
+      form={defaultProps.form}
+      errors={defaultProps.errors}
+      onChange={defaultProps.onChange}
+      onBlur={defaultProps.onBlur}
+      onSubmit={defaultProps.onSubmit}
+      onCancel={defaultProps.onCancel}
+      sessionRole="admin"
+      topAction={defaultProps.topAction}
+    />);
+
+    expect(screen.getByLabelText('Rol')).not.toBeDisabled();
+    expect(screen.getByLabelText('Estatus del usuario')).not.toBeDisabled();
+  });
+
+  it('disables rol and estatus in EDIT mode for non-admin', () => {
+    render(<UserForm
+      mode="EDIT"
+      form={defaultProps.form}
+      errors={defaultProps.errors}
+      onChange={defaultProps.onChange}
+      onBlur={defaultProps.onBlur}
+      onSubmit={defaultProps.onSubmit}
+      onCancel={defaultProps.onCancel}
+      sessionRole="representante"
+      topAction={defaultProps.topAction}
+    />);
+
+    expect(screen.getByLabelText('Rol')).toBeDisabled();
+    expect(screen.getByLabelText('Estatus del usuario')).toBeDisabled();
   });
 });

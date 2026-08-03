@@ -53,7 +53,12 @@ const buildPayload = (form, mode) => {
   });
 };
 
-const useUserForm = ({ mode, initialUser, sessionRole }) => {
+const useUserForm = ({
+  mode,
+  initialUser,
+  sessionRole,
+  visibleFields = [],
+}) => {
   const isCreate = mode === VIEW_STATE.CREATE;
   const initialUserSignature = useMemo(() => JSON.stringify({
     id: initialUser?.id ?? null,
@@ -106,7 +111,7 @@ const useUserForm = ({ mode, initialUser, sessionRole }) => {
 
   const handleBlur = (event) => {
     const { name } = event.target;
-    const fieldErrors = getFieldErrors(form, mode);
+    const fieldErrors = getFieldErrors(form, mode, { visibleFields });
 
     setErrors((prevErrors) => ({
       ...prevErrors,
@@ -116,7 +121,12 @@ const useUserForm = ({ mode, initialUser, sessionRole }) => {
 
   const validate = () => {
     const payload = buildPayload(form, mode);
-    const result = validateUserForm({ form, mode, payload });
+    const result = validateUserForm({
+      form,
+      mode,
+      payload,
+      options: { visibleFields },
+    });
     setErrors(result.errors || {});
     return result;
   };
