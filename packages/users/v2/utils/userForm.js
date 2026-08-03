@@ -82,9 +82,53 @@ const normalizeUpdatePayload = (form) => {
   return payload;
 };
 
+const isEqualValue = (left, right) => {
+  if (left === right) {
+    return true;
+  }
+
+  if ((left === null || left === undefined) && (right === null || right === undefined)) {
+    return true;
+  }
+
+  return false;
+};
+
+const buildChangedUpdatePayload = ({ initialUser, candidatePayload, sessionRole }) => {
+  const basePayload = normalizeUpdatePayload(mapUserToForm(initialUser, sessionRole));
+  const changedPayload = {};
+
+  if (!isEqualValue(basePayload.actualizado, candidatePayload.actualizado)) {
+    changedPayload.actualizado = candidatePayload.actualizado;
+  }
+
+  const basePersona = basePayload.persona || {};
+  const candidatePersona = candidatePayload.persona || {};
+  const changedPersona = Object.keys(candidatePersona).reduce((acc, key) => {
+    if (!isEqualValue(basePersona[key], candidatePersona[key])) {
+      acc[key] = candidatePersona[key];
+    }
+
+    return acc;
+  }, {});
+
+  if (Object.keys(changedPersona).length > 0) {
+    changedPayload.persona = changedPersona;
+  }
+
+  ['correo', 'rolId', 'estatus'].forEach((key) => {
+    if (!isEqualValue(basePayload[key], candidatePayload[key])) {
+      changedPayload[key] = candidatePayload[key];
+    }
+  });
+
+  return changedPayload;
+};
+
 export {
   buildEmptyUserForm,
   mapUserToForm,
   getUserDisplayName,
   normalizeUpdatePayload,
+  buildChangedUpdatePayload,
 };

@@ -46,10 +46,10 @@ jest.mock('@siiges-ui/users', () => ({
 
 jest.mock('../../../v2/hooks/useUserDetail', () => jest.fn());
 
-jest.mock('../../../v2/components/UserProfileSkeleton', () => function () {
+jest.mock('../../../v2/components/UserProfileSkeleton', () => function MockUserProfileSkeleton() {
   return <div>skeleton</div>;
 });
-jest.mock('../../../v2/components/UserProfileViewSections', () => function () {
+jest.mock('../../../v2/components/UserProfileViewSections', () => function MockUserProfileViewSections() {
   return <div>sections</div>;
 });
 
@@ -84,9 +84,7 @@ describe('UserProfilePage', () => {
     render(<UserProfilePage />);
 
     expect(screen.getByText('sections')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('Regresar'));
     fireEvent.click(screen.getByText('Editar perfil'));
-    expect(mockBack).toHaveBeenCalled();
     expect(mockPush).toHaveBeenCalledWith('/usuarios/perfilUsuario/editar');
   });
 
@@ -109,6 +107,9 @@ describe('UserProfilePage', () => {
 
     expect(mockNotifyError).toHaveBeenCalledWith('Boom');
     expect(screen.getByText('No se pudo cargar el perfil.')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Regresar'));
+    expect(mockBack).toHaveBeenCalled();
   });
 
   it('returns null when there is no profile data yet', () => {

@@ -148,9 +148,27 @@ const updateUser = ({
   signal,
 });
 
+const deleteUser = ({
+  session,
+  usuarioId,
+  signal,
+}) => {
+  if (session?.rol !== 'admin') {
+    return Promise.reject(new Error('Rol no autorizado para eliminar usuarios.'));
+  }
+
+  return request({
+    path: `api/v1/usuarios/${usuarioId}`,
+    token: session.token,
+    method: 'DELETE',
+    signal,
+  });
+};
+
 export {
   getUsers,
   getUserById,
   createUser,
   updateUser,
+  deleteUser,
 };

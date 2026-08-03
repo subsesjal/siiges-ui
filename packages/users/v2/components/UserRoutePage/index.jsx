@@ -16,6 +16,12 @@ import { getUserPermissions } from '../../utils/permissions';
 import useUserDetail from '../../hooks/useUserDetail';
 import { createUser, updateUser } from '../../services/usuarios.service';
 
+const MODE_LAYOUT_TITLES = {
+  [VIEW_STATE.CREATE]: 'Agregar usuario',
+  [VIEW_STATE.EDIT]: 'Modificar usuario',
+  [VIEW_STATE.VIEW]: 'Consultar usuario',
+};
+
 export default function UserRoutePage({ mode }) {
   const router = useRouter();
   const { session } = useAuth();
@@ -100,9 +106,10 @@ export default function UserRoutePage({ mode }) {
   const isSessionReady = Boolean(session?.rol);
   const isRouteLoading = !isSessionReady
     || (needsDetail && detailState.loading && !detailState.data);
+  const layoutTitle = MODE_LAYOUT_TITLES[mode] || 'Usuarios';
 
   return (
-    <Layout title="Usuarios V2">
+    <Layout title={layoutTitle}>
       <Loading loading={isRouteLoading} />
       <Box sx={{ paddingX: 2, paddingTop: 1 }}>
         {!canRenderMode ? (

@@ -90,9 +90,6 @@ export default function UserProfilePage() {
           <Grid item xs={12}>
             <Grid container justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
               <Grid item>
-                <ButtonSimple onClick={() => router.back()} design="enviar" text="Regresar" />
-              </Grid>
-              <Grid item>
                 <ButtonSimple
                   onClick={() => router.push('/usuarios/perfilUsuario/editar')}
                   text="Editar perfil"

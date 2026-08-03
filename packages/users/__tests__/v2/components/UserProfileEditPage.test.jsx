@@ -78,6 +78,7 @@ jest.mock('../../../v2/services/usuarios.service', () => ({
 const mockUseUserDetail = jest.requireMock('../../../v2/hooks/useUserDetail');
 const mockUseUserForm = jest.requireMock('../../../v2/hooks/useUserForm');
 const mockUpdateUser = jest.requireMock('../../../v2/services/usuarios.service').updateUser;
+const mockUseAuth = jest.requireMock('@siiges-ui/shared').useAuth;
 
 // eslint-disable-next-line import/first
 import UserProfileEditPage from '../../../v2/components/UserProfileEditPage';
@@ -142,6 +143,22 @@ describe('UserProfileEditPage', () => {
     expect(screen.getByText('No se pudo cargar el perfil.')).toBeInTheDocument();
   });
 
+  it('uses fallback message and back navigation in profile load error state', () => {
+    mockUseUserDetail.mockReturnValueOnce({
+      data: null,
+      loading: false,
+      error: {},
+    });
+
+    render(<UserProfileEditPage />);
+
+    expect(mockNotifyError).toHaveBeenCalledWith('No fue posible cargar el perfil.');
+    expect(screen.getByText('Error desconocido')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Regresar'));
+    expect(mockBack).toHaveBeenCalled();
+  });
+
   it('submits the profile update and redirects on success', async () => {
     render(<UserProfileEditPage />);
 
@@ -151,7 +168,7 @@ describe('UserProfileEditPage', () => {
       expect(mockUpdateUser).toHaveBeenCalledWith({
         session: { id: 1, token: 'abc', rol: 'admin' },
         usuarioId: 1,
-        data: { correo: 'updated@test.com', rolId: 2 },
+        data: { correo: 'updated@test.com' },
       });
     });
 
@@ -159,6 +176,144 @@ describe('UserProfileEditPage', () => {
       expect(mockNotifySuccess).toHaveBeenCalledWith('Perfil actualizado correctamente.');
     });
     expect(mockPush).toHaveBeenCalledWith('/usuarios/perfilUsuario');
+  });
+
+  it('does not submit when profile has no changes', async () => {
+    mockUseUserForm.mockReturnValueOnce({
+      form: { correo: 'user@test.com' },
+      errors: {},
+      handleChange: jest.fn(),
+      handleBlur: jest.fn(),
+      validate: jest.fn(() => ({
+        valid: true,
+        cleanedData: {
+          actualizado: 1,
+          correo: 'user@test.com',
+          rolId: 2,
+          estatus: 1,
+          persona: {
+            nombre: 'Juan',
+            apellidoPaterno: 'Perez',
+            apellidoMaterno: 'G',
+            sexo: '',
+            nacionalidad: '',
+            rfc: '',
+            curp: '',
+            celular: '',
+            telefono: '',
+            tituloCargo: '',
+          },
+        },
+        errors: {},
+      })),
+    });
+
+    render(<UserProfileEditPage />);
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(mockUpdateUser).not.toHaveBeenCalled();
+    });
+    expect(mockNotifySuccess).toHaveBeenCalledWith('No hay cambios para guardar.');
+    expect(mockPush).toHaveBeenCalledWith('/usuarios/perfilUsuario');
+  });
+
+  it('shows validation error and does not call update when form is invalid', async () => {
+    mockUseUserForm.mockReturnValueOnce({
+      form: { correo: '' },
+      errors: {},
+      handleChange: jest.fn(),
+      handleBlur: jest.fn(),
+      validate: jest.fn(() => ({
+        valid: false,
+        cleanedData: {},
+        errors: { correo: 'Correo requerido' },
+      })),
+    });
+
+    render(<UserProfileEditPage />);
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(mockUpdateUser).not.toHaveBeenCalled();
+    });
+    expect(mockNotifyError).toHaveBeenCalledWith('Correo requerido');
+  });
+
+  it('shows fallback validation message when no field error is available', async () => {
+    mockUseUserForm.mockReturnValueOnce({
+      form: { correo: '' },
+      errors: {},
+      handleChange: jest.fn(),
+      handleBlur: jest.fn(),
+      validate: jest.fn(() => ({
+        valid: false,
+        cleanedData: {},
+        errors: null,
+      })),
+    });
+
+    render(<UserProfileEditPage />);
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(mockNotifyError).toHaveBeenCalledWith('Revisa los campos obligatorios antes de continuar.');
+    });
+    expect(mockUpdateUser).not.toHaveBeenCalled();
+  });
+
+  it('supports missing session role when building payload diff', async () => {
+    mockUseAuth.mockReturnValueOnce({ session: { id: 1, token: 'abc' } });
+
+    render(<UserProfileEditPage />);
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(mockUpdateUser).toHaveBeenCalledWith({
+        session: { id: 1, token: 'abc' },
+        usuarioId: 1,
+        data: { correo: 'updated@test.com' },
+      });
+    });
+  });
+
+  it('shows error notification when update fails', async () => {
+    mockUpdateUser.mockRejectedValueOnce(new Error('Fallo update'));
+
+    render(<UserProfileEditPage />);
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(mockNotifyError).toHaveBeenCalledWith('Fallo update');
+    });
+  });
+
+  it('does not submit while detail state is loading', async () => {
+    mockUseUserDetail.mockReturnValueOnce({
+      data: {
+        id: 1,
+        correo: 'user@test.com',
+        usuario: 'testuser',
+        estatus: 1,
+        rol: { id: 2, descripcion: 'Admin' },
+        persona: { nombre: 'Juan', apellidoPaterno: 'Perez', apellidoMaterno: 'G' },
+      },
+      loading: true,
+      error: null,
+    });
+
+    render(<UserProfileEditPage />);
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(mockUpdateUser).not.toHaveBeenCalled();
+    });
   });
 
   it('navigates back when cancel is clicked', () => {

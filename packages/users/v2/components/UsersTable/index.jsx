@@ -5,7 +5,16 @@ import mapUsersToRows from '../../utils/userRows';
 import UsersActionIcons from '../UsersActionIcons';
 
 function UsersTable({
-  data, loading, canEdit, onView, onEdit, canCreate, onCreate, onReload,
+  data,
+  loading,
+  canEdit,
+  canDelete,
+  onView,
+  onEdit,
+  onDelete,
+  canCreate,
+  onCreate,
+  onReload,
 }) {
   const rows = useMemo(() => mapUsersToRows(data), [data]);
 
@@ -25,12 +34,14 @@ function UsersTable({
       renderCell: (params) => (
         <UsersActionIcons
           canEdit={canEdit}
+          canDelete={canDelete}
           onView={() => onView(params.row.raw)}
           onEdit={() => onEdit(params.row.raw)}
+          onDelete={() => onDelete(params.row.raw)}
         />
       ),
     },
-  ], [canEdit, onEdit, onView]);
+  ], [canDelete, canEdit, onDelete, onEdit, onView]);
 
   return (
     <DataTable
@@ -38,7 +49,7 @@ function UsersTable({
       columns={columns}
       loading={loading}
       buttonAdd={canCreate}
-      buttonText="Nuevo usuario"
+      buttonText="Agregar usuario"
       buttonClick={onCreate}
       buttonType="add"
       onReloadClick={onReload}
@@ -47,6 +58,8 @@ function UsersTable({
 }
 
 UsersTable.defaultProps = {
+  canDelete: false,
+  onDelete: () => {},
   canCreate: false,
   onCreate: () => {},
   onReload: () => {},
@@ -56,8 +69,10 @@ UsersTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   loading: PropTypes.bool.isRequired,
   canEdit: PropTypes.bool.isRequired,
+  canDelete: PropTypes.bool,
   onView: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
   canCreate: PropTypes.bool,
   onCreate: PropTypes.func,
   onReload: PropTypes.func,

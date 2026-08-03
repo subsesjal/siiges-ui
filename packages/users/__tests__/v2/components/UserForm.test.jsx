@@ -14,11 +14,16 @@ MockBinarySelect.defaultProps = {
   label: '',
 };
 
-function MockButtonsForm({ cancel, confirm }) {
+function MockButtonsForm({
+  cancel,
+  confirm,
+  confirmDisabled,
+  cancelText,
+}) {
   return (
     <div>
-      <button type="button" onClick={cancel}>Cancelar</button>
-      <button type="button" onClick={confirm}>Guardar</button>
+      <button type="button" onClick={cancel}>{cancelText}</button>
+      {!confirmDisabled && <button type="button" onClick={confirm}>Guardar</button>}
     </div>
   );
 }
@@ -26,11 +31,15 @@ function MockButtonsForm({ cancel, confirm }) {
 MockButtonsForm.propTypes = {
   cancel: PropTypes.func,
   confirm: PropTypes.func,
+  confirmDisabled: PropTypes.bool,
+  cancelText: PropTypes.string,
 };
 
 MockButtonsForm.defaultProps = {
   cancel: () => {},
   confirm: () => {},
+  confirmDisabled: false,
+  cancelText: 'Cancelar',
 };
 
 function MockInput({ label, name }) {
@@ -61,18 +70,29 @@ MockInputPassword.defaultProps = {
   name: '',
 };
 
-function MockSelect({ title, name }) {
-  return <select aria-label={title} name={name} />;
+function MockSelect({ title, name, options }) {
+  return (
+    <select aria-label={title} name={name}>
+      {options.map((option) => (
+        <option key={option.id} value={option.id}>{option.nombre}</option>
+      ))}
+    </select>
+  );
 }
 
 MockSelect.propTypes = {
   title: PropTypes.string,
   name: PropTypes.string,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    nombre: PropTypes.string.isRequired,
+  })),
 };
 
 MockSelect.defaultProps = {
   title: '',
   name: '',
+  options: [],
 };
 
 jest.mock('@siiges-ui/shared', () => ({
@@ -127,7 +147,7 @@ describe('UserForm', () => {
     expect(container).toBeTruthy();
   });
 
-  it('shows CREATE title', () => {
+  it('shows user data title in CREATE mode', () => {
     render(<UserForm
       mode={defaultProps.mode}
       form={defaultProps.form}
@@ -139,7 +159,7 @@ describe('UserForm', () => {
       sessionRole={defaultProps.sessionRole}
       topAction={defaultProps.topAction}
     />);
-    expect(screen.getByText('Crear usuario')).toBeInTheDocument();
+    expect(screen.getByText('Datos del usuario')).toBeInTheDocument();
   });
 
   it('renders without crashing in VIEW mode', () => {
@@ -157,6 +177,40 @@ describe('UserForm', () => {
     expect(container).toBeTruthy();
   });
 
+  it('shows user data title in VIEW mode', () => {
+    render(<UserForm
+      mode="VIEW"
+      form={defaultProps.form}
+      errors={defaultProps.errors}
+      onChange={defaultProps.onChange}
+      onBlur={defaultProps.onBlur}
+      onSubmit={defaultProps.onSubmit}
+      onCancel={defaultProps.onCancel}
+      sessionRole={defaultProps.sessionRole}
+      topAction={defaultProps.topAction}
+    />);
+
+    expect(screen.getByText('Datos del usuario')).toBeInTheDocument();
+    expect(screen.queryByText('Consultar usuario')).not.toBeInTheDocument();
+  });
+
+  it('shows "Regresar" button in VIEW mode', () => {
+    render(<UserForm
+      mode="VIEW"
+      form={defaultProps.form}
+      errors={defaultProps.errors}
+      onChange={defaultProps.onChange}
+      onBlur={defaultProps.onBlur}
+      onSubmit={defaultProps.onSubmit}
+      onCancel={defaultProps.onCancel}
+      sessionRole={defaultProps.sessionRole}
+      topAction={defaultProps.topAction}
+    />);
+
+    expect(screen.getByText('Regresar')).toBeInTheDocument();
+    expect(screen.queryByText('Guardar')).not.toBeInTheDocument();
+  });
+
   it('renders without crashing in EDIT mode', () => {
     const { container } = render(<UserForm
       mode="EDIT"
@@ -170,5 +224,41 @@ describe('UserForm', () => {
       topAction={defaultProps.topAction}
     />);
     expect(container).toBeTruthy();
+  });
+
+  it('shows user data title in EDIT mode', () => {
+    render(<UserForm
+      mode="EDIT"
+      form={defaultProps.form}
+      errors={defaultProps.errors}
+      onChange={defaultProps.onChange}
+      onBlur={defaultProps.onBlur}
+      onSubmit={defaultProps.onSubmit}
+      onCancel={defaultProps.onCancel}
+      sessionRole={defaultProps.sessionRole}
+      topAction={defaultProps.topAction}
+    />);
+
+    expect(screen.getByText('Datos del usuario')).toBeInTheDocument();
+    expect(screen.queryByText('Modifica usuario')).not.toBeInTheDocument();
+  });
+
+  it('adds "Rol actual" option when current role is not in session options', () => {
+    render(<UserForm
+      mode="EDIT"
+      form={{
+        ...defaultProps.form,
+        rolId: '999',
+      }}
+      errors={defaultProps.errors}
+      onChange={defaultProps.onChange}
+      onBlur={defaultProps.onBlur}
+      onSubmit={defaultProps.onSubmit}
+      onCancel={defaultProps.onCancel}
+      sessionRole="sicyt_editar"
+      topAction={defaultProps.topAction}
+    />);
+
+    expect(screen.getByText('Rol actual')).toBeInTheDocument();
   });
 });

@@ -12,7 +12,7 @@ export default function UsersEmptyState({ canCreate, onCreate }) {
           Cuando agregues usuarios apareceran aqui.
         </Typography>
         {canCreate && (
-          <Button text="Nuevo usuario" type="add" onClick={onCreate} align="center" />
+          <Button text="Agregar usuario" type="add" onClick={onCreate} align="center" />
         )}
       </Stack>
     </Box>
