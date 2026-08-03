@@ -19,6 +19,23 @@ import { buildChangedUpdatePayload } from '../../utils/userForm';
 import UserProfileEditForm from '../UserProfileEditForm';
 import UserProfileSkeleton from '../UserProfileSkeleton';
 
+const PROFILE_VISIBLE_FIELDS = [
+  'nombre',
+  'apellidoPaterno',
+  'apellidoMaterno',
+  'sexo',
+  'nacionalidad',
+  'rfc',
+  'curp',
+  'correo',
+  'celular',
+  'telefono',
+  'usuario',
+  'rolId',
+  'tituloCargo',
+  'estatus',
+];
+
 export default function UserProfileEditPage() {
   const router = useRouter();
   const { session } = useAuth();
@@ -49,6 +66,7 @@ export default function UserProfileEditPage() {
     mode: VIEW_STATE.EDIT,
     initialUser: detailState.data,
     sessionRole: session?.rol || '',
+    visibleFields: PROFILE_VISIBLE_FIELDS,
   });
 
   const profileUser = detailState.data;

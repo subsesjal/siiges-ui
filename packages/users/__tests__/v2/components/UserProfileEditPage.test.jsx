@@ -120,6 +120,24 @@ describe('UserProfileEditPage', () => {
     render(<UserProfileEditPage />);
 
     expect(screen.getByTestId('edit-form')).toBeInTheDocument();
+    expect(mockUseUserForm).toHaveBeenCalledWith(expect.objectContaining({
+      visibleFields: [
+        'nombre',
+        'apellidoPaterno',
+        'apellidoMaterno',
+        'sexo',
+        'nacionalidad',
+        'rfc',
+        'curp',
+        'correo',
+        'celular',
+        'telefono',
+        'usuario',
+        'rolId',
+        'tituloCargo',
+        'estatus',
+      ],
+    }));
   });
 
   it('renders the skeleton while loading', () => {

@@ -5,7 +5,16 @@ const PHONE_REGEX = /^\d{10}$/;
 
 const isEmpty = (value) => value === undefined || value === null || String(value).trim() === '';
 
-const validateContactoFields = (form) => {
+const shouldValidateField = (fieldName, visibleFields) => {
+  if (!Array.isArray(visibleFields) || visibleFields.length === 0) {
+    return true;
+  }
+
+  return visibleFields.includes(fieldName);
+};
+
+const validateContactoFields = (form, options = {}) => {
+  const { visibleFields = [] } = options;
   const contactoErrors = {};
   const correo = String(form.correo || '').trim();
   const curp = String(form.persona?.curp || '').trim();
@@ -13,25 +22,29 @@ const validateContactoFields = (form) => {
   const celular = String(form.persona?.celular || '').trim();
   const telefono = String(form.persona?.telefono || '').trim();
 
-  if (isEmpty(correo)) {
+  if (shouldValidateField('correo', visibleFields) && isEmpty(correo)) {
     contactoErrors.correo = 'Correo requerido.';
-  } else if (correo.length < 3 || correo.length > 50 || !EMAIL_REGEX.test(correo)) {
+  } else if (shouldValidateField('correo', visibleFields)
+    && (correo.length < 3 || correo.length > 50 || !EMAIL_REGEX.test(correo))) {
     contactoErrors.correo = 'El correo debe ser válido y tener entre 3 y 50 caracteres.';
   }
 
-  if (curp && curp.length !== 18) {
+  if (shouldValidateField('curp', visibleFields) && curp && curp.length !== 18) {
     contactoErrors.curp = 'La CURP debe contener 18 caracteres.';
   }
 
-  if (rfc && rfc.length !== 12 && rfc.length !== 13) {
+  if (shouldValidateField('rfc', visibleFields)
+    && rfc
+    && rfc.length !== 12
+    && rfc.length !== 13) {
     contactoErrors.rfc = 'El RFC debe contener 12 o 13 caracteres.';
   }
 
-  if (celular && !PHONE_REGEX.test(celular)) {
+  if (shouldValidateField('celular', visibleFields) && celular && !PHONE_REGEX.test(celular)) {
     contactoErrors.celular = 'El celular debe contener exactamente 10 dígitos numéricos.';
   }
 
-  if (telefono && !PHONE_REGEX.test(telefono)) {
+  if (shouldValidateField('telefono', visibleFields) && telefono && !PHONE_REGEX.test(telefono)) {
     contactoErrors.telefono = 'El teléfono debe contener exactamente 10 dígitos numéricos.';
   }
 
@@ -52,33 +65,46 @@ const validatePassword = (value) => {
   return '';
 };
 
-const getFieldErrors = (form, mode) => {
-  const contactoErrors = validateContactoFields(form);
+const getFieldErrors = (form, mode, options = {}) => {
+  const { visibleFields = [] } = options;
+  const contactoErrors = validateContactoFields(form, options);
   const errors = { ...contactoErrors };
 
-  if (!form.persona?.nombre) errors.nombre = 'Nombre requerido.';
-  if (!form.persona?.apellidoPaterno) errors.apellidoPaterno = 'Apellido requerido.';
+  if (shouldValidateField('nombre', visibleFields) && !form.persona?.nombre) {
+    errors.nombre = 'Nombre requerido.';
+  }
+  if (shouldValidateField('apellidoPaterno', visibleFields) && !form.persona?.apellidoPaterno) {
+    errors.apellidoPaterno = 'Apellido requerido.';
+  }
 
-  if (mode !== VIEW_STATE.EDIT && !form.rolId) {
+  if (shouldValidateField('rolId', visibleFields) && mode !== VIEW_STATE.EDIT && !form.rolId) {
     errors.rolId = 'Rol requerido.';
   }
 
   if (mode === VIEW_STATE.CREATE) {
-    if (!form.usuario) errors.usuario = 'Usuario requerido.';
-    const passwordError = validatePassword(form.contrasena);
-    if (passwordError) errors.contrasena = passwordError;
-    if (!form.repeatContrasena) {
-      errors.repeatContrasena = 'Repetir contraseña es requerido.';
-    } else if (form.repeatContrasena !== form.contrasena) {
-      errors.repeatContrasena = 'Las contraseñas deben coincidir.';
+    if (shouldValidateField('usuario', visibleFields) && !form.usuario) {
+      errors.usuario = 'Usuario requerido.';
+    }
+    if (shouldValidateField('contrasena', visibleFields)) {
+      const passwordError = validatePassword(form.contrasena);
+      if (passwordError) errors.contrasena = passwordError;
+    }
+    if (shouldValidateField('repeatContrasena', visibleFields)) {
+      if (!form.repeatContrasena) {
+        errors.repeatContrasena = 'Repetir contraseña es requerido.';
+      } else if (form.repeatContrasena !== form.contrasena) {
+        errors.repeatContrasena = 'Las contraseñas deben coincidir.';
+      }
     }
   }
 
   return errors;
 };
 
-const validateUserForm = ({ form, mode, payload }) => {
-  const errors = getFieldErrors(form, mode);
+const validateUserForm = ({
+  form, mode, payload, options = {},
+}) => {
+  const errors = getFieldErrors(form, mode, options);
   if (Object.keys(errors).length > 0) {
     return { valid: false, errors, cleanedData: null };
   }
