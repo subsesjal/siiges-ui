@@ -1,12 +1,11 @@
 import { Grid } from '@mui/material';
 import {
-  DefaultModal, Select, ButtonsForm, useUI,
+  DefaultModal, Select, ButtonsForm, useUI, getData,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import updateCiclosEscolares from '@siiges-ui/serviciosescolares/src/Components/utils/updateCiclosEscolares';
 import postCiclosEscolares from './PostCiclosEscolares';
-import nombresCiclos from '../../Utils/nombresCiclos';
 import descripcionesCiclos from '../../Utils/descripcionesCiclos';
 
 export default function CiclosEscolaresModal({
@@ -19,11 +18,33 @@ export default function CiclosEscolaresModal({
   const title = type === 'new' ? 'Agregar Ciclo Escolar' : 'Modificar Ciclo Escolar';
   const { setNoti } = useUI();
 
-  const [form, setForm] = React.useState({
+  const [catalogoCiclos, setCatalogoCiclos] = useState([]);
+  const [form, setForm] = useState({
     id: data?.id,
     nombre: data?.nombre,
     descripcion: data?.descripcion,
   });
+
+  useEffect(() => {
+    const fetchCatalogo = async () => {
+      const { statusCode, data: catalogoData, errorMessage } = await getData({
+        endpoint: '/ciclosEscolares/catalogo',
+      });
+
+      if (statusCode !== 200) {
+        setNoti({
+          open: true,
+          message: errorMessage || 'Error al consultar el catálogo de ciclos escolares',
+          type: 'error',
+        });
+        return;
+      }
+
+      setCatalogoCiclos(catalogoData || []);
+    };
+
+    if (open) fetchCatalogo();
+  }, [open]);
 
   const pathCiclosEscolares = async ({ id, ...body }) => {
     try {
@@ -42,10 +63,16 @@ export default function CiclosEscolaresModal({
       });
     }
   };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
+
+  const nombresCiclos = catalogoCiclos.map((ciclo) => ({
+    id: ciclo.id,
+    nombre: ciclo.nombre,
+  }));
 
   return (
     <DefaultModal open={open} setOpen={setOpen} title={title}>
@@ -54,7 +81,7 @@ export default function CiclosEscolaresModal({
           <Select
             title="Nombre"
             name="nombre"
-            options={nombresCiclos || []}
+            options={nombresCiclos}
             textValue
             onChange={handleOnChange}
             value={form?.nombre}
