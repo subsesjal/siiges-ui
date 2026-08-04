@@ -15,6 +15,7 @@ import SchoolIcon from '@mui/icons-material/School';
 // import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremiumOutlined';
+import CoPresentOutlinedIcon from '@mui/icons-material/CoPresentOutlined';
 import { USERS_ROUTE } from '../../../constants/routes';
 
 const canViewAsignacionFolios = (rol, nombre) => {
@@ -192,6 +193,22 @@ const panelMenuOptions = (rol, nombre) => {
               : []),
           ],
           key: 'asignacionFolios',
+        }]
+        : []),
+
+      ...(rol === 'admin'
+        ? [{
+          userId: 2,
+          text: 'Control Escolar',
+          icon: <CoPresentOutlinedIcon />,
+          type: 'dropdown',
+          options: [
+            {
+              text: 'Ciclos Escolares',
+              route: '/serviciosEscolares/controlEscolar/ciclosEscolares',
+            },
+          ],
+          key: 'controlEscolar',
         }]
         : []),
 
