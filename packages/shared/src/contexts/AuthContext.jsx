@@ -58,6 +58,7 @@ export function AuthProvider({ children }) {
         id: userData.data.id,
         nombre: userData.data.usuario,
         rol: userData.data.rol.nombre,
+        estatus: userData.data.estatus,
         token: userData.token,
       };
       setSession(newSession);

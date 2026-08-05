@@ -1,5 +1,6 @@
 import React from 'react';
 import ButtonsAlumnos from '../Components/utils/ButtonAlumnos';
+import DocumentsStudents from '../Components/utils/DocumentsStudents';
 
 const columnsAlumnos = (onDeleteSuccess) => [
   {
@@ -12,9 +13,24 @@ const columnsAlumnos = (onDeleteSuccess) => [
   { field: 'situacion', headerName: 'Situación', width: 120 },
   { field: 'validacion', headerName: 'Validación', width: 120 },
   {
+    field: 'documentos',
+    headerName: 'Documentos',
+    width: 220,
+    sortable: false,
+    filterable: false,
+    renderCell: (params) => (
+      <DocumentsStudents
+        archivoCertificadoUbicacion={params.row.archivoCertificadoUbicacion}
+        archivoNacimientoUbicacion={params.row.archivoNacimientoUbicacion}
+        archivoCurpUbicacion={params.row.archivoCurpUbicacion}
+        archivoValidacionUbicacion={params.row.archivoValidacionUbicacion}
+      />
+    ),
+  },
+  {
     field: 'actions',
     headerName: 'Acciones',
-    width: 150,
+    width: 120,
     renderCell: (params) => (
       <ButtonsAlumnos
         id={params.id}

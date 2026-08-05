@@ -63,6 +63,7 @@ import getTurnoById from './utils/handlers/turnos';
 import ParseCookies from './utils/handlers/cookieHandler';
 import getCurrentUser from './utils/handlers/getCurrentUser';
 import { setToken, getToken } from './utils/handlers/globals';
+import getTokenLocalStorage from './utils/handlers/getToken';
 import formattedDate from './utils/handlers/formattedDate';
 import { validateFormData } from './utils/handlers/validateFormData';
 import validateField from './utils/handlers/validateField';
@@ -165,6 +166,7 @@ export {
   // Utilidades
   setToken,
   getToken,
+  getTokenLocalStorage,
   getTurnoById,
   formattedDate,
   validateFormData,

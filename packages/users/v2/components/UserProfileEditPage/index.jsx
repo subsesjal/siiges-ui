@@ -15,8 +15,26 @@ import VIEW_STATE from '../../constants/viewState';
 import useUserDetail from '../../hooks/useUserDetail';
 import useUserForm from '../../hooks/useUserForm';
 import { updateUser } from '../../services/usuarios.service';
+import { buildChangedUpdatePayload } from '../../utils/userForm';
 import UserProfileEditForm from '../UserProfileEditForm';
 import UserProfileSkeleton from '../UserProfileSkeleton';
+
+const PROFILE_VISIBLE_FIELDS = [
+  'nombre',
+  'apellidoPaterno',
+  'apellidoMaterno',
+  'sexo',
+  'nacionalidad',
+  'rfc',
+  'curp',
+  'correo',
+  'celular',
+  'telefono',
+  'usuario',
+  'rolId',
+  'tituloCargo',
+  'estatus',
+];
 
 export default function UserProfileEditPage() {
   const router = useRouter();
@@ -48,6 +66,7 @@ export default function UserProfileEditPage() {
     mode: VIEW_STATE.EDIT,
     initialUser: detailState.data,
     sessionRole: session?.rol || '',
+    visibleFields: PROFILE_VISIBLE_FIELDS,
   });
 
   const profileUser = detailState.data;
@@ -72,10 +91,22 @@ export default function UserProfileEditPage() {
     }
 
     try {
-      const payload = {
+      const candidatePayload = {
         ...cleanedData,
         rolId: profileUser?.rol?.id ?? cleanedData.rolId,
       };
+
+      const payload = buildChangedUpdatePayload({
+        initialUser: profileUser,
+        candidatePayload,
+        sessionRole: session?.rol || '',
+      });
+
+      if (Object.keys(payload).length === 0) {
+        notify.success('No hay cambios para guardar.');
+        router.push('/usuarios/perfilUsuario');
+        return;
+      }
 
       await updateUser({
         session,

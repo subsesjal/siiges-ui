@@ -15,11 +15,12 @@ export default function ButtonsFoliosAdmin({
   const router = useRouter();
   const { session } = useAuth();
   const { rol } = session;
+  const userFirma = (rol === 'admin' || rol === 'folios_sicyt');
   const buttonFolios = estatus !== 3 ? 'Asignar Folio' : 'Envio Titulación';
   const shouldRenderButtonFolios = !(estatus === 3 && tipoDocumento === 'Certificado');
 
   const esCertificado = tipoDocumento === 'Certificado';
-  const mostrarBotonFirma = esCertificado && (estatus === 9 || estatus === 10) && rol === 'admin';
+  const mostrarBotonFirma = esCertificado && (estatus === 9 || estatus === 10) && userFirma;
 
   return (
     <Grid container spacing={2} alignItems="center">

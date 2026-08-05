@@ -8,6 +8,8 @@ const userMultiRol = [
   'sicyt_editar',
   'ce_ies',
   'ce_sicyt',
+  'folios_sicyt',
+  'avances_sicyt',
 ];
 
 export default function useUserRol(session, setUsers, section) {

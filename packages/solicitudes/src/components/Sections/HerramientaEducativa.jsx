@@ -19,7 +19,7 @@ export default function HerramientaEducativa({ disabled, type, programaId }) {
   const isDisabled = disabled || isSectionDisabled;
 
   useEffect(() => {
-    if (type === 'editar' || type === 'consultar') {
+    if (type === 'editar' || type === 'consultar' || type === 'observaciones') {
       GetFile(fileData, setUrl);
     }
   }, []);

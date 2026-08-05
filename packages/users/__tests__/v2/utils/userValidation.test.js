@@ -64,20 +64,47 @@ describe('userValidation - getFieldErrors', () => {
 
   it('returns error when RFC is not 12 or 13 chars', () => {
     const form = { ...baseForm, persona: { ...baseForm.persona, rfc: 'ABC' } };
-    const errors = getFieldErrors(form, VIEW_STATE.EDIT);
+    const errors = getFieldErrors(form, VIEW_STATE.EDIT, { visibleFields: ['rfc'] });
     expect(errors.rfc).toBeDefined();
   });
 
   it('accepts 12-char RFC', () => {
     const form = { ...baseForm, persona: { ...baseForm.persona, rfc: 'ABCD123456EF' } };
-    const errors = getFieldErrors(form, VIEW_STATE.EDIT);
+    const errors = getFieldErrors(form, VIEW_STATE.EDIT, { visibleFields: ['rfc'] });
     expect(errors.rfc).toBeUndefined();
   });
 
   it('accepts 13-char RFC', () => {
     const form = { ...baseForm, persona: { ...baseForm.persona, rfc: 'ABCD123456EFG' } };
-    const errors = getFieldErrors(form, VIEW_STATE.EDIT);
+    const errors = getFieldErrors(form, VIEW_STATE.EDIT, { visibleFields: ['rfc'] });
     expect(errors.rfc).toBeUndefined();
+  });
+
+  it('does not validate RFC in EDIT when field is hidden', () => {
+    const form = { ...baseForm, persona: { ...baseForm.persona, rfc: 'ABC' } };
+    const errors = getFieldErrors(form, VIEW_STATE.EDIT, {
+      visibleFields: ['nombre', 'apellidoPaterno', 'correo'],
+    });
+    expect(errors.rfc).toBeUndefined();
+  });
+
+  it('does not validate CURP/celular/telefono when fields are hidden', () => {
+    const form = {
+      ...baseForm,
+      persona: {
+        ...baseForm.persona,
+        curp: 'ABC',
+        celular: '123',
+        telefono: '123ABC4567',
+      },
+    };
+    const errors = getFieldErrors(form, VIEW_STATE.EDIT, {
+      visibleFields: ['nombre', 'apellidoPaterno', 'correo'],
+    });
+
+    expect(errors.curp).toBeUndefined();
+    expect(errors.celular).toBeUndefined();
+    expect(errors.telefono).toBeUndefined();
   });
 
   it('returns error when celular has wrong length', () => {
@@ -182,6 +209,41 @@ describe('userValidation - validateUserForm', () => {
     const payload = { estatus: NaN };
     const result = validateUserForm({ form: baseForm, mode: VIEW_STATE.EDIT, payload });
     expect(result.valid).toBe(false);
+  });
+
+  it('returns invalid when RFC is incorrect and validation is enabled', () => {
+    const form = { ...baseForm, persona: { ...baseForm.persona, rfc: 'ABC' } };
+    const result = validateUserForm({
+      form,
+      mode: VIEW_STATE.EDIT,
+      payload: {},
+      options: { visibleFields: ['rfc'] },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.errors.rfc).toBeDefined();
+  });
+
+  it('returns valid when invalid hidden fields are not part of visible fields', () => {
+    const form = {
+      ...baseForm,
+      persona: {
+        ...baseForm.persona,
+        rfc: 'ABC',
+        curp: 'ABC',
+        celular: '123',
+      },
+    };
+    const result = validateUserForm({
+      form,
+      mode: VIEW_STATE.EDIT,
+      payload: {},
+      options: {
+        visibleFields: ['nombre', 'apellidoPaterno', 'correo'],
+      },
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.errors).toEqual({});
   });
 
   it('returns valid:true when EDIT payload has no rolId or estatus', () => {

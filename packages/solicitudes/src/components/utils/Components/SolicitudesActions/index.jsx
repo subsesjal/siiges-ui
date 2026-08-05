@@ -64,6 +64,17 @@ function SolicitudesActions({ id, estatus }) {
           descargar: estatus === 10,
         });
         break;
+      case 'sicyt_editar':
+        setShowButtons({
+          ver: true,
+          consultar: true,
+          revisar: estatus === 3,
+          editar: false,
+          observaciones: estatus === 2,
+          eliminar: false,
+          descargar: estatus === 10,
+        });
+        break;
       default:
         setShowButtons({
           ver: true,

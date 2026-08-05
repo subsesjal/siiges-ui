@@ -67,6 +67,13 @@ export default function ValidacionForm({
           nombre: alumno.persona.nombre,
           situacion: alumno.situacion.nombre,
           validacion: alumno.validacion?.situacionValidacion?.nombre || 'Sin validar',
+          situacionValidacionId: alumno.validacion?.situacionValidacionId || null,
+          tipo: alumno.validacion?.tipo?.nombre || 'Sin validar',
+          observaciones: alumno.validacion?.observaciones || null,
+          archivoCertificadoUbicacion: alumno.archivoCertificadoUbicacion || null,
+          archivoNacimientoUbicacion: alumno.archivoNacimientoUbicacion || null,
+          archivoCurpUbicacion: alumno.archivoCurpUbicacion || null,
+          archivoValidacionUbicacion: alumno.archivoValidacionUbicacion || null,
         }));
         setAlumnos(transformedAlumnos);
       }

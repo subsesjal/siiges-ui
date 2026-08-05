@@ -9,6 +9,9 @@ import {
   getPlantelesByInstitucion,
   getProgramas,
 } from '@siiges-ui/instituciones';
+import getInstitucionIdFromSession from '../../utils/getInstitucionId';
+
+const ROLES_INSTITUCION_FIJA = ['representante', 'ce_ies'];
 
 export default function ReporteForm({
   setInstitucion, setAlumnos, setPrograma, setLoading, setCicloEscolar,
@@ -35,6 +38,7 @@ export default function ReporteForm({
   const [totalExtraordinarios, setTotalExtraordinarios] = useState(4);
 
   const isAdminSicyt = session?.rol === 'ce_sicyt' || session?.rol === 'admin';
+  const isRepresentante = ROLES_INSTITUCION_FIJA.includes(session?.rol);
 
   useEffect(() => {
     if (fetchedInstituciones?.length) {
@@ -155,7 +159,7 @@ export default function ReporteForm({
     const storedPrograma = localStorage.getItem('reporte_selectedPrograma');
     const storedCiclo = localStorage.getItem('reporte_selectedCiclo');
 
-    if (storedInstitucion) {
+    if (storedInstitucion && !isRepresentante) {
       setSelectedInstitucion(storedInstitucion);
       setInstitucion(storedInstitucion);
       fetchPlanteles(storedInstitucion);
@@ -178,8 +182,7 @@ export default function ReporteForm({
     }
   }, []);
 
-  const handleInstitucionChange = (event) => {
-    const institucionId = event.target.value;
+  const selectInstitucion = (institucionId) => {
     setSelectedInstitucion(institucionId);
     setInstitucion(institucionId);
     if (typeof window !== 'undefined') {
@@ -190,6 +193,30 @@ export default function ReporteForm({
     setAlumnos([]);
     fetchPlanteles(institucionId);
   };
+
+  const handleInstitucionChange = (event) => {
+    selectInstitucion(event.target.value);
+  };
+
+  // Auto-seleccionar institución cuando el rol es representante/ce_ies,
+  // resolviendo el id vía getInstitucionIdFromSession (maneja el caso
+  // ce_ies buscando primero al usuario padre).
+  useEffect(() => {
+    const asignarInstitucionDesdeSesion = async () => {
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones,
+        session,
+      });
+
+      if (institucionId && institucionId !== selectedInstitucion) {
+        selectInstitucion(institucionId);
+      }
+    };
+
+    if (isRepresentante) {
+      asignarInstitucionDesdeSesion();
+    }
+  }, [instituciones, session]);
 
   const handlePlantelChange = (event) => {
     const plantelId = event.target.value;

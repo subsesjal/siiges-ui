@@ -1,16 +1,12 @@
 import { Grid, Typography } from '@mui/material';
 import {
-  ButtonSimple, GetFile, InputFile,
-  useUI,
+  GetFile, InputFile,
 } from '@siiges-ui/shared';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 
 export default function DocumentosAlumno({ id, type }) {
-  const { setNoti } = useUI();
   const [fileURLs, setFileURLs] = useState([null, null, null]);
-  const router = useRouter();
 
   const handleFileLoaded = (index, url) => {
     setFileURLs((prevURLs) => {
@@ -23,7 +19,7 @@ export default function DocumentosAlumno({ id, type }) {
   useEffect(() => {
     if (type === 'edit' || type === 'view') {
       const fetchFiles = async () => {
-        const fileTypes = ['ARCHIVO_CERTIFICADO', 'ARCHIVO_NACIMIENTO', 'ARCHIVO_CURP'];
+        const fileTypes = ['ARCHIVO_CERTIFICADO', 'ARCHIVO_NACIMIENTO', 'ARCHIVO_CURP', 'ARCHIVO_VALIDACION_ALUMNO'];
         const promises = fileTypes.map((tipoDocumento, index) => new Promise((resolve) => {
           GetFile({ tipoEntidad: 'ALUMNO', entidadId: id, tipoDocumento }, (url, error) => {
             if (!error && url) {
@@ -39,14 +35,6 @@ export default function DocumentosAlumno({ id, type }) {
       fetchFiles();
     }
   }, [id, type]);
-
-  const saveButtonAction = async () => {
-    setNoti({
-      open: true,
-      message: 'Documentos guardados con éxito',
-      type: 'success',
-    });
-  };
 
   return (
     <div style={{ padding: '20px' }}>
@@ -69,7 +57,7 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo de Cédula Profesional, Título o equivalente (PDF)"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
-            disabled={type === 'view'}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -80,7 +68,7 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo Acta de Nacimiento (PDF)"
             url={fileURLs[1]}
             setUrl={(url) => handleFileLoaded(1, url)}
-            disabled={type === 'view'}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -91,29 +79,20 @@ export default function DocumentosAlumno({ id, type }) {
             label="Archivo CURP (PDF)"
             url={fileURLs[2]}
             setUrl={(url) => handleFileLoaded(2, url)}
-            disabled={type === 'view'}
+            disabled
           />
         </Grid>
-
-        {/* Botones solo en modo edición */}
-        {type === 'edit' && (
-          <>
-            <Grid item xs={9} />
-            <Grid item>
-              <ButtonSimple
-                text="Regresar"
-                design="enviar"
-                align="right"
-                onClick={() => {
-                  router.back();
-                }}
-              />
-            </Grid>
-            <Grid item>
-              <ButtonSimple onClick={saveButtonAction} text="Guardar" />
-            </Grid>
-          </>
-        )}
+        <Grid item xs={12}>
+          <InputFile
+            tipoEntidad="ALUMNO"
+            tipoDocumento="ARCHIVO_VALIDACION_ALUMNO"
+            id={id}
+            label="Archivo de Validación"
+            url={fileURLs[3]}
+            setUrl={(url) => handleFileLoaded(3, url)}
+            disabled
+          />
+        </Grid>
       </Grid>
     </div>
   );

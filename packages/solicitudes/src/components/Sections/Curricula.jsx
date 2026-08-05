@@ -30,7 +30,7 @@ export default function Curricula({ disabled, type }) {
   }));
 
   useEffect(() => {
-    if (type === 'editar' || type === 'consultar') {
+    if (type === 'editar' || type === 'consultar' || type === 'observaciones') {
       fileData.forEach((fileInfo, index) => {
         GetFile(fileInfo, (url, err) => {
           if (!err) {

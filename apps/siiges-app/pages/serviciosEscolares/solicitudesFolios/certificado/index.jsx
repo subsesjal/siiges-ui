@@ -17,7 +17,7 @@ export default function SolicitudesFoliosCertificado() {
   const [plantel, setPlantel] = useState(null);
   const [institucion, setInstitucion] = useState(null);
 
-  const isAdmin = session.rol === 'admin';
+  const isAdmin = session.rol === 'admin' || session.rol === 'folios_sicyt';
   const isRepresentante = session.rol === 'representante';
   const isCeIes = session.rol === 'ce_ies';
   const isCeSicyt = session.rol === 'ce_sicyt';

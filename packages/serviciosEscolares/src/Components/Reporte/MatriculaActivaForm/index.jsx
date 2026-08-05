@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import {
-  BinarySelect, ButtonSimple, Select, useUI,
+  BinarySelect, ButtonSimple, Select, useAuth, useUI,
 } from '@siiges-ui/shared';
 import {
   getInstituciones,
@@ -10,6 +10,9 @@ import {
 } from '@siiges-ui/instituciones';
 import PropTypes from 'prop-types';
 import SearchIcon from '@mui/icons-material/Search';
+import getInstitucionIdFromSession from '../../utils/getInstitucionId';
+
+const ROLES_INSTITUCION_FIJA = ['representante', 'ce_ies'];
 
 export default function MatriculaActivaForm({
   formData,
@@ -20,14 +23,21 @@ export default function MatriculaActivaForm({
   setLoading,
 }) {
   const { setNoti } = useUI();
+  const { session } = useAuth();
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
     tipoInstitucionId: 1,
     setLoading,
   });
 
+  const institucionesOptions = Array.isArray(instituciones)
+    ? [...instituciones].sort((a, b) => a.nombre.localeCompare(b.nombre))
+    : [];
+
   const [planteles, setPlanteles] = useState([]);
   const [programas, setProgramas] = useState([]);
+
+  const isRepresentante = ROLES_INSTITUCION_FIJA.includes(session.rol);
 
   const handleInstitucionChange = (institucionId) => {
     setFormData((prev) => ({
@@ -89,6 +99,23 @@ export default function MatriculaActivaForm({
     setFormData((prev) => ({ ...prev, programa: programaId }));
   };
 
+  useEffect(() => {
+    const asignarInstitucionDesdeSesion = async () => {
+      const institucionId = await getInstitucionIdFromSession({
+        instituciones,
+        session,
+      });
+
+      if (institucionId && institucionId !== formData.institucion) {
+        handleInstitucionChange(institucionId);
+      }
+    };
+
+    if (isRepresentante) {
+      asignarInstitucionDesdeSesion();
+    }
+  }, [instituciones, session]);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={3}>
@@ -121,11 +148,9 @@ export default function MatriculaActivaForm({
             title="Institución"
             name="institucion"
             value={formData.institucion || ''}
-            options={
-              instituciones?.sort((a, b) => a.nombre.localeCompare(b.nombre))
-              || []
-            }
+            options={institucionesOptions}
             onChange={(e) => handleInstitucionChange(e.target.value)}
+            disabled={isRepresentante}
           />
         </Grid>
       ) : (
@@ -135,10 +160,9 @@ export default function MatriculaActivaForm({
               title="Institución"
               name="institucion"
               value={formData.institucion || ''}
-              options={
-                instituciones?.sort((a, b) => a.nombre.localeCompare(b.nombre)) || []
-              }
+              options={institucionesOptions}
               onChange={(e) => handleInstitucionChange(e.target.value)}
+              disabled={isRepresentante}
             />
           </Grid>
           <Grid item xs={4}>
@@ -180,9 +204,9 @@ export default function MatriculaActivaForm({
 
 MatriculaActivaForm.propTypes = {
   formData: PropTypes.shape({
-    programa: PropTypes.string,
-    institucion: PropTypes.string,
-    plantel: PropTypes.string,
+    programa: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    institucion: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    plantel: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     busquedaGeneralTexto: PropTypes.string,
   }).isRequired,
   setFormData: PropTypes.func.isRequired,

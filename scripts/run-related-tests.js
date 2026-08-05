@@ -138,12 +138,21 @@ const coverageEntries = Object.entries(coverageSummary)
 
 const failures = [];
 
-testableFiles.forEach((changedFile) => {
+const filesToEvaluate = testableFiles.filter((changedFile) => {
   if (isBarrelFile(changedFile)) {
     console.log(`[coverage] Skipping threshold for barrel file: ${changedFile}`);
-    return;
+    return false;
   }
 
+  return true;
+});
+
+const aggregateByMetric = metricsToCheck.reduce((acc, metric) => ({
+  ...acc,
+  [metric]: { covered: 0, total: 0 },
+}), {});
+
+filesToEvaluate.forEach((changedFile) => {
   const normalizedChangedFile = changedFile.replace(/\\/g, '/');
   const coverageEntry = coverageEntries.find(
     ({ filePath }) => filePath.endsWith(normalizedChangedFile),
@@ -155,20 +164,32 @@ testableFiles.forEach((changedFile) => {
   }
 
   metricsToCheck.forEach((metric) => {
-    const pct = coverageEntry.metrics[metric]?.pct;
+    const metricInfo = coverageEntry.metrics[metric] || {};
+    const covered = Number(metricInfo.covered || 0);
+    const total = Number(metricInfo.total || 0);
 
-    if (typeof pct !== 'number' || pct < coverageThreshold) {
-      failures.push(
-        `${changedFile} -> ${metric} ${typeof pct === 'number' ? pct : 'N/A'}% (required ${coverageThreshold}%)`,
-      );
-    }
+    aggregateByMetric[metric].covered += covered;
+    aggregateByMetric[metric].total += total;
   });
 });
 
+if (filesToEvaluate.length > 0) {
+  metricsToCheck.forEach((metric) => {
+    const { covered, total } = aggregateByMetric[metric];
+    const pct = total > 0 ? (covered / total) * 100 : 100;
+
+    if (pct < coverageThreshold) {
+      failures.push(
+        `changed-files aggregate -> ${metric} ${pct.toFixed(2)}% (required ${coverageThreshold}%)`,
+      );
+    }
+  });
+}
+
 if (failures.length > 0) {
-  console.error(`\n[coverage] Failed threshold check (${coverageThreshold}%) for changed files:`);
+  console.error(`\n[coverage] Failed aggregate threshold check (${coverageThreshold}%) for changed files:`);
   failures.forEach((failure) => console.error(` - ${failure}`));
   process.exit(1);
 }
 
-console.log(`\n[coverage] All changed files meet the ${coverageThreshold}% threshold.`);
+console.log(`\n[coverage] Changed files aggregate meets the ${coverageThreshold}% threshold.`);

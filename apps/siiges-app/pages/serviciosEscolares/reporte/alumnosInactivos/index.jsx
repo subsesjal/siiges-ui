@@ -43,6 +43,7 @@ export default function AlumnosInactivos() {
     fechaFinAntecedentes: formatDate(alumno.validacion?.fechaFinAntecedente),
     fechaExpedicion: formatDate(alumno.validacion?.fechaExpedicion),
     tipoValidacion: alumno.validacion?.tipo?.nombre || 'Sin validación',
+    fechaCreacion: formatDate(alumno.createdAt),
   }));
 
   const handleSearch = async () => {
@@ -81,7 +82,12 @@ export default function AlumnosInactivos() {
           <Divider sx={{ marginTop: 2 }} />
         </Grid>
         <Grid item xs={12}>
-          <AlumnosInactivosTable matriculas={matriculas} />
+          <AlumnosInactivosTable
+            matriculas={matriculas}
+            institucionId={formData.institucion}
+            plantelId={formData.plantel}
+            programaId={formData.programa}
+          />
         </Grid>
       </Grid>
     </Layout>

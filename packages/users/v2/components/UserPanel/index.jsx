@@ -10,6 +10,23 @@ import VIEW_STATE from '../../constants/viewState';
 import UserForm from '../UserForm';
 import useUserForm from '../../hooks/useUserForm';
 import UsersSkeleton from '../UsersSkeleton';
+import { buildChangedUpdatePayload } from '../../utils/userForm';
+
+const BASE_VISIBLE_FIELDS = [
+  'nombre',
+  'apellidoPaterno',
+  'apellidoMaterno',
+  'rolId',
+  'tituloCargo',
+  'correo',
+  'usuario',
+  'estatus',
+];
+
+const CREATE_ONLY_VISIBLE_FIELDS = [
+  'contrasena',
+  'repeatContrasena',
+];
 
 export default function UserPanel({
   mode,
@@ -22,20 +39,28 @@ export default function UserPanel({
   onUpdate,
   onNotify,
   sessionRole,
-  sessionUserId,
 }) {
+  const visibleFields = mode === VIEW_STATE.CREATE
+    ? [...BASE_VISIBLE_FIELDS, ...CREATE_ONLY_VISIBLE_FIELDS]
+    : BASE_VISIBLE_FIELDS;
+
   const {
     form,
     errors,
     handleChange,
     handleBlur,
     validate,
-  } = useUserForm({ mode, initialUser: user, sessionRole });
+  } = useUserForm({
+    mode,
+    initialUser: user,
+    sessionRole,
+    visibleFields,
+  });
 
   const isCreate = mode === VIEW_STATE.CREATE;
   const isEdit = mode === VIEW_STATE.EDIT;
   const isView = mode === VIEW_STATE.VIEW;
-  const isSelfEdit = isEdit && user?.id && String(user.id) === String(sessionUserId);
+  const canEditRoleAndStatus = sessionRole === 'admin';
 
   const submitAction = async () => {
     if (actionLoading) {
@@ -58,13 +83,25 @@ export default function UserPanel({
     }
 
     if (isEdit && user?.id) {
-      const payload = isSelfEdit
-        ? {
+      const candidatePayload = canEditRoleAndStatus
+        ? cleanedData
+        : {
           ...cleanedData,
           rolId: user?.rol?.id ?? cleanedData.rolId,
           estatus: user?.estatus ?? cleanedData.estatus,
-        }
-        : cleanedData;
+        };
+
+      const payload = buildChangedUpdatePayload({
+        initialUser: user,
+        candidatePayload,
+        sessionRole,
+      });
+
+      if (Object.keys(payload).length === 0) {
+        onNotify.success('No hay cambios para guardar.');
+        onClose();
+        return;
+      }
 
       await onUpdate(user.id, payload);
     }
@@ -148,14 +185,13 @@ UserPanel.propTypes = {
   onUpdate: PropTypes.func.isRequired,
   onNotify: PropTypes.shape({
     error: PropTypes.func.isRequired,
+    success: PropTypes.func.isRequired,
   }).isRequired,
   sessionRole: PropTypes.string.isRequired,
-  sessionUserId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 UserPanel.defaultProps = {
   user: null,
   error: null,
   actionLoading: false,
-  sessionUserId: null,
 };

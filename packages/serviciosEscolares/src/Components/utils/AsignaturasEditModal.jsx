@@ -239,7 +239,7 @@ export default function AsignaturasEditModal({
             value={formAsignaturas.consecutivo || 0}
             disabled={isDisabled}
             onChange={handleOnChange}
-            max={99}
+            max={999}
             min={0}
             textValue
           />

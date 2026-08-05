@@ -193,6 +193,10 @@ const handleRolOptions = (setRolOptions, session, useEffect) => {
           id: '22',
           nombre: 'Servicio Social SICYT',
         },
+        {
+          id: '24',
+          nombre: 'Folios SICYT',
+        },
       ]);
     }
   }, []);
