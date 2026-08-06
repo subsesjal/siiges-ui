@@ -436,7 +436,7 @@ export default function DatosInstitucion({ alumno }) {
           rows={4}
           value={form.observaciones}
           onChange={handleChange}
-          disabled={isCeSicyt}
+          disabled={!isCeSicyt}
         />
       </Grid>
       {formSent && (
