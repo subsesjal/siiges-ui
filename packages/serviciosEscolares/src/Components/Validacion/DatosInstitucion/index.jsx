@@ -481,8 +481,8 @@ export default function DatosInstitucion({ alumno }) {
               tipoDocumento="ARCHIVO_NACIMIENTO"
               id={alumno.id}
               label="Archivo Acta de Nacimiento (PDF)"
-              url={urlCurp}
-              setUrl={setUrlCurp}
+              url={urlNac}
+              setUrl={setUrlNac}
               required
             />
           </Grid>
@@ -492,8 +492,8 @@ export default function DatosInstitucion({ alumno }) {
               tipoDocumento="ARCHIVO_CURP"
               id={alumno.id}
               label="Archivo CURP (PDF)"
-              url={urlNac}
-              setUrl={setUrlNac}
+              url={urlCurp}
+              setUrl={setUrlCurp}
               required
             />
           </Grid>
