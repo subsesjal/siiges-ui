@@ -11,7 +11,7 @@ import {
 } from '@siiges-ui/instituciones';
 import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
-const ROLES_INSTITUCION_FIJA = ['representante', 'ce_ies'];
+const ROLES_INSTITUCION_FIJA = ['representante', 'ce_ies', 'avances_sicyt'];
 
 export default function ReporteForm({
   setInstitucion, setAlumnos, setPrograma, setLoading, setCicloEscolar,
