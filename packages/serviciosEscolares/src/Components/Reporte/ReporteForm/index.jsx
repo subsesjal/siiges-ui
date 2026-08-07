@@ -37,7 +37,7 @@ export default function ReporteForm({
   const [selectedPrograma, setSelectedPrograma] = useState('');
   const [totalExtraordinarios, setTotalExtraordinarios] = useState(4);
 
-  const isAdminSicyt = session?.rol === 'ce_sicyt' || session?.rol === 'admin';
+  const isAdminSicyt = session?.rol === 'ce_sicyt' || session?.rol === 'admin' || session?.rol === 'avances_sicyt';
   const isRepresentante = ROLES_INSTITUCION_FIJA.includes(session?.rol);
 
   useEffect(() => {
