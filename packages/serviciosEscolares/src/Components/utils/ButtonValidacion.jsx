@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import EditIcon from '@mui/icons-material/EditOutlined';
-import { updateRecord, useUI } from '@siiges-ui/shared';
+import { updateRecord, useAuth, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
@@ -16,12 +16,17 @@ const SITUACION_DOCUMENTO_OPTIONS = [
   { id: 4, nombre: 'Pendiente' },
 ];
 
+const ALLOWED_IDS = [2519, 336];
+
 export default function ButtonsValidacion({
   id, url, programa, institucion, situacionValidacionId, onUpdated,
 }) {
+  const { session } = useAuth();
   const { setNoti, setLoading } = useUI();
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
+
+  const puedeEditarSituacion = session?.rol === 'admin' || ALLOWED_IDS.includes(Number(session?.id));
 
   const linkUrl = `${url}?id=${id}&programa=${programa}&institucion=${institucion}`;
 
@@ -77,7 +82,7 @@ export default function ButtonsValidacion({
           </Tooltip>
         </Link>
       )}
-      {id && (
+      {id && puedeEditarSituacion && (
         <>
           <Tooltip title="Situación de documento" placement="top">
             <IconButton
