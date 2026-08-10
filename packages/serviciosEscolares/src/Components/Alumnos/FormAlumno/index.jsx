@@ -21,6 +21,21 @@ import {
 import alumnosService from '../../utils/alumnosService';
 import SituacionSelect from '../../utils/SituacionSelect';
 
+const normalizeText = (str = '') => str
+  .toString()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .trim()
+  .toLowerCase();
+
+const MEXICANA_VARIANTS = ['mexicana', 'mexicano', 'mexico'];
+
+export const getNacionalidadId = (rawValue) => {
+  const normalized = normalizeText(rawValue);
+  const esMexicana = MEXICANA_VARIANTS.includes(normalized);
+  return esMexicana ? nacionalidad[0].id : nacionalidad[1].id;
+};
+
 export default function FormAlumno({
   type,
   alumno,
@@ -42,6 +57,9 @@ export default function FormAlumno({
   );
   const optionalFields = ['apellidoMaterno', 'telefono', 'celular', 'situacionId'];
 
+  const OTRO_NACIONALIDAD_ID = nacionalidad.find((n) => n.nombre === 'Otro')?.id;
+  const isCurpRequired = formSelect?.nacionalidad !== OTRO_NACIONALIDAD_ID;
+
   const getErrorMessage = (campoId) => {
     if (campoId === 'correoPrimario') return errorMail;
     if (campoId === 'curp') return errorCurp;
@@ -58,7 +76,7 @@ export default function FormAlumno({
       setFormSelect((prevForm) => ({
         ...prevForm,
         sexo: findId(generos, 'sexo'),
-        nacionalidad: findId(nacionalidad, 'nacionalidad'),
+        nacionalidad: getNacionalidadId(alumno?.nacionalidad),
         situacionId: alumno.situacionId || '',
       }));
     }
@@ -84,6 +102,10 @@ export default function FormAlumno({
     }
 
     if (name === 'curp') {
+      if (!isCurpRequired) {
+        setErrorCurp('');
+        return true;
+      }
       if (curpValidator(value)) {
         setErrorCurp('');
         return true;
@@ -127,6 +149,7 @@ export default function FormAlumno({
 
     campos.forEach((field) => {
       if (optionalFields.includes(field.id)) return;
+      if (field.id === 'curp' && !isCurpRequired) return;
 
       const hasValueInForm = Object.prototype.hasOwnProperty.call(
         form || {},
@@ -194,7 +217,9 @@ export default function FormAlumno({
   const renderCampo = (campo) => {
     const value = formSelect?.[campo.id] || '';
     const errorMessage = getErrorMessage(campo.id);
-    const isRequired = !optionalFields.includes(campo.id);
+    const isRequired = campo.id === 'curp'
+      ? isCurpRequired
+      : !optionalFields.includes(campo.id);
 
     if (campo.type === 'text') {
       return (
@@ -311,6 +336,7 @@ FormAlumno.propTypes = {
     id: PropTypes.number,
     fechaRegistro: PropTypes.string,
     situacionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    nacionalidad: PropTypes.string,
     search: PropTypes.string,
   }),
   onAlumnoUpdated: PropTypes.func,
