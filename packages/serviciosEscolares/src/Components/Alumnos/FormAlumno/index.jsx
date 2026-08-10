@@ -52,7 +52,9 @@ export default function FormAlumno({
   });
   const [errorMail, setErrorMail] = useState('');
   const [errorCurp, setErrorCurp] = useState('');
-  const ifRepresentantes = (session.rol === 'representante' || session.rol === 'ce_ies');
+  const puedeModificarTodasLasSituaciones = (
+    session.rol === 'admin' || session.rol === 'avances_sicyt'
+  );
   const optionalFields = ['apellidoMaterno', 'telefono', 'celular', 'situacionId'];
 
   const OTRO_NACIONALIDAD_ID = nacionalidad.find((n) => n.nombre === 'Otro')?.id;
@@ -78,7 +80,7 @@ export default function FormAlumno({
         situacionId: alumno.situacionId || '',
       }));
     }
-    if (ifRepresentantes) {
+    if (!puedeModificarTodasLasSituaciones) {
       setForm((prevForm) => ({
         ...prevForm,
       }));
@@ -258,7 +260,7 @@ export default function FormAlumno({
           title={campo.label}
           options={campo.options}
           disabled={!(type === 'edit')}
-          ifRepresentantes={ifRepresentantes}
+          ifRepresentantes={!puedeModificarTodasLasSituaciones}
           name={campo.id}
           value={value}
           onChange={handleOnChange}
