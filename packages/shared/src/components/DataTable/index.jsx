@@ -19,6 +19,9 @@ function DataTable({
   buttonType,
   onReloadClick,
   buttonReloadDisabled = false,
+  secondaryButtonText,
+  secondaryButtonClick,
+  secondaryButtonDisabled = false,
   initialState,
 }) {
   const [searchText, setSearchText] = useState('');
@@ -86,7 +89,7 @@ function DataTable({
     <>
       <Grid container alignItems="center" spacing={2}>
         <Grid item xs={9} sx={{ mt: 2 }}>
-          {buttonAdd || onReloadClick ? (
+          {buttonAdd || onReloadClick || secondaryButtonText ? (
             <Stack
               direction="row"
               spacing={1.5}
@@ -104,6 +107,16 @@ function DataTable({
                   text={buttonText}
                   type={buttonType}
                 />
+              )}
+              {secondaryButtonText && (
+                <Button
+                  type="enviar"
+                  text={secondaryButtonText}
+                  onClick={secondaryButtonClick}
+                  disabled={secondaryButtonDisabled}
+                >
+                  {secondaryButtonText}
+                </Button>
               )}
               {onReloadClick && (
                 <MuiButton
@@ -170,6 +183,9 @@ DataTable.defaultProps = {
   buttonType: '',
   onReloadClick: null,
   buttonReloadDisabled: false,
+  secondaryButtonText: '',
+  secondaryButtonClick: () => {},
+  secondaryButtonDisabled: false,
   initialState: { sorting: { sortModel: [{ field: 'id', sort: 'asc' }] } },
   buttonClick: () => {},
 };
@@ -201,6 +217,9 @@ DataTable.propTypes = {
   buttonClick: PropTypes.func,
   onReloadClick: PropTypes.func,
   buttonReloadDisabled: PropTypes.bool,
+  secondaryButtonText: PropTypes.string,
+  secondaryButtonClick: PropTypes.func,
+  secondaryButtonDisabled: PropTypes.bool,
 };
 
 export default React.memo(DataTable);

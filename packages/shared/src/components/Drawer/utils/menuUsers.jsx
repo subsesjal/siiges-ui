@@ -207,6 +207,10 @@ const panelMenuOptions = (rol, nombre) => {
               text: 'Ciclos Escolares',
               route: '/serviciosEscolares/controlEscolar/ciclosEscolares',
             },
+            {
+              text: 'Activar Programas',
+              route: '/serviciosEscolares/controlEscolar/activarProgramas',
+            },
           ],
           key: 'controlEscolar',
         }]
