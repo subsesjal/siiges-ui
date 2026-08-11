@@ -68,6 +68,7 @@ import MatriculaActivaTable from './Components/Reporte/MatriculaActivaTable/inde
 import AlumnosInactivosForm from './Components/Reporte/AlumnosInactivosForm/index';
 import AlumnosInactivosTable from './Components/Reporte/AlumnosInactivosTable/index';
 import CatalogoCiclosEscolares from './Components/ControlEscolar/CatalogoCiclosEscolares/index';
+import ActivarProgramas from './Components/ControlEscolar/ActivarProgramas/ActivarProgramas';
 
 export {
   AlumnosInactivosForm,
@@ -140,4 +141,5 @@ export {
   AlumnosData,
   ModalFirmaElectronica,
   CatalogoCiclosEscolares,
+  ActivarProgramas,
 };
