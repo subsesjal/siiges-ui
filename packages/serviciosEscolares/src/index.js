@@ -67,6 +67,7 @@ import MatriculaActivaForm from './Components/Reporte/MatriculaActivaForm/index'
 import MatriculaActivaTable from './Components/Reporte/MatriculaActivaTable/index';
 import AlumnosInactivosForm from './Components/Reporte/AlumnosInactivosForm/index';
 import AlumnosInactivosTable from './Components/Reporte/AlumnosInactivosTable/index';
+import CatalogoCiclosEscolares from './Components/ControlEscolar/CatalogoCiclosEscolares/index';
 
 export {
   AlumnosInactivosForm,
@@ -138,4 +139,5 @@ export {
   FormFoliosAsignados,
   AlumnosData,
   ModalFirmaElectronica,
+  CatalogoCiclosEscolares,
 };
