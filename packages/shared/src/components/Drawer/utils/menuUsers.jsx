@@ -207,6 +207,10 @@ const panelMenuOptions = (rol, nombre) => {
               text: 'Ciclos Escolares',
               route: '/serviciosEscolares/controlEscolar/ciclosEscolares',
             },
+            {
+              text: 'Activar Programas',
+              route: '/serviciosEscolares/controlEscolar/activarProgramas',
+            },
           ],
           key: 'controlEscolar',
         }]
@@ -352,6 +356,40 @@ const optionsMenuFilter = {
       icon: <DescriptionIcon />,
       route: '/solicitudesBecas',
       key: 'solicitudesBecas',
+    },
+    {
+      text: 'Programas',
+      icon: <AssignmentIcon />,
+      route: '/serviciosEscolares/programas',
+      key: 'programas',
+    },
+    {
+      text: 'Alumnos',
+      icon: <PersonIcon />,
+      route: '/serviciosEscolares/alumnos',
+      key: 'alumnos',
+    },
+    {
+      text: 'Reportes',
+      icon: <AssignmentLateIcon />,
+      type: 'dropdown',
+      options: [
+        {
+          text: 'Alumnos Activos',
+          route: '/serviciosEscolares/reporte/matriculaActiva',
+        },
+        {
+          text: 'Alumnos Inactivos',
+          route: '/serviciosEscolares/reporte/alumnosInactivos',
+        },
+      ],
+      key: 'reporte',
+    },
+    {
+      text: 'Busqueda de Alumnos',
+      icon: <AssignmentIcon />,
+      route: '/serviciosEscolares/alumnos/busquedaAlumnos',
+      key: 'busquedaAlumnos',
     },
   ],
   serv_soc_ies: [
