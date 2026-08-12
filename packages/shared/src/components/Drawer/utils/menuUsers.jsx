@@ -375,10 +375,6 @@ const optionsMenuFilter = {
       type: 'dropdown',
       options: [
         {
-          text: 'Extraordinarios',
-          route: '/serviciosEscolares/reporte/extraordinario',
-        },
-        {
           text: 'Alumnos Activos',
           route: '/serviciosEscolares/reporte/matriculaActiva',
         },
