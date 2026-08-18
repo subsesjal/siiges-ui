@@ -9,8 +9,26 @@ export default function submitEditSolicitud(
 ) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
-  const { form, setNoti } = validations;
+  const {
+    form, setNoti, errors,
+  } = validations;
   const token = getToken();
+
+  if (errors && Object.keys(errors).length > 0) {
+    const isSectionValid = Object.values(errors)
+      .map((validate) => validate())
+      .every(Boolean);
+
+    if (!isSectionValid) {
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: '¡Revisa los campos marcados en rojo antes de continuar!',
+        type: 'error',
+      });
+      return;
+    }
+  }
 
   setLoading(true);
 
@@ -63,7 +81,6 @@ export default function submitEditSolicitud(
       });
     })
     .catch((err) => {
-      console.error('Error:', err);
       setLoading(false);
       setNoti({
         open: true,
