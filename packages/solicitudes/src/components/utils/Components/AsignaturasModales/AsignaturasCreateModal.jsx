@@ -15,6 +15,11 @@ import { TablesPlanEstudiosContext } from '../../Context/tablesPlanEstudiosProvi
 import { area, grados } from '../../Mocks/mockAsignaturas';
 import SolicitudContext from '../../Context/solicitudContext';
 
+const TEXT_FIELDS = ['nombre', 'clave'];
+const FIELDS_TO_VALIDATE = [
+  'gradoId', 'areaId', 'nombre', 'clave', 'creditos', 'horasDocente', 'horasIndependiente',
+];
+
 export default function AsignaturasCreateModal({ open, hideModal, title }) {
   const {
     asignaturasList,
@@ -56,7 +61,23 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
   };
 
   const handleOnBlur = (e) => {
-    const { name } = e.target;
+    const { name, value } = e.target;
+
+    if (TEXT_FIELDS.includes(name) && typeof value === 'string') {
+      const trimmedValue = value.trim();
+      setFormAsignaturas((prevData) => ({ ...prevData, [name]: trimmedValue }));
+      validateField(
+        {
+          ...formAsignaturas,
+          [name]: trimmedValue,
+        },
+        name,
+        setError,
+        errorDatosAsignaturas,
+      );
+      return;
+    }
+
     validateField(formAsignaturas, name, setError, errorDatosAsignaturas);
   };
 
@@ -66,12 +87,32 @@ export default function AsignaturasCreateModal({ open, hideModal, title }) {
   };
 
   const handleOnSubmit = async () => {
+    const trimmedForm = { ...formAsignaturas };
+    TEXT_FIELDS.forEach((field) => {
+      if (typeof trimmedForm[field] === 'string') {
+        trimmedForm[field] = trimmedForm[field].trim();
+      }
+    });
+
+    const validationResults = FIELDS_TO_VALIDATE.map(
+      (field) => validateField(trimmedForm, field, setError, errorDatosAsignaturas),
+    );
+    const hasErrors = validationResults.some(
+      (result) => Object.values(result).some(Boolean),
+    );
+
+    if (hasErrors) {
+      return;
+    }
+
+    setFormAsignaturas(trimmedForm);
+
     const matchingGrade = selectedGrade.find(
-      (grade) => grade.id === formAsignaturas.gradoId,
+      (grade) => grade.id === trimmedForm.gradoId,
     );
     const updatedFormAsignaturas = matchingGrade
-      ? { ...formAsignaturas, grado: matchingGrade.nombre }
-      : { ...formAsignaturas };
+      ? { ...trimmedForm, grado: matchingGrade.nombre }
+      : { ...trimmedForm };
 
     try {
       await handleCreate(

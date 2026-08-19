@@ -211,6 +211,48 @@ export default function DocentesModal({
   const handleOnSubmit = () => {
     const requiredFields = [
       {
+        name: 'tipoDocente',
+        value: formDocentes?.tipoDocente,
+        errorMsg: errorDatosDocentes.tipoDocente,
+      },
+      {
+        name: 'nombre',
+        value: formDocentes?.persona?.nombre,
+        errorMsg: errorDatosDocentes.nombre,
+      },
+      {
+        name: 'apellidoPaterno',
+        value: formDocentes?.persona?.apellidoPaterno,
+        errorMsg: errorDatosDocentes.apellidoPaterno,
+      },
+      {
+        name: 'apellidoMaterno',
+        value: formDocentes?.persona?.apellidoMaterno,
+        errorMsg: errorDatosDocentes.apellidoMaterno,
+      },
+      {
+        name: 'asignaturasDocentes',
+        value: formDocentes?.asignaturasDocentes?.length
+          ? formDocentes.asignaturasDocentes
+          : undefined,
+        errorMsg: errorDatosDocentes.asignaturasDocentes,
+      },
+      {
+        name: 'tipoContratacion',
+        value: formDocentes?.tipoContratacion,
+        errorMsg: errorDatosDocentes.tipoContratacion,
+      },
+      {
+        name: 'antiguedad',
+        value: formDocentes?.antiguedad,
+        errorMsg: errorDatosDocentes.antiguedad,
+      },
+      {
+        name: 'experiencias',
+        value: formDocentes?.experiencias,
+        errorMsg: errorDatosDocentes.experiencias,
+      },
+      {
         name: 'formacion_1_nivelId',
         value: formDocentes?.formacionesDocentes?.[0]?.nivelId,
         errorMsg: errorDatosDocentes.formacion_1_nivelId,
@@ -235,6 +277,11 @@ export default function DocentesModal({
         value: formDocentes?.formacionesDocentes?.[0]?.institucion,
         errorMsg: errorDatosDocentes.formacion_1_institucion,
       },
+    ];
+
+    const section1Fields = [
+      'tipoDocente', 'nombre', 'apellidoPaterno', 'apellidoMaterno',
+      'asignaturasDocentes', 'tipoContratacion', 'antiguedad', 'experiencias',
     ];
 
     if (showFormacion2) {
@@ -293,8 +340,11 @@ export default function DocentesModal({
         mode,
         setLoading,
       );
+      return;
     }
-    setCurrentSection(1);
+
+    const hasSection1Error = section1Fields.some((field) => newErrors[field]);
+    setCurrentSection(hasSection1Error ? 1 : 2);
   };
 
   const isConsultMode = mode === 'consult';
