@@ -15,6 +15,7 @@ import {
   setAndValidateFormData,
   mailValidator,
   curpValidator,
+  cicloIngresoValidator,
   generos,
   nacionalidad,
 } from './dataAlumnos';
@@ -52,6 +53,7 @@ export default function FormAlumno({
   });
   const [errorMail, setErrorMail] = useState('');
   const [errorCurp, setErrorCurp] = useState('');
+  const [errorCiclo, setErrorCiclo] = useState('');
   const puedeModificarTodasLasSituaciones = (
     session.rol === 'admin' || session.rol === 'avances_sicyt'
   );
@@ -63,6 +65,7 @@ export default function FormAlumno({
   const getErrorMessage = (campoId) => {
     if (campoId === 'correoPrimario') return errorMail;
     if (campoId === 'curp') return errorCurp;
+    if (campoId === 'alumnoCicloIngreso') return errorCiclo;
     return false;
   };
 
@@ -111,6 +114,15 @@ export default function FormAlumno({
         return true;
       }
       setErrorCurp('¡El CURP debe tener 18 caracteres!.');
+      return false;
+    }
+
+    if (name === 'alumnoCicloIngreso') {
+      if (cicloIngresoValidator(value)) {
+        setErrorCiclo('');
+        return true;
+      }
+      setErrorCiclo('El Ciclo de Ingreso debe tener el formato AAAA + letra (ej. 2024A).');
       return false;
     }
 
@@ -181,7 +193,18 @@ export default function FormAlumno({
     }
 
     try {
-      const dataBody = setAndValidateFormData({ ...form, ...query }).formData;
+      const { formData: dataBody, validate } = setAndValidateFormData({ ...form, ...query });
+
+      if (!validate) {
+        setNoti({
+          open: true,
+          message: 'Revisa que todos los campos obligatorios estén completos y sean válidos.',
+          type: 'error',
+        });
+        setLoading(false);
+        return;
+      }
+
       if (type === 'edit') {
         await alumnosService({
           id: query.alumnoId,
