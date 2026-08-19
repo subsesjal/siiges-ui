@@ -38,6 +38,7 @@ export const campos = [
   { id: 'celular', label: 'Celular', type: 'text' },
   { id: 'curp', label: 'CURP', type: 'text' },
   { id: 'matricula', label: 'Matrícula', type: 'text' },
+  { id: 'alumnoCicloIngreso', label: 'Ciclo de Ingreso', type: 'text' },
   {
     id: 'situacionId',
     label: 'Situación',
@@ -51,12 +52,18 @@ export const mailValidator = (email) => {
   return regex.test(email);
 };
 
-export const curpValidator = (curp) => curp.length === 18;
+export const curpValidator = (curp) => curp?.length === 18;
+
+export const cicloIngresoValidator = (ciclo) => {
+  const regex = /^\d{4}[ABC]$/;
+  return regex.test(ciclo);
+};
 
 export const setFormData = (data) => ({
   situacionId: data?.situacionId || 2,
   programaId: data?.alumnoId,
   matricula: data?.matricula,
+  alumnoCicloIngreso: data?.alumnoCicloIngreso,
   estatus: 1,
   persona: {
     nombre: data?.nombre,
@@ -74,14 +81,31 @@ export const setFormData = (data) => ({
 
 const validateForm = (data) => {
   const queryEvaluate = (value) => value === undefined || value === null || value === '';
+
+  // 1. Validar que los campos raíz no estén vacíos
   const firstValidate = !Object.values(data).some(queryEvaluate);
 
+  // ¿El CURP es obligatorio? Solo si la nacionalidad no es "Otro"
+  const isCurpRequired = data?.persona?.nacionalidad !== 'Otro';
+
+  // 2. Validar que los campos de persona no estén vacíos
+  // (ignorando apellidoMaterno siempre, y curp cuando no es requerido)
   const secondValidate = !Object.entries(data?.persona)
-    .filter(([key]) => key !== 'apellidoMaterno')
+    .filter(([key]) => {
+      if (key === 'apellidoMaterno') return false;
+      if (key === 'curp' && !isCurpRequired) return false;
+      return true;
+    })
     .map(([, value]) => value)
     .some(queryEvaluate);
 
-  return firstValidate && secondValidate;
+  // 3. Validar el formato específico del Ciclo de Ingreso
+  const isCicloValid = cicloIngresoValidator(data?.alumnoCicloIngreso);
+
+  // 4. Si el CURP sí es requerido, también debe cumplir el formato de 18 caracteres
+  const isCurpValid = !isCurpRequired || curpValidator(data?.persona?.curp);
+
+  return firstValidate && secondValidate && isCicloValid && isCurpValid;
 };
 
 export const setAndValidateFormData = (data) => {
