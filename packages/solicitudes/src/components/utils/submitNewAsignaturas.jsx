@@ -38,7 +38,7 @@ const handleCreate = async (
         type: 'error',
       });
       setLoading(false);
-      throw new Error('¡Error de red!');
+      return null;
     }
 
     const data = await response.json();
@@ -61,8 +61,14 @@ const handleCreate = async (
 
     return newData;
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    setNoti({
+      open: true,
+      message:
+        '¡Ocurrió un error al guardar los datos. Por favor, inténtalo de nuevo.!',
+      type: 'error',
+    });
+    setLoading(false);
+    return null;
   }
 };
 
