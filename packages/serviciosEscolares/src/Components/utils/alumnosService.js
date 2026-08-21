@@ -61,6 +61,7 @@ export default async function alumnosService({ id, dataBody, method }) {
     tipoTramiteId: data?.tipoTramiteId,
     equivalenciaId: data?.equivalencia?.id,
     equivalencia: data?.equivalencia,
+    alumnoCicloIngreso: data?.alumnoCicloIngreso,
   };
 
   return { data, dataForm };
