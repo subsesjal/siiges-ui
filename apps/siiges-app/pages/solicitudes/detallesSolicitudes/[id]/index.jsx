@@ -290,7 +290,7 @@ export default function DetallesSolicitudes() {
             ))}
           </List>
         </Grid>
-        {solicitud.programa?.acuerdoRvoe === '' && session.rol !== 'sicyt_editar' ? (
+        {solicitud.programa?.acuerdoRvoe === '' && session.rol === 'sicyt_editar' ? (
           <Grid item xs={4}>
             <Typography variant="subtitle1" color="textSecondary">
               RVOE

@@ -6,10 +6,26 @@ const handleEdit = (
   setInitialValues,
   setDocentesList,
   hideModal,
+  errors,
   setNoti,
   programaId,
   setCurrentSection,
 ) => {
+  if (errors && Object.keys(errors).length > 0) {
+    const isFormValid = Object.values(errors)
+      .map((validate) => validate())
+      .every(Boolean);
+
+    if (!isFormValid) {
+      setNoti({
+        open: true,
+        message: '¡Revisa los campos marcados en rojo antes de continuar!',
+        type: 'error',
+      });
+      return;
+    }
+  }
+
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const token = getToken();
@@ -38,9 +54,18 @@ const handleEdit = (
       setInitialValues({});
       setCurrentSection(1);
       hideModal();
+      setNoti({
+        open: true,
+        message: '¡Docente editado con éxito!',
+        type: 'success',
+      });
     })
     .catch((error) => {
-      console.error('Error:', error);
+      setNoti({
+        open: true,
+        message: `¡Error al editar Docente!: ${error.message}`,
+        type: 'error',
+      });
     });
 };
 
