@@ -42,6 +42,22 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     [form, setError, error],
   );
 
+  const creditosOrdinarios = form[1].programa?.creditosOrdinarios;
+  const minimoHorasOptativas = form[1].programa?.minimoHorasOptativas;
+
+  useEffect(() => {
+    if (creditosOrdinarios === undefined && minimoHorasOptativas === undefined) {
+      return;
+    }
+
+    const ordinarios = parseFloat(creditosOrdinarios);
+    const optativas = parseFloat(minimoHorasOptativas);
+    const total = (Number.isNaN(ordinarios) ? 0 : ordinarios)
+      + (Number.isNaN(optativas) ? 0 : optativas);
+
+    formDatosPlanEstudios('creditos', total, form, setForm);
+  }, [creditosOrdinarios, minimoHorasOptativas]);
+
   const handleOnBlur = (e) => {
     const { name, value } = e?.target || {};
     if (name && value !== undefined) {
@@ -63,7 +79,7 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
     }
-  }, [setErrors]);
+  }, [errors, setErrors]);
 
   const antecedenteAcademico = [
     { id: 1, nombre: 'Bachillerato' },
@@ -199,14 +215,41 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
         <Grid item xs={6}>
           <Input
             id="creditos"
-            label="Créditos necesarios para concluir el programa"
+            label="Créditos necesarios para concluir el programa (Ordinarios + Optativas)"
             name="creditos"
             auto="creditos"
             value={form[1].programa?.creditos}
+            errorMessage={error.creditos}
+            required
+            disabled
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="creditosOrdinarios"
+            label="Créditos ordinarios"
+            name="creditosOrdinarios"
+            auto="creditosOrdinarios"
+            value={form[1].programa?.creditosOrdinarios}
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            errorMessage={error.creditos}
+            errorMessage={error.creditosOrdinarios}
+            required
+            disabled={isDisabled}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="minimoHorasOptativas"
+            label="Créditos electivas"
+            name="minimoHorasOptativas"
+            auto="minimoHorasOptativas"
+            value={form[1].programa?.minimoHorasOptativas}
+            onChange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
+            errorMessage={error.minimoHorasOptativas}
             required
             disabled={isDisabled}
           />
