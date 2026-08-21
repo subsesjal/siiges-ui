@@ -67,6 +67,7 @@ export default function AlumnoData({ alumno }) {
             <ListTitle text="Teléfono" />
             <ListTitle text="Nacionalidad" />
             <ListTitle text="Género" />
+            <ListTitle text="Ciclo de Ingreso" />
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -77,6 +78,7 @@ export default function AlumnoData({ alumno }) {
             <ListSubtitle text={alumno?.telefono || 'N/A'} />
             <ListSubtitle text={alumno?.nacionalidad || 'N/A'} />
             <ListSubtitle text={alumno?.sexo || 'N/A'} />
+            <ListSubtitle text={alumno?.alumnoCicloIngreso || 'N/A'} />
           </List>
         </Grid>
       </Grid>
@@ -98,6 +100,7 @@ AlumnoData.propTypes = {
     telefono: PropTypes.string,
     nacionalidad: PropTypes.string,
     sexo: PropTypes.string,
+    alumnoCicloIngreso: PropTypes.string,
   }),
 };
 
