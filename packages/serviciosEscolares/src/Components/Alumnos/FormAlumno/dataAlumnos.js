@@ -61,7 +61,7 @@ export const cicloIngresoValidator = (ciclo) => {
 
 export const setFormData = (data) => ({
   situacionId: data?.situacionId || 2,
-  programaId: data?.alumnoId,
+  programaId: data?.programaId,
   matricula: data?.matricula,
   alumnoCicloIngreso: data?.alumnoCicloIngreso,
   estatus: 1,
