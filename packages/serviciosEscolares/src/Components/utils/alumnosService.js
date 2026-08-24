@@ -37,7 +37,7 @@ export default async function alumnosService({ id, dataBody, method }) {
   const dataForm = {
     id: data?.id,
     personaId: data?.personaId,
-    programaId: data?.programaId,
+    programaId: data?.programaId ?? data?.alumnoId,
     programa: data?.programa?.nombre,
     creditos: data?.programa?.creditos,
     claveCentroTrabajo: data?.programa?.plantel?.claveCentroTrabajo,
