@@ -2,10 +2,10 @@ import {
   List, ListItem, ListItemText, Grid, Typography, Divider,
 } from '@mui/material';
 import {
-  ButtonSimple, Layout, Title, useApi, useAuth, useUI, getData,
+  ButtonSimple, Layout, Title, useAuth, useUI, getData,
   ListTitle, ListSubtitle,
 } from '@siiges-ui/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import OficioModal from '@siiges-ui/solicitudes/src/components/Modal/ModalOficio';
 
@@ -20,13 +20,55 @@ export default function DetallesSolicitudes() {
   const router = useRouter();
   const { query } = router;
   const [solicitud, setSolicitud] = useState({});
-  const { data } = useApi({ endpoint: `api/v1/solicitudes/${query.id}/detalles` });
+
+  const fetchSolicitud = useCallback(async () => {
+    if (!query.id) return;
+
+    try {
+      const response = await getData({
+        endpoint: `/solicitudes/${query.id}/detalles`,
+      });
+
+      if (response?.statusCode === 200) {
+        setSolicitud(response.data || {});
+      } else {
+        setNoti({
+          open: true,
+          message: response?.errorMessage || '¡Error al cargar la solicitud!',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: '¡Error al cargar la solicitud!',
+        type: 'error',
+      });
+    }
+  }, [query.id]);
+
+  const updateSolicitudLocal = useCallback((changes = {}) => {
+    setSolicitud((prev) => ({
+      ...prev,
+      ...changes,
+      programa: {
+        ...prev.programa,
+        ...changes.programa,
+        plantel: {
+          ...prev.programa?.plantel,
+          ...changes.programa?.plantel,
+          institucion: {
+            ...prev.programa?.plantel?.institucion,
+            ...changes.programa?.plantel?.institucion,
+          },
+        },
+      },
+    }));
+  }, []);
 
   useEffect(() => {
-    if (data) {
-      setSolicitud(data);
-    }
-  }, [data]);
+    fetchSolicitud();
+  }, [fetchSolicitud]);
 
   const downloadFile = async (tipoDocumento) => {
     try {
@@ -313,6 +355,8 @@ export default function DetallesSolicitudes() {
         hideModal={hideOficioModal}
         downloadFile={downloadFile}
         solicitudId={solicitud.id}
+        solicitud={solicitud}
+        onSuccess={updateSolicitudLocal}
       />
     </Layout>
   );
