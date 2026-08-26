@@ -229,6 +229,7 @@ export default function AsignaturasEditModal({
             options={seriacionOptions}
             disabled={isDisabled}
             onChange={handleOnChange}
+            multiple
             textValue
           />
         </Grid>
