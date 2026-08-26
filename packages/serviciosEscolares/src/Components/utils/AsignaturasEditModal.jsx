@@ -71,7 +71,10 @@ export default function AsignaturasEditModal({
 
   const handleOnChange = ({ target: { name, value } }) => {
     setFormAsignaturas((prev) => {
-      const newValue = name === 'tipo' ? Number(value) : value;
+      let newValue = value;
+      if (name === 'tipo') newValue = Number(value);
+      if (name === 'seriacion') newValue = Array.isArray(value) ? value.join(',') : value;
+
       return {
         ...prev,
         [name]: newValue,
@@ -114,7 +117,10 @@ export default function AsignaturasEditModal({
   };
 
   const seriacionOptions = useMemo(
-    () => asignaturasList.map(({ id, clave }) => ({ id, nombre: clave })),
+    () => asignaturasList.map(({ nombre, clave }) => ({
+      id: clave,
+      nombre: `${nombre} | ${clave}`,
+    })),
     [asignaturasList],
   );
 
@@ -225,11 +231,14 @@ export default function AsignaturasEditModal({
           <BasicSelect
             title="Seriación"
             name="seriacion"
-            value={formAsignaturas.seriacion || ''}
+            value={
+              formAsignaturas.seriacion
+                ? formAsignaturas.seriacion.split(',')
+                : []
+            }
+            multiple
             options={seriacionOptions}
-            disabled={isDisabled}
             onChange={handleOnChange}
-            textValue
           />
         </Grid>
         <Grid item xs={4}>
