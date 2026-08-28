@@ -14,7 +14,7 @@ import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 const ROLES_INSTITUCION_FIJA = ['representante', 'ce_ies', 'avances_sicyt'];
 
 export default function ReporteForm({
-  setInstitucion, setAlumnos, setPrograma, setLoading, setCicloEscolar,
+  setInstitucion, setAlumnos, setPrograma, setLoading, setCicloEscolar, setPlantel,
 }) {
   const { instituciones: fetchedInstituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -221,6 +221,7 @@ export default function ReporteForm({
   const handlePlantelChange = (event) => {
     const plantelId = event.target.value;
     setSelectedPlantel(plantelId);
+    setPlantel(plantelId);
     if (typeof window !== 'undefined') {
       localStorage.setItem('reporte_selectedPlantel', plantelId);
     }
@@ -359,4 +360,5 @@ ReporteForm.propTypes = {
   setLoading: PropTypes.func.isRequired,
   setInstitucion: PropTypes.func.isRequired,
   setCicloEscolar: PropTypes.func.isRequired,
+  setPlantel: PropTypes.func.isRequired,
 };
