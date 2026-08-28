@@ -6,6 +6,7 @@ export default function Reporte() {
   const [institucion, setInstitucion] = useState();
   const [alumnos, setAlumnos] = useState();
   const [programa, setPrograma] = useState();
+  const [plantel, setPlantel] = useState();
   const [loading, setLoading] = useState(true);
   const [cicloEscolar, setCicloEscolar] = useState('');
 
@@ -15,6 +16,7 @@ export default function Reporte() {
         setInstitucion={setInstitucion}
         setAlumnos={setAlumnos}
         setPrograma={setPrograma}
+        setPlantel={setPlantel}
         setLoading={setLoading}
         setCicloEscolar={setCicloEscolar}
       />
@@ -23,6 +25,8 @@ export default function Reporte() {
           alumnos={alumnos}
           programa={programa}
           institucion={institucion}
+          cicloEscolar={cicloEscolar}
+          plantel={plantel}
         />
       )}
     </Layout>
