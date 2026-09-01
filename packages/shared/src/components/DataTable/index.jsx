@@ -23,6 +23,16 @@ function DataTable({
   secondaryButtonClick,
   secondaryButtonDisabled = false,
   initialState,
+  loading: externalLoading = false,
+  paginationMode = 'client',
+  rowCount,
+  page = 0,
+  pageSize: controlledPageSize,
+  onPageChange,
+  onPageSizeChange,
+  sortModel,
+  onSortModelChange,
+  onSearch,
 }) {
   const [searchText, setSearchText] = useState('');
   const [filteredRows, setFilteredRows] = useState(rows);
@@ -75,7 +85,21 @@ function DataTable({
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchText(value);
-    debouncedSearch(value, rows);
+    if (paginationMode === 'client') {
+      debouncedSearch(value, rows);
+    }
+  };
+
+  const handleSearchSubmit = () => {
+    if (paginationMode === 'server') {
+      onSearch(searchText);
+    }
+  };
+
+  const handleSearchKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearchSubmit();
+    }
   };
 
   const localeText = {
@@ -149,9 +173,10 @@ function DataTable({
             sx={{ mt: 2 }}
             value={searchText}
             onChange={handleSearch}
+            onKeyDown={handleSearchKeyDown}
             InputProps={{
               endAdornment: (
-                <IconButton>
+                <IconButton onClick={handleSearchSubmit}>
                   <SearchIcon />
                 </IconButton>
               ),
@@ -162,12 +187,25 @@ function DataTable({
       <div style={{ height: 400, width: '100%', marginTop: 15 }}>
         <DataGrid
           localeText={localeText}
-          loading={loading}
-          rows={filteredRows}
+          loading={externalLoading || loading}
+          rows={paginationMode === 'server' ? rows : filteredRows}
           columns={columns || []}
-          pageSize={pageSize}
+          paginationMode={paginationMode}
+          rowCount={paginationMode === 'server' ? rowCount : undefined}
+          page={paginationMode === 'server' ? page : undefined}
+          pageSize={paginationMode === 'server' ? controlledPageSize : pageSize}
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          onPageChange={paginationMode === 'server' ? onPageChange : undefined}
+          onPageSizeChange={(newPageSize) => {
+            if (paginationMode === 'server') {
+              onPageSizeChange(newPageSize);
+            } else {
+              setPageSize(newPageSize);
+            }
+          }}
+          sortingMode={paginationMode === 'server' ? 'server' : 'client'}
+          sortModel={paginationMode === 'server' ? sortModel : undefined}
+          onSortModelChange={paginationMode === 'server' ? onSortModelChange : undefined}
           initialState={initialState || { sorting: { sortModel: [{ field: 'id', sort: 'asc' }] } }}
         />
       </div>
@@ -188,6 +226,16 @@ DataTable.defaultProps = {
   secondaryButtonDisabled: false,
   initialState: { sorting: { sortModel: [{ field: 'id', sort: 'asc' }] } },
   buttonClick: () => {},
+  rowCount: 0,
+  loading: false,
+  paginationMode: 'client',
+  page: 0,
+  pageSize: 10,
+  onPageChange: () => {},
+  onPageSizeChange: () => {},
+  sortModel: [],
+  onSortModelChange: () => {},
+  onSearch: () => {},
 };
 
 DataTable.propTypes = {
@@ -220,6 +268,21 @@ DataTable.propTypes = {
   secondaryButtonText: PropTypes.string,
   secondaryButtonClick: PropTypes.func,
   secondaryButtonDisabled: PropTypes.bool,
+  loading: PropTypes.bool,
+  paginationMode: PropTypes.oneOf(['client', 'server']),
+  rowCount: PropTypes.number,
+  page: PropTypes.number,
+  pageSize: PropTypes.number,
+  onPageChange: PropTypes.func,
+  onPageSizeChange: PropTypes.func,
+  sortModel: PropTypes.arrayOf(
+    PropTypes.shape({
+      field: PropTypes.string.isRequired,
+      sort: PropTypes.oneOf(['desc', 'asc']),
+    }),
+  ),
+  onSortModelChange: PropTypes.func,
+  onSearch: PropTypes.func,
 };
 
 export default React.memo(DataTable);
