@@ -21,7 +21,7 @@ export default function SnackAlert({
   return (
     <Snackbar
       open={open}
-      autoHideDuration={3000}
+      autoHideDuration={6000}
       onClose={close}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       TransitionComponent={SlideTransition}
