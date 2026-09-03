@@ -161,12 +161,16 @@ export default function ConsultRvoe() {
           },
         );
         const data = await response.json();
-        setRvoes(data.data || []);
-        setNoti({
-          open: true,
-          type: 'error',
-          message: 'No se encontraron RVOEs para el plantel seleccionado.',
-        });
+        const rvoesData = data.data || [];
+        setRvoes(rvoesData);
+
+        if (rvoesData.length === 0) {
+          setNoti({
+            open: true,
+            type: 'error',
+            message: 'No se encontraron RVOEs para el plantel seleccionado.',
+          });
+        }
       } catch (error) {
         console.error('¡Error al buscar RVOEs!:', error);
       } finally {
