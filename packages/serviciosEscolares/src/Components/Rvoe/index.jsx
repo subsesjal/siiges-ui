@@ -1,175 +1,252 @@
-import React, { useState, useMemo } from 'react';
-import { Grid } from '@mui/material';
-import { DataTable, Select } from '@siiges-ui/shared';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Grid, CircularProgress, Typography } from '@mui/material';
+import { DataTable, Select, useUI } from '@siiges-ui/shared';
 import { useRouter } from 'next/router';
 
-// 1. Datos simulados (Mock Data)
-const MOCK_INSTITUCIONES = [
-  { id: 1, nombre: 'Universidad Tecnológica de Jalisco' },
-  { id: 2, nombre: 'Instituto Tecnológico Superior de Zapopan' },
-];
+const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+const domain = process.env.NEXT_PUBLIC_URL;
 
-const MOCK_PLANTELES = {
-  1: [
-    { id: 101, nombre: 'Plantel Central (Guadalajara)' },
-    { id: 102, nombre: 'Plantel Sur (Tlajomulco)' },
-  ],
-  2: [
-    { id: 201, nombre: 'Plantel Zapopan Norte' },
-  ],
-};
+const ESTADO_ID_JALISCO = 14;
 
-const MOCK_MUNICIPIOS = {
-  101: [
-    { id: 1001, nombre: 'Guadalajara' },
-  ],
-  102: [
-    { id: 1002, nombre: 'Tlajomulco de Zúñiga' },
-  ],
-  201: [
-    { id: 1003, nombre: 'Zapopan' },
-  ],
-};
-
-const MOCK_RVOES = [
-  {
-    id: 1,
-    institucionId: 1,
-    plantelId: 101,
-    municipioId: 1001,
-    nombrePrograma: 'Licenciatura en Desarrollo de Software',
-    rvoe: 'ES2023001',
-    fechaCreacion: '2023-01-15',
-    municipio: 'Guadalajara',
-    estatus: 'Activo',
-  },
-  {
-    id: 2,
-    institucionId: 1,
-    plantelId: 101,
-    municipioId: 1001,
-    nombrePrograma: 'Ingeniería en Redes y Telecomunicaciones',
-    rvoe: 'ES2023002',
-    fechaCreacion: '2023-03-20',
-    municipio: 'Guadalajara',
-    estatus: 'Activo',
-  },
-  {
-    id: 3,
-    institucionId: 1,
-    plantelId: 102,
-    municipioId: 1002,
-    nombrePrograma: 'Licenciatura en Negocios Digitales',
-    rvoe: 'ES2023003',
-    fechaCreacion: '2023-05-10',
-    municipio: 'Tlajomulco de Zúñiga',
-    estatus: 'En Revisión',
-  },
-  {
-    id: 4,
-    institucionId: 2,
-    plantelId: 201,
-    municipioId: 1003,
-    nombrePrograma: 'Ingeniería Mecatrónica',
-    rvoe: 'ES2022045',
-    fechaCreacion: '2022-11-01',
-    municipio: 'Zapopan',
-    estatus: 'Activo',
-  },
-];
-
-// 2. Definición de columnas solicitadas
 const columns = [
-  { field: 'nombrePrograma', headerName: 'Nombre programa', name: 'Nombre programa', width: 500 },
-  { field: 'rvoe', headerName: 'RVOE', name: 'RVOE', width: 100 },
-  { field: 'fechaCreacion', headerName: 'Fecha de creación', name: 'Fecha de creación', width: 150 },
-  { field: 'municipio', headerName: 'Municipio', name: 'Municipio', width: 200 },
-  { field: 'estatus', headerName: 'Estatus', name: 'Estatus', width: 150 },
+  {
+    field: 'nombrePrograma', headerName: 'Nombre programa', name: 'Nombre programa', width: 500,
+  },
+  {
+    field: 'acuerdoRvoe', headerName: 'RVOE', name: 'RVOE', width: 150,
+  },
+  {
+    field: 'fechaCreacion', headerName: 'Fecha de creación', name: 'Fecha de creación', width: 160,
+  },
+  {
+    field: 'municipio', headerName: 'Municipio', name: 'Municipio', width: 150,
+  },
+  {
+    field: 'vigencia', headerName: 'Fecha de vigencia', name: 'Vigencia', width: 160,
+  },
 ];
 
 export default function ConsultRvoe() {
-  const router = useRouter();
-
-  // Estados para controlar las selecciones
+  // Estados de selección
+  const [selectedMunicipio, setSelectedMunicipio] = useState('');
   const [selectedInstitucion, setSelectedInstitucion] = useState('');
   const [selectedPlantel, setSelectedPlantel] = useState('');
-  const [selectedMunicipio, setSelectedMunicipio] = useState('');
+
+  // Estados de opciones
+  const [municipios, setMunicipios] = useState([]);
+  const [instituciones, setInstituciones] = useState([]);
+  const [planteles, setPlanteles] = useState([]);
+  const [rvoes, setRvoes] = useState([]);
+
+  // Estados de carga
+  const [loadingMunicipios, setLoadingMunicipios] = useState(false);
+  const [loadingInstituciones, setLoadingInstituciones] = useState(false);
+  const [loadingPlanteles, setLoadingPlanteles] = useState(false);
+  const [loadingRvoes, setLoadingRvoes] = useState(false);
+  const { setNoti } = useUI();
+
+  // 1. Municipios (siempre activo, se cargan al montar)
+  useEffect(() => {
+    const fetchMunicipios = async () => {
+      setLoadingMunicipios(true);
+      try {
+        const response = await fetch(
+          `${domain}/api/v1/public/municipios/?estadoId=${ESTADO_ID_JALISCO}`,
+          {
+            headers: {
+              api_key: apiKey,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const data = await response.json();
+        setMunicipios(
+          data.data?.filter(
+            (municipio) => municipio.estadoId === ESTADO_ID_JALISCO,
+          ) || [],
+        );
+      } catch (error) {
+        console.error('¡Error al buscar municipios!:', error);
+      } finally {
+        setLoadingMunicipios(false);
+      }
+    };
+
+    fetchMunicipios();
+  }, []);
+
+  // 2. Instituciones por municipio
+  useEffect(() => {
+    const fetchInstituciones = async () => {
+      if (!selectedMunicipio) {
+        setInstituciones([]);
+        return;
+      }
+
+      setLoadingInstituciones(true);
+      try {
+        const response = await fetch(
+          `${domain}/api/v1/public/instituciones?municipioId=${selectedMunicipio}`,
+          {
+            headers: {
+              api_key: apiKey,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const data = await response.json();
+        setInstituciones(data.data || []);
+      } catch (error) {
+        console.error('¡Error al buscar instituciones!:', error);
+      } finally {
+        setLoadingInstituciones(false);
+      }
+    };
+
+    fetchInstituciones();
+  }, [selectedMunicipio]);
+
+  // 3. Planteles por institución
+  useEffect(() => {
+    const fetchPlanteles = async () => {
+      if (!selectedInstitucion) {
+        setPlanteles([]);
+        return;
+      }
+
+      setLoadingPlanteles(true);
+      try {
+        const response = await fetch(
+          `${domain}/api/v1/public/instituciones/${selectedInstitucion}/planteles`,
+          {
+            headers: {
+              api_key: apiKey,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const data = await response.json();
+        const mappedPlanteles = (data.data || []).map((plantel) => ({
+          id: plantel.id,
+          nombre: `${plantel.claveCentroTrabajo} - ${plantel.domicilio?.calle ?? ''} #${plantel.domicilio?.numeroExterior ?? ''}`,
+        }));
+        setPlanteles(mappedPlanteles);
+      } catch (error) {
+        console.error('¡Error al buscar planteles!:', error);
+      } finally {
+        setLoadingPlanteles(false);
+      }
+    };
+
+    fetchPlanteles();
+  }, [selectedInstitucion]);
+
+  // 4. RVOEs por plantel
+  useEffect(() => {
+    const fetchRvoes = async () => {
+      if (!selectedPlantel) {
+        setRvoes([]);
+        return;
+      }
+
+      setLoadingRvoes(true);
+      try {
+        const response = await fetch(
+          `${domain}/api/v1/public/rvoes?plantelId=${selectedPlantel}`,
+          {
+            headers: {
+              api_key: apiKey,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const data = await response.json();
+        setRvoes(data.data || []);
+        setNoti({
+          open: true,
+          type: 'error',
+          message: 'No se encontraron RVOEs para el plantel seleccionado.',
+        });
+      } catch (error) {
+        console.error('¡Error al buscar RVOEs!:', error);
+      } finally {
+        setLoadingRvoes(false);
+      }
+    };
+
+    fetchRvoes();
+  }, [selectedPlantel]);
 
   // Handlers para la selección en cascada
+  const handleMunicipioChange = (event) => {
+    const value = event?.target ? event.target.value : event;
+    setSelectedMunicipio(value);
+    setSelectedInstitucion('');
+    setSelectedPlantel('');
+  };
+
   const handleInstitucionChange = (event) => {
     const value = event?.target ? event.target.value : event;
     setSelectedInstitucion(value);
     setSelectedPlantel('');
-    setSelectedMunicipio('');
   };
 
   const handlePlantelChange = (event) => {
     const value = event?.target ? event.target.value : event;
     setSelectedPlantel(value);
-    setSelectedMunicipio('');
   };
 
-  const handleMunicipioChange = (event) => {
-    const value = event?.target ? event.target.value : event;
-    setSelectedMunicipio(value);
-  };
+  const isAllSelected = Boolean(selectedMunicipio && selectedInstitucion && selectedPlantel);
 
-  // Opciones dinámicas para los selectores dependientes
-  const plantelOptions = selectedInstitucion ? MOCK_PLANTELES[selectedInstitucion] || [] : [];
-  const municipioOptions = selectedPlantel ? MOCK_MUNICIPIOS[selectedPlantel] || [] : [];
-
-  // Validar si los tres campos están seleccionados
-  const isAllSelected = Boolean(selectedInstitucion && selectedPlantel && selectedMunicipio);
-
-  // Filtrar los datos de la tabla únicamente cuando todos los campos están seleccionados
   const tableRows = useMemo(() => {
     if (!isAllSelected) return [];
-
-    return MOCK_RVOES.filter(
-      (item) =>
-        String(item.institucionId) === String(selectedInstitucion) &&
-        String(item.plantelId) === String(selectedPlantel) &&
-        String(item.municipioId) === String(selectedMunicipio)
-    );
-  }, [selectedInstitucion, selectedPlantel, selectedMunicipio, isAllSelected]);
+    return rvoes;
+  }, [rvoes, isAllSelected]);
 
   return (
     <Grid container spacing={1}>
       <Grid item xs={6}>
         <Select
           title="Municipios"
-          options={municipioOptions}
+          options={municipios}
           name="municipio"
           value={selectedMunicipio}
           onChange={handleMunicipioChange}
-          disabled={!selectedInstitucion || !selectedPlantel}
+          loading={loadingMunicipios}
         />
       </Grid>
       <Grid item xs={6}>
         <Select
           title="Institución"
-          options={MOCK_INSTITUCIONES}
+          options={instituciones}
           name="institucion"
           value={selectedInstitucion}
           onChange={handleInstitucionChange}
+          disabled={!selectedMunicipio}
+          loading={loadingInstituciones}
         />
       </Grid>
       <Grid item xs={12}>
         <Select
           title="Plantel"
-          options={plantelOptions}
+          options={planteles}
           name="plantel"
           value={selectedPlantel}
           onChange={handlePlantelChange}
           disabled={!selectedInstitucion}
+          loading={loadingPlanteles}
         />
       </Grid>
       <Grid item xs={12}>
-        <DataTable
-          title="Lista de RVOES"
-          rows={tableRows}
-          columns={columns}
-        />
+        {loadingRvoes ? (
+          <CircularProgress size={24} />
+        ) : (
+          <DataTable
+            title="Lista de RVOES"
+            rows={tableRows}
+            columns={columns}
+          />
+        )}
       </Grid>
     </Grid>
   );
