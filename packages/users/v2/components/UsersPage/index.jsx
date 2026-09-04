@@ -30,12 +30,25 @@ export default function UsersPage() {
   const { session } = useAuth();
   const notify = useNotification();
   const [refreshKey, setRefreshKey] = useState(0);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [search, setSearch] = useState('');
+  const [sortModel, setSortModel] = useState([{ field: 'id', sort: 'asc' }]);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const deleteAbortRef = useRef(null);
 
   const permissions = useMemo(() => getUserPermissions(session?.rol), [session?.rol]);
-  const listState = useUsersData({ session, refreshKey });
+  const activeSort = sortModel[0] || { field: 'id', sort: 'asc' };
+  const listState = useUsersData({
+    session,
+    refreshKey,
+    page,
+    limit: pageSize,
+    search,
+    sortBy: activeSort.field,
+    sortOrder: activeSort.sort,
+  });
 
   const openCreate = useCallback(() => {
     router.push('/usuarios/crear');
@@ -50,7 +63,28 @@ export default function UsersPage() {
   }, [router]);
 
   const reloadUsers = useCallback(() => {
+    setSearch('');
+    setPage(0);
     setRefreshKey((prev) => prev + 1);
+  }, []);
+
+  const handlePageChange = useCallback((nextPage) => {
+    setPage(nextPage);
+  }, []);
+
+  const handlePageSizeChange = useCallback((nextPageSize) => {
+    setPage(0);
+    setPageSize(nextPageSize);
+  }, []);
+
+  const handleSortModelChange = useCallback((nextSortModel) => {
+    setPage(0);
+    setSortModel(nextSortModel);
+  }, []);
+
+  const handleSearch = useCallback((nextSearch) => {
+    setPage(0);
+    setSearch(nextSearch);
   }, []);
 
   const openDelete = useCallback((user) => {
@@ -110,7 +144,13 @@ export default function UsersPage() {
   const isSessionReady = Boolean(session?.rol);
   const isRouteLoading = !isSessionReady || listState.loading;
   const hasError = Boolean(listState.error);
-  const isEmpty = !listState.loading && !hasError && listState.data.length === 0;
+  const shouldShowEmptyState = !listState.loading
+    && !hasError
+    && listState.data.length === 0
+    && !search;
+  const shouldShowTable = !hasError
+    && !listState.loading
+    && (listState.data.length > 0 || Boolean(search));
 
   const errorMessage = useMemo(
     () => listState.error?.message || 'No fue posible cargar los usuarios.',
@@ -130,10 +170,10 @@ export default function UsersPage() {
         {hasError && (
           <UsersErrorState message={errorMessage} onRetry={reloadUsers} />
         )}
-        {isEmpty && (
+        {shouldShowEmptyState && (
           <UsersEmptyState canCreate={canCreate} onCreate={openCreate} />
         )}
-        {!listState.loading && !hasError && listState.data.length > 0 && (
+        {shouldShowTable && (
           <UsersTable
             data={listState.data}
             loading={listState.loading}
@@ -145,6 +185,14 @@ export default function UsersPage() {
             onDelete={openDelete}
             onCreate={openCreate}
             onReload={reloadUsers}
+            pagination={listState.pagination}
+            page={page}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            sortModel={sortModel}
+            onSortModelChange={handleSortModelChange}
+            onSearch={handleSearch}
           />
         )}
       </>

@@ -15,6 +15,14 @@ function UsersTable({
   canCreate,
   onCreate,
   onReload,
+  pagination,
+  page,
+  pageSize,
+  onPageChange,
+  onPageSizeChange,
+  sortModel,
+  onSortModelChange,
+  onSearch,
 }) {
   const rows = useMemo(() => mapUsersToRows(data), [data]);
 
@@ -47,12 +55,21 @@ function UsersTable({
     <DataTable
       rows={rows}
       columns={columns}
-      loading={loading}
       buttonAdd={canCreate}
       buttonText="Agregar usuario"
       buttonClick={onCreate}
       buttonType="add"
       onReloadClick={onReload}
+      loading={loading}
+      paginationMode="server"
+      rowCount={pagination.total}
+      page={page}
+      pageSize={pageSize}
+      onPageChange={onPageChange}
+      onPageSizeChange={onPageSizeChange}
+      sortModel={sortModel}
+      onSortModelChange={onSortModelChange}
+      onSearch={onSearch}
     />
   );
 }
@@ -63,6 +80,14 @@ UsersTable.defaultProps = {
   canCreate: false,
   onCreate: () => {},
   onReload: () => {},
+  pagination: { total: 0 },
+  page: 0,
+  pageSize: 10,
+  onPageChange: () => {},
+  onPageSizeChange: () => {},
+  sortModel: [],
+  onSortModelChange: () => {},
+  onSearch: () => {},
 };
 
 UsersTable.propTypes = {
@@ -76,6 +101,17 @@ UsersTable.propTypes = {
   canCreate: PropTypes.bool,
   onCreate: PropTypes.func,
   onReload: PropTypes.func,
+  pagination: PropTypes.shape({ total: PropTypes.number }),
+  page: PropTypes.number,
+  pageSize: PropTypes.number,
+  onPageChange: PropTypes.func,
+  onPageSizeChange: PropTypes.func,
+  sortModel: PropTypes.arrayOf(PropTypes.shape({
+    field: PropTypes.string.isRequired,
+    sort: PropTypes.oneOf(['asc', 'desc']),
+  })),
+  onSortModelChange: PropTypes.func,
+  onSearch: PropTypes.func,
 };
 
 export default React.memo(UsersTable);

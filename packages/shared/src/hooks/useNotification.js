@@ -8,6 +8,7 @@
  * notify.error('Algo salió mal');
  */
 
+import { useMemo } from 'react';
 import { useUI } from '../contexts/UIContext';
 
 export function useNotification() {
@@ -15,12 +16,12 @@ export function useNotification() {
     showSuccess, showError, showWarning, showInfo,
   } = useUI();
 
-  return {
+  return useMemo(() => ({
     success: showSuccess,
     error: showError,
     warning: showWarning,
     info: showInfo,
-  };
+  }), [showError, showInfo, showSuccess, showWarning]);
 }
 
 export default useNotification;

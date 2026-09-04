@@ -59,6 +59,7 @@ const request = async ({
   method = 'GET',
   body,
   signal,
+  unwrapData = true,
 }) => {
   const response = await fetch(`${BASE_URL}/${path}`, {
     method,
@@ -79,25 +80,48 @@ const request = async ({
     throw new Error(getFriendlyValidationMessage(rawMessage));
   }
 
-  return payload?.data ?? payload;
+  return unwrapData ? payload?.data ?? payload : payload;
 };
 
-const getUsers = ({ session, signal }) => {
+const getUsers = ({
+  session,
+  signal,
+  page,
+  limit,
+  search,
+  sortBy,
+  sortOrder,
+}) => {
+  const query = new URLSearchParams();
+
+  if (page !== undefined) query.set('page', page);
+  if (limit !== undefined) query.set('limit', limit);
+  if (search) query.set('search', search);
+  if (sortBy) query.set('sortBy', sortBy);
+  if (sortOrder) query.set('sortOrder', sortOrder);
+
+  const appendQuery = (path) => {
+    const queryString = query.toString();
+    return queryString ? `${path}?${queryString}` : path;
+  };
+
   if (session?.rol === 'representante') {
     return request({
-      path: `api/v1/usuarios/${session.id}/usuarios`,
+      path: appendQuery(`api/v1/usuarios/${session.id}/usuarios`),
       token: session.token,
       method: 'GET',
       signal,
+      unwrapData: false,
     });
   }
 
   if (session?.rol === 'admin' || session?.rol === 'sicyt_editar') {
     return request({
-      path: 'api/v1/usuarios',
+      path: appendQuery('api/v1/usuarios'),
       token: session.token,
       method: 'GET',
       signal,
+      unwrapData: false,
     });
   }
 

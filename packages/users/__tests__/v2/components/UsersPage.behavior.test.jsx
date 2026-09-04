@@ -58,19 +58,32 @@ MockDefaultModal.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-function MockUsersTable({ onDelete }) {
+function MockUsersTable({ onDelete, onSearch }) {
   return (
-    <button
-      type="button"
-      onClick={() => onDelete({ id: 7, usuario: 'usuario_eliminar' })}
-    >
-      open-delete
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => onDelete({ id: 7, usuario: 'usuario_eliminar' })}
+      >
+        open-delete
+      </button>
+      <button type="button" onClick={() => onSearch('not-found')}>
+        search-not-found
+      </button>
+      <button type="button" onClick={() => onSearch('')}>
+        clear-search
+      </button>
+    </>
   );
 }
 
 MockUsersTable.propTypes = {
   onDelete: PropTypes.func.isRequired,
+  onSearch: PropTypes.func,
+};
+
+MockUsersTable.defaultProps = {
+  onSearch: () => {},
 };
 
 function MockUsersSkeleton() {
@@ -106,7 +119,7 @@ jest.mock('@siiges-ui/shared', () => ({
   DefaultModal: MockDefaultModal,
 }));
 
-jest.mock('../../../v2/hooks/useUsersData', () => () => mockUseUsersData());
+jest.mock('../../../v2/hooks/useUsersData', () => (args) => mockUseUsersData(args));
 
 jest.mock('../../../v2/utils/permissions', () => ({
   getUserPermissions: () => mockGetUserPermissions(),
@@ -181,6 +194,27 @@ describe('UsersPage behavior', () => {
 
     expect(screen.getByText('Boom list')).toBeInTheDocument();
     expect(mockNotifyError).toHaveBeenCalledWith('Boom list');
+  });
+
+  it('keeps the table visible when the filtered search has no matches so the user can retry', () => {
+    mockUseUsersData.mockImplementation((args = {}) => {
+      const { search = '' } = args;
+      return {
+        data: search === 'not-found' ? [] : [{ id: 1, usuario: 'usuario_ok' }],
+        loading: false,
+        error: null,
+        pagination: { total: search === 'not-found' ? 0 : 1 },
+      };
+    });
+
+    render(<UsersPage />);
+
+    expect(screen.getByText('open-delete')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('search-not-found'));
+
+    expect(screen.getByText('open-delete')).toBeInTheDocument();
+    expect(screen.queryByText('empty')).not.toBeInTheDocument();
   });
 
   it('opens delete modal and confirms deletion successfully', async () => {
