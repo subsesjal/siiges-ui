@@ -43,20 +43,20 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
   );
 
   const creditosOrdinarios = form[1].programa?.creditosOrdinarios;
-  const minimoHorasOptativas = form[1].programa?.minimoHorasOptativas;
+  const minimoCreditosOptativas = form[1].programa?.minimoCreditosOptativas;
 
   useEffect(() => {
-    if (creditosOrdinarios === undefined && minimoHorasOptativas === undefined) {
+    if (creditosOrdinarios === undefined && minimoCreditosOptativas === undefined) {
       return;
     }
 
-    const ordinarios = parseFloat(creditosOrdinarios);
-    const optativas = parseFloat(minimoHorasOptativas);
+    const ordinarios = Number(creditosOrdinarios);
+    const optativas = Number(minimoCreditosOptativas);
     const total = (Number.isNaN(ordinarios) ? 0 : ordinarios)
       + (Number.isNaN(optativas) ? 0 : optativas);
 
     formDatosPlanEstudios('creditos', total, form, setForm);
-  }, [creditosOrdinarios, minimoHorasOptativas]);
+  }, [creditosOrdinarios, minimoCreditosOptativas]);
 
   const handleOnBlur = (e) => {
     const { name, value } = e?.target || {};
@@ -241,15 +241,15 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="minimoHorasOptativas"
+            id="minimoCreditosOptativas"
             label="Créditos electivas"
-            name="minimoHorasOptativas"
-            auto="minimoHorasOptativas"
-            value={form[1].programa?.minimoHorasOptativas}
+            name="minimoCreditosOptativas"
+            auto="minimoCreditosOptativas"
+            value={form[1].programa?.minimoCreditosOptativas}
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            errorMessage={error.minimoHorasOptativas}
+            errorMessage={error.minimoCreditosOptativas}
             required
             disabled={isDisabled}
           />
