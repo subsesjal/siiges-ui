@@ -31,10 +31,10 @@ export default function AlumnosInactivosTable({
     if (programaId) params.programaId = programaId;
 
     try {
-      const objectUrl = await GetFilePdf('/alumnos/matricula-inactiva/pdf', params);
+      const objectUrl = await GetFilePdf('/alumnos/matricula-inactiva/csv', params);
       const link = document.createElement('a');
       link.href = objectUrl;
-      link.download = 'reporte-alumnos-inactivos.pdf';
+      link.download = 'reporte-alumnos-inactivos.csv';
       link.click();
       URL.revokeObjectURL(objectUrl);
     } catch (error) {
