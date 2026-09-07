@@ -241,7 +241,7 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
         </Grid>
         <Grid item xs={6}>
           <Input
-            id="minimoHorasOptativas"
+            id="minimoCreditosOptativas"
             label="Créditos electivas"
             name="minimoCreditosOptativas"
             auto="minimoCreditosOptativas"
