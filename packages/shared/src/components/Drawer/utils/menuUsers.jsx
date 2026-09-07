@@ -18,7 +18,7 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import CoPresentOutlinedIcon from '@mui/icons-material/CoPresentOutlined';
 import { USERS_ROUTE } from '../../../constants/routes';
 
-const ACCESOS_ESPECIALES = {
+const SPECIAL_ACCESS = {
   asignacionFolios: {
     representante: [469, 821],
     ce_ies: [2715],
@@ -28,16 +28,16 @@ const ACCESOS_ESPECIALES = {
   },
 };
 
-const tieneAccesoEspecial = (feature, rol, userId) => (
-  (ACCESOS_ESPECIALES[feature]?.[rol] ?? []).includes(userId)
+const hasSpecialAccess = (feature, rol, userId) => (
+  (SPECIAL_ACCESS[feature]?.[rol] ?? []).includes(userId)
 );
 
 const canViewAsignacionFolios = (rol, userId) => {
   if (rol === 'admin' || rol === 'ce_sicyt' || rol === 'folios_sicyt') return true;
 
-  if (rol === 'representante' && tieneAccesoEspecial('asignacionFolios', rol, userId)) return true;
+  if (rol === 'representante' && hasSpecialAccess('asignacionFolios', rol, userId)) return true;
 
-  if (rol === 'ce_ies' && tieneAccesoEspecial('asignacionFolios', rol, userId)) return true;
+  if (rol === 'ce_ies' && hasSpecialAccess('asignacionFolios', rol, userId)) return true;
 
   return false;
 };
@@ -172,7 +172,7 @@ const panelMenuOptions = (rol, nombre, userId) => {
             route: '/serviciosEscolares/titulacion',
           },
           ...((rol === 'admin' || rol === 'folios_sicyt'
-            || (rol === 'representante' && tieneAccesoEspecial('catalogoCertificados', rol, userId)))
+            || (rol === 'representante' && hasSpecialAccess('catalogoCertificados', rol, userId)))
             ? [
               {
                 text: 'Catálogo de Certificados',
@@ -444,10 +444,10 @@ const optionsAdminMenuFilterRol = (rol, username, userId) => {
 };
 
 /**
- * Finds the userId (del menú, no del usuario) associated with a given path.
+ * Finds the menu userId associated with a given path.
  *
  * @param {string} path - The path to search for.
- * @returns {number} - The userId del menú associated with the path.
+ * @returns {number} - The menu userId associated with the path.
  */
 const findRoute = (path, rol, username, userId) => {
   const wordSearch = path.split('/')[1];
