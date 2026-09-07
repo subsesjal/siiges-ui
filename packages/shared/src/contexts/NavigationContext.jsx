@@ -36,11 +36,11 @@ export function NavigationProvider({ children }) {
 
   // Actualizar sección cuando cambia la ruta o el rol
   useEffect(() => {
-    const currentSection = findRoute(router.route, session?.rol);
+    const currentSection = findRoute(router.route, session?.rol, session?.nombre, session?.id);
     if (currentSection) {
       setSection(currentSection);
     }
-  }, [router.route, session?.rol]);
+  }, [router.route, session?.rol, session?.nombre, session?.id]);
 
   /**
    * Navega a una ruta específica
