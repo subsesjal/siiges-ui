@@ -49,12 +49,12 @@ export default function errorDatosPlanEstudios(form, setError) {
           && formData.programa?.creditosOrdinarios !== ''
           && validNumber.test(formData.programa?.creditosOrdinarios),
     ),
-    minimoHorasOptativas: () => validateField(
-      'minimoHorasOptativas',
+    minimoCreditosOptativas: () => validateField(
+      'minimoCreditosOptativas',
       '¡Créditos electivas son requeridos y deben ser un número válido!',
-      formData.programa?.minimoHorasOptativas !== undefined
-          && formData.programa?.minimoHorasOptativas !== ''
-          && validNumber.test(formData.programa?.minimoHorasOptativas),
+      formData.programa?.minimoCreditosOptativas !== undefined
+          && formData.programa?.minimoCreditosOptativas !== ''
+          && validNumber.test(formData.programa?.minimoCreditosOptativas),
     ),
     creditos: () => validateField(
       'creditos',
@@ -65,12 +65,12 @@ export default function errorDatosPlanEstudios(form, setError) {
           && formData.programa?.creditosOrdinarios !== undefined
           && formData.programa?.creditosOrdinarios !== ''
           && validNumber.test(formData.programa?.creditosOrdinarios)
-          && formData.programa?.minimoHorasOptativas !== undefined
-          && formData.programa?.minimoHorasOptativas !== ''
-          && validNumber.test(formData.programa?.minimoHorasOptativas)
+          && formData.programa?.minimoCreditosOptativas !== undefined
+          && formData.programa?.minimoCreditosOptativas !== ''
+          && validNumber.test(formData.programa?.minimoCreditosOptativas)
           && Number(formData.programa?.creditos)
             === Number(formData.programa?.creditosOrdinarios)
-            + Number(formData.programa?.minimoHorasOptativas),
+            + Number(formData.programa?.minimoCreditosOptativas),
     ),
     antecedenteAcademico: () => validateField(
       'antecedenteAcademico',
