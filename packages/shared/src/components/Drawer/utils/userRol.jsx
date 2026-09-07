@@ -21,12 +21,12 @@ export default function useUserRol(session, setUsers, section) {
   useEffect(() => {
     if (!session) return;
 
-    const { rol, nombre } = session;
+    const { rol, nombre, id: userId } = session;
 
-    const findIndex = findRoute(router.route, rol, nombre);
+    const findIndex = findRoute(router.route, rol, nombre, userId);
 
     if (userMultiRol.includes(rol)) {
-      const users = optionsAdminMenuFilterRol(rol, nombre);
+      const users = optionsAdminMenuFilterRol(rol, nombre, userId);
 
       const validateNumberUsers = users.flat().reduce((acc, user) => {
         if (user && !acc.includes(user.userId)) {
