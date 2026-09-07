@@ -18,15 +18,30 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import CoPresentOutlinedIcon from '@mui/icons-material/CoPresentOutlined';
 import { USERS_ROUTE } from '../../../constants/routes';
 
-const canViewAsignacionFolios = (rol, nombre) => {
+const ACCESOS_ESPECIALES = {
+  asignacionFolios: {
+    representante: [469, 821],
+    ce_ies: [2715],
+  },
+  catalogoCertificados: {
+    representante: [469, 821],
+  },
+};
+
+const tieneAccesoEspecial = (feature, rol, userId) => (
+  (ACCESOS_ESPECIALES[feature]?.[rol] ?? []).includes(userId)
+);
+
+const canViewAsignacionFolios = (rol, userId) => {
   if (rol === 'admin' || rol === 'ce_sicyt' || rol === 'folios_sicyt') return true;
 
-  if (rol === 'representante' && nombre === 'obedc') return true;
+  if (rol === 'representante' && tieneAccesoEspecial('asignacionFolios', rol, userId)) return true;
 
-  if (rol === 'ce_ies' && nombre === 'roberto_ies') return true;
+  if (rol === 'ce_ies' && tieneAccesoEspecial('asignacionFolios', rol, userId)) return true;
 
   return false;
 };
+
 const options = [
   {
     id: 1,
@@ -74,7 +89,7 @@ const isSicytEditar = (rol) => rol === 'sicyt_editar';
 const isFoliosSicyt = (rol) => rol === 'folios_sicyt';
 const isAvancesSicyt = (rol) => rol === 'avances_sicyt';
 
-const panelMenuOptions = (rol, nombre) => {
+const panelMenuOptions = (rol, nombre, userId) => {
   const onlyProgramas = isSicytEditar(rol);
   const onlyFolios = isFoliosSicyt(rol);
   const excludeDocsYFolios = isAvancesSicyt(rol);
@@ -156,7 +171,8 @@ const panelMenuOptions = (rol, nombre) => {
             text: 'Catálogo de Títulos',
             route: '/serviciosEscolares/titulacion',
           },
-          ...((rol === 'admin' || (rol === 'folios_sicyt') || (rol === 'representante' && nombre === 'josefina'))
+          ...((rol === 'admin' || rol === 'folios_sicyt'
+            || (rol === 'representante' && tieneAccesoEspecial('catalogoCertificados', rol, userId)))
             ? [
               {
                 text: 'Catálogo de Certificados',
@@ -168,7 +184,7 @@ const panelMenuOptions = (rol, nombre) => {
         key: 'titulacion',
       }] : []),
 
-      ...(!excludeDocsYFolios && canViewAsignacionFolios(rol, nombre)
+      ...(!excludeDocsYFolios && canViewAsignacionFolios(rol, userId)
         ? [{
           userId: 2,
           text: 'Asignación de Folios',
@@ -420,22 +436,22 @@ const optionsMenuFilter = {
 
 const getOptionsRoles = (rol) => options.filter(({ roles }) => roles.includes(rol));
 
-const optionsAdminMenuFilterRol = (rol, username) => {
+const optionsAdminMenuFilterRol = (rol, username, userId) => {
   const user = getOptionsRoles(rol);
-  const usersMenu = panelMenuOptions(rol, username).filter(Boolean);
+  const usersMenu = panelMenuOptions(rol, username, userId).filter(Boolean);
 
   return user.map(({ id }) => usersMenu.filter((item) => item && item.userId === id));
 };
 
 /**
- * Finds the userId associated with a given path.
+ * Finds the userId (del menú, no del usuario) associated with a given path.
  *
  * @param {string} path - The path to search for.
- * @returns {number} - The userId associated with the path.
+ * @returns {number} - The userId del menú associated with the path.
  */
-const findRoute = (path, rol, username) => {
+const findRoute = (path, rol, username, userId) => {
   const wordSearch = path.split('/')[1];
-  const usersMenu = panelMenuOptions(rol, username).filter(Boolean);
+  const usersMenu = panelMenuOptions(rol, username, userId).filter(Boolean);
 
   let foundItem = usersMenu.find(
     (item) => {
@@ -448,7 +464,7 @@ const findRoute = (path, rol, username) => {
 
   if (!foundItem && usersMenu.length) {
     // eslint-disable-next-line prefer-destructuring
-    foundItem = optionsAdminMenuFilterRol(rol, username)
+    foundItem = optionsAdminMenuFilterRol(rol, username, userId)
       .flat()
       .filter(Boolean)[0];
   }
