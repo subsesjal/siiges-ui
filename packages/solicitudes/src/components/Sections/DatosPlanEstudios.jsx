@@ -46,14 +46,16 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
   const minimoCreditosOptativas = form[1].programa?.minimoCreditosOptativas;
 
   useEffect(() => {
-    if (creditosOrdinarios === undefined && minimoCreditosOptativas === undefined) {
+    const esValido = (v) => v !== undefined && v !== null && v !== '';
+
+    if (!esValido(creditosOrdinarios) || !esValido(minimoCreditosOptativas)) {
       return;
     }
 
     const ordinarios = Number(creditosOrdinarios);
     const optativas = Number(minimoCreditosOptativas);
     const total = (Number.isNaN(ordinarios) ? 0 : ordinarios)
-      + (Number.isNaN(optativas) ? 0 : optativas);
+    + (Number.isNaN(optativas) ? 0 : optativas);
 
     formDatosPlanEstudios('creditos', total, form, setForm);
   }, [creditosOrdinarios, minimoCreditosOptativas]);
@@ -215,7 +217,7 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
         <Grid item xs={6}>
           <Input
             id="creditos"
-            label="Créditos necesarios para concluir el programa (Ordinarios + Optativas)"
+            label="Créditos totales para concluir el programa (Ordinarios + Electivas)"
             name="creditos"
             auto="creditos"
             value={form[1].programa?.creditos}
