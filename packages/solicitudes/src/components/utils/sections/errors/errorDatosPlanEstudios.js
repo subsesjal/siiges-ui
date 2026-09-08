@@ -1,4 +1,4 @@
-export default function errorDatosPlanEstudios(form, setError) {
+export default function errorDatosPlanEstudios(form, setError, error, tipoSolicitudId) {
   const formData = form[1];
   const validNumber = /^-?\d*\.?\d+$/;
 
@@ -78,18 +78,22 @@ export default function errorDatosPlanEstudios(form, setError) {
       formData.programa?.antecedenteAcademico !== undefined
           && formData.programa?.antecedenteAcademico !== '',
     ),
-    objetivoGeneral: () => validateField(
+  };
+
+  if (tipoSolicitudId !== 3) {
+    errors.objetivoGeneral = () => validateField(
       'objetivoGeneral',
       'Objetivo general es requerido',
       formData.programa?.objetivoGeneral !== undefined
           && formData.programa?.objetivoGeneral !== '',
-    ),
-    objetivosParticulares: () => validateField(
+    );
+    errors.objetivosParticulares = () => validateField(
       'objetivosParticulares',
       '¡Objetivos particulares son requeridos!',
       formData.programa?.objetivosParticulares !== undefined
           && formData.programa?.objetivosParticulares !== '',
-    ),
-  };
+    );
+  }
+
   return errors;
 }
