@@ -39,6 +39,7 @@ export default async function alumnosService({ id, dataBody, method }) {
     personaId: data?.personaId,
     programaId: data?.programaId,
     programa: data?.programa?.nombre,
+    acuerdoRvoe: data?.programa?.acuerdoRvoe,
     creditos: data?.programa?.creditos,
     claveCentroTrabajo: data?.programa?.plantel?.claveCentroTrabajo,
     institucion: data?.programa?.plantel?.institucion?.nombre,
