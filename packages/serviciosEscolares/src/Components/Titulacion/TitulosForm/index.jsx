@@ -301,7 +301,7 @@ export default function TitulosForm({
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={12} sx={{ mt: 2 }}>
         <ButtonSimple
-          text={modo === 'general' ? 'Específico' : 'General'}
+          text={modo === 'general' ? 'Búsqueda Específica' : 'Búsqueda General'}
           onClick={toggleModo}
           design="buscar"
           icon={<SwapHorizIcon />}
