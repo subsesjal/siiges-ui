@@ -4,7 +4,7 @@ import { Typography, Grid, Button } from '@mui/material';
 import '../../styles/buttons/ButtonAdd.css';
 
 export default function ButtonSimple({
-  text, onClick, align, design, children, disabled, fullWidth,
+  text, onClick, align, design, children, disabled, fullWidth, icon,
 }) {
   const justifyContent = {
     left: 'flex-start',
@@ -22,6 +22,15 @@ export default function ButtonSimple({
           disabled={disabled}
           fullWidth={fullWidth}
         >
+          {icon && (
+            <Grid
+              container
+              alignItems="center"
+              sx={{ width: 'auto', marginRight: 1 }}
+            >
+              {icon}
+            </Grid>
+          )}
           <Typography variant="body1" style={{ textTransform: 'none' }}>
             {text}
           </Typography>
@@ -39,6 +48,7 @@ ButtonSimple.defaultProps = {
   children: null,
   disabled: false,
   fullWidth: false,
+  icon: null,
 };
 
 ButtonSimple.propTypes = {
@@ -49,4 +59,5 @@ ButtonSimple.propTypes = {
   fullWidth: PropTypes.bool,
   align: PropTypes.oneOf(['left', 'center', 'right']),
   children: PropTypes.node,
+  icon: PropTypes.node,
 };
