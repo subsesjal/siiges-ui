@@ -33,6 +33,10 @@ const getStepName = (component) => componentSteps.find(
 )?.stepName || '';
 
 const buildSteps = (modalidad, tipoSolicitudId) => {
+  if ([5, 6].includes(tipoSolicitudId)) {
+    return [DatosGenerales];
+  }
+
   const baseCommonSteps = [PlanEstudios, DatosGenerales, Plantel, Anexos];
 
   if (tipoSolicitudId !== 3) {
@@ -205,6 +209,9 @@ export default function NuevaSolicitud({ type, solicitudId = '' }) {
     { id: 1, nombre: 'Nueva Solicitud' },
     { id: 2, nombre: 'Refrendo' },
     { id: 3, nombre: 'Cambio de Domicilio' },
+    { id: 4, nombre: 'Actualización' },
+    { id: 5, nombre: 'Cambio de Representante Legal' },
+    { id: 6, nombre: 'Cambio de nombre de Institución' },
   ];
 
   const getSolicitudTypeName = () => {
