@@ -7,11 +7,15 @@ import {
   Refrendo,
   getSolicitudes,
   columnsSolicitudes,
+  Actualizacion,
+  CambioNombreInstitucion,
+  CambioRepresentanteLegal,
 } from '@siiges-ui/solicitudes';
 import {
   Layout, Select, DataTable, useAuth,
 } from '@siiges-ui/shared';
 import { Divider } from '@mui/material';
+import dayjs from 'dayjs';
 
 export default function Solicitudes() {
   const { session } = useAuth();
@@ -20,8 +24,21 @@ export default function Solicitudes() {
   const [NewRequestContentVisible, setNewRequestContentVisible] = useState(false);
   const [ChangeAddressContentVisible, setChangeAddressContentVisible] = useState(false);
   const [RefrendoContentVisible, setRefrendoContentVisible] = useState(false);
+  const [ActualizacionContentVisible, setActualizacionContentVisible] = useState(false);
+  // const [RepLegalContentVisible, setRepLegalContentVisible] = useState(false);
+  const [NombreInstitucionContentVisible, setNombreInstitucionContentVisible] = useState(false);
   const [rows, setRows] = useState([]);
   const { solicitudes } = getSolicitudes();
+
+  useEffect(() => {
+    setNewRequestContentVisible(option === 'new');
+    setChangeAddressContentVisible(option === 'address');
+    setRefrendoContentVisible(option === 'refrendo');
+    setActualizacionContentVisible(option === 'actualizacion');
+    // setRepLegalContentVisible(option === 'repLegal');
+    setNombreInstitucionContentVisible(option === 'nombreInstitucion');
+  }, [option]);
+
   useEffect(() => {
     if (solicitudes !== undefined && solicitudes !== null) {
       let filteredSolicitudes;
@@ -42,6 +59,9 @@ export default function Solicitudes() {
         acuerdoRvoe: solicitud.programa?.acuerdoRvoe,
         estatusSolicitudId: solicitud.estatusSolicitud?.nombre,
         institucion: solicitud?.programa?.plantel?.institucion?.nombre,
+        fechaIncorporacion: solicitud.fechaIncorporacion
+          ? dayjs(solicitud.fechaIncorporacion).format('DD/MM/YYYY')
+          : '—',
         plantel: `${solicitud.programa?.plantel?.domicilio?.calle} #${solicitud.programa?.plantel?.domicilio?.numeroExterior}`,
         actions: 'Actions Placeholder',
       }));
@@ -78,8 +98,13 @@ export default function Solicitudes() {
       baseOptions.push(
         { id: 'refrendo', nombre: 'Refrendo de plan de estudios' },
         { id: 'address', nombre: 'Cambio de domicilio' },
+        { id: 'actualizacion', nombre: 'Actualización' },
       );
     }
+    baseOptions.push(
+      // { id: 'repLegal', nombre: 'Cambio de Representante Legal' },
+      { id: 'nombreInstitucion', nombre: 'Cambio de nombre de Institución' },
+    );
     return baseOptions;
   }, [hasAcuerdoRvoe]);
 
@@ -98,6 +123,9 @@ export default function Solicitudes() {
       {NewRequestContentVisible && <NewRequest />}
       {ChangeAddressContentVisible && <ChangeAddress />}
       {RefrendoContentVisible && <Refrendo />}
+      {ActualizacionContentVisible && <Actualizacion />}
+      {/* {RepLegalContentVisible && <CambioRepresentanteLegal />} */}
+      {NombreInstitucionContentVisible && <CambioNombreInstitucion />}
       <DataTable
         title="Tabla de solicitudes"
         rows={rows}

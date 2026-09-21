@@ -18,6 +18,11 @@ const columnsSolicitudes = (rol) => [
   },
   { field: 'plantel', headerName: 'Plantel', width: 300 },
   {
+    field: 'fechaIncorporacion',
+    headerName: 'Fecha a Incorporación',
+    width: 200,
+  },
+  {
     field: 'actions',
     headerName: 'Acciones',
     width: 150,
