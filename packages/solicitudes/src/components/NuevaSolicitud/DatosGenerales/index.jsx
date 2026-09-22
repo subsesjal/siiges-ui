@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
 import InstitucionData from '../../Sections/InstitucionData';
@@ -10,11 +10,19 @@ import { DatosGeneralesProvider } from '../../utils/Context/datosGeneralesContex
 import Observaciones from '../../Sections/Observaciones';
 
 export default function DatosGenerales({
-  nextModule, id, type, solicitud, isDisabled,
+  nextModule, id, type, solicitud, isDisabled, tipoSolicitudId,
 }) {
+  const allowedSections = useMemo(() => {
+    if (tipoSolicitudId === 5) return [2];
+    if (tipoSolicitudId === 6) return [1];
+    return [1, 2, 3];
+  }, [tipoSolicitudId]);
+
   const {
     next, prev, section, position, porcentaje,
-  } = pagination(useState, 3);
+  } = pagination(useState, allowedSections.length);
+
+  const realSection = allowedSections[section - 1];
 
   return (
     <Card sx={{ mt: 3, mb: 3 }}>
@@ -25,28 +33,23 @@ export default function DatosGenerales({
             sectionTitle="Datos Generales"
             sections={section}
             position={position}
-            total="3"
+            total={String(allowedSections.length)}
             porcentaje={porcentaje}
             nextModule={nextModule}
             id={id}
             next={next}
             prev={prev}
           >
-            {section === 1
-              && (
-              <InstitucionData
-                disabled={isDisabled}
-                id={id}
-                type={type}
-              />
-              )}
-            {section === 2 && <RepresentanteLegalData disabled={isDisabled} id={id} type={type} />}
-            {section === 3 && <DiligenciasData disabled={isDisabled} id={id} type={type} />}
-            <Observaciones
-              id={id}
-              section={section + 10}
-              type={type}
-            />
+            {realSection === 1 && (
+              <InstitucionData disabled={isDisabled} id={id} type={type} />
+            )}
+            {realSection === 2 && (
+              <RepresentanteLegalData disabled={isDisabled} id={id} type={type} />
+            )}
+            {realSection === 3 && (
+              <DiligenciasData disabled={isDisabled} id={id} type={type} />
+            )}
+            <Observaciones id={id} section={realSection + 10} type={type} />
           </SectionLayout>
         </DatosGeneralesProvider>
       </CardContent>
@@ -60,6 +63,7 @@ DatosGenerales.defaultProps = {
 };
 
 DatosGenerales.propTypes = {
+  tipoSolicitudId: PropTypes.number.isRequired,
   nextModule: PropTypes.func.isRequired,
   id: PropTypes.oneOfType([
     PropTypes.number,

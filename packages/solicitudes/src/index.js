@@ -21,8 +21,14 @@ import columnsSolicitudes from './components/utils/Tables/solicitudesColumns';
 import DocentesCreateModal from './components/utils/Components/DocentesModales/DocentesModal';
 import HerramientaEducativa from './components/Sections/HerramientaEducativa';
 import useProgramaById from './components/utils/useProgramaById';
+import Actualizacion from './components/ModuleSelector/Actualizacion';
+import CambioNombreInstitucion from './components/ModuleSelector/CambioNombreInstitucion';
+import CambioRepresentanteLegal from './components/ModuleSelector/CambioRepresentanteLegal';
 
 export {
+  CambioRepresentanteLegal,
+  CambioNombreInstitucion,
+  Actualizacion,
   useProgramaById,
   HerramientaEducativa,
   getSolicitudDetalles,

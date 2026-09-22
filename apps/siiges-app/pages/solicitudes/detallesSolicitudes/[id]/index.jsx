@@ -301,7 +301,7 @@ export default function DetallesSolicitudes() {
               </ListItem>
             </List>
           </Grid>
-        ) : (
+        )/* : (
           <Grid item xs={4}>
             <Typography variant="subtitle1" color="textSecondary">
               RVOE
@@ -312,7 +312,7 @@ export default function DetallesSolicitudes() {
               </ListItem>
             </List>
           </Grid>
-        )}
+        ) */ : null}
         <Grid item xs={4}>
           <Typography variant="subtitle1" color="textSecondary">
             Inspección

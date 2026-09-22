@@ -93,6 +93,8 @@ export default function PlanEstudios({
             programaTurnos: programaTurnosIds,
             duracionPeriodos: solicitudes.programa.duracionPeriodos,
             creditos: solicitudes.programa.creditos,
+            creditosOrdinarios: solicitudes.programa.creditosOrdinarios,
+            minimoCreditosOptativas: solicitudes.programa.minimoCreditosOptativas,
             antecedenteAcademico: solicitudes.programa.antecedenteAcademico,
             objetivoGeneral: solicitudes.programa.objetivoGeneral,
             objetivosParticulares: solicitudes.programa.objetivosParticulares,
@@ -190,8 +192,12 @@ export default function PlanEstudios({
     const modalidadNumber = Number(modalidad) || 0;
     const baseLength = modalidadNumber === 1 ? 9 : 10;
     const base = Array.from({ length: baseLength }, (_, i) => i + 1);
+
     if (tipoSolicitudId === 3) {
       return [1, 2, 6, 7];
+    }
+    if (tipoSolicitudId === 2) {
+      return [1, 5, 8];
     }
     return base;
   }, [modalidad, tipoSolicitudId]);

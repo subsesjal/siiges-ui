@@ -75,6 +75,16 @@ function SolicitudesActions({ id, estatus }) {
           descargar: estatus === 10,
         });
         break;
+      case 'admin':
+        setShowButtons({
+          ver: true,
+          consultar: true,
+          editar: true,
+          eliminar: false,
+          revisar: false,
+          observaciones: false,
+        });
+        break;
       default:
         setShowButtons({
           ver: true,

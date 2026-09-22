@@ -69,8 +69,10 @@ import AlumnosInactivosForm from './Components/Reporte/AlumnosInactivosForm/inde
 import AlumnosInactivosTable from './Components/Reporte/AlumnosInactivosTable/index';
 import CatalogoCiclosEscolares from './Components/ControlEscolar/CatalogoCiclosEscolares/index';
 import ActivarProgramas from './Components/ControlEscolar/ActivarProgramas/ActivarProgramas';
+import ConsultRvoe from './Components/Rvoe/index';
 
 export {
+  ConsultRvoe,
   AlumnosInactivosForm,
   AlumnosInactivosTable,
   BusquedaAlumnosForm,

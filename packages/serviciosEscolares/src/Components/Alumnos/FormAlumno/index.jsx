@@ -168,6 +168,8 @@ export default function FormAlumno({
         field.id,
       );
 
+      if (type === 'edit' && !hasValueInForm) return;
+
       const value = hasValueInForm
         ? form?.[field.id]
         : alumno?.[field.id];
@@ -193,7 +195,15 @@ export default function FormAlumno({
     }
 
     try {
-      const { formData: dataBody, validate } = setAndValidateFormData({ ...form, ...query });
+      const baseData = type === 'edit'
+        ? {
+          ...alumno,
+          ...form,
+          sexo: form?.sexo ?? formSelect?.sexo,
+          nacionalidad: form?.nacionalidad ?? formSelect?.nacionalidad,
+        }
+        : { ...form };
+      const { formData: dataBody, validate } = setAndValidateFormData({ ...baseData, ...query });
 
       if (!validate) {
         setNoti({
