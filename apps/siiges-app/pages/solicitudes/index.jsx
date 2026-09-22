@@ -9,7 +9,6 @@ import {
   columnsSolicitudes,
   Actualizacion,
   CambioNombreInstitucion,
-  CambioRepresentanteLegal,
 } from '@siiges-ui/solicitudes';
 import {
   Layout, Select, DataTable, useAuth,
