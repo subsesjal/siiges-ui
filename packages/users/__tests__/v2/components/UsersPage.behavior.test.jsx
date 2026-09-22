@@ -217,6 +217,28 @@ describe('UsersPage behavior', () => {
     expect(screen.queryByText('empty')).not.toBeInTheDocument();
   });
 
+  it('shows the skeleton only on the initial load and does not replace the table on refresh', () => {
+    let isRefreshing = false;
+
+    mockUseUsersData.mockImplementation(() => ({
+      data: [{ id: 1, usuario: 'usuario_ok' }],
+      loading: isRefreshing,
+      error: null,
+      pagination: { total: 1 },
+    }));
+
+    const { rerender } = render(<UsersPage />);
+
+    expect(screen.getByText('open-delete')).toBeInTheDocument();
+    expect(screen.queryByText('skeleton')).not.toBeInTheDocument();
+
+    isRefreshing = true;
+    rerender(<UsersPage />);
+
+    expect(screen.getByText('open-delete')).toBeInTheDocument();
+    expect(screen.queryByText('skeleton')).not.toBeInTheDocument();
+  });
+
   it('opens delete modal and confirms deletion successfully', async () => {
     mockUseUsersData.mockReturnValueOnce({
       data: [{ id: 7, usuario: 'usuario_eliminar' }],

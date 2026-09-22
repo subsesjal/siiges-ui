@@ -142,14 +142,23 @@ export default function UsersPage() {
   const { canEdit } = permissions;
   const { canDelete } = permissions;
   const isSessionReady = Boolean(session?.rol);
+  const hasRenderedInitialLoadRef = useRef(false);
+
+  useEffect(() => {
+    if (isSessionReady) {
+      hasRenderedInitialLoadRef.current = true;
+    }
+  }, [isSessionReady]);
+
   const isRouteLoading = !isSessionReady || listState.loading;
   const hasError = Boolean(listState.error);
+  const shouldShowInitialSkeleton = !isSessionReady
+    || (listState.loading && !hasRenderedInitialLoadRef.current);
   const shouldShowEmptyState = !listState.loading
     && !hasError
     && listState.data.length === 0
     && !search;
   const shouldShowTable = !hasError
-    && !listState.loading
     && (listState.data.length > 0 || Boolean(search));
 
   const errorMessage = useMemo(
@@ -166,11 +175,11 @@ export default function UsersPage() {
   } else {
     content = (
       <>
-        {listState.loading && <UsersSkeleton />}
+        {shouldShowInitialSkeleton && <UsersSkeleton />}
         {hasError && (
           <UsersErrorState message={errorMessage} onRetry={reloadUsers} />
         )}
-        {shouldShowEmptyState && (
+        {!listState.loading && shouldShowEmptyState && (
           <UsersEmptyState canCreate={canCreate} onCreate={openCreate} />
         )}
         {shouldShowTable && (
