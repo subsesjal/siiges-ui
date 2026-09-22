@@ -363,16 +363,13 @@ export default function InscripcionForm({
           />
         </Grid>
         <Grid item xs={4}>
-          <SelectAdd
+          <Select
             title="Ciclos Escolares"
             name="ciclosEscolares"
             value={state.selectedCicloEscolar}
             options={arrays.ciclosEscolares || []}
             onChange={(event) => handleCicloEscolarChange(event.target.value)}
             disabled={!state.selectedPrograma}
-            onAddClick={() => {
-              setOpen(true);
-            }}
           />
         </Grid>
         <Grid item xs={4}>
