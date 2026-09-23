@@ -164,10 +164,13 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
       if ([4, 5].includes(cicloId)) inferred = 2;
 
       if (inferred) {
-        setForm((prevForm) => ({
-          ...prevForm,
-          1: { ...prevForm[1], programa: { ...prevForm[1]?.programa, tipoCurricula: inferred } },
-        }));
+        formDatosPlanEstudios('tipoCurricula', inferred, form, setForm);
+        formDatosPlanEstudios(
+          'flexibilidadCurricular',
+          inferred === 'rigida' ? 'Rígida' : 'Flexible',
+          form,
+          setForm,
+        );
       }
     }
   }, [form[1].programa?.cicloId, form[1].programa?.tipoCurricula, setForm]);
@@ -175,6 +178,15 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
   const handleTipoCurriculaChange = (e) => {
     const { value } = e.target;
     const parsedValue = Number(value);
+
+    formDatosPlanEstudios('tipoCurricula', value, form, setForm);
+
+    formDatosPlanEstudios(
+      'flexibilidadCurricular',
+      value === 'rigida' ? 'Rígida' : 'Flexible',
+      form,
+      setForm,
+    );
 
     setForm((prevForm) => ({
       ...prevForm,
