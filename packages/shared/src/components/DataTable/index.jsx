@@ -8,6 +8,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { DataGrid, esES } from '@mui/x-data-grid';
 import Button from '../Buttons/Button';
 
+// SDT-1711: shared DataTable surface for Jira-GitHub integration verification.
 function DataTable({
   title,
   rows,
