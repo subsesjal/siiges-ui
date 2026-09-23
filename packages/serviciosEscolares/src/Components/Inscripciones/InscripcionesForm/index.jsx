@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Divider, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  LabelData, Select, getTurnoById, SelectAdd, useAuth, useUI,
+  LabelData, Select, getTurnoById, useAuth, useUI,
 } from '@siiges-ui/shared';
 import {
   getCiclosEscolares,
@@ -34,8 +34,6 @@ export default function InscripcionForm({
 
   const { setNoti } = useUI();
   const { session } = useAuth();
-  const [open, setOpen] = useState(false);
-  const [openGrupos, setOpenGrupos] = useState(false);
 
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
@@ -363,16 +361,13 @@ export default function InscripcionForm({
           />
         </Grid>
         <Grid item xs={4}>
-          <SelectAdd
+          <Select
             title="Ciclos Escolares"
             name="ciclosEscolares"
             value={state.selectedCicloEscolar}
             options={arrays.ciclosEscolares || []}
             onChange={(event) => handleCicloEscolarChange(event.target.value)}
             disabled={!state.selectedPrograma}
-            onAddClick={() => {
-              setOpen(true);
-            }}
           />
         </Grid>
         <Grid item xs={4}>
@@ -386,16 +381,13 @@ export default function InscripcionForm({
           />
         </Grid>
         <Grid item xs={4}>
-          <SelectAdd
+          <Select
             title="Grupos"
             name="Grupos"
             value={state.selectedGrupo}
             options={arrays.grupos || []}
             onChange={(event) => handleGrupoChange(event.target.value)}
             disabled={!state.selectedGrado}
-            onAddClick={() => {
-              setOpenGrupos(true);
-            }}
           />
         </Grid>
       </Grid>
@@ -419,26 +411,6 @@ export default function InscripcionForm({
           </Grid>
         </Grid>
       )}
-      <CicloEscolarModal
-        open={open}
-        setOpen={setOpen}
-        programaId={{ programaId: state.selectedPrograma }}
-        fetchCiclosEscolares={fetchCiclosEscolares}
-      />
-      <GruposModal
-        open={openGrupos}
-        setOpen={setOpenGrupos}
-        type="new"
-        params={{
-          cicloEscolarId: state.selectedCicloEscolar,
-          cicloNombre: arrays.ciclosEscolares.find(
-            (ciclo) => ciclo.id === state.selectedCicloEscolar,
-          )?.nombre,
-          gradoId: state.selectedGrado,
-          gradoNombre: arrays.grados.find((grado) => grado.id === state.selectedGrado)?.nombre,
-        }}
-        setFetchGrupos={setFetchGruposTrigger}
-      />
     </>
   );
 }
