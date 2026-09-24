@@ -18,6 +18,7 @@ import {
   cicloIngresoValidator,
   generos,
   nacionalidad,
+  optionalFields, // 👈 importado desde dataAlumnos
 } from './dataAlumnos';
 import alumnosService from '../../utils/alumnosService';
 import SituacionSelect from '../../utils/SituacionSelect';
@@ -57,7 +58,7 @@ export default function FormAlumno({
   const puedeModificarTodasLasSituaciones = (
     session.rol === 'admin' || session.rol === 'avances_sicyt'
   );
-  const optionalFields = ['apellidoMaterno', 'telefono', 'celular', 'situacionId'];
+  // ❌ Eliminada la declaración local de optionalFields (ahora viene del import)
 
   const OTRO_NACIONALIDAD_ID = nacionalidad.find((n) => n.nombre === 'Otro')?.id;
   const isCurpRequired = formSelect?.nacionalidad !== OTRO_NACIONALIDAD_ID;
@@ -203,7 +204,12 @@ export default function FormAlumno({
           nacionalidad: form?.nacionalidad ?? formSelect?.nacionalidad,
         }
         : { ...form };
-      const { formData: dataBody, validate } = setAndValidateFormData({ ...baseData, ...query });
+
+      // ✅ Ya no se pasa optionalFields como segundo argumento
+      const { formData: dataBody, validate } = setAndValidateFormData({
+        ...baseData,
+        ...query,
+      });
 
       if (!validate) {
         setNoti({
