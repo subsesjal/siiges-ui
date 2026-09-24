@@ -22,16 +22,10 @@ export const campos = [
   { id: 'apellidoMaterno', label: 'Segundo Apellido', type: 'text' },
   { id: 'fechaNacimiento', label: 'Fecha de nacimiento', type: 'date' },
   {
-    id: 'sexo',
-    label: 'Género',
-    type: 'select',
-    options: generos,
+    id: 'sexo', label: 'Género', type: 'select', options: generos,
   },
   {
-    id: 'nacionalidad',
-    label: 'Nacionalidad',
-    type: 'select',
-    options: nacionalidad,
+    id: 'nacionalidad', label: 'Nacionalidad', type: 'select', options: nacionalidad,
   },
   { id: 'correoPrimario', label: 'Correo', type: 'text' },
   { id: 'telefono', label: 'Teléfono', type: 'text' },
@@ -40,12 +34,11 @@ export const campos = [
   { id: 'matricula', label: 'Matrícula', type: 'text' },
   { id: 'alumnoCicloIngreso', label: 'Ciclo de Ingreso', type: 'text' },
   {
-    id: 'situacionId',
-    label: 'Situación',
-    type: 'select',
-    options: situaciones,
+    id: 'situacionId', label: 'Situación', type: 'select', options: situaciones,
   },
 ];
+
+export const optionalFields = ['apellidoMaterno', 'telefono', 'celular', 'situacionId'];
 
 export const mailValidator = (email) => {
   const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -79,34 +72,40 @@ export const setFormData = (data) => ({
   },
 });
 
-const validateForm = (data) => {
+function validateForm(data) {
   const queryEvaluate = (value) => value === undefined || value === null || value === '';
 
-  // 1. Validar que los campos raíz no estén vacíos
-  const firstValidate = !Object.values(data).some(queryEvaluate);
+  // 1. Validar campos raíz (excluyendo 'persona')
+  const firstValidate = !Object.entries(data)
+    .filter(([key]) => key !== 'persona')
+    .map(([, value]) => value)
+    .some(queryEvaluate);
 
   // ¿El CURP es obligatorio? Solo si la nacionalidad no es "Otro"
   const isCurpRequired = data?.persona?.nacionalidad !== 'Otro';
 
-  // 2. Validar que los campos de persona no estén vacíos
-  // (ignorando apellidoMaterno siempre, y curp cuando no es requerido)
-  const secondValidate = !Object.entries(data?.persona)
+  // Campos opcionales que viven dentro de 'persona'
+  const PERSONA_OPTIONAL_FIELDS = ['apellidoMaterno', 'telefono', 'celular'];
+  const personaOptional = optionalFields.filter((f) => PERSONA_OPTIONAL_FIELDS.includes(f));
+
+  // 2. Validar campos de 'persona' ignorando los opcionales
+  const secondValidate = !Object.entries(data?.persona || {})
     .filter(([key]) => {
-      if (key === 'apellidoMaterno') return false;
+      if (personaOptional.includes(key)) return false;
       if (key === 'curp' && !isCurpRequired) return false;
       return true;
     })
     .map(([, value]) => value)
     .some(queryEvaluate);
 
-  // 3. Validar el formato específico del Ciclo de Ingreso
+  // 3. Validar formato del Ciclo de Ingreso
   const isCicloValid = cicloIngresoValidator(data?.alumnoCicloIngreso);
 
-  // 4. Si el CURP sí es requerido, también debe cumplir el formato de 18 caracteres
+  // 4. Si el CURP es requerido, debe cumplir el formato
   const isCurpValid = !isCurpRequired || curpValidator(data?.persona?.curp);
 
   return firstValidate && secondValidate && isCicloValid && isCurpValid;
-};
+}
 
 export const setAndValidateFormData = (data) => {
   const formData = setFormData(data);
