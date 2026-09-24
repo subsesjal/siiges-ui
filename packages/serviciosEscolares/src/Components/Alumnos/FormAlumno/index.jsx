@@ -15,8 +15,10 @@ import {
   setAndValidateFormData,
   mailValidator,
   curpValidator,
+  cicloIngresoValidator,
   generos,
   nacionalidad,
+  optionalFields, // 👈 importado desde dataAlumnos
 } from './dataAlumnos';
 import alumnosService from '../../utils/alumnosService';
 import SituacionSelect from '../../utils/SituacionSelect';
@@ -52,10 +54,11 @@ export default function FormAlumno({
   });
   const [errorMail, setErrorMail] = useState('');
   const [errorCurp, setErrorCurp] = useState('');
+  const [errorCiclo, setErrorCiclo] = useState('');
   const puedeModificarTodasLasSituaciones = (
     session.rol === 'admin' || session.rol === 'avances_sicyt'
   );
-  const optionalFields = ['apellidoMaterno', 'telefono', 'celular', 'situacionId'];
+  // ❌ Eliminada la declaración local de optionalFields (ahora viene del import)
 
   const OTRO_NACIONALIDAD_ID = nacionalidad.find((n) => n.nombre === 'Otro')?.id;
   const isCurpRequired = formSelect?.nacionalidad !== OTRO_NACIONALIDAD_ID;
@@ -63,6 +66,7 @@ export default function FormAlumno({
   const getErrorMessage = (campoId) => {
     if (campoId === 'correoPrimario') return errorMail;
     if (campoId === 'curp') return errorCurp;
+    if (campoId === 'alumnoCicloIngreso') return errorCiclo;
     return false;
   };
 
@@ -114,6 +118,15 @@ export default function FormAlumno({
       return false;
     }
 
+    if (name === 'alumnoCicloIngreso') {
+      if (cicloIngresoValidator(value)) {
+        setErrorCiclo('');
+        return true;
+      }
+      setErrorCiclo('El Ciclo de Ingreso debe tener el formato AAAA + letra (ej. 2024A).');
+      return false;
+    }
+
     if (value === '' || value === undefined) {
       setNoti({
         open: true,
@@ -156,6 +169,8 @@ export default function FormAlumno({
         field.id,
       );
 
+      if (type === 'edit' && !hasValueInForm) return;
+
       const value = hasValueInForm
         ? form?.[field.id]
         : alumno?.[field.id];
@@ -181,7 +196,31 @@ export default function FormAlumno({
     }
 
     try {
-      const dataBody = setAndValidateFormData({ ...form, ...query }).formData;
+      const baseData = type === 'edit'
+        ? {
+          ...alumno,
+          ...form,
+          sexo: form?.sexo ?? formSelect?.sexo,
+          nacionalidad: form?.nacionalidad ?? formSelect?.nacionalidad,
+        }
+        : { ...form };
+
+      // ✅ Ya no se pasa optionalFields como segundo argumento
+      const { formData: dataBody, validate } = setAndValidateFormData({
+        ...baseData,
+        ...query,
+      });
+
+      if (!validate) {
+        setNoti({
+          open: true,
+          message: 'Revisa que todos los campos obligatorios estén completos y sean válidos.',
+          type: 'error',
+        });
+        setLoading(false);
+        return;
+      }
+
       if (type === 'edit') {
         await alumnosService({
           id: query.alumnoId,
