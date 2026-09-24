@@ -45,6 +45,7 @@ export function AuthProvider({ children }) {
       '/consultaRevEquiv',
       '/consultaRevEquiv/[folio]/consultarFolio',
       '/consultaRvoe',
+      '/consultaBeneficiarios',
     ],
     [],
   );
