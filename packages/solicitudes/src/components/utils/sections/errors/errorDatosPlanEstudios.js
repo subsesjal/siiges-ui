@@ -16,67 +16,75 @@ export default function errorDatosPlanEstudios(form, setError, error, tipoSolici
       'nivelId',
       '¡Seleccione un nivel!',
       formData.programa?.nivelId !== undefined
-          && formData.programa?.nivelId !== '',
+        && formData.programa?.nivelId !== '',
     ),
     nombre: () => validateField(
       'nombre',
       '¡Nombre del programa es requerido!',
       formData.programa?.nombre !== undefined
-          && formData.programa?.nombre !== '',
+        && formData.programa?.nombre !== '',
+    ),
+    tipoCurricula: () => validateField(
+      'tipoCurricula',
+      '¡Seleccione un tipo de currícula!',
+      formData.programa?.tipoCurricula !== undefined
+        && formData.programa?.tipoCurricula !== '',
     ),
     cicloId: () => validateField(
       'cicloId',
       '¡Periodo es requerido!',
       formData.programa?.cicloId !== undefined
-          && formData.programa?.cicloId !== '',
+        && formData.programa?.cicloId !== '',
     ),
     programaTurnos: () => validateField(
       'programaTurnos',
       '¡Seleccione al menos un turno!',
       formData.programa?.programaTurnos !== undefined
-          && formData.programa?.programaTurnos.length > 0,
+        && formData.programa?.programaTurnos.length > 0,
     ),
     duracionPeriodos: () => validateField(
       'duracionPeriodos',
-      '¡Duración del programa es requerida!',
+      '¡La duración del programa debe ser al menos 1!',
       formData.programa?.duracionPeriodos !== undefined
-          && formData.programa?.duracionPeriodos !== '',
+        && formData.programa?.duracionPeriodos !== ''
+        && validNumber.test(formData.programa?.duracionPeriodos)
+        && Number(formData.programa?.duracionPeriodos) >= 1,
     ),
     creditosOrdinarios: () => validateField(
       'creditosOrdinarios',
       '¡Créditos ordinarios son requeridos y deben ser un número válido!',
       formData.programa?.creditosOrdinarios !== undefined
-          && formData.programa?.creditosOrdinarios !== ''
-          && validNumber.test(formData.programa?.creditosOrdinarios),
+        && formData.programa?.creditosOrdinarios !== ''
+        && validNumber.test(formData.programa?.creditosOrdinarios),
     ),
     minimoCreditosOptativas: () => validateField(
       'minimoCreditosOptativas',
       '¡Créditos electivas son requeridos y deben ser un número válido!',
       formData.programa?.minimoCreditosOptativas !== undefined
-          && formData.programa?.minimoCreditosOptativas !== ''
-          && validNumber.test(formData.programa?.minimoCreditosOptativas),
+        && formData.programa?.minimoCreditosOptativas !== ''
+        && validNumber.test(formData.programa?.minimoCreditosOptativas),
     ),
     creditos: () => validateField(
       'creditos',
       '¡Captura los créditos ordinarios y optativas para calcular el total!',
       formData.programa?.creditos !== undefined
-          && formData.programa?.creditos !== ''
-          && validNumber.test(formData.programa?.creditos)
-          && formData.programa?.creditosOrdinarios !== undefined
-          && formData.programa?.creditosOrdinarios !== ''
-          && validNumber.test(formData.programa?.creditosOrdinarios)
-          && formData.programa?.minimoCreditosOptativas !== undefined
-          && formData.programa?.minimoCreditosOptativas !== ''
-          && validNumber.test(formData.programa?.minimoCreditosOptativas)
-          && Number(formData.programa?.creditos)
-            === Number(formData.programa?.creditosOrdinarios)
-            + Number(formData.programa?.minimoCreditosOptativas),
+        && formData.programa?.creditos !== ''
+        && validNumber.test(formData.programa?.creditos)
+        && formData.programa?.creditosOrdinarios !== undefined
+        && formData.programa?.creditosOrdinarios !== ''
+        && validNumber.test(formData.programa?.creditosOrdinarios)
+        && formData.programa?.minimoCreditosOptativas !== undefined
+        && formData.programa?.minimoCreditosOptativas !== ''
+        && validNumber.test(formData.programa?.minimoCreditosOptativas)
+        && Number(formData.programa?.creditos)
+          === Number(formData.programa?.creditosOrdinarios)
+          + Number(formData.programa?.minimoCreditosOptativas),
     ),
     antecedenteAcademico: () => validateField(
       'antecedenteAcademico',
       '¡Nivel previo es requerido!',
       formData.programa?.antecedenteAcademico !== undefined
-          && formData.programa?.antecedenteAcademico !== '',
+        && formData.programa?.antecedenteAcademico !== '',
     ),
   };
 
@@ -85,13 +93,13 @@ export default function errorDatosPlanEstudios(form, setError, error, tipoSolici
       'objetivoGeneral',
       'Objetivo general es requerido',
       formData.programa?.objetivoGeneral !== undefined
-          && formData.programa?.objetivoGeneral !== '',
+        && formData.programa?.objetivoGeneral !== '',
     );
     errors.objetivosParticulares = () => validateField(
       'objetivosParticulares',
       '¡Objetivos particulares son requeridos!',
       formData.programa?.objetivosParticulares !== undefined
-          && formData.programa?.objetivosParticulares !== '',
+        && formData.programa?.objetivosParticulares !== '',
     );
   }
 

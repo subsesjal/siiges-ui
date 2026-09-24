@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useMemo, useState,
+  useContext, useEffect, useState, useMemo,
 } from 'react';
 import { Grid, Typography, TextField } from '@mui/material';
 import {
@@ -11,7 +11,46 @@ import errorDatosPlanEstudios from '../utils/sections/errors/errorDatosPlanEstud
 import SolicitudContext from '../utils/Context/solicitudContext';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 import useSectionDisabled from './Hooks/useSectionDisabled';
-import modalidades from '../utils/Mocks/mockModalidades';
+
+// Sacamos las constantes fuera del componente para mejorar rendimiento y evitar re-renders
+const antecedenteAcademico = [
+  { id: 1, nombre: 'Bachillerato' },
+  { id: 2, nombre: 'Licenciatura' },
+  { id: 3, nombre: 'Técnico Superior Universitario' },
+  { id: 4, nombre: 'Especialidad' },
+  { id: 5, nombre: 'Maestria' },
+  { id: 6, nombre: 'Doctorado' },
+  { id: 7, nombre: 'Profesional Asociado' },
+  { id: 8, nombre: 'Educación Continua' },
+];
+
+const nivel = [
+  { id: 2, nombre: 'Licenciatura' },
+  { id: 3, nombre: 'Técnico Superior Universitario' },
+  { id: 4, nombre: 'Especialidad' },
+  { id: 5, nombre: 'Maestria' },
+  { id: 6, nombre: 'Doctorado' },
+];
+
+const periodoOptionsBase = [
+  { id: 1, nombre: 'Semestral' },
+  { id: 2, nombre: 'Cuatrimestral' },
+  { id: 3, nombre: 'Anual' },
+  { id: 4, nombre: 'Semestral curriculum flexible' },
+  { id: 5, nombre: 'Cuatrimestral curriculum flexible' },
+];
+
+const tipoCurriculaOptions = [
+  { id: 1, nombre: 'Rígida' },
+  { id: 2, nombre: 'Flexible' },
+];
+
+const turno = [
+  { id: 1, nombre: 'Matutino' },
+  { id: 2, nombre: 'Vespertino' },
+  { id: 3, nombre: 'Nocturno' },
+  { id: 4, nombre: 'Mixto' },
+];
 
 export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
   const [initialValues, setInitialValues] = useState({});
@@ -21,7 +60,7 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     if (type !== 'editar' && type !== 'consultar') {
       setOpen(true);
     }
-  }, []);
+  }, [type]);
 
   const {
     form, setForm, error, setError, setErrors,
@@ -30,9 +69,25 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
 
   const isDisabled = disabled || isSectionDisabled;
 
+  useEffect(() => {
+    const duracion = form[1].programa?.duracionPeriodos;
+    if (duracion === undefined || duracion === null || duracion === '' || Number(duracion) < 1) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        1: { ...prevForm[1], programa: { ...prevForm[1]?.programa, duracionPeriodos: 1 } },
+      }));
+    }
+  }, [form[1].programa?.duracionPeriodos, setForm]);
+
   const handleOnChange = (e) => {
     const { name, value } = e?.target || {};
     if (name && value !== undefined) {
+      if (name === 'duracionPeriodos') {
+        const numVal = parseInt(value, 10);
+        const validValue = Number.isNaN(numVal) || numVal < 1 ? 1 : numVal;
+        formDatosPlanEstudios(name, validValue, form, setForm);
+        return;
+      }
       formDatosPlanEstudios(name, value, form, setForm);
     }
   };
@@ -41,28 +96,30 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     () => errorDatosPlanEstudios(form, setError, error, tipoSolicitudId),
     [form, setError, error, tipoSolicitudId],
   );
-
   const creditosOrdinarios = form[1].programa?.creditosOrdinarios;
   const minimoCreditosOptativas = form[1].programa?.minimoCreditosOptativas;
 
   useEffect(() => {
     const esValido = (valor) => valor !== undefined && valor !== null && valor !== '';
-
-    if (!esValido(creditosOrdinarios) || !esValido(minimoCreditosOptativas)) {
-      return;
-    }
+    if (!esValido(creditosOrdinarios) || !esValido(minimoCreditosOptativas)) return;
 
     const ordinarios = Number(creditosOrdinarios);
     const optativas = Number(minimoCreditosOptativas);
-    const total = (Number.isNaN(ordinarios) ? 0 : ordinarios)
-      + (Number.isNaN(optativas) ? 0 : optativas);
+    // eslint-disable-next-line max-len
+    const total = (Number.isNaN(ordinarios) ? 0 : ordinarios) + (Number.isNaN(optativas) ? 0 : optativas);
 
-    formDatosPlanEstudios('creditos', total, form, setForm);
-  }, [creditosOrdinarios, minimoCreditosOptativas]);
+    if (form[1].programa?.creditos !== total) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        1: { ...prevForm[1], programa: { ...prevForm[1]?.programa, creditos: total } },
+      }));
+    }
+  }, [creditosOrdinarios, minimoCreditosOptativas, form, setForm]);
 
   const handleOnBlur = (e) => {
     const { name, value } = e?.target || {};
     if (name && value !== undefined) {
+      if (name === 'duracionPeriodos') return;
       const initialValue = initialValues[name];
       if (value !== initialValue || value === '') {
         errors[name]?.();
@@ -83,41 +140,70 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     }
   }, [errors, setErrors]);
 
-  const antecedenteAcademico = [
-    { id: 1, nombre: 'Bachillerato' },
-    { id: 2, nombre: 'Licenciatura' },
-    { id: 3, nombre: 'Técnico Superior Universitario' },
-    { id: 4, nombre: 'Especialidad' },
-    { id: 5, nombre: 'Maestria' },
-    { id: 6, nombre: 'Doctorado' },
-    { id: 7, nombre: 'Profesional Asociado' },
-    { id: 8, nombre: 'Educación Continua' },
-  ];
+  const tipoCurricula = Number(form[1].programa?.tipoCurricula);
+  const [periodoOptions, setPeriodoOptions] = useState(periodoOptionsBase);
 
-  const nivel = [
-    { id: 2, nombre: 'Licenciatura' },
-    { id: 3, nombre: 'Técnico Superior Universitario' },
-    { id: 4, nombre: 'Especialidad' },
-    { id: 5, nombre: 'Maestria' },
-    { id: 6, nombre: 'Doctorado' },
-    { id: 7, nombre: 'Profesional Asociado' },
-    { id: 8, nombre: 'Educación Continua' },
-  ];
+  // Filtramos los periodos
+  useEffect(() => {
+    if (tipoCurricula === 1) {
+      setPeriodoOptions(periodoOptionsBase.filter((p) => p.id === 1 || p.id === 2));
+    } else if (tipoCurricula === 2) {
+      setPeriodoOptions(periodoOptionsBase.filter((p) => p.id === 4 || p.id === 5));
+    } else {
+      setPeriodoOptions(periodoOptionsBase);
+    }
+  }, [tipoCurricula]);
 
-  const periodo = [
-    { id: 1, nombre: 'Semestral' },
-    { id: 2, nombre: 'Cuatrimestral' },
-    { id: 3, nombre: 'Anual' },
-    { id: 4, nombre: 'Semestral curriculum flexible' },
-    { id: 5, nombre: 'Cuatrimestral curriculum flexible' },
-  ];
+  useEffect(() => {
+    const cicloId = Number(form[1].programa?.cicloId);
+    const currTipoCurricula = form[1].programa?.tipoCurricula;
 
-  const turno = [
-    { id: 1, nombre: 'Matutino' },
-    { id: 2, nombre: 'Vespertino' },
-    { id: 3, nombre: 'Nocturno' },
-    { id: 4, nombre: 'Mixto' },
-  ];
+    if (!currTipoCurricula && cicloId) {
+      let inferred = '';
+      if ([1, 2].includes(cicloId)) inferred = 1;
+      if ([4, 5].includes(cicloId)) inferred = 2;
+
+      if (inferred) {
+        formDatosPlanEstudios('tipoCurricula', inferred, form, setForm);
+        formDatosPlanEstudios(
+          'flexibilidadCurricular',
+          inferred === 'rigida' ? 'Rígida' : 'Flexible',
+          form,
+          setForm,
+        );
+      }
+    }
+  }, [form[1].programa?.cicloId, form[1].programa?.tipoCurricula, setForm]);
+
+  const handleTipoCurriculaChange = (e) => {
+    const { value } = e.target;
+    const parsedValue = Number(value);
+
+    formDatosPlanEstudios('tipoCurricula', value, form, setForm);
+
+    formDatosPlanEstudios(
+      'flexibilidadCurricular',
+      value === 'rigida' ? 'Rígida' : 'Flexible',
+      form,
+      setForm,
+    );
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      1: {
+        ...prevForm[1],
+        programa: {
+          ...prevForm[1]?.programa,
+          tipoCurricula: parsedValue,
+          cicloId: '',
+        },
+      },
+    }));
+
+    if (error.tipoCurricula) {
+      errors.tipoCurricula?.();
+    }
+  };
 
   return (
     <Grid container spacing={2}>
@@ -156,23 +242,25 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
         </Grid>
         <Grid item xs={3}>
           <BasicSelect
-            title="Modalidad"
-            name="modalidadId"
-            value={form[1].programa?.modalidadId || ''}
-            options={modalidades}
-            onChange={handleOnChange}
+            title="Tipo de currícula"
+            name="tipoCurricula"
+            value={form[1].programa?.tipoCurricula || ''}
+            options={tipoCurriculaOptions}
+            onChange={handleTipoCurriculaChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            errorMessage={error.modalidadId}
-            disabled
+            errorMessage={error.tipoCurricula}
+            required
+            disabled={isDisabled}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <BasicSelect
+            key={`select-periodo-${tipoCurricula}`}
             title="Periodo"
             name="cicloId"
             value={form[1].programa?.cicloId || ''}
-            options={periodo}
+            options={periodoOptions}
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
@@ -181,7 +269,7 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
             disabled={isDisabled}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={3}>
           <BasicSelect
             title="Turno"
             name="programaTurnos"
@@ -203,12 +291,13 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
             name="duracionPeriodos"
             auto="duracionPeriodos"
             onChange={handleOnChange}
-            value={form[1].programa?.duracionPeriodos || ''}
+            value={form[1].programa?.duracionPeriodos || 1}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            errorMessage={error.duracionPeriodos}
+            errorMessage={undefined}
             required
             disabled={isDisabled}
+            min={1}
           />
         </Grid>
         <Grid item xs={3} sx={{ mt: 3 }}>
