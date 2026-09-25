@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Divider, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-  LabelData, Select, getTurnoById, useAuth, useUI,
+  LabelData, Select, SelectAdd, getTurnoById, useAuth, useUI,
 } from '@siiges-ui/shared';
 import {
   getCiclosEscolares,
@@ -37,6 +37,7 @@ export default function InscripcionForm({
 
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
+  const [openGrupos, setOpenGrupos] = useState(false);
 
   const initialState = typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_KEY)
     ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
@@ -381,13 +382,16 @@ export default function InscripcionForm({
           />
         </Grid>
         <Grid item xs={4}>
-          <Select
+          <SelectAdd
             title="Grupos"
             name="Grupos"
             value={state.selectedGrupo}
             options={arrays.grupos || []}
             onChange={(event) => handleGrupoChange(event.target.value)}
             disabled={!state.selectedGrado}
+            onAddClick={() => {
+              setOpenGrupos(true);
+            }}
           />
         </Grid>
       </Grid>
@@ -411,6 +415,20 @@ export default function InscripcionForm({
           </Grid>
         </Grid>
       )}
+      <GruposModal
+        open={openGrupos}
+        setOpen={setOpenGrupos}
+        type="new"
+        params={{
+          cicloEscolarId: state.selectedCicloEscolar,
+          cicloNombre: arrays.ciclosEscolares.find(
+            (ciclo) => ciclo.id === state.selectedCicloEscolar,
+          )?.nombre,
+          gradoId: state.selectedGrado,
+          gradoNombre: arrays.grados.find((grado) => grado.id === state.selectedGrado)?.nombre,
+        }}
+        setFetchGrupos={setFetchGruposTrigger}
+      />
     </>
   );
 }
