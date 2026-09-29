@@ -56,7 +56,6 @@ const handleEdit = async (
       type: 'success',
     });
   } catch (error) {
-    console.error('Error:', error);
     setLoading(false);
     setNoti({
       open: true,

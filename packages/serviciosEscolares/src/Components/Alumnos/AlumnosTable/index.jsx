@@ -58,7 +58,7 @@ export default function AlumnosTable({
           router.push(
             {
               pathname: '/serviciosEscolares/alumnos/[alumnoId]/NuevoAlumno',
-              query: { alumnoId: programa },
+              query: { alumnoId: programa, programaId: programa },
             },
             '/serviciosEscolares/alumnos/NuevoAlumno',
           );

@@ -1,44 +1,26 @@
 import { getToken } from '@siiges-ui/shared';
 
-function validateInitialSolicitudPayload(payload) {
-  const requiredRoot = ['tipoSolicitudId', 'estatusSolicitudId', 'usuarioId', 'programa'];
-  const missingRoot = requiredRoot.filter((field) => !payload?.[field]);
-  if (missingRoot.length) {
-    return `Faltan campos obligatorios de la solicitud: ${missingRoot.join(', ')}`;
-  }
-
-  const requiredPrograma = ['nivelId', 'cicloId', 'modalidadId', 'plantelId', 'programaTurnos'];
-  const programa = payload.programa || {};
-  const missingPrograma = requiredPrograma.filter((field) => {
-    if (field === 'programaTurnos') {
-      return !Array.isArray(programa.programaTurnos) || !programa.programaTurnos.length;
-    }
-    return !programa[field];
-  });
-
-  if (missingPrograma.length) {
-    return `Faltan campos obligatorios del programa: ${missingPrograma.join(', ')}`;
-  }
-
-  return null;
-}
-
 function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections, router) {
   const apikey = process.env.NEXT_PUBLIC_API_KEY;
   const url = process.env.NEXT_PUBLIC_URL;
   const {
-    form, setNoti, setId, setProgramaId,
+    form, setNoti, setId, setProgramaId, errors,
   } = validations;
 
-  const validationError = validateInitialSolicitudPayload(form?.[1]);
-  if (validationError) {
-    setLoading(false);
-    setNoti({
-      open: true,
-      message: `¡No se pudo crear la solicitud!: ${validationError}`,
-      type: 'error',
-    });
-    return;
+  if (errors && Object.keys(errors).length > 0) {
+    const isSectionValid = Object.values(errors)
+      .map((validate) => validate())
+      .every(Boolean);
+
+    if (!isSectionValid) {
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: '¡Revisa los campos marcados en rojo antes de continuar!',
+        type: 'error',
+      });
+      return;
+    }
   }
 
   const token = getToken();
@@ -82,26 +64,22 @@ function submitNewSolicitud(validations, setNewSubmit, setLoading, setSections, 
             return section;
           }));
           setNewSubmit(false);
+          setLoading(false);
+          setNoti({
+            open: true,
+            message: '¡Éxito, no hubo problemas en esta sección!',
+            type: 'success',
+          });
           router.push(`/solicitudes/detallesSolicitudes/${data.data.id}/editarSolicitud`);
-          setTimeout(() => {
-            setLoading(false);
-            setNoti({
-              open: true,
-              message: '¡Éxito, no hubo problemas en esta sección!',
-              type: 'success',
-            });
-          }, 1000);
         });
     })
     .catch((err) => {
-      setTimeout(() => {
-        setLoading(false);
-        setNoti({
-          open: true,
-          message: `¡Hubo un problema, revise que los campos estén correctos!: ${err}`,
-          type: 'error',
-        });
-      }, 1000);
+      setLoading(false);
+      setNoti({
+        open: true,
+        message: `¡Hubo un problema, revise que los campos estén correctos!: ${err}`,
+        type: 'error',
+      });
     });
 }
 

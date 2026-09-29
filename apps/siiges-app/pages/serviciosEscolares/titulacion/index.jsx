@@ -5,12 +5,17 @@ import React, { useState } from 'react';
 
 export default function Titulacion() {
   const { setLoading } = useUI();
-  const [titulos, setTitulos] = useState();
+  const [titulos, setTitulos] = useState([]);
   const [programa, setPrograma] = useState();
   const [reloadFlag, setReloadFlag] = useState(false);
+  const [modo, setModo] = useState('general');
 
   const reloadTitulos = () => {
     setReloadFlag((prev) => !prev);
+  };
+
+  const toggleModo = () => {
+    setModo((prev) => (prev === 'general' ? 'especifico' : 'general'));
   };
 
   return (
@@ -20,15 +25,15 @@ export default function Titulacion() {
         setPrograma={setPrograma}
         setLoading={setLoading}
         reloadFlag={reloadFlag}
+        modo={modo}
+        toggleModo={toggleModo}
       />
       <Divider sx={{ marginTop: 2 }} />
-      {titulos && (
-        <TitulosTable
-          titulos={titulos}
-          programa={programa}
-          reloadTitulos={reloadTitulos}
-        />
-      )}
+      <TitulosTable
+        titulos={titulos}
+        programa={programa}
+        reloadTitulos={reloadTitulos}
+      />
     </Layout>
   );
 }

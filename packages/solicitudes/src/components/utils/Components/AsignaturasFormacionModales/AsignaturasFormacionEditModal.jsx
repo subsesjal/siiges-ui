@@ -91,13 +91,31 @@ export default function AsignaturasFormacionEditModal({
       createdAt, deletedAt, updatedAt, ...submissionData
     } = formAsignaturasFormacion;
 
+    const trimmedData = {
+      ...submissionData,
+      nombre: String(submissionData.nombre || '').trim(),
+      clave: String(submissionData.clave || '').trim(),
+    };
+
+    const camposDelFormulario = [
+      'gradoId', 'nombre', 'clave', 'creditos', 'horasDocente', 'horasIndependiente',
+    ];
+
+    const isFormValid = camposDelFormulario
+      .map((campo) => validateField(trimmedData, campo, setError, errorDatosAsignaturas))
+      .every(Boolean);
+
+    if (!isFormValid || !trimmedData.nombre || !trimmedData.clave) {
+      return;
+    }
+
     const matchingGrade = selectedGrade.find(
-      (grade) => grade.id === submissionData.gradoId,
+      (grade) => grade.id === trimmedData.gradoId,
     );
 
     const updatedFormAsignaturas = matchingGrade
-      ? { ...submissionData, grado: matchingGrade.nombre }
-      : submissionData;
+      ? { ...trimmedData, grado: matchingGrade.nombre }
+      : trimmedData;
 
     handleEdit(
       updatedFormAsignaturas,

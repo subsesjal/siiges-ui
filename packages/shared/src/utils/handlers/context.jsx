@@ -20,7 +20,9 @@ function Provider({ children }) {
   const [noti, setNoti] = useState(false);
   const [loading, setLoading] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
-  const [section, setSection] = useState(findRoute(router.route, session.rol));
+  const [section, setSection] = useState(
+    findRoute(router.route, session.rol, session.nombre, session.id),
+  );
   const [avatarUrl, setAvatarUrl] = useState(null);
 
   const excludedRoutes = [
@@ -115,8 +117,8 @@ function Provider({ children }) {
     } else if (!excludedRoutes.includes(router.route)) {
       setShouldRedirect(true);
     }
-    if (findRoute(router.route, session.rol)) {
-      setSection(findRoute(router.route, session.rol));
+    if (findRoute(router.route, session.rol, session.nombre, session.id)) {
+      setSection(findRoute(router.route, session.rol, session.nombre, session.id));
     }
   }, [router]);
 

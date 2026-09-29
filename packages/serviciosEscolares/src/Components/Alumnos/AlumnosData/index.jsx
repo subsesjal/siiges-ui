@@ -5,7 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import { ListTitle, ListSubtitle } from '@siiges-ui/shared';
 
-export default function AlumnoData({ alumno }) {
+export default function AlumnoData({ alumno, mostrarPrograma }) {
   if (!alumno) {
     return <div>Cargando...</div>;
   }
@@ -67,6 +67,9 @@ export default function AlumnoData({ alumno }) {
             <ListTitle text="Teléfono" />
             <ListTitle text="Nacionalidad" />
             <ListTitle text="Género" />
+            <ListTitle text="Ciclo de Ingreso" />
+            {mostrarPrograma && <ListTitle text="Acuerdo RVOE" />}
+            {mostrarPrograma && <ListTitle text="Programa" />}
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -77,6 +80,9 @@ export default function AlumnoData({ alumno }) {
             <ListSubtitle text={alumno?.telefono || 'N/A'} />
             <ListSubtitle text={alumno?.nacionalidad || 'N/A'} />
             <ListSubtitle text={alumno?.sexo || 'N/A'} />
+            <ListSubtitle text={alumno?.alumnoCicloIngreso || 'N/A'} />
+            {mostrarPrograma && <ListSubtitle text={alumno?.acuerdoRvoe || 'N/A'} />}
+            {mostrarPrograma && <ListSubtitle text={alumno?.programa || 'N/A'} />}
           </List>
         </Grid>
       </Grid>
@@ -98,9 +104,14 @@ AlumnoData.propTypes = {
     telefono: PropTypes.string,
     nacionalidad: PropTypes.string,
     sexo: PropTypes.string,
+    alumnoCicloIngreso: PropTypes.string,
+    programa: PropTypes.string,
+    acuerdoRvoe: PropTypes.string,
   }),
+  mostrarPrograma: PropTypes.bool,
 };
 
 AlumnoData.defaultProps = {
   alumno: null,
+  mostrarPrograma: false,
 };

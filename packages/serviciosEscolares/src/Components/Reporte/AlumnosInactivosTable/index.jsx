@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { ButtonSimple, DataTable, useUI } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import GetFilePdf from '../../utils/GetFilePdf';
+import getFilePdf from '../../utils/getFilePdf';
 
 const columns = [
   { field: 'nombre', headerName: 'Nombre', width: 350 },
@@ -31,12 +31,18 @@ export default function AlumnosInactivosTable({
     if (programaId) params.programaId = programaId;
 
     try {
-      const objectUrl = await GetFilePdf('/alumnos/matricula-inactiva/pdf', params);
-      const link = document.createElement('a');
-      link.href = objectUrl;
-      link.download = 'reporte-alumnos-inactivos.pdf';
-      link.click();
-      URL.revokeObjectURL(objectUrl);
+      const response = await getFilePdf({
+        endpoint: '/alumnos/matricula-inactiva/csv',
+        query: `?${new URLSearchParams(params).toString()}`,
+        fileName: 'reporte-alumnos-inactivos.csv',
+      });
+      if (response.statusCode !== 200) {
+        setNoti({
+          open: true,
+          message: response.errorMessage || '¡No se pudo generar el reporte!',
+          type: 'warning',
+        });
+      }
     } catch (error) {
       setNoti({ open: true, message: '¡No se pudo generar el reporte!', type: 'warning' });
     } finally {

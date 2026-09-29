@@ -93,6 +93,8 @@ export default function PlanEstudios({
             programaTurnos: programaTurnosIds,
             duracionPeriodos: solicitudes.programa.duracionPeriodos,
             creditos: solicitudes.programa.creditos,
+            creditosOrdinarios: solicitudes.programa.creditosOrdinarios,
+            minimoCreditosOptativas: solicitudes.programa.minimoCreditosOptativas,
             antecedenteAcademico: solicitudes.programa.antecedenteAcademico,
             objetivoGeneral: solicitudes.programa.objetivoGeneral,
             objetivosParticulares: solicitudes.programa.objetivosParticulares,

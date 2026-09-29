@@ -20,6 +20,8 @@ import getAlumnoByMatricula from './utils/getAlumnoByMatricula';
 import PlantelesInstitucionesAuth from './components/Planteles/plantelesInstitucionesAuth';
 import postAsignaturasAlumno from './utils/postAsignaturasAlumno';
 import getInscripcionesAlumnos from './utils/getInscripcionesAlumnos';
+import getInstitucionProgramas from './utils/getInstitucionProgramas';
+import groupProgramasByPlantel from './utils/groupProgramasByPlantel';
 
 export {
   InstitucionBox,
@@ -44,4 +46,6 @@ export {
   getAlumnoByMatricula,
   postAsignaturasAlumno,
   getInscripcionesAlumnos,
+  getInstitucionProgramas,
+  groupProgramasByPlantel,
 };

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import SearchIcon from '@mui/icons-material/Search';
 import {
-  Select, getData, useUI, useAuth,
+  Select, getData, useUI, useAuth, ButtonSimple,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 import {
@@ -12,7 +14,7 @@ import {
 import getInstitucionIdFromSession from '../../utils/getInstitucionId';
 
 export default function TitulosForm({
-  setTitulos, setPrograma, setLoading, reloadFlag,
+  setTitulos, setPrograma, setLoading, reloadFlag, modo, toggleModo,
 }) {
   const { instituciones } = getInstituciones({
     esNombreAutorizado: true,
@@ -42,6 +44,14 @@ export default function TitulosForm({
   const roles = ['representante', 'ce_ies'];
   const isRepresentante = roles.includes(session.rol);
 
+  const [especifico, setEspecifico] = useState({
+    nombre: '',
+    primerApellido: '',
+    segundoApellido: '',
+    curp: '',
+    numeroRvoe: '',
+  });
+
   const formatFecha = (fechaStr) => {
     const date = new Date(fechaStr);
     if (Number.isNaN(date)) return '';
@@ -49,6 +59,42 @@ export default function TitulosForm({
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+  };
+
+  const mapTitulos = (data) => data.map((item) => ({
+    id: item.id,
+    folioControl: item.folioControl,
+    nombreCompleto: `${item.nombre} ${item.primerApellido} ${item.segundoApellido}`,
+    curp: item.curp,
+    numeroRvoe: item.numeroRvoe,
+    nombreCarrera: item.nombreCarrera,
+    fechaExpedicion: formatFecha(item.fechaExpedicion),
+  }));
+
+  const fetchTitulosByQuery = async (query) => {
+    try {
+      const response = await getData({
+        endpoint: '/titulosElectronicos',
+        query,
+      });
+
+      if (response.statusCode === 200) {
+        setTitulos(mapTitulos(response.data));
+      } else {
+        setTitulos([]);
+        setNoti({
+          open: true,
+          message: 'No se encontraron títulos',
+          type: 'warning',
+        });
+      }
+    } catch (error) {
+      setNoti({
+        open: true,
+        message: `Error al obtener titulos: ${error}`,
+        type: 'error',
+      });
+    }
   };
 
   const fetchTitulos = async (programaId) => {
@@ -76,36 +122,50 @@ export default function TitulosForm({
       return;
     }
 
-    try {
-      const response = await getData({
-        endpoint: '/titulosElectronicos',
-        query: `?numeroRvoe=${rvoe}`,
-      });
+    await fetchTitulosByQuery(`?numeroRvoe=${rvoe}&institucionId=${selectedInstitucion}`);
+  };
 
-      if (response.statusCode === 200) {
-        const titulosFiltrados = response.data.map((item) => ({
-          id: item.id,
-          folioControl: item.folioControl,
-          nombreCompleto: `${item.nombre} ${item.primerApellido} ${item.segundoApellido}`,
-          curp: item.curp,
-          nombreCarrera: item.nombreCarrera,
-          fechaExpedicion: formatFecha(item.fechaExpedicion),
-        }));
+  const handleEspecificoChange = (field) => (event) => {
+    setEspecifico((prev) => ({ ...prev, [field]: event.target.value }));
+  };
 
-        setTitulos(titulosFiltrados);
-      } else {
-        setNoti({
-          open: true,
-          message: 'No se encontraron títulos',
-          type: 'warning',
-        });
-      }
-    } catch (error) {
+  const fetchTitulosEspecifico = async () => {
+    if (!selectedInstitucion) {
       setNoti({
         open: true,
-        message: `Error al obtener titulos: ${error}`,
-        type: 'error',
+        message: 'Debe seleccionar una institución',
+        type: 'warning',
       });
+      return;
+    }
+
+    const {
+      nombre, primerApellido, segundoApellido, curp, numeroRvoe,
+    } = especifico;
+
+    if (!nombre.trim() && !primerApellido.trim() && !segundoApellido.trim()
+      && !curp.trim() && !numeroRvoe.trim()) {
+      setNoti({
+        open: true,
+        message: 'Debe capturar al menos un criterio de búsqueda (Nombre, Apellidos, CURP o RVOE)',
+        type: 'warning',
+      });
+      return;
+    }
+
+    const params = new URLSearchParams({ institucionId: selectedInstitucion });
+    if (nombre.trim()) params.append('nombre', nombre.trim());
+    if (primerApellido.trim()) params.append('primerApellido', primerApellido.trim());
+    if (segundoApellido.trim()) params.append('segundoApellido', segundoApellido.trim());
+    if (curp.trim()) params.append('curp', curp.trim());
+    if (numeroRvoe.trim()) params.append('numeroRvoe', numeroRvoe.trim());
+
+    await fetchTitulosByQuery(`?${params.toString()}`);
+  };
+
+  const handleEspecificoKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      fetchTitulosEspecifico();
     }
   };
 
@@ -196,12 +256,12 @@ export default function TitulosForm({
   };
 
   useEffect(() => {
-    if (selectedInstitucion) {
+    if (selectedInstitucion && modo === 'general') {
       fetchPlanteles(selectedInstitucion);
-    } else {
+    } else if (!selectedInstitucion) {
       setPlanteles([]);
     }
-  }, [selectedInstitucion]);
+  }, [selectedInstitucion, modo]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -212,27 +272,42 @@ export default function TitulosForm({
   }, [selectedInstitucion, selectedPlantel, selectedPrograma]);
 
   useEffect(() => {
-    if (selectedPlantel) {
+    if (selectedPlantel && modo === 'general') {
       fetchProgramas(selectedPlantel);
     }
-  }, [selectedPlantel]);
+  }, [selectedPlantel, modo]);
 
   useEffect(() => {
-    if (selectedPrograma) {
+    if (selectedPrograma && modo === 'general') {
       fetchTitulos(selectedPrograma);
       setPrograma(selectedPrograma);
     }
-  }, [selectedPrograma, programas]);
+  }, [selectedPrograma, programas, modo]);
 
   useEffect(() => {
-    if (selectedPrograma) {
+    if (modo === 'general' && selectedPrograma) {
       fetchTitulos(selectedPrograma);
+    } else if (modo === 'especifico') {
+      fetchTitulosEspecifico();
     }
   }, [reloadFlag]);
 
+  useEffect(() => {
+    setTitulos([]);
+    setPrograma(undefined);
+  }, [modo]);
+
   return (
     <Grid container spacing={2} alignItems="center">
-      <Grid item xs={4}>
+      <Grid item xs={12} sx={{ mt: 2 }}>
+        <ButtonSimple
+          text={modo === 'general' ? 'Búsqueda Específica' : 'Búsqueda General'}
+          onClick={toggleModo}
+          design="buscar"
+          icon={<SwapHorizIcon />}
+        />
+      </Grid>
+      <Grid item xs={4} sx={modo === 'general' ? { mt: 0 } : { mt: 0.5 }}>
         <Select
           title="Instituciones"
           name="instituciones"
@@ -242,26 +317,98 @@ export default function TitulosForm({
           disabled={isRepresentante}
         />
       </Grid>
-      <Grid item xs={4}>
-        <Select
-          title="Planteles"
-          name="planteles"
-          value={selectedPlantel}
-          options={planteles || []}
-          onChange={handlePlantelChange}
-          disabled={!selectedInstitucion}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <Select
-          title="Programas"
-          name="programas"
-          value={selectedPrograma}
-          options={programas || []}
-          onChange={handleProgramaChange}
-          disabled={!selectedPlantel}
-        />
-      </Grid>
+      {modo === 'general' ? (
+        <>
+          <Grid item xs={4}>
+            <Select
+              title="Planteles"
+              name="planteles"
+              value={selectedPlantel}
+              options={planteles || []}
+              onChange={handlePlantelChange}
+              disabled={!selectedInstitucion}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Select
+              title="Programas"
+              name="programas"
+              value={selectedPrograma}
+              options={programas || []}
+              onChange={handleProgramaChange}
+              disabled={!selectedPlantel}
+            />
+          </Grid>
+        </>
+      ) : (
+        <>
+          <Grid item xs={4}>
+            <TextField
+              fullWidth
+              size="small"
+              sx={{ mt: 2 }}
+              label="Nombre"
+              value={especifico.nombre}
+              onChange={handleEspecificoChange('nombre')}
+              onKeyDown={handleEspecificoKeyDown}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              fullWidth
+              size="small"
+              sx={{ mt: 2 }}
+              label="Primer apellido"
+              value={especifico.primerApellido}
+              onChange={handleEspecificoChange('primerApellido')}
+              onKeyDown={handleEspecificoKeyDown}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              fullWidth
+              size="small"
+              sx={{ mt: 2 }}
+              label="Segundo apellido"
+              value={especifico.segundoApellido}
+              onChange={handleEspecificoChange('segundoApellido')}
+              onKeyDown={handleEspecificoKeyDown}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              fullWidth
+              size="small"
+              sx={{ mt: 2 }}
+              label="CURP"
+              value={especifico.curp}
+              onChange={handleEspecificoChange('curp')}
+              onKeyDown={handleEspecificoKeyDown}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              fullWidth
+              size="small"
+              sx={{ mt: 2 }}
+              label="RVOE"
+              value={especifico.numeroRvoe}
+              onChange={handleEspecificoChange('numeroRvoe')}
+              onKeyDown={handleEspecificoKeyDown}
+            />
+          </Grid>
+          <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+            <ButtonSimple
+              text="Buscar"
+              onClick={fetchTitulosEspecifico}
+              design="buscar"
+              fullWidth
+            >
+              <SearchIcon />
+            </ButtonSimple>
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 }
@@ -271,4 +418,6 @@ TitulosForm.propTypes = {
   setPrograma: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
   reloadFlag: PropTypes.func.isRequired,
+  modo: PropTypes.oneOf(['general', 'especifico']).isRequired,
+  toggleModo: PropTypes.func.isRequired,
 };

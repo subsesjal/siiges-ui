@@ -38,7 +38,7 @@ export default function BusquedaAlumno() {
     <Layout title="Consultar Alumno">
       <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid item xs={12}>
-          <AlumnoData alumno={alumno} />
+          <AlumnoData alumno={alumno} mostrarPrograma />
         </Grid>
         <Grid item xs={12}>
           <Divider sx={{ marginTop: 2 }} />

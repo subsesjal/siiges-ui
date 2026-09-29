@@ -102,10 +102,28 @@ export default function AsignaturasEditModal({
       ...submissionData
     } = formAsignaturas;
 
-    const matchingGrade = selectedGrade.find((grade) => grade.id === submissionData.gradoId);
+    const trimmedData = {
+      ...submissionData,
+      nombre: String(submissionData.nombre || '').trim(),
+      clave: String(submissionData.clave || '').trim(),
+    };
+
+    const camposDelFormulario = [
+      'gradoId', 'areaId', 'nombre', 'clave', 'creditos', 'horasDocente', 'horasIndependiente',
+    ];
+
+    const isFormValid = camposDelFormulario
+      .map((campo) => validateField(trimmedData, campo, setError, errorDatosAsignaturas))
+      .every(Boolean);
+
+    if (!isFormValid || !trimmedData.nombre || !trimmedData.clave) {
+      return;
+    }
+
+    const matchingGrade = selectedGrade.find((grade) => grade.id === trimmedData.gradoId);
     const updatedFormAsignaturas = matchingGrade
-      ? { ...submissionData, grado: matchingGrade.nombre }
-      : submissionData;
+      ? { ...trimmedData, grado: matchingGrade.nombre }
+      : trimmedData;
 
     handleEdit(
       updatedFormAsignaturas,

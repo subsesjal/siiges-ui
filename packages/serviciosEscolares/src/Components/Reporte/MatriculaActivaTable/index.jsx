@@ -4,7 +4,8 @@ import { DataTable, LabelData } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
 
 const columnsBusquedaGeneral = [
-  { field: 'programa', headerName: 'Programa', width: 900 },
+  { field: 'programa', headerName: 'Programa', width: 500 },
+  { field: 'acuerdoRvoe', headerName: 'RVOE', width: 200 },
   { field: 'totalAlumnos', headerName: 'Total de Alumnos', width: 200 },
 ];
 
@@ -12,6 +13,7 @@ const columnsBusquedaPrograma = [
   { field: 'institucion', headerName: 'Institución', width: 350 },
   { field: 'plantel', headerName: 'Plantel', width: 300 },
   { field: 'programa', headerName: 'Programa', width: 300 },
+  { field: 'acuerdoRvoe', headerName: 'RVOE', width: 200 },
   { field: 'totalAlumnos', headerName: 'Total de Alumnos', width: 150 },
 ];
 
@@ -58,6 +60,7 @@ MatriculaActivaTable.propTypes = {
     PropTypes.shape({
       programaId: PropTypes.number.isRequired,
       programa: PropTypes.string,
+      acuerdoRvoe: PropTypes.string,
       institucion: PropTypes.string,
       totalAlumnos: PropTypes.number,
     }),

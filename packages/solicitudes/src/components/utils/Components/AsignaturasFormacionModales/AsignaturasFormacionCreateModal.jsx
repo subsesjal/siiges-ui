@@ -74,12 +74,35 @@ export default function AsignaturasFormacionCreateModal({
   };
 
   const handleOnSubmit = () => {
+    const camposDelFormulario = [
+      'gradoId', 'nombre', 'clave', 'creditos', 'horasDocente', 'horasIndependiente',
+    ];
+
+    const isFormValid = camposDelFormulario
+      .map((campo) => errorsAsignatura[campo]?.())
+      .every(Boolean);
+
+    if (!isFormValid) {
+      return;
+    }
+
     const matchingGrade = grados.optativa.find(
       (grade) => grade.id === formAsignaturasFormacion.gradoId,
     );
+
+    const trimmedForm = {
+      ...formAsignaturasFormacion,
+      nombre: String(formAsignaturasFormacion.nombre || '').trim(),
+      clave: String(formAsignaturasFormacion.clave || '').trim(),
+    };
+
+    if (!trimmedForm.nombre || !trimmedForm.clave) {
+      return;
+    }
+
     const updatedFormAsignaturas = matchingGrade
-      ? { ...formAsignaturasFormacion, grado: matchingGrade.nombre }
-      : { ...formAsignaturasFormacion };
+      ? { ...trimmedForm, grado: matchingGrade.nombre }
+      : { ...trimmedForm };
 
     handleCreate(
       updatedFormAsignaturas,

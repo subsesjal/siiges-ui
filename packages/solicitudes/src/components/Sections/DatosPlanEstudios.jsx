@@ -38,9 +38,27 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
   };
 
   const errors = useMemo(
-    () => errorDatosPlanEstudios(form, setError, error),
-    [form, setError, error],
+    () => errorDatosPlanEstudios(form, setError, error, tipoSolicitudId),
+    [form, setError, error, tipoSolicitudId],
   );
+
+  const creditosOrdinarios = form[1].programa?.creditosOrdinarios;
+  const minimoCreditosOptativas = form[1].programa?.minimoCreditosOptativas;
+
+  useEffect(() => {
+    const esValido = (valor) => valor !== undefined && valor !== null && valor !== '';
+
+    if (!esValido(creditosOrdinarios) || !esValido(minimoCreditosOptativas)) {
+      return;
+    }
+
+    const ordinarios = Number(creditosOrdinarios);
+    const optativas = Number(minimoCreditosOptativas);
+    const total = (Number.isNaN(ordinarios) ? 0 : ordinarios)
+      + (Number.isNaN(optativas) ? 0 : optativas);
+
+    formDatosPlanEstudios('creditos', total, form, setForm);
+  }, [creditosOrdinarios, minimoCreditosOptativas]);
 
   const handleOnBlur = (e) => {
     const { name, value } = e?.target || {};
@@ -63,7 +81,7 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
     }
-  }, [setErrors]);
+  }, [errors, setErrors]);
 
   const antecedenteAcademico = [
     { id: 1, nombre: 'Bachillerato' },
@@ -199,14 +217,41 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
         <Grid item xs={6}>
           <Input
             id="creditos"
-            label="Créditos necesarios para concluir el programa"
+            label="Créditos necesarios para concluir el programa (Ordinarios + Optativas)"
             name="creditos"
             auto="creditos"
             value={form[1].programa?.creditos}
+            errorMessage={error.creditos}
+            required
+            disabled
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="creditosOrdinarios"
+            label="Créditos ordinarios"
+            name="creditosOrdinarios"
+            auto="creditosOrdinarios"
+            value={form[1].programa?.creditosOrdinarios}
             onChange={handleOnChange}
             onblur={handleOnBlur}
             onfocus={handleInputFocus}
-            errorMessage={error.creditos}
+            errorMessage={error.creditosOrdinarios}
+            required
+            disabled={isDisabled}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Input
+            id="minimoCreditosOptativas"
+            label="Créditos electivas"
+            name="minimoCreditosOptativas"
+            auto="minimoCreditosOptativas"
+            value={form[1].programa?.minimoCreditosOptativas}
+            onChange={handleOnChange}
+            onblur={handleOnBlur}
+            onfocus={handleInputFocus}
+            errorMessage={error.minimoCreditosOptativas}
             required
             disabled={isDisabled}
           />

@@ -5,22 +5,23 @@ import {
   Input,
   Select,
   ButtonsModal,
-  getData,
   updateRecord,
   InputDate,
 } from '@siiges-ui/shared';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 
 export default function OficioModal({
   open,
   hideModal,
   downloadFile,
   solicitudId,
+  solicitud,
+  onSuccess,
 }) {
   const [formData, setFormData] = useState({
     oficioNumber: '',
     fechaEfecto: '',
+    vigencia: '',
     nombreAutorizado: '',
     fechaAutorizacion: '',
   });
@@ -29,49 +30,30 @@ export default function OficioModal({
   const [esNombreAutorizado, setEsNombreAutorizado] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    if (name === 'fechaEfecto') {
+      setFormData((prev) => ({ ...prev, fechaEfecto: value, fechaAutorizacion: value }));
+      return;
+    }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   useEffect(() => {
-    let isMounted = true;
+    const ratificaciones = solicitud?.programa?.plantel?.institucion
+      ?.ratificacionesNombre || [];
 
-    const fetchData = async () => {
-      try {
-        const response = await getData({
-          endpoint: `/solicitudes/${solicitudId}/detalles`,
-        });
+    const transformedNombres = [
+      { id: 1, nombre: ratificaciones[0]?.nombrePropuesto1 || '' },
+      { id: 2, nombre: ratificaciones[0]?.nombrePropuesto2 || '' },
+      { id: 3, nombre: ratificaciones[0]?.nombrePropuesto3 || '' },
+    ].filter((item) => item.nombre);
 
-        if (isMounted && response.statusCode === 200) {
-          const ratificaciones = response.data?.programa?.plantel?.institucion
-            ?.ratificacionesNombre || [];
-
-          const transformedNombres = [
-            { id: 1, nombre: ratificaciones[0]?.nombrePropuesto1 || '' },
-            { id: 2, nombre: ratificaciones[0]?.nombrePropuesto2 || '' },
-            { id: 3, nombre: ratificaciones[0]?.nombrePropuesto3 || '' },
-          ].filter((item) => item.nombre);
-
-          setEsNombreAutorizado(ratificaciones[0].esNombreAutorizado || false);
-          setInstitucionId(response.data?.programa?.plantel?.institucion?.id);
-          setNombresPropuestos(transformedNombres);
-        }
-      } catch (errorMessage) {
-        if (isMounted) {
-          setError('¡Error al cargar los datos!');
-        }
-      }
-    };
-
-    if (solicitudId) {
-      fetchData();
-    }
-
-    return () => { isMounted = false; };
-  }, [solicitudId]);
+    setEsNombreAutorizado(ratificaciones[0]?.esNombreAutorizado || false);
+    setInstitucionId(solicitud?.programa?.plantel?.institucion?.id || null);
+    setNombresPropuestos(transformedNombres);
+  }, [solicitud]);
 
   const renderNombreField = () => {
     if (nombresPropuestos.length > 0) {
@@ -99,10 +81,10 @@ export default function OficioModal({
 
   const handleOnSubmit = async () => {
     const {
-      fechaEfecto, oficioNumber, nombreAutorizado, fechaAutorizacion,
+      fechaEfecto, oficioNumber, vigencia, nombreAutorizado, fechaAutorizacion,
     } = formData;
 
-    if (!fechaEfecto || !oficioNumber) {
+    if (!fechaEfecto || !oficioNumber || !vigencia) {
       setError('¡Por favor, completa los campos obligatorios!');
       return;
     }
@@ -121,6 +103,7 @@ export default function OficioModal({
           estatusSolicitudId: 11,
           programa: {
             fechaSurteEfecto: new Date(fechaEfecto).toISOString(),
+            vigencia: new Date(vigencia).toISOString(),
             acuerdoRvoe: String(oficioNumber),
           },
         },
@@ -151,7 +134,24 @@ export default function OficioModal({
       if (response.statusCode === 200 && responseInstitucion.statusCode === 200) {
         downloadFile('ACUERDO_RVOE');
         hideModal();
-        router.back();
+
+        if (onSuccess) {
+          await onSuccess({
+            estatusSolicitudId: 11,
+            programa: {
+              fechaSurteEfecto: new Date(fechaEfecto).toISOString(),
+              vigencia: new Date(vigencia).toISOString(),
+              acuerdoRvoe: String(oficioNumber),
+              ...(!esNombreAutorizado ? {
+                plantel: {
+                  institucion: {
+                    nombre: nombreAutorizado,
+                  },
+                },
+              } : {}),
+            },
+          });
+        }
       } else {
         setError(response.errorMessage || responseInstitucion.errorMessage || '¡Error desconocido!');
       }
@@ -163,7 +163,7 @@ export default function OficioModal({
   };
 
   return (
-    <DefaultModal open={open} setOpen={hideModal} title="Oficio">
+    <DefaultModal open={open} setOpen={hideModal} title="Acuerdo RVOE">
       <Grid container spacing={2}>
         {error && (
           <Grid item xs={12}>
@@ -195,18 +195,16 @@ export default function OficioModal({
             required
           />
         </Grid>
-        {!esNombreAutorizado && (
         <Grid item xs={6}>
           <InputDate
-            id="fechaAutorizacion"
-            label="Fecha en que se autoriza el nombre"
-            name="fechaAutorizacion"
-            value={formData.fechaAutorizacion}
+            id="vigencia"
+            label="Vigencia"
+            name="vigencia"
+            value={formData.vigencia}
             onChange={handleChange}
             required
           />
         </Grid>
-        )}
         <Grid item xs={12}>
           <ButtonsModal
             confirm={handleOnSubmit}
@@ -219,9 +217,17 @@ export default function OficioModal({
   );
 }
 
+OficioModal.defaultProps = {
+  solicitud: {},
+  onSuccess: null,
+};
+
 OficioModal.propTypes = {
   open: PropTypes.bool.isRequired,
   hideModal: PropTypes.func.isRequired,
   downloadFile: PropTypes.func.isRequired,
   solicitudId: PropTypes.number.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  solicitud: PropTypes.object,
+  onSuccess: PropTypes.func,
 };

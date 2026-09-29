@@ -18,7 +18,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
       return true;
     },
     nombre: () => {
-      if (form.nombre === undefined || form.nombre === '') {
+      if (form.nombre === undefined || String(form.nombre).trim() === '') {
         setError({ ...error, nombre: '¡Nombre inválido!' });
         return false;
       }
@@ -26,7 +26,7 @@ export default function errorDatosAsignaturasFormacion(form, setError, error) {
       return true;
     },
     clave: () => {
-      if (form.clave === undefined || form.clave === '') {
+      if (form.clave === undefined || String(form.clave).trim() === '') {
         setError({ ...error, clave: '¡Clave inválida!' });
         return false;
       }
