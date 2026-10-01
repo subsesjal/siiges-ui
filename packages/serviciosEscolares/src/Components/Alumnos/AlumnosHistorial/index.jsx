@@ -17,20 +17,28 @@ export default function HistorialAcademico({ alumno, historial, simple }) {
     alumno?.programa?.creditos ?? alumno?.creditos ?? 0,
   );
 
-  const asignaturasMap = new Map();
-  (historial ?? [])
-    .filter((r) => r && r.asignatura)
-    .forEach((record) => {
-      const prev = asignaturasMap.get(record.asignaturaId);
-      if (prev) {
-        if (prev.tipo === 1 && record.tipo === 2) asignaturasMap.set(record.asignaturaId, record);
-      } else {
-        asignaturasMap.set(record.asignaturaId, record);
-      }
-    });
+  const notaAprobatoria = parseFloat(alumno?.calificacionAprobatoria);
+  const tieneCalificacionAprobatoria = !Number.isNaN(notaAprobatoria);
 
-  const creditosObtenidos = [...asignaturasMap.values()].reduce(
-    (sum, r) => sum + Number(r?.asignatura?.creditos ?? 0),
+  const aprobadasPorAsignatura = new Map();
+  (historial ?? []).forEach((record) => {
+    if (!record?.asignatura) return;
+
+    const nota = parseFloat(record.calificacion);
+    if (Number.isNaN(nota)) return;
+    if (tieneCalificacionAprobatoria && nota < notaAprobatoria) return;
+
+    const previa = aprobadasPorAsignatura.get(record.asignaturaId);
+    if (!previa || nota > previa.nota) {
+      aprobadasPorAsignatura.set(record.asignaturaId, {
+        nota,
+        asignatura: record.asignatura,
+      });
+    }
+  });
+
+  const creditosObtenidos = [...aprobadasPorAsignatura.values()].reduce(
+    (sum, { asignatura }) => sum + (Number(asignatura?.creditos) || 0),
     0,
   );
 
@@ -85,6 +93,7 @@ HistorialAcademico.propTypes = {
     situacionId: PropTypes.number.isRequired,
     matricula: PropTypes.string.isRequired,
     creditos: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    calificacionAprobatoria: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     programa: PropTypes.shape({
       creditos: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
