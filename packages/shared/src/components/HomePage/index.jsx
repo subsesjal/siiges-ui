@@ -10,7 +10,7 @@ import PaperHome from '../Paper/PaperHome';
 function HomePage() {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [noticias, setNoticias] = useState([]);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const noticiasPerPage = 3;
 
   useEffect(() => {
