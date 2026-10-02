@@ -68,7 +68,9 @@ export default function Folios() {
   const selectedAlumno = alumnosRows.find(
     (row) => row.id === alumnoToDelete,
   );
+  const TIPO_SOLICITUD_PARCIAL = 2;
   const esCertificado = etiquetas.tipoDocumento === 'Certificado';
+  const isParcial = solicitudData?.tipoSolicitudFolio?.id === TIPO_SOLICITUD_PARCIAL;
 
   const router = useRouter();
   const { id, status } = router.query;
@@ -649,6 +651,7 @@ export default function Folios() {
                 title="Agregar Alumno"
                 setAlumnoResponse={setAlumnoResponse}
                 disabled={disabled}
+                isParcial={isParcial}
               />
             )}
           </>
