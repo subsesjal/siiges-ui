@@ -70,6 +70,9 @@ import AlumnosInactivosTable from './Components/Reporte/AlumnosInactivosTable/in
 import CatalogoCiclosEscolares from './Components/ControlEscolar/CatalogoCiclosEscolares/index';
 import ActivarProgramas from './Components/ControlEscolar/ActivarProgramas/ActivarProgramas';
 import ConsultRvoe from './Components/Rvoe/index';
+// import AcreditacionAlumnos from './Components/AcreditacionAlumnos';
+// import AcreditacionAlumno from './Components/AcreditacionAlumno';
+import { readModo } from './Components/utils/foliosNavigation';
 
 export {
   ConsultRvoe,
@@ -144,4 +147,7 @@ export {
   ModalFirmaElectronica,
   CatalogoCiclosEscolares,
   ActivarProgramas,
+  // AcreditacionAlumnos,
+  // AcreditacionAlumno,
+  readModo,
 };

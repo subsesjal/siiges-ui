@@ -129,12 +129,12 @@ export default function FoliosForm({
   };
 
   const solicitudesTitulos = [
-    { id: 1, nombre: 'Duplicado' },
+    // { id: 1, nombre: 'Duplicado' },
     { id: 3, nombre: 'Total' },
   ];
 
   const solicitudesCertificados = [
-    { id: 1, nombre: 'Duplicado' },
+    // { id: 1, nombre: 'Duplicado' },
     { id: 2, nombre: 'Parcial' },
     { id: 3, nombre: 'Total' },
   ];
