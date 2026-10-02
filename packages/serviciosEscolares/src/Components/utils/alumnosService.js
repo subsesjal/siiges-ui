@@ -41,6 +41,7 @@ export default async function alumnosService({ id, dataBody, method }) {
     programa: data?.programa?.nombre,
     acuerdoRvoe: data?.programa?.acuerdoRvoe,
     creditos: data?.programa?.creditos,
+    calificacionAprobatoria: data?.programa?.calificacionAprobatoria,
     claveCentroTrabajo: data?.programa?.plantel?.claveCentroTrabajo,
     institucion: data?.programa?.plantel?.institucion?.nombre,
     plantel: `${data?.programa?.plantel?.domicilio?.calle} ${
