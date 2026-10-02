@@ -71,6 +71,9 @@ import CatalogoCiclosEscolares from './Components/ControlEscolar/CatalogoCiclosE
 import ActivarProgramas from './Components/ControlEscolar/ActivarProgramas/ActivarProgramas';
 import ConsultRvoe from './Components/Rvoe/index';
 import ConsultBeneficiariosBecas from './Components/BeneficiariosBecas/index';
+// import AcreditacionAlumnos from './Components/AcreditacionAlumnos';
+// import AcreditacionAlumno from './Components/AcreditacionAlumno';
+import { readModo } from './Components/utils/foliosNavigation';
 
 export {
   ConsultBeneficiariosBecas,
@@ -146,4 +149,7 @@ export {
   ModalFirmaElectronica,
   CatalogoCiclosEscolares,
   ActivarProgramas,
+  // AcreditacionAlumnos,
+  // AcreditacionAlumno,
+  readModo,
 };

@@ -28,6 +28,10 @@ import {
   ModalFirmaElectronica,
   ButtonsFolios,
 } from '@siiges-ui/serviciosescolares';
+import { readCreateContext, readModo } from '../../utils/foliosNavigation';
+
+const TIPO_SOLICITUD_PARCIAL = 2;
+const ESTATUS_EDITABLES = [1, 4];
 
 const fundamentoLegal = [
   { id: 1, nombre: 'ART. 52 LRART. 5 CONST' },
@@ -124,21 +128,26 @@ export default function FoliosData({ type }) {
     fecha: dayjs(),
   });
   const [observaciones, setObservaciones] = useState('');
+  const [createCtx, setCreateCtx] = useState(null);
+  const [modoGuardado, setModoGuardado] = useState(null);
 
   const selectedAlumno = rows.find((row) => row.id === alumnoToDelete);
 
   const router = useRouter();
-  const {
-    tipoDocumento,
-    tipoSolicitud,
-    programa,
-    id: editId,
-    status,
-  } = router.query;
+  const { id: editId, status } = router.query;
+
+  const origenCrear = router.query.programa ? router.query : (createCtx || {});
+  const { tipoDocumento, tipoSolicitud, programa } = origenCrear;
+
+  const modo = modoGuardado || status || null;
 
   const esCertificado = etiquetas.tipoDocumento === 'Certificado';
+  const isParcial = Number(formData.tipoSolicitudFolioId) === TIPO_SOLICITUD_PARCIAL;
+  const programaId = Number(formData.programaId) || null;
+  const isConsult = modo === 'consult'
+    || (type === 'edit' && estatus !== null && !ESTATUS_EDITABLES.includes(estatus));
 
-  const accion = status || (
+  const accion = modo || (
     typeof window !== 'undefined'
       ? sessionStorage.getItem('foliosAccion')
       : null
@@ -172,6 +181,14 @@ export default function FoliosData({ type }) {
       setIsSaved(true);
     }
   }, [type]);
+
+  useEffect(() => {
+    if (type !== 'edit') setCreateCtx(readCreateContext());
+  }, [type]);
+
+  useEffect(() => {
+    if (type === 'edit' && editId) setModoGuardado(readModo(editId));
+  }, [type, editId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -259,7 +276,7 @@ export default function FoliosData({ type }) {
           setEtiquetas({
             institucion: data.plantel?.institucion?.nombre,
             claveCentroTrabajo: data.plantel?.claveCentroTrabajo,
-            tipoDocumento: tipoDocumento === '1' ? 'Título' : 'Certificado',
+            tipoDocumento: Number(tipoDocumento) === 1 ? 'Título' : 'Certificado',
             tipoSolicitudFolio: tipoSolicitudFolioOptions.find(
               (o) => o.id === Number(tipoSolicitud),
             )?.label,
@@ -594,14 +611,14 @@ export default function FoliosData({ type }) {
               <VisibilityOutlinedIcon />
             </IconButton>
           </Tooltip>
-          {status !== 'consult' && (
+          {!isConsult && (
             <Tooltip title="Editar" placement="top">
               <IconButton onClick={() => handleEditFn(params.row.id)}>
                 <EditIcon />
               </IconButton>
             </Tooltip>
           )}
-          {status !== 'consult' && (
+          {!isConsult && (
             <Tooltip title="Eliminar alumno" placement="top">
               <IconButton onClick={() => handleDeleteFn(params.row.id)}>
                 <DeleteIcon />
@@ -641,7 +658,7 @@ export default function FoliosData({ type }) {
                 <VisibilityOutlinedIcon />
               </IconButton>
             </Tooltip>
-            {status !== 'consult' && !estaEnModoFirma && (
+            {!isConsult && !estaEnModoFirma && (
             <Tooltip title="Eliminar alumno" placement="top">
               <IconButton onClick={() => handleDeleteFn(params.row.id)}>
                 <DeleteIcon />
@@ -738,7 +755,7 @@ export default function FoliosData({ type }) {
               name="estadoCuenta"
               value={formData.estadoCuenta}
               onChange={handleChange}
-              disabled={status === 'consult'}
+              disabled={isConsult}
               onlyNumbers
             />
           </Grid>
@@ -749,7 +766,7 @@ export default function FoliosData({ type }) {
               name="folioPago"
               value={formData.folioPago}
               onChange={handleChange}
-              disabled={status === 'consult'}
+              disabled={isConsult}
             />
           </Grid>
           <Grid item xs={3}>
@@ -759,7 +776,7 @@ export default function FoliosData({ type }) {
               name="claveInstitucionDGP"
               value={formData.claveInstitucionDGP}
               onChange={handleChange}
-              disabled={status === 'consult'}
+              disabled={isConsult}
             />
           </Grid>
           <Grid item xs={3}>
@@ -769,7 +786,7 @@ export default function FoliosData({ type }) {
               name="claveCarreraDGP"
               value={formData.claveCarreraDGP}
               onChange={handleChange}
-              disabled={status === 'consult'}
+              disabled={isConsult}
             />
           </Grid>
           <Grid item xs={12}>
@@ -780,7 +797,7 @@ export default function FoliosData({ type }) {
               tipoEntidad="SOLICITUD_FOLIO"
               url={url}
               setUrl={setUrl}
-              disabled={!isSaved || status === 'consult'}
+              disabled={!isSaved || isConsult}
             />
           </Grid>
         </Grid>
@@ -790,7 +807,7 @@ export default function FoliosData({ type }) {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <DataTable
-              buttonAdd={status !== 'consult' && !estaEnModoFirma}
+              buttonAdd={!isConsult && !estaEnModoFirma}
               buttonClick={handleAddAlumno}
               buttonText="Agregar Alumnos"
               title="Alumnos"
@@ -852,7 +869,7 @@ export default function FoliosData({ type }) {
                     <ButtonsFolios
                       save={handleConfirm}
                       send={handleSend}
-                      disabled={status === 'consult'}
+                      disabled={isConsult}
                       disabledSend={!puedeEnviarSolicitud}
                       saved={isSaved}
                       alumnos={alumnosData}
@@ -872,7 +889,7 @@ export default function FoliosData({ type }) {
           type={alumnoType}
           id={id}
           rowData={rowData}
-          programaId={formData.programaId}
+          programaId={programaId}
           setAlumnoResponse={setAlumnoResponse}
           disabled={disabled}
           alumnosAgregados={alumnosData}
@@ -883,11 +900,12 @@ export default function FoliosData({ type }) {
           setOpen={setOpen}
           type={alumnoType}
           id={id}
-          programaId={formData.programaId}
-          rowData={rowData}
+          programaId={programaId}
           setAlumnoResponse={setAlumnoResponse}
+          rowData={rowData}
           disabled={disabled}
           alumnosAgregados={alumnosData}
+          isParcial={isParcial}
         />
       )}
 

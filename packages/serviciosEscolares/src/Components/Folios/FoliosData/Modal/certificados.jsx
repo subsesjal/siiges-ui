@@ -13,8 +13,8 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const SITUACION_EGRESADO = 3;
+const SITUACIONES_PARCIAL = [1, 4];
 const TIPO_DOCUMENTO_CERTIFICADO = 2;
-
 export default function ModalCertificado({
   open,
   setOpen,
@@ -25,6 +25,7 @@ export default function ModalCertificado({
   rowData,
   disabled,
   alumnosAgregados,
+  isParcial,
 }) {
   const [alumnos, setAlumnos] = useState([]);
   const [selectedAlumnos, setSelectedAlumnos] = useState([]);
@@ -50,8 +51,13 @@ export default function ModalCertificado({
   useEffect(() => {
     if (open && isCreateMode && programaId) {
       setLoadingAlumnos(true);
+      const situaciones = isParcial ? SITUACIONES_PARCIAL : [SITUACION_EGRESADO];
+      const params = new URLSearchParams();
+      situaciones.forEach((s) => params.append('situacionId', s));
+      params.append('tipoDocumentoId', TIPO_DOCUMENTO_CERTIFICADO);
+      if (isParcial) params.append('parcial', 'true');
       getData({
-        endpoint: `/solicitudesFolios/alumnos/programas/${programaId}?situacionId=${SITUACION_EGRESADO}&tipoDocumentoId=${TIPO_DOCUMENTO_CERTIFICADO}`,
+        endpoint: `/solicitudesFolios/alumnos/programas/${programaId}?${params.toString()}`,
       })
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -72,7 +78,7 @@ export default function ModalCertificado({
           setLoadingAlumnos(false);
         });
     }
-  }, [open, type, programaId]);
+  }, [open, type, programaId, isParcial]);
 
   useEffect(() => {
     if (open && isConsultMode && rowData) {
@@ -325,6 +331,7 @@ ModalCertificado.defaultProps = {
   disabled: false,
   alumnosAgregados: [],
   rowData: null,
+  isParcial: false,
 };
 
 ModalCertificado.propTypes = {
@@ -335,6 +342,7 @@ ModalCertificado.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
+  isParcial: PropTypes.bool,
   alumnosAgregados: PropTypes.arrayOf(
     PropTypes.shape({
       alumnoId: PropTypes.number.isRequired,

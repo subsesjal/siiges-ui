@@ -1,13 +1,20 @@
-import { FoliosData } from '@siiges-ui/serviciosescolares';
+import { FoliosData, readModo } from '@siiges-ui/serviciosescolares';
 import { Layout } from '@siiges-ui/shared';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 export default function EditFoliosCertificados() {
   const router = useRouter();
-  const { status } = router.query;
+  const { id, status } = router.query;
+  const [modoGuardado, setModoGuardado] = useState(null);
 
-  const title = status === 'consult' ? 'Consultar Solicitud de Folios' : 'Editar Solicitud de Folios';
+  useEffect(() => {
+    if (id) setModoGuardado(readModo(id));
+  }, [id]);
+
+  const modo = modoGuardado || status;
+
+  const title = modo === 'consult' ? 'Consultar Solicitud de Folios' : 'Editar Solicitud de Folios';
   return (
     <Layout title={title}>
       <FoliosData solicitudType="certificado" type="edit" />

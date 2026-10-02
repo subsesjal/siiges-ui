@@ -7,14 +7,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DriveFileRenameOutline from '@mui/icons-material/DriveFileRenameOutline';
 import PropTypes from 'prop-types';
+import { saveCreateContext, saveModo } from '../../utils/foliosNavigation';
 
 const solicitudesTitulos = [
-  { id: 1, nombre: 'Duplicado' },
+  // { id: 1, nombre: 'Duplicado' },
   { id: 3, nombre: 'Total' },
 ];
 
 const solicitudesCertificados = [
-  { id: 1, nombre: 'Duplicado' },
+  // { id: 1, nombre: 'Duplicado' },
   { id: 2, nombre: 'Parcial' },
   { id: 3, nombre: 'Total' },
 ];
@@ -102,20 +103,20 @@ function FoliosTable({
 
   const navigateTo = (id, status) => {
     const routeBase = tipoDocumento === 1 ? 'titulos' : 'certificados';
-    const path = status === 'create'
-      ? `/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}`
-      : `/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`;
 
-    router.push({
-      pathname: path,
-      query: {
+    if (status === 'create') {
+      saveCreateContext({
         tipoDocumento,
         tipoSolicitud,
         programa,
-        status,
         plantel,
-      },
-    });
+      });
+      router.push(`/serviciosEscolares/solicitudesFolios/createFolio/${routeBase}`);
+      return;
+    }
+
+    saveModo(id, status);
+    router.push(`/serviciosEscolares/solicitudesFolios/${id}/${routeBase}`);
   };
 
   const handleEdit = (id) => navigateTo(id, 'edit');
