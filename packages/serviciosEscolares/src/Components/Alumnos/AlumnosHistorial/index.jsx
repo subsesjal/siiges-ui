@@ -37,10 +37,12 @@ export default function HistorialAcademico({ alumno, historial, simple }) {
     }
   });
 
-  const creditosObtenidos = [...aprobadasPorAsignatura.values()].reduce(
-    (sum, { asignatura }) => sum + (Number(asignatura?.creditos) || 0),
-    0,
-  );
+  const creditosObtenidos = Math.round(
+    [...aprobadasPorAsignatura.values()].reduce(
+      (sum, { asignatura }) => sum + (Number(asignatura?.creditos) || 0),
+      0,
+    ) * 100,
+  ) / 100;
 
   return (
     <Grid container spacing={2}>
