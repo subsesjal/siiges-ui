@@ -24,12 +24,6 @@ export default function errorDatosPlanEstudios(form, setError, error, tipoSolici
       formData.programa?.nombre !== undefined
         && formData.programa?.nombre !== '',
     ),
-    tipoCurricula: () => validateField(
-      'tipoCurricula',
-      '¡Seleccione un tipo de currícula!',
-      formData.programa?.tipoCurricula !== undefined
-        && formData.programa?.tipoCurricula !== '',
-    ),
     cicloId: () => validateField(
       'cicloId',
       '¡Periodo es requerido!',

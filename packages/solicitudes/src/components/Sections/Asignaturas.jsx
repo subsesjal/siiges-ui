@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { DataTable } from '@siiges-ui/shared';
+import { DataTable, LabelData } from '@siiges-ui/shared';
 import columns from './Mocks/Asignaturas';
 import AsignaturasModal from '../utils/Components/AsignaturasModales/AsignaturasCreateModal';
 import { TablesPlanEstudiosContext } from '../utils/Context/tablesPlanEstudiosProviderContext';
@@ -13,12 +13,20 @@ import { grados } from '../utils/Mocks/mockAsignaturas';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
 export default function Asignaturas({ disabled, type, section }) {
-  const { programaId } = useContext(SolicitudContext);
+  const { programaId, form } = useContext(SolicitudContext);
   const [modal, setModal] = useState(false);
   const showModal = () => setModal(true);
   const hideModal = () => setModal(false);
   const { asignaturasList, setAsignaturasList } = useContext(
     TablesPlanEstudiosContext,
+  );
+
+  const creditosCapturados = useMemo(
+    () => (asignaturasList || []).reduce(
+      (total, asignatura) => total + (Number(asignatura.creditos) || 0),
+      0,
+    ),
+    [asignaturasList],
   );
 
   const isSectionDisabled = useSectionDisabled(section);
@@ -44,6 +52,21 @@ export default function Asignaturas({ disabled, type, section }) {
       <Grid item xs={12}>
         <Typography variant="h6">Asignaturas</Typography>
       </Grid>
+
+      <Grid item xs={6}>
+        <LabelData
+          title="Créditos Totales:"
+          subtitle={form[1]?.programa?.creditos ?? 0}
+        />
+      </Grid>
+
+      <Grid item xs={6}>
+        <LabelData
+          title="Créditos Capturados:"
+          subtitle={creditosCapturados}
+        />
+      </Grid>
+
       <Grid item xs={12}>
         <DataTable
           buttonAdd
@@ -57,6 +80,7 @@ export default function Asignaturas({ disabled, type, section }) {
           loading={loading}
         />
       </Grid>
+
       <AsignaturasModal
         open={modal}
         hideModal={hideModal}

@@ -12,7 +12,6 @@ import SolicitudContext from '../utils/Context/solicitudContext';
 import formDatosPlanEstudios from '../utils/sections/forms/formDatosPlanEstudios';
 import useSectionDisabled from './Hooks/useSectionDisabled';
 
-// Sacamos las constantes fuera del componente para mejorar rendimiento y evitar re-renders
 const antecedenteAcademico = [
   { id: 1, nombre: 'Bachillerato' },
   { id: 2, nombre: 'Licenciatura' },
@@ -105,8 +104,8 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
 
     const ordinarios = Number(creditosOrdinarios);
     const optativas = Number(minimoCreditosOptativas);
-    // eslint-disable-next-line max-len
-    const total = (Number.isNaN(ordinarios) ? 0 : ordinarios) + (Number.isNaN(optativas) ? 0 : optativas);
+    const total = (
+      Number.isNaN(ordinarios) ? 0 : ordinarios) + (Number.isNaN(optativas) ? 0 : optativas);
 
     if (form[1].programa?.creditos !== total) {
       setForm((prevForm) => ({
@@ -140,69 +139,27 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
     }
   }, [errors, setErrors]);
 
-  const tipoCurricula = Number(form[1].programa?.tipoCurricula);
-  const [periodoOptions, setPeriodoOptions] = useState(periodoOptionsBase);
+  const [tipoCurricula, setTipoCurricula] = useState('');
 
-  // Filtramos los periodos
-  useEffect(() => {
-    if (tipoCurricula === 1) {
-      setPeriodoOptions(periodoOptionsBase.filter((p) => p.id === 1 || p.id === 2));
-    } else if (tipoCurricula === 2) {
-      setPeriodoOptions(periodoOptionsBase.filter((p) => p.id === 4 || p.id === 5));
-    } else {
-      setPeriodoOptions(periodoOptionsBase);
-    }
+  const periodoOptions = useMemo(() => {
+    if (tipoCurricula === 1) return periodoOptionsBase.filter((p) => [1, 2].includes(p.id));
+    if (tipoCurricula === 2) return periodoOptionsBase.filter((p) => [4, 5].includes(p.id));
+    return periodoOptionsBase;
   }, [tipoCurricula]);
 
   useEffect(() => {
     const cicloId = Number(form[1].programa?.cicloId);
-    const currTipoCurricula = form[1].programa?.tipoCurricula;
-
-    if (!currTipoCurricula && cicloId) {
-      let inferred = '';
-      if ([1, 2].includes(cicloId)) inferred = 1;
-      if ([4, 5].includes(cicloId)) inferred = 2;
-
-      if (inferred) {
-        formDatosPlanEstudios('tipoCurricula', inferred, form, setForm);
-        formDatosPlanEstudios(
-          'flexibilidadCurricular',
-          inferred === 'rigida' ? 'Rígida' : 'Flexible',
-          form,
-          setForm,
-        );
-      }
+    if (tipoCurricula === '' && cicloId) {
+      if ([1, 2].includes(cicloId)) setTipoCurricula(1);
+      else if ([4, 5].includes(cicloId)) setTipoCurricula(2);
     }
-  }, [form[1].programa?.cicloId, form[1].programa?.tipoCurricula, setForm]);
+  }, [form[1].programa?.cicloId]);
 
   const handleTipoCurriculaChange = (e) => {
-    const { value } = e.target;
-    const parsedValue = Number(value);
+    const parsedValue = Number(e.target.value);
 
-    formDatosPlanEstudios('tipoCurricula', value, form, setForm);
-
-    formDatosPlanEstudios(
-      'flexibilidadCurricular',
-      value === 'rigida' ? 'Rígida' : 'Flexible',
-      form,
-      setForm,
-    );
-
-    setForm((prevForm) => ({
-      ...prevForm,
-      1: {
-        ...prevForm[1],
-        programa: {
-          ...prevForm[1]?.programa,
-          tipoCurricula: parsedValue,
-          cicloId: '',
-        },
-      },
-    }));
-
-    if (error.tipoCurricula) {
-      errors.tipoCurricula?.();
-    }
+    setTipoCurricula(parsedValue);
+    formDatosPlanEstudios('cicloId', '', form, setForm);
   };
 
   return (
@@ -244,13 +201,9 @@ export default function DatosPlanEstudios({ disabled, type, tipoSolicitudId }) {
           <BasicSelect
             title="Tipo de currícula"
             name="tipoCurricula"
-            value={form[1].programa?.tipoCurricula || ''}
+            value={tipoCurricula}
             options={tipoCurriculaOptions}
             onChange={handleTipoCurriculaChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
-            errorMessage={error.tipoCurricula}
-            required
             disabled={isDisabled}
           />
         </Grid>

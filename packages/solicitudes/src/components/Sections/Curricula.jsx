@@ -72,30 +72,32 @@ export default function Curricula({ disabled, type }) {
     setInitialValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
+  const flexibildadCurricular = form[1].programa?.cicloId === 4 || form[1].programa?.cicloId === 5;
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">Currícula</Typography>
       </Grid>
       <Grid container spacing={2} sx={{ ml: 15, width: '100%' }}>
-        {form[1].programa?.duracionPeriodos && (
-        <Grid item xs={12}>
-          <Input
-            id="flexibilidadCurricular"
-            name="flexibilidadCurricular"
-            label="Flexibilidad curricular"
-            rows={4}
-            multiline
-            sx={{ width: '100%' }}
-            value={form[5].programa?.flexibilidadCurricular}
-            onChange={handleOnChange}
-            onblur={handleOnBlur}
-            onfocus={handleInputFocus}
-            helperText={error.flexibilidadCurricular}
-            error={!!error.flexibilidadCurricular}
-            disabled={isDisabled}
-          />
-        </Grid>
+        {flexibildadCurricular && (
+          <Grid item xs={12}>
+            <Input
+              id="flexibilidadCurricular"
+              name="flexibilidadCurricular"
+              label="Flexibilidad curricular"
+              rows={4}
+              multiline
+              sx={{ width: '100%' }}
+              value={form[5].programa?.flexibilidadCurricular}
+              onChange={handleOnChange}
+              onblur={handleOnBlur}
+              onfocus={handleInputFocus}
+              helperText={error.flexibilidadCurricular}
+              error={!!error.flexibilidadCurricular}
+              disabled={isDisabled}
+            />
+          </Grid>
         )}
         <Grid item xs={12}>
           <Input
